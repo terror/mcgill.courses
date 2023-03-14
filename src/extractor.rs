@@ -189,10 +189,10 @@ impl Extractor {
 
     // TODO: fix bug with multiple instructors
     let instructors = instructors
-      .split(")")
+      .split(')')
       .filter(|s| !s.is_empty())
-      .map(|s| {
-        let parts = s.split("(").collect::<Vec<&str>>();
+      .filter_map(|s| {
+        let parts = s.split('(').collect::<Vec<&str>>();
 
         if parts.len() != 2 {
           return None;
@@ -209,7 +209,6 @@ impl Extractor {
           term: parts[1].trim().to_string(),
         })
       })
-      .filter_map(|option| option)
       .collect::<Vec<Instructor>>();
 
     log::info!("Parsed course {}{}", subject, code);
