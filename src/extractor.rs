@@ -3,7 +3,7 @@ use super::*;
 #[derive(Parser)]
 pub(crate) struct Extractor {
   #[clap(long)]
-  threads: usize,
+  batch_size: usize,
 }
 
 #[derive(Debug)]
@@ -41,14 +41,14 @@ impl Extractor {
 
     let mut page = 0;
 
-    while let Some(entries) = self.pages(self.aggregate(page, page + self.threads))? {
+    while let Some(entries) = self.pages(self.aggregate(page, page + self.batch_size))? {
       courses.extend(
         entries
           .par_iter()
           .map(|entry| self.course(entry.clone()))
           .collect::<Result<Vec<Course>, _>>()?,
       );
-      page += self.threads;
+      page += self.batch_size;
     }
 
     fs::write(source, serde_json::to_string(&courses)?).map_err(anyhow::Error::from)
