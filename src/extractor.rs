@@ -144,6 +144,43 @@ impl Extractor {
     Ok(Some(entries))
   }
 
+  fn instructors(&self, input: &str) -> Vec<Instructor> {
+    let mut ret = Vec::new();
+
+    if input.contains("There are no professors associated with this course") {
+      return ret;
+    }
+
+    let mut tokens = input.to_owned();
+
+    ["Fall", "Winter", "Summer"].iter().for_each(|term| {
+      match tokens.contains(&format!("({term})")) {
+        false => return,
+        _ => {
+          let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
+
+          ret.extend(split[0].split(";").map(|s| {
+            let curr = s.trim().split(", ").collect::<Vec<&str>>();
+            Instructor {
+              name: format!(
+                "{} {}",
+                curr.get(1).unwrap_or(&""),
+                curr.get(0).unwrap_or(&"")
+              ),
+              term: term.to_string(),
+            }
+          }));
+
+          if split.len() > 1 {
+            tokens = split[1].trim().to_string();
+          }
+        }
+      }
+    });
+
+    ret
+  }
+
   fn course(&self, entry: Entry) -> Result<Course> {
     let html = Html::parse_fragment(&entry.content()?);
 
@@ -187,30 +224,6 @@ impl Extractor {
       .trim()
       .to_owned();
 
-    // TODO: fix bug with multiple instructors
-    let instructors = instructors
-      .split(')')
-      .filter(|s| !s.is_empty())
-      .filter_map(|s| {
-        let parts = s.split('(').collect::<Vec<&str>>();
-
-        if parts.len() != 2 {
-          return None;
-        }
-
-        let name_parts = parts[0].trim().split(", ").collect::<Vec<&str>>();
-
-        if name_parts.len() != 2 {
-          return None;
-        }
-
-        Some(Instructor {
-          name: format!("{} {}", name_parts[1], name_parts[0]),
-          term: parts[1].trim().to_string(),
-        })
-      })
-      .collect::<Vec<Instructor>>();
-
     log::info!("Parsed course {}{}", subject, code);
 
     Ok(Course {
@@ -253,7 +266,7 @@ impl Extractor {
         .trim()
         .to_owned(),
       terms: entry.terms,
-      instructors,
+      instructors: self.instructors(&instructors),
     })
   }
 }
