@@ -1,5 +1,6 @@
+.env
 /.DS_Store
 /target
-notes
 courses.json
-.env
+node_modules/
+notes
