@@ -176,6 +176,41 @@ impl Extractor {
       .root_element()
       .select_single("div[class='node node-catalog clearfix']")?;
 
+    let instructors = content
+      .select_single("p[class='catalog-instructors']")?
+      .inner_html()
+      .trim()
+      .split(' ')
+      .skip(1)
+      .collect::<Vec<&str>>()
+      .join(" ")
+      .trim()
+      .to_owned();
+
+    let instructors = instructors
+      .split(")")
+      .filter(|s| !s.is_empty())
+      .map(|s| {
+        let parts = s.split("(").collect::<Vec<&str>>();
+
+        if parts.len() != 2 {
+          return None;
+        }
+
+        let name_parts = parts[0].trim().split(", ").collect::<Vec<&str>>();
+
+        if name_parts.len() != 2 {
+          return None;
+        }
+
+        Some(Instructor {
+          name: format!("{} {}", name_parts[1], name_parts[0]),
+          term: parts[1].trim().to_string(),
+        })
+      })
+      .filter_map(|option| option)
+      .collect::<Vec<Instructor>>();
+
     log::info!("Parsed course {}{}", subject, code);
 
     Ok(Course {
@@ -218,16 +253,7 @@ impl Extractor {
         .trim()
         .to_owned(),
       terms: entry.terms,
-      instructors: content
-        .select_single("p[class='catalog-instructors']")?
-        .inner_html()
-        .trim()
-        .split(' ')
-        .skip(1)
-        .collect::<Vec<&str>>()
-        .join(" ")
-        .trim()
-        .to_owned(),
+      instructors,
     })
   }
 }

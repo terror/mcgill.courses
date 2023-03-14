@@ -13,5 +13,5 @@ pub(crate) struct Course {
   pub(crate) faculty_url: String,
   pub(crate) terms: Vec<String>,
   pub(crate) description: String,
-  pub(crate) instructors: String,
+  pub(crate) instructors: Vec<Instructor>,
 }

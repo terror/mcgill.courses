@@ -1,7 +1,7 @@
 use {
   crate::{
-    arguments::Arguments, course::Course, extractor::Extractor, options::Options, select::Select,
-    server::Server, subcommand::Subcommand, vec_ext::VecExt,
+    arguments::Arguments, course::Course, extractor::Extractor, instructor::Instructor,
+    options::Options, select::Select, server::Server, subcommand::Subcommand, vec_ext::VecExt,
   },
   anyhow::anyhow,
   clap::Parser,
@@ -17,6 +17,7 @@ const BASE_URL: &str = "https://www.mcgill.ca";
 mod arguments;
 mod course;
 mod extractor;
+mod instructor;
 mod options;
 mod select;
 mod server;
