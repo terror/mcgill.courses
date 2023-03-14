@@ -21,7 +21,7 @@ $ docker compose up -d
 Spawn the server with a data source:
 
 ```bash
-$ cargo run -- --source=crates.json serve
+$ cargo run -- --source=courses.json serve
 ```
 
 n.b. the server cli provides a load subcommand for scraping all courses from
