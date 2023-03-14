@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  db:
+    environment:
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_DB: '${POSTGRES_DB}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+    image: postgres:latest
+    ports:
+      - '5432:5432'

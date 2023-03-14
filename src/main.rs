@@ -1,21 +1,29 @@
 use {
   crate::{
-    arguments::Arguments, course::Course, extractor::Extractor, instructor::Instructor,
-    options::Options, select::Select, server::Server, subcommand::Subcommand, vec_ext::VecExt,
+    arguments::Arguments, config::Config, course::Course, db::Db, extractor::Extractor,
+    instructor::Instructor, options::Options, select::Select, server::Server,
+    subcommand::Subcommand, vec_ext::VecExt,
   },
   anyhow::anyhow,
+  axum::Router,
   clap::Parser,
+  dotenv::dotenv,
+  http::Method,
   rayon::prelude::*,
   scraper::{ElementRef, Html, Selector},
   serde::{Deserialize, Serialize},
-  std::{fs, path::PathBuf, process},
+  sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
+  std::{fs, net::SocketAddr, path::PathBuf, process, str::FromStr},
+  tower_http::cors::{Any, CorsLayer},
   uuid::Uuid,
 };
 
 const BASE_URL: &str = "https://www.mcgill.ca";
 
 mod arguments;
+mod config;
 mod course;
+mod db;
 mod extractor;
 mod instructor;
 mod options;
@@ -26,10 +34,13 @@ mod vec_ext;
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
-fn main() {
+#[tokio::main]
+async fn main() {
   env_logger::init();
 
-  if let Err(error) = Arguments::parse().run() {
+  dotenv().ok();
+
+  if let Err(error) = Arguments::parse().run().await {
     eprintln!("error: {error}");
     process::exit(1);
   }

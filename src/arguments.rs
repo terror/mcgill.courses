@@ -9,10 +9,10 @@ pub(crate) struct Arguments {
 }
 
 impl Arguments {
-  pub(crate) fn run(self) -> Result {
+  pub(crate) async fn run(self) -> Result {
     match self.subcommand {
       Subcommand::Extract(extractor) => extractor.run(self.options.source),
-      Subcommand::Serve(server) => server.run(self.options.source),
+      Subcommand::Serve(server) => server.run(self.options.source).await,
     }
   }
 }

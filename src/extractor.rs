@@ -187,6 +187,7 @@ impl Extractor {
       .trim()
       .to_owned();
 
+    // TODO: fix bug with multiple instructors
     let instructors = instructors
       .split(")")
       .filter(|s| !s.is_empty())
