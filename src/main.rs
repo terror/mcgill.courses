@@ -1,7 +1,7 @@
 use {
   crate::{
     arguments::Arguments, config::Config, course::Course, db::Db, extractor::Extractor,
-    instructor::Instructor, options::Options, select::Select, server::Server,
+    instructor::Instructor, options::Options, select::Select, server::Server, state::State,
     subcommand::Subcommand, vec_ext::VecExt,
   },
   anyhow::anyhow,
@@ -29,6 +29,7 @@ mod instructor;
 mod options;
 mod select;
 mod server;
+mod state;
 mod subcommand;
 mod vec_ext;
 
