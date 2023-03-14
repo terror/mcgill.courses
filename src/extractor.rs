@@ -41,11 +41,11 @@ impl Extractor {
 
     let mut page = 0;
 
-    while let Some(entries) = self.pages(self.aggregate(page, page + self.batch_size))? {
+    while let Some(entries) = self.parse_pages(self.aggregate_urls(page, page + self.batch_size))? {
       courses.extend(
         entries
           .par_iter()
-          .map(|entry| self.course(entry.clone()))
+          .map(|entry| self.parse_course(entry.clone()))
           .collect::<Result<Vec<Course>, _>>()?,
       );
       page += self.batch_size;
@@ -54,7 +54,7 @@ impl Extractor {
     fs::write(source, serde_json::to_string(&courses)?).map_err(anyhow::Error::from)
   }
 
-  fn aggregate(&self, start: usize, end: usize) -> Vec<Page> {
+  fn aggregate_urls(&self, start: usize, end: usize) -> Vec<Page> {
     (start..=end)
       .map(|index| Page {
         number: index,
@@ -63,13 +63,13 @@ impl Extractor {
       .collect()
   }
 
-  fn pages(&self, pages: Vec<Page>) -> Result<Option<Vec<Entry>>> {
+  fn parse_pages(&self, pages: Vec<Page>) -> Result<Option<Vec<Entry>>> {
     Ok(
       pages
         .par_iter()
         .map(|page| {
           self
-            .page(page)
+            .parse_page(page)
             .unwrap_or(Some(Vec::new()))
             .unwrap_or(Vec::new())
         })
@@ -79,7 +79,7 @@ impl Extractor {
     )
   }
 
-  fn page(&self, page: &Page) -> Result<Option<Vec<Entry>>> {
+  fn parse_page(&self, page: &Page) -> Result<Option<Vec<Entry>>> {
     log::info!("Parsing html on page: {}...", page.number);
 
     let html = Html::parse_fragment(&page.content()?);
@@ -144,44 +144,43 @@ impl Extractor {
     Ok(Some(entries))
   }
 
-  fn instructors(&self, input: &str) -> Vec<Instructor> {
-    let mut ret = Vec::new();
-
-    if input.contains("There are no professors associated with this course") {
-      return ret;
-    }
-
+  fn parse_instructors(&self, input: &str) -> Vec<Instructor> {
     let mut tokens = input.to_owned();
 
-    ["Fall", "Winter", "Summer"].iter().for_each(|term| {
-      match tokens.contains(&format!("({term})")) {
-        false => return,
+    ["Fall", "Winter", "Summer"]
+      .iter()
+      .map(|term| match tokens.contains(&format!("({term})")) {
+        false => Vec::new(),
         _ => {
           let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
 
-          ret.extend(split[0].split(";").map(|s| {
-            let curr = s.trim().split(", ").collect::<Vec<&str>>();
-            Instructor {
-              name: format!(
-                "{} {}",
-                curr.get(1).unwrap_or(&""),
-                curr.get(0).unwrap_or(&"")
-              ),
-              term: term.to_string(),
-            }
-          }));
+          let instructors = split[0]
+            .split(";")
+            .map(|s| {
+              let curr = s.trim().split(", ").collect::<Vec<&str>>();
+              Instructor {
+                name: format!(
+                  "{} {}",
+                  curr.get(1).unwrap_or(&""),
+                  curr.get(0).unwrap_or(&"")
+                ),
+                term: term.to_string(),
+              }
+            })
+            .collect();
 
           if split.len() > 1 {
             tokens = split[1].trim().to_string();
           }
-        }
-      }
-    });
 
-    ret
+          instructors
+        }
+      })
+      .flatten()
+      .collect()
   }
 
-  fn course(&self, entry: Entry) -> Result<Course> {
+  fn parse_course(&self, entry: Entry) -> Result<Course> {
     let html = Html::parse_fragment(&entry.content()?);
 
     let full_title = html
@@ -212,17 +211,6 @@ impl Extractor {
     let content = html
       .root_element()
       .select_single("div[class='node node-catalog clearfix']")?;
-
-    let instructors = content
-      .select_single("p[class='catalog-instructors']")?
-      .inner_html()
-      .trim()
-      .split(' ')
-      .skip(1)
-      .collect::<Vec<&str>>()
-      .join(" ")
-      .trim()
-      .to_owned();
 
     log::info!("Parsed course {}{}", subject, code);
 
@@ -266,7 +254,18 @@ impl Extractor {
         .trim()
         .to_owned(),
       terms: entry.terms,
-      instructors: self.instructors(&instructors),
+      instructors: self.parse_instructors(
+        &content
+          .select_single("p[class='catalog-instructors']")?
+          .inner_html()
+          .trim()
+          .split(' ')
+          .skip(1)
+          .collect::<Vec<&str>>()
+          .join(" ")
+          .trim()
+          .to_owned(),
+      ),
     })
   }
 }
