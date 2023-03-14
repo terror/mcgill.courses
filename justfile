@@ -1,3 +1,5 @@
+export RUST_LOG := 'info'
+
 default:
   just --list
 
