@@ -1,8 +1,16 @@
 use {
   crate::{
-    arguments::Arguments, config::Config, course::Course, db::Db, extractor::Extractor,
-    instructor::Instructor, options::Options, select::Select, server::Server, state::State,
-    subcommand::Subcommand, vec_ext::VecExt,
+    arguments::Arguments,
+    config::Config,
+    course::{Course, Instructor, Requirements},
+    db::Db,
+    extractor::Extractor,
+    options::Options,
+    select::Select,
+    server::Server,
+    state::State,
+    subcommand::Subcommand,
+    vec_ext::VecExt,
   },
   anyhow::anyhow,
   axum::Router,
@@ -25,7 +33,6 @@ mod config;
 mod course;
 mod db;
 mod extractor;
-mod instructor;
 mod options;
 mod select;
 mod server;

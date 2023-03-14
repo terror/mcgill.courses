@@ -67,13 +67,12 @@ impl Extractor {
     Ok(
       pages
         .par_iter()
-        .map(|page| {
+        .flat_map(|page| {
           self
             .parse_page(page)
             .unwrap_or(Some(Vec::new()))
             .unwrap_or(Vec::new())
         })
-        .flatten()
         .collect::<Vec<Entry>>()
         .into_option(),
     )
@@ -149,20 +148,20 @@ impl Extractor {
 
     ["Fall", "Winter", "Summer"]
       .iter()
-      .map(|term| match tokens.contains(&format!("({term})")) {
+      .flat_map(|term| match tokens.contains(&format!("({term})")) {
         false => Vec::new(),
         _ => {
           let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
 
           let instructors = split[0]
-            .split(";")
+            .split(';')
             .map(|s| {
               let curr = s.trim().split(", ").collect::<Vec<&str>>();
               Instructor {
                 name: format!(
                   "{} {}",
                   curr.get(1).unwrap_or(&""),
-                  curr.get(0).unwrap_or(&"")
+                  curr.first().unwrap_or(&"")
                 ),
                 term: term.to_string(),
               }
@@ -176,8 +175,39 @@ impl Extractor {
           instructors
         }
       })
-      .flatten()
       .collect()
+  }
+
+  fn parse_requirements(&self, notes: Vec<ElementRef>) -> Result<Requirements> {
+    let mut requirements = Requirements::new();
+
+    notes.iter().try_for_each(|note| -> Result {
+      let curr = note.select_single("li")?.select_single("p")?;
+
+      if curr.inner_html().starts_with("Prerequisite") {
+        requirements.set_prerequisites(
+          curr
+            .select_many("a")?
+            .iter()
+            .map(|link| link.inner_html())
+            .collect(),
+        );
+      }
+
+      if curr.inner_html().starts_with("Corequisite") {
+        requirements.set_corequisites(
+          curr
+            .select_many("a")?
+            .iter()
+            .map(|link| link.inner_html())
+            .collect(),
+        );
+      }
+
+      Ok(())
+    })?;
+
+    Ok(requirements)
   }
 
   fn parse_course(&self, entry: Entry) -> Result<Course> {
@@ -211,6 +241,10 @@ impl Extractor {
     let content = html
       .root_element()
       .select_single("div[class='node node-catalog clearfix']")?;
+
+    let notes = html
+      .root_element()
+      .select_many("ul[class='catalog-notes']")?;
 
     log::info!("Parsed course {}{}", subject, code);
 
@@ -255,7 +289,7 @@ impl Extractor {
         .to_owned(),
       terms: entry.terms,
       instructors: self.parse_instructors(
-        &content
+        content
           .select_single("p[class='catalog-instructors']")?
           .inner_html()
           .trim()
@@ -263,9 +297,9 @@ impl Extractor {
           .skip(1)
           .collect::<Vec<&str>>()
           .join(" ")
-          .trim()
-          .to_owned(),
+          .trim(),
       ),
+      requirements: self.parse_requirements(notes)?,
     })
   }
 }
