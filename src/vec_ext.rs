@@ -1,3 +1,5 @@
+use super::*;
+
 pub(crate) trait VecExt<T> {
   fn into_option(self) -> Option<Self>
   where
@@ -6,10 +8,9 @@ pub(crate) trait VecExt<T> {
 
 impl<T> VecExt<T> for Vec<T> {
   fn into_option(self) -> Option<Self> {
-    if self.is_empty() {
-      None
-    } else {
-      Some(self)
+    match self.is_empty() {
+      true => None,
+      _ => Some(self),
     }
   }
 }

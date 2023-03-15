@@ -2,7 +2,7 @@ use {
   crate::{
     arguments::Arguments,
     config::Config,
-    course::{Course, Instructor, Requirements},
+    course::{Course, Instructor, Requirement, Requirements, Schedule},
     db::Db,
     extractor::Extractor,
     options::Options,
@@ -21,12 +21,10 @@ use {
   scraper::{ElementRef, Html, Selector},
   serde::{Deserialize, Serialize},
   sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
-  std::{fs, net::SocketAddr, path::PathBuf, process, str::FromStr},
+  std::{fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr},
   tower_http::cors::{Any, CorsLayer},
   uuid::Uuid,
 };
-
-const BASE_URL: &str = "https://www.mcgill.ca";
 
 mod arguments;
 mod config;

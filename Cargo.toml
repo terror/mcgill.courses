@@ -9,6 +9,7 @@ axum = { version = "0.6.11", features = ["headers", "json"] }
 axum-extra = { version = "0.4.2", features = ["spa"] }
 axum-macros = "0.3.6"
 axum-server = "0.4.6"
+chrono = "0.4.24"
 clap = { version = "4.1.8", features = ["derive"] }
 dotenv = "0.15.0"
 env_logger = "0.10.0"
