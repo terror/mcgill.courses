@@ -21,7 +21,10 @@ use {
   scraper::{ElementRef, Html, Selector},
   serde::{Deserialize, Serialize},
   sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
-  std::{fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr},
+  std::{
+    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr, thread,
+    time::Duration,
+  },
   tower_http::cors::{Any, CorsLayer},
   uuid::Uuid,
 };

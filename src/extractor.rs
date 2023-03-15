@@ -2,6 +2,12 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Extractor {
+  #[clap(long)]
+  user_agent: String,
+  #[clap(long, default_value = "0")]
+  course_delay: u64,
+  #[clap(long, default_value = "0")]
+  page_delay: u64,
   #[clap(long, default_value = "20")]
   batch_size: usize,
   #[clap(long, default_value = "202305")]
@@ -44,53 +50,56 @@ struct VsbClient {
 impl VsbClient {
   const BASE_URL: &str = "https://vsb.mcgill.ca/vsb/getclassdata.jsp";
 
-  pub(crate) fn new(term: String) -> Result<Self> {
+  pub(crate) fn new(term: String, user_agent: String) -> Result<Self> {
     Ok(Self {
       client: reqwest::blocking::Client::builder()
-        .user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
+        .user_agent(user_agent)
         .build()?,
       term,
     })
   }
 
   pub(crate) fn schedule(&self, code: &str) -> Result<Vec<Schedule>> {
-    let response = self
-      .client
-      .get(&format!(
-        "{}?term={}&course_1_0={}&rq_1_0=null{}&nouser=1&_={}",
-        VsbClient::BASE_URL,
-        self.term,
-        code,
-        self.window(),
-        chrono::Local::now().timestamp_millis()
-      ))
-      .header("Accept-Encoding", "")
-      .send()?
-      .text()?;
-
-    let html = Html::parse_fragment(&response);
-
-    let error = html
-      .root_element()
-      .select_single("errors")?
-      .select_many("error")?;
-
-    if !error.is_empty() {
-      return Ok(Vec::new());
-    }
+    let html = Html::parse_fragment(
+      &self
+        .client
+        .get(&self.format_url(code))
+        .header("Accept-Encoding", "")
+        .send()?
+        .text()?,
+    );
 
     Ok(
-      html
+      match html
         .root_element()
-        .select_many("block")?
-        .iter()
-        .map(|block| Schedule {
-          campus: block.value().attr("campus").map(|s| s.to_string()),
-          course_type: block.value().attr("type").map(|s| s.to_string()),
-          location: block.value().attr("location").map(|s| s.to_string()),
-          section: block.value().attr("section").map(|s| s.to_string()),
-        })
-        .collect(),
+        .select_single("errors")?
+        .select_many("error")?
+        .is_empty()
+      {
+        true => Vec::new(),
+        _ => html
+          .root_element()
+          .select_many("block")?
+          .iter()
+          .map(|block| Schedule {
+            campus: block.value().attr("campus").map(|s| s.to_string()),
+            course_type: block.value().attr("type").map(|s| s.to_string()),
+            location: block.value().attr("location").map(|s| s.to_string()),
+            section: block.value().attr("secNo").map(|s| s.to_string()),
+          })
+          .collect(),
+      },
+    )
+  }
+
+  fn format_url(&self, code: &str) -> String {
+    format!(
+      "{}?term={}&course_1_0={}&rq_1_0=null{}&nouser=1&_={}",
+      VsbClient::BASE_URL,
+      self.term,
+      code,
+      self.window(),
+      chrono::Local::now().timestamp_millis()
     )
   }
 
@@ -215,6 +224,8 @@ impl Extractor {
 
     log::info!("Scraped entries on page {}: {:?}", page.number, entries);
 
+    thread::sleep(Duration::from_millis(self.page_delay));
+
     Ok(Some(entries))
   }
 
@@ -307,6 +318,8 @@ impl Extractor {
 
     log::info!("Parsed course {}{}", &subject, &code);
 
+    thread::sleep(Duration::from_millis(self.course_delay));
+
     Ok(Course {
       id: Uuid::new_v5(
         &Uuid::NAMESPACE_X500,
@@ -363,7 +376,7 @@ impl Extractor {
           .root_element()
           .select_many("ul[class='catalog-notes']")?,
       )?,
-      schedule: VsbClient::new(self.vsb_term.to_string())?
+      schedule: VsbClient::new(self.vsb_term.to_string(), self.user_agent.to_string())?
         .schedule(&format!("{}-{}", subject, code))?,
     })
   }
