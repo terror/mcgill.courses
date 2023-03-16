@@ -7,11 +7,11 @@ use {
   axum::Router,
   clap::Parser,
   dotenv::dotenv,
-  extractor::{
-    course_listing::CourseListing, extract, instructor::Instructor,
+  http::Method,
+  model::{
+    course_listing::CourseListing, instructor::Instructor,
     requirements::Requirements, schedule::Schedule,
   },
-  http::Method,
   rayon::prelude::*,
   serde::{Deserialize, Serialize},
   sqlx::{migrate::MigrateDatabase, PgPool, Postgres},

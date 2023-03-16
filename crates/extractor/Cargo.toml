@@ -6,9 +6,8 @@ publish = false
 
 [dependencies]
 anyhow = "1.0.69"
-reqwest = { version = "0.11.14", features = ["blocking"] }
+model = { path = "../../crates/model" }
 scraper = "0.15.0"
-serde = { version = "1.0.156", features = ["derive"] }
 
 [dev-dependencies]
 include_dir = "0.7.3"

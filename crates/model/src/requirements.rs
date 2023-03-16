@@ -1,9 +1,25 @@
 use super::*;
 
+pub enum Requirement {
+  Corequisites,
+  Prerequisites,
+  Unknown,
+}
+
+impl From<&str> for Requirement {
+  fn from(s: &str) -> Self {
+    match s {
+      "Corequisite" => Self::Corequisites,
+      "Prerequisite" => Self::Prerequisites,
+      _ => Self::Unknown,
+    }
+  }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Requirements {
-  pub(crate) corequisites: Vec<String>,
-  pub(crate) prerequisites: Vec<String>,
+  pub corequisites: Vec<String>,
+  pub prerequisites: Vec<String>,
 }
 
 impl Requirements {
