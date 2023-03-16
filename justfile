@@ -26,7 +26,7 @@ services:
   docker-compose up -d
 
 test:
-  cargo test
+  cargo test --all
 
 watch +COMMAND='test':
   cargo watch --clear --exec "{{COMMAND}}"
