@@ -79,6 +79,8 @@ impl Loader {
 
     let listings = extract::extract_course_listing_page(&page.content()?)?;
 
+    thread::sleep(Duration::from_millis(self.page_delay));
+
     if let Some(listings) = listings {
       return Ok(Some(
         listings
@@ -104,6 +106,8 @@ impl Loader {
       &course_page.subject,
       &course_page.code
     );
+
+    thread::sleep(Duration::from_millis(self.course_delay));
 
     Ok(Course {
       title: course_page.title,
