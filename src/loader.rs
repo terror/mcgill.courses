@@ -111,6 +111,7 @@ impl Loader {
 
     Ok(Course {
       title: course_page.title,
+      credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
       department: listing.department,
@@ -118,7 +119,8 @@ impl Loader {
       faculty: listing.faculty,
       faculty_url: format!("{}{}", Loader::BASE_URL, course_page.faculty_url),
       instructors: course_page.instructors,
-      requirements: course_page.requirements,
+      prerequisites: course_page.requirements.prerequisites,
+      corequisites: course_page.requirements.corequisites,
       terms: listing.terms,
       level: listing.level,
       url: listing.url,

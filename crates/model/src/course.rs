@@ -3,6 +3,7 @@ use super::*;
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Course {
   pub title: String,
+  pub credits: String,
   pub subject: String,
   pub code: String,
   pub level: String,
@@ -13,6 +14,7 @@ pub struct Course {
   pub terms: Vec<String>,
   pub description: String,
   pub instructors: Vec<Instructor>,
-  pub requirements: Requirements,
+  pub prerequisites: Vec<String>,
+  pub corequisites: Vec<String>,
   pub schedule: Vec<Schedule>,
 }

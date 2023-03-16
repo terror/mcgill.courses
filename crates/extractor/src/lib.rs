@@ -140,10 +140,20 @@ pub fn extract_course_page(text: &str) -> Result<CoursePage> {
 
   Ok(CoursePage {
     title: full_title
+      .splitn(3, ' ')
+      .nth(2)
+      .unwrap_or("")
+      .split(" (")
+      .next()
+      .unwrap_or("")
+      .to_owned(),
+    credits: full_title
+      .split('(')
+      .skip(1)
+      .collect::<String>()
       .split(' ')
-      .skip(2)
-      .collect::<Vec<&str>>()
-      .join(" "),
+      .take(1)
+      .collect::<String>(),
     subject: subject.clone(),
     code: code.clone(),
     faculty_url: content
@@ -470,7 +480,8 @@ mod tests {
       )
       .unwrap(),
       CoursePage {
-        title: "Discrete Structures (3 credits)".into(),
+        title: "Discrete Structures".into(),
+        credits: "3".into(),
         subject: "MATH".into(),
         code: "240".into(),
         faculty_url: "/study/2022-2023/faculties/science".into(),
