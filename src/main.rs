@@ -1,19 +1,16 @@
 use {
   crate::{
-    arguments::Arguments, config::Config, course::Course, db::Db,
-    loader::Loader, options::Options, page::Page, server::Server, state::State,
+    arguments::Arguments, config::Config, db::Db, loader::Loader,
+    options::Options, page::Page, server::Server, state::State,
     subcommand::Subcommand, vec_ext::VecExt, vsb_client::VsbClient,
   },
   axum::Router,
   clap::Parser,
   dotenv::dotenv,
   http::Method,
-  model::{
-    course_listing::CourseListing, instructor::Instructor,
-    requirements::Requirements, schedule::Schedule,
-  },
+  model::{course::Course, course_listing::CourseListing, schedule::Schedule},
   rayon::prelude::*,
-  serde::{Deserialize, Serialize},
+  serde::Deserialize,
   sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
   std::{
     fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr,
@@ -24,7 +21,6 @@ use {
 
 mod arguments;
 mod config;
-mod course;
 mod db;
 mod loader;
 mod options;
