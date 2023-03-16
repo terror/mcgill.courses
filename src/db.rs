@@ -17,7 +17,9 @@ impl Db {
       Postgres::create_database(&url).await?;
     }
 
-    let pool = PgPool::connect_with(sqlx::postgres::PgConnectOptions::from_str(&url)?).await?;
+    let pool =
+      PgPool::connect_with(sqlx::postgres::PgConnectOptions::from_str(&url)?)
+        .await?;
 
     log::debug!("Running migrations...");
 

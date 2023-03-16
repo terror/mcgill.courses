@@ -12,7 +12,7 @@ clippy:
   cargo clippy --all-targets --all-features
 
 fmt:
-  cargo fmt
+  cargo fmt --all
   prettier --write .
 
 fmt-check:
@@ -26,7 +26,7 @@ services:
   docker-compose up -d
 
 test:
-  cargo test
+  cargo test --all
 
 watch +COMMAND='test':
   cargo watch --clear --exec "{{COMMAND}}"
