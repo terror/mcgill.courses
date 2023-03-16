@@ -1,16 +1,10 @@
 use {
   crate::{
-    arguments::Arguments,
-    config::Config,
-    course::{Course, Instructor, Requirement, Requirements, Schedule},
-    db::Db,
-    extractor::Extractor,
-    options::Options,
-    select::Select,
-    server::Server,
-    state::State,
-    subcommand::Subcommand,
-    vec_ext::VecExt,
+    arguments::Arguments, config::Config, course::Course, course_listing::CourseListing,
+    course_page::CoursePage, db::Db, extractor::Extractor, instructor::Instructor,
+    options::Options, page::Page, requirement::Requirement, requirements::Requirements,
+    schedule::Schedule, select::Select, server::Server, state::State, subcommand::Subcommand,
+    vec_ext::VecExt, vsb_client::VsbClient,
   },
   anyhow::anyhow,
   axum::Router,
@@ -32,14 +26,23 @@ use {
 mod arguments;
 mod config;
 mod course;
+mod course_listing;
+mod course_page;
 mod db;
 mod extractor;
+mod instructor;
 mod options;
+mod page;
+mod parser;
+mod requirement;
+mod requirements;
+mod schedule;
 mod select;
 mod server;
 mod state;
 mod subcommand;
 mod vec_ext;
+mod vsb_client;
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
