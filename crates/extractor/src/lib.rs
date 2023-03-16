@@ -1,11 +1,7 @@
 use {
   anyhow::anyhow,
   model::{
-    course_listing::CourseListing,
-    course_page::CoursePage,
-    instructor::Instructor,
-    requirements::{Requirement, Requirements},
-    schedule::Schedule,
+    CourseListing, CoursePage, Instructor, Requirement, Requirements, Schedule,
   },
   scraper::{ElementRef, Html, Selector},
 };
