@@ -2,7 +2,7 @@ use {
   crate::{
     course_listing::CourseListing, course_page::CoursePage,
     instructor::Instructor, requirement::Requirement,
-    requirements::Requirements, select::Select, schedule::Schedule
+    requirements::Requirements, schedule::Schedule, select::Select,
   },
   anyhow::anyhow,
   scraper::{ElementRef, Html, Selector},

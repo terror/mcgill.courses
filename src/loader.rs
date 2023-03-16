@@ -97,8 +97,7 @@ impl Loader {
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
     log::info!("{:?}", listing);
 
-    let course_page =
-      extract::extract_course_page(&listing.content()?)?;
+    let course_page = extract::extract_course_page(&listing.content()?)?;
 
     log::info!(
       "Parsed course {}{}",

@@ -126,16 +126,15 @@ pub fn extract_schedule(text: &str) -> Result<Vec<Schedule>> {
       .select_many("error")?
       .is_empty()
     {
-      true => Vec::new(),
+      false => Vec::new(),
       _ => html
         .root_element()
         .select_many("block")?
         .iter()
         .map(|block| Schedule {
           campus: block.value().attr("campus").map(|s| s.to_string()),
-          course_type: block.value().attr("type").map(|s| s.to_string()),
+          display: block.value().attr("disp").map(|s| s.to_string()),
           location: block.value().attr("location").map(|s| s.to_string()),
-          section: block.value().attr("secNo").map(|s| s.to_string()),
         })
         .collect(),
     },
@@ -424,6 +423,25 @@ mod tests {
         description: "Introduction to discrete mathematics and applications. Logical reasoning and methods of proof. Elementary number theory and cryptography  prime numbers, modular equations, RSA encryption. Combinatorics  basic enumeration, combinatorial methods, recurrence equations. Graph theory  trees, cycles, planar\ngraphs.".into(),
         instructors: vec![Instructor { name: "Adrian Roshan Vetta".into(), term: "Fall".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Fall".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Winter".into() }, Instructor { name: "Jeremy Macdonald".into(), term: "Winter".into() }],
         requirements: Requirements { corequisites: vec!["MATH 133".into()], prerequisites: vec![] } }
+    );
+  }
+
+  #[test]
+  fn test_extract_schedule() {
+    assert_eq!(
+      extract_schedule(
+        MOCK_DIR
+          .get_file("vsb.xml")
+          .unwrap()
+          .contents_utf8()
+          .unwrap(),
+      )
+      .unwrap(),
+      vec![Schedule {
+        campus: Some("Downtown".into()),
+        display: Some("Lec 045".into()),
+        location: Some("BRONF 422".into()),
+      }]
     );
   }
 }

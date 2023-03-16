@@ -19,14 +19,16 @@ impl VsbClient {
   }
 
   pub(crate) fn schedule(&self, code: &str) -> Result<Vec<Schedule>> {
-    extract::extract_schedule(
-      &self
-        .client
-        .get(&self.format_url(code))
-        .header("Accept-Encoding", "")
-        .send()?
-        .text()?,
-    )
+    let text = &self
+      .client
+      .get(&self.format_url(code))
+      .header("Accept-Encoding", "")
+      .send()?
+      .text()?;
+
+    log::info!("{text}");
+
+    extract::extract_schedule(text)
   }
 
   fn format_url(&self, code: &str) -> String {

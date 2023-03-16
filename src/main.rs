@@ -1,16 +1,15 @@
 use {
   crate::{
     arguments::Arguments, config::Config, course::Course, db::Db,
-    loader::Loader, options::Options, page::Page,
-    server::Server, state::State, subcommand::Subcommand, vec_ext::VecExt,
-    vsb_client::VsbClient,
+    loader::Loader, options::Options, page::Page, server::Server, state::State,
+    subcommand::Subcommand, vec_ext::VecExt, vsb_client::VsbClient,
   },
   axum::Router,
   clap::Parser,
   dotenv::dotenv,
   extractor::{
     course_listing::CourseListing, extract, instructor::Instructor,
-    requirements::Requirements, schedule::Schedule
+    requirements::Requirements, schedule::Schedule,
   },
   http::Method,
   rayon::prelude::*,
