@@ -8,7 +8,7 @@ use {
   clap::Parser,
   dotenv::dotenv,
   http::Method,
-  model::{course::Course, course_listing::CourseListing, schedule::Schedule},
+  model::{Course, CourseListing, Schedule},
   rayon::prelude::*,
   serde::Deserialize,
   sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
