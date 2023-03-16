@@ -1,41 +1,36 @@
 use {
   crate::{
-    arguments::Arguments, config::Config, course::Course, course_listing::CourseListing,
-    course_page::CoursePage, db::Db, extractor::Extractor, instructor::Instructor,
-    options::Options, page::Page, requirement::Requirement, requirements::Requirements,
-    schedule::Schedule, select::Select, server::Server, state::State, subcommand::Subcommand,
+    arguments::Arguments, config::Config, course::Course, db::Db,
+    loader::Loader, options::Options, page::Page, schedule::Schedule,
+    select::Select, server::Server, state::State, subcommand::Subcommand,
     vec_ext::VecExt, vsb_client::VsbClient,
   },
   anyhow::anyhow,
   axum::Router,
   clap::Parser,
   dotenv::dotenv,
+  extractor::{
+    course_listing::CourseListing, extract, instructor::Instructor,
+    requirements::Requirements,
+  },
   http::Method,
   rayon::prelude::*,
   scraper::{ElementRef, Html, Selector},
   serde::{Deserialize, Serialize},
   sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr, thread,
-    time::Duration,
+    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr,
   },
   tower_http::cors::{Any, CorsLayer},
-  uuid::Uuid,
 };
 
 mod arguments;
 mod config;
 mod course;
-mod course_listing;
-mod course_page;
 mod db;
-mod extractor;
-mod instructor;
+mod loader;
 mod options;
 mod page;
-mod parser;
-mod requirement;
-mod requirements;
 mod schedule;
 mod select;
 mod server;

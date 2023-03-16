@@ -12,7 +12,7 @@ clippy:
   cargo clippy --all-targets --all-features
 
 fmt:
-  cargo fmt
+  cargo fmt --all
   prettier --write .
 
 fmt-check:

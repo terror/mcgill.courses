@@ -1,20 +1,20 @@
 use super::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub(crate) struct Instructor {
-  pub(crate) name: String,
-  pub(crate) term: String,
+pub struct Instructor {
+  pub name: String,
+  pub term: String,
 }
 
 impl Instructor {
-  pub(crate) fn new() -> Self {
+  pub fn new() -> Self {
     Self {
       name: String::new(),
       term: String::new(),
     }
   }
 
-  pub(crate) fn set_name_from_parts(self, parts: Vec<&str>) -> Self {
+  pub fn set_name_from_parts(self, parts: Vec<&str>) -> Self {
     Self {
       name: format!(
         "{} {}",
@@ -25,7 +25,7 @@ impl Instructor {
     }
   }
 
-  pub(crate) fn set_term(self, term: &str) -> Self {
+  pub fn set_term(self, term: &str) -> Self {
     Self {
       term: term.to_owned(),
       ..self

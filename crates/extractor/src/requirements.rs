@@ -1,20 +1,24 @@
 use super::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub(crate) struct Requirements {
+pub struct Requirements {
   pub(crate) corequisites: Vec<String>,
   pub(crate) prerequisites: Vec<String>,
 }
 
 impl Requirements {
-  pub(crate) fn new() -> Self {
+  pub fn new() -> Self {
     Self {
       corequisites: Vec::new(),
       prerequisites: Vec::new(),
     }
   }
 
-  pub(crate) fn set_requirement(&mut self, requirement: Requirement, data: Vec<String>) -> Result {
+  pub fn set_requirement(
+    &mut self,
+    requirement: Requirement,
+    data: Vec<String>,
+  ) -> Result {
     match requirement {
       Requirement::Corequisites => Ok(self.set_corequisites(data)),
       Requirement::Prerequisites => Ok(self.set_prerequisites(data)),

@@ -1,6 +1,4 @@
-use super::*;
-
-pub(crate) enum Requirement {
+pub enum Requirement {
   Corequisites,
   Prerequisites,
   Unknown,

@@ -1,131 +1,58 @@
 use super::*;
 
-pub(crate) fn parse_course_listing_page(html: &Html) -> Result<Option<Vec<CourseListing>>> {
-  Ok(
-    match html
-      .root_element()
-      .select_optional("div[class='view-content']")?
-    {
-      Some(content) => Some(
-        content
-          .select_many("div[class~='views-row']")?
-          .iter()
-          .map(|listing| -> Result<CourseListing> {
-            Ok(CourseListing {
-              department: listing
-                .select_single("span[class~='views-field-field-dept-code']")?
-                .select_single("span[class='field-content']")?
-                .inner_html(),
-              faculty: listing
-                .select_single("span[class~='views-field-field-faculty-code']")?
-                .select_single("span[class='field-content']")?
-                .inner_html(),
-              level: listing
-                .select_single("span[class~='views-field-level']")?
-                .select_single("span[class='field-content']")?
-                .inner_html(),
-              terms: listing
-                .select_single("span[class~='views-field-terms']")?
-                .select_single("span[class='field-content']")?
-                .inner_html()
-                .split(", ")
-                .map(|term| term.to_owned())
-                .collect::<Vec<String>>(),
-              url: listing
-                .select_single("div[class~='views-field-field-course-title-long']")?
-                .select_single("a")?
-                .value()
-                .attr("href")
-                .ok_or_else(|| anyhow!("Failed to get attribute"))?
-                .to_string(),
-            })
-          })
-          .collect::<Result<Vec<CourseListing>, _>>()?
-          .into_iter()
-          .filter(|entry| !entry.terms.contains(&String::from("Not Offered")))
-          .collect::<Vec<CourseListing>>(),
-      ),
-      None => None,
-    },
-  )
-}
-
-pub(crate) fn parse_course_instructors(html: Html) -> Result<Vec<Instructor>> {
-  let mut tokens = html
+pub fn extract_course_listing_page(
+  html: &Html,
+) -> Result<Option<Vec<CourseListing>>> {
+  match html
     .root_element()
-    .select_single("div[class='node node-catalog clearfix']")?
-    .select_single("p[class='catalog-instructors']")?
-    .inner_html()
-    .trim()
-    .split(' ')
-    .skip(1)
-    .collect::<Vec<&str>>()
-    .join(" ")
-    .to_owned();
-
-  Ok(
-    ["Fall", "Winter", "Summer"]
-      .iter()
-      .flat_map(|term| match tokens.contains(&format!("({term})")) {
-        false => Vec::new(),
-        _ => {
-          let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
-
-          let instructors = split[0]
-            .split(';')
-            .map(|s| {
-              Instructor::new()
-                .set_name_from_parts(s.trim().split(", ").collect())
-                .set_term(term)
-            })
-            .collect();
-
-          if split.len() > 1 {
-            tokens = split[1].trim().to_string();
-          }
-
-          instructors
-        }
-      })
-      .collect(),
-  )
-}
-
-pub(crate) fn parse_course_requirements(html: Html) -> Result<Requirements> {
-  let mut requirements = Requirements::new();
-
-  if let Some(notes) = html
-    .root_element()
-    .select_optional("ul[class='catalog-notes']")?
+    .select_optional("div[class='view-content']")?
   {
-    notes
-      .select_many("li")?
-      .iter()
-      .try_for_each(|note| -> Result {
-        let par = note.select_single("p")?;
-
-        ["Prerequisite", "Corequisite"]
-          .iter()
-          .try_for_each(|title| -> Result {
-            match par.inner_html().starts_with(title) {
-              false => Ok(()),
-              _ => requirements.set_requirement(
-                Requirement::from(*title),
-                par
-                  .select_many("a")?
-                  .iter()
-                  .map(|link| link.inner_html())
-                  .collect(),
-              ),
-            }
+    Some(content) => Ok(Some(
+      content
+        .select_many("div[class~='views-row']")?
+        .iter()
+        .map(|listing| -> Result<CourseListing> {
+          Ok(CourseListing {
+            department: listing
+              .select_single("span[class~='views-field-field-dept-code']")?
+              .select_single("span[class='field-content']")?
+              .inner_html(),
+            faculty: listing
+              .select_single("span[class~='views-field-field-faculty-code']")?
+              .select_single("span[class='field-content']")?
+              .inner_html(),
+            level: listing
+              .select_single("span[class~='views-field-level']")?
+              .select_single("span[class='field-content']")?
+              .inner_html(),
+            terms: listing
+              .select_single("span[class~='views-field-terms']")?
+              .select_single("span[class='field-content']")?
+              .inner_html()
+              .split(", ")
+              .map(|term| term.to_owned())
+              .collect::<Vec<String>>(),
+            url: listing
+              .select_single(
+                "div[class~='views-field-field-course-title-long']",
+              )?
+              .select_single("a")?
+              .value()
+              .attr("href")
+              .ok_or_else(|| anyhow!("Failed to get attribute"))?
+              .to_string(),
           })
-      })?;
+        })
+        .collect::<Result<Vec<CourseListing>, _>>()?
+        .into_iter()
+        .filter(|entry| !entry.terms.contains(&String::from("Not Offered")))
+        .collect::<Vec<CourseListing>>(),
+    )),
+    None => Ok(None),
   }
-
-  Ok(requirements)
 }
 
-pub(crate) fn parse_course_page(html: Html) -> Result<CoursePage> {
+pub fn extract_course_page(html: Html) -> Result<CoursePage> {
   let full_title = html
     .root_element()
     .select_single("h1[id='page-title']")?
@@ -182,9 +109,84 @@ pub(crate) fn parse_course_page(html: Html) -> Result<CoursePage> {
       .join(" ")
       .trim()
       .to_owned(),
-    instructors: parser::parse_course_instructors(html.clone())?,
-    requirements: parser::parse_course_requirements(html.clone())?,
+    instructors: extract_course_instructors(html.clone())?,
+    requirements: extract_course_requirements(html.clone())?,
   })
+}
+
+fn extract_course_instructors(html: Html) -> Result<Vec<Instructor>> {
+  let mut tokens = html
+    .root_element()
+    .select_single("div[class='node node-catalog clearfix']")?
+    .select_single("p[class='catalog-instructors']")?
+    .inner_html()
+    .trim()
+    .split(' ')
+    .skip(1)
+    .collect::<Vec<&str>>()
+    .join(" ")
+    .to_owned();
+
+  let instructors = ["Fall", "Winter", "Summer"]
+    .iter()
+    .flat_map(|term| match tokens.contains(&format!("({term})")) {
+      false => Vec::new(),
+      _ => {
+        let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
+
+        let instructors = split[0]
+          .split(';')
+          .map(|s| {
+            Instructor::new()
+              .set_name_from_parts(s.trim().split(", ").collect())
+              .set_term(term)
+          })
+          .collect();
+
+        if split.len() > 1 {
+          tokens = split[1].trim().to_string();
+        }
+
+        instructors
+      }
+    })
+    .collect();
+
+  Ok(instructors)
+}
+
+fn extract_course_requirements(html: Html) -> Result<Requirements> {
+  let mut requirements = Requirements::new();
+
+  if let Some(notes) = html
+    .root_element()
+    .select_optional("ul[class='catalog-notes']")?
+  {
+    notes
+      .select_many("li")?
+      .iter()
+      .try_for_each(|note| -> Result {
+        let par = note.select_single("p")?;
+
+        ["Prerequisite", "Corequisite"]
+          .iter()
+          .try_for_each(|title| -> Result {
+            match par.inner_html().starts_with(title) {
+              false => Ok(()),
+              _ => requirements.set_requirement(
+                Requirement::from(*title),
+                par
+                  .select_many("a")?
+                  .iter()
+                  .map(|link| link.inner_html())
+                  .collect(),
+              ),
+            }
+          })
+      })?;
+  }
+
+  Ok(requirements)
 }
 
 #[cfg(test)]
@@ -197,9 +199,9 @@ mod tests {
   static MOCK_DIR: Dir<'_> = include_dir!("mocks");
 
   #[test]
-  fn test_parse_course_page() {
+  fn test_extract_course_page() {
     assert_eq!(
-      parse_course_listing_page(&Html::parse_fragment(
+      extract_course_listing_page(&Html::parse_fragment(
         MOCK_DIR
           .get_file("page.html")
           .unwrap()
@@ -326,9 +328,9 @@ mod tests {
   }
 
   #[test]
-  fn test_parse_course_instructors() {
+  fn test_extract_course_instructors() {
     assert_eq!(
-      parse_course_instructors(Html::parse_fragment(
+      extract_course_instructors(Html::parse_fragment(
         MOCK_DIR
           .get_file("course.html")
           .unwrap()
@@ -358,9 +360,9 @@ mod tests {
   }
 
   #[test]
-  fn test_parse_course_requirements() {
+  fn test_extract_course_requirements() {
     assert_eq!(
-      parse_course_requirements(Html::parse_fragment(
+      extract_course_requirements(Html::parse_fragment(
         MOCK_DIR
           .get_file("course.html")
           .unwrap()
@@ -376,9 +378,9 @@ mod tests {
   }
 
   #[test]
-  fn test_parse_partial_course() {
+  fn text_extract_course_page() {
     assert_eq!(
-      parse_course_page(
+      extract_course_page(
         Html::parse_fragment(
           MOCK_DIR
             .get_file("course.html")
