@@ -2,7 +2,7 @@ use {
   crate::{
     course_listing::CourseListing, course_page::CoursePage,
     instructor::Instructor, requirement::Requirement,
-    requirements::Requirements, select::Select,
+    requirements::Requirements, select::Select, schedule::Schedule
   },
   anyhow::anyhow,
   scraper::{ElementRef, Html, Selector},
@@ -19,3 +19,4 @@ pub mod course_listing;
 pub mod extract;
 pub mod instructor;
 pub mod requirements;
+pub mod schedule;

@@ -77,9 +77,7 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     log::info!("Parsing html on page: {}...", page.number);
 
-    let listings = extract::extract_course_listing_page(
-      &Html::parse_fragment(&page.content()?),
-    )?;
+    let listings = extract::extract_course_listing_page(&page.content()?)?;
 
     if let Some(listings) = listings {
       return Ok(Some(
@@ -100,7 +98,7 @@ impl Loader {
     log::info!("{:?}", listing);
 
     let course_page =
-      extract::extract_course_page(Html::parse_fragment(&listing.content()?))?;
+      extract::extract_course_page(&listing.content()?)?;
 
     log::info!(
       "Parsed course {}{}",

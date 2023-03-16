@@ -19,35 +19,13 @@ impl VsbClient {
   }
 
   pub(crate) fn schedule(&self, code: &str) -> Result<Vec<Schedule>> {
-    let html = Html::parse_fragment(
+    extract::extract_schedule(
       &self
         .client
         .get(&self.format_url(code))
         .header("Accept-Encoding", "")
         .send()?
         .text()?,
-    );
-
-    Ok(
-      match html
-        .root_element()
-        .select_single("errors")?
-        .select_many("error")?
-        .is_empty()
-      {
-        true => Vec::new(),
-        _ => html
-          .root_element()
-          .select_many("block")?
-          .iter()
-          .map(|block| Schedule {
-            campus: block.value().attr("campus").map(|s| s.to_string()),
-            course_type: block.value().attr("type").map(|s| s.to_string()),
-            location: block.value().attr("location").map(|s| s.to_string()),
-            section: block.value().attr("secNo").map(|s| s.to_string()),
-          })
-          .collect(),
-      },
     )
   }
 

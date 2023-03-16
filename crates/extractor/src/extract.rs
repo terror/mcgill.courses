@@ -1,9 +1,9 @@
 use super::*;
 
 pub fn extract_course_listing_page(
-  html: &Html,
+  text: &str,
 ) -> Result<Option<Vec<CourseListing>>> {
-  match html
+  match Html::parse_fragment(text)
     .root_element()
     .select_optional("div[class='view-content']")?
   {
@@ -52,7 +52,9 @@ pub fn extract_course_listing_page(
   }
 }
 
-pub fn extract_course_page(html: Html) -> Result<CoursePage> {
+pub fn extract_course_page(text: &str) -> Result<CoursePage> {
+  let html = Html::parse_fragment(text);
+
   let full_title = html
     .root_element()
     .select_single("h1[id='page-title']")?
@@ -112,6 +114,32 @@ pub fn extract_course_page(html: Html) -> Result<CoursePage> {
     instructors: extract_course_instructors(html.clone())?,
     requirements: extract_course_requirements(html.clone())?,
   })
+}
+
+pub fn extract_schedule(text: &str) -> Result<Vec<Schedule>> {
+  let html = Html::parse_fragment(text);
+
+  Ok(
+    match html
+      .root_element()
+      .select_single("errors")?
+      .select_many("error")?
+      .is_empty()
+    {
+      true => Vec::new(),
+      _ => html
+        .root_element()
+        .select_many("block")?
+        .iter()
+        .map(|block| Schedule {
+          campus: block.value().attr("campus").map(|s| s.to_string()),
+          course_type: block.value().attr("type").map(|s| s.to_string()),
+          location: block.value().attr("location").map(|s| s.to_string()),
+          section: block.value().attr("secNo").map(|s| s.to_string()),
+        })
+        .collect(),
+    },
+  )
 }
 
 fn extract_course_instructors(html: Html) -> Result<Vec<Instructor>> {
@@ -201,13 +229,13 @@ mod tests {
   #[test]
   fn test_extract_course_page() {
     assert_eq!(
-      extract_course_listing_page(&Html::parse_fragment(
+      extract_course_listing_page(
         MOCK_DIR
           .get_file("page.html")
           .unwrap()
           .contents_utf8()
           .unwrap()
-      ),)
+      )
       .unwrap()
       .unwrap(),
       vec![
@@ -381,13 +409,11 @@ mod tests {
   fn text_extract_course_page() {
     assert_eq!(
       extract_course_page(
-        Html::parse_fragment(
-          MOCK_DIR
-            .get_file("course.html")
-            .unwrap()
-            .contents_utf8()
-            .unwrap(),
-        ),
+        MOCK_DIR
+          .get_file("course.html")
+          .unwrap()
+          .contents_utf8()
+          .unwrap(),
       )
       .unwrap(),
       CoursePage {
