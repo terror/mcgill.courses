@@ -2,7 +2,7 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct Db {
-  pool: PgPool,
+  _pool: PgPool,
 }
 
 impl Db {
@@ -25,6 +25,6 @@ impl Db {
 
     sqlx::migrate!("./migrations").run(&pool).await?;
 
-    Ok(Self { pool })
+    Ok(Self { _pool: pool })
   }
 }

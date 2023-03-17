@@ -8,7 +8,7 @@ pub(crate) trait RequirementsExt {
 
 impl RequirementsExt for Requirements {
   fn from_notes(notes: ElementRef) -> Result<Self> {
-    let mut requirements = Self::new();
+    let mut requirements = Self::default();
 
     notes
       .select_many("li")?

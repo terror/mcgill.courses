@@ -22,7 +22,7 @@ impl VsbClient {
     extractor::extract_course_schedules(
       &self
         .client
-        .get(&self.format_url(code))
+        .get(self.format_url(code))
         .header("Accept-Encoding", "")
         .send()?
         .text()?,

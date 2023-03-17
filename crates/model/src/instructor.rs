@@ -1,20 +1,13 @@
 use super::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Instructor {
   pub name: String,
   pub term: String,
 }
 
 impl Instructor {
-  pub fn new() -> Self {
-    Self {
-      name: String::new(),
-      term: String::new(),
-    }
-  }
-
-  pub fn set_name_from_parts(self, parts: Vec<&str>) -> Self {
+  pub fn set_name(self, parts: Vec<&str>) -> Self {
     Self {
       name: format!(
         "{} {}",

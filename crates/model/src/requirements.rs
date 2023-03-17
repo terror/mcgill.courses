@@ -16,28 +16,27 @@ impl From<&str> for Requirement {
   }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Requirements {
   pub corequisites: Vec<String>,
   pub prerequisites: Vec<String>,
 }
 
 impl Requirements {
-  pub fn new() -> Self {
-    Self {
-      corequisites: Vec::new(),
-      prerequisites: Vec::new(),
-    }
-  }
-
   pub fn set_requirement(
     &mut self,
     requirement: Requirement,
     data: Vec<String>,
   ) -> Result {
     match requirement {
-      Requirement::Corequisites => Ok(self.set_corequisites(data)),
-      Requirement::Prerequisites => Ok(self.set_prerequisites(data)),
+      Requirement::Corequisites => {
+        self.set_corequisites(data);
+        Ok(())
+      }
+      Requirement::Prerequisites => {
+        self.set_prerequisites(data);
+        Ok(())
+      }
       Requirement::Unknown => Err(anyhow!("Unknown course requirement")),
     }
   }
