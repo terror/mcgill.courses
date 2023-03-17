@@ -25,7 +25,7 @@ impl CoursePageExt for CoursePage {
       .collect::<Vec<&str>>()
       .join(" ");
 
-    Ok(CoursePage {
+    Ok(Self {
       title: full_title
         .splitn(3, ' ')
         .nth(2)

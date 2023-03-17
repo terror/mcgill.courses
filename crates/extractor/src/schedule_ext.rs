@@ -8,7 +8,7 @@ pub(crate) trait ScheduleExt {
 
 impl ScheduleExt for Schedule {
   fn from_block(block: &ElementRef) -> Self {
-    Schedule {
+    Self {
       campus: block.value().attr("campus").map(|s| s.to_string()),
       display: block.value().attr("disp").map(|s| s.to_string()),
       location: block.value().attr("location").map(|s| s.to_string()),

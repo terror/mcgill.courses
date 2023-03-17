@@ -8,7 +8,7 @@ pub(crate) trait CourseListingExt {
 
 impl CourseListingExt for CourseListing {
   fn from_listing(listing: &ElementRef) -> Result<Self> {
-    Ok(CourseListing {
+    Ok(Self {
       department: listing
         .select_single("span[class~='views-field-field-dept-code']")?
         .select_single("span[class='field-content']")?
