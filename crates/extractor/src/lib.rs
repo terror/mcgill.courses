@@ -30,7 +30,7 @@ pub fn extract_course_listings(
       content
         .select_many("div[class~='views-row']")?
         .iter()
-        .map(|listing| CourseListing::from_listing(listing))
+        .map(CourseListing::from_listing)
         .collect::<Result<Vec<CourseListing>, _>>()?
         .into_iter()
         .filter(|entry| !entry.terms.contains(&String::from("Not Offered")))
@@ -59,7 +59,7 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
         .root_element()
         .select_many("block")?
         .iter()
-        .map(|block| Schedule::from_block(block))
+        .map(Schedule::from_block)
         .collect(),
     },
   )
@@ -79,8 +79,7 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
     .split(' ')
     .skip(1)
     .collect::<Vec<&str>>()
-    .join(" ")
-    .to_owned();
+    .join(" ");
 
   ["Fall", "Winter", "Summer"].iter().for_each(|term| {
     if tokens.contains(&format!("({term})")) {
@@ -89,8 +88,8 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
       let inner = split[0]
         .split(';')
         .map(|s| {
-          Instructor::new()
-            .set_name_from_parts(s.trim().split(", ").collect())
+          Instructor::default()
+            .set_name(s.trim().split(", ").collect())
             .set_term(term)
         })
         .collect::<Vec<Instructor>>();
@@ -112,7 +111,7 @@ fn extract_course_requirements(html: &Html) -> Result<Requirements> {
     .select_optional("ul[class='catalog-notes']")?
   {
     Some(notes) => Requirements::from_notes(notes),
-    None => Ok(Requirements::new()),
+    None => Ok(Requirements::default()),
   }
 }
 
