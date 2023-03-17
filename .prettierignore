@@ -1,3 +1,5 @@
+/crates/extractor/mocks
+/mocks
 /node_modules
 /target
-/mocks
+courses.json

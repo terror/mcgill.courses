@@ -125,7 +125,7 @@ mod tests {
     include_dir::{include_dir, Dir},
   };
 
-  static MOCK_DIR: Dir<'_> = include_dir!("mocks");
+  static MOCK_DIR: Dir<'_> = include_dir!("crates/extractor/mocks");
 
   #[test]
   fn extract_course_listings() {
