@@ -77,7 +77,7 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     log::info!("Parsing html on page: {}...", page.number);
 
-    let listings = extractor::extract_course_listing_page(&page.content()?)?;
+    let listings = extractor::extract_course_listings(&page.content()?)?;
 
     thread::sleep(Duration::from_millis(self.page_delay));
 

@@ -19,7 +19,7 @@ impl VsbClient {
   }
 
   pub(crate) fn schedule(&self, code: &str) -> Result<Vec<Schedule>> {
-    extractor::extract_schedule(
+    extractor::extract_course_schedules(
       &self
         .client
         .get(&self.format_url(code))
