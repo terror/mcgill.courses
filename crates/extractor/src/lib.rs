@@ -132,7 +132,7 @@ mod tests {
     assert_eq!(
       super::extract_course_listings(
         MOCK_DIR
-          .get_file("listings.html")
+          .get_file("course_listings.html")
           .unwrap()
           .contents_utf8()
           .unwrap()
@@ -334,7 +334,7 @@ mod tests {
     assert_eq!(
       super::extract_course_schedules(
         MOCK_DIR
-          .get_file("vsb.xml")
+          .get_file("course_schedules.xml")
           .unwrap()
           .contents_utf8()
           .unwrap(),
