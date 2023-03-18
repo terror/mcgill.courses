@@ -46,3 +46,16 @@ function SearchPanel() {
     </div>
   );
 }
+
+function Button({url, content}: {url:string, content:string}) {
+  return (
+    <div>
+      <a href={url}>
+        <button className="button hover:bg-red-600 duration-300">
+          {content}
+        </button>
+      </a>
+    </div>
+  );
+}
+

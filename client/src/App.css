@@ -67,6 +67,9 @@
   color: #FAFAFA;
   animation-duration:  0.5s;
 }
+
+.red-text{
+  color: #F05A46;
 }
 
 @media (prefers-reduced-motion: no-preference) {
