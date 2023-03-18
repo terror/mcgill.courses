@@ -13,7 +13,7 @@ You'll need [docker](https://www.docker.com/),
 installed on your machine to spawn the various components the project needs to
 run locally.
 
-First, mount a local postgresql instance, see `.env.example` for what
+First, mount a local mongodb instance, see `.env.example` for what
 environment variables you'll need to set:
 
 ```bash
