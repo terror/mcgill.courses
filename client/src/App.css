@@ -8,26 +8,65 @@
   height:100vh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.searchbar-text{
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 24px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.searchbar-wrapper{
+  width: 807px;
+  height: 65px;
+  left: 236px;
+  top: 307px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  
+  background: #FAFAFA;
+  border: 0px solid #E0E0E0;
+  mix-blend-mode: normal;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  font-size: x-large;
+}
+
+.searchbar-input{
+  width: 760px;
+  height: 65px;
+  left: 236px;
+  top: 307px;
+  
+  background: #FAFAFA;
+  color: #333333;
+}
+
+.searchbar-icon{
+  width: 30px;
+  height: 30px;
+  left: 236px;
+  top: 307px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.button{
+  width: 206px;
+  height: 52px;
+  background: #F05A46;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #FAFAFA;
+  animation-duration:  0.5s;
+}
 }
 
 @media (prefers-reduced-motion: no-preference) {

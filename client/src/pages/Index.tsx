@@ -30,3 +30,19 @@ function Navbar() {
     </div>
   );
 }
+
+function SearchPanel() {
+  return (
+    <div className='searchpanel absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+    space-y-10 '>
+      <div className='searchbar-wrapper'>
+        <img className='searchbar-icon' src={magnifyingGlass} alt='search'/>
+        <input className="searchbar-input" type="text" placeholder="Search for courses or instructors"/>
+      </div>
+      <div>
+        <p className="searchbar-text">Explore the courses and instructors at <span className='red-text'>McGill University</span></p>
+      </div>
+      <Button content="Take me there!" url=""/>
+    </div>
+  );
+}
