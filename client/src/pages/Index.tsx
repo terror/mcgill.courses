@@ -12,3 +12,21 @@ return (
     </div>
   );
 }
+
+//navbar with login and signup buttons and logo on the left
+function Navbar() {
+  const [showLogin, setShowLogin] = useState(false);
+
+  const handleLogin = () => { setShowLogin(!showLogin); };
+
+  return (
+    <div className='w-screen flex justify-between p-10'>
+      <div className='flex items-center justify-center'>
+        <img className='logo' src={reactLogo} alt='logo'/>
+      </div>
+      <div className='flex items-center justify-center text-xl'>
+        <a onClick={handleLogin} className='cursor-pointer pr-6'>Login</a> {showLogin && <LoginWindow/>}
+      </div>
+    </div>
+  );
+}
