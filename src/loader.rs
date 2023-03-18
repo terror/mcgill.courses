@@ -36,7 +36,7 @@ impl Loader {
       page += self.batch_size;
     }
 
-    fs::write(source, serde_json::to_string(&courses)?)
+    fs::write(source, serde_json::to_string_pretty(&courses)?)
       .map_err(anyhow::Error::from)
   }
 
