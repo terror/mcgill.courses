@@ -6,9 +6,9 @@ pub(crate) struct State {
 }
 
 impl State {
-  pub(crate) async fn new(config: Config) -> Result<Self> {
+  pub(crate) async fn new(config: Config, source: PathBuf) -> Result<Self> {
     Ok(Self {
-      _db: Db::connect(&config).await?,
+      _db: Db::connect(&config, source).await?,
     })
   }
 }

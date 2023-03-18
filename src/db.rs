@@ -2,29 +2,40 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct Db {
-  _pool: PgPool,
+  _client: Client,
 }
 
 impl Db {
-  pub(crate) async fn connect(config: &Config) -> Result<Self> {
-    let url = format!(
-      "postgres://{}:{}@localhost/{}",
-      config.postgres_user, config.postgres_password, config.postgres_db
-    );
+  pub(crate) async fn connect(
+    _config: &Config,
+    source: PathBuf,
+  ) -> Result<Self> {
+    let mut client_options =
+      ClientOptions::parse("mongodb://localhost:27017").await?;
 
-    if !sqlx::Postgres::database_exists(&url).await? {
-      log::debug!("Creating database...");
-      Postgres::create_database(&url).await?;
-    }
+    client_options.app_name = Some("mcgillgg".to_string());
 
-    let pool =
-      PgPool::connect_with(sqlx::postgres::PgConnectOptions::from_str(&url)?)
-        .await?;
+    let client = Client::with_options(client_options)?;
 
-    log::debug!("Running migrations...");
+    client
+      .database("admin")
+      .run_command(doc! {"ping": 1}, None)
+      .await?;
 
-    sqlx::migrate!("./migrations").run(&pool).await?;
+    log::info!("Connected successfully.");
 
-    Ok(Self { _pool: pool })
+    client
+      .database("admin")
+      .collection::<Course>("courses")
+      .insert_many(
+        serde_json::from_str::<Vec<Course>>(&fs::read_to_string(source)?)?
+          .as_slice(),
+        None,
+      )
+      .await?;
+
+    log::info!("Inserted courses");
+
+    Ok(Self { _client: client })
   }
 }

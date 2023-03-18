@@ -1,16 +1,15 @@
 version: '3.7'
 
 services:
-  db:
+  mongodb:
+    image: mongo:latest
     environment:
-      POSTGRES_USER: '${POSTGRES_USER}'
-      POSTGRES_DB: '${POSTGRES_DB}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
-    image: postgres:latest
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - '5432:5432'
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
 
 volumes:
-  pgdata:
+  mongodb_data:

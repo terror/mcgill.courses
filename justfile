@@ -27,6 +27,10 @@ fmt-check:
   cargo fmt --all -- --check
   @echo formatting check done
 
+restart:
+  docker-compose down
+  just services
+
 run *args:
   cargo run -- {{args}}
 

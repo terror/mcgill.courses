@@ -9,11 +9,11 @@ use {
   dotenv::dotenv,
   http::Method,
   model::{Course, CourseListing, Schedule},
+  mongodb::{bson::doc, options::ClientOptions, Client},
   rayon::prelude::*,
   serde::Deserialize,
-  sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr,
+    fs, marker::Sized, net::SocketAddr, path::PathBuf, process,
     thread, time::Duration,
   },
   tower_http::cors::{Any, CorsLayer},

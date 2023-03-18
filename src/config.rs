@@ -2,9 +2,9 @@ use super::*;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct Config {
-  pub(crate) postgres_user: String,
-  pub(crate) postgres_db: String,
-  pub(crate) postgres_password: String,
+  pub(crate) mongodb_username: String,
+  pub(crate) mongodb_cluster: String,
+  pub(crate) mongodb_password: String,
 }
 
 impl Config {

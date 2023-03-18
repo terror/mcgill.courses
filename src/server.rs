@@ -22,7 +22,7 @@ impl Server {
               .allow_methods([Method::GET])
               .allow_origin(Any),
           )
-          .with_state(State::new(Config::load()?).await?)
+          .with_state(State::new(Config::load()?, source).await?)
           .into_make_service(),
       )
       .await?;
