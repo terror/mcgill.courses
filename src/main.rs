@@ -13,8 +13,8 @@ use {
   rayon::prelude::*,
   serde::Deserialize,
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process,
-    thread, time::Duration,
+    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, thread,
+    time::Duration,
   },
   tower_http::cors::{Any, CorsLayer},
 };
