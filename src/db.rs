@@ -7,11 +7,10 @@ pub(crate) struct Db {
 
 impl Db {
   pub(crate) async fn connect(
-    _config: &Config,
+    config: &Config,
     source: PathBuf,
   ) -> Result<Self> {
-    let mut client_options =
-      ClientOptions::parse("mongodb://localhost:27017").await?;
+    let mut client_options = ClientOptions::parse(&config.mongodb_uri).await?;
 
     client_options.app_name = Some("mcgillgg".to_string());
 
