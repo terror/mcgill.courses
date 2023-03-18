@@ -1,5 +1,8 @@
 use super::*;
 
+use futures::stream::TryStreamExt;
+use mongodb::options::UpdateModifications;
+
 #[derive(Debug, Clone)]
 pub(crate) struct Db {
   _client: Client,
@@ -23,17 +26,44 @@ impl Db {
 
     log::info!("Connected successfully.");
 
-    client
-      .database("admin")
-      .collection::<Course>("courses")
-      .insert_many(
-        serde_json::from_str::<Vec<Course>>(&fs::read_to_string(source)?)?
-          .as_slice(),
-        None,
-      )
-      .await?;
+    let courses =
+      serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?;
+
+    let course_collection =
+      client.database("admin").collection::<Course>("courses");
+
+    let courses = courses.into_iter().take(1).collect::<Vec<Course>>();
+
+    for course in courses {
+      if let Some(mut found) =
+        course_collection.find_one(doc! {}, None).await.unwrap()
+      {
+        found.terms.extend(course.terms);
+
+        log::info!("Found course {}", course.title);
+
+        course_collection
+          .update_one(
+            doc! { "title": &course.title },
+            UpdateModifications::Document(doc! {}),
+            None,
+          )
+          .await?;
+      } else {
+        course_collection.insert_one(course, None).await?;
+      }
+    }
 
     log::info!("Inserted courses");
+
+    log::info!(
+      "Number of courses: {:?}",
+      course_collection
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Course>>()
+        .await?
+    );
 
     Ok(Self { _client: client })
   }

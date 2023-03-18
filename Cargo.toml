@@ -16,6 +16,7 @@ dotenv = "0.15.0"
 env_logger = "0.10.0"
 envy = "0.4.2"
 extractor = { path = "crates/extractor" }
+futures = "0.3.27"
 http = "0.2.9"
 log = "0.4.17"
 model = { path = "crates/model" }
