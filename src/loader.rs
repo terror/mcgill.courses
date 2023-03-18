@@ -124,11 +124,10 @@ impl Loader {
       terms: listing.terms,
       level: listing.level,
       url: listing.url,
-      schedule: VsbClient::new(
-        self.vsb_term.to_string(),
-        self.user_agent.to_string(),
-      )?
-      .schedule(&format!("{}-{}", course_page.subject, course_page.code))?,
+      schedule: VsbClient::new(self.user_agent.to_string())?.schedule(
+        &format!("{}-{}", course_page.subject, course_page.code),
+        self.vsb_term,
+      )?,
     })
   }
 }

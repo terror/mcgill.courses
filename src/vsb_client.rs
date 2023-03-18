@@ -3,37 +3,39 @@ use super::*;
 #[derive(Debug)]
 pub(crate) struct VsbClient {
   client: reqwest::blocking::Client,
-  term: String,
 }
 
 impl VsbClient {
   const BASE_URL: &str = "https://vsb.mcgill.ca/vsb/getclassdata.jsp";
 
-  pub(crate) fn new(term: String, user_agent: String) -> Result<Self> {
+  pub(crate) fn new(user_agent: String) -> Result<Self> {
     Ok(Self {
       client: reqwest::blocking::Client::builder()
         .user_agent(user_agent)
         .build()?,
-      term,
     })
   }
 
-  pub(crate) fn schedule(&self, code: &str) -> Result<Vec<Schedule>> {
+  pub(crate) fn schedule(
+    &self,
+    code: &str,
+    term: usize,
+  ) -> Result<Vec<Schedule>> {
     extractor::extract_course_schedules(
       &self
         .client
-        .get(self.format_url(code))
+        .get(self.url(code, term))
         .header("Accept-Encoding", "")
         .send()?
         .text()?,
     )
   }
 
-  fn format_url(&self, code: &str) -> String {
+  fn url(&self, code: &str, term: usize) -> String {
     format!(
       "{}?term={}&course_1_0={}&rq_1_0=null{}&nouser=1&_={}",
       VsbClient::BASE_URL,
-      self.term,
+      term,
       code,
       self.window(),
       chrono::Local::now().timestamp_millis()
