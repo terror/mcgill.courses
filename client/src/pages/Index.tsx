@@ -59,3 +59,28 @@ function Button({url, content}: {url:string, content:string}) {
   );
 }
 
+function LoginWindow(){
+  return (
+    <div className='login-panel flex-col z-50 space-y-4'>
+        <p className='login-panel-title mb-10'>Login</p>
+        <div className='mr-auto ml-10'>Email</div>
+        <div className='login-panel-input-box'>
+          <input className='login-panel-input' type='email'/>
+        </div>
+        <div className='mr-auto ml-10'>Password</div>
+        <div className='login-panel-input-box'>
+          <input className='login-panel-input' type='password'/>
+        </div>
+        <div className='text-lg  p-3'>Don't have an account? <a>Sign up</a> </div>
+        <Button content="Login" url=""/>
+    </div>
+  );
+}
+
+function SignUpWindow(){
+  return (
+    <div> </div>
+  );
+}
+
+export default Index;
