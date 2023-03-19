@@ -1,8 +1,8 @@
 use {
   crate::{
-    arguments::Arguments, config::Config, db::Db, loader::Loader,
+    arguments::Arguments, env::Env, db::Db, loader::Loader,
     options::Options, page::Page, server::Server, state::State,
-    subcommand::Subcommand, vec_ext::VecExt, vsb_client::VsbClient,
+    subcommand::Subcommand, vec_ext::VecExt, vsb_client::VsbClient, config::Config
   },
   axum::Router,
   clap::Parser,
@@ -20,6 +20,7 @@ use {
 };
 
 mod arguments;
+mod env;
 mod config;
 mod db;
 mod loader;
