@@ -18,6 +18,7 @@ envy = "0.4.2"
 extractor = { path = "crates/extractor" }
 futures = "0.3.27"
 http = "0.2.9"
+itertools = "0.10.5"
 log = "0.4.17"
 model = { path = "crates/model" }
 mongodb = "2.4.0"

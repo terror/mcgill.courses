@@ -1,9 +1,20 @@
 use super::*;
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(
+  Debug, Default, Clone, Serialize, Deserialize, PartialEq, Hash, Eq,
+)]
 pub struct Instructor {
   pub name: String,
   pub term: String,
+}
+
+impl Into<Bson> for Instructor {
+  fn into(self) -> bson::Bson {
+    Bson::Document(doc! {
+      "name": self.name,
+      "term": self.term,
+    })
+  }
 }
 
 impl Instructor {

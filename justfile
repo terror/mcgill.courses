@@ -29,6 +29,7 @@ fmt-check:
 
 restart:
   docker-compose down
+  docker volume rm mcgillgg_mongodb_data
   just services
 
 run *args:

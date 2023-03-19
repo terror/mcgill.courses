@@ -1,6 +1,8 @@
 use super::*;
 
 use futures::stream::TryStreamExt;
+use itertools::Itertools;
+use model::Instructor;
 use mongodb::options::UpdateModifications;
 
 #[derive(Debug, Clone)]
@@ -15,7 +17,7 @@ impl Db {
   ) -> Result<Self> {
     let mut client_options = ClientOptions::parse(&config.mongodb_uri).await?;
 
-    client_options.app_name = Some("mcgillgg".to_string());
+    client_options.app_name = Some("mcgill.gg".to_string());
 
     let client = Client::with_options(client_options)?;
 
@@ -32,23 +34,53 @@ impl Db {
     let course_collection =
       client.database("admin").collection::<Course>("courses");
 
-    let courses = courses.into_iter().take(1).collect::<Vec<Course>>();
+    let courses = vec![courses
+      .into_iter()
+      .find(|course| course.title == "Discrete Structures")
+      .unwrap()];
 
     for course in courses {
-      if let Some(mut found) = course_collection
+      if let Some(found) = course_collection
         .find_one(doc! { "title": &course.title }, None)
         .await?
       {
-        found.terms.extend(course.terms);
+        let terms = [course.terms, found.terms]
+          .concat()
+          .iter()
+          .unique()
+          .cloned()
+          .collect::<Vec<String>>();
 
-        log::info!("Found course {}", course.title);
+        let instructors = [course.instructors, found.instructors]
+          .concat()
+          .iter()
+          .unique()
+          .cloned()
+          .collect::<Vec<Instructor>>();
+
+        let schedule = [course.schedule, found.schedule]
+          .concat()
+          .iter()
+          .unique()
+          .cloned()
+          .collect::<Vec<Schedule>>();
 
         course_collection
           .update_one(
             doc! { "title": &course.title },
-            UpdateModifications::Document(
-              doc! { "$set": { "terms": found.terms } },
-            ),
+            UpdateModifications::Document(doc! {
+              "$set": {
+                "corequisites": course.corequisites,
+                "credits": course.credits,
+                "description": course.description,
+                "faculty_url": course.faculty_url,
+                "instructors": instructors,
+                "prerequisites": found.prerequisites,
+                "schedule": schedule,
+                "terms": terms,
+                "url": course.url
+              }
+            }),
             None,
           )
           .await?;
