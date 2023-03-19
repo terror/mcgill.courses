@@ -5,12 +5,24 @@ import magnifyingGlass from '../assets/magnifyingGlass.png';
 import '../App.css';
 
 function Index() {
-return (
-    <div className='flex flex-col items-center justify-center '>
-      <Navbar/>
-      <SearchPanel/>
-    </div>
-  );
+  const data = [
+    {
+      "title": "Fundamentals of Programming",
+      "subject": "COMP",
+      "code": "202",
+    },
+    {
+      "title": "Introduction to Computer Science",
+      "subject": "COMP",
+      "code": "250",
+    }]
+
+  return (
+      <div className='flex flex-col items-center justify-center '>
+        <Navbar/>
+        <SearchPanel data={data}/>
+      </div>
+    );
 }
 
 function Navbar() {
@@ -36,17 +48,8 @@ function Navbar() {
   );
 }
 
-function SearchPanel() {
+function SearchPanel({data}: {data : readonly object[]}) {
   const [query, setQuery] = useState('');
-  const data: readonly object[] = [
-    {title: 'Fundamentals of Programming', subject: 'COMP', code: "202"}, 
-    {title: 'Introduction to Computer Science', subject: 'COMP', code: "250"},
-    {title: 'Introduction to Algorithms', subject: 'COMP', code: "251"},
-    {title: 'Introduction to Software Engineering', subject: 'COMP', code: "303"},
-    {title: 'Introduction to Computer Systems', subject: 'COMP', code: "206"},
-    {title: 'Database Systems', subject: 'COMP', code: "421"},
-    {title: 'Applied Machine Learning', subject: 'COMP', code: "551"}
-  ]
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value)
