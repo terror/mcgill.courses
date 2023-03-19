@@ -15,7 +15,6 @@ clap = { version = "4.1.8", features = ["derive"] }
 db = { path = "crates/db" }
 env_logger = "0.10.0"
 extractor = { path = "crates/extractor" }
-futures = "0.3.27"
 http = "0.2.9"
 log = "0.4.17"
 model = { path = "crates/model" }

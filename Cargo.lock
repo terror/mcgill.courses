@@ -2266,7 +2266,6 @@ dependencies = [
  "db",
  "env_logger",
  "extractor",
- "futures",
  "http",
  "log",
  "model",
