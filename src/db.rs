@@ -1,10 +1,5 @@
 use super::*;
 
-use futures::stream::TryStreamExt;
-use itertools::Itertools;
-use model::Instructor;
-use mongodb::options::UpdateModifications;
-
 #[derive(Debug, Clone)]
 pub(crate) struct Db {
   _client: Client,
