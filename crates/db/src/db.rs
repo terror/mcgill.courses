@@ -1,12 +1,12 @@
 use super::*;
 
 #[derive(Debug, Clone)]
-pub(crate) struct Db {
+pub struct Db {
   database: Database,
 }
 
 impl Db {
-  pub(crate) async fn connect(db_name: &str) -> Result<Self> {
+  pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
       ClientOptions::parse(format!("mongodb://localhost:27017/{}", db_name))
         .await?;
@@ -27,7 +27,7 @@ impl Db {
     })
   }
 
-  pub(crate) async fn seed(&self, source: PathBuf) -> Result {
+  pub async fn seed(&self, source: PathBuf) -> Result {
     log::info!("Seeding courses...");
 
     for course in
@@ -115,7 +115,7 @@ impl Db {
 mod tests {
   use {super::*, pretty_assertions::assert_eq};
 
-  static SEED_DIR: Dir<'_> = include_dir!("seeds");
+  static SEED_DIR: Dir<'_> = include_dir!("crates/db/seeds");
 
   struct TestContext {
     db: Db,
