@@ -27,7 +27,9 @@ use {
 #[cfg(test)]
 use {
   futures::stream::TryStreamExt,
+  include_dir::{include_dir, Dir},
   std::sync::atomic::{AtomicUsize, Ordering},
+  tempdir::TempDir,
 };
 
 mod arguments;

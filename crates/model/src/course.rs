@@ -1,6 +1,6 @@
 use super::*;
 
-#[derive(Debug, Default, Clone, Deserialize, Serialize)]
+#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Course {
   pub title: String,
   pub credits: String,

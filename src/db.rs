@@ -45,7 +45,7 @@ impl Db {
                   "description": course.description,
                   "faculty_url": course.faculty_url,
                   "instructors": course.instructors.combine(found.instructors),
-                  "prerequisites": found.prerequisites,
+                  "prerequisites": course.prerequisites,
                   "schedule": course.schedule.combine(found.schedule),
                   "terms": course.terms.combine(found.terms),
                   "url": course.url
@@ -64,7 +64,7 @@ impl Db {
   }
 
   #[cfg(test)]
-  pub(crate) async fn courses(&self) -> Result<Vec<Course>> {
+  async fn courses(&self) -> Result<Vec<Course>> {
     Ok(
       self
         .database
@@ -76,10 +76,7 @@ impl Db {
     )
   }
 
-  pub(crate) async fn find_course(
-    &self,
-    query: Document,
-  ) -> Result<Option<Course>> {
+  async fn find_course(&self, query: Document) -> Result<Option<Course>> {
     Ok(
       self
         .database
@@ -89,10 +86,7 @@ impl Db {
     )
   }
 
-  pub(crate) async fn add_course(
-    &self,
-    course: Course,
-  ) -> Result<InsertOneResult> {
+  async fn add_course(&self, course: Course) -> Result<InsertOneResult> {
     Ok(
       self
         .database
@@ -102,7 +96,7 @@ impl Db {
     )
   }
 
-  pub(crate) async fn update_course(
+  async fn update_course(
     &self,
     query: Document,
     update: Document,
@@ -119,7 +113,9 @@ impl Db {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+  use {super::*, pretty_assertions::assert_eq};
+
+  static SEED_DIR: Dir<'_> = include_dir!("seeds");
 
   struct TestContext {
     db: Db,
@@ -163,5 +159,100 @@ mod tests {
     let db = Db::connect(&db_name).await.unwrap();
 
     assert_eq!(db.courses().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn course_seeding_is_accurate() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let tempdir = TempDir::new("test").unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(
+      &source,
+      SEED_DIR
+        .get_file("before.json")
+        .unwrap()
+        .contents_utf8()
+        .unwrap(),
+    )
+    .unwrap();
+
+    db.seed(source).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 3);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn course_seeding_ignores_duplicates() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let tempdir = TempDir::new("test").unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(
+      &source,
+      serde_json::to_string(
+        &(0..10).map(|_| Course::default()).collect::<Vec<Course>>(),
+      )
+      .unwrap(),
+    )
+    .unwrap();
+
+    db.seed(source).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn courses_get_updated_when_seeding() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let tempdir = TempDir::new("test").unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(
+      &source,
+      SEED_DIR
+        .get_file("before.json")
+        .unwrap()
+        .contents_utf8()
+        .unwrap(),
+    )
+    .unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 3);
+
+    fs::write(
+      &source,
+      SEED_DIR
+        .get_file("update.json")
+        .unwrap()
+        .contents_utf8()
+        .unwrap(),
+    )
+    .unwrap();
+
+    db.seed(source).await.unwrap();
+
+    let courses = db.courses().await.unwrap();
+
+    assert_eq!(courses.len(), 4);
+
+    let updated = serde_json::from_str::<Vec<Course>>(
+      SEED_DIR
+        .get_file("after.json")
+        .unwrap()
+        .contents_utf8()
+        .unwrap(),
+    )
+    .unwrap();
+
+    assert_eq!(courses, updated);
   }
 }
