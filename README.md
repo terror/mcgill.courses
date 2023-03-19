@@ -13,8 +13,7 @@ You'll need [docker](https://www.docker.com/),
 installed on your machine to spawn the various components the project needs to
 run locally.
 
-First, mount a local mongodb instance, see `.env.example` for what environment
-variables you'll need to set:
+First, mount a local mongodb instance with docker:
 
 ```bash
 $ docker compose up -d
@@ -26,9 +25,9 @@ Spawn the server with a data source:
 $ cargo run -- --source=courses.json serve
 ```
 
-n.b. The server command-line interface provides a `load` subcommand for scraping
-all courses from various McGill course information websites and building a JSON
-data source, example usage:
+_n.b._ The server command-line interface provides a `load` subcommand for
+scraping all courses from various McGill course information websites and
+building a JSON data source, example usage:
 
 ```
 $ RUST_LOG=info cargo run -- --source=courses.json \
@@ -39,8 +38,7 @@ $ RUST_LOG=info cargo run -- --source=courses.json \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 ```
 
-Or alternatively if you have [just](https://github.com/casey/just) in your
-$PATH:
+Or alternatively if you have [just](https://github.com/casey/just) installed:
 
 ```
 $ just extract
