@@ -117,6 +117,15 @@ mod tests {
 
   static SEED_DIR: Dir<'_> = include_dir!("crates/db/seeds");
 
+  fn get_content(name: &str) -> String {
+    SEED_DIR
+      .get_file(name)
+      .unwrap()
+      .contents_utf8()
+      .unwrap()
+      .to_string()
+  }
+
   struct TestContext {
     db: Db,
     db_name: String,
@@ -169,15 +178,7 @@ mod tests {
 
     let source = tempdir.path().join("courses.json");
 
-    fs::write(
-      &source,
-      SEED_DIR
-        .get_file("before.json")
-        .unwrap()
-        .contents_utf8()
-        .unwrap(),
-    )
-    .unwrap();
+    fs::write(&source, get_content("before.json")).unwrap();
 
     db.seed(source).await.unwrap();
 
@@ -185,7 +186,7 @@ mod tests {
   }
 
   #[tokio::test(flavor = "multi_thread")]
-  async fn course_seeding_ignores_duplicates() {
+  async fn course_seeding_does_not_insert_duplicates() {
     let TestContext { db, .. } = TestContext::new().await;
 
     let tempdir = TempDir::new("test").unwrap();
@@ -214,29 +215,13 @@ mod tests {
 
     let source = tempdir.path().join("courses.json");
 
-    fs::write(
-      &source,
-      SEED_DIR
-        .get_file("before.json")
-        .unwrap()
-        .contents_utf8()
-        .unwrap(),
-    )
-    .unwrap();
+    fs::write(&source, get_content("before.json")).unwrap();
 
     db.seed(source.clone()).await.unwrap();
 
     assert_eq!(db.courses().await.unwrap().len(), 3);
 
-    fs::write(
-      &source,
-      SEED_DIR
-        .get_file("update.json")
-        .unwrap()
-        .contents_utf8()
-        .unwrap(),
-    )
-    .unwrap();
+    fs::write(&source, get_content("update.json")).unwrap();
 
     db.seed(source).await.unwrap();
 
@@ -244,15 +229,9 @@ mod tests {
 
     assert_eq!(courses.len(), 4);
 
-    let updated = serde_json::from_str::<Vec<Course>>(
-      SEED_DIR
-        .get_file("after.json")
-        .unwrap()
-        .contents_utf8()
-        .unwrap(),
-    )
-    .unwrap();
-
-    assert_eq!(courses, updated);
+    assert_eq!(
+      courses,
+      serde_json::from_str::<Vec<Course>>(&get_content("after.json")).unwrap()
+    );
   }
 }
