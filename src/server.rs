@@ -36,11 +36,18 @@ impl Server {
               .allow_methods([Method::GET])
               .allow_origin(Any),
           )
-          .with_state(State::new(db).await?)
+          .route("/auth/login", get(microsoft_auth))
+          .route("/auth/authorized", get(login_authorized))
+          .route("/", get(index))
+          .with_state(State::new(db, oauth_client()).await?)
           .into_make_service(),
       )
       .await?;
 
     Ok(())
   }
+}
+
+async fn index() -> String {
+  String::from("Hello world")
 }
