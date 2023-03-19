@@ -1,14 +1,24 @@
 use {
   crate::{
-    arguments::Arguments, loader::Loader, options::Options, page::Page,
-    server::Server, state::State, subcommand::Subcommand, vec_ext::VecExt,
+    arguments::Arguments,
+    auth::{login_authorized, microsoft_auth, oauth_client},
+    loader::Loader,
+    options::Options,
+    page::Page,
+    server::Server,
+    state::State,
+    subcommand::Subcommand,
+    vec_ext::VecExt,
     vsb_client::VsbClient,
   },
-  axum::Router,
+  async_session::MemoryStore,
+  axum::{routing::get, Router},
   clap::Parser,
   db::Db,
+  dotenv::dotenv,
   http::Method,
   model::{Course, CourseListing, Schedule},
+  oauth2::basic::BasicClient,
   rayon::prelude::*,
   std::{
     fs, marker::Sized, net::SocketAddr, path::PathBuf, process, sync::Arc,
@@ -18,6 +28,7 @@ use {
 };
 
 mod arguments;
+mod auth;
 mod loader;
 mod options;
 mod page;
@@ -32,6 +43,7 @@ type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 #[tokio::main]
 async fn main() {
   env_logger::init();
+  dotenv().ok();
 
   if let Err(error) = Arguments::parse().run().await {
     eprintln!("error: {error}");
