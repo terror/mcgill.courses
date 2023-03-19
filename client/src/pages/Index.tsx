@@ -3,27 +3,28 @@ import { useState, useEffect } from 'react';
 import reactLogo from '../assets/react.svg';
 import magnifyingGlass from '../assets/magnifyingGlass.png';
 import '../App.css';
+import courses from '../assets/courses.json';
+import { debounce } from 'lodash';
 
 const Index = () => {
-  const [courses, setCourses] = useState({});
+  // const [courses, setCourses] = useState({});
 
-  useEffect(() => {
-    fetch('http://localhost:8000/courses', {
-      headers: {
-        method: 'GET',
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setCourses(data))
-      .catch((err) => console.error(err));
-  }, []);
-
+  // useEffect(() => {
+  //   fetch('http://localhost:8000/courses', {
+  //     headers: {
+  //       method: 'GET',
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => setCourses(data))
+  //     .catch((err) => console.error(err));
+  // }, []);
   return (
     <div className='flex flex-col items-center justify-center '>
       <Navbar />
-      <SearchPanel data={courses} />
+      <SearchPanel data={courses as object[]} />
     </div>
   );
 };
@@ -61,16 +62,41 @@ function Navbar() {
 function SearchPanel({ data }: { data: readonly object[] }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
 
-  const fuse = new Fuse(data, { keys: ['title', 'subject', 'code'] });
+  const fuse = new Fuse(data, {keys: ["longName"]});
+
+  const handleSearch = debounce((query:string) => {
+    const result = fuse.search(query);
+    setResults(result as any);
+  }, 100);
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
+    handleSearch(event.target.value);
+    setShowResults(true);
+  };
 
-    const result = fuse.search(query);
-    setResults(result as any);
+  window.onclick = function (event) {
+    (event.target === document.getElementsByClassName('searchbar-input')[0] ? setShowResults(true) : setShowResults(false));
+  }
 
-    console.log(results);
+  const renderResults = () => {
+    if (results.length > 0 && showResults) {
+      const topResults = results.slice(0, 8);
+      return (
+        <div className='absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-left w-full text-lg'>
+          <ul className='searchpanel-list'>
+            {topResults.map((result: object) => (
+              <a href={`/course/${result.item.subject}${result.item.code}`}> <li>
+                <p className='disabled:hover'>{result.item.longName}</p>
+              </li></a>
+            ))}
+          </ul>
+        </div>
+      );
+    }
   };
 
   return (
@@ -87,25 +113,13 @@ function SearchPanel({ data }: { data: readonly object[] }) {
           onChange={handleInputChange}
         />
       </div>
+      {renderResults()}
       <div>
         <p className='searchbar-text'>
           Explore the courses and instructors at{' '}
           <span className='red-text'>McGill University</span>
         </p>
       </div>
-      {/* <Button content="Take me there!" url=""/> */}
-    </div>
-  );
-}
-
-function Button({ url, content }: { url: string; content: string }) {
-  return (
-    <div>
-      <a href={url}>
-        <button className='button hover:bg-red-600 duration-300'>
-          {content}
-        </button>
-      </a>
     </div>
   );
 }
@@ -127,7 +141,6 @@ function LoginWindow() {
         <div className='text-lg  p-3'>
           Don't have an account? <a>Sign up</a>{' '}
         </div>
-        <Button content='Login' url='' />
       </div>
     </div>
   );
