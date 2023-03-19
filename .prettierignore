@@ -1,2 +1,5 @@
-node_modules
-target
+/crates/extractor/mocks
+/mocks
+/node_modules
+/target
+courses.json

@@ -21,8 +21,9 @@ impl<'a> Select<'a> for ElementRef<'a> {
     Ok(
       self
         .select(
-          &Selector::parse(selector)
-            .map_err(|error| anyhow!("Failed to parse selector: {:?}", error))?,
+          &Selector::parse(selector).map_err(|error| {
+            anyhow!("Failed to parse selector: {:?}", error)
+          })?,
         )
         .next(),
     )
@@ -32,10 +33,11 @@ impl<'a> Select<'a> for ElementRef<'a> {
     Ok(
       self
         .select(
-          &Selector::parse(selector)
-            .map_err(|error| anyhow!("Failed to parse selector: {:?}", error))?,
+          &Selector::parse(selector).map_err(|error| {
+            anyhow!("Failed to parse selector: {:?}", error)
+          })?,
         )
-        .collect::<Vec<ElementRef<'a>>>(),
+        .collect(),
     )
   }
 }
