@@ -5,22 +5,19 @@ import magnifyingGlass from '../assets/magnifyingGlass.png';
 import '../App.css';
 
 function Index() {
-  const data = [
-    {
-      "title": "Fundamentals of Programming",
-      "subject": "COMP",
-      "code": "202",
-    },
-    {
-      "title": "Introduction to Computer Science",
-      "subject": "COMP",
-      "code": "250",
-    }]
+  const coursesData = fetch('http://localhost:8000/courses')
+    .then(response => response.json())
+    .then(data => {
+      return data;
+    })
+    .catch(error => {console.log(error);});
+
+    console.log(coursesData)
 
   return (
       <div className='flex flex-col items-center justify-center '>
         <Navbar/>
-        <SearchPanel data={data}/>
+        <SearchPanel data={coursesData}/>
       </div>
     );
 }
@@ -50,14 +47,17 @@ function Navbar() {
 
 function SearchPanel({data}: {data : readonly object[]}) {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+
+  const fuse = new Fuse(data, { keys: ['title', 'subject', 'code'], });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
     setQuery(event.target.value);
 
-    const fuse = new Fuse(data, { keys: ['title', 'subject', 'code'], });
     const result = fuse.search(query);
-    console.log(result);
+    setResults(result as any);
+
+    console.log(results);
   };
 
 
@@ -107,12 +107,6 @@ function LoginWindow(){
           <Button content="Login" url=""/>
       </div>
     </div>
-  );
-}
-
-function SignUpWindow(){
-  return (
-    <div> </div>
   );
 }
 
