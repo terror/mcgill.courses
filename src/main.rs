@@ -8,7 +8,6 @@ use {
   clap::Parser,
   http::Method,
   itertools::Itertools,
-  model::Instructor,
   model::{Course, CourseListing, Schedule},
   mongodb::options::UpdateModifications,
   mongodb::{
@@ -19,8 +18,8 @@ use {
   },
   rayon::prelude::*,
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, sync::Arc,
-    thread, time::Duration,
+    fs, hash::Hash, marker::Sized, net::SocketAddr, path::PathBuf, process,
+    sync::Arc, thread, time::Duration,
   },
   tower_http::cors::{Any, CorsLayer},
 };

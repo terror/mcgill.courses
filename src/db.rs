@@ -35,27 +35,6 @@ impl Db {
     {
       match self.find_course(doc! { "title": &course.title }).await? {
         Some(found) => {
-          let terms = [course.terms, found.terms]
-            .concat()
-            .iter()
-            .unique()
-            .cloned()
-            .collect::<Vec<String>>();
-
-          let instructors = [course.instructors, found.instructors]
-            .concat()
-            .iter()
-            .unique()
-            .cloned()
-            .collect::<Vec<Instructor>>();
-
-          let schedule = [course.schedule, found.schedule]
-            .concat()
-            .iter()
-            .unique()
-            .cloned()
-            .collect::<Vec<Schedule>>();
-
           self
             .update_course(
               doc! { "title": &course.title },
@@ -65,10 +44,10 @@ impl Db {
                   "credits": course.credits,
                   "description": course.description,
                   "faculty_url": course.faculty_url,
-                  "instructors": instructors,
+                  "instructors": course.instructors.combine(found.instructors),
                   "prerequisites": found.prerequisites,
-                  "schedule": schedule,
-                  "terms": terms,
+                  "schedule": course.schedule.combine(found.schedule),
+                  "terms": course.terms.combine(found.terms),
                   "url": course.url
                 }
               },
