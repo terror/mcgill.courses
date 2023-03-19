@@ -5,17 +5,17 @@
 #root {
   margin: 0 auto;
   text-align: center;
-  height:100vh;
+  height: 100vh;
 }
 
-.searchbar-text{
+.searchbar-text {
   font-style: normal;
   font-weight: 300;
   font-size: 20px;
   line-height: 24px;
 }
 
-.searchbar-wrapper{
+.searchbar-wrapper {
   width: 807px;
   height: 65px;
   left: 236px;
@@ -25,26 +25,26 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  
-  background: #FAFAFA;
-  border: 0px solid #E0E0E0;
+
+  background: #fafafa;
+  border: 0px solid #e0e0e0;
   mix-blend-mode: normal;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   font-size: x-large;
 }
 
-.searchbar-input{
+.searchbar-input {
   width: 760px;
   height: 65px;
   left: 236px;
   top: 307px;
-  
-  background: #FAFAFA;
+
+  background: #fafafa;
   color: #333333;
 }
 
-.searchbar-icon{
+.searchbar-icon {
   width: 30px;
   height: 30px;
   left: 236px;
@@ -53,10 +53,10 @@
   margin-right: 20px;
 }
 
-.button{
+.button {
   width: 206px;
   height: 52px;
-  background: #F05A46;
+  background: #f05a46;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
 
@@ -64,32 +64,32 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
-  color: #FAFAFA;
-  animation-duration:  0.5s;
+  color: #fafafa;
+  animation-duration: 0.5s;
 }
 
-.red-text{
-  color: #F05A46;
+.red-text {
+  color: #f05a46;
 }
 
-.login-panel{
+.login-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  position:fixed;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width:475px;
+  width: 475px;
   height: 577px;
-  border : 1px solid #E0E0E0;
-  background-color: #FAFAFA;
+  border: 1px solid #e0e0e0;
+  background-color: #fafafa;
   box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
 }
 
-.login-panel-title{
+.login-panel-title {
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
@@ -98,23 +98,22 @@
   margin-top: 40px;
 }
 
-.login-panel-input{
-  background: #FAFAFA;
+.login-panel-input {
+  background: #fafafa;
   /* center and slightly smaller than login-panel-input-box */
-  width: 360px;;
+  width: 360px;
   height: 64px;
   left: 42px;
   top: 316px;
-
 }
 
-.login-panel-input-box{
+.login-panel-input-box {
   width: 392px;
   height: 64px;
   left: 42px;
   top: 316px;
 
-  background: #FAFAFA;
+  background: #fafafa;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
 }

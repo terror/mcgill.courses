@@ -9,7 +9,7 @@
 
   color-scheme: light dark;
   color: #333333;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,12 +26,12 @@ body {
   min-height: 100vh;
 }
 
-a{
+a {
   transition: color 0.2s ease-in-out;
 }
 
 a:hover {
-  color: #F05A46;
+  color: #f05a46;
 }
 
 h1 {
@@ -42,7 +42,6 @@ h1 {
 input:focus {
   outline: none;
 }
-
 
 @media (prefers-color-scheme: light) {
   :root {

@@ -34,7 +34,8 @@ impl Server {
           .layer(
             CorsLayer::new()
               .allow_methods([Method::GET])
-              .allow_origin(Any),
+              .allow_origin(Any)
+              .allow_headers(Any),
           )
           .route("/courses", get(Self::courses))
           .with_state(State::new(db).await?)
