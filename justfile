@@ -9,7 +9,7 @@ build:
   cargo build
 
 clippy:
-  cargo clippy --all-targets --all-features
+  ./bin/clippy
 
 extract:
   cargo run -- --source=courses.json \
@@ -26,6 +26,11 @@ fmt:
 fmt-check:
   cargo fmt --all -- --check
   @echo formatting check done
+
+restart:
+  docker-compose down
+  docker volume rm mcgillgg_mongodb_data
+  just services
 
 run *args:
   cargo run -- {{args}}

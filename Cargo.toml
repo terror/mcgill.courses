@@ -12,9 +12,8 @@ axum = { version = "0.6.11", features = ["headers", "json"] }
 axum-server = "0.4.6"
 chrono = "0.4.24"
 clap = { version = "4.1.8", features = ["derive"] }
-dotenv = "0.15.0"
+db = { path = "crates/db" }
 env_logger = "0.10.0"
-envy = "0.4.2"
 extractor = { path = "crates/extractor" }
 http = "0.2.9"
 log = "0.4.17"
@@ -23,9 +22,5 @@ rayon = "1.7.0"
 reqwest = { version = "0.11.14", features = ["blocking"] }
 serde = { version = "1.0.156", features = ["derive"] }
 serde_json = "1.0.94"
-sqlx = { version = "0.6.2", features = ["runtime-tokio-rustls", "postgres"] }
 tokio = { version = "1.26.0", features = ["rt-multi-thread", "macros"] }
 tower-http = { version = "0.4.0", features = ["cors"] }
-
-[dev-dependencies]
-include_dir = "0.7.3"

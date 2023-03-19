@@ -1,5 +1,6 @@
 use {
   anyhow::anyhow,
+  bson::{doc, Bson},
   serde::{Deserialize, Serialize},
 };
 

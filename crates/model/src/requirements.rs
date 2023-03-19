@@ -25,7 +25,7 @@ pub struct Requirements {
 impl Requirements {
   pub fn set_requirement(
     &mut self,
-    requirement: Requirement,
+    requirement: &Requirement,
     data: Vec<String>,
   ) -> Result {
     match requirement {

@@ -22,7 +22,7 @@ impl RequirementsExt for Requirements {
             match par.inner_html().starts_with(title) {
               false => Ok(()),
               _ => requirements.set_requirement(
-                Requirement::from(*title),
+                &Requirement::from(*title),
                 par
                   .select_many("a")?
                   .iter()

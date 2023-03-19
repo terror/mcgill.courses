@@ -16,19 +16,22 @@ jobs:
   all:
     name: All
 
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-
-    runs-on: ${{matrix.os}}
+    runs-on: macos-latest
 
     env:
       RUSTFLAGS: --deny warnings
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download actionlint
+        id: actionlint
+        run:
+          bash <(curl
+          https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+
+      - name: Check Github Actions Workflow
+        run: ${{ steps.actionlint.outputs.executable }} -color
 
       - name: Install Rust Toolchain Components
         uses: actions-rs/toolchain@v1
@@ -37,23 +40,36 @@ jobs:
           override: true
           toolchain: stable
 
+      - name: Install mongodb
+        run: |
+          brew tap mongodb/brew
+          brew install mongodb-community@6.0
+          brew services start mongodb-community@6.0
+
       - uses: Swatinem/rust-cache@v1
+
+      - name: Info
+        run: |
+          rustup --version
+          cargo --version
+          cargo clippy --version
+
+      - name: Build
+        run: cargo build --workspace --all-features --all-targets
+
+      - name: Test
+        run: cargo test --workspace --all-features --all-targets
 
       - name: Check Lockfile
         run: cargo update --locked --package server
 
-      - name: Test
-        run: cargo test --all
+      - name: Forbid
+        run: |
+          brew install ripgrep
+          ./bin/forbid
 
       - name: Clippy
-        run: cargo clippy --all --all-targets
+        run: ./bin/clippy
 
-      - name: Format
+      - name: Check Formatting
         run: cargo fmt --all -- --check
-
-      - name: Check for Forbidden Words
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install ripgrep
-          ./bin/forbid

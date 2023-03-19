@@ -1,27 +1,23 @@
 use {
   crate::{
-    arguments::Arguments, config::Config, db::Db, loader::Loader,
-    options::Options, page::Page, server::Server, state::State,
-    subcommand::Subcommand, vec_ext::VecExt, vsb_client::VsbClient,
+    arguments::Arguments, loader::Loader, options::Options, page::Page,
+    server::Server, state::State, subcommand::Subcommand, vec_ext::VecExt,
+    vsb_client::VsbClient,
   },
   axum::Router,
   clap::Parser,
-  dotenv::dotenv,
+  db::Db,
   http::Method,
   model::{Course, CourseListing, Schedule},
   rayon::prelude::*,
-  serde::Deserialize,
-  sqlx::{migrate::MigrateDatabase, PgPool, Postgres},
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, str::FromStr,
+    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, sync::Arc,
     thread, time::Duration,
   },
   tower_http::cors::{Any, CorsLayer},
 };
 
 mod arguments;
-mod config;
-mod db;
 mod loader;
 mod options;
 mod page;
@@ -36,8 +32,6 @@ type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 #[tokio::main]
 async fn main() {
   env_logger::init();
-
-  dotenv().ok();
 
   if let Err(error) = Arguments::parse().run().await {
     eprintln!("error: {error}");
