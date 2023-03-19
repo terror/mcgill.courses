@@ -60,11 +60,12 @@ impl Db {
       }
     }
 
+    log::info!("Finished seeding courses");
+
     Ok(())
   }
 
-  #[cfg(test)]
-  async fn courses(&self) -> Result<Vec<Course>> {
+  pub async fn courses(&self) -> Result<Vec<Course>> {
     Ok(
       self
         .database
