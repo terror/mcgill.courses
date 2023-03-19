@@ -1,6 +1,8 @@
 use super::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Hash, Eq)]
+#[derive(
+  Debug, Default, Clone, Serialize, Deserialize, PartialEq, Hash, Eq,
+)]
 pub struct Schedule {
   pub campus: Option<String>,
   pub display: Option<String>,

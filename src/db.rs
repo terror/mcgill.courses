@@ -2,42 +2,39 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct Db {
-  _client: Client,
+  database: Database,
 }
 
 impl Db {
-  pub(crate) async fn connect(config: &Config) -> Result<Self> {
+  pub(crate) async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
-      ClientOptions::parse(&config.env.mongodb_uri).await?;
+      ClientOptions::parse(format!("mongodb://localhost:27017/{}", db_name))
+        .await?;
 
-    client_options.app_name = Some("mcgill.gg".to_string());
+    client_options.app_name = Some(db_name.to_string());
 
     let client = Client::with_options(client_options)?;
 
     client
-      .database("admin")
+      .database(db_name)
       .run_command(doc! {"ping": 1}, None)
       .await?;
 
     log::info!("Connected successfully.");
 
-    if config.seed {
-      log::info!("Seeding courses...");
+    Ok(Self {
+      database: client.database(db_name),
+    })
+  }
 
-      let courses = serde_json::from_str::<Vec<Course>>(&fs::read_to_string(
-        &config.source,
-      )?)?;
+  pub(crate) async fn seed(&self, source: PathBuf) -> Result {
+    log::info!("Seeding courses...");
 
-      log::info!("Length of courses: {}", courses.len());
-
-      let course_collection =
-        client.database("admin").collection::<Course>("courses");
-
-      for course in courses {
-        if let Some(found) = course_collection
-          .find_one(doc! { "title": &course.title }, None)
-          .await?
-        {
+    for course in
+      serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
+    {
+      match self.find_course(doc! { "title": &course.title }).await? {
+        Some(found) => {
           let terms = [course.terms, found.terms]
             .concat()
             .iter()
@@ -59,10 +56,10 @@ impl Db {
             .cloned()
             .collect::<Vec<Schedule>>();
 
-          course_collection
-            .update_one(
+          self
+            .update_course(
               doc! { "title": &course.title },
-              UpdateModifications::Document(doc! {
+              doc! {
                 "$set": {
                   "corequisites": course.corequisites,
                   "credits": course.credits,
@@ -74,28 +71,118 @@ impl Db {
                   "terms": terms,
                   "url": course.url
                 }
-              }),
-              None,
+              },
             )
             .await?;
-        } else {
-          course_collection.insert_one(course, None).await?;
+        }
+        None => {
+          self.add_course(course).await?;
         }
       }
-
-      log::info!("Inserted courses");
-
-      log::info!(
-        "Number of courses: {:?}",
-        course_collection
-          .find(None, None)
-          .await?
-          .try_collect::<Vec<Course>>()
-          .await?
-          .len()
-      );
     }
 
-    Ok(Self { _client: client })
+    Ok(())
+  }
+
+  #[cfg(test)]
+  pub(crate) async fn courses(&self) -> Result<Vec<Course>> {
+    Ok(
+      self
+        .database
+        .collection::<Course>("courses")
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Course>>()
+        .await?,
+    )
+  }
+
+  pub(crate) async fn find_course(
+    &self,
+    query: Document,
+  ) -> Result<Option<Course>> {
+    Ok(
+      self
+        .database
+        .collection::<Course>("courses")
+        .find_one(query, None)
+        .await?,
+    )
+  }
+
+  pub(crate) async fn add_course(
+    &self,
+    course: Course,
+  ) -> Result<InsertOneResult> {
+    Ok(
+      self
+        .database
+        .collection::<Course>("courses")
+        .insert_one(course, None)
+        .await?,
+    )
+  }
+
+  pub(crate) async fn update_course(
+    &self,
+    query: Document,
+    update: Document,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Course>("courses")
+        .update_one(query, UpdateModifications::Document(update), None)
+        .await?,
+    )
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  struct TestContext {
+    db: Db,
+    db_name: String,
+  }
+
+  impl TestContext {
+    async fn new() -> Self {
+      static TEST_DATABASE_NUMBER: AtomicUsize = AtomicUsize::new(0);
+
+      let test_database_number =
+        TEST_DATABASE_NUMBER.fetch_add(1, Ordering::Relaxed);
+
+      let db_name = format!(
+        "mcgill-gg-test-{}-{}",
+        std::time::SystemTime::now()
+          .duration_since(std::time::SystemTime::UNIX_EPOCH)
+          .unwrap()
+          .as_millis(),
+        test_database_number,
+      );
+
+      let db = Db::connect(&db_name).await.unwrap();
+
+      TestContext { db, db_name }
+    }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn on_disk_database_is_persistant() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    assert_eq!(db.courses().await.unwrap().len(), 0);
+
+    db.add_course(Course::default()).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 1);
+
+    drop(db);
+
+    let db = Db::connect(&db_name).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 1);
   }
 }

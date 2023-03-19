@@ -2,13 +2,11 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct State {
-  _db: Db,
+  _db: Arc<Db>,
 }
 
 impl State {
-  pub(crate) async fn new(config: Config) -> Result<Self> {
-    Ok(Self {
-      _db: Db::connect(&config).await?,
-    })
+  pub(crate) async fn new(db: Arc<Db>) -> Result<Self> {
+    Ok(Self { _db: db })
   }
 }

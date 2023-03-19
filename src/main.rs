@@ -1,32 +1,38 @@
 use {
   crate::{
-    arguments::Arguments, config::Config, db::Db, env::Env, loader::Loader,
-    options::Options, page::Page, server::Server, state::State,
-    subcommand::Subcommand, vec_ext::VecExt, vsb_client::VsbClient,
+    arguments::Arguments, db::Db, loader::Loader, options::Options, page::Page,
+    server::Server, state::State, subcommand::Subcommand, vec_ext::VecExt,
+    vsb_client::VsbClient,
   },
   axum::Router,
   clap::Parser,
-  dotenv::dotenv,
-  futures::stream::TryStreamExt,
   http::Method,
   itertools::Itertools,
   model::Instructor,
   model::{Course, CourseListing, Schedule},
   mongodb::options::UpdateModifications,
-  mongodb::{bson::doc, options::ClientOptions, Client},
+  mongodb::{
+    bson::{doc, Document},
+    options::ClientOptions,
+    results::{InsertOneResult, UpdateResult},
+    Client, Database,
+  },
   rayon::prelude::*,
-  serde::Deserialize,
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, thread,
-    time::Duration,
+    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, sync::Arc,
+    thread, time::Duration,
   },
   tower_http::cors::{Any, CorsLayer},
 };
 
+#[cfg(test)]
+use {
+  futures::stream::TryStreamExt,
+  std::sync::atomic::{AtomicUsize, Ordering},
+};
+
 mod arguments;
-mod config;
 mod db;
-mod env;
 mod loader;
 mod options;
 mod page;
@@ -41,8 +47,6 @@ type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 #[tokio::main]
 async fn main() {
   env_logger::init();
-
-  dotenv().ok();
 
   if let Err(error) = Arguments::parse().run().await {
     eprintln!("error: {error}");
