@@ -68,39 +68,55 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
 fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
   let mut instructors = Vec::new();
 
-  let raw = html
+  let catalog = html
     .root_element()
-    .select_single("div[class='node node-catalog clearfix']")?
-    .select_single("p[class='catalog-instructors']")?
-    .inner_html();
+    .select_single("div[class='node node-catalog clearfix']")?;
 
-  let mut tokens = raw
+  let mut tokens = catalog
+    .select_single("p[class='catalog-instructors']")?
+    .inner_html()
     .trim()
     .split(' ')
     .skip(1)
     .collect::<Vec<&str>>()
     .join(" ");
 
-  ["Fall", "Winter", "Summer"].iter().for_each(|term| {
-    if tokens.contains(&format!("({term})")) {
-      let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
+  catalog
+    .select_single("p[class='catalog-terms']")?
+    .inner_html()
+    .trim()
+    .split(' ')
+    .skip(1)
+    .filter(|entry| !entry.is_empty())
+    .collect::<Vec<&str>>()
+    .join(" ")
+    .split(", ")
+    .map(|term| {
+      (
+        term.split(' ').take(1).collect::<String>(),
+        term.to_string(),
+      )
+    })
+    .for_each(|(term, full_term)| {
+      if tokens.contains(&format!("({term})")) {
+        let split = tokens.split(&format!("({term})")).collect::<Vec<&str>>();
 
-      let inner = split[0]
-        .split(';')
-        .map(|s| {
-          Instructor::default()
-            .set_name(&s.trim().split(", ").collect::<Vec<&str>>())
-            .set_term(term)
-        })
-        .collect::<Vec<Instructor>>();
+        let inner = split[0]
+          .split(';')
+          .map(|s| {
+            Instructor::default()
+              .set_name(&s.trim().split(", ").collect::<Vec<&str>>())
+              .set_term(&full_term)
+          })
+          .collect::<Vec<Instructor>>();
 
-      if split.len() > 1 {
-        tokens = split[1].trim().to_string();
+        if split.len() > 1 {
+          tokens = split[1].trim().to_string();
+        }
+
+        instructors.extend(inner);
       }
-
-      instructors.extend(inner);
-    }
-  });
+    });
 
   Ok(instructors)
 }
@@ -122,6 +138,7 @@ mod tests {
       CourseListing, CoursePage, Html, Instructor, Requirements, Schedule,
     },
     include_dir::{include_dir, Dir},
+    pretty_assertions::assert_eq,
   };
 
   static MOCK_DIR: Dir<'_> = include_dir!("crates/extractor/mocks");
@@ -269,19 +286,19 @@ mod tests {
       vec![
         Instructor {
           name: "Adrian Roshan Vetta".into(),
-          term: "Fall".into()
+          term: "Fall 2022".into()
         },
         Instructor {
           name: "Jérôme Fortier".into(),
-          term: "Fall".into()
+          term: "Fall 2022".into()
         },
         Instructor {
           name: "Jérôme Fortier".into(),
-          term: "Winter".into()
+          term: "Winter 2023".into()
         },
         Instructor {
           name: "Jeremy Macdonald".into(),
-          term: "Winter".into()
+          term: "Winter 2023".into()
         }
       ]
     );
@@ -323,7 +340,7 @@ mod tests {
         code: "240".into(),
         faculty_url: "/study/2022-2023/faculties/science".into(),
         description: "Introduction to discrete mathematics and applications. Logical reasoning and methods of proof. Elementary number theory and cryptography  prime numbers, modular equations, RSA encryption. Combinatorics  basic enumeration, combinatorial methods, recurrence equations. Graph theory  trees, cycles, planar\ngraphs.".into(),
-        instructors: vec![Instructor { name: "Adrian Roshan Vetta".into(), term: "Fall".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Fall".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Winter".into() }, Instructor { name: "Jeremy Macdonald".into(), term: "Winter".into() }],
+        instructors: vec![Instructor { name: "Adrian Roshan Vetta".into(), term: "Fall 2022".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Fall 2022".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Winter 2023".into() }, Instructor { name: "Jeremy Macdonald".into(), term: "Winter 2023".into() }],
         requirements: Requirements { corequisites: vec!["MATH 133".into()], prerequisites: vec![] } }
     );
   }
