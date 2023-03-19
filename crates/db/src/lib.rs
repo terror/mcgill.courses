@@ -1,5 +1,6 @@
 use {
   crate::vec_ext::VecExt,
+  futures::stream::TryStreamExt,
   itertools::Itertools,
   model::Course,
   mongodb::{
@@ -14,7 +15,6 @@ use {
 
 #[cfg(test)]
 use {
-  futures::stream::TryStreamExt,
   include_dir::{include_dir, Dir},
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,

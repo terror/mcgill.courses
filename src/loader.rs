@@ -37,7 +37,7 @@ impl Loader {
     }
 
     fs::write(source, serde_json::to_string_pretty(&courses)?)
-      .map_err(anyhow::Error::from)
+      .map_err(|err| Error(anyhow::Error::from(err)))
   }
 
   fn aggregate_urls(&self, start: usize, end: usize) -> Vec<Page> {
