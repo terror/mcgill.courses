@@ -30,6 +30,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Download actionlint
+        id: actionlint
+        run:
+          bash <(curl
+          https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+
+      - name: Check Github Actions Workflow
+        run: ${{ steps.actionlint.outputs.executable }} -color
+
       - name: Install Rust Toolchain Components
         uses: actions-rs/toolchain@v1
         with:
@@ -37,12 +46,20 @@ jobs:
           override: true
           toolchain: stable
 
+      - name: Install mongodb
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew tap mongodb/brew
+          brew install mongodb-community@6.0
+          brew services start mongodb-community@6.0
+
       - uses: Swatinem/rust-cache@v1
 
       - name: Check Lockfile
         run: cargo update --locked --package server
 
       - name: Test
+        if: ${{ matrix.os == 'macos-latest' }}
         run: cargo test --all
 
       - name: Clippy
