@@ -9,7 +9,7 @@ build:
   cargo build
 
 clippy:
-  cargo clippy --all-targets --all-features
+  ./bin/clippy
 
 extract:
   cargo run -- --source=courses.json \

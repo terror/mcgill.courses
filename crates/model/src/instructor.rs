@@ -18,7 +18,7 @@ impl Into<Bson> for Instructor {
 }
 
 impl Instructor {
-  pub fn set_name(self, parts: Vec<&str>) -> Self {
+  pub fn set_name(self, parts: &[&str]) -> Self {
     Self {
       name: format!(
         "{} {}",

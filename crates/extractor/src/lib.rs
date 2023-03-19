@@ -89,7 +89,7 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
         .split(';')
         .map(|s| {
           Instructor::default()
-            .set_name(s.trim().split(", ").collect())
+            .set_name(&s.trim().split(", ").collect::<Vec<&str>>())
             .set_term(term)
         })
         .collect::<Vec<Instructor>>();
