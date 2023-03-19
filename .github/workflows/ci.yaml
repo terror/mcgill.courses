@@ -16,13 +16,7 @@ jobs:
   all:
     name: All
 
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-
-    runs-on: ${{matrix.os}}
+    runs-on: macos-latest
 
     env:
       RUSTFLAGS: --deny warnings
@@ -47,7 +41,6 @@ jobs:
           toolchain: stable
 
       - name: Install mongodb
-        if: ${{ matrix.os == 'macos-latest' }}
         run: |
           brew tap mongodb/brew
           brew install mongodb-community@6.0
@@ -55,22 +48,28 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
+      - name: Info
+        run: |
+          rustup --version
+          cargo --version
+          cargo clippy --version
+
+      - name: Build
+        run: cargo build --workspace --all-features --all-targets
+
+      - name: Test
+        run: cargo test --workspace --all-features --all-targets
+
       - name: Check Lockfile
         run: cargo update --locked --package server
 
-      - name: Test
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: cargo test --all
+      - name: Forbid
+        run: |
+          brew install ripgrep
+          ./bin/forbid
 
       - name: Clippy
         run: ./bin/clippy
 
-      - name: Format
+      - name: Check Formatting
         run: cargo fmt --all -- --check
-
-      - name: Check for Forbidden Words
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install ripgrep
-          ./bin/forbid
