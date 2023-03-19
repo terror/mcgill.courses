@@ -35,8 +35,9 @@ impl Db {
     let courses = courses.into_iter().take(1).collect::<Vec<Course>>();
 
     for course in courses {
-      if let Some(mut found) =
-        course_collection.find_one(doc! {}, None).await.unwrap()
+      if let Some(mut found) = course_collection
+        .find_one(doc! { "title": &course.title }, None)
+        .await?
       {
         found.terms.extend(course.terms);
 
@@ -45,7 +46,9 @@ impl Db {
         course_collection
           .update_one(
             doc! { "title": &course.title },
-            UpdateModifications::Document(doc! {}),
+            UpdateModifications::Document(
+              doc! { "$set": { "terms": found.terms } },
+            ),
             None,
           )
           .await?;
