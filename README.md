@@ -25,7 +25,7 @@ Spawn the server with a data source:
 $ cargo run -- --source=courses.json serve
 ```
 
-_n.b._ The server command-line interface provides a `load` subcommand for
+_n.b._ The server command-line interface provides a load subcommand for
 scraping all courses from various McGill course information websites and
 building a JSON data source, example usage:
 
