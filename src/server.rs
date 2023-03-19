@@ -21,7 +21,7 @@ impl Server {
     if self.seed {
       let clone = db.clone();
 
-      thread::spawn(|| async move {
+      tokio::spawn(async move {
         if let Err(error) = clone.seed(source).await {
           log::error!("error: {error}");
         }
@@ -36,11 +36,18 @@ impl Server {
               .allow_methods([Method::GET])
               .allow_origin(Any),
           )
+          .route("/courses", get(Self::courses))
           .with_state(State::new(db).await?)
           .into_make_service(),
       )
       .await?;
 
     Ok(())
+  }
+
+  pub(crate) async fn courses(
+    AppState(state): AppState<State>,
+  ) -> Result<impl IntoResponse> {
+    Ok(Json(state.db.courses().await?))
   }
 }

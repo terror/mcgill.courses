@@ -21,14 +21,14 @@ impl VsbClient {
     code: &str,
     term: usize,
   ) -> Result<Vec<Schedule>> {
-    extractor::extract_course_schedules(
+    Ok(extractor::extract_course_schedules(
       &self
         .client
         .get(self.url(code, term))
         .header("Accept-Encoding", "")
         .send()?
         .text()?,
-    )
+    )?)
   }
 
   fn url(&self, code: &str, term: usize) -> String {
