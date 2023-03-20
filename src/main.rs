@@ -10,7 +10,6 @@ use {
   },
   clap::Parser,
   db::Db,
-  http::Method,
   http::StatusCode,
   model::{Course, CourseListing, Schedule},
   rayon::prelude::*,
@@ -25,7 +24,7 @@ use {
     thread,
     time::Duration,
   },
-  tower_http::cors::{Any, CorsLayer},
+  tower_http::cors::CorsLayer,
 };
 
 mod arguments;

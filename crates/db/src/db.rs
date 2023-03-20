@@ -20,7 +20,7 @@ impl Db {
       .run_command(doc! {"ping": 1}, None)
       .await?;
 
-    log::info!("Connected successfully.");
+    log::info!("Connected to MongoDB.");
 
     Ok(Self {
       database: client.database(db_name),
