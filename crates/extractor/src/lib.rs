@@ -72,6 +72,17 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
     .root_element()
     .select_single("div[class='node node-catalog clearfix']")?;
 
+  let raw = catalog
+    .select_single("p[class='catalog-terms']")?
+    .inner_html();
+
+  let terms = raw
+    .trim()
+    .split(' ')
+    .skip(1)
+    .filter(|entry| !entry.is_empty())
+    .collect::<Vec<&str>>();
+
   let mut tokens = catalog
     .select_single("p[class='catalog-instructors']")?
     .inner_html()
@@ -81,14 +92,7 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
     .collect::<Vec<&str>>()
     .join(" ");
 
-  catalog
-    .select_single("p[class='catalog-terms']")?
-    .inner_html()
-    .trim()
-    .split(' ')
-    .skip(1)
-    .filter(|entry| !entry.is_empty())
-    .collect::<Vec<&str>>()
+  terms
     .join(" ")
     .split(", ")
     .map(|term| {
