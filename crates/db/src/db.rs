@@ -111,7 +111,10 @@ impl Db {
         .collection::<Course>(Db::COURSE_COLLECTION)
         .find(
           doc! { "$text" : { "$search": query } },
-          FindOptions::builder().limit(10).build(),
+          FindOptions::builder()
+            .sort(doc! { "score": { "$meta" : "textScore" }})
+            .limit(10)
+            .build(),
         )
         .await?
         .try_collect::<Vec<Course>>()
