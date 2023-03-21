@@ -8,13 +8,10 @@ pub(crate) struct State {
 }
 
 impl State {
-  pub(crate) async fn new(
-    db: Arc<Db>,
-    oauth_client: BasicClient,
-  ) -> Result<Self> {
+  pub(crate) async fn new(db: Arc<Db>) -> Result<Self> {
     Ok(Self {
       db,
-      oauth_client,
+      oauth_client: auth::oauth_client(),
       store: MemoryStore::new(),
     })
   }

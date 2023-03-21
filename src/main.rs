@@ -1,16 +1,8 @@
 use {
   crate::{
-    arguments::Arguments,
-    auth::{login_authorized, microsoft_auth, oauth_client},
-    error::Error,
-    loader::Loader,
-    options::Options,
-    page::Page,
-    server::Server,
-    state::State,
-    subcommand::Subcommand,
-    vec_ext::VecExt,
-    vsb_client::VsbClient,
+    arguments::Arguments, error::Error, loader::Loader, options::Options,
+    page::Page, server::Server, state::State, subcommand::Subcommand,
+    vec_ext::VecExt, vsb_client::VsbClient,
   },
   async_session::MemoryStore,
   axum::{
