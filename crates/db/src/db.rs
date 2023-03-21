@@ -1,9 +1,5 @@
 use super::*;
 
-use mongodb::options::{FindOptions, IndexOptions};
-use mongodb::results::CreateIndexResult;
-use mongodb::IndexModel;
-
 #[derive(Debug, Clone)]
 pub struct Db {
   database: Database,
@@ -39,7 +35,14 @@ impl Db {
     for course in
       serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
     {
-      match self.find_course(doc! { "title": &course.title }).await? {
+      match self
+        .find_course(doc! {
+          "title": &course.title,
+          "subject": &course.subject,
+          "code": &course.code
+        })
+        .await?
+      {
         Some(found) => {
           self
             .update_course(
@@ -49,9 +52,10 @@ impl Db {
                   "corequisites": course.corequisites,
                   "credits": course.credits,
                   "description": course.description,
-                  "faculty_url": course.faculty_url,
+                  "facultyUrl": course.faculty_url,
                   "instructors": course.instructors.combine(found.instructors),
                   "prerequisites": course.prerequisites,
+                  "restrictions": course.restrictions,
                   "schedule": course.schedule.combine(found.schedule),
                   "terms": course.terms.combine(found.terms),
                   "url": course.url
@@ -238,24 +242,24 @@ mod tests {
 
   #[tokio::test(flavor = "multi_thread")]
   async fn course_seeding_is_accurate() {
-    let TestContext { db, .. } = TestContext::new().await;
+    let TestContext { db, db_name } = TestContext::new().await;
 
-    let tempdir = TempDir::new("test").unwrap();
+    let tempdir = TempDir::new(&db_name).unwrap();
 
     let source = tempdir.path().join("courses.json");
 
-    fs::write(&source, get_content("before.json")).unwrap();
+    fs::write(&source, get_content("before_update.json")).unwrap();
 
     db.seed(source).await.unwrap();
 
-    assert_eq!(db.courses().await.unwrap().len(), 3);
+    assert_eq!(db.courses().await.unwrap().len(), 2);
   }
 
   #[tokio::test(flavor = "multi_thread")]
   async fn course_seeding_does_not_insert_duplicates() {
-    let TestContext { db, .. } = TestContext::new().await;
+    let TestContext { db, db_name } = TestContext::new().await;
 
-    let tempdir = TempDir::new("test").unwrap();
+    let tempdir = TempDir::new(&db_name).unwrap();
 
     let source = tempdir.path().join("courses.json");
 
@@ -275,29 +279,54 @@ mod tests {
 
   #[tokio::test(flavor = "multi_thread")]
   async fn courses_get_updated_when_seeding() {
-    let TestContext { db, .. } = TestContext::new().await;
+    let TestContext { db, db_name } = TestContext::new().await;
 
-    let tempdir = TempDir::new("test").unwrap();
+    let tempdir = TempDir::new(&db_name).unwrap();
 
     let source = tempdir.path().join("courses.json");
 
-    fs::write(&source, get_content("before.json")).unwrap();
+    fs::write(&source, get_content("before_update.json")).unwrap();
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses().await.unwrap().len(), 3);
+    assert_eq!(db.courses().await.unwrap().len(), 2);
 
     fs::write(&source, get_content("update.json")).unwrap();
 
     db.seed(source).await.unwrap();
 
-    let courses = db.courses().await.unwrap();
+    let courses = dbg!(db.courses().await.unwrap());
 
-    assert_eq!(courses.len(), 4);
+    assert_eq!(courses.len(), 3);
 
     assert_eq!(
       courses,
-      serde_json::from_str::<Vec<Course>>(&get_content("after.json")).unwrap()
+      serde_json::from_str::<Vec<Course>>(&get_content("after_update.json"))
+        .unwrap()
     );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn search_is_accurate() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 83);
+
+    let courses = db.search("COMP 202").await.unwrap();
+
+    assert_eq!(courses.len(), 10);
+
+    let first = courses.first().unwrap();
+
+    assert_eq!(first.subject, "COMP");
+    assert_eq!(first.code, "202");
   }
 }
