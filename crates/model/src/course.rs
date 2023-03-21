@@ -1,6 +1,7 @@
 use super::*;
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
 pub struct Course {
   pub title: String,
   pub credits: String,
@@ -16,5 +17,6 @@ pub struct Course {
   pub instructors: Vec<Instructor>,
   pub prerequisites: Vec<String>,
   pub corequisites: Vec<String>,
+  pub restrictions: Option<String>,
   pub schedule: Vec<Schedule>,
 }

@@ -10,6 +10,11 @@ pub(crate) struct Server {
   seed: bool,
 }
 
+#[derive(Deserialize)]
+pub(crate) struct SearchParams {
+  pub(crate) query: String,
+}
+
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
     let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
@@ -21,7 +26,7 @@ impl Server {
     if self.seed {
       let clone = db.clone();
 
-      thread::spawn(|| async move {
+      tokio::spawn(async move {
         if let Err(error) = clone.seed(source).await {
           log::error!("error: {error}");
         }
@@ -31,20 +36,31 @@ impl Server {
     axum_server::Server::bind(addr)
       .serve(
         Router::new()
-          .layer(
-            CorsLayer::new()
-              .allow_methods([Method::GET])
-              .allow_origin(Any),
-          )
           .route("/auth/login", get(microsoft_auth))
           .route("/auth/authorized", get(login_authorized))
           .route("/", get(index))
+          .route("/courses", get(Self::courses))
+          .route("/search", get(Self::search))
           .with_state(State::new(db, oauth_client()).await?)
+          .layer(CorsLayer::permissive())
           .into_make_service(),
       )
       .await?;
 
     Ok(())
+  }
+
+  pub(crate) async fn courses(
+    AppState(state): AppState<State>,
+  ) -> Result<impl IntoResponse> {
+    Ok(Json(state.db.courses().await?))
+  }
+
+  pub(crate) async fn search(
+    Query(params): Query<SearchParams>,
+    AppState(state): AppState<State>,
+  ) -> Result<impl IntoResponse> {
+    Ok(Json(state.db.search(&params.query).await?))
   }
 }
 

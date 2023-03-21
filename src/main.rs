@@ -20,15 +20,24 @@ use {
   model::{Course, CourseListing, Schedule},
   oauth2::basic::BasicClient,
   rayon::prelude::*,
+  serde::Deserialize,
   std::{
-    fs, marker::Sized, net::SocketAddr, path::PathBuf, process, sync::Arc,
-    thread, time::Duration,
+    fmt::{self, Display, Formatter},
+    fs,
+    marker::Sized,
+    net::SocketAddr,
+    path::PathBuf,
+    process,
+    sync::Arc,
+    thread,
+    time::Duration,
   },
-  tower_http::cors::{Any, CorsLayer},
+  tower_http::cors::CorsLayer,
 };
 
 mod arguments;
 mod auth;
+mod error;
 mod loader;
 mod options;
 mod page;
@@ -38,7 +47,7 @@ mod subcommand;
 mod vec_ext;
 mod vsb_client;
 
-type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
+type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {

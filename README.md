@@ -25,9 +25,9 @@ Spawn the server with a data source:
 $ cargo run -- --source=courses.json serve
 ```
 
-_n.b._ The server command-line interface provides a load subcommand for
-scraping all courses from various McGill course information websites and
-building a JSON data source, example usage:
+_n.b._ The server command-line interface provides a load subcommand for scraping
+all courses from various McGill course information websites and building a JSON
+data source, example usage:
 
 ```
 $ RUST_LOG=info cargo run -- --source=courses.json \
@@ -41,7 +41,7 @@ $ RUST_LOG=info cargo run -- --source=courses.json \
 Or alternatively if you have [just](https://github.com/casey/just) installed:
 
 ```
-$ just extract
+$ just load
 ```
 
 Spawn the react frontend:

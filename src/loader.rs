@@ -37,7 +37,7 @@ impl Loader {
     }
 
     fs::write(source, serde_json::to_string_pretty(&courses)?)
-      .map_err(anyhow::Error::from)
+      .map_err(|err| Error(anyhow::Error::from(err)))
   }
 
   fn aggregate_urls(&self, start: usize, end: usize) -> Vec<Page> {
@@ -114,16 +114,17 @@ impl Loader {
       credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
+      level: listing.level,
+      url: listing.url,
       department: listing.department,
-      description: course_page.description,
       faculty: listing.faculty,
       faculty_url: format!("{}{}", Loader::BASE_URL, course_page.faculty_url),
+      terms: listing.terms,
+      description: course_page.description,
       instructors: course_page.instructors,
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
-      terms: listing.terms,
-      level: listing.level,
-      url: listing.url,
+      restrictions: course_page.requirements.restrictions,
       schedule: VsbClient::new(self.user_agent.to_string())?.schedule(
         &format!("{}-{}", course_page.subject, course_page.code),
         self.vsb_term,
