@@ -1,6 +1,6 @@
 use super::*;
 
-use mongodb::options::IndexOptions;
+use mongodb::options::{FindOptions, IndexOptions};
 use mongodb::results::CreateIndexResult;
 use mongodb::IndexModel;
 
@@ -109,7 +109,10 @@ impl Db {
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
-        .find(doc! { "$text" : { "$search": query } }, None)
+        .find(
+          doc! { "$text" : { "$search": query } },
+          FindOptions::builder().limit(10).build(),
+        )
         .await?
         .try_collect::<Vec<Course>>()
         .await?,

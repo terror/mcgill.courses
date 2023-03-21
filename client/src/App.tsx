@@ -38,8 +38,8 @@ const Home = () => {
             <a href='#' className='-m-1.5 p-1.5'>
               <span className='sr-only'>Your Company</span>
               <img
-                className='h-8 w-auto'
-                src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
+                className='h-12 w-auto'
+                src='https://camo.githubusercontent.com/9d8561dcbe730f9db0fb62b0c1b2aecfdabecd2a95b86d7efe3224aedc1b8981/68747470733a2f2f73757065722d7374617469632d6173736574732e73332e616d617a6f6e6177732e636f6d2f36323936646338332d303562352d346261392d626435332d3830653135646330343933362f696d616765732f32646139363935302d323361362d343164392d626635382d3362363561346565333733372e706e67'
                 alt=''
               />
             </a>
@@ -87,7 +87,7 @@ const Home = () => {
                 <span className='sr-only'>Your Company</span>
                 <img
                   className='h-8 w-auto'
-                  src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
+                  src='https://camo.githubusercontent.com/9d8561dcbe730f9db0fb62b0c1b2aecfdabecd2a95b86d7efe3224aedc1b8981/68747470733a2f2f73757065722d7374617469632d6173736574732e73332e616d617a6f6e6177732e636f6d2f36323936646338332d303562352d346261392d626435332d3830653135646330343933362f696d616765732f32646139363935302d323361362d343164392d626635382d3362363561346565333733372e706e67'
                   alt=''
                 />
               </a>
@@ -127,94 +127,43 @@ const Home = () => {
         </Dialog>
       </header>
       <div className='relative isolate px-6 pt-14 lg:px-8'>
-        <div className='absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80'>
-          <svg
-            className='relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]'
-            viewBox='0 0 1155 678'
-          >
-            <path
-              fill='url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)'
-              fillOpacity='.3'
-              d='M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z'
-            />
-            <defs>
-              <linearGradient
-                id='45de2b6b-92d5-4d68-a6a0-9b9b2abad533'
-                x1='1155.49'
-                x2='-78.208'
-                y1='.177'
-                y2='474.645'
-                gradientUnits='userSpaceOnUse'
-              >
-                <stop stopColor='#9089FC' />
-                <stop offset={1} stopColor='#FF80B5' />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
         <div className='mx-auto max-w-2xl py-32 sm:py-48 lg:py-56'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
+            <h1 className='text-left text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>
-            <p className='mt-6 text-lg leading-8 text-gray-600'></p>
-            <div className='mt-10 flex items-center justify-center gap-x-6'>
-              <div className='flex justify-center'>
-                <div className='mb-3 w-96'>
-                  <div className='flex w-full flex-wrap items-stretch'>
-                    <input
-                      type='search'
-                      className='flex-auto rounded-lg border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-500'
-                      placeholder='Search for courses, subjects or professors'
-                      aria-label='Search'
-                      aria-describedby='search'
-                      onChange={(event) =>
-                        handleInputChange(event.target.value)
-                      }
-                    />
-                  </div>
-                  {results.map((result, i) => (
-                    <div
-                      className='border border-neutral-300 rounded-lg p-2'
-                      key={i}
-                    >
-                    <p>
-                      {result.subject}
-                      {result.code} - {result.title}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+            <div class='relative w-full mt-4'>
+              <div class='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+                <svg
+                  aria-hidden='true'
+                  class='w-5 h-5 text-neutral-500 dark:text-neutral-400'
+                  fill='currentColor'
+                  viewBox='0 0 20 20'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    fill-rule='evenodd'
+                    d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
+                    clip-rule='evenodd'
+                  ></path>
+                </svg>
               </div>
+              <input
+                type='text'
+                class='bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
+                placeholder='Search for courses, subjects or professors'
+                onChange={(event) => handleInputChange(event.target.value)}
+              />
             </div>
+            {results.map((result, i) => (
+              <div class='rounded-lg border p-2' key={i}>
+                {result.subject}
+                {result.code} - {result.title}
+              </div>
+            ))}
           </div>
-        </div>
-        <div className='absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]'>
-          <svg
-            className='relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]'
-            viewBox='0 0 1155 678'
-          >
-            <path
-              fill='url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)'
-              fillOpacity='.3'
-              d='M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z'
-            />
-            <defs>
-              <linearGradient
-                id='ecb5b0c9-546c-4772-8c71-4d3f06d544bc'
-                x1='1155.49'
-                x2='-78.208'
-                y1='.177'
-                y2='474.645'
-                gradientUnits='userSpaceOnUse'
-              >
-                <stop stopColor='#9089FC' />
-                <stop offset={1} stopColor='#FF80B5' />
-              </linearGradient>
-            </defs>
-          </svg>
         </div>
       </div>
     </div>
