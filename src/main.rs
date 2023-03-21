@@ -5,15 +5,19 @@ use {
     vec_ext::VecExt, vsb_client::VsbClient,
   },
   axum::{
-    extract::State as AppState, response::IntoResponse, response::Response,
-    routing::get, routing::Router, Json,
+    extract::{Query, State as AppState},
+    response::IntoResponse,
+    response::Response,
+    routing::get,
+    routing::Router,
+    Json,
   },
   clap::Parser,
   db::Db,
-  http::Method,
   http::StatusCode,
   model::{Course, CourseListing, Schedule},
   rayon::prelude::*,
+  serde::Deserialize,
   std::{
     fmt::{self, Display, Formatter},
     fs,
@@ -25,7 +29,7 @@ use {
     thread,
     time::Duration,
   },
-  tower_http::cors::{Any, CorsLayer},
+  tower_http::cors::CorsLayer,
 };
 
 mod arguments;
