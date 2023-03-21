@@ -1,7 +1,5 @@
 use super::*;
 
-use axum::extract::Query;
-
 #[derive(Parser)]
 pub(crate) struct Server {
   #[clap(long, default_value = "admin")]
