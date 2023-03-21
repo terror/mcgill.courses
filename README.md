@@ -41,7 +41,7 @@ $ RUST_LOG=info cargo run -- --source=courses.json \
 Or alternatively if you have [just](https://github.com/casey/just) installed:
 
 ```
-$ just extract
+$ just load
 ```
 
 Spawn the react frontend:
