@@ -1,5 +1,7 @@
 use super::*;
 
+use axum::extract::Query;
+
 #[derive(Parser)]
 pub(crate) struct Server {
   #[clap(long, default_value = "admin")]
@@ -8,6 +10,11 @@ pub(crate) struct Server {
   port: u16,
   #[clap(long, default_value = "false")]
   seed: bool,
+}
+
+#[derive(Deserialize)]
+pub(crate) struct SearchParams {
+  pub(crate) query: String,
 }
 
 impl Server {
@@ -31,13 +38,10 @@ impl Server {
     axum_server::Server::bind(addr)
       .serve(
         Router::new()
-          .layer(
-            CorsLayer::new()
-              .allow_methods([Method::GET])
-              .allow_origin(Any),
-          )
           .route("/courses", get(Self::courses))
+          .route("/search", get(Self::search))
           .with_state(State::new(db).await?)
+          .layer(CorsLayer::permissive())
           .into_make_service(),
       )
       .await?;
@@ -49,5 +53,18 @@ impl Server {
     AppState(state): AppState<State>,
   ) -> Result<impl IntoResponse> {
     Ok(Json(state.db.courses().await?))
+  }
+
+  pub(crate) async fn search(
+    Query(params): Query<SearchParams>,
+    AppState(state): AppState<State>,
+  ) -> impl IntoResponse {
+    match state.db.search(&params.query).await {
+      Ok(payload) => (StatusCode::OK, Json(Some(payload))),
+      Err(error) => {
+        eprintln!("Error serving request for query {}: {error}", params.query);
+        (StatusCode::INTERNAL_SERVER_ERROR, Json(None))
+      }
+    }
   }
 }

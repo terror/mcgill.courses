@@ -10,10 +10,10 @@ use {
   },
   clap::Parser,
   db::Db,
-  http::Method,
   http::StatusCode,
   model::{Course, CourseListing, Schedule},
   rayon::prelude::*,
+  serde::Deserialize,
   std::{
     fmt::{self, Display, Formatter},
     fs,
@@ -25,7 +25,7 @@ use {
     thread,
     time::Duration,
   },
-  tower_http::cors::{Any, CorsLayer},
+  tower_http::cors::CorsLayer,
 };
 
 mod arguments;

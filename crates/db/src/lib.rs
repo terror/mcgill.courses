@@ -2,6 +2,7 @@ use {
   crate::vec_ext::VecExt,
   futures::stream::TryStreamExt,
   itertools::Itertools,
+  log::info,
   model::Course,
   mongodb::{
     bson::{doc, Document},

@@ -1,5 +1,7 @@
 use super::*;
 
+use mongodb::IndexModel;
+
 #[derive(Debug, Clone)]
 pub struct Db {
   database: Database,
@@ -20,7 +22,7 @@ impl Db {
       .run_command(doc! {"ping": 1}, None)
       .await?;
 
-    log::info!("Connected successfully.");
+    info!("Connected successfully.");
 
     Ok(Self {
       database: client.database(db_name),
@@ -28,7 +30,7 @@ impl Db {
   }
 
   pub async fn seed(&self, source: PathBuf) -> Result {
-    log::info!("Seeding courses...");
+    info!("Seeding courses...");
 
     for course in
       serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
@@ -60,7 +62,25 @@ impl Db {
       }
     }
 
-    log::info!("Finished seeding courses");
+    info!("Finished seeding courses, building index...");
+
+    self
+      .database
+      .collection::<Course>("courses")
+      .create_index(
+        IndexModel::builder()
+          .keys(doc! {
+              "title": "text",
+              "subject": "text",
+              "code": "text",
+              "description": "text"
+          })
+          .build(),
+        None,
+      )
+      .await?;
+
+    info!("Course index complete.");
 
     Ok(())
   }
@@ -71,6 +91,20 @@ impl Db {
         .database
         .collection::<Course>("courses")
         .find(None, None)
+        .await?
+        .try_collect::<Vec<Course>>()
+        .await?,
+    )
+  }
+
+  pub async fn search(&self, query: &str) -> Result<Vec<Course>> {
+    info!("Received query: {query}");
+
+    Ok(
+      self
+        .database
+        .collection::<Course>("courses")
+        .find(doc! { "$text" : { "$search": query } }, None)
         .await?
         .try_collect::<Vec<Course>>()
         .await?,

@@ -13,15 +13,19 @@ const navigation = [
 const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const [courses, setCourses] = useState([]);
+  const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    console.log('rendered!');
-  }, []);
-
-  const handleInputChange = (query: string) => {
-    console.log(query);
-  }
+  const handleInputChange = async (query: string) => {
+    try {
+      setResults(
+        await (
+          await fetch(`http://localhost:8000/search?query=${query}`)
+        ).json()
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className='bg-white'>
@@ -166,9 +170,20 @@ const Home = () => {
                       placeholder='Search for courses, subjects or professors'
                       aria-label='Search'
                       aria-describedby='button-addon1'
-                      onChange={(event) => handleInputChange(event.target.value)}
+                      onChange={(event) =>
+                        handleInputChange(event.target.value)
+                      }
                     />
                   </div>
+                  {results.map((result, i) => (
+                    <div
+                      className='border border-blue-100 mt-2 rounded-lg p-2'
+                      key={i}
+                    >
+                      {result.subject}
+                      {result.code} - {result.title}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
