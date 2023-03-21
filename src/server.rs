@@ -36,9 +36,9 @@ impl Server {
     axum_server::Server::bind(addr)
       .serve(
         Router::new()
-          .route("/auth/login", get(microsoft_auth))
-          .route("/auth/authorized", get(login_authorized))
           .route("/", get(index))
+          .route("/auth/authorized", get(login_authorized))
+          .route("/auth/login", get(microsoft_auth))
           .route("/courses", get(Self::courses))
           .route("/search", get(Self::search))
           .with_state(State::new(db, oauth_client()).await?)
