@@ -39,8 +39,8 @@ export const Home = () => {
               <span className='sr-only'>Your Company</span>
               <img
                 className='h-12 w-auto'
-                src='https://camo.githubusercontent.com/9d8561dcbe730f9db0fb62b0c1b2aecfdabecd2a95b86d7efe3224aedc1b8981/68747470733a2f2f73757065722d7374617469632d6173736574732e73332e616d617a6f6e6177732e636f6d2f36323936646338332d303562352d346261392d626435332d3830653135646330343933362f696d616765732f32646139363935302d323361362d343164392d626635382d3362363561346565333733372e706e67'
-                alt=''
+                src='bird.png'
+                alt='bird'
               />
             </a>
           </div>
@@ -87,7 +87,7 @@ export const Home = () => {
                 <span className='sr-only'>Your Company</span>
                 <img
                   className='h-8 w-auto'
-                  src='https://camo.githubusercontent.com/9d8561dcbe730f9db0fb62b0c1b2aecfdabecd2a95b86d7efe3224aedc1b8981/68747470733a2f2f73757065722d7374617469632d6173736574732e73332e616d617a6f6e6177732e636f6d2f36323936646338332d303562352d346261392d626435332d3830653135646330343933362f696d616765732f32646139363935302d323361362d343164392d626635382d3362363561346565333733372e706e67'
+                  src='bird.png'
                   alt=''
                 />
               </a>
