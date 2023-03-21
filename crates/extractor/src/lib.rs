@@ -147,18 +147,21 @@ mod tests {
 
   static MOCK_DIR: Dir<'_> = include_dir!("crates/extractor/mocks");
 
+  fn get_content(name: &str) -> String {
+    MOCK_DIR
+      .get_file(name)
+      .unwrap()
+      .contents_utf8()
+      .unwrap()
+      .to_string()
+  }
+
   #[test]
   fn extract_course_listings() {
     assert_eq!(
-      super::extract_course_listings(
-        MOCK_DIR
-          .get_file("course_listings.html")
-          .unwrap()
-          .contents_utf8()
-          .unwrap()
-      )
-      .unwrap()
-      .unwrap(),
+      super::extract_course_listings(&get_content("course_listings.html"))
+        .unwrap()
+        .unwrap(),
       vec![
         CourseListing {
           department: "Bioresource Engineering".into(),
@@ -279,13 +282,9 @@ mod tests {
   #[test]
   fn extract_course_instructors() {
     assert_eq!(
-      super::extract_course_instructors(&Html::parse_fragment(
-        MOCK_DIR
-          .get_file("course_page.html")
-          .unwrap()
-          .contents_utf8()
-          .unwrap()
-      ))
+      super::extract_course_instructors(&Html::parse_fragment(&get_content(
+        "course_page.html"
+      )))
       .unwrap(),
       vec![
         Instructor {
@@ -312,11 +311,7 @@ mod tests {
   fn extract_course_requirements() {
     assert_eq!(
       super::extract_course_requirements(&Html::parse_fragment(
-        MOCK_DIR
-          .get_file("course_page.html")
-          .unwrap()
-          .contents_utf8()
-          .unwrap()
+        &get_content("course_page.html")
       ))
       .unwrap(),
       Requirements {
@@ -331,11 +326,7 @@ mod tests {
   fn extract_course_page() {
     assert_eq!(
       super::extract_course_page(
-        MOCK_DIR
-          .get_file("course_page.html")
-          .unwrap()
-          .contents_utf8()
-          .unwrap(),
+        &get_content("course_page.html")
       )
       .unwrap(),
       CoursePage {
@@ -353,14 +344,8 @@ mod tests {
   #[test]
   fn extract_course_schedules() {
     assert_eq!(
-      super::extract_course_schedules(
-        MOCK_DIR
-          .get_file("course_schedules.xml")
-          .unwrap()
-          .contents_utf8()
-          .unwrap(),
-      )
-      .unwrap(),
+      super::extract_course_schedules(&get_content("course_schedules.xml"))
+        .unwrap(),
       vec![Schedule {
         campus: Some("Downtown".into()),
         display: Some("Lec 045".into()),
