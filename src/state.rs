@@ -2,7 +2,7 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct State {
-  _db: Arc<Db>,
+  pub db: Arc<Db>,
   pub oauth_client: BasicClient,
   pub store: MemoryStore,
 }
@@ -13,7 +13,7 @@ impl State {
     oauth_client: BasicClient,
   ) -> Result<Self> {
     Ok(Self {
-      _db: db,
+      db,
       oauth_client,
       store: MemoryStore::new(),
     })
