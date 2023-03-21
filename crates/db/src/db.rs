@@ -1,5 +1,7 @@
 use super::*;
 
+use mongodb::options::IndexOptions;
+use mongodb::results::CreateIndexResult;
 use mongodb::IndexModel;
 
 #[derive(Debug, Clone)]
@@ -8,6 +10,8 @@ pub struct Db {
 }
 
 impl Db {
+  const COURSE_COLLECTION: &str = "courses";
+
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
       ClientOptions::parse(format!("mongodb://localhost:27017/{}", db_name))
@@ -65,18 +69,19 @@ impl Db {
     info!("Finished seeding courses, building index...");
 
     self
-      .database
-      .collection::<Course>("courses")
-      .create_index(
-        IndexModel::builder()
-          .keys(doc! {
-              "title": "text",
-              "subject": "text",
-              "code": "text",
-              "description": "text"
-          })
-          .build(),
-        None,
+      .create_course_index(
+        doc! {
+          "subject": "text",
+          "code": "text",
+          "title": "text",
+          "description": "text"
+        },
+        doc! {
+          "subject": 3,
+          "code": 3,
+          "title": 2,
+          "description": 1
+        },
       )
       .await?;
 
@@ -89,7 +94,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>("courses")
+        .collection::<Course>(Db::COURSE_COLLECTION)
         .find(None, None)
         .await?
         .try_collect::<Vec<Course>>()
@@ -103,7 +108,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>("courses")
+        .collection::<Course>(Db::COURSE_COLLECTION)
         .find(doc! { "$text" : { "$search": query } }, None)
         .await?
         .try_collect::<Vec<Course>>()
@@ -115,7 +120,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>("courses")
+        .collection::<Course>(Db::COURSE_COLLECTION)
         .find_one(query, None)
         .await?,
     )
@@ -125,7 +130,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>("courses")
+        .collection::<Course>(Db::COURSE_COLLECTION)
         .insert_one(course, None)
         .await?,
     )
@@ -139,8 +144,28 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>("courses")
+        .collection::<Course>(Db::COURSE_COLLECTION)
         .update_one(query, UpdateModifications::Document(update), None)
+        .await?,
+    )
+  }
+
+  async fn create_course_index(
+    &self,
+    keys: Document,
+    weights: Document,
+  ) -> Result<CreateIndexResult> {
+    Ok(
+      self
+        .database
+        .collection::<Course>(Db::COURSE_COLLECTION)
+        .create_index(
+          IndexModel::builder()
+            .keys(keys)
+            .options(IndexOptions::builder().weights(weights).build())
+            .build(),
+          None,
+        )
         .await?,
     )
   }

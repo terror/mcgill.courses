@@ -162,14 +162,14 @@ const Home = () => {
             <p className='mt-6 text-lg leading-8 text-gray-600'></p>
             <div className='mt-10 flex items-center justify-center gap-x-6'>
               <div className='flex justify-center'>
-                <div className='mb-3 xl:w-96'>
-                  <div className='relative mb-4 flex w-full flex-wrap items-stretch'>
+                <div className='mb-3 w-96'>
+                  <div className='flex w-full flex-wrap items-stretch'>
                     <input
                       type='search'
-                      className='relative m-0 -mr-px block w-[1%] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-200'
+                      className='flex-auto rounded-lg border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-500'
                       placeholder='Search for courses, subjects or professors'
                       aria-label='Search'
-                      aria-describedby='button-addon1'
+                      aria-describedby='search'
                       onChange={(event) =>
                         handleInputChange(event.target.value)
                       }
@@ -177,11 +177,13 @@ const Home = () => {
                   </div>
                   {results.map((result, i) => (
                     <div
-                      className='border border-blue-100 mt-2 rounded-lg p-2'
+                      className='border border-neutral-300 rounded-lg p-2'
                       key={i}
                     >
+                    <p>
                       {result.subject}
                       {result.code} - {result.title}
+                      </p>
                     </div>
                   ))}
                 </div>

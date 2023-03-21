@@ -58,13 +58,7 @@ impl Server {
   pub(crate) async fn search(
     Query(params): Query<SearchParams>,
     AppState(state): AppState<State>,
-  ) -> impl IntoResponse {
-    match state.db.search(&params.query).await {
-      Ok(payload) => (StatusCode::OK, Json(Some(payload))),
-      Err(error) => {
-        eprintln!("Error serving request for query {}: {error}", params.query);
-        (StatusCode::INTERNAL_SERVER_ERROR, Json(None))
-      }
-    }
+  ) -> Result<impl IntoResponse> {
+    Ok(Json(state.db.search(&params.query).await?))
   }
 }
