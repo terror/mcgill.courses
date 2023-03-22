@@ -39,10 +39,12 @@ impl Server {
           .route("/", get(index))
           .route("/auth/authorized", get(auth::login_authorized))
           .route("/auth/login", get(auth::microsoft_auth))
+          .route("/auth/user", get(auth::current_user))
+          .route("/auth/logout", get(auth::logout))
           .route("/courses", get(Self::courses))
           .route("/search", get(Self::search))
           .with_state(State::new(db).await?)
-          .layer(CorsLayer::permissive())
+          .layer(CorsLayer::very_permissive())
           .into_make_service(),
       )
       .await?;

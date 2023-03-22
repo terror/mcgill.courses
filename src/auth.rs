@@ -2,7 +2,8 @@ use crate::state;
 use async_session::{Session, SessionStore};
 use axum::{
   extract::{FromRef, Query, State as AppState},
-  response::{IntoResponse, Redirect},
+  headers::Cookie,
+  response::{IntoResponse, Redirect, TypedHeader},
 };
 use http::{header::SET_COOKIE, HeaderMap};
 use oauth2::{
@@ -65,6 +66,7 @@ pub(crate) async fn microsoft_auth(
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
   id: String,
+  mail: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -105,5 +107,41 @@ pub(crate) async fn login_authorized(
   let mut headers = HeaderMap::new();
   headers.insert(SET_COOKIE, cookie.parse().unwrap());
 
-  (headers, Redirect::to("/"))
+  (headers, Redirect::to("http://localhost:5173"))
+}
+
+pub(crate) async fn current_user(
+  TypedHeader(cookies): TypedHeader<Cookie>,
+  AppState(state): AppState<state::State>,
+) -> impl IntoResponse {
+  if let Some(session_cookie) = cookies.get("SESSION") {
+    if let Some(session) = state
+      .store
+      .load_session(session_cookie.to_string())
+      .await
+      .unwrap()
+    {
+      log::info!("Fetched session: {:?}", session);
+      serde_json::to_string(&session.get::<User>("user").unwrap()).unwrap()
+    } else {
+      String::from("null")
+    }
+  } else {
+    String::from("null")
+  }
+}
+
+pub(crate) async fn logout(
+  TypedHeader(cookies): TypedHeader<Cookie>,
+  AppState(state): AppState<state::State>,
+) -> impl IntoResponse {
+  let cookie = cookies.get("SESSION").unwrap();
+  let session =
+    match state.store.load_session(cookie.to_string()).await.unwrap() {
+      Some(s) => s,
+      None => return Redirect::to("http://localhost:5173"),
+    };
+
+  state.store.destroy_session(session).await.unwrap();
+  Redirect::to("http://localhost:5173")
 }
