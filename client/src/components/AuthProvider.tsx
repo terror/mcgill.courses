@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
-import { User } from '../types/types';
+import { User } from '../types/user';
+import { fetchClient } from '../utils/fetchClient';
 
 export const authContext = createContext<User | undefined>(undefined);
 
@@ -9,15 +10,12 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
 
   useEffect(() => {
     setStatus('pending');
-    fetch('http://localhost:8000/auth/user', { credentials: 'include' }).then(
-      (res) => {
-        res.json().then((data) => {
-          console.log(data);
-          setUser(data as User);
-          setStatus('success');
-        });
-      }
-    );
+    fetchClient
+      .getData<User>('/auth/user', { credentials: 'include' })
+      .then((user) => {
+        setUser(user);
+        setStatus('success');
+      });
   }, []);
 
   return status === 'pending' ? (

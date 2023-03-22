@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import React from 'react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react';
-import { Course } from '../types/types';
+import { Course } from '../types/course';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../utils/fetchClient';
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -21,11 +23,7 @@ export const Home = () => {
 
   const handleInputChange = async (query: string) => {
     try {
-      setResults(
-        await (
-          await fetch(`http://localhost:8000/search?query=${query}`)
-        ).json()
-      );
+      setResults(await fetchClient.getData<Course[]>(`/search?query=${query}`));
     } catch (err) {
       console.error(err);
     }
@@ -72,19 +70,19 @@ export const Home = () => {
                   {user.mail}
                 </div>
                 <a
-                  href='http://localhost:8000/auth/logout'
+                  href={`${import.meta.env.VITE_API_URL}/auth/logout`}
                   className='text-sm font-semibold text-gray-900 ml-4'
                 >
                   Log out
                 </a>
               </div>
             ) : (
-              <Link
-                to='/login'
+              <a
+                href={`${import.meta.env.VITE_API_URL}/auth/login`}
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
                 Log in <span aria-hidden='true'>&rarr;</span>
-              </Link>
+              </a>
             )}
           </div>
         </nav>
