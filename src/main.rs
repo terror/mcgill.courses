@@ -33,10 +33,12 @@ use {
 };
 
 mod arguments;
+mod courses;
 mod error;
 mod loader;
 mod options;
 mod page;
+mod search;
 mod server;
 mod state;
 mod subcommand;
