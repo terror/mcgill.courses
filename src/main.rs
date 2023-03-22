@@ -5,7 +5,7 @@ use {
     vec_ext::VecExt, vsb_client::VsbClient,
   },
   axum::{
-    extract::{Query, State as AppState},
+    extract::{Path, Query, State as AppState},
     response::IntoResponse,
     response::Response,
     routing::get,

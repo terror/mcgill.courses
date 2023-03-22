@@ -31,7 +31,8 @@ impl Server {
     axum_server::Server::bind(addr)
       .serve(
         Router::new()
-          .route("/courses", get(courses::courses))
+          .route("/courses", get(courses::get_courses))
+          .route("/courses/:id", get(courses::get_course_by_id))
           .route("/search", get(search::search))
           .with_state(State::new(db).await?)
           .layer(CorsLayer::permissive())

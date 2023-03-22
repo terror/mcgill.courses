@@ -28,8 +28,7 @@ load:
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
 restart:
-  docker-compose down
-  docker volume rm mcgillgg_mongodb_data
+  docker-compose down --volumes
   just services
 
 run *args:
