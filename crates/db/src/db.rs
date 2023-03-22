@@ -22,7 +22,7 @@ impl Db {
       .run_command(doc! {"ping": 1}, None)
       .await?;
 
-    info!("Connected successfully.");
+    info!("Connected to MongoDB.");
 
     Ok(Self {
       database: client.database(db_name),
