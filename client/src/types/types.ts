@@ -26,3 +26,8 @@ export type Schedule = {
   display?: string;
   location?: string;
 };
+
+export interface User {
+  id: string;
+  mail: string;
+}
