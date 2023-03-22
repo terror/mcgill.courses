@@ -1,5 +1,8 @@
 [
   {
+    "_id": {
+      "$oid": "641a9b029bd5e88e8d3256c4"
+    },
     "title": "Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -49,6 +52,9 @@
     ]
   },
   {
+    "_id": {
+      "$oid": "641a9b039bd5e88e8d3256d1"
+    },
     "title": "Honours Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -72,13 +78,16 @@
     "schedule": []
   },
   {
+    "_id": {
+      "$oid": "641a9c039bd5e88e8d3261f9"
+    },
     "title": "Algorithmic Game Theory",
     "credits": "4",
-    "subject": "COMP",
+    "subject": "MATH",
     "code": "553",
     "level": "Graduate, Undergraduate",
-    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-553",
-    "department": "Computer Science",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/math-553",
+    "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
     "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
@@ -91,7 +100,7 @@
     ],
     "prerequisites": ["COMP 362", "MATH 350", "MATH 454", "MATH 487"],
     "corequisites": [],
-    "restrictions": "Not open to students who are taking or have taken MATH 553",
+    "restrictions": "Not open to students who are taking or have taken COMP 553",
     "schedule": []
   }
 ]

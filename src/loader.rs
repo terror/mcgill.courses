@@ -113,6 +113,7 @@ impl Loader {
     thread::sleep(Duration::from_millis(self.course_delay));
 
     Ok(Course {
+      id: ObjectId::new(),
       title: course_page.title,
       credits: course_page.credits,
       subject: course_page.subject.clone(),

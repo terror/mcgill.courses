@@ -5,7 +5,7 @@ use {
   log::info,
   model::Course,
   mongodb::{
-    bson::{doc, Document},
+    bson::{doc, oid::ObjectId, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions},
     results::{CreateIndexResult, InsertOneResult, UpdateResult},

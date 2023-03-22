@@ -126,6 +126,13 @@ impl Db {
     )
   }
 
+  pub async fn find_course_by_id(
+    &self,
+    id: ObjectId,
+  ) -> Result<Option<Course>> {
+    self.find_course(doc! { "_id": id }).await
+  }
+
   async fn find_course(&self, query: Document) -> Result<Option<Course>> {
     Ok(
       self
@@ -328,5 +335,29 @@ mod tests {
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn get_course_by_id() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let courses = db.courses().await.unwrap();
+
+    assert_eq!(courses.len(), 83);
+
+    let first = courses.first().unwrap();
+
+    assert_eq!(
+      db.find_course_by_id(first.id).await.unwrap().unwrap(),
+      *first
+    );
   }
 }

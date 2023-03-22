@@ -1,5 +1,8 @@
 [
   {
+    "_id": {
+      "$oid": "641a9b029bd5e88e8d3256c4"
+    },
     "title": "Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -31,6 +34,9 @@
     "schedule": []
   },
   {
+    "_id": {
+      "$oid": "641a9b039bd5e88e8d3256d1"
+    },
     "title": "Honours Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
