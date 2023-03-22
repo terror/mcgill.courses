@@ -4,7 +4,7 @@ use super::*;
 #[serde(rename_all = "camelCase")]
 pub struct Course {
   #[serde(rename = "_id")]
-  pub id: ObjectId,
+  pub id: String,
   pub title: String,
   pub credits: String,
   pub subject: String,

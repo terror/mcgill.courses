@@ -10,7 +10,6 @@ members = ["crates/*"]
 anyhow = "1.0.69"
 axum = { version = "0.6.11", features = ["headers", "json"] }
 axum-server = "0.4.6"
-bson = "2.6.1"
 chrono = "0.4.24"
 clap = { version = "4.1.8", features = ["derive"] }
 db = { path = "crates/db" }

@@ -12,7 +12,6 @@ use {
     routing::Router,
     Json,
   },
-  bson::oid::ObjectId,
   clap::Parser,
   db::Db,
   http::StatusCode,

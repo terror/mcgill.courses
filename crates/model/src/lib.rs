@@ -1,5 +1,5 @@
 use {
-  bson::{doc, oid::ObjectId, Bson},
+  bson::{doc, Bson},
   serde::{Deserialize, Serialize},
 };
 

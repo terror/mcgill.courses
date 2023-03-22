@@ -2262,7 +2262,6 @@ dependencies = [
  "anyhow",
  "axum",
  "axum-server",
- "bson",
  "chrono",
  "clap",
  "db",

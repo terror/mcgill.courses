@@ -1,8 +1,6 @@
 [
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256c4"
-    },
+    "_id": "COMP251",
     "title": "Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -40,9 +38,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9c039bd5e88e8d3261f9"
-    },
+    "_id": "MATH553",
     "title": "Algorithmic Game Theory",
     "credits": "4",
     "subject": "MATH",

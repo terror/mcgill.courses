@@ -1,8 +1,6 @@
 [
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256e8"
-    },
+    "_id": "COMP202",
     "title": "Foundations of Programming",
     "credits": "3",
     "subject": "COMP",
@@ -40,9 +38,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256f3"
-    },
+    "_id": "COMP204",
     "title": "Computer Programming for Life Sciences",
     "credits": "3",
     "subject": "COMP",
@@ -70,9 +66,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b069bd5e88e8d3256fe"
-    },
+    "_id": "COMP206",
     "title": "Introduction to Software Systems",
     "credits": "3",
     "subject": "COMP",
@@ -104,9 +98,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325704"
-    },
+    "_id": "COMP208",
     "title": "Computer Programming for Physical Sciences and\n Engineering\n",
     "credits": "3",
     "subject": "COMP",
@@ -134,9 +126,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d32570e"
-    },
+    "_id": "COMP230",
     "title": "Logic and Computability",
     "credits": "3",
     "subject": "COMP",
@@ -160,9 +150,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b019bd5e88e8d3256b9"
-    },
+    "_id": "COMP250",
     "title": "Introduction to Computer Science",
     "credits": "3",
     "subject": "COMP",
@@ -190,9 +178,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256c4"
-    },
+    "_id": "COMP251",
     "title": "Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -224,9 +210,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b039bd5e88e8d3256d1"
-    },
+    "_id": "COMP252",
     "title": "Honours Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -250,9 +234,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256dd"
-    },
+    "_id": "COMP273",
     "title": "Introduction to Computer Systems",
     "credits": "3",
     "subject": "COMP",
@@ -284,9 +266,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256e9"
-    },
+    "_id": "COMP302",
     "title": "Programming Languages and Paradigms",
     "credits": "3",
     "subject": "COMP",
@@ -321,9 +301,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256f4"
-    },
+    "_id": "COMP303",
     "title": "Software Design",
     "credits": "3",
     "subject": "COMP",
@@ -351,9 +329,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b069bd5e88e8d3256ff"
-    },
+    "_id": "COMP307",
     "title": "Principles of Web Development",
     "credits": "3",
     "subject": "COMP",
@@ -377,9 +353,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325709"
-    },
+    "_id": "COMP308",
     "title": "Computer Systems Lab",
     "credits": "1",
     "subject": "COMP",
@@ -403,9 +377,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256e0"
-    },
+    "_id": "COMP310",
     "title": "Operating Systems",
     "credits": "3",
     "subject": "COMP",
@@ -433,9 +405,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256eb"
-    },
+    "_id": "COMP321",
     "title": "Programming Challenges",
     "credits": "3",
     "subject": "COMP",
@@ -459,9 +429,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256f6"
-    },
+    "_id": "COMP322",
     "title": "Introduction to C++",
     "credits": "1",
     "subject": "COMP",
@@ -485,9 +453,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325702"
-    },
+    "_id": "COMP330",
     "title": "Theory of Computation",
     "credits": "3",
     "subject": "COMP",
@@ -515,9 +481,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d32570a"
-    },
+    "_id": "COMP345",
     "title": "From Natural Language to Data Science",
     "credits": "3",
     "subject": "COMP",
@@ -545,9 +509,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325714"
-    },
+    "_id": "COMP350",
     "title": "Numerical Computing",
     "credits": "3",
     "subject": "COMP",
@@ -577,9 +539,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d32571a"
-    },
+    "_id": "COMP360",
     "title": "Algorithm Design",
     "credits": "3",
     "subject": "COMP",
@@ -613,9 +573,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d32571e"
-    },
+    "_id": "COMP361D1",
     "title": "Software Engineering Project",
     "credits": "3",
     "subject": "COMP",
@@ -639,9 +597,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d325725"
-    },
+    "_id": "COMP361D2",
     "title": "Software Engineering Project",
     "credits": "3",
     "subject": "COMP",
@@ -665,9 +621,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b019bd5e88e8d3256b4"
-    },
+    "_id": "COMP362",
     "title": "Honours Algorithm Design",
     "credits": "3",
     "subject": "COMP",
@@ -691,9 +645,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256bd"
-    },
+    "_id": "COMP396",
     "title": "Undergraduate Research Project",
     "credits": "3",
     "subject": "COMP",
@@ -731,9 +683,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b039bd5e88e8d3256d0"
-    },
+    "_id": "COMP400",
     "title": "Project in Computer Science",
     "credits": "4",
     "subject": "COMP",
@@ -771,9 +721,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b039bd5e88e8d3256db"
-    },
+    "_id": "COMP401",
     "title": "Project in Biology and Computer Science",
     "credits": "3",
     "subject": "COMP",
@@ -811,9 +759,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256c8"
-    },
+    "_id": "COMP402",
     "title": "Honours Project in Computer Science and Biology",
     "credits": "6",
     "subject": "COMP",
@@ -851,9 +797,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b039bd5e88e8d3256d9"
-    },
+    "_id": "COMP402D1",
     "title": "Honours Project in Computer Science and Biology",
     "credits": "3",
     "subject": "COMP",
@@ -877,9 +821,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256e3"
-    },
+    "_id": "COMP402D2",
     "title": "Honours Project in Computer Science and Biology",
     "credits": "3",
     "subject": "COMP",
@@ -903,9 +845,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256ee"
-    },
+    "_id": "COMP417",
     "title": "Introduction Robotics and Intelligent Systems",
     "credits": "3",
     "subject": "COMP",
@@ -933,9 +873,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256f9"
-    },
+    "_id": "COMP421",
     "title": "Database Systems",
     "credits": "3",
     "subject": "COMP",
@@ -963,9 +901,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256cb"
-    },
+    "_id": "COMP424",
     "title": "Artificial Intelligence",
     "credits": "3",
     "subject": "COMP",
@@ -989,9 +925,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b039bd5e88e8d3256d4"
-    },
+    "_id": "COMP445",
     "title": "Computational Linguistics",
     "credits": "3",
     "subject": "COMP",
@@ -1015,9 +949,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256df"
-    },
+    "_id": "COMP451",
     "title": "Fundamentals of Machine Learning",
     "credits": "3",
     "subject": "COMP",
@@ -1041,9 +973,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256ec"
-    },
+    "_id": "COMP462",
     "title": "Computational Biology Methods",
     "credits": "3",
     "subject": "COMP",
@@ -1067,9 +997,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256f8"
-    },
+    "_id": "COMP480",
     "title": "Independent Studies in Computer Science",
     "credits": "3",
     "subject": "COMP",
@@ -1107,9 +1035,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325703"
-    },
+    "_id": "COMP512",
     "title": "Distributed Systems",
     "credits": "4",
     "subject": "COMP",
@@ -1137,9 +1063,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d32570d"
-    },
+    "_id": "COMP514",
     "title": "Applied Robotics",
     "credits": "4",
     "subject": "COMP",
@@ -1163,9 +1087,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d325719"
-    },
+    "_id": "COMP520",
     "title": "Compiler Design",
     "credits": "4",
     "subject": "COMP",
@@ -1189,9 +1111,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d32571c"
-    },
+    "_id": "COMP525",
     "title": "Formal Verification",
     "credits": "3",
     "subject": "COMP",
@@ -1215,9 +1135,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b019bd5e88e8d3256b8"
-    },
+    "_id": "COMP527",
     "title": "Logic and Computation",
     "credits": "3",
     "subject": "COMP",
@@ -1241,9 +1159,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256c1"
-    },
+    "_id": "COMP531",
     "title": "Advanced Theory of Computation",
     "credits": "3",
     "subject": "COMP",
@@ -1267,9 +1183,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b029bd5e88e8d3256cd"
-    },
+    "_id": "COMP535",
     "title": "Computer Networks 1",
     "credits": "4",
     "subject": "COMP",
@@ -1293,9 +1207,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b039bd5e88e8d3256d6"
-    },
+    "_id": "COMP540",
     "title": "Matrix Computations",
     "credits": "4",
     "subject": "COMP",
@@ -1319,9 +1231,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b049bd5e88e8d3256de"
-    },
+    "_id": "COMP546",
     "title": "Computational Perception",
     "credits": "4",
     "subject": "COMP",
@@ -1345,9 +1255,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256ed"
-    },
+    "_id": "COMP547",
     "title": "Cryptography and Data Security",
     "credits": "4",
     "subject": "COMP",
@@ -1371,9 +1279,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b059bd5e88e8d3256fa"
-    },
+    "_id": "COMP551",
     "title": "Applied Machine Learning",
     "credits": "4",
     "subject": "COMP",
@@ -1401,9 +1307,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325705"
-    },
+    "_id": "COMP553",
     "title": "Algorithmic Game Theory",
     "credits": "4",
     "subject": "COMP",
@@ -1427,9 +1331,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325710"
-    },
+    "_id": "COMP555",
     "title": "Software Privacy",
     "credits": "4",
     "subject": "COMP",
@@ -1453,9 +1355,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325712"
-    },
+    "_id": "COMP557",
     "title": "Fundamentals of Computer Graphics",
     "credits": "4",
     "subject": "COMP",
@@ -1479,9 +1379,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d32571d"
-    },
+    "_id": "COMP558",
     "title": "Fundamentals of Computer Vision",
     "credits": "4",
     "subject": "COMP",
@@ -1505,9 +1403,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d325726"
-    },
+    "_id": "COMP559",
     "title": "Fundamentals of Computer Animation",
     "credits": "4",
     "subject": "COMP",
@@ -1531,9 +1427,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325731"
-    },
+    "_id": "COMP561",
     "title": "Computational Biology Methods and Research",
     "credits": "4",
     "subject": "COMP",
@@ -1557,9 +1451,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d325715"
-    },
+    "_id": "COMP562",
     "title": "Theory of Machine Learning",
     "credits": "4",
     "subject": "COMP",
@@ -1591,9 +1483,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d325722"
-    },
+    "_id": "COMP565",
     "title": "Machine Learning in Genomics and Healthcare",
     "credits": "4",
     "subject": "COMP",
@@ -1623,9 +1513,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d325723"
-    },
+    "_id": "COMP579",
     "title": "Reinforcement Learning",
     "credits": "4",
     "subject": "COMP",
@@ -1655,9 +1543,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325732"
-    },
+    "_id": "COMP585",
     "title": "Intelligent Software\n Systems\n",
     "credits": "4",
     "subject": "COMP",
@@ -1681,9 +1567,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d32573a"
-    },
+    "_id": "COMP588",
     "title": "Probabilistic Graphical Models",
     "credits": "4",
     "subject": "COMP",
@@ -1707,9 +1591,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b079bd5e88e8d325711"
-    },
+    "_id": "COMP596",
     "title": "Topics in Computer Science 3",
     "credits": "3",
     "subject": "COMP",
@@ -1737,9 +1619,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b089bd5e88e8d32571b"
-    },
+    "_id": "COMP597",
     "title": "Topics in Computer Science 4",
     "credits": "4",
     "subject": "COMP",
@@ -1763,9 +1643,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d325728"
-    },
+    "_id": "COMP598",
     "title": "Topics in Computer Science 1",
     "credits": "3",
     "subject": "COMP",
@@ -1797,9 +1675,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d32572d"
-    },
+    "_id": "COMP599",
     "title": "Topics in Computer Science 2",
     "credits": "4",
     "subject": "COMP",
@@ -1827,9 +1703,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d32572b"
-    },
+    "_id": "COMP602",
     "title": "Computer Science Seminar 1",
     "credits": "1",
     "subject": "COMP",
@@ -1857,9 +1731,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325734"
-    },
+    "_id": "COMP603",
     "title": "Computer Science Seminar 2",
     "credits": "1",
     "subject": "COMP",
@@ -1887,9 +1759,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d32572f"
-    },
+    "_id": "COMP604",
     "title": "Graduate School Fundamentals\n",
     "credits": "1",
     "subject": "COMP",
@@ -1921,9 +1791,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325736"
-    },
+    "_id": "COMP611",
     "title": "Mathematical Tools for Computer Science",
     "credits": "4",
     "subject": "COMP",
@@ -1947,9 +1815,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325738"
-    },
+    "_id": "COMP690",
     "title": "Probabilistic Analysis of Algorithms",
     "credits": "4",
     "subject": "COMP",
@@ -1973,9 +1839,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d325721"
-    },
+    "_id": "COMP691",
     "title": "Thesis Research 1",
     "credits": "3",
     "subject": "COMP",
@@ -2005,9 +1869,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b099bd5e88e8d32572c"
-    },
+    "_id": "COMP693",
     "title": "Research Project 1",
     "credits": "3",
     "subject": "COMP",
@@ -2026,9 +1888,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325733"
-    },
+    "_id": "COMP694",
     "title": "Research Project 2",
     "credits": "6",
     "subject": "COMP",
@@ -2047,9 +1907,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325735"
-    },
+    "_id": "COMP695",
     "title": "Research Project 3",
     "credits": "6",
     "subject": "COMP",
@@ -2068,9 +1926,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325730"
-    },
+    "_id": "COMP696",
     "title": "Thesis Research 2",
     "credits": "3",
     "subject": "COMP",
@@ -2100,9 +1956,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d32573d"
-    },
+    "_id": "COMP697",
     "title": "Thesis Research 3",
     "credits": "4",
     "subject": "COMP",
@@ -2132,9 +1986,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d325739"
-    },
+    "_id": "COMP698",
     "title": "Thesis Research 4",
     "credits": "10",
     "subject": "COMP",
@@ -2164,9 +2016,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d32573b"
-    },
+    "_id": "COMP699",
     "title": "Thesis Research 5",
     "credits": "12",
     "subject": "COMP",
@@ -2196,9 +2046,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0a9bd5e88e8d32573c"
-    },
+    "_id": "COMP700",
     "title": "Ph.D. Comprehensive Examination",
     "credits": "",
     "subject": "COMP",
@@ -2217,9 +2065,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325746"
-    },
+    "_id": "COMP690",
     "title": "Probabilistic Analysis of Algorithms",
     "credits": "4",
     "subject": "COMP",
@@ -2243,9 +2089,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325743"
-    },
+    "_id": "COMP691",
     "title": "Thesis Research 1",
     "credits": "3",
     "subject": "COMP",
@@ -2275,9 +2119,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0d9bd5e88e8d32574e"
-    },
+    "_id": "COMP693",
     "title": "Research Project 1",
     "credits": "3",
     "subject": "COMP",
@@ -2296,9 +2138,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325744"
-    },
+    "_id": "COMP694",
     "title": "Research Project 2",
     "credits": "6",
     "subject": "COMP",
@@ -2317,9 +2157,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0d9bd5e88e8d325750"
-    },
+    "_id": "COMP695",
     "title": "Research Project 3",
     "credits": "6",
     "subject": "COMP",
@@ -2338,9 +2176,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0e9bd5e88e8d32575b"
-    },
+    "_id": "COMP696",
     "title": "Thesis Research 2",
     "credits": "3",
     "subject": "COMP",
@@ -2370,9 +2206,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325745"
-    },
+    "_id": "COMP697",
     "title": "Thesis Research 3",
     "credits": "4",
     "subject": "COMP",
@@ -2402,9 +2236,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0d9bd5e88e8d32574c"
-    },
+    "_id": "COMP698",
     "title": "Thesis Research 4",
     "credits": "10",
     "subject": "COMP",
@@ -2434,9 +2266,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0e9bd5e88e8d325758"
-    },
+    "_id": "COMP699",
     "title": "Thesis Research 5",
     "credits": "12",
     "subject": "COMP",
@@ -2466,9 +2296,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325747"
-    },
+    "_id": "COMP700",
     "title": "Ph.D. Comprehensive Examination",
     "credits": "",
     "subject": "COMP",
@@ -2487,9 +2315,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0d9bd5e88e8d32574d"
-    },
+    "_id": "COMP701",
     "title": "Thesis Proposal and Area Examination",
     "credits": "3",
     "subject": "COMP",
@@ -2519,9 +2345,7 @@
     ]
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325740"
-    },
+    "_id": "COMP760",
     "title": "Advanced Topics Theory 1",
     "credits": "4",
     "subject": "COMP",
@@ -2545,9 +2369,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0d9bd5e88e8d32574b"
-    },
+    "_id": "COMP762",
     "title": "Advanced Topics Programming 1",
     "credits": "4",
     "subject": "COMP",
@@ -2571,9 +2393,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0c9bd5e88e8d325741"
-    },
+    "_id": "COMP764",
     "title": "Advanced Topics Systems 1",
     "credits": "4",
     "subject": "COMP",
@@ -2597,9 +2417,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0d9bd5e88e8d32574a"
-    },
+    "_id": "COMP765",
     "title": "Advanced Topics Systems 2",
     "credits": "4",
     "subject": "COMP",
@@ -2623,9 +2441,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0e9bd5e88e8d325756"
-    },
+    "_id": "COMP766",
     "title": "Advanced Topics Applications 1",
     "credits": "4",
     "subject": "COMP",
@@ -2649,9 +2465,7 @@
     "schedule": []
   },
   {
-    "_id": {
-      "$oid": "641a9b0e9bd5e88e8d325761"
-    },
+    "_id": "COMP767",
     "title": "Advanced Topics: Applications 2",
     "credits": "4",
     "subject": "COMP",

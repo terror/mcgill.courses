@@ -35,14 +35,7 @@ impl Db {
     for course in
       serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
     {
-      match self
-        .find_course(doc! {
-          "title": &course.title,
-          "subject": &course.subject,
-          "code": &course.code
-        })
-        .await?
-      {
+      match self.find_course(doc! { "_id": &course.id, }).await? {
         Some(found) => {
           self
             .update_course(
@@ -126,10 +119,7 @@ impl Db {
     )
   }
 
-  pub async fn find_course_by_id(
-    &self,
-    id: ObjectId,
-  ) -> Result<Option<Course>> {
+  pub async fn find_course_by_id(&self, id: &str) -> Result<Option<Course>> {
     self.find_course(doc! { "_id": id }).await
   }
 
@@ -356,7 +346,7 @@ mod tests {
     let first = courses.first().unwrap();
 
     assert_eq!(
-      db.find_course_by_id(first.id).await.unwrap().unwrap(),
+      db.find_course_by_id(&first.id).await.unwrap().unwrap(),
       *first
     );
   }
