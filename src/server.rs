@@ -10,11 +10,6 @@ pub(crate) struct Server {
   seed: bool,
 }
 
-#[derive(Deserialize)]
-pub(crate) struct SearchParams {
-  pub(crate) query: String,
-}
-
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
     let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
@@ -36,8 +31,8 @@ impl Server {
     axum_server::Server::bind(addr)
       .serve(
         Router::new()
-          .route("/courses", get(Self::courses))
-          .route("/search", get(Self::search))
+          .route("/courses", get(courses::courses))
+          .route("/search", get(search::search))
           .with_state(State::new(db).await?)
           .layer(CorsLayer::permissive())
           .into_make_service(),
@@ -45,18 +40,5 @@ impl Server {
       .await?;
 
     Ok(())
-  }
-
-  pub(crate) async fn courses(
-    AppState(state): AppState<State>,
-  ) -> Result<impl IntoResponse> {
-    Ok(Json(state.db.courses().await?))
-  }
-
-  pub(crate) async fn search(
-    Query(params): Query<SearchParams>,
-    AppState(state): AppState<State>,
-  ) -> Result<impl IntoResponse> {
-    Ok(Json(state.db.search(&params.query).await?))
   }
 }
