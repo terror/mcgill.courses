@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
-import { User } from '../types/user';
+import { User, UserResponse } from '../types/user';
 import { fetchClient } from '../utils/fetchClient';
 
 export const authContext = createContext<User | undefined>(undefined);
@@ -11,9 +11,9 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   useEffect(() => {
     setStatus('pending');
     fetchClient
-      .getData<User>('/auth/user', { credentials: 'include' })
-      .then((user) => {
-        setUser(user);
+      .getData<UserResponse>('/auth/user', { credentials: 'include' })
+      .then((data) => {
+        setUser(data.user);
         setStatus('success');
       });
   }, []);

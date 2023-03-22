@@ -1,20 +1,6 @@
-use crate::state;
-use async_session::{Session, SessionStore};
-use axum::{
-  extract::{FromRef, Query, State as AppState},
-  headers::Cookie,
-  response::{IntoResponse, Redirect, TypedHeader},
-};
-use http::{header::SET_COOKIE, HeaderMap};
-use oauth2::{
-  basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
-  AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
-  TokenResponse, TokenUrl,
-};
-use serde::{Deserialize, Serialize};
-use std::env;
+use super::*;
 
-static COOKIE_NAME: &str = "SESSION";
+static COOKIE_NAME: &str = "session";
 
 pub(crate) fn oauth_client() -> BasicClient {
   let client_id = env::var("MS_CLIENT_ID")
@@ -45,9 +31,15 @@ pub(crate) fn oauth_client() -> BasicClient {
   )
 }
 
-impl FromRef<state::State> for BasicClient {
-  fn from_ref(state: &state::State) -> Self {
+impl FromRef<State> for BasicClient {
+  fn from_ref(state: &State) -> Self {
     state.oauth_client.clone()
+  }
+}
+
+impl FromRef<State> for MemoryStore {
+  fn from_ref(state: &State) -> Self {
+    state.store.clone()
   }
 }
 
@@ -78,70 +70,110 @@ pub struct AuthRequest {
 
 pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
-  AppState(state): AppState<state::State>,
-) -> impl IntoResponse {
-  let token = state
-    .oauth_client
+  AppState(store): AppState<MemoryStore>,
+  AppState(oauth_client): AppState<BasicClient>,
+) -> Result<impl IntoResponse> {
+  let token = oauth_client
     .exchange_code(AuthorizationCode::new(query.code.clone()))
     .request_async(async_http_client)
-    .await
-    .unwrap();
+    .await?;
 
   let client = reqwest::Client::new();
   let user = client
     .get("https://graph.microsoft.com/v1.0/me")
     .bearer_auth(token.access_token().secret())
     .send()
-    .await
-    .unwrap()
+    .await?
     .json::<User>()
-    .await
-    .unwrap();
+    .await?;
 
   let mut session = Session::new();
-  session.insert("user", &user).unwrap();
+  session.insert("user", &user)?;
 
-  let cookie = state.store.store_session(session).await.unwrap().unwrap();
+  let cookie = store.store_session(session).await?.unwrap();
   let cookie = format!("{}={}; SameSite=Lax; Path=/", COOKIE_NAME, cookie);
 
   let mut headers = HeaderMap::new();
   headers.insert(SET_COOKIE, cookie.parse().unwrap());
 
-  (headers, Redirect::to("http://localhost:5173"))
+  Ok((headers, Redirect::to("http://localhost:5173")))
 }
 
-pub(crate) async fn current_user(
-  TypedHeader(cookies): TypedHeader<Cookie>,
-  AppState(state): AppState<state::State>,
-) -> impl IntoResponse {
-  if let Some(session_cookie) = cookies.get("SESSION") {
-    if let Some(session) = state
-      .store
-      .load_session(session_cookie.to_string())
-      .await
-      .unwrap()
-    {
-      log::info!("Fetched session: {:?}", session);
-      serde_json::to_string(&session.get::<User>("user").unwrap()).unwrap()
-    } else {
-      String::from("null")
-    }
-  } else {
-    String::from("null")
-  }
+#[derive(Serialize, Deserialize)]
+struct UserResponse {
+  user: Option<User>,
+}
+
+pub(crate) async fn current_user(user: Option<User>) -> impl IntoResponse {
+  Json(UserResponse { user })
 }
 
 pub(crate) async fn logout(
   TypedHeader(cookies): TypedHeader<Cookie>,
-  AppState(state): AppState<state::State>,
-) -> impl IntoResponse {
-  let cookie = cookies.get("SESSION").unwrap();
-  let session =
-    match state.store.load_session(cookie.to_string()).await.unwrap() {
-      Some(s) => s,
-      None => return Redirect::to("http://localhost:5173"),
-    };
+  AppState(store): AppState<MemoryStore>,
+) -> Result<impl IntoResponse> {
+  let cookie = match cookies.get(COOKIE_NAME) {
+    Some(c) => c,
+    None => return Ok(Redirect::to("http://localhost:5173")),
+  };
 
-  state.store.destroy_session(session).await.unwrap();
-  Redirect::to("http://localhost:5173")
+  let session = match store.load_session(cookie.to_string()).await? {
+    Some(s) => s,
+    None => return Ok(Redirect::to("http://localhost:5173")),
+  };
+
+  store.destroy_session(session).await.unwrap();
+  Ok(Redirect::to("http://localhost:5173"))
+}
+
+pub struct AuthRedirect;
+
+impl IntoResponse for AuthRedirect {
+  fn into_response(self) -> Response {
+    Redirect::temporary("/auth/login").into_response()
+  }
+}
+
+#[async_trait]
+impl<S> FromRequestParts<S> for User
+where
+  MemoryStore: FromRef<S>,
+  S: Send + Sync,
+{
+  type Rejection = AuthRedirect;
+
+  async fn from_request_parts(
+    parts: &mut Parts,
+    state: &S,
+  ) -> Result<Self, Self::Rejection> {
+    let store = MemoryStore::from_ref(state);
+
+    let cookies =
+      parts.extract::<TypedHeader<Cookie>>().await.map_err(|e| {
+        match *e.name() {
+          header::COOKIE => match e.reason() {
+            TypedHeaderRejectionReason::Missing => AuthRedirect,
+            _ => {
+              log::error!("Unexpected error getting cookie header(s): {}", e);
+              AuthRedirect
+            }
+          },
+          _ => {
+            log::error!("Unexpected error getting cookies: {}", e);
+            AuthRedirect
+          }
+        }
+      })?;
+
+    let session_cookie = cookies.get(COOKIE_NAME).ok_or(AuthRedirect)?;
+    let session = store
+      .load_session(session_cookie.to_string())
+      .await
+      .unwrap()
+      .ok_or(AuthRedirect)?;
+
+    let user = session.get::<User>("user").ok_or(AuthRedirect)?;
+
+    Ok(user)
+  }
 }
