@@ -65,7 +65,3 @@ impl Server {
     Ok(Json(state.db.search(&params.query).await?))
   }
 }
-
-async fn index() -> String {
-  String::from("Hello world")
-}
