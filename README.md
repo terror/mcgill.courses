@@ -25,6 +25,8 @@ Spawn the server with a data source:
 $ cargo run -- --source=courses.json serve
 ```
 
+Refer to `.env.example` for what environment variables need to be set.
+
 _n.b._ The server command-line interface provides a load subcommand for scraping
 all courses from various McGill course information websites and building a JSON
 data source, example usage:
@@ -44,7 +46,7 @@ Or alternatively if you have [just](https://github.com/casey/just) installed:
 $ just load
 ```
 
-Spawn the react frontend:
+Finally, spawn the react frontend:
 
 ```bash
 $ npm install
