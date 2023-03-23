@@ -52,7 +52,9 @@ impl RequirementsExt for Requirements {
                     .join(" "),
                 ),
               ),
-              Requirement::Unknown => Err(anyhow!("Unkown course requirement")),
+              Requirement::Unknown => {
+                Err(anyhow!("Unknown course requirement"))
+              }
             },
           }
         })

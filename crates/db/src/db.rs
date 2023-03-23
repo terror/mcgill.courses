@@ -223,7 +223,7 @@ mod tests {
   }
 
   #[tokio::test(flavor = "multi_thread")]
-  async fn on_disk_database_is_persistant() {
+  async fn on_disk_database_is_persistent() {
     let TestContext { db, db_name } = TestContext::new().await;
 
     assert_eq!(db.courses().await.unwrap().len(), 0);
