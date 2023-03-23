@@ -6,7 +6,7 @@ export const fetchClient = {
     return (await (await this.get(endpoint, init)).json()) as T;
   },
   post: async (endpoint: string, data: any, init?: RequestInit) => {
-    return await fetch(import.meta.env.VITE_API_URL + endpoint, {
+    return await fetch('/api' + endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
       ...init,
