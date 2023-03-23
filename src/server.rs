@@ -38,7 +38,7 @@ impl Server {
           .route("/courses/:id", get(courses::get_course_by_id))
           .route("/search", get(search::search))
           .route("/user", get(user::get_user))
-          .with_state(State::new(db).await?)
+          .with_state(State::new(db).await)
           .layer(CorsLayer::very_permissive())
           .into_make_service(),
       )

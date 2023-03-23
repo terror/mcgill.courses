@@ -20,11 +20,11 @@ impl FromRef<State> for MemoryStore {
 }
 
 impl State {
-  pub(crate) async fn new(db: Arc<Db>) -> Result<Self> {
-    Ok(Self {
+  pub(crate) async fn new(db: Arc<Db>) -> Self {
+    Self {
       db,
       oauth_client: auth::oauth_client(),
       store: MemoryStore::new(),
-    })
+    }
   }
 }
