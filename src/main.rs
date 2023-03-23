@@ -7,7 +7,7 @@ use {
   async_session::{async_trait, MemoryStore, Session, SessionStore},
   axum::{
     extract::{
-      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Query,
+      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path, Query,
       State as AppState,
     },
     headers::Cookie,
@@ -45,10 +45,12 @@ use {
 
 mod arguments;
 mod auth;
+mod courses;
 mod error;
 mod loader;
 mod options;
 mod page;
+mod search;
 mod server;
 mod state;
 mod subcommand;

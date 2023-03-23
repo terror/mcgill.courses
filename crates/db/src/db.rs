@@ -22,7 +22,7 @@ impl Db {
       .run_command(doc! {"ping": 1}, None)
       .await?;
 
-    info!("Connected successfully.");
+    info!("Connected to MongoDB.");
 
     Ok(Self {
       database: client.database(db_name),
@@ -35,14 +35,7 @@ impl Db {
     for course in
       serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
     {
-      match self
-        .find_course(doc! {
-          "title": &course.title,
-          "subject": &course.subject,
-          "code": &course.code
-        })
-        .await?
-      {
+      match self.find_course(doc! { "_id": &course.id, }).await? {
         Some(found) => {
           self
             .update_course(
@@ -77,12 +70,14 @@ impl Db {
         doc! {
           "subject": "text",
           "code": "text",
+          "_id": "text",
           "title": "text",
           "description": "text"
         },
         doc! {
-          "subject": 3,
-          "code": 3,
+          "subject": 4,
+          "code": 4,
+          "_id": 3,
           "title": 2,
           "description": 1
         },
@@ -124,6 +119,10 @@ impl Db {
         .try_collect::<Vec<Course>>()
         .await?,
     )
+  }
+
+  pub async fn find_course_by_id(&self, id: &str) -> Result<Option<Course>> {
+    self.find_course(doc! { "_id": id }).await
   }
 
   async fn find_course(&self, query: Document) -> Result<Option<Course>> {
@@ -328,5 +327,101 @@ mod tests {
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn get_course_by_id() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let courses = db.courses().await.unwrap();
+
+    assert_eq!(courses.len(), 83);
+
+    let first = courses.first().unwrap();
+
+    assert_eq!(
+      db.find_course_by_id(&first.id).await.unwrap().unwrap(),
+      *first
+    );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn search_course_by_id_exact() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 83);
+
+    let courses = db.search("COMP202").await.unwrap();
+
+    assert_eq!(courses.len(), 1);
+
+    let first = courses.first().unwrap();
+
+    assert_eq!(first.subject, "COMP");
+    assert_eq!(first.code, "202");
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn fuzzy_search_course_by_title() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 83);
+
+    let courses = db.search("foundations of").await.unwrap();
+
+    assert_eq!(courses.len(), 5);
+
+    let first = courses.first().unwrap();
+
+    assert_eq!(first.subject, "COMP");
+    assert_eq!(first.code, "202");
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn fuzzy_search_course_by_description() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(db.courses().await.unwrap().len(), 83);
+
+    let courses = db.search("computing systems").await.unwrap();
+
+    assert_eq!(courses.len(), 10);
+
+    let first = courses.first().unwrap();
+
+    assert_eq!(first.subject, "COMP");
+    assert_eq!(first.code, "350");
   }
 }

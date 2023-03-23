@@ -10,6 +10,8 @@ pub(crate) struct Loader {
   page_delay: u64,
   #[clap(long, default_value = "20")]
   batch_size: usize,
+  #[clap(long, default_value = "2022-2023")]
+  mcgill_term: String,
   #[clap(long, default_value = "202305")]
   vsb_term: usize,
 }
@@ -45,8 +47,9 @@ impl Loader {
       .map(|index| Page {
         number: index,
         url: format!(
-          "{}/study/2022-2023/courses/search?page={}",
+          "{}/study/{}/courses/search?page={}",
           Loader::BASE_URL,
+          self.mcgill_term,
           index
         ),
       })
@@ -110,6 +113,7 @@ impl Loader {
     thread::sleep(Duration::from_millis(self.course_delay));
 
     Ok(Course {
+      id: format!("{}{}", course_page.subject, course_page.code),
       title: course_page.title,
       credits: course_page.credits,
       subject: course_page.subject.clone(),

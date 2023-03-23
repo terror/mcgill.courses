@@ -1,5 +1,6 @@
 [
   {
+    "_id": "COMP251",
     "title": "Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
@@ -31,6 +32,7 @@
     "schedule": []
   },
   {
+    "_id": "COMP252",
     "title": "Honours Algorithms and Data Structures",
     "credits": "3",
     "subject": "COMP",
