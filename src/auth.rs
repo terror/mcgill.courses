@@ -51,7 +51,7 @@ pub(crate) async fn login_authorized(
 
   session.insert(
     "user",
-    &client
+    client
       .get("https://graph.microsoft.com/v1.0/me")
       .bearer_auth(token.access_token().secret())
       .send()
