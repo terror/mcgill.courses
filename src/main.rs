@@ -7,8 +7,8 @@ use {
   async_session::{async_trait, MemoryStore, Session, SessionStore},
   axum::{
     extract::{
-      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path, Query,
-      State as AppState,
+      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
+      Query, State as AppState,
     },
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
