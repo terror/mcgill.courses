@@ -1,6 +1,21 @@
 use super::*;
 
-static COOKIE_NAME: &str = "session";
+pub(crate) const COOKIE_NAME: &str = "session";
+
+pub struct AuthRedirect;
+
+impl IntoResponse for AuthRedirect {
+  fn into_response(self) -> Response {
+    Redirect::temporary("/auth/login").into_response()
+  }
+}
+
+#[derive(Debug, Deserialize)]
+#[allow(dead_code)]
+pub struct AuthRequest {
+  code: String,
+  state: String,
+}
 
 pub(crate) fn oauth_client() -> BasicClient {
   let client_id = env::var("MS_CLIENT_ID")
@@ -31,18 +46,6 @@ pub(crate) fn oauth_client() -> BasicClient {
   )
 }
 
-impl FromRef<State> for BasicClient {
-  fn from_ref(state: &State) -> Self {
-    state.oauth_client.clone()
-  }
-}
-
-impl FromRef<State> for MemoryStore {
-  fn from_ref(state: &State) -> Self {
-    state.store.clone()
-  }
-}
-
 pub(crate) async fn microsoft_auth(
   AppState(client): AppState<BasicClient>,
 ) -> impl IntoResponse {
@@ -53,19 +56,6 @@ pub(crate) async fn microsoft_auth(
     .url();
 
   Redirect::to(authorize_url.as_ref())
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct User {
-  id: String,
-  mail: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[allow(dead_code)]
-pub struct AuthRequest {
-  code: String,
-  state: String,
 }
 
 pub(crate) async fn login_authorized(
@@ -99,15 +89,6 @@ pub(crate) async fn login_authorized(
   Ok((headers, Redirect::to("http://localhost:5173")))
 }
 
-#[derive(Serialize, Deserialize)]
-struct UserResponse {
-  user: Option<User>,
-}
-
-pub(crate) async fn current_user(user: Option<User>) -> impl IntoResponse {
-  Json(UserResponse { user })
-}
-
 pub(crate) async fn logout(
   TypedHeader(cookies): TypedHeader<Cookie>,
   AppState(store): AppState<MemoryStore>,
@@ -124,56 +105,4 @@ pub(crate) async fn logout(
 
   store.destroy_session(session).await?;
   Ok(Redirect::to("http://localhost:5173"))
-}
-
-pub struct AuthRedirect;
-
-impl IntoResponse for AuthRedirect {
-  fn into_response(self) -> Response {
-    Redirect::temporary("/auth/login").into_response()
-  }
-}
-
-#[async_trait]
-impl<S> FromRequestParts<S> for User
-where
-  MemoryStore: FromRef<S>,
-  S: Send + Sync,
-{
-  type Rejection = AuthRedirect;
-
-  async fn from_request_parts(
-    parts: &mut Parts,
-    state: &S,
-  ) -> Result<Self, Self::Rejection> {
-    let store = MemoryStore::from_ref(state);
-
-    let cookies =
-      parts.extract::<TypedHeader<Cookie>>().await.map_err(|e| {
-        match *e.name() {
-          header::COOKIE => match e.reason() {
-            TypedHeaderRejectionReason::Missing => AuthRedirect,
-            _ => {
-              log::error!("Unexpected error getting cookie header(s): {}", e);
-              AuthRedirect
-            }
-          },
-          _ => {
-            log::error!("Unexpected error getting cookies: {}", e);
-            AuthRedirect
-          }
-        }
-      })?;
-
-    let session_cookie = cookies.get(COOKIE_NAME).ok_or(AuthRedirect)?;
-    let session = store
-      .load_session(session_cookie.to_string())
-      .await
-      .unwrap()
-      .ok_or(AuthRedirect)?;
-
-    let user = session.get::<User>("user").ok_or(AuthRedirect)?;
-
-    Ok(user)
-  }
 }

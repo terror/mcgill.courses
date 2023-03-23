@@ -7,6 +7,18 @@ pub(crate) struct State {
   pub store: MemoryStore,
 }
 
+impl FromRef<State> for BasicClient {
+  fn from_ref(state: &State) -> Self {
+    state.oauth_client.clone()
+  }
+}
+
+impl FromRef<State> for MemoryStore {
+  fn from_ref(state: &State) -> Self {
+    state.store.clone()
+  }
+}
+
 impl State {
   pub(crate) async fn new(db: Arc<Db>) -> Result<Self> {
     Ok(Self {

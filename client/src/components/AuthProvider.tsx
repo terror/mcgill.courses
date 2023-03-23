@@ -11,7 +11,7 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   useEffect(() => {
     setLoading(true);
     fetchClient
-      .getData<UserResponse>('/auth/user', { credentials: 'include' })
+      .getData<UserResponse>('/user', { credentials: 'include' })
       .then((data) => {
         setUser(data.user);
         setLoading(false);

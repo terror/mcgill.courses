@@ -1,8 +1,8 @@
 use {
   crate::{
-    arguments::Arguments, error::Error, loader::Loader, options::Options,
-    page::Page, server::Server, state::State, subcommand::Subcommand,
-    vec_ext::VecExt, vsb_client::VsbClient,
+    arguments::Arguments, auth::AuthRedirect, error::Error, loader::Loader,
+    options::Options, page::Page, server::Server, state::State,
+    subcommand::Subcommand, user::User, vec_ext::VecExt, vsb_client::VsbClient,
   },
   async_session::{async_trait, MemoryStore, Session, SessionStore},
   axum::{
@@ -54,6 +54,7 @@ mod search;
 mod server;
 mod state;
 mod subcommand;
+mod user;
 mod vec_ext;
 mod vsb_client;
 
