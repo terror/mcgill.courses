@@ -1,24 +1,35 @@
 use {
   crate::{
-    arguments::Arguments, error::Error, loader::Loader, options::Options,
-    page::Page, server::Server, state::State, subcommand::Subcommand,
-    vec_ext::VecExt, vsb_client::VsbClient,
+    arguments::Arguments, auth::AuthRedirect, error::Error, loader::Loader,
+    options::Options, page::Page, server::Server, state::State,
+    subcommand::Subcommand, user::User, vec_ext::VecExt, vsb_client::VsbClient,
   },
+  async_session::{async_trait, MemoryStore, Session, SessionStore},
   axum::{
-    extract::{Path, Query, State as AppState},
-    response::IntoResponse,
-    response::Response,
+    extract::{
+      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
+      Query, State as AppState,
+    },
+    headers::Cookie,
+    response::{IntoResponse, Redirect, Response, TypedHeader},
     routing::get,
     routing::Router,
-    Json,
+    Json, RequestPartsExt,
   },
   clap::Parser,
   db::Db,
-  http::StatusCode,
+  dotenv::dotenv,
+  http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   model::{Course, CourseListing, Schedule},
+  oauth2::{
+    basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
+    AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
+    TokenResponse, TokenUrl,
+  },
   rayon::prelude::*,
-  serde::Deserialize,
+  serde::{Deserialize, Serialize},
   std::{
+    env,
     fmt::{self, Display, Formatter},
     fs,
     marker::Sized,
@@ -33,6 +44,7 @@ use {
 };
 
 mod arguments;
+mod auth;
 mod courses;
 mod error;
 mod loader;
@@ -42,6 +54,7 @@ mod search;
 mod server;
 mod state;
 mod subcommand;
+mod user;
 mod vec_ext;
 mod vsb_client;
 
@@ -50,6 +63,7 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 #[tokio::main]
 async fn main() {
   env_logger::init();
+  dotenv().ok();
 
   if let Err(error) = Arguments::parse().run().await {
     eprintln!("error: {error}");

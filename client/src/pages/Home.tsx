@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
+import React from 'react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react';
+import { Course } from '../types/course';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../utils/fetchClient';
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -12,16 +17,13 @@ const navigation = [
 
 export const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const user = useAuth();
 
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Course[]>([]);
 
   const handleInputChange = async (query: string) => {
     try {
-      setResults(
-        await (
-          await fetch(`http://localhost:8000/search?query=${query}`)
-        ).json()
-      );
+      setResults(await fetchClient.getData<Course[]>(`/search?query=${query}`));
     } catch (err) {
       console.error(err);
     }
@@ -62,12 +64,26 @@ export const Home = () => {
             ))}
           </div>
           <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-            <a
-              href='#'
-              className='text-sm font-semibold leading-6 text-gray-900'
-            >
-              Log in <span aria-hidden='true'>&rarr;</span>
-            </a>
+            {user ? (
+              <div className='flex items-center'>
+                <div className='text-sm font-semibold leading-6 text-gray-900'>
+                  {user.mail}
+                </div>
+                <a
+                  href={`${import.meta.env.VITE_API_URL}/auth/logout`}
+                  className='text-sm font-semibold text-gray-900 ml-4'
+                >
+                  Log out
+                </a>
+              </div>
+            ) : (
+              <a
+                href={`${import.meta.env.VITE_API_URL}/auth/login`}
+                className='text-sm font-semibold leading-6 text-gray-900'
+              >
+                Log in <span aria-hidden='true'>&rarr;</span>
+              </a>
+            )}
           </div>
         </nav>
         <Dialog
@@ -107,7 +123,7 @@ export const Home = () => {
                 </div>
                 <div className='py-6'>
                   <a
-                    href='#'
+                    href={`${import.meta.env.VITE_API_URL}/auth/login`}
                     className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
                   >
                     Log in
