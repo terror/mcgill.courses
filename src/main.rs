@@ -1,9 +1,19 @@
 use {
   crate::{
-    arguments::Arguments, auth::AuthRedirect, error::Error, loader::Loader,
-    options::Options, page::Page, server::Server, state::State,
-    subcommand::Subcommand, user::User, vec_ext::VecExt, vsb_client::VsbClient,
+    arguments::Arguments,
+    auth::{AuthRedirect, COOKIE_NAME},
+    error::Error,
+    loader::Loader,
+    options::Options,
+    page::Page,
+    server::Server,
+    state::State,
+    subcommand::Subcommand,
+    user::User,
+    vec_ext::VecExt,
+    vsb_client::VsbClient,
   },
+  anyhow::anyhow,
   async_session::{async_trait, MemoryStore, Session, SessionStore},
   axum::{
     extract::{
@@ -57,6 +67,8 @@ mod subcommand;
 mod user;
 mod vec_ext;
 mod vsb_client;
+
+const CLIENT_URL: &str = "http://localhost:5173";
 
 type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 

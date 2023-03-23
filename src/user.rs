@@ -48,12 +48,7 @@ where
 
     Ok(
       session_store
-        .load_session(
-          cookies
-            .get(auth::COOKIE_NAME)
-            .ok_or(AuthRedirect)?
-            .to_owned(),
-        )
+        .load_session(cookies.get(COOKIE_NAME).ok_or(AuthRedirect)?.to_owned())
         .await
         .unwrap()
         .ok_or(AuthRedirect)?
