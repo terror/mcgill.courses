@@ -6,19 +6,19 @@ export const authContext = createContext<User | undefined>(undefined);
 
 const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   const [user, setUser] = useState<User>();
-  const [status, setStatus] = useState('pending');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setStatus('pending');
+    setLoading(true);
     fetchClient
       .getData<UserResponse>('/auth/user', { credentials: 'include' })
       .then((data) => {
         setUser(data.user);
-        setStatus('success');
+        setLoading(false);
       });
   }, []);
 
-  return status === 'pending' ? (
+  return loading ? (
     <div>Loading...</div>
   ) : (
     <authContext.Provider value={user}>{children}</authContext.Provider>
