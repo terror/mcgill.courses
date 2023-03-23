@@ -36,7 +36,6 @@ impl Server {
     axum_server::Server::bind(addr)
       .serve(
         Router::new()
-          .route("/", get(index))
           .route("/auth/authorized", get(auth::login_authorized))
           .route("/auth/login", get(auth::microsoft_auth))
           .route("/auth/user", get(auth::current_user))
