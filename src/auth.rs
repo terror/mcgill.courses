@@ -94,7 +94,7 @@ pub(crate) async fn login_authorized(
   let cookie = format!("{}={}; SameSite=Lax; Path=/", COOKIE_NAME, cookie);
 
   let mut headers = HeaderMap::new();
-  headers.insert(SET_COOKIE, cookie.parse().unwrap());
+  headers.insert(SET_COOKIE, cookie.parse()?);
 
   Ok((headers, Redirect::to("http://localhost:5173")))
 }
@@ -122,7 +122,7 @@ pub(crate) async fn logout(
     None => return Ok(Redirect::to("http://localhost:5173")),
   };
 
-  store.destroy_session(session).await.unwrap();
+  store.destroy_session(session).await?;
   Ok(Redirect::to("http://localhost:5173"))
 }
 
