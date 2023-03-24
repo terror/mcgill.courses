@@ -2,7 +2,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 import { User, UserResponse } from '../types/user';
 import { fetchClient } from '../utils/fetchClient';
 
-export const authContext = createContext<User | undefined>(undefined);
+export const AuthContext = createContext<User | undefined>(undefined);
 
 const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   const [user, setUser] = useState<User>();
@@ -18,10 +18,10 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
       });
   }, []);
 
-  return loading ? (
-    <div>Loading...</div>
-  ) : (
-    <authContext.Provider value={user}>{children}</authContext.Provider>
+  return (
+    <AuthContext.Provider value={user}>
+      {!loading && children}
+    </AuthContext.Provider>
   );
 };
 
