@@ -2,9 +2,10 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct State {
-  pub db: Arc<Db>,
-  pub oauth_client: BasicClient,
-  pub session_store: MemoryStore,
+  pub(crate) db: Arc<Db>,
+  pub(crate) oauth_client: BasicClient,
+  pub(crate) request_client: reqwest::Client,
+  pub(crate) session_store: MemoryStore,
 }
 
 impl FromRef<State> for BasicClient {
@@ -53,6 +54,7 @@ impl State {
         )
         .expect("Invalid redirect URL"),
       ),
+      request_client: reqwest::Client::new(),
       session_store: MemoryStore::new(),
     }
   }

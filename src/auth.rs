@@ -33,17 +33,15 @@ pub(crate) async fn microsoft_auth(
 
 pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
-  AppState(store): AppState<MemoryStore>,
-  AppState(oauth_client): AppState<BasicClient>,
+  AppState(state): AppState<State>,
 ) -> Result<impl IntoResponse> {
   log::debug!("Fetching token from oauth client...");
 
-  let token = oauth_client
+  let token = state
+    .oauth_client
     .exchange_code(AuthorizationCode::new(query.code.clone()))
     .request_async(async_http_client)
     .await?;
-
-  let client = reqwest::Client::new();
 
   let mut session = Session::new();
 
@@ -51,7 +49,8 @@ pub(crate) async fn login_authorized(
 
   session.insert(
     "user",
-    client
+    state
+      .request_client
       .get("https://graph.microsoft.com/v1.0/me")
       .bearer_auth(token.access_token().secret())
       .send()
@@ -67,7 +66,8 @@ pub(crate) async fn login_authorized(
     format!(
       "{}={}; SameSite=Lax; Path=/",
       COOKIE_NAME,
-      store
+      state
+        .session_store
         .store_session(session)
         .await?
         .ok_or(anyhow!("Failed to store session"))?
