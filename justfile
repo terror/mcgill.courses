@@ -17,7 +17,7 @@ fmt:
 
 fmt-check:
   cargo fmt --all -- --check
-  @echo formatting check done
+  prettier --check .
 
 load:
   cargo run -- --source=courses.json \
