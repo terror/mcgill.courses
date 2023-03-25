@@ -1,5 +1,5 @@
 import { Course } from '../model/course';
-import { Search } from 'react-feather';
+import { Search, Layers } from 'react-feather';
 import { useState } from 'react';
 
 type CourseSearchBarProps = {
@@ -55,6 +55,11 @@ export const CourseSearchBar = ({
               </div>
             </a>
           ))}
+          <a href={`/explore`}>
+            <div className='p-3 hover:bg-gray-100 cursor-pointer text-left flex items-center'>
+              <Layers /> <div className='ml-2'>Explore all courses</div>
+            </div>
+          </a>
         </div>
       )}
     </div>
