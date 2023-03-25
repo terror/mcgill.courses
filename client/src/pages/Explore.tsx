@@ -32,6 +32,15 @@ export const Explore = () => {
                 {course._id} - {course.title}
               </div>
               <div>{course.description}</div>
+              {course.instructors.length !== 0 && (
+                <div className='mt-2'>
+                  {course.instructors.map((instructor) => (
+                    <span>
+                      {instructor.name} ({instructor.term}){' '}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
