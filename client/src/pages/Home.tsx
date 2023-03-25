@@ -3,11 +3,11 @@ import React from 'react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react';
-import { Course } from '../types/course';
+import { Course } from '../model/course';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../utils/fetchClient';
-import { Layout } from '../components/Layouts/Layout';
+import { fetchClient } from '../lib/fetchClient';
+import { Layout } from '../components/Layout';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 
 export const Home = () => {

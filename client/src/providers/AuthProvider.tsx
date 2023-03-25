@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
-import { User, UserResponse } from '../types/user';
-import { fetchClient } from '../utils/fetchClient';
+import { User, UserResponse } from '../model/user';
+import { fetchClient } from '../lib/fetchClient';
 
 export const AuthContext = createContext<User | undefined>(undefined);
 

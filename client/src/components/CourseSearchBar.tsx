@@ -1,4 +1,4 @@
-import { Course } from '../types/course';
+import { Course } from '../model/course';
 import { Search } from 'react-feather';
 import { useState } from 'react';
 

@@ -1,9 +1,15 @@
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { useAuth } from '../../../hooks/useAuth';
-import { navigation } from './navOptions';
+import { useAuth } from '../hooks/useAuth';
 import { SideNav } from './SideNav';
+
+export const navigation = [
+  { name: 'Product', href: '#' },
+  { name: 'Features', href: '#' },
+  { name: 'Marketplace', href: '#' },
+  { name: 'Company', href: '#' },
+];
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
