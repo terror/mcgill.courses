@@ -11,8 +11,9 @@ export const CourseSearchBar = ({
   results,
   handleInputChange,
 }: CourseSearchBarProps) => {
-  const [searchSelected, setSearchSelected] = useState(false);
   const parser = new DOMParser();
+
+  const [searchSelected, setSearchSelected] = useState(false);
 
   return (
     <div className='relative'>
@@ -29,7 +30,7 @@ export const CourseSearchBar = ({
         </div>
         <input
           type='text'
-          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
+          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-3 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
@@ -41,7 +42,7 @@ export const CourseSearchBar = ({
           {results.map((result, index) => (
             <a href={`/course/${result._id}`}>
               <div
-                className={`p-2 hover:bg-gray-100 cursor-pointer text-left ${
+                className={`p-3 hover:bg-gray-100 cursor-pointer text-left ${
                   index < results.length - 1 && 'border-b border-gray-200'
                 }`}
                 key={result._id}
