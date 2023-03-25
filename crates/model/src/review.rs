@@ -4,6 +4,5 @@ use super::*;
 pub struct Review {
   content: String,
   course_id: String,
-  user_id: String
+  user_id: String,
 }
-
