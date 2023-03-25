@@ -39,14 +39,18 @@ export const CourseSearchBar = ({
       {searchSelected && (
         <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
           {results.map((result, index) => (
-            <a href={`/course/${result._id}`} >
+            <a href={`/course/${result._id}`}>
               <div
                 className={`p-2 hover:bg-gray-100 cursor-pointer text-left ${
                   index < results.length - 1 && 'border-b border-gray-200'
                 }`}
                 key={result._id}
               >
-                {result._id} - {parser.parseFromString(result.title, 'text/html').body.textContent}
+                {result._id} -{' '}
+                {
+                  parser.parseFromString(result.title, 'text/html').body
+                    .textContent
+                }
               </div>
             </a>
           ))}

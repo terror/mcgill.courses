@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { SideNav } from './SideNav';
 
-export const navigation = [
-  { name: 'About', href: '/about' },
-];
+export const navigation = [{ name: 'About', href: '/about' }];
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
