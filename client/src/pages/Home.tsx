@@ -15,7 +15,7 @@ export const Home = () => {
 
   const handleInputChange = async (query: string) => {
     try {
-      setResults(await fetchClient.getData<Course[]>(`/search?query=${query}`));
+      setResults((await fetchClient.getData<Course[]>(`/search?query=${query}`)).slice(0, 6));
     } catch (err) {
       console.error(err);
     }
