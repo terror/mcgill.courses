@@ -14,33 +14,41 @@ export const CourseSearchBar = ({
   const [searchSelected, setSearchSelected] = useState(false);
 
   return (
-    <div>
+    <div className='relative'>
       <div className='relative w-full mt-4'>
         <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
           <Search
             size={20}
             className={
               'transition duration-200 ' +
-              (searchSelected ? 'stroke-red-500' : 'stroke-gray-400')
+              (searchSelected ? 'stroke-red-600' : 'stroke-gray-400')
             }
             aria-hidden='true'
           />
         </div>
         <input
           type='text'
-          className='bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
+          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-2.5 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
-          onSelect={() => setSearchSelected(true)}
+          onFocus={() => setSearchSelected(true)}
           onBlur={() => setSearchSelected(false)}
         />
       </div>
-      {results.map((result, i) => (
-        <div className='rounded-lg border p-2' key={i}>
-          {result.subject}
-          {result.code} - {result.title}
+      {searchSelected && (
+        <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
+          {results.map((result, index) => (
+            <div
+              className={`p-2 hover:bg-gray-100 cursor-pointer ${
+                index < results.length - 1 && 'border-b border-gray-200'
+              }`}
+              key={result._id}
+            >
+              {result._id} - {result.title}
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 };
