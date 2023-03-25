@@ -7,6 +7,7 @@ pub struct Db {
 
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
+  const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
