@@ -1,7 +1,8 @@
-import { Course } from '../model/course';
-import { Search, Layers } from 'react-feather';
 import { useState } from 'react';
+
+import { Course } from '../model/course';
 import { Link } from 'react-router-dom';
+import { Search, Layers } from 'react-feather';
 
 type CourseSearchBarProps = {
   results: Course[];
