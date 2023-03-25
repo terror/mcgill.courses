@@ -32,7 +32,7 @@ export const CourseSearchBar = ({
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
-          onBlur={() => setSearchSelected(false)}
+          onBlur={() => setTimeout(() => setSearchSelected(false), 200)}
         />
       </div>
       {searchSelected && (
