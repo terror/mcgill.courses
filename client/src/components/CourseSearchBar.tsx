@@ -19,7 +19,7 @@ export const CourseSearchBar = ({
       <div className='relative w-full mt-4'>
         <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
           <Search
-            size={19}
+            size={20}
             className={
               'transition duration-200 ' +
               (searchSelected ? 'stroke-red-600' : 'stroke-gray-400')
