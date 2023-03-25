@@ -1,6 +1,8 @@
-import { Course } from '../model/course';
-import { Search } from 'react-feather';
 import { useState } from 'react';
+
+import { Course } from '../model/course';
+import { Link } from 'react-router-dom';
+import { Search } from 'react-feather';
 
 type CourseSearchBarProps = {
   results: Course[];
@@ -40,7 +42,7 @@ export const CourseSearchBar = ({
       {searchSelected && (
         <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
           {results.map((result, index) => (
-            <a href={`/course/${result._id}`}>
+            <Link to={`/course/${result._id}`}>
               <div
                 className={`p-3 hover:bg-gray-100 cursor-pointer text-left ${
                   index < results.length - 1 && 'border-b border-gray-200'
@@ -53,7 +55,7 @@ export const CourseSearchBar = ({
                     .textContent
                 }
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       )}
