@@ -30,15 +30,17 @@ jobs:
           bash <(curl
           https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
 
-      - name: Check Github Actions Workflow
+      - name: Check workflow
         run: ${{ steps.actionlint.outputs.executable }} -color
 
-      - name: Install Rust Toolchain Components
+      - name: Install rust toolchain components
         uses: actions-rs/toolchain@v1
         with:
           components: clippy, rustfmt
           override: true
           toolchain: stable
+
+      - uses: Swatinem/rust-cache@v1
 
       - name: Install mongodb
         run: |
@@ -46,7 +48,9 @@ jobs:
           brew install mongodb-community@6.0
           brew services start mongodb-community@6.0
 
-      - uses: Swatinem/rust-cache@v1
+      - name: Install prettier
+        run: |
+          brew install prettier
 
       - name: Info
         run: |
@@ -54,22 +58,25 @@ jobs:
           cargo --version
           cargo clippy --version
 
-      - name: Build
-        run: cargo build --workspace --all-features --all-targets
-
-      - name: Test
-        run: cargo test --workspace --all-features --all-targets
-
-      - name: Check Lockfile
-        run: cargo update --locked --package server
-
       - name: Forbid
         run: |
           brew install ripgrep
           ./bin/forbid
 
+      - name: Build
+        run: cargo build --workspace --all-features --all-targets
+
       - name: Clippy
         run: ./bin/clippy
 
-      - name: Check Formatting
+      - name: Check lockfile
+        run: cargo update --locked --package server
+
+      - name: Check rust formatting
         run: cargo fmt --all -- --check
+
+      - name: Check typescript formatting
+        run: prettier --check .
+
+      - name: Test
+        run: cargo test --workspace --all-features --all-targets
