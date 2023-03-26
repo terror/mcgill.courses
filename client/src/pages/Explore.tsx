@@ -11,11 +11,11 @@ export const Explore = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [offset, setOffset] = useState(10);
+  const [offset, setOffset] = useState(20);
 
   useEffect(() => {
     fetchClient
-      .getData<Course[]>('/courses?limit=10')
+      .getData<Course[]>('/courses?limit=20')
       .then((courses) =>
         setCourses(courses.filter((course) => course.title !== ''))
       )
@@ -35,14 +35,14 @@ export const Explore = () => {
   return (
     <Layout>
       <div className='w-full py-32 flex flex-col items-center'>
-        <h1 className='m-5 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
+        <h1 className='mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
           Showing all courses
         </h1>
         <InfiniteScroll
           dataLength={courses.length}
           hasMore={hasMore}
           loader={
-            <div class='text-center'>
+            <div class='text-center mt-4'>
               <Spinner />
             </div>
           }
