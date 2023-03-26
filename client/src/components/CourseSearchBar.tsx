@@ -44,9 +44,7 @@ export const CourseSearchBar = ({
           {results.map((result, index) => (
             <Link to={`/course/${result._id}`}>
               <div
-                className={`p-3 hover:bg-gray-100 cursor-pointer text-left ${
-                  index < results.length - 1 && 'border-b border-gray-200'
-                }`}
+                className='p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200'
                 key={result._id}
               >
                 {result._id} -{' '}
