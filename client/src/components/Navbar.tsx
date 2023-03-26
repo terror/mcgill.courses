@@ -1,8 +1,10 @@
-import { Dialog } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Dialog } from '@headlessui/react';
+import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
+import { useAuth } from '../hooks/useAuth';
 
 export const navigation = [
   { name: 'About', href: '/about' },
@@ -47,18 +49,19 @@ export const Navbar = () => {
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
           {user ? (
-            <div className='flex items-center'>
-              <div className='text-sm font-semibold leading-6 text-gray-900'>
-                {user.mail}
-              </div>
-              <a
-                href={`${import.meta.env.VITE_API_URL}/auth/logout`}
-                className='text-sm font-semibold text-gray-900 ml-4'
-              >
-                Log out
-              </a>
-            </div>
+            <ProfileDropdown />
           ) : (
+            // <div className='flex items-center'>
+            //   <div className='text-sm font-semibold leading-6 text-gray-900'>
+            //     {user.mail}
+            //   </div>
+            //   <a
+            //     href={`${import.meta.env.VITE_API_URL}/auth/logout`}
+            //     className='text-sm font-semibold text-gray-900 ml-4'
+            //   >
+            //     Log out
+            //   </a>
+            // </div>
             <a
               href={`${import.meta.env.VITE_API_URL}/auth/login`}
               className='text-sm font-semibold leading-6 text-gray-900'
