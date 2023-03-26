@@ -51,17 +51,6 @@ export const Navbar = () => {
           {user ? (
             <ProfileDropdown />
           ) : (
-            // <div className='flex items-center'>
-            //   <div className='text-sm font-semibold leading-6 text-gray-900'>
-            //     {user.mail}
-            //   </div>
-            //   <a
-            //     href={`${import.meta.env.VITE_API_URL}/auth/logout`}
-            //     className='text-sm font-semibold text-gray-900 ml-4'
-            //   >
-            //     Log out
-            //   </a>
-            // </div>
             <a
               href={`${import.meta.env.VITE_API_URL}/auth/login`}
               className='text-sm font-semibold leading-6 text-gray-900'
