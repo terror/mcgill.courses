@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Course } from '../model/course';
 import { Link } from 'react-router-dom';
 import { Search, Layers } from 'react-feather';
+import { classNames } from '../lib/classNames';
 
 type CourseSearchBarProps = {
   results: Course[];
@@ -23,10 +24,10 @@ export const CourseSearchBar = ({
         <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
           <Search
             size={20}
-            className={
-              'transition duration-200 ' +
-              (searchSelected ? 'stroke-red-600' : 'stroke-gray-400')
-            }
+            className={classNames(
+              'transition duration-200',
+              searchSelected ? 'stroke-red-600' : 'stroke-gray-400'
+            )}
             aria-hidden='true'
           />
         </div>
