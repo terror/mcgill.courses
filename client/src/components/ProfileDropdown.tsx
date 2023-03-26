@@ -3,9 +3,9 @@ import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { User } from 'react-feather';
 
-function classNames(...classes) {
+const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
-}
+};
 
 export const ProfileDropdown = () => {
   return (
