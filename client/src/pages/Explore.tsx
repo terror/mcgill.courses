@@ -18,7 +18,7 @@ export const Explore = () => {
       .then((courses) =>
         setCourses(courses.filter((course) => course.title !== ''))
       )
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   }, []);
 
   const fetchMore = async () => {
