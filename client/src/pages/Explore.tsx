@@ -8,13 +8,15 @@ import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
 
 export const Explore = () => {
+  const limit = 20;
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(20);
+  const [offset, setOffset] = useState(limit);
 
   useEffect(() => {
     fetchClient
-      .getData<Course[]>('/courses?limit=20')
+      .getData<Course[]>(`/courses?limit=${limit}`)
       .then((courses) =>
         setCourses(courses.filter((course) => course.title !== ''))
       )
@@ -23,11 +25,14 @@ export const Explore = () => {
 
   const fetchMore = async () => {
     const batch = await fetchClient.getData<Course[]>(
-      `/courses?limit=10&offset=${offset}`
+      `/courses?limit=${limit}&offset=${offset}`
     );
+
     if (batch.length === 0) setHasMore(false);
-    setCourses(courses.concat(batch));
-    setOffset(offset + 10);
+    else {
+      setCourses(courses.concat(batch));
+      setOffset(offset + limit);
+    }
   };
 
   return (
