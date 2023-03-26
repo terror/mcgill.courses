@@ -1,7 +1,8 @@
 import { Dialog } from '@headlessui/react';
+import { Link } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../hooks/useAuth';
 import { navigation } from './Navbar';
+import { useAuth } from '../hooks/useAuth';
 
 type SideNavProps = {
   open: boolean;
@@ -43,12 +44,20 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             </div>
             <div className='py-6'>
               {user ? (
-                <a
-                  href={`${import.meta.env.VITE_API_URL}/auth/logout`}
-                  className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
-                >
-                  Log out
-                </a>
+                <>
+                  <Link
+                    to='/profile'
+                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                  >
+                    Profile
+                  </Link>
+                  <a
+                    href={`${import.meta.env.VITE_API_URL}/auth/logout`}
+                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                  >
+                    Log out
+                  </a>
+                </>
               ) : (
                 <a
                   href={`${import.meta.env.VITE_API_URL}/auth/login`}
