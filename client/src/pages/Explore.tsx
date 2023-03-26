@@ -45,7 +45,7 @@ export const Explore = () => {
           dataLength={courses.length}
           hasMore={hasMore}
           loader={
-            <div class='text-center mt-4'>
+            <div className='text-center mt-4'>
               <Spinner />
             </div>
           }
