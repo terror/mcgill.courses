@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { User } from 'react-feather';
 
-const classNames = (...classes) => {
+const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
 };
 
