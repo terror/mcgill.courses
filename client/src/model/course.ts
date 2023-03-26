@@ -2,6 +2,7 @@ import { Instructor } from './instructor';
 import { Schedule } from './schedule';
 
 export type Course = {
+  _id: string;
   title: string;
   credits: string;
   subject: string;

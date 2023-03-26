@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Course } from '../model/course';
 import { Link } from 'react-router-dom';
-import { Search } from 'react-feather';
+import { Search, Layers } from 'react-feather';
 
 type CourseSearchBarProps = {
   results: Course[];
@@ -44,9 +44,7 @@ export const CourseSearchBar = ({
           {results.map((result, index) => (
             <Link to={`/course/${result._id}`}>
               <div
-                className={`p-3 hover:bg-gray-100 cursor-pointer text-left ${
-                  index < results.length - 1 && 'border-b border-gray-200'
-                }`}
+                className='p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200'
                 key={result._id}
               >
                 {result._id} -{' '}
@@ -57,6 +55,11 @@ export const CourseSearchBar = ({
               </div>
             </Link>
           ))}
+          <Link to={`/explore`}>
+            <div className='p-3 hover:bg-gray-100 cursor-pointer text-left flex items-center'>
+              <Layers /> <div className='ml-2'>Explore all courses</div>
+            </div>
+          </Link>
         </div>
       )}
     </div>
