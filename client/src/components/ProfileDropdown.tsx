@@ -48,7 +48,7 @@ export const ProfileDropdown = () => {
                     'block w-full px-4 py-2 text-left text-sm'
                   )}
                 >
-                  Sign out
+                  Log out
                 </a>
               )}
             </Menu.Item>
