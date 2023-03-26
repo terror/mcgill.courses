@@ -10,7 +10,6 @@ import { fetchClient } from '../lib/fetchClient';
 export const Explore = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [offset, setOffset] = useState(20);
 
   useEffect(() => {
@@ -20,7 +19,6 @@ export const Explore = () => {
         setCourses(courses.filter((course) => course.title !== ''))
       )
       .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
   }, []);
 
   const fetchMore = async () => {
