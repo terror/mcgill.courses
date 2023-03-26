@@ -301,7 +301,7 @@ mod tests {
 
     db.seed(source).await.unwrap();
 
-    let courses = dbg!(db.courses(None, None).await.unwrap());
+    let courses = db.courses(None, None).await.unwrap();
 
     assert_eq!(courses.len(), 3);
 

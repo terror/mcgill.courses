@@ -42,15 +42,14 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
+      - name: Install client dependencies
+        run: npm ci
+
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
           brew install mongodb-community@6.0
           brew services start mongodb-community@6.0
-
-      - name: Install prettier
-        run: |
-          brew install prettier
 
       - name: Info
         run: |
@@ -75,8 +74,11 @@ jobs:
       - name: Check rust formatting
         run: cargo fmt --all -- --check
 
+      - name: Lint typescript code
+        run: npm run lint
+
       - name: Check typescript formatting
-        run: prettier --check .
+        run: npm run format-check
 
       - name: Test
         run: cargo test --workspace --all-features --all-targets
