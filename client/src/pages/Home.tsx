@@ -24,7 +24,7 @@ export const Home = () => {
   return (
     <Layout>
       <div className='relative isolate px-6 pt-14 lg:px-8'>
-        <div className='mx-auto max-w-2xl py-32 sm:py-48 lg:py-56'>
+        <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
             <h1 className='text-left text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
