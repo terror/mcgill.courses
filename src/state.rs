@@ -8,6 +8,12 @@ pub(crate) struct State {
   pub(crate) session_store: MemoryStore,
 }
 
+impl FromRef<State> for Arc<Db> {
+  fn from_ref(state: &State) -> Self {
+    state.db.clone()
+  }
+}
+
 impl FromRef<State> for BasicClient {
   fn from_ref(state: &State) -> Self {
     state.oauth_client.clone()

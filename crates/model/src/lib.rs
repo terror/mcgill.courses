@@ -10,6 +10,7 @@ mod course_listing;
 mod course_page;
 mod instructor;
 mod requirements;
+mod review;
 mod schedule;
 
 pub use crate::{
@@ -18,5 +19,6 @@ pub use crate::{
   course_page::CoursePage,
   instructor::Instructor,
   requirements::{Requirement, Requirements},
+  review::Review,
   schedule::Schedule,
 };

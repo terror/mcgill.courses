@@ -6,6 +6,12 @@ pub(crate) struct User {
   mail: String,
 }
 
+impl User {
+  pub(crate) fn id(self) -> String {
+    self.id
+  }
+}
+
 #[derive(Serialize, Deserialize)]
 struct UserResponse {
   user: Option<User>,

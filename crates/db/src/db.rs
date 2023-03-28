@@ -7,6 +7,7 @@ pub struct Db {
 
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
+  const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
@@ -132,6 +133,85 @@ impl Db {
     self.find_course(doc! { "_id": id }).await
   }
 
+  pub async fn add_review(&self, review: Review) -> Result<InsertOneResult> {
+    if self
+      .find_review(&review.course_id, &review.user_id)
+      .await?
+      .is_some()
+    {
+      Err(anyhow!("Cannot review this course twice"))
+    } else {
+      Ok(
+        self
+          .database
+          .collection::<Review>(Db::REVIEW_COLLECTION)
+          .insert_one(review, None)
+          .await?,
+      )
+    }
+  }
+
+  pub async fn update_review(&self, review: Review) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .update_one(
+          doc! {
+            "courseId": review.course_id,
+            "userId": review.user_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": { "content": &review.content },
+          }),
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn delete_review(&self, review: Review) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": review.course_id,
+            "userId": review.user_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn find_reviews_by_course_id(
+    &self,
+    course_id: &str,
+  ) -> Result<Vec<Review>> {
+    self.find_reviews(doc! { "courseId": course_id }).await
+  }
+
+  pub async fn find_reviews_by_user_id(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Review>> {
+    self.find_reviews(doc! { "userId": user_id }).await
+  }
+
+  async fn find_reviews(&self, query: Document) -> Result<Vec<Review>> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .find(query, None)
+        .await?
+        .try_collect::<Vec<Review>>()
+        .await?,
+    )
+  }
+
   async fn find_course(&self, query: Document) -> Result<Option<Course>> {
     Ok(
       self
@@ -182,6 +262,33 @@ impl Db {
             .build(),
           None,
         )
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn reviews(&self) -> Result<Vec<Review>> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Review>>()
+        .await?,
+    )
+  }
+
+  async fn find_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Option<Review>> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?,
     )
   }
@@ -417,7 +524,6 @@ mod tests {
     let source = tempdir.path().join("courses.json");
 
     fs::write(&source, get_content("search.json")).unwrap();
-
     db.seed(source.clone()).await.unwrap();
 
     assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
@@ -460,5 +566,250 @@ mod tests {
     db.seed(source.clone()).await.unwrap();
 
     assert_eq!(db.courses(None, Some(20)).await.unwrap().len(), 63);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn add_reviews() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let reviews = vec![
+      Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "3".into(),
+        course_id: "MATH240".into(),
+      },
+    ];
+
+    for review in &reviews {
+      db.add_review(review.clone()).await.unwrap();
+    }
+
+    assert_eq!(db.reviews().await.unwrap().len(), 3);
+    assert_eq!(db.reviews().await.unwrap(), reviews);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn find_reviews_by_course_id() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let reviews = vec![
+      Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "3".into(),
+        course_id: "MATH340".into(),
+      },
+    ];
+
+    for review in &reviews {
+      db.add_review(review.clone()).await.unwrap();
+    }
+
+    assert_eq!(db.reviews().await.unwrap().len(), 3);
+    assert_eq!(db.reviews().await.unwrap(), reviews);
+
+    assert_eq!(
+      db.find_reviews_by_course_id("MATH240").await.unwrap(),
+      vec![
+        Review {
+          content: "foo".into(),
+          user_id: "1".into(),
+          course_id: "MATH240".into(),
+        },
+        Review {
+          content: "foo".into(),
+          user_id: "2".into(),
+          course_id: "MATH240".into(),
+        }
+      ]
+    )
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn find_reviews_by_user_id() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let reviews = vec![
+      Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "3".into(),
+        course_id: "MATH340".into(),
+      },
+    ];
+
+    for review in &reviews {
+      db.add_review(review.clone()).await.unwrap();
+    }
+
+    assert_eq!(db.reviews().await.unwrap().len(), 3);
+    assert_eq!(db.reviews().await.unwrap(), reviews);
+
+    assert_eq!(
+      db.find_reviews_by_user_id("2").await.unwrap(),
+      vec![Review {
+        content: "foo".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      },]
+    )
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn dont_add_multiple_reviews_per_user() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    };
+
+    db.add_review(review.clone()).await.unwrap();
+
+    assert!(db.add_review(review).await.is_err());
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn update_review() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_review(Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
+    db.update_review(Review {
+      content: "bar".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.update_review(Review {
+        content: "bar".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .modified_count,
+      0
+    );
+
+    assert_eq!(
+      db.find_review("MATH240", "1")
+        .await
+        .unwrap()
+        .unwrap()
+        .content,
+      "bar"
+    );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_review() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_review(Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.delete_review(Review {
+        content: "bar".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .deleted_count,
+      0
+    );
+
+    assert_eq!(
+      db.delete_review(Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .deleted_count,
+      1
+    );
+
+    assert_eq!(db.find_review("MATH240", "1").await.unwrap(), None);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_review_then_add_again() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_review(Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.delete_review(Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .deleted_count,
+      1
+    );
+
+    assert!(db
+      .add_review(Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .is_ok());
   }
 }
