@@ -147,6 +147,26 @@ impl Db {
     }
   }
 
+  pub async fn update_review(&self, review: Review) -> Result<UpdateResult> {
+    let document = doc! {
+      "content": review.content,
+      "course_id": review.course_id,
+      "user_id": review.user_id
+    };
+
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .update_one(
+          document.clone(),
+          UpdateModifications::Document(document),
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn delete_review(&self, review: Review) -> Result<DeleteResult> {
     Ok(
       self

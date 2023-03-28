@@ -50,6 +50,27 @@ pub(crate) async fn add_review(
   Ok(())
 }
 
+pub(crate) async fn update_review(
+  AppState(state): AppState<State>,
+  user: User,
+  body: Json<ReviewBody>,
+) -> Result<impl IntoResponse> {
+  let ReviewBody { content, course_id } = body.0;
+
+  log::trace!("Updating review...");
+
+  state
+    .db
+    .update_review(Review {
+      content,
+      course_id,
+      user_id: user.id(),
+    })
+    .await?;
+
+  Ok(())
+}
+
 pub(crate) async fn delete_review(
   AppState(state): AppState<State>,
   user: User,

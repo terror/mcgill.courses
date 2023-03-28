@@ -39,6 +39,7 @@ impl Server {
           .route("/reviews", delete(reviews::delete_review))
           .route("/reviews", get(reviews::get_reviews))
           .route("/reviews", post(reviews::add_review))
+          .route("/reviews", put(reviews::update_review))
           .route("/search", get(search::search))
           .route("/user", get(user::get_user))
           .with_state(State::new(db).await)
