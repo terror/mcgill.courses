@@ -8,7 +8,7 @@
     "dev": "vite",
     "format": "npm run prettier --write .",
     "format-check": "prettier --check .",
-    "lint": "tslint -c tslint.json client/**/{*.ts,*.tsx}",
+    "lint": "tslint -c tslint.json 'client/**/{*.ts,*.tsx}'",
     "preview": "vite preview"
   },
   "dependencies": {

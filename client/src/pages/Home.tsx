@@ -1,14 +1,9 @@
-import { useState, useEffect } from 'react';
-import React from 'react';
+import { useState } from 'react';
 
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Dialog } from '@headlessui/react';
 import { Course } from '../model/course';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { Layout } from '../components/Layout';
 import { CourseSearchBar } from '../components/CourseSearchBar';
+import { Layout } from '../components/Layout';
+import { fetchClient } from '../lib/fetchClient';
 
 export const Home = () => {
   const [results, setResults] = useState<Course[]>([]);
