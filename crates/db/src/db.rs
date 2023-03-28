@@ -158,8 +158,8 @@ impl Db {
         .collection::<Review>(Db::REVIEW_COLLECTION)
         .update_one(
           doc! {
-            "course_id": review.course_id,
-            "user_id": review.user_id
+            "courseId": review.course_id,
+            "userId": review.user_id
           },
           UpdateModifications::Document(doc! {
             "$set": { "content": &review.content },
@@ -177,9 +177,8 @@ impl Db {
         .collection::<Review>(Db::REVIEW_COLLECTION)
         .delete_one(
           doc! {
-            "content": review.content,
-            "course_id": review.course_id,
-            "user_id": review.user_id
+            "courseId": review.course_id,
+            "userId": review.user_id
           },
           None,
         )
@@ -719,14 +718,17 @@ mod tests {
     .await
     .unwrap();
 
-    assert!(db
-      .update_review(Review {
+    assert_eq!(
+      db.update_review(Review {
         content: "bar".into(),
         user_id: "2".into(),
         course_id: "MATH240".into(),
       })
       .await
-      .is_err());
+      .unwrap()
+      .modified_count,
+      0
+    );
 
     assert_eq!(
       db.find_review("MATH240", "1")
@@ -764,8 +766,8 @@ mod tests {
 
     assert_eq!(
       db.delete_review(Review {
-        content: "bar".into(),
-        user_id: "2".into(),
+        content: "foo".into(),
+        user_id: "1".into(),
         course_id: "MATH240".into(),
       })
       .await
