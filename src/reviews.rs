@@ -49,3 +49,30 @@ pub(crate) async fn add_review(
 
   Ok(())
 }
+
+#[derive(Debug, Deserialize)]
+pub(crate) struct DeleteReviewBody {
+  pub(crate) content: String,
+  pub(crate) course_id: String,
+}
+
+pub(crate) async fn delete_review(
+  AppState(state): AppState<State>,
+  user: User,
+  body: Json<DeleteReviewBody>,
+) -> Result<impl IntoResponse> {
+  let DeleteReviewBody { content, course_id } = body.0;
+
+  log::trace!("Deleting review from database...");
+
+  state
+    .db
+    .delete_review(Review {
+      content,
+      course_id,
+      user_id: user.id(),
+    })
+    .await?;
+
+  Ok(())
+}

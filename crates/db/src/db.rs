@@ -147,6 +147,23 @@ impl Db {
     }
   }
 
+  pub async fn delete_review(&self, review: Review) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .delete_one(
+          doc! {
+            "content": review.content,
+            "course_id": review.course_id,
+            "user_id": review.user_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn find_reviews_by_course_id(
     &self,
     course_id: &str,

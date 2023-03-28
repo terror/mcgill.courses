@@ -9,7 +9,7 @@ use {
     bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions},
-    results::{CreateIndexResult, InsertOneResult, UpdateResult},
+    results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Database, IndexModel,
   },
   std::{fs, hash::Hash, path::PathBuf},

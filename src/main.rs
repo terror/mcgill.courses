@@ -23,7 +23,7 @@ use {
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
     routing::Router,
-    routing::{get, post},
+    routing::{delete, get, post},
     Json, RequestPartsExt,
   },
   clap::Parser,
