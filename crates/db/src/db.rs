@@ -134,7 +134,11 @@ impl Db {
   }
 
   pub async fn add_review(&self, review: Review) -> Result<InsertOneResult> {
-    if self.find_review(&review).await?.is_some() {
+    if self
+      .find_review(&review.course_id, &review.user_id)
+      .await?
+      .is_some()
+    {
       Err(anyhow!("Cannot review this course twice"))
     } else {
       Ok(
@@ -148,19 +152,18 @@ impl Db {
   }
 
   pub async fn update_review(&self, review: Review) -> Result<UpdateResult> {
-    let document = doc! {
-      "content": review.content,
-      "course_id": review.course_id,
-      "user_id": review.user_id
-    };
-
     Ok(
       self
         .database
         .collection::<Review>(Db::REVIEW_COLLECTION)
         .update_one(
-          document.clone(),
-          UpdateModifications::Document(document),
+          doc! {
+            "course_id": review.course_id,
+            "user_id": review.user_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": { "content": &review.content },
+          }),
           None,
         )
         .await?,
@@ -277,15 +280,16 @@ impl Db {
     )
   }
 
-  async fn find_review(&self, review: &Review) -> Result<Option<Review>> {
+  async fn find_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Option<Review>> {
     Ok(
       self
         .database
         .collection::<Review>(Db::REVIEW_COLLECTION)
-        .find_one(
-          doc! { "courseId": &review.course_id, "userId": &review.user_id },
-          None,
-        )
+        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?,
     )
   }
@@ -521,7 +525,6 @@ mod tests {
     let source = tempdir.path().join("courses.json");
 
     fs::write(&source, get_content("search.json")).unwrap();
-
     db.seed(source.clone()).await.unwrap();
 
     assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
@@ -685,6 +688,21 @@ mod tests {
   async fn dont_add_multiple_reviews_per_user() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    let review = Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    };
+
+    db.add_review(review.clone()).await.unwrap();
+
+    assert!(db.add_review(review).await.is_err());
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn update_review() {
+    let TestContext { db, .. } = TestContext::new().await;
+
     db.add_review(Review {
       content: "foo".into(),
       user_id: "1".into(),
@@ -693,13 +711,69 @@ mod tests {
     .await
     .unwrap();
 
+    db.update_review(Review {
+      content: "bar".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
     assert!(db
-      .add_review(Review {
-        content: "foo".into(),
-        user_id: "1".into(),
+      .update_review(Review {
+        content: "bar".into(),
+        user_id: "2".into(),
         course_id: "MATH240".into(),
       })
       .await
       .is_err());
+
+    assert_eq!(
+      db.find_review("MATH240", "1")
+        .await
+        .unwrap()
+        .unwrap()
+        .content,
+      "bar"
+    );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_review() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_review(Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.delete_review(Review {
+        content: "bar".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .deleted_count,
+      0
+    );
+
+    assert_eq!(
+      db.delete_review(Review {
+        content: "bar".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .deleted_count,
+      1
+    );
+
+    assert_eq!(db.find_review("MATH240", "1").await.unwrap(), None);
   }
 }
