@@ -1,9 +1,10 @@
 use {
   crate::vec_ext::VecExt,
+  anyhow::anyhow,
   futures::stream::TryStreamExt,
   itertools::Itertools,
   log::info,
-  model::Course,
+  model::{Course, Review},
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,

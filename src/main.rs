@@ -30,7 +30,7 @@ use {
   db::Db,
   dotenv::dotenv,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
-  model::{Course, CourseListing, Schedule},
+  model::{Course, CourseListing, Review, Schedule},
   oauth2::{
     basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
     AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
@@ -39,6 +39,7 @@ use {
   rayon::prelude::*,
   serde::{Deserialize, Serialize},
   std::{
+    collections::HashSet,
     env,
     fmt::{self, Display, Formatter},
     fs,
@@ -60,6 +61,7 @@ mod error;
 mod loader;
 mod options;
 mod page;
+mod reviews;
 mod search;
 mod server;
 mod state;
