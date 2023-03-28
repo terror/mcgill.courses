@@ -22,3 +22,30 @@ pub(crate) async fn get_reviews(
 
   Ok(Json(reviews.into_iter().collect::<HashSet<Review>>()))
 }
+
+#[derive(Debug, Deserialize)]
+pub(crate) struct AddReviewBody {
+  pub(crate) content: String,
+  pub(crate) course_id: String,
+}
+
+pub(crate) async fn add_review(
+  AppState(state): AppState<State>,
+  user: User,
+  body: Json<AddReviewBody>,
+) -> Result<impl IntoResponse> {
+  let AddReviewBody { content, course_id } = body.0;
+
+  log::trace!("Adding review to database...");
+
+  state
+    .db
+    .add_review(Review {
+      content,
+      course_id,
+      user_id: user.id(),
+    })
+    .await?;
+
+  Ok(())
+}

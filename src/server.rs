@@ -37,6 +37,7 @@ impl Server {
           .route("/courses", get(courses::get_courses))
           .route("/courses/:id", get(courses::get_course_by_id))
           .route("/reviews", get(reviews::get_reviews))
+          .route("/reviews", post(reviews::add_review))
           .route("/search", get(search::search))
           .route("/user", get(user::get_user))
           .with_state(State::new(db).await)
