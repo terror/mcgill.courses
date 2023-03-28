@@ -1,10 +1,9 @@
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Dialog } from '@headlessui/react';
+import { useAuth } from '../hooks/useAuth';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
-import { useAuth } from '../hooks/useAuth';
 
 export const navigation = [
   { name: 'About', href: '/about' },
