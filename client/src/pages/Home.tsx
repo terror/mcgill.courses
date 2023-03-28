@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { Course } from '../model/course';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
 import { fetchClient } from '../lib/fetchClient';
+import { Course } from '../model/course';
 
 export const Home = () => {
   const [results, setResults] = useState<Course[]>([]);

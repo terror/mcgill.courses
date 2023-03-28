@@ -1,8 +1,9 @@
 import { Dialog } from '@headlessui/react';
-import { Link } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { navigation } from './Navbar';
+import { Link } from 'react-router-dom';
+
 import { useAuth } from '../hooks/useAuth';
+import { navigation } from './Navbar';
 
 type SideNavProps = {
   open: boolean;

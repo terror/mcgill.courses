@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Course } from '../model/course';
-import { Layout } from '../components/Layout';
 import { Link } from 'react-router-dom';
+
+import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
+import { Course } from '../model/course';
 
 export const Explore = () => {
   const limit = 20;
@@ -17,9 +17,7 @@ export const Explore = () => {
   useEffect(() => {
     fetchClient
       .getData<Course[]>(`/courses?limit=${limit}`)
-      .then((courses) =>
-        setCourses(courses.filter((course) => course.title !== ''))
-      )
+      .then((data) => setCourses(data.filter((course) => course.title !== '')))
       .catch((err) => console.log(err));
   }, []);
 

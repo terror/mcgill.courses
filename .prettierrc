@@ -1,4 +1,7 @@
 {
+  "importOrder": ["^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
   "jsxSingleQuote": true,
   "proseWrap": "always",
   "semi": true,

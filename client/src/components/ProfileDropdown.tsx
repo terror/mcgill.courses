@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
-
 import { Menu, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
 import { User } from 'react-feather';
+
 import { classNames } from '../lib/classNames';
 
 export const ProfileDropdown = () => {
