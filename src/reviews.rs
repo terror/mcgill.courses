@@ -24,7 +24,7 @@ pub(crate) async fn get_reviews(
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct AddReviewBody {
+pub(crate) struct ReviewBody {
   pub(crate) content: String,
   pub(crate) course_id: String,
 }
@@ -32,9 +32,9 @@ pub(crate) struct AddReviewBody {
 pub(crate) async fn add_review(
   AppState(state): AppState<State>,
   user: User,
-  body: Json<AddReviewBody>,
+  body: Json<ReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let AddReviewBody { content, course_id } = body.0;
+  let ReviewBody { content, course_id } = body.0;
 
   log::trace!("Adding review to database...");
 
@@ -50,18 +50,12 @@ pub(crate) async fn add_review(
   Ok(())
 }
 
-#[derive(Debug, Deserialize)]
-pub(crate) struct DeleteReviewBody {
-  pub(crate) content: String,
-  pub(crate) course_id: String,
-}
-
 pub(crate) async fn delete_review(
   AppState(state): AppState<State>,
   user: User,
-  body: Json<DeleteReviewBody>,
+  body: Json<ReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let DeleteReviewBody { content, course_id } = body.0;
+  let ReviewBody { content, course_id } = body.0;
 
   log::trace!("Deleting review from database...");
 
