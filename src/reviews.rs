@@ -8,16 +8,16 @@ pub(crate) struct GetReviewsParams {
 
 pub(crate) async fn get_reviews(
   params: Query<GetReviewsParams>,
-  AppState(state): AppState<State>,
+  AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
   let mut reviews = vec![];
 
   if let Some(course_id) = &params.course_id {
-    reviews.extend(state.db.find_reviews_by_course_id(course_id).await?)
+    reviews.extend(db.find_reviews_by_course_id(course_id).await?)
   }
 
   if let Some(user_id) = &params.user_id {
-    reviews.extend(state.db.find_reviews_by_user_id(user_id).await?)
+    reviews.extend(db.find_reviews_by_user_id(user_id).await?)
   }
 
   Ok(Json(reviews.into_iter().collect::<HashSet<Review>>()))
@@ -30,7 +30,7 @@ pub(crate) struct ReviewBody {
 }
 
 pub(crate) async fn add_review(
-  AppState(state): AppState<State>,
+  AppState(db): AppState<Arc<Db>>,
   user: User,
   body: Json<ReviewBody>,
 ) -> Result<impl IntoResponse> {
@@ -38,20 +38,18 @@ pub(crate) async fn add_review(
 
   log::trace!("Adding review to database...");
 
-  state
-    .db
-    .add_review(Review {
-      content,
-      course_id,
-      user_id: user.id(),
-    })
-    .await?;
+  db.add_review(Review {
+    content,
+    course_id,
+    user_id: user.id(),
+  })
+  .await?;
 
   Ok(())
 }
 
 pub(crate) async fn update_review(
-  AppState(state): AppState<State>,
+  AppState(db): AppState<Arc<Db>>,
   user: User,
   body: Json<ReviewBody>,
 ) -> Result<impl IntoResponse> {
@@ -59,20 +57,18 @@ pub(crate) async fn update_review(
 
   log::trace!("Updating review...");
 
-  state
-    .db
-    .update_review(Review {
-      content,
-      course_id,
-      user_id: user.id(),
-    })
-    .await?;
+  db.update_review(Review {
+    content,
+    course_id,
+    user_id: user.id(),
+  })
+  .await?;
 
   Ok(())
 }
 
 pub(crate) async fn delete_review(
-  AppState(state): AppState<State>,
+  AppState(db): AppState<Arc<Db>>,
   user: User,
   body: Json<ReviewBody>,
 ) -> Result<impl IntoResponse> {
@@ -80,14 +76,12 @@ pub(crate) async fn delete_review(
 
   log::trace!("Deleting review from database...");
 
-  state
-    .db
-    .delete_review(Review {
-      content,
-      course_id,
-      user_id: user.id(),
-    })
-    .await?;
+  db.delete_review(Review {
+    content,
+    course_id,
+    user_id: user.id(),
+  })
+  .await?;
 
   Ok(())
 }
