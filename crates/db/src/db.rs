@@ -778,4 +778,38 @@ mod tests {
 
     assert_eq!(db.find_review("MATH240", "1").await.unwrap(), None);
   }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_review_then_add_again() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_review(Review {
+      content: "foo".into(),
+      user_id: "1".into(),
+      course_id: "MATH240".into(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.delete_review(Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .unwrap()
+      .deleted_count,
+      1
+    );
+
+    assert!(db
+      .add_review(Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+      })
+      .await
+      .is_ok());
+  }
 }
