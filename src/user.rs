@@ -10,6 +10,14 @@ impl User {
   pub(crate) fn id(self) -> String {
     self.id
   }
+
+  #[cfg(test)]
+  pub(crate) fn new(id: &str, mail: &str) -> Self {
+    User {
+      id: String::from(id),
+      mail: String::from(mail),
+    }
+  }
 }
 
 #[derive(Serialize, Deserialize)]
