@@ -44,10 +44,13 @@ fn app(db: Arc<Db>) -> Router {
     .route("/auth/logout", get(auth::logout))
     .route("/courses", get(courses::get_courses))
     .route("/courses/:id", get(courses::get_course_by_id))
-    .route("/reviews", delete(reviews::delete_review))
-    .route("/reviews", get(reviews::get_reviews))
-    .route("/reviews", post(reviews::add_review))
-    .route("/reviews", put(reviews::update_review))
+    .route(
+      "/reviews",
+      get(reviews::get_reviews)
+        .delete(reviews::delete_review)
+        .post(reviews::add_review)
+        .put(reviews::update_review),
+    )
     .route("/search", get(search::search))
     .route("/user", get(user::get_user))
     .with_state(State::new(db))
