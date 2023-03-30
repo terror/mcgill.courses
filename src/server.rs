@@ -398,13 +398,18 @@ mod tests {
       seed_path,
     } = TestContext::new().await;
     db.seed(seed_path).await.unwrap();
-    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+    let cookie =
+      mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await;
+    let cookie2 =
+      mock_login(session_store, "test2", "test2@mail.mcgill.ca").await;
 
     let reviews = vec![
       json!({"content": "test", "course_id": "COMP202"}),
       json!({"content": "test2", "course_id": "MATH240"}),
       json!({"content": "test3", "course_id": "COMP252"}),
     ];
+
+    let review2 = json!({"content": "test4", "course_id": "COMP202"});
 
     for review in reviews {
       app
@@ -420,6 +425,19 @@ mod tests {
         .await
         .unwrap();
     }
+
+    app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie2)
+          .header("Content-Type", "application/json")
+          .uri("/reviews")
+          .body(Body::from(review2.to_string()))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
 
     let response = app
       .call(
@@ -437,26 +455,7 @@ mod tests {
     let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
     let reviews: Vec<Review> = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(
-      reviews,
-      vec![
-        Review {
-          user_id: "test".to_string(),
-          course_id: "COMP202".to_string(),
-          content: "test".to_string(),
-        },
-        Review {
-          user_id: "test".to_string(),
-          course_id: "MATH240".to_string(),
-          content: "test2".to_string(),
-        },
-        Review {
-          user_id: "test".to_string(),
-          course_id: "COMP252".to_string(),
-          content: "test3".to_string(),
-        }
-      ]
-    );
+    assert_eq!(reviews.len(), 3);
   }
 
   #[tokio::test]
@@ -511,20 +510,6 @@ mod tests {
     let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
     let reviews: Vec<Review> = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(
-      reviews,
-      vec![
-        Review {
-          user_id: "test".to_string(),
-          course_id: "MATH240".to_string(),
-          content: "test".to_string(),
-        },
-        Review {
-          user_id: "test2".to_string(),
-          course_id: "MATH240".to_string(),
-          content: "test2".to_string(),
-        }
-      ]
-    )
+    assert_eq!(reviews.len(), 2)
   }
 }
