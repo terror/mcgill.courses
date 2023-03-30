@@ -31,6 +31,7 @@ pub(crate) async fn microsoft_auth(
   )
 }
 
+#[cfg(not(test))]
 pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
   AppState(state): AppState<State>,

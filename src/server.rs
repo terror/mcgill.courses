@@ -1,4 +1,5 @@
 use super::*;
+use hyper::Body;
 
 #[derive(Parser)]
 pub(crate) struct Server {
@@ -37,11 +38,7 @@ impl Server {
 }
 
 fn app(db: Arc<Db>) -> Router {
-  dotenv().ok();
-  Router::new()
-    .route("/auth/authorized", get(auth::login_authorized))
-    .route("/auth/login", get(auth::microsoft_auth))
-    .route("/auth/logout", get(auth::logout))
+  let router: Router<state::State, Body> = Router::new()
     .route("/courses", get(courses::get_courses))
     .route("/courses/:id", get(courses::get_course_by_id))
     .route("/reviews", delete(reviews::delete_review))
@@ -49,7 +46,15 @@ fn app(db: Arc<Db>) -> Router {
     .route("/reviews", post(reviews::add_review))
     .route("/reviews", put(reviews::update_review))
     .route("/search", get(search::search))
-    .route("/user", get(user::get_user))
+    .route("/user", get(user::get_user));
+
+  #[cfg(not(test))]
+  let router: Router<state::State, Body> = router
+    .route("/auth/authorized", get(auth::login_authorized))
+    .route("/auth/login", get(auth::microsoft_auth))
+    .route("/auth/logout", get(auth::logout));
+
+  router
     .with_state(State::new(db))
     .layer(CorsLayer::very_permissive())
 }

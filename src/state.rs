@@ -3,6 +3,7 @@ use super::*;
 #[derive(Debug, Clone)]
 pub(crate) struct State {
   pub(crate) db: Arc<Db>,
+  #[cfg(not(test))]
   pub(crate) oauth_client: BasicClient,
   pub(crate) request_client: reqwest::Client,
   pub(crate) session_store: MemoryStore,
@@ -14,6 +15,7 @@ impl FromRef<State> for Arc<Db> {
   }
 }
 
+#[cfg(not(test))]
 impl FromRef<State> for BasicClient {
   fn from_ref(state: &State) -> Self {
     state.oauth_client.clone()
@@ -30,6 +32,7 @@ impl State {
   pub(crate) fn new(db: Arc<Db>) -> Self {
     Self {
       db,
+      #[cfg(not(test))]
       oauth_client: BasicClient::new(
         ClientId::new(
           env::var("MS_CLIENT_ID")
