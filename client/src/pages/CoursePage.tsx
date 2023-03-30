@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { CourseReview } from '../components/CourseReview';
+import { CourseRequirements, CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
 import { Course } from '../model/course';
 import { Review } from '../model/review';
+import { Requirements } from '../model/requirements';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -19,10 +20,17 @@ export const CoursePage = () => {
     usefulRating: 8,
     interestingRating: 9,
   };
+  const requirements: Requirements = {
+    prereqs: ['MATH 135', 'MATH 136'],
+    coreqs: ['MATH 241'],
+    restrictions: [],
+    otherInformation: ["This course is only offered in the Fall", "This course is very hard"],
+  };
 
   return (
     <Layout>
       <CourseReview review={review} />
+      <CourseRequirements requirements={requirements}/>
     </Layout>
   );
 };
