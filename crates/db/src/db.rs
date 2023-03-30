@@ -200,6 +200,20 @@ impl Db {
     self.find_reviews(doc! { "userId": user_id }).await
   }
 
+  pub async fn find_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Option<Review>> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
+        .await?,
+    )
+  }
+
   async fn find_reviews(&self, query: Document) -> Result<Vec<Review>> {
     Ok(
       self
@@ -275,20 +289,6 @@ impl Db {
         .find(None, None)
         .await?
         .try_collect::<Vec<Review>>()
-        .await?,
-    )
-  }
-
-  async fn find_review(
-    &self,
-    course_id: &str,
-    user_id: &str,
-  ) -> Result<Option<Review>> {
-    Ok(
-      self
-        .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
-        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?,
     )
   }
