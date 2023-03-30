@@ -2,6 +2,7 @@ import { Star } from 'react-feather';
 import { Course } from '../model/course';
 import { Instructor } from '../model/instructor';
 import { Review } from '../model/review';
+import { Requirements } from '../model/requirements';
 
 type CourseReviewProps = {
   review: Review;
@@ -16,6 +17,10 @@ type FillbarProps = {
 type RatingProps = {
   text: string;
   rating: number;
+};
+
+type RequirementsProps = {
+  requirements: Requirements;
 };
 
 export const Rating = ({ text, rating }: RatingProps) => {
@@ -86,6 +91,61 @@ export const CourseReview = ({ review }: CourseReviewProps) => {
         </div>
       </div>
       <div className='mt-6 text-sm'>{review.text}</div>
+    </div>
+  );
+};
+
+// TODO: Make this a rectangle of a certain size TBD
+// TODO: Align the rectangle to the right of the screen
+export const CourseRequirements = ({requirements}:  RequirementsProps) => {
+  return (
+    <div className='w-30 mx-4 p-6 bg-slate-50 rounded-md'>
+      <div className='flex-col space-y-3'>
+        <div className='space-y-2'>
+        {requirements.prereqs.length > 0 && (
+            <div>
+              <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+                Prerequisites
+              </h2>
+              {requirements.prereqs.map((prereq) => (
+                <p className='text-gray-700'>{prereq}</p>
+              ))}
+            </div>
+          )}
+          {requirements.coreqs.length > 0 && (
+            <div>
+              <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+                Corequisites
+              </h2>
+              {requirements.coreqs.map((coreq) => (
+                <p className='text-gray-700'>{coreq}</p>
+              ))}
+            </div>
+          )}
+          {requirements.restrictions.length > 0 && (
+            <div>
+              <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+                Restrictions
+              </h2>
+              {requirements.restrictions.map((restriction) => (
+                <p className='text-gray-700'>{restriction}</p>
+              ))}
+            </div>
+          )}
+          {requirements.otherInformation.length > 0 && (
+            <div>
+              <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+                Other Information
+              </h2>
+              {requirements.otherInformation.map((info) => (
+                <p className='text-gray-700'>{info}</p>
+              ))}
+            </div>
+          )}
+        </div>
+        <div>
+        </div>
+      </div>
     </div>
   );
 };
