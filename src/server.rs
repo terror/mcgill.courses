@@ -28,16 +28,17 @@ impl Server {
       });
     }
 
+    let session_store = Arc::new(MemoryStore::new());
+
     axum_server::Server::bind(addr)
-      .serve(app(db).into_make_service())
+      .serve(app(db, session_store).into_make_service())
       .await?;
 
     Ok(())
   }
 }
 
-fn app(db: Arc<Db>) -> Router {
-  dotenv().ok();
+fn app(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Router {
   Router::new()
     .route("/auth/authorized", get(auth::login_authorized))
     .route("/auth/login", get(auth::microsoft_auth))
@@ -53,7 +54,7 @@ fn app(db: Arc<Db>) -> Router {
     )
     .route("/search", get(search::search))
     .route("/user", get(user::get_user))
-    .with_state(State::new(db))
+    .with_state(State::new(db, session_store))
     .layer(CorsLayer::very_permissive())
 }
 
@@ -70,10 +71,12 @@ mod tests {
   struct TestContext {
     db: Arc<Db>,
     app: Router,
+    session_store: Arc<MemoryStore>,
   }
 
   impl TestContext {
     async fn new() -> Self {
+      dotenv().ok();
       static TEST_DATABASE_NUMBER: AtomicUsize = AtomicUsize::new(0);
 
       let test_database_number =
@@ -89,15 +92,20 @@ mod tests {
       );
 
       let db = Arc::new(Db::connect(&db_name).await.unwrap());
-      let app = app(db.clone());
+      let session_store = Arc::new(MemoryStore::new());
+      let app = app(db.clone(), session_store.clone());
 
-      TestContext { db, app }
+      TestContext {
+        db,
+        app,
+        session_store,
+      }
     }
   }
 
   #[tokio::test]
   async fn courses_route_works() {
-    let TestContext { db, app } = TestContext::new().await;
+    let TestContext { db, app, .. } = TestContext::new().await;
     db.seed(PathBuf::from("courses.json")).await.unwrap();
     let response = app
       .oneshot(
@@ -119,7 +127,7 @@ mod tests {
 
   #[tokio::test]
   async fn courses_route_offset_limit() {
-    let TestContext { db, app } = TestContext::new().await;
+    let TestContext { db, app, .. } = TestContext::new().await;
     db.seed(PathBuf::from("courses.json")).await.unwrap();
 
     let response = app
@@ -159,7 +167,7 @@ mod tests {
 
   #[tokio::test]
   async fn course_by_id_works() {
-    let TestContext { db, app } = TestContext::new().await;
+    let TestContext { db, app, .. } = TestContext::new().await;
     db.seed(PathBuf::from("courses.json")).await.unwrap();
 
     let response = app
@@ -185,7 +193,7 @@ mod tests {
 
   #[tokio::test]
   async fn course_by_id_invalid_course_code() {
-    let TestContext { db, app } = TestContext::new().await;
+    let TestContext { db, app, .. } = TestContext::new().await;
     db.seed(PathBuf::from("courses.json")).await.unwrap();
 
     let response = app
@@ -208,7 +216,7 @@ mod tests {
 
   #[tokio::test]
   async fn unauthenticated_cant_add_review() {
-    let TestContext { db, app } = TestContext::new().await;
+    let TestContext { db, app, .. } = TestContext::new().await;
     db.seed(PathBuf::from("courses.json")).await.unwrap();
 
     let review = json!({"content": "test", "course_id": "MATH240"});
