@@ -108,40 +108,40 @@ export const CourseRequirements = ({requirements}:  RequirementsProps) => {
                 Prerequisites
               </h2>
               {requirements.prereqs.map((prereq) => (
-                <p className='text-gray-700'>{prereq}</p>
+                <p className='text-gray-500'>{prereq}</p>
               ))}
             </div>
-          )}
-          {requirements.coreqs.length > 0 && (
+        )}
+        {requirements.coreqs.length > 0 && (
             <div>
               <h2 className='leading-none mt-1 font-semibold text-gray-700'>
                 Corequisites
               </h2>
               {requirements.coreqs.map((coreq) => (
-                <p className='text-gray-700'>{coreq}</p>
+                <p className='text-gray-500'>{coreq}</p>
               ))}
             </div>
-          )}
-          {requirements.restrictions.length > 0 && (
-            <div>
-              <h2 className='leading-none mt-1 font-semibold text-gray-700'>
-                Restrictions
-              </h2>
-              {requirements.restrictions.map((restriction) => (
-                <p className='text-gray-700'>{restriction}</p>
-              ))}
-            </div>
-          )}
-          {requirements.otherInformation.length > 0 && (
-            <div>
-              <h2 className='leading-none mt-1 font-semibold text-gray-700'>
-                Other Information
-              </h2>
-              {requirements.otherInformation.map((info) => (
-                <p className='text-gray-700'>{info}</p>
-              ))}
-            </div>
-          )}
+        )}
+        {requirements.restrictions.length > 0 && (
+          <div>
+            <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+              Restrictions
+            </h2>
+            {requirements.restrictions.map((restriction) => (
+              <p className='text-gray-500'>{restriction}</p>
+            ))}
+          </div>
+        )}
+        {requirements.otherInformation.length > 0 && (
+          <div>
+            <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+              Other Information
+            </h2>
+            {requirements.otherInformation.map((info) => (
+              <p className='text-gray-500'>{info}</p>
+            ))}
+          </div>
+        )}
         </div>
         <div>
         </div>
