@@ -143,8 +143,6 @@ export const CourseRequirements = ({requirements}:  RequirementsProps) => {
           </div>
         )}
         </div>
-        <div>
-        </div>
       </div>
     </div>
   );
