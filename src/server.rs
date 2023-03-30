@@ -224,6 +224,7 @@ mod tests {
     let response = app
       .oneshot(
         Request::builder()
+          .method(http::Method::POST)
           .uri("/reviews")
           .body(Body::from(review.to_string()))
           .unwrap(),
@@ -231,6 +232,6 @@ mod tests {
       .await
       .unwrap();
 
-    assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+    assert_eq!(response.status(), StatusCode::TEMPORARY_REDIRECT);
   }
 }
