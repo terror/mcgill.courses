@@ -31,55 +31,55 @@ impl Server {
     let session_store = Arc::new(MemoryStore::new());
 
     axum_server::Server::bind(addr)
-      .serve(app(db, session_store).into_make_service())
+      .serve(Self::app(db, session_store).into_make_service())
       .await?;
 
     Ok(())
   }
-}
 
-fn app(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Router {
-  Router::new()
-    .route("/auth/authorized", get(auth::login_authorized))
-    .route("/auth/login", get(auth::microsoft_auth))
-    .route("/auth/logout", get(auth::logout))
-    .route("/courses", get(courses::get_courses))
-    .route("/courses/:id", get(courses::get_course_by_id))
-    .route(
-      "/reviews",
-      get(reviews::get_reviews)
-        .delete(reviews::delete_review)
-        .post(reviews::add_review)
-        .put(reviews::update_review),
-    )
-    .route("/search", get(search::search))
-    .route("/user", get(user::get_user))
-    .with_state(State::new(db, session_store))
-    .layer(CorsLayer::very_permissive())
+  fn app(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Router {
+    Router::new()
+      .route("/auth/authorized", get(auth::login_authorized))
+      .route("/auth/login", get(auth::microsoft_auth))
+      .route("/auth/logout", get(auth::logout))
+      .route("/courses", get(courses::get_courses))
+      .route("/courses/:id", get(courses::get_course_by_id))
+      .route(
+        "/reviews",
+        get(reviews::get_reviews)
+          .delete(reviews::delete_review)
+          .post(reviews::add_review)
+          .put(reviews::update_review),
+      )
+      .route("/search", get(search::search))
+      .route("/user", get(user::get_user))
+      .with_state(State::new(db, session_store))
+      .layer(CorsLayer::very_permissive())
+  }
 }
 
 #[cfg(test)]
 mod tests {
-  use super::*;
-  use axum::body::Body;
-  use http::Request;
-  use pretty_assertions::assert_eq;
-  use serde_json::json;
-  use std::sync::atomic::{AtomicUsize, Ordering};
-  use tower::{Service, ServiceExt};
+  use {
+    super::*,
+    axum::body::Body,
+    http::Request,
+    pretty_assertions::assert_eq,
+    serde_json::json,
+    std::sync::atomic::{AtomicUsize, Ordering},
+    tower::{Service, ServiceExt},
+  };
 
   struct TestContext {
-    db: Arc<Db>,
     app: Router,
+    db: Arc<Db>,
     session_store: Arc<MemoryStore>,
-    seed_path: PathBuf,
   }
-
-  const SEED_DIR: &str = "crates/db/seeds/mini.json";
 
   impl TestContext {
     async fn new() -> Self {
       dotenv().ok();
+
       static TEST_DATABASE_NUMBER: AtomicUsize = AtomicUsize::new(0);
 
       let test_database_number =
@@ -96,16 +96,18 @@ mod tests {
 
       let db = Arc::new(Db::connect(&db_name).await.unwrap());
       let session_store = Arc::new(MemoryStore::new());
-      let app = app(db.clone(), session_store.clone());
-      let seed_path = PathBuf::from(SEED_DIR);
+      let app = Server::app(db.clone(), session_store.clone());
 
       TestContext {
-        db,
         app,
+        db,
         session_store,
-        seed_path,
       }
     }
+  }
+
+  fn seed_dir() -> PathBuf {
+    PathBuf::from("crates/db/seeds/mini.json")
   }
 
   async fn mock_login(
@@ -114,18 +116,22 @@ mod tests {
     mail: &str,
   ) -> String {
     let mut session = Session::new();
+
     session.insert("user", User::new(id, mail)).unwrap();
 
-    let cookie = session_store.store_session(session).await.unwrap().unwrap();
-    format!("{}={}", COOKIE_NAME, cookie)
+    format!(
+      "{}={}",
+      COOKIE_NAME,
+      session_store.store_session(session).await.unwrap().unwrap()
+    )
   }
 
   #[tokio::test]
   async fn courses_route_works() {
-    let TestContext {
-      db, app, seed_path, ..
-    } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+    let TestContext { db, app, .. } = TestContext::new().await;
+
+    db.seed(seed_dir()).await.unwrap();
+
     let response = app
       .oneshot(
         Request::builder()
@@ -138,18 +144,20 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-    let body: Vec<Course> = serde_json::from_slice(&body).unwrap();
-
-    assert_eq!(body, db.courses(None, None).await.unwrap());
+    assert_eq!(
+      serde_json::from_slice::<Vec<Course>>(
+        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      )
+      .unwrap(),
+      db.courses(None, None).await.unwrap()
+    );
   }
 
   #[tokio::test]
   async fn courses_route_offset_limit() {
-    let TestContext {
-      db, app, seed_path, ..
-    } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+    let TestContext { db, app, .. } = TestContext::new().await;
+
+    db.seed(seed_dir()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -163,10 +171,13 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-    let body: Vec<Course> = serde_json::from_slice(&body).unwrap();
-
-    assert_eq!(body, db.courses(Some(10), Some(40)).await.unwrap());
+    assert_eq!(
+      serde_json::from_slice::<Vec<Course>>(
+        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      )
+      .unwrap(),
+      db.courses(Some(10), Some(40)).await.unwrap()
+    );
   }
 
   #[tokio::test]
@@ -188,10 +199,9 @@ mod tests {
 
   #[tokio::test]
   async fn course_by_id_works() {
-    let TestContext {
-      db, app, seed_path, ..
-    } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+    let TestContext { db, app, .. } = TestContext::new().await;
+
+    db.seed(seed_dir()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -205,21 +215,20 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-    let body: Course = serde_json::from_slice(&body).unwrap();
-
     assert_eq!(
-      body,
+      serde_json::from_slice::<Course>(
+        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      )
+      .unwrap(),
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
   }
 
   #[tokio::test]
   async fn course_by_id_invalid_course_code() {
-    let TestContext {
-      db, app, seed_path, ..
-    } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+    let TestContext { db, app, .. } = TestContext::new().await;
+
+    db.seed(seed_dir()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -233,27 +242,29 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::NOT_FOUND);
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-    let body: Option<Course> = serde_json::from_slice(&body).unwrap();
-
-    assert_eq!(body, None);
+    assert_eq!(
+      serde_json::from_slice::<Option<Course>>(
+        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      )
+      .unwrap(),
+      None
+    );
   }
 
   #[tokio::test]
   async fn unauthenticated_cant_add_review() {
-    let TestContext {
-      db, app, seed_path, ..
-    } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+    let TestContext { db, app, .. } = TestContext::new().await;
 
-    let review = json!({"content": "test", "course_id": "MATH240"});
+    db.seed(seed_dir()).await.unwrap();
 
     let response = app
       .oneshot(
         Request::builder()
           .method(http::Method::POST)
           .uri("/reviews")
-          .body(Body::from(review.to_string()))
+          .body(Body::from(
+            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+          ))
           .unwrap(),
       )
       .await
@@ -268,21 +279,24 @@ mod tests {
       db,
       app,
       session_store,
-      seed_path,
+      ..
     } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
 
-    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
-    let review = json!({"content": "test", "course_id": "MATH240"});
+    db.seed(seed_dir()).await.unwrap();
 
     let response = app
       .oneshot(
         Request::builder()
           .method(http::Method::POST)
-          .header("Cookie", cookie)
+          .header(
+            "Cookie",
+            mock_login(session_store, "test", "test@mail.mcgill.ca").await,
+          )
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(review.to_string()))
+          .body(Body::from(
+            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+          ))
           .unwrap(),
       )
       .await
@@ -298,12 +312,12 @@ mod tests {
       db,
       mut app,
       session_store,
-      seed_path,
+      ..
     } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+
+    db.seed(seed_dir()).await.unwrap();
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
-    let review = json!({"content": "test", "course_id": "MATH240"});
 
     let response = app
       .call(
@@ -312,7 +326,9 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(review.to_string()))
+          .body(Body::from(
+            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+          ))
           .unwrap(),
       )
       .await
@@ -321,15 +337,14 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
     assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
 
-    let delete_body = json!({"user_id": "test", "course_id": "MATH240"});
-
     let response = app
       .call(
         Request::builder()
           .method(http::Method::DELETE)
           .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(delete_body.to_string()))
+          .body(Body::from(json!({"course_id": "MATH240"}).to_string()))
           .unwrap(),
       )
       .await
@@ -345,12 +360,12 @@ mod tests {
       db,
       mut app,
       session_store,
-      seed_path,
+      ..
     } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+
+    db.seed(seed_dir()).await.unwrap();
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
-    let review = json!({"content": "test", "course_id": "MATH240"});
 
     app
       .call(
@@ -359,26 +374,31 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(review.to_string()))
+          .body(Body::from(
+            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+          ))
           .unwrap(),
       )
       .await
       .unwrap();
 
-    let update_body = json!({"content": "updated", "course_id": "MATH240"});
     let response = app
       .call(
         Request::builder()
           .method(http::Method::PUT)
           .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(update_body.to_string()))
+          .body(Body::from(
+            json!({"content": "updated", "course_id": "MATH240"}).to_string(),
+          ))
           .unwrap(),
       )
       .await
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
+
     assert_eq!(
       db.find_review("MATH240", "test")
         .await
@@ -395,11 +415,14 @@ mod tests {
       db,
       mut app,
       session_store,
-      seed_path,
+      ..
     } = TestContext::new().await;
-    db.seed(seed_path).await.unwrap();
+
+    db.seed(seed_dir()).await.unwrap();
+
     let cookie =
       mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await;
+
     let cookie2 =
       mock_login(session_store, "test2", "test2@mail.mcgill.ca").await;
 
@@ -452,10 +475,14 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-    let reviews: Vec<Review> = serde_json::from_slice(&body).unwrap();
-
-    assert_eq!(reviews.len(), 3);
+    assert_eq!(
+      serde_json::from_slice::<Vec<Review>>(
+        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      )
+      .unwrap()
+      .len(),
+      3
+    );
   }
 
   #[tokio::test]
@@ -464,10 +491,10 @@ mod tests {
       db,
       mut app,
       session_store,
-      seed_path,
+      ..
     } = TestContext::new().await;
 
-    db.seed(seed_path).await.unwrap();
+    db.seed(seed_dir()).await.unwrap();
 
     let cookies = vec![
       mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await,
@@ -507,9 +534,13 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-    let reviews: Vec<Review> = serde_json::from_slice(&body).unwrap();
-
-    assert_eq!(reviews.len(), 2)
+    assert_eq!(
+      serde_json::from_slice::<Vec<Review>>(
+        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      )
+      .unwrap()
+      .len(),
+      2
+    )
   }
 }

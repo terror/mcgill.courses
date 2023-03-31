@@ -24,7 +24,7 @@ pub(crate) async fn get_reviews(
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct ReviewBody {
+pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) content: String,
   pub(crate) course_id: String,
 }
@@ -32,9 +32,9 @@ pub(crate) struct ReviewBody {
 pub(crate) async fn add_review(
   AppState(db): AppState<Arc<Db>>,
   user: User,
-  body: Json<ReviewBody>,
+  body: Json<AddOrUpdateReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let ReviewBody { content, course_id } = body.0;
+  let AddOrUpdateReviewBody { content, course_id } = body.0;
 
   log::trace!("Adding review to database...");
 
@@ -51,9 +51,9 @@ pub(crate) async fn add_review(
 pub(crate) async fn update_review(
   AppState(db): AppState<Arc<Db>>,
   user: User,
-  body: Json<ReviewBody>,
+  body: Json<AddOrUpdateReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let ReviewBody { content, course_id } = body.0;
+  let AddOrUpdateReviewBody { content, course_id } = body.0;
 
   log::trace!("Updating review...");
 
@@ -67,21 +67,19 @@ pub(crate) async fn update_review(
   Ok(())
 }
 
+#[derive(Debug, Deserialize)]
+pub(crate) struct DeleteReviewBody {
+  course_id: String,
+}
+
 pub(crate) async fn delete_review(
   AppState(db): AppState<Arc<Db>>,
   user: User,
-  body: Json<ReviewBody>,
+  body: Json<DeleteReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let ReviewBody { content, course_id } = body.0;
+  log::trace!("Deleting review from the database...");
 
-  log::trace!("Deleting review from database...");
-
-  db.delete_review(Review {
-    content,
-    course_id,
-    user_id: user.id(),
-  })
-  .await?;
+  db.delete_review(&body.course_id, &user.id()).await?;
 
   Ok(())
 }
