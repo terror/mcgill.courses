@@ -170,15 +170,19 @@ impl Db {
     )
   }
 
-  pub async fn delete_review(&self, review: Review) -> Result<DeleteResult> {
+  pub async fn delete_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<DeleteResult> {
     Ok(
       self
         .database
         .collection::<Review>(Db::REVIEW_COLLECTION)
         .delete_one(
           doc! {
-            "courseId": review.course_id,
-            "userId": review.user_id
+            "courseId": course_id,
+            "userId": user_id
           },
           None,
         )
@@ -198,6 +202,20 @@ impl Db {
     user_id: &str,
   ) -> Result<Vec<Review>> {
     self.find_reviews(doc! { "userId": user_id }).await
+  }
+
+  pub async fn find_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Option<Review>> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
+        .await?,
+    )
   }
 
   async fn find_reviews(&self, query: Document) -> Result<Vec<Review>> {
@@ -275,20 +293,6 @@ impl Db {
         .find(None, None)
         .await?
         .try_collect::<Vec<Review>>()
-        .await?,
-    )
-  }
-
-  async fn find_review(
-    &self,
-    course_id: &str,
-    user_id: &str,
-  ) -> Result<Option<Review>> {
-    Ok(
-      self
-        .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
-        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?,
     )
   }
@@ -753,26 +757,18 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.delete_review(Review {
-        content: "bar".into(),
-        user_id: "2".into(),
-        course_id: "MATH240".into(),
-      })
-      .await
-      .unwrap()
-      .deleted_count,
+      db.delete_review("MATH240", "2")
+        .await
+        .unwrap()
+        .deleted_count,
       0
     );
 
     assert_eq!(
-      db.delete_review(Review {
-        content: "foo".into(),
-        user_id: "1".into(),
-        course_id: "MATH240".into(),
-      })
-      .await
-      .unwrap()
-      .deleted_count,
+      db.delete_review("MATH240", "1")
+        .await
+        .unwrap()
+        .deleted_count,
       1
     );
 
@@ -792,14 +788,10 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.delete_review(Review {
-        content: "foo".into(),
-        user_id: "1".into(),
-        course_id: "MATH240".into(),
-      })
-      .await
-      .unwrap()
-      .deleted_count,
+      db.delete_review("MATH240", "1")
+        .await
+        .unwrap()
+        .deleted_count,
       1
     );
 
