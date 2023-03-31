@@ -420,26 +420,22 @@ mod tests {
 
     db.seed(seed_dir()).await.unwrap();
 
-    let cookie =
-      mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await;
-
-    let cookie2 =
-      mock_login(session_store, "test2", "test2@mail.mcgill.ca").await;
-
     let reviews = vec![
       json!({"content": "test", "course_id": "COMP202"}),
       json!({"content": "test2", "course_id": "MATH240"}),
       json!({"content": "test3", "course_id": "COMP252"}),
     ];
 
-    let review2 = json!({"content": "test4", "course_id": "COMP202"});
-
     for review in reviews {
       app
         .call(
           Request::builder()
             .method(http::Method::POST)
-            .header("Cookie", cookie.clone())
+            .header(
+              "Cookie",
+              mock_login(session_store.clone(), "test", "test@mail.mcgill.ca")
+                .await,
+            )
             .header("Content-Type", "application/json")
             .uri("/reviews")
             .body(Body::from(review.to_string()))
@@ -453,10 +449,15 @@ mod tests {
       .call(
         Request::builder()
           .method(http::Method::POST)
-          .header("Cookie", cookie2)
+          .header(
+            "Cookie",
+            mock_login(session_store, "test2", "test2@mail.mcgill.ca").await,
+          )
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(review2.to_string()))
+          .body(Body::from(
+            json!({"content": "test4", "course_id": "COMP202"}).to_string(),
+          ))
           .unwrap(),
       )
       .await
