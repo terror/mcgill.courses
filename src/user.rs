@@ -6,6 +6,20 @@ pub(crate) struct User {
   mail: String,
 }
 
+impl User {
+  pub(crate) fn id(self) -> String {
+    self.id
+  }
+
+  #[cfg(test)]
+  pub(crate) fn new(id: &str, mail: &str) -> Self {
+    User {
+      id: String::from(id),
+      mail: String::from(mail),
+    }
+  }
+}
+
 #[derive(Serialize, Deserialize)]
 struct UserResponse {
   user: Option<User>,
@@ -18,7 +32,7 @@ pub(crate) async fn get_user(user: Option<User>) -> impl IntoResponse {
 #[async_trait]
 impl<S> FromRequestParts<S> for User
 where
-  MemoryStore: FromRef<S>,
+  Arc<MemoryStore>: FromRef<S>,
   S: Send + Sync,
 {
   type Rejection = AuthRedirect;
@@ -27,7 +41,7 @@ where
     parts: &mut Parts,
     state: &S,
   ) -> Result<Self, Self::Rejection> {
-    let session_store = MemoryStore::from_ref(state);
+    let session_store = Arc::<MemoryStore>::from_ref(state);
 
     let cookies =
       parts.extract::<TypedHeader<Cookie>>().await.map_err(|e| {

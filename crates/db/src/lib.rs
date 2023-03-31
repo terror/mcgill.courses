@@ -1,14 +1,15 @@
 use {
   crate::vec_ext::VecExt,
+  anyhow::anyhow,
   futures::stream::TryStreamExt,
   itertools::Itertools,
   log::info,
-  model::Course,
+  model::{Course, Review},
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions},
-    results::{CreateIndexResult, InsertOneResult, UpdateResult},
+    results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Database, IndexModel,
   },
   std::{fs, hash::Hash, path::PathBuf},

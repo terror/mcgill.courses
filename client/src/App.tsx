@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
+
 import { CoursePage } from './pages/CoursePage';
+import { Explore } from './pages/Explore';
 import { Home } from './pages/Home';
 
 const App = () => {
@@ -9,6 +11,7 @@ const App = () => {
       <Route path='course'>
         <Route path=':id' element={<CoursePage />} />
       </Route>
+      <Route path='/explore' element={<Explore />} />
     </Routes>
   );
 };

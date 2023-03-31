@@ -3,7 +3,7 @@ export RUST_LOG := 'info'
 default:
   just --list
 
-all: build test clippy fmt-check
+all: forbid build test clippy lint fmt-check
 
 build:
   cargo build
@@ -13,11 +13,17 @@ clippy:
 
 fmt:
   cargo fmt --all
-  prettier --write .
+  npm run format
 
 fmt-check:
   cargo fmt --all -- --check
-  prettier --check .
+  npm run format-check
+
+forbid:
+  ./bin/forbid
+
+lint:
+  npm run lint
 
 load:
   cargo run -- --source=courses.json \
@@ -28,8 +34,7 @@ load:
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
 restart:
-  docker-compose down --volumes
-  just services
+  docker-compose down --volumes && just services
 
 run *args:
   cargo run -- {{args}}

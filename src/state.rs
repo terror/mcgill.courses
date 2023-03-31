@@ -5,7 +5,13 @@ pub(crate) struct State {
   pub(crate) db: Arc<Db>,
   pub(crate) oauth_client: BasicClient,
   pub(crate) request_client: reqwest::Client,
-  pub(crate) session_store: MemoryStore,
+  pub(crate) session_store: Arc<MemoryStore>,
+}
+
+impl FromRef<State> for Arc<Db> {
+  fn from_ref(state: &State) -> Self {
+    state.db.clone()
+  }
 }
 
 impl FromRef<State> for BasicClient {
@@ -14,14 +20,20 @@ impl FromRef<State> for BasicClient {
   }
 }
 
-impl FromRef<State> for MemoryStore {
+impl FromRef<State> for reqwest::Client {
+  fn from_ref(state: &State) -> Self {
+    state.request_client.clone()
+  }
+}
+
+impl FromRef<State> for Arc<MemoryStore> {
   fn from_ref(state: &State) -> Self {
     state.session_store.clone()
   }
 }
 
 impl State {
-  pub(crate) async fn new(db: Arc<Db>) -> Self {
+  pub(crate) fn new(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Self {
     Self {
       db,
       oauth_client: BasicClient::new(
@@ -55,7 +67,7 @@ impl State {
         .expect("Invalid redirect URL"),
       ),
       request_client: reqwest::Client::new(),
-      session_store: MemoryStore::new(),
+      session_store,
     }
   }
 }

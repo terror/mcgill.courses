@@ -2455,14 +2455,17 @@ dependencies = [
  "env_logger",
  "extractor",
  "http",
+ "hyper",
  "log",
  "model",
  "oauth2",
+ "pretty_assertions",
  "rayon",
  "reqwest",
  "serde",
  "serde_json",
  "tokio",
+ "tower",
  "tower-http",
 ]
 

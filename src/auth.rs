@@ -33,12 +33,13 @@ pub(crate) async fn microsoft_auth(
 
 pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
-  AppState(state): AppState<State>,
+  AppState(oauth_client): AppState<BasicClient>,
+  AppState(request_client): AppState<reqwest::Client>,
+  AppState(session_store): AppState<Arc<MemoryStore>>,
 ) -> Result<impl IntoResponse> {
   log::debug!("Fetching token from oauth client...");
 
-  let token = state
-    .oauth_client
+  let token = oauth_client
     .exchange_code(AuthorizationCode::new(query.code.clone()))
     .request_async(async_http_client)
     .await?;
@@ -49,8 +50,7 @@ pub(crate) async fn login_authorized(
 
   session.insert(
     "user",
-    state
-      .request_client
+    request_client
       .get("https://graph.microsoft.com/v1.0/me")
       .bearer_auth(token.access_token().secret())
       .send()
@@ -66,8 +66,7 @@ pub(crate) async fn login_authorized(
     format!(
       "{}={}; SameSite=Lax; Path=/",
       COOKIE_NAME,
-      state
-        .session_store
+      session_store
         .store_session(session)
         .await?
         .ok_or(anyhow!("Failed to store session"))?
@@ -80,7 +79,7 @@ pub(crate) async fn login_authorized(
 
 pub(crate) async fn logout(
   TypedHeader(cookies): TypedHeader<Cookie>,
-  AppState(session_store): AppState<MemoryStore>,
+  AppState(session_store): AppState<Arc<MemoryStore>>,
 ) -> Result<impl IntoResponse> {
   let cookie = match cookies.get(COOKIE_NAME) {
     Some(c) => c,
