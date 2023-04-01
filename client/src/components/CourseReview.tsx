@@ -23,7 +23,7 @@ export const Rating = ({ text, rating }: RatingProps) => {
   return (
     <div className='mt-1'>
       <span className='font-bold text-sm'>{text}</span>
-      <Fillbar fillAmount={rating * 10} width={132} height={6} />
+      <Fillbar fillAmount={rating * 20} width={132} height={6} />
     </div>
   );
 };
@@ -62,7 +62,7 @@ export const StarRating = ({ rating }: StarRatingProps) => {
 
 export const CourseReview = ({ review }: CourseReviewProps) => {
   return (
-    <div className='w-84 mx-4 p-6 bg-slate-50 rounded-md'>
+    <div className='w-96 mx-4 p-6 bg-slate-50 rounded-md'>
       <div className='flex'>
         <div className='flex flex-col'>
           <div className='w-16 h-16 rounded-full bg-gray-200' />
@@ -71,22 +71,18 @@ export const CourseReview = ({ review }: CourseReviewProps) => {
               Instructor:
             </h2>
             <p className='text-gray-700'>{review.instructor}</p>
-            <h2 className='leading-none mt-1 font-semibold text-gray-700'>
-              Term:
-            </h2>
-            <p className='text-gray-500'>{review.term}</p>
           </div>
         </div>
         <div className='ml-auto w-fit'>
           <StarRating rating={4} />
           <div className='ml-1 mt-6'>
-            <Rating text='Difficulty' rating={review.difficultyRating} />
-            <Rating text='Useful' rating={review.usefulRating} />
-            <Rating text='Interesting' rating={review.interestingRating} />
+            <Rating text='Difficulty' rating={4} />
+            <Rating text='Useful' rating={3} />
+            <Rating text='Interesting' rating={5} />
           </div>
         </div>
       </div>
-      <div className='mt-6 text-sm'>{review.text}</div>
+      <div className='mt-6 text-sm'>{review.content}</div>
     </div>
   );
 };
