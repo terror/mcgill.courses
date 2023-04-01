@@ -162,7 +162,11 @@ impl Db {
             "userId": review.user_id
           },
           UpdateModifications::Document(doc! {
-            "$set": { "content": &review.content },
+            "$set": {
+              "content": &review.content,
+              "instructor": &review.instructor,
+              "rating": review.rating
+            },
           }),
           None,
         )
@@ -735,17 +739,7 @@ mod tests {
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
-      instructor: "test".into(),
-      rating: 5,
-      user_id: "1".into(),
-    })
-    .await
-    .unwrap();
-
-    db.update_review(Review {
-      content: "bar".into(),
-      course_id: "MATH240".into(),
-      instructor: "test".into(),
+      instructor: "bar".into(),
       rating: 5,
       user_id: "1".into(),
     })
@@ -756,8 +750,22 @@ mod tests {
       db.update_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
-        instructor: "test".into(),
-        rating: 5,
+        instructor: "foo".into(),
+        rating: 4,
+        user_id: "1".into(),
+      })
+      .await
+      .unwrap()
+      .modified_count,
+      1
+    );
+
+    assert_eq!(
+      db.update_review(Review {
+        content: "bar".into(),
+        course_id: "MATH240".into(),
+        instructor: "foo".into(),
+        rating: 4,
         user_id: "2".into(),
       })
       .await
@@ -766,14 +774,11 @@ mod tests {
       0
     );
 
-    assert_eq!(
-      db.find_review("MATH240", "1")
-        .await
-        .unwrap()
-        .unwrap()
-        .content,
-      "bar"
-    );
+    let review = db.find_review("MATH240", "1").await.unwrap().unwrap();
+
+    assert_eq!(review.content, "bar");
+    assert_eq!(review.instructor, "foo");
+    assert_eq!(review.rating, 4);
   }
 
   #[tokio::test(flavor = "multi_thread")]

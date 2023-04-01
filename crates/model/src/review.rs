@@ -6,6 +6,6 @@ pub struct Review {
   pub content: String,
   pub course_id: String,
   pub instructor: String,
-  pub rating: usize,
+  pub rating: u32,
   pub user_id: String,
 }

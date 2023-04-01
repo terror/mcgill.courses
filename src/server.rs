@@ -295,7 +295,13 @@ mod tests {
           .header("Content-Type", "application/json")
           .uri("/reviews")
           .body(Body::from(
-            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+            json!({
+              "content": "test",
+              "course_id": "MATH240",
+              "instructor": "test",
+              "rating": 5
+            })
+            .to_string(),
           ))
           .unwrap(),
       )
@@ -327,7 +333,13 @@ mod tests {
           .header("Content-Type", "application/json")
           .uri("/reviews")
           .body(Body::from(
-            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+            json!({
+              "content": "test",
+              "course_id": "MATH240",
+              "instructor": "test",
+              "rating": 5
+            })
+            .to_string(),
           ))
           .unwrap(),
       )

@@ -28,7 +28,7 @@ pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) content: String,
   pub(crate) course_id: String,
   pub(crate) instructor: String,
-  pub(crate) rating: usize,
+  pub(crate) rating: u32,
 }
 
 pub(crate) async fn add_review(
