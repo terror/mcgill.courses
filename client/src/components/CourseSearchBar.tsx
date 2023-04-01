@@ -55,7 +55,7 @@ export const CourseSearchBar = ({
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
           onBlur={() => setTimeout(() => setSearchSelected(false), 80)}
-          onKeyDown={handleKeyDown} 
+          onKeyDown={handleKeyDown}
         />
       </div>
       {searchSelected && (
@@ -65,7 +65,7 @@ export const CourseSearchBar = ({
               <div
                 className={classNames(
                   'p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200',
-                  selectedIndex === index && 'bg-gray-100'
+                  selectedIndex === index ? 'bg-gray-100' : ''
                 )}
                 key={result._id}
               >
