@@ -1,9 +1,10 @@
 import { useParams } from 'react-router-dom';
+
 import { CourseRequirements, CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
 import { Course } from '../model/course';
-import { Review } from '../model/review';
 import { Requirements } from '../model/requirements';
+import { Review } from '../model/review';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -24,13 +25,16 @@ export const CoursePage = () => {
     prereqs: ['MATH 135', 'MATH 136'],
     coreqs: ['MATH 241'],
     restrictions: [],
-    otherInformation: ["This course is only offered in the Fall", "This course is very hard"],
+    otherInformation: [
+      'This course is only offered in the Fall',
+      'This course is very hard',
+    ],
   };
 
   return (
     <Layout>
       <CourseReview review={review} />
-      <CourseRequirements requirements={requirements}/>
+      <CourseRequirements requirements={requirements} />
     </Layout>
   );
 };
