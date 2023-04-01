@@ -720,11 +720,9 @@ mod tests {
     let TestContext { db, .. } = TestContext::new().await;
 
     let review = Review {
-      content: "foo".into(),
       user_id: "1".into(),
-      instructor: "test".into(),
-      rating: 5,
       course_id: "MATH240".into(),
+      ..Default::default()
     };
 
     db.add_review(review.clone()).await.unwrap();
@@ -788,9 +786,8 @@ mod tests {
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
-      instructor: "test".into(),
-      rating: 5,
       user_id: "1".into(),
+      ..Default::default()
     })
     .await
     .unwrap();
@@ -821,9 +818,8 @@ mod tests {
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
-      instructor: "test".into(),
-      rating: 5,
       user_id: "1".into(),
+      ..Default::default()
     })
     .await
     .unwrap();
@@ -840,9 +836,8 @@ mod tests {
       .add_review(Review {
         content: "foo".into(),
         course_id: "MATH240".into(),
-        instructor: "test".into(),
-        rating: 5,
         user_id: "1".into(),
+        ..Default::default()
       })
       .await
       .is_ok());

@@ -1,6 +1,8 @@
 use super::*;
 
-#[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(
+  Clone, Debug, Default, Serialize, Deserialize, Hash, Eq, PartialEq,
+)]
 #[serde(rename_all = "camelCase")]
 pub struct Review {
   pub content: String,
