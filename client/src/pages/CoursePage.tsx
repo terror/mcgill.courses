@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 
-import { CourseRequirements, CourseReview } from '../components/CourseReview';
+import { CourseRequirements } from '../components/CourseRequirements';
+import { CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
 import { Course } from '../model/course';
 import { Requirements } from '../model/requirements';
