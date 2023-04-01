@@ -6,8 +6,8 @@ import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 
 export const navigation = [
-  { name: 'About', href: '/about' },
   { name: 'Explore', href: '/explore' },
+  { name: 'About', href: '/about' },
 ];
 
 export const Navbar = () => {
