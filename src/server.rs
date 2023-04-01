@@ -284,6 +284,14 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructor": "test",
+      "rating": 5
+    })
+    .to_string();
+
     let response = app
       .oneshot(
         Request::builder()
@@ -294,15 +302,7 @@ mod tests {
           )
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({
-              "content": "test",
-              "course_id": "MATH240",
-              "instructor": "test",
-              "rating": 5
-            })
-            .to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
@@ -325,6 +325,14 @@ mod tests {
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
 
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructor": "test",
+      "rating": 5
+    })
+    .to_string();
+
     let response = app
       .call(
         Request::builder()
@@ -332,15 +340,7 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({
-              "content": "test",
-              "course_id": "MATH240",
-              "instructor": "test",
-              "rating": 5
-            })
-            .to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
@@ -379,6 +379,14 @@ mod tests {
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
 
+    let review = json!({
+        "content": "test",
+        "course_id": "MATH240",
+        "instructor": "foo",
+        "rating": 1
+    })
+    .to_string();
+
     app
       .call(
         Request::builder()
@@ -386,19 +394,19 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({
-                "content": "test",
-                "course_id": "MATH240",
-                "instructor": "foo",
-                "rating": 1
-            })
-            .to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
       .unwrap();
+
+    let review = json!({
+      "content": "updated",
+      "course_id": "MATH240",
+      "instructor": "bar",
+      "rating": 5
+    })
+    .to_string();
 
     let response = app
       .call(
@@ -407,15 +415,7 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({
-              "content": "updated",
-              "course_id": "MATH240",
-              "instructor": "bar",
-              "rating": 5
-            })
-            .to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
