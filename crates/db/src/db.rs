@@ -165,7 +165,8 @@ impl Db {
             "$set": {
               "content": &review.content,
               "instructor": &review.instructor,
-              "rating": review.rating
+              "rating": review.rating,
+              "timestamp": Utc::now().format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
             },
           }),
           None,
@@ -587,6 +588,7 @@ mod tests {
         instructor: "test".into(),
         rating: 5,
         user_id: "1".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
@@ -594,6 +596,7 @@ mod tests {
         instructor: "test".into(),
         rating: 5,
         user_id: "2".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
@@ -601,6 +604,7 @@ mod tests {
         instructor: "test".into(),
         rating: 5,
         user_id: "3".into(),
+        ..Default::default()
       },
     ];
 
@@ -623,6 +627,7 @@ mod tests {
         instructor: "test".into(),
         rating: 5,
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
@@ -630,6 +635,7 @@ mod tests {
         instructor: "test".into(),
         rating: 5,
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
@@ -637,6 +643,7 @@ mod tests {
         instructor: "test".into(),
         rating: 5,
         course_id: "MATH340".into(),
+        ..Default::default()
       },
     ];
 
@@ -656,6 +663,7 @@ mod tests {
           instructor: "test".into(),
           rating: 5,
           course_id: "MATH240".into(),
+          ..Default::default()
         },
         Review {
           content: "foo".into(),
@@ -663,6 +671,7 @@ mod tests {
           instructor: "test".into(),
           rating: 5,
           user_id: "2".into(),
+          ..Default::default()
         }
       ]
     )
@@ -676,23 +685,20 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "1".into(),
-        instructor: "test".into(),
-        rating: 5,
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
         user_id: "2".into(),
-        instructor: "test".into(),
-        rating: 5,
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
         user_id: "3".into(),
-        instructor: "test".into(),
-        rating: 5,
         course_id: "MATH340".into(),
+        ..Default::default()
       },
     ];
 
@@ -708,9 +714,10 @@ mod tests {
       vec![Review {
         content: "foo".into(),
         user_id: "2".into(),
-        instructor: "test".into(),
-        rating: 5,
+        instructor: "".into(),
+        rating: 0,
         course_id: "MATH240".into(),
+        ..Default::default()
       },]
     )
   }
@@ -740,6 +747,7 @@ mod tests {
       instructor: "bar".into(),
       rating: 5,
       user_id: "1".into(),
+      timestamp: Utc::now(),
     })
     .await
     .unwrap();
@@ -751,6 +759,7 @@ mod tests {
         instructor: "foo".into(),
         rating: 4,
         user_id: "1".into(),
+        ..Default::default()
       })
       .await
       .unwrap()
@@ -765,6 +774,7 @@ mod tests {
         instructor: "foo".into(),
         rating: 4,
         user_id: "2".into(),
+        ..Default::default()
       })
       .await
       .unwrap()

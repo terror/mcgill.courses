@@ -9,5 +9,6 @@ pub struct Review {
   pub course_id: String,
   pub instructor: String,
   pub rating: u32,
+  pub timestamp: DateTime<Utc>,
   pub user_id: String,
 }

@@ -50,6 +50,7 @@ pub(crate) async fn add_review(
     course_id,
     instructor,
     rating,
+    timestamp: Utc::now(),
     user_id: user.id(),
   })
   .await?;
@@ -76,6 +77,7 @@ pub(crate) async fn update_review(
     course_id,
     instructor,
     rating,
+    timestamp: Utc::now(),
     user_id: user.id(),
   })
   .await?;
