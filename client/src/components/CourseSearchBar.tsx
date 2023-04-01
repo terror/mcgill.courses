@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Layers, Search } from 'react-feather';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { classNames } from '../lib/classNames';
 import { Course } from '../model/course';
@@ -15,6 +15,7 @@ export const CourseSearchBar = ({
   handleInputChange,
 }: CourseSearchBarProps) => {
   const parser = new DOMParser();
+  const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -30,7 +31,7 @@ export const CourseSearchBar = ({
       );
     }
     if (selectedIndex > -1 && event.key === 'Enter') {
-      window.location.href = `/course/${results[selectedIndex]._id}`;
+      navigate(`/course/${results[selectedIndex]._id}`);
     }
   };
 
