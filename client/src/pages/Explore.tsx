@@ -60,7 +60,7 @@ export const Explore = () => {
                   <div>{course.description}</div>
                   {course.instructors.length !== 0 && (
                     <div className='mt-2'>
-                      {course.instructors.map((instructor, index) => (
+                      Instructor(s): {course.instructors.map((instructor, index) => (
                         <span key={index}>
                           {instructor.name} ({instructor.term}){' '}
                         </span>
