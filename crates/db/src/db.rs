@@ -166,7 +166,7 @@ impl Db {
               "content": &review.content,
               "instructor": &review.instructor,
               "rating": review.rating,
-              "timestamp": Utc::now().format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
+              "timestamp": review.timestamp.format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
             },
           }),
           None,
@@ -752,6 +752,8 @@ mod tests {
     .await
     .unwrap();
 
+    let timestamp = Utc::now();
+
     assert_eq!(
       db.update_review(Review {
         content: "bar".into(),
@@ -759,7 +761,7 @@ mod tests {
         instructor: "foo".into(),
         rating: 4,
         user_id: "1".into(),
-        ..Default::default()
+        timestamp
       })
       .await
       .unwrap()
@@ -787,6 +789,7 @@ mod tests {
     assert_eq!(review.content, "bar");
     assert_eq!(review.instructor, "foo");
     assert_eq!(review.rating, 4);
+    assert_eq!(review.timestamp, timestamp);
   }
 
   #[tokio::test(flavor = "multi_thread")]
