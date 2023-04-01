@@ -1,9 +1,7 @@
 export type Review = {
-  course: string;
+  content: string;
+  courseId: string;
   instructor: string;
-  term: string;
-  text: string;
-  difficultyRating: number;
-  usefulRating: number;
-  interestingRating: number;
+  rating: number; // 0-5
+  userId: string;
 };
