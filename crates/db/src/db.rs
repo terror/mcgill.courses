@@ -579,18 +579,24 @@ mod tests {
     let reviews = vec![
       Review {
         content: "foo".into(),
+        course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
         user_id: "1".into(),
-        course_id: "MATH240".into(),
       },
       Review {
         content: "foo".into(),
+        course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
         user_id: "2".into(),
-        course_id: "MATH240".into(),
       },
       Review {
         content: "foo".into(),
-        user_id: "3".into(),
         course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
+        user_id: "3".into(),
       },
     ];
 
@@ -610,16 +616,22 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "1".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
       },
       Review {
         content: "foo".into(),
         user_id: "2".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
       },
       Review {
         content: "foo".into(),
         user_id: "3".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH340".into(),
       },
     ];
@@ -637,12 +649,16 @@ mod tests {
         Review {
           content: "foo".into(),
           user_id: "1".into(),
+          instructor: "test".into(),
+          rating: 5,
           course_id: "MATH240".into(),
         },
         Review {
           content: "foo".into(),
-          user_id: "2".into(),
           course_id: "MATH240".into(),
+          instructor: "test".into(),
+          rating: 5,
+          user_id: "2".into(),
         }
       ]
     )
@@ -656,16 +672,22 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "1".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
       },
       Review {
         content: "foo".into(),
         user_id: "2".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
       },
       Review {
         content: "foo".into(),
         user_id: "3".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH340".into(),
       },
     ];
@@ -682,6 +704,8 @@ mod tests {
       vec![Review {
         content: "foo".into(),
         user_id: "2".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
       },]
     )
@@ -694,6 +718,8 @@ mod tests {
     let review = Review {
       content: "foo".into(),
       user_id: "1".into(),
+      instructor: "test".into(),
+      rating: 5,
       course_id: "MATH240".into(),
     };
 
@@ -708,16 +734,20 @@ mod tests {
 
     db.add_review(Review {
       content: "foo".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      instructor: "test".into(),
+      rating: 5,
+      user_id: "1".into(),
     })
     .await
     .unwrap();
 
     db.update_review(Review {
       content: "bar".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      instructor: "test".into(),
+      rating: 5,
+      user_id: "1".into(),
     })
     .await
     .unwrap();
@@ -725,8 +755,10 @@ mod tests {
     assert_eq!(
       db.update_review(Review {
         content: "bar".into(),
-        user_id: "2".into(),
         course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
+        user_id: "2".into(),
       })
       .await
       .unwrap()
@@ -750,8 +782,10 @@ mod tests {
 
     db.add_review(Review {
       content: "foo".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      instructor: "test".into(),
+      rating: 5,
+      user_id: "1".into(),
     })
     .await
     .unwrap();
@@ -781,8 +815,10 @@ mod tests {
 
     db.add_review(Review {
       content: "foo".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      instructor: "test".into(),
+      rating: 5,
+      user_id: "1".into(),
     })
     .await
     .unwrap();
@@ -798,8 +834,10 @@ mod tests {
     assert!(db
       .add_review(Review {
         content: "foo".into(),
-        user_id: "1".into(),
         course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
+        user_id: "1".into(),
       })
       .await
       .is_ok());

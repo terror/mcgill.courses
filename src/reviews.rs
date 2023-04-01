@@ -27,6 +27,8 @@ pub(crate) async fn get_reviews(
 pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) content: String,
   pub(crate) course_id: String,
+  pub(crate) instructor: String,
+  pub(crate) rating: usize,
 }
 
 pub(crate) async fn add_review(
@@ -34,13 +36,20 @@ pub(crate) async fn add_review(
   user: User,
   body: Json<AddOrUpdateReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let AddOrUpdateReviewBody { content, course_id } = body.0;
+  let AddOrUpdateReviewBody {
+    content,
+    course_id,
+    instructor,
+    rating,
+  } = body.0;
 
   log::trace!("Adding review to database...");
 
   db.add_review(Review {
     content,
     course_id,
+    instructor,
+    rating,
     user_id: user.id(),
   })
   .await?;
@@ -53,13 +62,20 @@ pub(crate) async fn update_review(
   user: User,
   body: Json<AddOrUpdateReviewBody>,
 ) -> Result<impl IntoResponse> {
-  let AddOrUpdateReviewBody { content, course_id } = body.0;
+  let AddOrUpdateReviewBody {
+    content,
+    course_id,
+    instructor,
+    rating,
+  } = body.0;
 
   log::trace!("Updating review...");
 
   db.update_review(Review {
     content,
     course_id,
+    instructor,
+    rating,
     user_id: user.id(),
   })
   .await?;

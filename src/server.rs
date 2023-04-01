@@ -375,7 +375,13 @@ mod tests {
           .header("Content-Type", "application/json")
           .uri("/reviews")
           .body(Body::from(
-            json!({"content": "test", "course_id": "MATH240"}).to_string(),
+            json!({
+                "content": "test",
+                "course_id": "MATH240",
+                "instructor": "foo",
+                "rating": 1
+            })
+            .to_string(),
           ))
           .unwrap(),
       )
@@ -390,7 +396,13 @@ mod tests {
           .header("Content-Type", "application/json")
           .uri("/reviews")
           .body(Body::from(
-            json!({"content": "updated", "course_id": "MATH240"}).to_string(),
+            json!({
+              "content": "updated",
+              "course_id": "MATH240",
+              "instructor": "bar",
+              "rating": 5
+            })
+            .to_string(),
           ))
           .unwrap(),
       )
@@ -399,14 +411,11 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    assert_eq!(
-      db.find_review("MATH240", "test")
-        .await
-        .unwrap()
-        .unwrap()
-        .content,
-      "updated"
-    );
+    let review = db.find_review("MATH240", "test").await.unwrap().unwrap();
+
+    assert_eq!(review.content, "updated");
+    assert_eq!(review.instructor, "bar");
+    assert_eq!(review.rating, 5);
   }
 
   #[tokio::test]
@@ -421,9 +430,24 @@ mod tests {
     db.seed(seed()).await.unwrap();
 
     let reviews = vec![
-      json!({"content": "test", "course_id": "COMP202"}),
-      json!({"content": "test2", "course_id": "MATH240"}),
-      json!({"content": "test3", "course_id": "COMP252"}),
+      json!({
+        "content": "test",
+        "course_id": "COMP202",
+        "instructor": "test",
+        "rating": 5
+      }),
+      json!({
+        "content": "test2",
+        "course_id": "MATH240",
+        "instructor": "test",
+        "rating": 5
+      }),
+      json!({
+        "content": "test3",
+        "course_id": "COMP252",
+        "instructor": "test",
+        "rating": 5
+      }),
     ];
 
     for review in reviews {
@@ -503,8 +527,18 @@ mod tests {
     ];
 
     let reviews = vec![
-      json!({"content": "test", "course_id": "MATH240"}),
-      json!({"content": "test2", "course_id": "MATH240"}),
+      json!({
+        "content": "test",
+        "course_id": "MATH240",
+        "instructor": "test",
+        "rating": 5
+      }),
+      json!({
+         "content": "test2",
+         "course_id": "MATH240",
+         "instructor": "test",
+         "rating": 5
+      }),
     ];
 
     for (cookie, review) in cookies.iter().zip(reviews) {
