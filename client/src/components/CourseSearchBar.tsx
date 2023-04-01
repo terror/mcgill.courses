@@ -55,7 +55,7 @@ export const CourseSearchBar = ({
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
           onBlur={() => setTimeout(() => setSearchSelected(false), 80)}
-          onKeyDown={handleKeyDown} // new event handler for arrow keys
+          onKeyDown={handleKeyDown} 
         />
       </div>
       {searchSelected && (
