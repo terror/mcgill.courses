@@ -24,7 +24,9 @@ export const CourseSearchBar = ({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowUp') {
       event.preventDefault();
-      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : results.length - 1));
+      setSelectedIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : results.length - 1
+      );
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedIndex((prevIndex) =>
