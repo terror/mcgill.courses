@@ -46,7 +46,6 @@ export const CoursePage = () => {
     coreqs: course.corequisites,
     restrictions: course.restrictions,
   };
-  console.log(requirements);
 
   return (
     <Layout>
