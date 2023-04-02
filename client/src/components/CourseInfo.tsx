@@ -13,7 +13,7 @@ const LinkButton = ({ url }: { url: string }) => {
     <a href={url} className='my-auto'>
       <ExternalLink
         size={20}
-        className='ml-1'
+        className='ml-1 transition-colors duration-300'
         color={color}
         onMouseEnter={() => setColor(red)}
         onMouseLeave={() => setColor('Gray')}
