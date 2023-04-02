@@ -2,6 +2,8 @@ import { IonIcon } from '@ionic/react';
 import { leafOutline, snowOutline, sunnyOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { ExternalLink } from 'react-feather';
+import { BsSnow, BsSun } from 'react-icons/bs';
+import { FaCanadianMapleLeaf } from 'react-icons/fa';
 
 import { Course } from '../model/course';
 
@@ -23,37 +25,19 @@ const LinkButton = ({ url }: { url: string }) => {
 };
 
 const TermsIcons = ({ terms }: { terms: string[] }) => {
-  type IconMap = {
-    [key: string]: string;
-  };
-
-  type ColorMap = {
-    [key: string]: string;
-  };
+  type IconMap = { [key: string]: JSX.Element };
 
   const icons: IconMap = {
-    fall: leafOutline,
-    winter: snowOutline,
-    summer: sunnyOutline,
-  };
-
-  const colors: ColorMap = {
-    fall: 'Brown',
-    winter: 'SkyBlue',
-    summer: 'Orange',
+    fall: <FaCanadianMapleLeaf size={25} color='Siena' />,
+    winter: <BsSnow size={25} color='SkyBlue' />,
+    summer: <BsSun size={25} color='Orange' />,
   };
 
   return (
     <div className='flex flex-row space-x-3'>
       {terms
         .map((term) => term.split(' ')[0].toLowerCase())
-        .map((term) => (
-          <IonIcon
-            icon={icons[term]}
-            className='text-2xl'
-            style={{ color: colors[term] }}
-          />
-        ))}
+        .map((term) => icons[term])}
     </div>
   );
 };
