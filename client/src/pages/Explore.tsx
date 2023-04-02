@@ -17,7 +17,7 @@ export const Explore = () => {
   useEffect(() => {
     fetchClient
       .getData<Course[]>(`/courses?limit=${limit}`)
-      .then((data) => setCourses(data.filter((course) => course.title !== '')))
+      .then((data) => setCourses(data))
       .catch((err) => console.log(err));
   }, []);
 
