@@ -22,7 +22,7 @@ export const Navbar = () => {
       >
         <div className='flex lg:flex-1'>
           <a href='/' className='-m-1.5 p-1.5'>
-            <img className='h-12 w-auto' src='bird.png' alt='bird' />
+            <img className='h-12 w-auto' src='/bird.png' alt='bird' />
           </a>
         </div>
         <div className='flex lg:hidden'>
