@@ -1,5 +1,3 @@
-import { IonIcon } from '@ionic/react';
-import { leafOutline, snowOutline, sunnyOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { ExternalLink } from 'react-feather';
 import { BsSnow, BsSun } from 'react-icons/bs';
