@@ -22,11 +22,11 @@ export const CoursePage = () => {
   }, []);
 
   if (course === null) {
-    return <div>404 not found</div>; // TODO: 404 component
+    return <div>404 not found</div>;
   }
 
   if (course === undefined) {
-    return <div>Loading...</div>; //TODO: some spinning comonent
+    return <div>Loading...</div>;
   }
 
   const review: Review = {
