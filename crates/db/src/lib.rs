@@ -17,6 +17,7 @@ use {
 
 #[cfg(test)]
 use {
+  chrono::prelude::*,
   include_dir::{include_dir, Dir},
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
