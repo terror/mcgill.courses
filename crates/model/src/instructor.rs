@@ -1,7 +1,16 @@
 use super::*;
 
 #[derive(
-  Debug, Default, Clone, Serialize, Deserialize, PartialEq, Hash, Eq,
+  Clone,
+  Debug,
+  Default,
+  Deserialize,
+  Eq,
+  Hash,
+  Ord,
+  PartialEq,
+  PartialOrd,
+  Serialize,
 )]
 pub struct Instructor {
   pub name: String,

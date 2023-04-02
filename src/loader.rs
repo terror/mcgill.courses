@@ -38,13 +38,17 @@ impl Loader {
       page += self.batch_size;
     }
 
-    fs::write(
-      source,
-      serde_json::to_string_pretty(
-        &courses.into_iter().collect::<HashSet<Course>>(),
-      )?,
-    )
-    .map_err(|err| Error(anyhow::Error::from(err)))
+    let mut courses = courses
+      .into_iter()
+      .collect::<HashSet<Course>>()
+      .into_iter()
+      .filter(|course| !course.title.is_empty())
+      .collect::<Vec<Course>>();
+
+    courses.sort();
+
+    fs::write(source, serde_json::to_string_pretty(&courses)?)
+      .map_err(|err| Error(anyhow::Error::from(err)))
   }
 
   fn aggregate_urls(&self, start: usize, end: usize) -> Vec<Page> {
