@@ -1,9 +1,11 @@
+import { IonIcon } from '@ionic/react';
+import { leafOutline, snowOutline, sunnyOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { ExternalLink } from 'react-feather';
 
 import { Course } from '../model/course';
 
-export const LinkButton = ({ url }: { url: string }) => {
+const LinkButton = ({ url }: { url: string }) => {
   const [color, setColor] = useState('Gray');
   const red = 'rgb(220 38 38)';
 
@@ -20,29 +22,59 @@ export const LinkButton = ({ url }: { url: string }) => {
   );
 };
 
+const TermsIcons = ({ terms }: { terms: string[] }) => {
+  type IconMap = {
+    [key: string]: string;
+  };
+
+  type ColorMap = {
+    [key: string]: string;
+  };
+
+  const icons: IconMap = {
+    fall: leafOutline,
+    winter: snowOutline,
+    summer: sunnyOutline,
+  };
+
+  const colors: ColorMap = {
+    fall: 'Brown',
+    winter: 'SkyBlue',
+    summer: 'Orange',
+  };
+
+  return (
+    <div className='flex flex-row space-x-3'>
+      {terms
+        .map((term) => term.split(' ')[0].toLowerCase())
+        .map((term) => (
+          <IonIcon
+            icon={icons[term]}
+            className='text-2xl'
+            style={{ color: colors[term] }}
+          />
+        ))}
+    </div>
+  );
+};
+
 export const CourseInfo = ({ course }: { course: Course }) => {
   return (
     <div className='w-screen p-6 bg-slate-50 md:mt-10'>
       <div className='flex flex-col md:flex-row'>
         <div className='flex flex-col space-y-3 w-fit m-4 md:w-1/2 md:m-4'>
           <div className='flex flex-row space-x-2 align-middle'>
-            <h1 className='text-3xl font-semibold break-words text-gray-700'>
+            <h1 className='text-4xl font-semibold break-words text-gray-800'>
               {course._id}
             </h1>
             {course.url ? <LinkButton url={course.url} /> : null}
           </div>
-          <h2 className='text-2xl'> {course.title} </h2>
-
-          {/* Make nice UI for this*/}
+          <h2 className='text-3xl text-gray-800'> {course.title} </h2>
           {course.terms.length > 0 ? (
-            <p className='text-gray-500'>{course.terms.join(', ')}</p>
+            <TermsIcons terms={course.terms} />
           ) : (
-            <p> Not currently offered </p>
+            <p>This course is not currently being offered.</p>
           )}
-          <p className='text-gray-500'>
-            {course.faculty} ({course.department})
-          </p>
-
           <p className='text-gray-500 break-words'>{course.description}</p>
         </div>
         <div className='flex flex-col space-y-3 w-fit m-4  md:m-4 md:w-1/2'></div>
