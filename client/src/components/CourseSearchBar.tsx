@@ -20,6 +20,7 @@ export const CourseSearchBar = ({
   const [searchSelected, setSearchSelected] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowUp') {
       event.preventDefault();

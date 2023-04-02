@@ -162,7 +162,12 @@ impl Db {
             "userId": review.user_id
           },
           UpdateModifications::Document(doc! {
-            "$set": { "content": &review.content },
+            "$set": {
+              "content": &review.content,
+              "instructor": &review.instructor,
+              "rating": review.rating,
+              "timestamp": review.timestamp.format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
+            },
           }),
           None,
         )
@@ -579,18 +584,27 @@ mod tests {
     let reviews = vec![
       Review {
         content: "foo".into(),
+        course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
         user_id: "1".into(),
-        course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
+        course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
         user_id: "2".into(),
-        course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
-        user_id: "3".into(),
         course_id: "MATH240".into(),
+        instructor: "test".into(),
+        rating: 5,
+        user_id: "3".into(),
+        ..Default::default()
       },
     ];
 
@@ -610,17 +624,26 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "1".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
         user_id: "2".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
         user_id: "3".into(),
+        instructor: "test".into(),
+        rating: 5,
         course_id: "MATH340".into(),
+        ..Default::default()
       },
     ];
 
@@ -637,12 +660,18 @@ mod tests {
         Review {
           content: "foo".into(),
           user_id: "1".into(),
+          instructor: "test".into(),
+          rating: 5,
           course_id: "MATH240".into(),
+          ..Default::default()
         },
         Review {
           content: "foo".into(),
-          user_id: "2".into(),
           course_id: "MATH240".into(),
+          instructor: "test".into(),
+          rating: 5,
+          user_id: "2".into(),
+          ..Default::default()
         }
       ]
     )
@@ -657,16 +686,19 @@ mod tests {
         content: "foo".into(),
         user_id: "1".into(),
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
         user_id: "2".into(),
         course_id: "MATH240".into(),
+        ..Default::default()
       },
       Review {
         content: "foo".into(),
         user_id: "3".into(),
         course_id: "MATH340".into(),
+        ..Default::default()
       },
     ];
 
@@ -682,7 +714,10 @@ mod tests {
       vec![Review {
         content: "foo".into(),
         user_id: "2".into(),
+        instructor: "".into(),
+        rating: 0,
         course_id: "MATH240".into(),
+        ..Default::default()
       },]
     )
   }
@@ -692,9 +727,9 @@ mod tests {
     let TestContext { db, .. } = TestContext::new().await;
 
     let review = Review {
-      content: "foo".into(),
       user_id: "1".into(),
       course_id: "MATH240".into(),
+      ..Default::default()
     };
 
     db.add_review(review.clone()).await.unwrap();
@@ -708,25 +743,40 @@ mod tests {
 
     db.add_review(Review {
       content: "foo".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      instructor: "bar".into(),
+      rating: 5,
+      user_id: "1".into(),
+      timestamp: Utc::now(),
     })
     .await
     .unwrap();
 
-    db.update_review(Review {
-      content: "bar".into(),
-      user_id: "1".into(),
-      course_id: "MATH240".into(),
-    })
-    .await
-    .unwrap();
+    let timestamp = Utc::now();
 
     assert_eq!(
       db.update_review(Review {
         content: "bar".into(),
-        user_id: "2".into(),
         course_id: "MATH240".into(),
+        instructor: "foo".into(),
+        rating: 4,
+        user_id: "1".into(),
+        timestamp
+      })
+      .await
+      .unwrap()
+      .modified_count,
+      1
+    );
+
+    assert_eq!(
+      db.update_review(Review {
+        content: "bar".into(),
+        course_id: "MATH240".into(),
+        instructor: "foo".into(),
+        rating: 4,
+        user_id: "2".into(),
+        ..Default::default()
       })
       .await
       .unwrap()
@@ -734,14 +784,12 @@ mod tests {
       0
     );
 
-    assert_eq!(
-      db.find_review("MATH240", "1")
-        .await
-        .unwrap()
-        .unwrap()
-        .content,
-      "bar"
-    );
+    let review = db.find_review("MATH240", "1").await.unwrap().unwrap();
+
+    assert_eq!(review.content, "bar");
+    assert_eq!(review.instructor, "foo");
+    assert_eq!(review.rating, 4);
+    assert_eq!(review.timestamp, timestamp);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -750,8 +798,9 @@ mod tests {
 
     db.add_review(Review {
       content: "foo".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      user_id: "1".into(),
+      ..Default::default()
     })
     .await
     .unwrap();
@@ -781,8 +830,9 @@ mod tests {
 
     db.add_review(Review {
       content: "foo".into(),
-      user_id: "1".into(),
       course_id: "MATH240".into(),
+      user_id: "1".into(),
+      ..Default::default()
     })
     .await
     .unwrap();
@@ -798,8 +848,9 @@ mod tests {
     assert!(db
       .add_review(Review {
         content: "foo".into(),
-        user_id: "1".into(),
         course_id: "MATH240".into(),
+        user_id: "1".into(),
+        ..Default::default()
       })
       .await
       .is_ok());
