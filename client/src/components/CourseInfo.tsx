@@ -1,6 +1,24 @@
-import { Star, ExternalLink } from 'react-feather';
+import { useState } from 'react';
+import { ExternalLink } from 'react-feather';
 
 import { Course } from '../model/course';
+
+export const LinkButton = ({ url }: { url: string }) => {
+  const [color, setColor] = useState('Gray');
+  const red = 'rgb(220 38 38)';
+
+  return (
+    <a href={url} className='my-auto'>
+      <ExternalLink
+        size={20}
+        className='ml-1'
+        color={color}
+        onMouseEnter={() => setColor(red)}
+        onMouseLeave={() => setColor('Gray')}
+      ></ExternalLink>
+    </a>
+  );
+};
 
 export const CourseInfo = ({ course }: { course: Course }) => {
   return (
