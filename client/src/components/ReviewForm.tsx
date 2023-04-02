@@ -63,6 +63,14 @@ export const ReviewForm = ({ course }: ReviewFormProps) => {
               setQuery={setQuery}
             />
             <div className='flex flex-col'>
+              <Field
+                component='textarea'
+                rows='8'
+                id='content'
+                name='content'
+                placeholder='Write your thoughts on this course...'
+                className='resize-none bg-gray-50 mt-6 p-3 rounded-md outline-none'
+              />
               <label htmlFor='rating' className='mt-4 mb-2'>
                 Rating
               </label>
@@ -70,15 +78,7 @@ export const ReviewForm = ({ course }: ReviewFormProps) => {
                 type='number'
                 id='rating'
                 name='rating'
-                className='p-2 rounded-md w-fit bg-gray-50'
-              />
-              <Field
-                component='textarea'
-                rows='8'
-                id='content'
-                name='content'
-                placeholder='Write your thoughts on this course...'
-                className='resize-none bg-gray-50 mt-12 p-3 rounded-md outline-none'
+                className='p-2 rounded-md w-fit mb-4 bg-gray-50'
               />
               <button
                 type='submit'
