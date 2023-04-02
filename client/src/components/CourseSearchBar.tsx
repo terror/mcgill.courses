@@ -18,16 +18,16 @@ export const CourseSearchBar = ({
   const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowUp') {
       event.preventDefault();
-      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
+      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : results.length - 1));
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedIndex((prevIndex) =>
-        prevIndex < results.length - 1 ? prevIndex + 1 : results.length - 1
+        prevIndex < results.length - 1 ? prevIndex + 1 : 0
       );
     }
     if (selectedIndex > -1 && event.key === 'Enter') {
