@@ -590,6 +590,7 @@ name = "db"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "futures",
  "include_dir",
  "itertools",
@@ -1476,6 +1477,7 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "bson",
+ "chrono",
  "reqwest",
  "serde",
 ]

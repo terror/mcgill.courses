@@ -106,7 +106,7 @@ mod tests {
     }
   }
 
-  fn seed_dir() -> PathBuf {
+  fn seed() -> PathBuf {
     PathBuf::from("crates/db/seeds/mini.json")
   }
 
@@ -130,7 +130,7 @@ mod tests {
   async fn courses_route_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -157,7 +157,7 @@ mod tests {
   async fn courses_route_offset_limit() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -201,7 +201,7 @@ mod tests {
   async fn course_by_id_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -228,7 +228,7 @@ mod tests {
   async fn course_by_id_invalid_course_code() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -255,7 +255,7 @@ mod tests {
   async fn unauthenticated_cant_add_review() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let response = app
       .oneshot(
@@ -282,7 +282,15 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructor": "test",
+      "rating": 5
+    })
+    .to_string();
 
     let response = app
       .oneshot(
@@ -294,9 +302,7 @@ mod tests {
           )
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({"content": "test", "course_id": "MATH240"}).to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
@@ -315,9 +321,17 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructor": "test",
+      "rating": 5
+    })
+    .to_string();
 
     let response = app
       .call(
@@ -326,9 +340,7 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({"content": "test", "course_id": "MATH240"}).to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
@@ -363,9 +375,17 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+        "content": "test",
+        "course_id": "MATH240",
+        "instructor": "foo",
+        "rating": 1
+    })
+    .to_string();
 
     app
       .call(
@@ -374,13 +394,19 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({"content": "test", "course_id": "MATH240"}).to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
       .unwrap();
+
+    let review = json!({
+      "content": "updated",
+      "course_id": "MATH240",
+      "instructor": "bar",
+      "rating": 5
+    })
+    .to_string();
 
     let response = app
       .call(
@@ -389,9 +415,7 @@ mod tests {
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
           .uri("/reviews")
-          .body(Body::from(
-            json!({"content": "updated", "course_id": "MATH240"}).to_string(),
-          ))
+          .body(Body::from(review))
           .unwrap(),
       )
       .await
@@ -399,14 +423,11 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    assert_eq!(
-      db.find_review("MATH240", "test")
-        .await
-        .unwrap()
-        .unwrap()
-        .content,
-      "updated"
-    );
+    let review = db.find_review("MATH240", "test").await.unwrap().unwrap();
+
+    assert_eq!(review.content, "updated");
+    assert_eq!(review.instructor, "bar");
+    assert_eq!(review.rating, 5);
   }
 
   #[tokio::test]
@@ -418,12 +439,27 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let reviews = vec![
-      json!({"content": "test", "course_id": "COMP202"}),
-      json!({"content": "test2", "course_id": "MATH240"}),
-      json!({"content": "test3", "course_id": "COMP252"}),
+      json!({
+        "content": "test",
+        "course_id": "COMP202",
+        "instructor": "test",
+        "rating": 5
+      }),
+      json!({
+        "content": "test2",
+        "course_id": "MATH240",
+        "instructor": "test",
+        "rating": 5
+      }),
+      json!({
+        "content": "test3",
+        "course_id": "COMP252",
+        "instructor": "test",
+        "rating": 5
+      }),
     ];
 
     for review in reviews {
@@ -495,7 +531,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed_dir()).await.unwrap();
+    db.seed(seed()).await.unwrap();
 
     let cookies = vec![
       mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await,
@@ -503,8 +539,18 @@ mod tests {
     ];
 
     let reviews = vec![
-      json!({"content": "test", "course_id": "MATH240"}),
-      json!({"content": "test2", "course_id": "MATH240"}),
+      json!({
+        "content": "test",
+        "course_id": "MATH240",
+        "instructor": "test",
+        "rating": 5
+      }),
+      json!({
+         "content": "test2",
+         "course_id": "MATH240",
+         "instructor": "test",
+         "rating": 5
+      }),
     ];
 
     for (cookie, review) in cookies.iter().zip(reviews) {

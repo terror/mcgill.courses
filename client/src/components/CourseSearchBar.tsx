@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Layers, Search } from 'react-feather';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { classNames } from '../lib/classNames';
 import { Course } from '../model/course';
@@ -15,8 +15,27 @@ export const CourseSearchBar = ({
   handleInputChange,
 }: CourseSearchBarProps) => {
   const parser = new DOMParser();
+  const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setSelectedIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : results.length - 1
+      );
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setSelectedIndex((prevIndex) =>
+        prevIndex < results.length - 1 ? prevIndex + 1 : 0
+      );
+    }
+    if (selectedIndex > -1 && event.key === 'Enter') {
+      navigate(`/course/${results[selectedIndex]._id}`);
+    }
+  };
 
   return (
     <div className='relative'>
@@ -37,7 +56,8 @@ export const CourseSearchBar = ({
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
-          onBlur={() => setTimeout(() => setSearchSelected(false), 200)}
+          onBlur={() => setTimeout(() => setSearchSelected(false), 80)}
+          onKeyDown={handleKeyDown}
         />
       </div>
       {searchSelected && (
@@ -45,7 +65,10 @@ export const CourseSearchBar = ({
           {results.map((result, index) => (
             <Link to={`/course/${result._id}`}>
               <div
-                className='p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200'
+                className={classNames(
+                  'p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200',
+                  selectedIndex === index ? 'bg-gray-100' : ''
+                )}
                 key={result._id}
               >
                 {result._id} -{' '}
