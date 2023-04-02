@@ -33,7 +33,7 @@ pub fn extract_course_listings(
         .map(CourseListing::from_listing)
         .collect::<Result<Vec<CourseListing>, _>>()?
         .into_iter()
-        .filter(|entry| !entry.terms.contains(&String::from("Not Offered")))
+        .map(|listing| listing.filter_terms())
         .collect(),
     )),
     None => Ok(None),
@@ -167,115 +167,144 @@ mod tests {
           department: "Bioresource Engineering".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/aeph-120".into()
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/aeph-120".into(),
         },
         CourseListing {
           department: "Bioresource Engineering".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/aeph-122".into()
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/aeph-122".into(),
         },
         CourseListing {
           department: "Institute for Aerospace Eng.".into(),
           faculty: "Faculty of Engineering".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
+          terms: ["Fall 2022".into()].to_vec(),
           url: "/study/2022-2023/courses/aero-401".into(),
         },
         CourseListing {
           department: "Institute for Aerospace Eng.".into(),
           faculty: "Faculty of Engineering".into(),
           level: "Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/aero-410".into()
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/aero-410".into(),
         },
         CourseListing {
           department: "Institute for Aerospace Eng.".into(),
           faculty: "Faculty of Engineering".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/aero-460d1".into()
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/aero-460d1".into(),
         },
         CourseListing {
           department: "Institute for Aerospace Eng.".into(),
           faculty: "Faculty of Engineering".into(),
           level: "Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/aero-460d2".into()
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/aero-460d2".into(),
         },
         CourseListing {
           department: "Islamic Studies".into(),
           faculty: "Faculty of Arts".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/afri-200".into()
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/afri-200".into(),
         },
         CourseListing {
           department: "Islamic Studies".into(),
           faculty: "Faculty of Arts".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/afri-401".into()
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/afri-401".into(),
         },
         CourseListing {
           department: "Islamic Studies".into(),
           faculty: "Faculty of Arts".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/afri-481".into()
+          terms: [].to_vec(),
+          url: "/study/2022-2023/courses/afri-480".into(),
+        },
+        CourseListing {
+          department: "Islamic Studies".into(),
+          faculty: "Faculty of Arts".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/afri-481".into(),
+        },
+        CourseListing {
+          department: "Islamic Studies".into(),
+          faculty: "Faculty of Arts".into(),
+          level: "Undergraduate".into(),
+          terms: [].to_vec(),
+          url: "/study/2022-2023/courses/afri-499".into(),
         },
         CourseListing {
           department: "Islamic Studies".into(),
           faculty: "Faculty of Arts".into(),
           level: "Graduate, Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/afri-598".into()
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/afri-598".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/agec-200".into()
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/agec-200".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/agec-201".into()
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/agec-201".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/agec-231".into()
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/agec-231".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Winter 2023".into()].into(),
-          url: "/study/2022-2023/courses/agec-320".into()
+          terms: [].to_vec(),
+          url: "/study/2022-2023/courses/agec-242".into(),
+        },
+        CourseListing {
+          department: "Agricultural Economics".into(),
+          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          level: "Undergraduate".into(),
+          terms: ["Winter 2023".into()].to_vec(),
+          url: "/study/2022-2023/courses/agec-320".into(),
         },
         CourseListing {
           department: "Natural Resource Sciences".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/agec-332".into()
+          terms: [].to_vec(),
+          url: "/study/2022-2023/courses/agec-330".into(),
+        },
+        CourseListing {
+          department: "Natural Resource Sciences".into(),
+          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/agec-332".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
           faculty: "Agricultural &amp; Environmental Sciences".into(),
           level: "Undergraduate".into(),
-          terms: ["Fall 2022".into()].into(),
-          url: "/study/2022-2023/courses/agec-333".into()
-        }
-      ],
+          terms: ["Fall 2022".into()].to_vec(),
+          url: "/study/2022-2023/courses/agec-333".into(),
+        },
+      ]
+      .to_vec(),
     );
   }
 
