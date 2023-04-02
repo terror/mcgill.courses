@@ -40,7 +40,7 @@ export const Navbar = () => {
             <a
               key={item.name}
               href={item.href}
-              className='text-sm font-semibold leading-6 text-gray-900'
+              className='text-sm font-semibold leading-6 text-gray-900 relative before:content before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-red-600 before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-300'
             >
               {item.name}
             </a>
