@@ -1,7 +1,9 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
+import { classNames } from '../lib/classNames';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 
@@ -12,7 +14,11 @@ export const navigation = [
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
   const user = useAuth();
+
+  const redUnderlineStyle =
+    'before:content before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-red-600';
 
   return (
     <header className='z-50'>
@@ -21,9 +27,9 @@ export const Navbar = () => {
         aria-label='Global'
       >
         <div className='flex lg:flex-1'>
-          <a href='/' className='-m-1.5 p-1.5'>
+          <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='/bird.png' alt='bird' />
-          </a>
+          </Link>
         </div>
         <div className='flex lg:hidden'>
           <button
@@ -37,13 +43,21 @@ export const Navbar = () => {
         </div>
         <div className='hidden lg:flex lg:gap-x-12'>
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
-              className='text-sm font-semibold leading-6 text-gray-900 relative before:content before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-red-600 before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-300'
+              to={item.href}
+              className={classNames(
+                'text-sm font-semibold leading-6 text-gray-900 relative',
+                location.pathname === item.href
+                  ? redUnderlineStyle
+                  : classNames(
+                      redUnderlineStyle,
+                      'before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-300'
+                    )
+              )}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
