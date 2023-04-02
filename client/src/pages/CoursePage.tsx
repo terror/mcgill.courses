@@ -1,14 +1,34 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
+import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
 import { Requirements } from '../model/requirements';
 import { Review } from '../model/review';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
+  const [course, setCourse] = useState<Course>();
+
+  useEffect(() => {
+    fetchClient
+      .getData<Course>(`/courses/${params.id?.toUpperCase()}`)
+      .then((data) => setCourse(data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  if (course === null) {
+    return <div>404 not found</div>; // TODO: 404 component
+  }
+
+  if (course === undefined) {
+    return <div>Loading...</div>; //TODO: some spinning comonent
+  }
+
   const review: Review = {
     course: 'MATH 240',
     instructor: 'Adrian Roshan Vetta',
@@ -22,20 +42,19 @@ export const CoursePage = () => {
     usefulRating: 8,
     interestingRating: 9,
   };
+
   const requirements: Requirements = {
-    prereqs: ['MATH 135', 'MATH 136'],
-    coreqs: ['MATH 241'],
-    restrictions: [],
-    otherInformation: [
-      'This course is only offered in the Fall',
-      'This course is very hard',
-    ],
+    prereqs: course.prerequisites,
+    coreqs: course.corequisites,
+    restrictions: course.restrictions,
   };
+  console.log(requirements);
 
   return (
     <Layout>
-      <CourseReview review={review} />
+      <CourseInfo course={course} />
       <CourseRequirements requirements={requirements} />
+      <CourseReview review={review} />
     </Layout>
   );
 };
