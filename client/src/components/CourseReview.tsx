@@ -1,9 +1,7 @@
-import { Edit, Star, Trash2 } from 'react-feather';
+import { format } from 'date-fns';
+import { Edit } from 'react-feather';
 import { Link } from 'react-router-dom';
 
-import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
-import { Instructor } from '../model/instructor';
 import { Review } from '../model/review';
 import { DeleteButton } from './DeleteButton';
 import { Rating } from './Rating';
@@ -20,6 +18,8 @@ export const CourseReview = ({
   canModify,
   handleDelete,
 }: CourseReviewProps) => {
+  const dateStr = format(new Date(review.timestamp), 'MMM d, yyyy');
+
   return (
     <div className='w-96 p-6 bg-slate-50 rounded-md'>
       <div className='flex'>
@@ -28,8 +28,8 @@ export const CourseReview = ({
             <div className='w-16 h-16 rounded-full bg-gray-200' />
             {canModify && (
               <div className='flex space-x-2 ml-auto mr-6'>
-                <Link to='/review/'>
-                  <Edit />
+                <Link to={`/review/${review.courseId}/edit`}>
+                  <Edit className='hover:stroke-gray-500 transition duration-200' />
                 </Link>
                 <DeleteButton
                   title='Delete Review'
@@ -47,15 +47,13 @@ export const CourseReview = ({
           </div>
         </div>
         <div className='ml-auto w-fit'>
-          <StarRating rating={4} />
-          <div className='ml-1 mt-6'>
-            <Rating text='Difficulty' rating={4} />
-            <Rating text='Useful' rating={3} />
-            <Rating text='Interesting' rating={5} />
-          </div>
+          <StarRating rating={review.rating} />
+          <h2 className='leading-none mt-2 ml-1 font-bold text-sm  text-gray-700'>
+            {dateStr}
+          </h2>
         </div>
       </div>
-      <div className='mt-6 text-sm'>{review.content}</div>
+      <div className='mt-6 text-md'>{review.content}</div>
     </div>
   );
 };

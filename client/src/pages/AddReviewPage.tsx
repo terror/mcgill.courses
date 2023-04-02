@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { AddReviewForm } from '../components/AddReviewForm';
 import { Layout } from '../components/Layout';
-import { ReviewForm } from '../components/ReviewForm';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
 
-export const ReviewPage = () => {
+export const AddReviewPage = () => {
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
 
@@ -22,7 +22,7 @@ export const ReviewPage = () => {
   return (
     <Layout>
       <div className='flex justify-center'>
-        <ReviewForm course={course} />
+        <AddReviewForm course={course} />
       </div>
     </Layout>
   );
