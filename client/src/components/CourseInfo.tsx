@@ -26,7 +26,7 @@ const TermsIcons = ({ terms }: { terms: string[] }) => {
   type IconMap = { [key: string]: JSX.Element };
 
   const icons: IconMap = {
-    fall: <FaCanadianMapleLeaf size={25} color='Siena' />,
+    fall: <FaCanadianMapleLeaf size={25} color='Brown' />,
     winter: <BsSnow size={25} color='SkyBlue' />,
     summer: <BsSun size={25} color='Orange' />,
   };
