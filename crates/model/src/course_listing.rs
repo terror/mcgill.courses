@@ -1,6 +1,6 @@
 use super::*;
 
-#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct CourseListing {
   pub department: String,
   pub faculty: String,
