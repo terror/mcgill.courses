@@ -1,7 +1,7 @@
 import { Star } from 'react-feather';
 
 type StarRatingProps = {
-  rating: 1 | 2 | 3 | 4 | 5;
+  rating: number;
 };
 
 export const StarRating = ({ rating }: StarRatingProps) => {
