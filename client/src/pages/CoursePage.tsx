@@ -33,8 +33,8 @@ export const CoursePage = () => {
     return <div>404 not found</div>;
   }
 
-  if (course === undefined || reviews == undefined) {
-    return <div>Loading...</div>; //TODO: some spinning comonent
+  if (course === undefined || reviews === undefined) {
+    return <div>Loading...</div>; // TODO: some spinning comonent
   }
 
   const requirements: Requirements = {

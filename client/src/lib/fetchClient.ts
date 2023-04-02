@@ -18,12 +18,12 @@ export const fetchClient = {
     });
   },
   async post(endpoint: string, data: any, init?: RequestInit) {
-    return await this.reqWithBody(endpoint, 'POST', data, init);
+    return this.reqWithBody(endpoint, 'POST', data, init);
   },
   async put(endpoint: string, data: any, init?: RequestInit) {
-    return await this.reqWithBody(endpoint, 'PUT', data, init);
+    return this.reqWithBody(endpoint, 'PUT', data, init);
   },
   async delete(endpoint: string, data: any, init?: RequestInit) {
-    return await this.reqWithBody(endpoint, 'DELETE', data, init);
+    return this.reqWithBody(endpoint, 'DELETE', data, init);
   },
 };
