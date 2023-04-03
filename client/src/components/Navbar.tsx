@@ -17,9 +17,10 @@ export const navigation = [
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const [searchResults, setSearchResults] = useState<Course[]>([]);
-  const pathName = useLocation().pathname;
+
+  const location = useLocation();
+  const pathName = location.pathname;
 
   const handleInputChange = async (query: string) => {
     try {
@@ -34,7 +35,6 @@ export const Navbar = () => {
   };
 
   const user = useAuth();
-  const location = useLocation();
 
   const redUnderlineStyle =
     'before:content before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-red-600';
