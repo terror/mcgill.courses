@@ -52,7 +52,7 @@ export const CourseSearchBar = ({
         </div>
         <input
           type='text'
-          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-3 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
+          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-3 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black min-w-[600px]'
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
