@@ -36,10 +36,10 @@ export const Navbar = () => {
   return (
     <header className='z-50'>
       <nav
-        className='flex items-center justify-center p-6 lg:px-8 space-between'
+        className='flex items-center p-6 lg:px-8 justify-between'
         aria-label='Global'
       >
-        <div className='flex lg:flex-none mr-auto'>
+        <div className='flex lg:flex-1 mr-auto '>
           <a href='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='bird.png' alt='bird' />
           </a>
@@ -55,14 +55,14 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='hidden lg:flex justify-center mx-auto'>
+          <div className='hidden lg:flex align-middle justify-center flex-1'>
             <CourseSearchBar
               results={searchResults}
               handleInputChange={handleInputChange}
             />
           </div>
         ) : null}
-        <div className='flex flex-row'>
+        <div className='flex flex-row lg:flex-1'>
           <div className='hidden lg:flex lg:gap-x-12 lg:ml-auto'>
             {navigation.map((item) => (
               <a
