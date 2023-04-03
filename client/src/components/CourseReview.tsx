@@ -1,71 +1,44 @@
-import { Star } from 'react-feather';
+import { format } from 'date-fns';
+import { Edit } from 'react-feather';
+import { Link } from 'react-router-dom';
 
-import { Course } from '../model/course';
-import { Instructor } from '../model/instructor';
 import { Review } from '../model/review';
+import { DeleteButton } from './DeleteButton';
+import { Rating } from './Rating';
+import { StarRating } from './StarRating';
 
 type CourseReviewProps = {
   review: Review;
+  canModify: boolean;
+  handleDelete: () => void;
 };
 
-type FillbarProps = {
-  fillAmount: number;
-  width?: number;
-  height?: number;
-};
+export const CourseReview = ({
+  review,
+  canModify,
+  handleDelete,
+}: CourseReviewProps) => {
+  const dateStr = format(new Date(review.timestamp), 'MMM d, yyyy');
 
-type RatingProps = {
-  text: string;
-  rating: number;
-};
-
-export const Rating = ({ text, rating }: RatingProps) => {
   return (
-    <div className='mt-1'>
-      <span className='font-bold text-sm'>{text}</span>
-      <Fillbar fillAmount={rating * 20} width={132} height={6} />
-    </div>
-  );
-};
-
-export const Fillbar = ({ fillAmount, width, height }: FillbarProps) => {
-  return (
-    <div
-      className='bg-gray-200 rounded-xl'
-      style={{ width: width ?? 48, height: height ?? 4 }}
-    >
-      <div
-        className={'bg-red-500 rounded-xl'}
-        style={{ width: `${fillAmount}%`, height: height ?? 4 }}
-      />
-    </div>
-  );
-};
-
-type StarRatingProps = {
-  rating: 1 | 2 | 3 | 4 | 5;
-};
-
-export const StarRating = ({ rating }: StarRatingProps) => {
-  const stars = [];
-  for (let i = 0; i < 5; i++) {
-    stars.push(
-      <Star
-        key={i}
-        strokeWidth={0}
-        className={i < rating ? 'fill-yellow-400' : 'fill-gray-200'}
-      />
-    );
-  }
-  return <div className='flex'>{...stars}</div>;
-};
-
-export const CourseReview = ({ review }: CourseReviewProps) => {
-  return (
-    <div className='w-96 mx-4 p-6 bg-slate-50 rounded-md'>
+    <div className='w-96 p-6 bg-slate-50 rounded-md'>
       <div className='flex'>
-        <div className='flex flex-col'>
-          <div className='w-16 h-16 rounded-full bg-gray-200' />
+        <div className='flex flex-col w-full'>
+          <div className='flex'>
+            <div className='w-16 h-16 rounded-full bg-gray-200' />
+            {canModify && (
+              <div className='flex space-x-2 ml-auto mr-6'>
+                <Link to={`/review/${review.courseId}/edit`}>
+                  <Edit className='hover:stroke-gray-500 transition duration-200' />
+                </Link>
+                <DeleteButton
+                  title='Delete Review'
+                  text={`Are you sure you want to delete your review of ${review.courseId}? `}
+                  onConfirm={handleDelete}
+                />
+              </div>
+            )}
+          </div>
           <div className='mt-2 text-sm'>
             <h2 className='leading-none mt-1 font-semibold text-gray-700'>
               Instructor:
@@ -74,15 +47,13 @@ export const CourseReview = ({ review }: CourseReviewProps) => {
           </div>
         </div>
         <div className='ml-auto w-fit'>
-          <StarRating rating={4} />
-          <div className='ml-1 mt-6'>
-            <Rating text='Difficulty' rating={4} />
-            <Rating text='Useful' rating={3} />
-            <Rating text='Interesting' rating={5} />
-          </div>
+          <StarRating rating={review.rating} />
+          <h2 className='leading-none mt-2 ml-1 font-bold text-sm  text-gray-700'>
+            {dateStr}
+          </h2>
         </div>
       </div>
-      <div className='mt-6 text-sm'>{review.content}</div>
+      <div className='mt-6 text-md'>{review.content}</div>
     </div>
   );
 };

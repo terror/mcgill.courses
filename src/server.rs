@@ -51,6 +51,7 @@ impl Server {
           .post(reviews::add_review)
           .put(reviews::update_review),
       )
+      .route("/reviews/:id", get(reviews::get_review))
       .route("/search", get(search::search))
       .route("/user", get(user::get_user))
       .with_state(State::new(db, session_store))

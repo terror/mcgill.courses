@@ -1,12 +1,11 @@
-import { Combobox } from '@headlessui/react';
-import { Field, Form, Formik, useField, useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
-import { Instructor } from '../model/instructor';
+import { Review } from '../model/review';
 import { Autocomplete } from './Autocomplete';
 
 const ReviewSchema = Yup.object().shape({
@@ -15,12 +14,14 @@ const ReviewSchema = Yup.object().shape({
   rating: Yup.number().min(0).max(5).required('Required'),
 });
 
-type ReviewFormProps = {
+type EditReviewFormProps = {
   course: Course;
+  review: Review;
 };
 
-export const ReviewForm = ({ course }: ReviewFormProps) => {
+export const EditReviewForm = ({ course, review }: EditReviewFormProps) => {
   const params = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
 
   const instructorNames = Array.from(
@@ -35,20 +36,28 @@ export const ReviewForm = ({ course }: ReviewFormProps) => {
         });
 
   const initialValues = {
-    content: '',
-    instructor: '',
-    rating: 0,
+    content: review.content,
+    instructor: review.instructor,
+    rating: review.rating,
   };
 
   return (
-    <div className='mx-2 w-2/6 bg-white rounded-lg p-6'>
-      <h1 className='text-xl font-bold mb-2'>{`${course._id} - ${course.title}`}</h1>
+    <div className='mx-2 w-6/12 bg-white rounded-lg p-6'>
+      <h1 className='text-xl font-bold mb-8'>{`Editing review of ${course._id} - ${course.title}`}</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={ReviewSchema}
         onSubmit={async (values, actions) => {
-          console.log(values);
+          await fetchClient.put(
+            `/reviews`,
+            {
+              course_id: course._id,
+              ...values,
+            },
+            { headers: { 'Content-Type': 'application/json' } }
+          );
           actions.setSubmitting(false);
+          navigate(`/course/${params.id}`);
         }}
       >
         {({ values, errors, touched, handleChange, setFieldValue }) => (
