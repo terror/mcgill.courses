@@ -1,6 +1,17 @@
 use super::*;
 
-#[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[derive(
+  Clone,
+  Debug,
+  Default,
+  Deserialize,
+  Eq,
+  Hash,
+  Ord,
+  PartialEq,
+  PartialOrd,
+  Serialize,
+)]
 #[serde(rename_all = "camelCase")]
 pub struct Course {
   #[serde(rename = "_id")]
