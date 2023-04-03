@@ -61,14 +61,14 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='hidden lg:flex align-middle justify-center flex-1'>
+          <div className='hidden lg:flex align-middle justify-center flex-1 my-auto'>
             <CourseSearchBar
               results={searchResults}
               handleInputChange={handleInputChange}
             />
           </div>
         ) : null}
-        <div className='flex flex-row lg:flex-1'>
+        <div className='flex flex-row lg:flex-1 min-w-fit ml-6'>
           <div className='hidden lg:flex lg:gap-x-12 lg:ml-auto'>
             {navigation.map((item) => (
               <Link
