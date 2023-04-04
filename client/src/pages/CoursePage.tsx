@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
+import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
@@ -62,19 +63,7 @@ export const CoursePage = () => {
       <div className='flex'>
         <div>
           <div className='mt-8 ml-8'>
-            {canReview && (
-              <div className='p-3 rounded-md bg-gray-50 mb-8'>
-                <p>
-                  Taken this course?{' '}
-                  <Link
-                    className='px-3 py-2 ml-2 bg-red-500 hover:bg-red-400 transition duration-200 text-white rounded-md'
-                    to={`/review/${course._id}/add`}
-                  >
-                    Leave a review
-                  </Link>
-                </p>
-              </div>
-            )}
+            {canReview && <CourseReviewPrompt course={course} />}
             <div>
               {reviews &&
                 reviews.map((r) => (
