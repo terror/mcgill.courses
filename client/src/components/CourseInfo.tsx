@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { ExternalLink } from 'react-feather';
 import { BsSnow, BsSun } from 'react-icons/bs';
-import { FaCanadianMapleLeaf } from 'react-icons/fa';
+import { FaLeaf, FaRegSnowflake, FaSun } from 'react-icons/fa';
 
+import { uniqueTermInsturctors } from '../lib/uniqueTermInstructors';
 import { Course } from '../model/course';
 
 const LinkButton = ({ url }: { url: string }) => {
@@ -22,20 +23,35 @@ const LinkButton = ({ url }: { url: string }) => {
   );
 };
 
-const TermsIcons = ({ terms }: { terms: string[] }) => {
+const termToIcon = (term: string) => {
   type IconMap = { [key: string]: JSX.Element };
 
   const icons: IconMap = {
-    fall: <FaCanadianMapleLeaf size={25} color='Brown' />,
-    winter: <BsSnow size={25} color='SkyBlue' />,
+    fall: <FaLeaf size={25} color='Brown' />,
+    winter: <FaRegSnowflake size={25} color='SkyBlue' />,
     summer: <BsSun size={25} color='Orange' />,
   };
 
+  return icons[term.split(' ')[0].toLowerCase()];
+};
+
+type CourseTermsProps = {
+  course: Course;
+};
+
+const CourseTerms = ({ course }: CourseTermsProps) => {
+  const instructors = uniqueTermInsturctors(course);
+
   return (
     <div className='flex flex-row space-x-3'>
-      {terms
-        .map((term) => term.split(' ')[0].toLowerCase())
-        .map((term) => icons[term])}
+      {instructors.map((i) => (
+        <div className='bg-gray-100 p-2 rounded-xl'>
+          <div className='flex space-x-2'>
+            {termToIcon(i.term)}
+            <div>{i.name}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
@@ -53,7 +69,7 @@ export const CourseInfo = ({ course }: { course: Course }) => {
           </div>
           <h2 className='text-3xl text-gray-800'> {course.title} </h2>
           {course.terms.length > 0 ? (
-            <TermsIcons terms={course.terms} />
+            <CourseTerms course={course} />
           ) : (
             <p>This course is not currently being offered.</p>
           )}
