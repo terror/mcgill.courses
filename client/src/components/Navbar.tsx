@@ -4,6 +4,9 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { classNames } from '../lib/classNames';
+import { fetchClient } from '../lib/fetchClient';
+import { Course } from '../model/course';
+import { CourseSearchBar } from './CourseSearchBar';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 
@@ -14,7 +17,23 @@ export const navigation = [
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<Course[]>([]);
+
   const location = useLocation();
+  const pathName = location.pathname;
+
+  const handleInputChange = async (query: string) => {
+    try {
+      setSearchResults(
+        await fetchClient.getData<Course[]>(
+          `/search?query=${encodeURIComponent(query)}`
+        )
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const user = useAuth();
 
   const redUnderlineStyle =
@@ -23,10 +42,10 @@ export const Navbar = () => {
   return (
     <header className='z-50'>
       <nav
-        className='flex items-center justify-between p-6 lg:px-8'
+        className='flex items-center p-6 lg:px-8 justify-between'
         aria-label='Global'
       >
-        <div className='flex lg:flex-1'>
+        <div className='flex lg:flex-1 mr-auto'>
           <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='/bird.png' alt='bird' />
           </Link>
@@ -41,36 +60,46 @@ export const Navbar = () => {
             <Bars3Icon className='h-6 w-6' aria-hidden='true' />
           </button>
         </div>
-        <div className='hidden lg:flex lg:gap-x-12'>
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              className={classNames(
-                'text-sm font-semibold leading-6 text-gray-900 relative',
-                location.pathname === item.href
-                  ? redUnderlineStyle
-                  : classNames(
-                      redUnderlineStyle,
-                      'before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-300'
-                    )
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          {user ? (
-            <ProfileDropdown />
-          ) : (
-            <a
-              href={`${import.meta.env.VITE_API_URL}/auth/login`}
-              className='text-sm font-semibold leading-6 text-gray-900'
-            >
-              Log in <span aria-hidden='true'>&rarr;</span>
-            </a>
-          )}
+        {pathName !== '/' ? (
+          <div className='hidden lg:flex align-middle justify-center flex-1 my-auto'>
+            <CourseSearchBar
+              results={searchResults}
+              handleInputChange={handleInputChange}
+            />
+          </div>
+        ) : null}
+        <div className='flex flex-row lg:flex-1 min-w-fit ml-6'>
+          <div className='hidden lg:flex lg:gap-x-12 lg:ml-auto'>
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={classNames(
+                  'text-sm font-semibold leading-6 text-gray-900 relative',
+                  location.pathname === item.href
+                    ? redUnderlineStyle
+                    : classNames(
+                        redUnderlineStyle,
+                        'before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-300'
+                      )
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+          <div className='hidden lg:flex lg:justify-end lg:ml-12'>
+            {user ? (
+              <ProfileDropdown />
+            ) : (
+              <a
+                href={`${import.meta.env.VITE_API_URL}/auth/login`}
+                className='text-sm font-semibold leading-6 text-gray-900'
+              >
+                Log in <span aria-hidden='true'>&rarr;</span>
+              </a>
+            )}
+          </div>
         </div>
       </nav>
       <SideNav open={mobileMenuOpen} onClose={setMobileMenuOpen} />
