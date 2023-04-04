@@ -59,7 +59,7 @@ const CourseTerms = ({ course }: CourseTermsProps) => {
 export const CourseInfo = ({ course }: { course: Course }) => {
   return (
     <div className='flex justify-center'>
-      <div className='w-screen p-6 mx-8 rounded-md bg-slate-50 md:mt-10'>
+      <div className='w-screen p-6 mx-10 bg-slate-50 md:mt-10'>
         <div className='flex flex-col md:flex-row'>
           <div className='flex flex-col space-y-3 w-fit m-4 md:w-1/2 md:m-4'>
             <div className='flex flex-row space-x-2 align-middle'>
