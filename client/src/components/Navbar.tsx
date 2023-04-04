@@ -37,20 +37,6 @@ export const Navbar = () => {
 
   const user = useAuth();
 
-  const handleInputChange = async (query: string) => {
-    try {
-      setSearchResults(
-        await fetchClient.getData<Course[]>(
-          `/search?query=${encodeURIComponent(query)}`
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const user = useAuth();
-
   return (
     <header className='z-50'>
       <nav
