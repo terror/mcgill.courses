@@ -28,7 +28,7 @@ export const CoursePage = () => {
       .then((data) => {
         setReviews(data);
       });
-  }, []);
+  }, [params.id]);
 
   if (course === null) {
     return <div>404 not found</div>;
