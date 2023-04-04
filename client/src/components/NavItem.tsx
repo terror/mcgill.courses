@@ -9,7 +9,7 @@ type NavItemProps = {
 
 export const NavItem = ({ name, href }: NavItemProps) => {
   const redUnderlineStyle =
-    'before:content before:absolute before:block before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-red-600';
+    'before:content before:absolute before:block before:w-full before:h-[2px] before:bottom-1 before:left-0 before:bg-red-600';
 
   return (
     <Link
