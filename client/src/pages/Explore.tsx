@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 
-import { Alert } from '../components/Alert';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';

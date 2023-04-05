@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
-import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { AiOutlineCheckCircle, AiOutlineInfoCircle } from 'react-icons/ai';
 import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 
-type status = 'Error' | 'Success' | 'Info' | 'Warning';
+type alertStatus = 'Error' | 'Success' | 'Info' | 'Warning';
 
 interface AlertProp {
-  status: status;
+  status: alertStatus;
   message?: string;
 }
 
