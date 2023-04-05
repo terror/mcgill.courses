@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 
+import { Alert } from '../components/Alert';
 import { Layout } from '../components/Layout';
-import { NotificationBox } from '../components/NotificationBox';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
@@ -73,7 +73,6 @@ export const Explore = () => {
             ))}
           </div>
         </InfiniteScroll>
-        <NotificationBox status='Success' />
       </div>
     </Layout>
   );
