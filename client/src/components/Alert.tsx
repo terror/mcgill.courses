@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import { AiOutlineCheckCircle, AiOutlineInfoCircle } from 'react-icons/ai';
-import { AiOutlineClose } from 'react-icons/ai';
+import {
+  AiOutlineCheckCircle,
+  AiOutlineClose,
+  AiOutlineInfoCircle,
+} from 'react-icons/ai';
 import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
