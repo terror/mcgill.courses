@@ -38,7 +38,6 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      <Alert status='Success' />
     </Layout>
   );
 };

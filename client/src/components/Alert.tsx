@@ -5,7 +5,7 @@ import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 
-type alertStatus = 'Error' | 'Success' | 'Info' | 'Warning';
+type alertStatus = 'error' | 'success' | 'info' | 'warning';
 
 interface AlertProp {
   status: alertStatus;
@@ -13,24 +13,24 @@ interface AlertProp {
 }
 
 const defaultMessages = {
-  Error: 'There was an error processing your request, please try again later.',
-  Success: 'Your request was successful.',
-  Info: 'This is an informational message.',
-  Warning: 'This is a warning message.',
+  error: 'There was an error processing your request, please try again later.',
+  success: 'Your request was successful.',
+  info: 'This is an informational message.',
+  warning: 'This is a warning message.',
 };
 
 const statusColor = {
-  Error: 'bg-red-100 border-red-500 text-red-700',
-  Success: 'bg-green-100 border-green-500 text-green-700',
-  Info: 'bg-blue-100 border-blue-500 text-blue-700',
-  Warning: 'bg-yellow-100 border-yellow-500 text-yellow-700',
+  error: 'bg-red-100 border-red-500 text-red-700',
+  success: 'bg-green-100 border-green-500 text-green-700',
+  info: 'bg-blue-100 border-blue-500 text-blue-700',
+  warning: 'bg-yellow-100 border-yellow-500 text-yellow-700',
 };
 
 const statusIcon = {
-  Error: <VscError className='text-red-700' size={20} />,
-  Success: <AiOutlineCheckCircle className='text-green-700' size={20} />,
-  Info: <AiOutlineInfoCircle className='text-blue-700 ' size={20} />,
-  Warning: <IoWarningOutline className='text-yellow-700' size={20} />,
+  error: <VscError className='text-red-700' size={20} />,
+  success: <AiOutlineCheckCircle className='text-green-700' size={20} />,
+  info: <AiOutlineInfoCircle className='text-blue-700 ' size={20} />,
+  warning: <IoWarningOutline className='text-yellow-700' size={20} />,
 };
 
 export const Alert = ({ status, message }: AlertProp) => {
@@ -67,7 +67,7 @@ export const Alert = ({ status, message }: AlertProp) => {
         ) : (
           <p className='m-1'>
             {defaultMessages[status]}
-            {status === 'Error' ? (
+            {status === 'error' ? (
               <p>
                 {' '}
                 If the problem persists, please{' '}
