@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Alert } from '../components/Alert';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
 import { fetchClient } from '../lib/fetchClient';
@@ -37,6 +38,7 @@ export const Home = () => {
           </div>
         </div>
       </div>
+      <Alert status='Success' />
     </Layout>
   );
 };

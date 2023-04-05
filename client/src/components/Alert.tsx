@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AiOutlineCheckCircle, AiOutlineInfoCircle } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
@@ -62,7 +63,7 @@ export const Alert = ({ status, message }: AlertProp) => {
       <div className='flex'>
         <div className='my-auto mr-2 ml-3 md:ml-1'>{statusIcon[status]}</div>
         {message ? (
-          <p className='m-3 md:m-1'>{message}</p>
+          <p className='m-3 md:m-1 my-auto'>{message}</p>
         ) : (
           <p className='m-1'>
             {defaultMessages[status]}
@@ -78,6 +79,13 @@ export const Alert = ({ status, message }: AlertProp) => {
             ) : null}
           </p>
         )}
+        <AiOutlineClose
+          className='my-auto ml-auto'
+          size={20}
+          opacity={0.25}
+          onClick={() => setShow(false)}
+          cursor={'pointer'}
+        ></AiOutlineClose>
       </div>
     </div>
   );
