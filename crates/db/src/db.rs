@@ -40,7 +40,7 @@ impl Db {
         Some(found) => {
           self
             .update_course(
-              doc! { "title": &course.title },
+              doc! { "_id": &course.id },
               doc! {
                 "$set": {
                   "corequisites": course.corequisites,
