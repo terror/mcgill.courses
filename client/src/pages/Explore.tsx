@@ -37,7 +37,7 @@ export const Explore = () => {
 
   return (
     <Layout>
-      {error ? <Alert status='error' /> : null}
+      {!error ? <Alert status='error' /> : null}
       <div className='w-full py-32 flex flex-col items-center'>
         <h1 className='mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
           Showing all courses

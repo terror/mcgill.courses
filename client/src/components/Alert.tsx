@@ -52,8 +52,8 @@ export const Alert = ({ status, message }: AlertProp) => {
       className={`
     ${
       show
-        ? 'translate-y-0 md:translate-x-0 md:translate-y-0'
-        : 'translate-y-full md:translate-x-[120%] md:translate-y-0'
+        ? 'translate-y-0 md:translate-y-0 md:translate-y-0'
+        : 'translate-y-full md:translate-y-[120%] md:translate-y-0'
     }
     ${statusColor[status]}
     p-4 fixed bottom-0 right-0 w-screen md:max-w-md md:w-full md:m-5 md:rounded-md shadow-md transition-all duration-300
