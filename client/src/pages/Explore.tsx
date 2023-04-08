@@ -39,7 +39,7 @@ export const Explore = () => {
     <Layout>
       {error ? <Alert status='error' /> : null}
       <div className='w-full py-32 flex flex-col items-center'>
-        <h1 className='mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
+        <h1 className='mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl text-center'>
           Showing all courses
         </h1>
         <InfiniteScroll
@@ -63,6 +63,7 @@ export const Explore = () => {
                   <div>{course.description}</div>
                   {course.instructors.length !== 0 && (
                     <div className='mt-2'>
+                      Instructor(s):{' '}
                       {course.instructors.map((instructor, index) => (
                         <span key={index}>
                           {instructor.name} ({instructor.term}){' '}
