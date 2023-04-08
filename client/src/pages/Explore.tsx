@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 
+import { Alert } from '../components/Alert';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
@@ -13,12 +14,13 @@ export const Explore = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetchClient
       .getData<Course[]>(`/courses?limit=${limit}`)
       .then((data) => setCourses(data))
-      .catch((err) => console.log(err));
+      .catch((err) => setError(true));
   }, []);
 
   const fetchMore = async () => {
@@ -35,6 +37,7 @@ export const Explore = () => {
 
   return (
     <Layout>
+      {error ? <Alert status='error' /> : null}
       <div className='w-full py-32 flex flex-col items-center'>
         <h1 className='mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
           Showing all courses
