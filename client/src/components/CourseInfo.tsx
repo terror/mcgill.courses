@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ExternalLink } from 'react-feather';
-import { BsSnow, BsSun } from 'react-icons/bs';
-import { FaLeaf, FaRegSnowflake, FaSun } from 'react-icons/fa';
+import { BsSun } from 'react-icons/bs';
+import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
 import { uniqueTermInsturctors } from '../lib/uniqueTermInstructors';
 import { Course } from '../model/course';
