@@ -19,8 +19,8 @@ export const Autocomplete = ({
     <div className='w-72'>
       <Combobox
         value={value}
-        onChange={(instructor) => {
-          setValue(instructor);
+        onChange={(val) => {
+          setValue(val);
         }}
       >
         <div className='relative w-full'>
