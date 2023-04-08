@@ -43,7 +43,7 @@ export const Navbar = () => {
         className='flex items-center p-6 lg:px-8 justify-between'
         aria-label='Global'
       >
-        <div className='flex lg:flex-1 mr-auto'>
+        <div className='flex lg:flex-1 mr-auto my-auto'>
           <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='/bird.png' alt='bird' />
           </Link>
@@ -59,7 +59,7 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='hidden lg:flex align-middle justify-center flex-1 my-auto'>
+          <div className='hidden my-auto lg:flex align-middle justify-center flex-1 my-auto'>
             <CourseSearchBar
               results={searchResults}
               handleInputChange={handleInputChange}
@@ -67,7 +67,7 @@ export const Navbar = () => {
           </div>
         ) : null}
         <div className='flex flex-row lg:flex-1 min-w-fit ml-6'>
-          <div className='hidden lg:flex lg:gap-x-12 lg:ml-auto'>
+          <div className='hidden my-auto lg:flex lg:gap-x-12 lg:ml-auto'>
             {navigation.map((item) => (
               <NavItem name={item.name} href={item.href} key={item.name} />
             ))}
