@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
 import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { Layout } from '../components/Layout';
+import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
@@ -35,7 +36,13 @@ export const CoursePage = () => {
   }
 
   if (course === undefined || reviews === undefined) {
-    return <div>Loading...</div>; // TODO: some spinning comonent
+    return (
+      <div className='flex justify-center items-center min-h-screen'>
+        <div className='text-center'>
+          <Spinner />
+        </div>
+      </div>
+    );
   }
 
   const requirements: Requirements = {
