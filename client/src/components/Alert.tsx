@@ -49,15 +49,15 @@ export const Alert = ({ status, message }: AlertProp) => {
 
   return (
     <div
-      className={
-        (show
-          ? 'translate-y-0 md:translate-x-0 md:translate-y-0'
-          : 'translate-y-full md:translate-x-[120%] md:translate-y-0') +
-        ' ' +
-        statusColor[status] +
-        ' ' +
-        'p-4 fixed bottom-0 right-0 w-screen md:max-w-md md:w-full md:m-5 md:rounded-md shadow-md transition-all duration-300 '
-      }
+      className={`
+    ${
+      show
+        ? 'translate-y-0 md:translate-x-0 md:translate-y-0'
+        : 'translate-y-full md:translate-x-[120%] md:translate-y-0'
+    }
+    ${statusColor[status]}
+    p-4 fixed bottom-0 right-0 w-screen md:max-w-md md:w-full md:m-5 md:rounded-md shadow-md transition-all duration-300
+  `}
       role='alert'
     >
       <div className='flex'>
@@ -69,12 +69,10 @@ export const Alert = ({ status, message }: AlertProp) => {
             {defaultMessages[status]}
             {status === 'error' ? (
               <p>
-                {' '}
                 If the problem persists, please{' '}
                 <Link to='/about' className='underline'>
-                  {' '}
-                  contact us{' '}
-                </Link>{' '}
+                  contact us
+                </Link>
               </p>
             ) : null}
           </p>
