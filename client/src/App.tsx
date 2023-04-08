@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 
 import { PrivateRoute } from './components/PrivateRoute';
+import { About } from './pages/About';
 import { AddReviewPage } from './pages/AddReviewPage';
 import { CoursePage } from './pages/CoursePage';
 import { EditReviewPage } from './pages/EditReviewPage';
-import { About } from './pages/About';
 import { Explore } from './pages/Explore';
 import { Home } from './pages/Home';
 

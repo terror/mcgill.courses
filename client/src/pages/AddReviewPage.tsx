@@ -19,7 +19,7 @@ export const AddReviewPage = () => {
   if (!course) {
     return <div></div>;
   }
-  
+
   return (
     <Layout>
       <div className='flex justify-center'>
