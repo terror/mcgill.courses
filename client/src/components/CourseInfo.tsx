@@ -6,23 +6,6 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { uniqueTermInsturctors } from '../lib/uniqueTermInstructors';
 import { Course } from '../model/course';
 
-const LinkButton = ({ url }: { url: string }) => {
-  const [color, setColor] = useState('Gray');
-  const red = 'rgb(220 38 38)';
-
-  return (
-    <a href={url} className='my-auto'>
-      <ExternalLink
-        size={20}
-        className='ml-1 transition-colors duration-300'
-        color={color}
-        onMouseEnter={() => setColor(red)}
-        onMouseLeave={() => setColor('Gray')}
-      ></ExternalLink>
-    </a>
-  );
-};
-
 const termToIcon = (term: string) => {
   type IconMap = { [key: string]: JSX.Element };
 
@@ -66,7 +49,14 @@ export const CourseInfo = ({ course }: { course: Course }) => {
               <h1 className='text-4xl font-semibold break-words text-gray-800'>
                 {course._id}
               </h1>
-              {course.url ? <LinkButton url={course.url} /> : null}
+              {course.url ? (
+                <a href={course.url} className='my-auto'>
+                  <ExternalLink
+                    size={20}
+                    className='ml-1 transition-colors duration-300 hover:stroke-red-500'
+                  />
+                </a>
+              ) : null}
             </div>
             <h2 className='text-3xl text-gray-800'> {course.title} </h2>
             {course.terms.length > 0 ? (
