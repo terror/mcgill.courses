@@ -41,9 +41,6 @@ export const Alert = ({ status, message }: AlertProp) => {
 
   useEffect(() => {
     setShow(true);
-  }, []);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setShow(false);
     }, 5000);
@@ -83,7 +80,7 @@ export const Alert = ({ status, message }: AlertProp) => {
           </p>
         )}
         <AiOutlineClose
-          className='my-auto ml-auto'
+          className='mb-auto ml-auto'
           size={20}
           opacity={0.25}
           onClick={() => setShow(false)}
