@@ -26,7 +26,7 @@ type CourseTermsProps = {
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
   const instructors = uniqueTermInstructors(course);
 
-  return (
+  return instructors.length !== 0 ? (
     <div
       className={classNames(
         'flex',
@@ -37,7 +37,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         <div
           className={classNames(
             'bg-gray-100 rounded-xl',
-            variant === 'small' ? 'p-1' : 'p-2'
+            variant === 'small' ? 'py-1 px-2' : 'p-2'
           )}
         >
           <div className='flex space-x-2 items-center'>
@@ -47,5 +47,5 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         </div>
       ))}
     </div>
-  );
+  ) : null;
 };
