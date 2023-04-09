@@ -50,7 +50,7 @@ export const CourseInfo = ({ course }: { course: Course }) => {
                 {course._id}
               </h1>
               {course.url ? (
-                <a href={course.url} className='my-auto'>
+                <a href={course.url} className='my-auto' target='_blank'>
                   <ExternalLink
                     size={20}
                     className='ml-1 transition-colors duration-300 hover:stroke-red-500'
