@@ -15,5 +15,8 @@ export const uniqueTermInstructors = (course: Course) => {
     }
   }
 
+  const order = ['Fall', 'Winter', 'Summer'];
+  unique.sort((a, b) => order.indexOf(a.term) - order.indexOf(b.term));
+
   return unique;
 };
