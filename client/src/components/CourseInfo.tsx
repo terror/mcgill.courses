@@ -1,43 +1,7 @@
-import { useState } from 'react';
 import { ExternalLink } from 'react-feather';
-import { BsSun } from 'react-icons/bs';
-import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
-import { uniqueTermInsturctors } from '../lib/uniqueTermInstructors';
 import { Course } from '../model/course';
-
-const termToIcon = (term: string) => {
-  type IconMap = { [key: string]: JSX.Element };
-
-  const icons: IconMap = {
-    fall: <FaLeaf size={25} color='Brown' />,
-    winter: <FaRegSnowflake size={25} color='SkyBlue' />,
-    summer: <BsSun size={25} color='Orange' />,
-  };
-
-  return icons[term.split(' ')[0].toLowerCase()];
-};
-
-type CourseTermsProps = {
-  course: Course;
-};
-
-const CourseTerms = ({ course }: CourseTermsProps) => {
-  const instructors = uniqueTermInsturctors(course);
-
-  return (
-    <div className='flex flex-row space-x-3'>
-      {instructors.map((i) => (
-        <div className='bg-gray-100 p-2 rounded-xl'>
-          <div className='flex space-x-2'>
-            {termToIcon(i.term)}
-            <div>{i.name}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+import { CourseTerms } from './CourseTerms';
 
 export const CourseInfo = ({ course }: { course: Course }) => {
   return (
@@ -60,7 +24,7 @@ export const CourseInfo = ({ course }: { course: Course }) => {
             </div>
             <h2 className='text-3xl text-gray-800'> {course.title} </h2>
             {course.terms.length > 0 ? (
-              <CourseTerms course={course} />
+              <CourseTerms course={course} variant='large' />
             ) : (
               <p>This course is not currently being offered.</p>
             )}

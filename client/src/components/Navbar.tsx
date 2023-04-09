@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
-import { classNames } from '../lib/classNames';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
 import { CourseSearchBar } from './CourseSearchBar';
@@ -59,7 +58,7 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='hidden my-auto lg:flex align-middle justify-center flex-1 my-auto'>
+          <div className='hidden lg:flex align-middle justify-center flex-1 my-auto'>
             <CourseSearchBar
               results={searchResults}
               handleInputChange={handleInputChange}
