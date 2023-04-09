@@ -1,6 +1,6 @@
 import { Course } from '../model/course';
 
-export const uniqueTermInsturctors = (course: Course) => {
+export const uniqueTermInstructors = (course: Course) => {
   const termInstructors = course.instructors.filter((i) =>
     course.terms.includes(i.term)
   );

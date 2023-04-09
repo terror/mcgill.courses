@@ -2,7 +2,7 @@ import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
 import { classNames } from '../lib/classNames';
-import { uniqueTermInsturctors as uniqueTermInstructors } from '../lib/uniqueTermInstructors';
+import { uniqueTermInstructors } from '../lib/uniqueTermInstructors';
 import { Course } from '../model/course';
 
 const termToIcon = (term: string, variant: 'small' | 'large') => {
