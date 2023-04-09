@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { Review } from '../model/review';
 import { DeleteButton } from './DeleteButton';
-import { Rating } from './Rating';
 import { StarRating } from './StarRating';
 
 type CourseReviewProps = {
