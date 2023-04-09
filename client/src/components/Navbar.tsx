@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
-import { classNames } from '../lib/classNames';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/course';
 import { CourseSearchBar } from './CourseSearchBar';
