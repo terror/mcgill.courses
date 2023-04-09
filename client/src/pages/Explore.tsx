@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router-dom';
 
 import { Alert } from '../components/Alert';
+import { CourseCard } from '../components/CourseCard';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
@@ -55,24 +55,7 @@ export const Explore = () => {
         >
           <div className='mx-auto'>
             {courses.map((course) => (
-              <Link to={`/course/${course._id}`} key={course._id}>
-                <div className='max-w-xl p-5 border rounded-lg m-2'>
-                  <div className='font-bold mb-2'>
-                    {course._id} - {course.title}
-                  </div>
-                  <div>{course.description}</div>
-                  {course.instructors.length !== 0 && (
-                    <div className='mt-2'>
-                      Instructor(s):{' '}
-                      {course.instructors.map((instructor, index) => (
-                        <span key={index}>
-                          {instructor.name} ({instructor.term}){' '}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Link>
+              <CourseCard course={course} />
             ))}
           </div>
         </InfiniteScroll>
