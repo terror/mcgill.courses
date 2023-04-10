@@ -32,16 +32,17 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         variant === 'small' ? 'space-x-2' : 'space-x-3'
       )}
     >
-      {instructors.map((i) => (
+      {instructors.map((instructor, i) => (
         <div
+          key={i}
           className={classNames(
             'bg-gray-100 rounded-xl',
             variant === 'small' ? 'py-1 px-2' : 'p-2'
           )}
         >
           <div className='flex space-x-2 items-center'>
-            {termToIcon(i.term, variant)}
-            <div>{i.name}</div>
+            {termToIcon(instructor.term, variant)}
+            <div>{instructor.name}</div>
           </div>
         </div>
       ))}
