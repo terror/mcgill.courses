@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 
 type CourseCardProps = {

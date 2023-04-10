@@ -1,6 +1,6 @@
 import { ExternalLink } from 'react-feather';
 
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 
 export const CourseInfo = ({ course }: { course: Course }) => {
