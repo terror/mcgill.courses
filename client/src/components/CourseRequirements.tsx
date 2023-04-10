@@ -1,4 +1,4 @@
-import { Requirements } from '../model/requirements';
+import { Requirements } from '../model/Requirements';
 
 type RequirementsProps = {
   requirements: Requirements;

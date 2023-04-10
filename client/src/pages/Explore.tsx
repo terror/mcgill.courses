@@ -6,7 +6,7 @@ import { CourseCard } from '../components/CourseCard';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 
 export const Explore = () => {
   const limit = 20;
