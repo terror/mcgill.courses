@@ -4,8 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
 import { SearchResults } from '../model/SearchResults';
+import { Course } from '../model/course';
 import { CourseSearchBar } from './CourseSearchBar';
 import { NavItem } from './NavItem';
 import { ProfileDropdown } from './ProfileDropdown';
