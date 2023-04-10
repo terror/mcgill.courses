@@ -9,9 +9,9 @@ import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
-import { Requirements } from '../model/requirements';
-import { Review } from '../model/review';
+import { Course } from '../model/Course';
+import { Requirements } from '../model/Requirements';
+import { Review } from '../model/Review';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 
 type CourseReviewPromptProps = {
   course: Course;
