@@ -6,7 +6,7 @@ import { CourseCard } from '../components/CourseCard';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 
 export const Explore = () => {
   const limit = 20;
@@ -20,7 +20,7 @@ export const Explore = () => {
     fetchClient
       .getData<Course[]>(`/courses?limit=${limit}`)
       .then((data) => setCourses(data))
-      .catch((err) => setError(true));
+      .catch((_) => setError(true));
   }, []);
 
   const fetchMore = async () => {
@@ -54,8 +54,8 @@ export const Explore = () => {
           style={{ overflowY: 'hidden' }}
         >
           <div className='mx-auto'>
-            {courses.map((course) => (
-              <CourseCard course={course} />
+            {courses.map((course, i) => (
+              <CourseCard key={i} course={course} />
             ))}
           </div>
         </InfiniteScroll>

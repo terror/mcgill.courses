@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { classNames } from '../lib/classNames';
+import { classNames } from '../lib/utils';
 
 type NavItemProps = {
   name: string;

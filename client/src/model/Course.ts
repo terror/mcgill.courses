@@ -1,5 +1,5 @@
-import { Instructor } from './instructor';
-import { Schedule } from './schedule';
+import { Instructor } from './Instructor';
+import { Schedule } from './Schedule';
 
 export type Course = {
   _id: string;

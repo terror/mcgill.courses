@@ -4,7 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
+import { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
 import { NavItem } from './NavItem';
 import { ProfileDropdown } from './ProfileDropdown';
@@ -17,18 +18,23 @@ export const navigation = [
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<Course[]>([]);
+
+  const [results, setResults] = useState<SearchResults>({
+    query: '',
+    courses: [],
+  });
 
   const location = useLocation();
   const pathName = location.pathname;
 
   const handleInputChange = async (query: string) => {
     try {
-      setSearchResults(
-        await fetchClient.getData<Course[]>(
+      setResults({
+        query,
+        courses: await fetchClient.getData<Course[]>(
           `/search?query=${encodeURIComponent(query)}`
-        )
-      );
+        ),
+      });
     } catch (err) {
       console.error(err);
     }
@@ -60,7 +66,7 @@ export const Navbar = () => {
         {pathName !== '/' ? (
           <div className='hidden lg:flex align-middle justify-center flex-1 my-auto'>
             <CourseSearchBar
-              results={searchResults}
+              results={results}
               handleInputChange={handleInputChange}
             />
           </div>

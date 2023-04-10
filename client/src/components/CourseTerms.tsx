@@ -1,9 +1,8 @@
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
-import { classNames } from '../lib/classNames';
-import { uniqueTermInstructors } from '../lib/uniqueTermInstructors';
-import { Course } from '../model/course';
+import { classNames, uniqueTermInstructors } from '../lib/utils';
+import { Course } from '../model/Course';
 
 const termToIcon = (term: string, variant: 'small' | 'large') => {
   type IconMap = { [key: string]: JSX.Element };
@@ -33,16 +32,17 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         variant === 'small' ? 'space-x-2' : 'space-x-3'
       )}
     >
-      {instructors.map((i) => (
+      {instructors.map((instructor, i) => (
         <div
+          key={i}
           className={classNames(
             'bg-gray-100 rounded-xl',
             variant === 'small' ? 'py-1 px-2' : 'p-2'
           )}
         >
           <div className='flex space-x-2 items-center'>
-            {termToIcon(i.term, variant)}
-            <div>{i.name}</div>
+            {termToIcon(instructor.term, variant)}
+            <div>{instructor.name}</div>
           </div>
         </div>
       ))}

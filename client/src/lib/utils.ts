@@ -1,4 +1,8 @@
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
+
+export const classNames = (...classes: string[]) => {
+  return classes.filter(Boolean).join(' ');
+};
 
 export const uniqueTermInstructors = (course: Course) => {
   const termInstructors = course.instructors.filter((i) =>

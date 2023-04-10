@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { User } from 'react-feather';
 
-import { classNames } from '../lib/classNames';
+import { classNames } from '../lib/utils';
 
 export const ProfileDropdown = () => {
   return (
