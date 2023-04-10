@@ -3,18 +3,23 @@ import { useState } from 'react';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
+import { SearchResults } from '../model/SearchResults';
 
 export const Home = () => {
-  const [results, setResults] = useState<Course[]>([]);
+  const [results, setResults] = useState<SearchResults>({
+    query: '',
+    courses: [],
+  });
 
   const handleInputChange = async (query: string) => {
     try {
-      setResults(
-        await fetchClient.getData<Course[]>(
+      setResults({
+        query,
+        courses: await fetchClient.getData<Course[]>(
           `/search?query=${encodeURIComponent(query)}`
-        )
-      );
+        ),
+      });
     } catch (err) {
       console.error(err);
     }

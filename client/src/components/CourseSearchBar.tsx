@@ -1,12 +1,13 @@
+import _ from 'lodash';
 import { useState } from 'react';
 import { Layers, Search } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { classNames } from '../lib/classNames';
-import { Course } from '../model/course';
+import { classNames } from '../lib/utils';
+import { SearchResults } from '../model/SearchResults';
 
 type CourseSearchBarProps = {
-  results: Course[];
+  results: SearchResults;
   handleInputChange: (query: string) => void;
 };
 
@@ -24,17 +25,17 @@ export const CourseSearchBar = ({
     if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSelectedIndex((prevIndex) =>
-        prevIndex > 0 ? prevIndex - 1 : results.length - 1
+        prevIndex > 0 ? prevIndex - 1 : results.courses.length - 1
       );
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedIndex((prevIndex) =>
-        prevIndex < results.length - 1 ? prevIndex + 1 : 0
+        prevIndex < results.courses.length - 1 ? prevIndex + 1 : 0
       );
     }
-    if (selectedIndex > -1 && event.key === 'Enter') {
-      navigate(`/course/${results[selectedIndex]._id}`);
-    }
+
+    if (selectedIndex > -1 && event.key === 'Enter')
+      navigate(`/course/${results.courses[selectedIndex]._id}`);
   };
 
   return (
@@ -62,7 +63,7 @@ export const CourseSearchBar = ({
       </div>
       {searchSelected && (
         <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
-          {results.map((result, index) => (
+          {results.courses.map((result, index) => (
             <Link to={`/course/${result._id}`}>
               <div
                 className={classNames(
@@ -71,11 +72,27 @@ export const CourseSearchBar = ({
                 )}
                 key={result._id}
               >
-                {result._id} -{' '}
-                {
-                  parser.parseFromString(result.title, 'text/html').body
-                    .textContent
-                }
+                <span>
+                  {`${result._id} - ${
+                    parser.parseFromString(result.title, 'text/html').body
+                      .textContent
+                  }`
+                    .split(
+                      new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
+                    )
+                    .map((part, i) => (
+                      <span
+                        key={i}
+                        className={
+                          part.toLowerCase() === results.query.toLowerCase()
+                            ? 'underline'
+                            : ''
+                        }
+                      >
+                        {part}
+                      </span>
+                    ))}
+                </span>
               </div>
             </Link>
           ))}

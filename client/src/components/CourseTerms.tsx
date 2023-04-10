@@ -1,9 +1,8 @@
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
-import { classNames } from '../lib/classNames';
-import { uniqueTermInstructors } from '../lib/uniqueTermInstructors';
-import { Course } from '../model/course';
+import { classNames, uniqueTermInstructors } from '../lib/utils';
+import { Course } from '../model/Course';
 
 const termToIcon = (term: string, variant: 'small' | 'large') => {
   type IconMap = { [key: string]: JSX.Element };
