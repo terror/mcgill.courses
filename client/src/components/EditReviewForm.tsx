@@ -1,10 +1,9 @@
 import { Form, Formik } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
-import * as Yup from 'yup';
 
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
-import { Review } from '../model/review';
+import { Course } from '../model/Course';
+import { Review } from '../model/Review';
 import { ReviewForm, ReviewSchema } from './ReviewForm';
 
 type EditReviewFormProps = {

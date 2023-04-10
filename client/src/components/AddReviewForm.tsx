@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 import { ReviewForm, ReviewSchema } from './ReviewForm';
 
 type ReviewFormProps = {

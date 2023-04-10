@@ -1,5 +1,4 @@
 import { Combobox } from '@headlessui/react';
-import { useState } from 'react';
 import { ChevronDown } from 'react-feather';
 
 type AutocompleteProps = {

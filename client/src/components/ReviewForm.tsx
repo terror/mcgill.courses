@@ -2,7 +2,7 @@ import { Field } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
-import { Course } from '../model/course';
+import { Course } from '../model/Course';
 import { Autocomplete } from './Autocomplete';
 
 export const ReviewSchema = Yup.object().shape({
