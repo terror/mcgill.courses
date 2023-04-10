@@ -63,24 +63,26 @@ export const CourseSearchBar = ({
       </div>
       {searchSelected && (
         <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
-          {results.courses.map((result, index) => (
-            <Link to={`/course/${result._id}`}>
-              <div
-                className={classNames(
-                  'p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200',
-                  selectedIndex === index ? 'bg-gray-100' : ''
-                )}
-                key={result._id}
-              >
-                <span>
-                  {`${result._id} - ${
-                    parser.parseFromString(result.title, 'text/html').body
-                      .textContent
-                  }`
-                    .split(
-                      new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
-                    )
-                    .map((part, i) => (
+          {results.courses.map((result, index) => {
+            const courseText = `${result._id} - ${
+              parser.parseFromString(result.title, 'text/html').body.textContent
+            }`;
+
+            const parts = courseText.split(
+              new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
+            );
+
+            return (
+              <Link to={`/course/${result._id}`}>
+                <div
+                  className={classNames(
+                    'p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200',
+                    selectedIndex === index ? 'bg-gray-100' : ''
+                  )}
+                  key={result._id}
+                >
+                  <span>
+                    {parts.map((part, i) => (
                       <span
                         key={i}
                         className={
@@ -92,10 +94,11 @@ export const CourseSearchBar = ({
                         {part}
                       </span>
                     ))}
-                </span>
-              </div>
-            </Link>
-          ))}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
           <Link to={`/explore`}>
             <div className='p-3 hover:bg-gray-100 cursor-pointer text-left flex items-center'>
               <Layers /> <div className='ml-2'>Explore all courses</div>
