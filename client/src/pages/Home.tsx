@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
 import { SearchResults } from '../model/SearchResults';
+import { Course } from '../model/course';
 
 export const Home = () => {
   const [results, setResults] = useState<SearchResults>({
