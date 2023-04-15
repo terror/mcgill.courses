@@ -45,10 +45,10 @@ export const Navbar = () => {
   return (
     <header className='z-50'>
       <nav
-        className='flex items-center p-6 lg:px-8 justify-between'
+        className='flex items-center justify-between p-6 lg:px-8'
         aria-label='Global'
       >
-        <div className='flex lg:flex-1 mr-auto my-auto'>
+        <div className='my-auto mr-auto flex lg:flex-1'>
           <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='/bird.png' alt='bird' />
           </Link>
@@ -64,20 +64,20 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='hidden lg:flex align-middle justify-center flex-1 my-auto'>
+          <div className='my-auto hidden flex-1 justify-center align-middle lg:flex'>
             <CourseSearchBar
               results={results}
               handleInputChange={handleInputChange}
             />
           </div>
         ) : null}
-        <div className='flex flex-row lg:flex-1 min-w-fit ml-6'>
-          <div className='hidden my-auto lg:flex lg:gap-x-12 lg:ml-auto'>
+        <div className='ml-6 flex min-w-fit flex-row lg:flex-1'>
+          <div className='my-auto hidden lg:ml-auto lg:flex lg:gap-x-12'>
             {navigation.map((item) => (
               <NavItem name={item.name} href={item.href} key={item.name} />
             ))}
           </div>
-          <div className='hidden lg:flex lg:justify-end lg:ml-12'>
+          <div className='hidden lg:ml-12 lg:flex lg:justify-end'>
             {user ? (
               <ProfileDropdown />
             ) : (
