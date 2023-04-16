@@ -166,7 +166,7 @@ impl Db {
               "content": &review.content,
               "instructor": &review.instructor,
               "rating": review.rating,
-              "timestamp": review.timestamp.format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
+              "timestamp": review.timestamp.format("%Y-%m-%dT%H:%M:%S%.9fZ").to_string()
             },
           }),
           None,
