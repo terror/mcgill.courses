@@ -37,7 +37,7 @@ export const CoursePage = () => {
 
   if (course === undefined || reviews === undefined) {
     return (
-      <div className='flex justify-center items-center min-h-screen'>
+      <div className='flex min-h-screen items-center justify-center'>
         <div className='text-center'>
           <Spinner />
         </div>

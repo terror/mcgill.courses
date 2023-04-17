@@ -63,7 +63,7 @@ export const ReviewForm = ({
           id='content'
           name='content'
           placeholder='Write your thoughts on this course...'
-          className='resize-none bg-gray-50 mt-6 p-3 rounded-md outline-none'
+          className='mt-6 resize-none rounded-md bg-gray-50 p-3 outline-none'
         />
         <label htmlFor='rating' className='mt-4 mb-2'>
           Rating
@@ -72,11 +72,11 @@ export const ReviewForm = ({
           type='number'
           id='rating'
           name='rating'
-          className='p-2 rounded-md w-fit mb-4 bg-gray-50'
+          className='mb-4 w-fit rounded-md bg-gray-50 p-2'
         />
         <button
           type='submit'
-          className='bg-red-400 px-3 py-2 w-fit text-white rounded-md mt-4 hover:bg-red-500 transition duration-300'
+          className='mt-4 w-fit rounded-md bg-red-400 px-3 py-2 text-white transition duration-300 hover:bg-red-500'
         >
           Submit
         </button>

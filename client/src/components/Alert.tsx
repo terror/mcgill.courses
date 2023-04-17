@@ -56,14 +56,14 @@ export const Alert = ({ status, message }: AlertProp) => {
         : 'translate-y-full md:translate-y-[120%] md:translate-y-0'
     }
     ${statusColor[status]}
-    p-4 fixed bottom-0 right-0 w-screen md:max-w-md md:w-full md:m-5 md:rounded-md shadow-md transition-all duration-300
+    fixed bottom-0 right-0 w-screen p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md
   `}
       role='alert'
     >
       <div className='flex'>
         <div className='my-auto mr-2 ml-3 md:ml-1'>{statusIcon[status]}</div>
         {message ? (
-          <p className='m-3 md:m-1 my-auto'>{message}</p>
+          <p className='m-3 my-auto md:m-1'>{message}</p>
         ) : (
           <p className='m-1'>
             {defaultMessages[status]}

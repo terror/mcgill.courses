@@ -15,12 +15,12 @@ export const NavItem = ({ name, href }: NavItemProps) => {
     <Link
       to={href}
       className={classNames(
-        'text-sm font-semibold leading-6 text-gray-900 relative',
+        'relative text-sm font-semibold leading-6 text-gray-900',
         location.pathname === href
           ? redUnderlineStyle
           : classNames(
               redUnderlineStyle,
-              'before:hover:scale-x-100 before:scale-x-0 before:origin-top-left before:transition before:ease-in-out before:duration-300'
+              'before:origin-top-left before:scale-x-0 before:transition before:duration-300 before:ease-in-out before:hover:scale-x-100'
             )
       )}
     >

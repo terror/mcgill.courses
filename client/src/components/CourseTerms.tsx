@@ -36,11 +36,11 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         <div
           key={i}
           className={classNames(
-            'bg-gray-100 rounded-xl',
+            'rounded-xl bg-gray-100',
             variant === 'small' ? 'py-1 px-2' : 'p-2'
           )}
         >
-          <div className='flex space-x-2 items-center'>
+          <div className='flex items-center space-x-2'>
             {termToIcon(instructor.term, variant)}
             <div>{instructor.name}</div>
           </div>

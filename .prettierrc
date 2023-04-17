@@ -3,6 +3,8 @@
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "jsxSingleQuote": true,
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "pluginSearchDirs": false,
   "proseWrap": "always",
   "semi": true,
   "singleQuote": true,
