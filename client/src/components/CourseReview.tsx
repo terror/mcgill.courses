@@ -20,15 +20,15 @@ export const CourseReview = ({
   const dateStr = format(new Date(review.timestamp), 'MMM d, yyyy');
 
   return (
-    <div className='w-96 p-6 bg-slate-50 rounded-md'>
+    <div className='w-96 rounded-md bg-slate-50 p-6'>
       <div className='flex'>
-        <div className='flex flex-col w-full'>
+        <div className='flex w-full flex-col'>
           <div className='flex'>
-            <div className='w-16 h-16 rounded-full bg-gray-200' />
+            <div className='h-16 w-16 rounded-full bg-gray-200' />
             {canModify && (
-              <div className='flex space-x-2 ml-auto mr-6'>
+              <div className='ml-auto mr-6 flex space-x-2'>
                 <Link to={`/review/${review.courseId}/edit`}>
-                  <Edit className='hover:stroke-gray-500 transition duration-200' />
+                  <Edit className='transition duration-200 hover:stroke-gray-500' />
                 </Link>
                 <DeleteButton
                   title='Delete Review'
@@ -39,7 +39,7 @@ export const CourseReview = ({
             )}
           </div>
           <div className='mt-2 text-sm'>
-            <h2 className='leading-none mt-1 font-semibold text-gray-700'>
+            <h2 className='mt-1 font-semibold leading-none text-gray-700'>
               Instructor:
             </h2>
             <p className='text-gray-700'>{review.instructor}</p>
@@ -47,12 +47,12 @@ export const CourseReview = ({
         </div>
         <div className='ml-auto w-fit'>
           <StarRating rating={review.rating} />
-          <h2 className='leading-none mt-2 ml-1 font-bold text-sm  text-gray-700'>
+          <h2 className='mt-2 ml-1 text-sm font-bold leading-none  text-gray-700'>
             {dateStr}
           </h2>
         </div>
       </div>
-      <div className='mt-6 text-md'>{review.content}</div>
+      <div className='text-md mt-6'>{review.content}</div>
     </div>
   );
 };

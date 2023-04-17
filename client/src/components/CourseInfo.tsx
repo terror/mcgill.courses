@@ -6,11 +6,11 @@ import { CourseTerms } from './CourseTerms';
 export const CourseInfo = ({ course }: { course: Course }) => {
   return (
     <div className='flex justify-center'>
-      <div className='w-screen p-6 mx-8 rounded-md bg-slate-50 md:mt-10'>
+      <div className='mx-8 w-screen rounded-md bg-slate-50 p-6 md:mt-10'>
         <div className='flex flex-col md:flex-row'>
-          <div className='flex flex-col space-y-3 w-fit m-4 md:w-1/2 md:m-4'>
+          <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
             <div className='flex flex-row space-x-2 align-middle'>
-              <h1 className='text-4xl font-semibold break-words text-gray-800'>
+              <h1 className='break-words text-4xl font-semibold text-gray-800'>
                 {course._id}
               </h1>
               {course.url ? (
@@ -28,9 +28,9 @@ export const CourseInfo = ({ course }: { course: Course }) => {
             ) : (
               <p>This course is not currently being offered.</p>
             )}
-            <p className='text-gray-500 break-words'>{course.description}</p>
+            <p className='break-words text-gray-500'>{course.description}</p>
           </div>
-          <div className='flex flex-col space-y-3 w-fit m-4  md:m-4 md:w-1/2'></div>
+          <div className='m-4 flex w-fit flex-col space-y-3  md:m-4 md:w-1/2'></div>
         </div>
       </div>
     </div>

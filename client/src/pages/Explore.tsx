@@ -38,15 +38,15 @@ export const Explore = () => {
   return (
     <Layout>
       {error ? <Alert status='error' /> : null}
-      <div className='w-full py-8 flex flex-col items-center'>
-        <h1 className='mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl text-center'>
+      <div className='flex w-full flex-col items-center py-8'>
+        <h1 className='mb-4 text-center text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
           Showing all courses
         </h1>
         <InfiniteScroll
           dataLength={courses.length}
           hasMore={hasMore}
           loader={
-            <div className='text-center mt-4'>
+            <div className='mt-4 text-center'>
               <Spinner />
             </div>
           }

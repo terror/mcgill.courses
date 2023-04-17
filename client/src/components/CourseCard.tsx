@@ -10,8 +10,8 @@ type CourseCardProps = {
 export const CourseCard = ({ course }: CourseCardProps) => {
   return (
     <Link to={`/course/${course._id}`} key={course._id}>
-      <div className='max-w-xl p-5 border rounded-lg m-2'>
-        <div className='font-bold mb-2'>
+      <div className='m-2 max-w-xl rounded-lg border p-5'>
+        <div className='mb-2 font-bold'>
           {course._id} - {course.title}
         </div>
         <CourseTerms course={course} variant='small' />

@@ -41,7 +41,7 @@ export const CourseSearchBar = ({
   return (
     <div className='relative'>
       <div className='relative w-full'>
-        <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
           <Search
             size={20}
             className={classNames(
@@ -53,7 +53,7 @@ export const CourseSearchBar = ({
         </div>
         <input
           type='text'
-          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-3 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black lg:min-w-[600px]'
+          className='block w-full rounded-lg border border-none border-neutral-50 bg-neutral-50 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-50 dark:text-black dark:placeholder-neutral-500 lg:min-w-[600px]'
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
@@ -62,7 +62,7 @@ export const CourseSearchBar = ({
         />
       </div>
       {searchSelected && (
-        <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
+        <div className='absolute top-full z-10 w-full overflow-hidden rounded-b-lg bg-white shadow-md'>
           {results.courses.map((result, index) => {
             const courseText = `${result._id} - ${
               parser.parseFromString(result.title, 'text/html').body.textContent
@@ -76,7 +76,7 @@ export const CourseSearchBar = ({
               <Link to={`/course/${result._id}`}>
                 <div
                   className={classNames(
-                    'p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200',
+                    'cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100',
                     selectedIndex === index ? 'bg-gray-100' : ''
                   )}
                   key={result._id}
@@ -100,7 +100,7 @@ export const CourseSearchBar = ({
             );
           })}
           <Link to={`/explore`}>
-            <div className='p-3 hover:bg-gray-100 cursor-pointer text-left flex items-center'>
+            <div className='flex cursor-pointer items-center p-3 text-left hover:bg-gray-100'>
               <Layers /> <div className='ml-2'>Explore all courses</div>
             </div>
           </Link>
