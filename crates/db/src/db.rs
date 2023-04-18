@@ -166,7 +166,7 @@ impl Db {
               "content": &review.content,
               "instructor": &review.instructor,
               "rating": review.rating,
-              "timestamp": review.timestamp.format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
+              "timestamp": review.timestamp
             },
           }),
           None,
@@ -747,12 +747,12 @@ mod tests {
       instructor: "bar".into(),
       rating: 5,
       user_id: "1".into(),
-      timestamp: Utc::now(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
     })
     .await
     .unwrap();
 
-    let timestamp = Utc::now();
+    let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
 
     assert_eq!(
       db.update_review(Review {

@@ -242,6 +242,7 @@ dependencies = [
  "ahash",
  "base64 0.13.1",
  "bitvec",
+ "chrono",
  "hex",
  "indexmap",
  "js-sys",
@@ -590,6 +591,7 @@ name = "db"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "bson",
  "chrono",
  "futures",
  "include_dir",

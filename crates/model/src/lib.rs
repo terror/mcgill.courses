@@ -1,5 +1,5 @@
 use {
-  bson::{doc, Bson},
+  bson::{doc, Bson, DateTime},
   chrono::prelude::*,
   serde::{Deserialize, Serialize},
 };
