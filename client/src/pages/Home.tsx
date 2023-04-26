@@ -27,11 +27,11 @@ export const Home = () => {
 
   return (
     <Layout>
-      <div className='relative isolate px-6 pt-14 lg:px-8'>
+      <div className='relative isolate h-screen px-6 pt-14 lg:px-8'>
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='mb-6 text-left text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
+            <h1 className='mb-6 text-left text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>

@@ -1,4 +1,4 @@
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Bars3Icon, MoonIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import { CourseSearchBar } from './CourseSearchBar';
 import { NavItem } from './NavItem';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
+import { DarkModeToggle } from './DarkModeToggle';
 
 export const navigation = [
   { name: 'Explore', href: '/explore' },
@@ -72,7 +73,8 @@ export const Navbar = () => {
           </div>
         ) : null}
         <div className='ml-6 flex min-w-fit flex-row lg:flex-1'>
-          <div className='my-auto hidden lg:ml-auto lg:flex lg:gap-x-12'>
+          <div className='my-auto hidden lg:ml-auto lg:flex lg:gap-x-8'>
+            <DarkModeToggle />
             {navigation.map((item) => (
               <NavItem name={item.name} href={item.href} key={item.name} />
             ))}
@@ -83,7 +85,7 @@ export const Navbar = () => {
             ) : (
               <a
                 href={`${import.meta.env.VITE_API_URL}/auth/login`}
-                className='text-sm font-semibold leading-6 text-gray-900'
+                className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
               >
                 Log in <span aria-hidden='true'>&rarr;</span>
               </a>

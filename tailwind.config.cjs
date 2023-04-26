@@ -7,5 +7,6 @@ module.exports = {
       sans: ['Inter', ...defaultTheme.fontFamily.sans],
     },
   },
+  darkMode: 'class',
   plugins: [],
 };

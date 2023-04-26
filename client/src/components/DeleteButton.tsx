@@ -19,7 +19,7 @@ export const DeleteButton = ({ title, text, onConfirm }: DeleteButtonProps) => {
   return (
     <>
       <button type='button' className='h-fit' onClick={() => setOpen(true)}>
-        <Trash2 className='transition duration-200 hover:stroke-red-600' />
+        <Trash2 className='transition duration-200 hover:stroke-red-600 dark:stroke-gray-200 dark:hover:stroke-red-600' />
       </button>
       <Transition appear show={open} as={Fragment}>
         <Dialog

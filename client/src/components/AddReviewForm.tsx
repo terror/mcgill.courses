@@ -20,8 +20,8 @@ export const AddReviewForm = ({ course }: ReviewFormProps) => {
   };
 
   return (
-    <div className='mx-2 w-6/12 rounded-lg bg-white p-6'>
-      <h1 className='mb-8 text-xl font-bold'>{`Reviewing ${course._id} - ${course.title}`}</h1>
+    <div className='mx-2 w-6/12 rounded-lg bg-white p-6 dark:bg-neutral-900'>
+      <h1 className='mb-8 text-xl font-bold dark:text-gray-200'>{`Reviewing ${course._id} - ${course.title}`}</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={ReviewSchema}
