@@ -18,7 +18,7 @@ export const CourseReview = ({
   handleDelete,
 }: CourseReviewProps) => {
   const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong)),
+    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
     'MMM d, yyyy'
   );
 

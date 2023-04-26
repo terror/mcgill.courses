@@ -12,9 +12,9 @@ export const DarkModeProvider = ({ children }: PropsWithChildren<any>) => {
     localStorage.getItem('theme') === 'dark'
   );
 
-  const setDarkMode = (darkMode: boolean) => {
-    setDark(darkMode);
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+  const setDarkMode = (dark: boolean) => {
+    setDark(dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
   };
 
   return (
