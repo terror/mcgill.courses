@@ -8,10 +8,10 @@ import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 
-type alertStatus = 'error' | 'success' | 'info' | 'warning';
+type AlertStatus = 'error' | 'success' | 'info' | 'warning';
 
 interface AlertProp {
-  status: alertStatus;
+  status: AlertStatus;
   message?: string;
 }
 
@@ -53,7 +53,7 @@ export const Alert = ({ status, message }: AlertProp) => {
     ${
       show
         ? 'translate-y-0 md:translate-y-0 md:translate-y-0'
-        : 'translate-y-full md:translate-y-[120%] md:translate-y-0'
+        : 'translate-y-full md:translate-y-[150%] md:translate-y-0'
     }
     ${statusColor[status]}
     fixed bottom-0 right-0 w-screen p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md
