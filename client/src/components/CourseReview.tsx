@@ -17,7 +17,10 @@ export const CourseReview = ({
   canModify,
   handleDelete,
 }: CourseReviewProps) => {
-  const dateStr = format(new Date(review.timestamp), 'MMM d, yyyy');
+  const dateStr = format(
+    new Date(parseInt(review.timestamp.$date.$numberLong)),
+    'MMM d, yyyy'
+  );
 
   return (
     <div className='w-96 rounded-md bg-slate-50 p-6 dark:bg-neutral-800'>
