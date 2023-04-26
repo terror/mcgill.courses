@@ -27,7 +27,7 @@ export const Home = () => {
 
   return (
     <Layout>
-      <div className='relative isolate h-screen px-6 pt-14 lg:px-8'>
+      <div className='relative isolate px-6 pt-14 lg:px-8'>
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
