@@ -32,11 +32,7 @@ export const Home = () => {
     }
   };
 
-  let err = searchParams.get('err');
-  let errAlert;
-  if (err) {
-    errAlert = <Alert status='error' message={alerts.get(err)} />;
-  }
+  const err = searchParams.get('err');
 
   return (
     <Layout>
@@ -55,7 +51,7 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      {errAlert}
+      {err && <Alert status='error' message={alerts.get(err)} />}
     </Layout>
   );
 };
