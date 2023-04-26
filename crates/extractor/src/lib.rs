@@ -57,9 +57,9 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
       false => Vec::new(),
       _ => html
         .root_element()
-        .select_many("block")?
+        .select_many("uselection")?
         .iter()
-        .map(Schedule::from_block)
+        .map(Schedule::from_selection)
         .collect(),
     },
   )
@@ -379,6 +379,7 @@ mod tests {
         campus: Some("Downtown".into()),
         display: Some("Lec 045".into()),
         location: Some("BRONF 422".into()),
+        term: Some("Summer 2023".into())
       }]
     );
   }

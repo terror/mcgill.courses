@@ -33,7 +33,8 @@
       {
         "campus": "Downtown",
         "display": "Lec 001",
-        "location": "ENGTR 0100; STBIO S1/3"
+        "location": "ENGTR 0100; STBIO S1/3",
+        "term": "foo"
       }
     ]
   },

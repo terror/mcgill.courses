@@ -16,6 +16,7 @@ pub struct Schedule {
   pub campus: Option<String>,
   pub display: Option<String>,
   pub location: Option<String>,
+  pub term: Option<String>,
 }
 
 impl Into<Bson> for Schedule {
@@ -24,6 +25,7 @@ impl Into<Bson> for Schedule {
       "campus": self.campus.unwrap_or(String::new()),
       "display": self.display.unwrap_or(String::new()),
       "location": self.location.unwrap_or(String::new()),
+      "term": self.term.unwrap_or(String::new()),
     })
   }
 }
