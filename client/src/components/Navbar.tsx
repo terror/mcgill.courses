@@ -19,7 +19,9 @@ export const navigation = [
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [arrowColor, setArrowColor] = useState('text-gray-900 dark:text-gray-200');
+  const [arrowColor, setArrowColor] = useState(
+    'text-gray-900 dark:text-gray-200'
+  );
 
   const [results, setResults] = useState<SearchResults>({
     query: '',
@@ -88,9 +90,15 @@ export const Navbar = () => {
                 href={`${import.meta.env.VITE_API_URL}/auth/login`}
                 className='my-auto text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
                 onMouseEnter={() => setArrowColor('text-red-600')}
-                onMouseLeave={() => setArrowColor('text-gray-900 dark:text-gray-200')}
+                onMouseLeave={() =>
+                  setArrowColor('text-gray-900 dark:text-gray-200')
+                }
               >
-                Log in <span className={arrowColor}  aria-hidden='true' >&rarr;</span> </a>
+                Log in{' '}
+                <span className={arrowColor} aria-hidden='true'>
+                  &rarr;
+                </span>{' '}
+              </a>
             )}
           </div>
         </div>
