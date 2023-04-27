@@ -44,20 +44,27 @@ pub(crate) async fn login_authorized(
     .request_async(async_http_client)
     .await?;
 
+  log::debug!("Fetching user data from Microsoft...");
+  let user: User = request_client
+    .get("https://graph.microsoft.com/v1.0/me")
+    .bearer_auth(token.access_token().secret())
+    .send()
+    .await?
+    .json()
+    .await?;
+
+  if !user.mail().ends_with("mcgill.ca") {
+    return Ok((
+      HeaderMap::new(),
+      Redirect::to(&format!("{}?err=invalidMail", CLIENT_URL)),
+    ));
+  }
+
   let mut session = Session::new();
 
   log::debug!("Inserting user data into session...");
 
-  session.insert(
-    "user",
-    request_client
-      .get("https://graph.microsoft.com/v1.0/me")
-      .bearer_auth(token.access_token().secret())
-      .send()
-      .await?
-      .json::<User>()
-      .await?,
-  )?;
+  session.insert("user", user)?;
 
   let mut headers = HeaderMap::new();
 
