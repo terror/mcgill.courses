@@ -57,7 +57,7 @@ export const Navbar = () => {
         <div className='flex lg:hidden'>
           <button
             type='button'
-            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700'
+            className='-m-6 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200'
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className='sr-only'>Open main menu</span>
@@ -73,7 +73,7 @@ export const Navbar = () => {
           </div>
         ) : null}
         <div className='ml-6 flex min-w-fit flex-row lg:flex-1'>
-          <div className='my-auto hidden lg:ml-auto lg:flex lg:gap-x-8'>
+          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
             <DarkModeToggle />
             {navigation.map((item) => (
               <NavItem name={item.name} href={item.href} key={item.name} />

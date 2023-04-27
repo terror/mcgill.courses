@@ -9,7 +9,10 @@ export const DarkModeToggle = () => {
   };
 
   return (
-    <button onClick={toggleDarkMode}>
+    <button
+      onClick={toggleDarkMode}
+      className='rounded-2xl p-1 hover:bg-gray-50 dark:hover:bg-neutral-700'
+    >
       {darkMode ? (
         <SunIcon className='h-6 w-6 fill-gray-200 stroke-gray-200 stroke-2' />
       ) : (
