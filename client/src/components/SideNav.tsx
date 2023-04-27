@@ -29,7 +29,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
         <div className='mt-1 flex items-center justify-between'>
           <div className='flex items-center'>
             <a href='/' className=''>
-              <img className='h-8 w-auto' src='bird.png' alt='' />
+              <img className='h-8 w-auto' src='/bird.png' alt='' />
             </a>
             <div className='ml-6'>
               <DarkModeToggle />
