@@ -5,7 +5,9 @@ export interface Theme {
   setDarkMode: (darkMode: boolean) => void;
 }
 
-export const DarkModeContext = createContext<Theme | undefined>(undefined);
+export const DarkModeContext = createContext<
+  [boolean, (darkMode: boolean) => void] | undefined
+>(undefined);
 
 export const DarkModeProvider = ({ children }: PropsWithChildren<any>) => {
   const [darkMode, setDark] = useState(
@@ -18,7 +20,7 @@ export const DarkModeProvider = ({ children }: PropsWithChildren<any>) => {
   };
 
   return (
-    <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+    <DarkModeContext.Provider value={[darkMode, setDarkMode]}>
       {children}
     </DarkModeContext.Provider>
   );

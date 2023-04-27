@@ -8,7 +8,7 @@ type LayoutProps = {
 };
 
 export const Layout = ({ children }: LayoutProps) => {
-  const { darkMode, setDarkMode } = useDarkMode();
+  const [darkMode, _] = useDarkMode();
 
   return (
     <div className={darkMode ? 'dark' : ''}>
