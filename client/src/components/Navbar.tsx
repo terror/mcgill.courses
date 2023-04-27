@@ -85,7 +85,7 @@ export const Navbar = () => {
             ) : (
               <a
                 href={`${import.meta.env.VITE_API_URL}/auth/login`}
-                className='text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
+                className='my-auto text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
               >
                 Log in <span aria-hidden='true'>&rarr;</span>
               </a>
