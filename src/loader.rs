@@ -123,7 +123,9 @@ impl Loader {
 
     Ok(Course {
       id: format!("{}{}", course_page.subject, course_page.code),
-      title: course_page.title,
+      id_ngrams: None,
+      title: course_page.title.clone(),
+      title_ngrams: None,
       credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
