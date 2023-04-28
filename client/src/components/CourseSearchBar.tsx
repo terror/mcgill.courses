@@ -86,7 +86,8 @@ export const CourseSearchBar = ({
                       <span
                         key={i}
                         className={
-                          part.toLowerCase() === results.query.toLowerCase()
+                          part.toLowerCase().trim() ===
+                          results.query.toLowerCase().trim()
                             ? 'underline'
                             : ''
                         }
