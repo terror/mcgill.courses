@@ -1,14 +1,8 @@
-import { Link } from 'react-router-dom';
-
-import { Course } from '../model/Course';
-
 type CourseReviewPromptProps = {
-  course: Course;
   openAddReview: () => void;
 };
 
 export const CourseReviewPrompt = ({
-  course,
   openAddReview,
 }: CourseReviewPromptProps) => {
   return (

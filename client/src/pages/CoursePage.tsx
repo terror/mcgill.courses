@@ -79,7 +79,6 @@ export const CoursePage = () => {
           <div className='mt-8 ml-8'>
             {canReview && (
               <CourseReviewPrompt
-                course={course}
                 openAddReview={() => setAddReviewOpen(true)}
               />
             )}
