@@ -39,10 +39,7 @@ impl ScheduleExt for Schedule {
                       .unwrap_or_default()
                       .split(',')
                       .any(|id| {
-                        id == timeblock
-                          .value()
-                          .attr("id")
-                          .unwrap_or_default()
+                        id == timeblock.value().attr("id").unwrap_or_default()
                       })
                   })
                   .map(|timeblock| TimeBlock {

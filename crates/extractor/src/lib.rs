@@ -3,14 +3,16 @@ use {
   course_listing_ext::CourseListingExt,
   course_page_ext::CoursePageExt,
   model::{
-    Block, CourseListing, CoursePage, Instructor, Requirement, Requirements,
-    Schedule, TimeBlock,
+    CourseListing, CoursePage, Instructor, Requirement, Requirements, Schedule,
   },
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,
   scraper::{ElementRef, Html, Selector},
   select::Select,
 };
+
+#[cfg(test)]
+use model::{Block, TimeBlock};
 
 mod course_listing_ext;
 mod course_page_ext;
@@ -138,7 +140,6 @@ fn extract_course_requirements(html: &Html) -> Result<Requirements> {
 
 #[cfg(test)]
 mod tests {
-  // TODO: cfg test block/timeblock
   use {
     super::{
       Block, CourseListing, CoursePage, Html, Instructor, Requirements,
