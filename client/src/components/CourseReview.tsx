@@ -9,12 +9,14 @@ import { StarRating } from './StarRating';
 type CourseReviewProps = {
   review: Review;
   canModify: boolean;
+  openEditReview: () => void;
   handleDelete: () => void;
 };
 
 export const CourseReview = ({
   review,
   canModify,
+  openEditReview,
   handleDelete,
 }: CourseReviewProps) => {
   const dateStr = format(
@@ -29,10 +31,10 @@ export const CourseReview = ({
           <div className='flex'>
             <div className='h-16 w-16 rounded-full bg-gray-200' />
             {canModify && (
-              <div className='ml-auto mr-6 flex space-x-2'>
-                <Link to={`/review/${review.courseId}/edit`}>
-                  <Edit className='transition duration-200 hover:stroke-gray-500 dark:stroke-gray-200 dark:hover:stroke-gray-400' />
-                </Link>
+              <div className='ml-auto mr-6 flex h-fit space-x-2'>
+                <div onClick={openEditReview}>
+                  <Edit className='cursor-pointer transition duration-200 hover:stroke-gray-500 dark:stroke-gray-200 dark:hover:stroke-gray-400' />
+                </div>
                 <DeleteButton
                   title='Delete Review'
                   text={`Are you sure you want to delete your review of ${review.courseId}? `}
