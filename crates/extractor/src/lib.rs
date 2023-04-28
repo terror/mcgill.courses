@@ -60,7 +60,7 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
         .select_many("uselection")?
         .iter()
         .map(Schedule::from_selection)
-        .collect(),
+        .collect::<Result<Vec<Schedule>>>()?,
     },
   )
 }
