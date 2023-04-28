@@ -8,7 +8,6 @@ use {
     page::Page,
     server::Server,
     state::State,
-    str_ext::StrExt,
     subcommand::Subcommand,
     user::User,
     vec_ext::VecExt,
@@ -32,8 +31,6 @@ use {
   db::Db,
   dotenv::dotenv,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
-  itertools::Itertools,
-  lazy_static::lazy_static,
   model::{Course, CourseListing, Review, Schedule},
   oauth2::{
     basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
@@ -69,7 +66,6 @@ mod reviews;
 mod search;
 mod server;
 mod state;
-mod str_ext;
 mod subcommand;
 mod user;
 mod vec_ext;

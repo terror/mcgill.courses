@@ -596,11 +596,13 @@ dependencies = [
  "futures",
  "include_dir",
  "itertools",
+ "lazy_static",
  "log",
  "model",
  "mongodb",
  "pretty_assertions",
  "serde_json",
+ "stop-words",
  "tempdir",
  "tokio",
 ]

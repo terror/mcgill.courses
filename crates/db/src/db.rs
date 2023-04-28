@@ -252,7 +252,14 @@ impl Db {
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
-        .insert_one(course, None)
+        .insert_one(
+          Course {
+            id_ngrams: Some(course.id.ngrams()),
+            title_ngrams: Some(course.title.filter_stopwords().ngrams()),
+            ..course
+          },
+          None,
+        )
         .await?,
     )
   }
@@ -428,6 +435,11 @@ mod tests {
       serde_json::from_str::<Vec<Course>>(&get_content("after_update.json"))
         .unwrap()
         .into_iter()
+        .map(|c| Course {
+          id_ngrams: Some(c.id.ngrams()),
+          title_ngrams: Some(c.title.filter_stopwords().ngrams()),
+          ..c
+        })
         .collect::<Vec<Course>>()
     );
   }

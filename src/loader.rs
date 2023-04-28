@@ -121,13 +121,11 @@ impl Loader {
 
     thread::sleep(Duration::from_millis(self.course_delay));
 
-    let id = format!("{}{}", course_page.subject, course_page.code);
-
     Ok(Course {
-      id: id.clone(),
-      id_ngrams: Some(id.as_str().ngrams()),
+      id: format!("{}{}", course_page.subject, course_page.code),
+      id_ngrams: None,
       title: course_page.title.clone(),
-      title_ngrams: Some(course_page.title.filter_stopwords().ngrams()),
+      title_ngrams: None,
       credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
