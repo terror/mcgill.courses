@@ -22,8 +22,8 @@ export const EditReviewForm = ({ course, review }: EditReviewFormProps) => {
   };
 
   return (
-    <div className='mx-2 w-6/12 rounded-lg bg-white p-6'>
-      <h1 className='mb-8 text-xl font-bold'>{`Editing review of ${course._id} - ${course.title}`}</h1>
+    <div className='mx-2 w-6/12 rounded-lg bg-white p-6 dark:bg-neutral-900'>
+      <h1 className='mb-8 text-xl font-bold dark:text-gray-200'>{`Editing review of ${course._id} - ${course.title}`}</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={ReviewSchema}

@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { navigation } from './Navbar';
+import { DarkModeToggle } from './DarkModeToggle';
+import { useDarkMode } from '../hooks/useDarkMode';
+import { classNames } from '../lib/utils';
 
 type SideNavProps = {
   open: boolean;
@@ -12,18 +15,29 @@ type SideNavProps = {
 
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
+  const [darkMode, _] = useDarkMode();
 
   return (
-    <Dialog as='div' className='lg:hidden' open={open} onClose={onClose}>
+    <Dialog
+      as='div'
+      className={classNames('lg:hidden', darkMode ? 'dark' : '')}
+      open={open}
+      onClose={onClose}
+    >
       <div className='fixed inset-0 z-50' />
-      <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
-        <div className='flex items-center justify-between'>
-          <a href='/' className='-m-1.5 p-1.5'>
-            <img className='h-8 w-auto' src='bird.png' alt='' />
-          </a>
+      <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+        <div className='mt-1 flex items-center justify-between'>
+          <div className='flex items-center'>
+            <a href='/' className=''>
+              <img className='h-8 w-auto' src='/bird.png' alt='' />
+            </a>
+            <div className='ml-6'>
+              <DarkModeToggle />
+            </div>
+          </div>
           <button
             type='button'
-            className='-m-2.5 rounded-md p-2.5 text-gray-700'
+            className='mr-2 rounded-2xl p-1 text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
             onClick={() => onClose(false)}
           >
             <span className='sr-only'>Close menu</span>
@@ -37,7 +51,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className='-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                  className='-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
                 >
                   {item.name}
                 </a>
@@ -48,13 +62,13 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                 <>
                   <Link
                     to='/profile'
-                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
                   >
                     Profile
                   </Link>
                   <a
                     href={`${import.meta.env.VITE_API_URL}/auth/logout`}
-                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                   >
                     Log out
                   </a>
@@ -62,7 +76,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
               ) : (
                 <a
                   href={`${import.meta.env.VITE_API_URL}/auth/login`}
-                  className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+                  className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                 >
                   Log in
                 </a>
