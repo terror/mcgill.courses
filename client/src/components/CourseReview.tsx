@@ -28,9 +28,16 @@ export const CourseReview = ({
       <div className='flex'>
         <div className='flex w-full flex-col'>
           <div className='flex'>
-            <div className='h-16 w-16 rounded-full bg-gray-200' />
+            <div className='mt-2 text-sm'>
+              <h2 className='font-semibold leading-none text-gray-700 dark:text-gray-200'>
+                Instructor:
+              </h2>
+              <p className='mt-1.5 text-gray-700 dark:text-gray-200'>
+                {review.instructor}
+              </p>
+            </div>
             {canModify && (
-              <div className='ml-auto mr-6 flex h-fit space-x-2'>
+              <div className='ml-auto mr-4 flex h-fit space-x-2'>
                 <div onClick={openEditReview}>
                   <Edit className='cursor-pointer transition duration-200 hover:stroke-gray-500 dark:stroke-gray-200 dark:hover:stroke-gray-400' />
                 </div>
@@ -42,14 +49,6 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          <div className='mt-2 text-sm'>
-            <h2 className='mt-1 font-semibold leading-none text-gray-700 dark:text-gray-200'>
-              Instructor:
-            </h2>
-            <p className='text-gray-700 dark:text-gray-200'>
-              {review.instructor}
-            </p>
-          </div>
         </div>
         <div className='ml-auto w-fit'>
           <StarRating rating={review.rating} />
@@ -58,7 +57,14 @@ export const CourseReview = ({
           </h2>
         </div>
       </div>
-      <div className='text-md mt-6 dark:text-gray-300'>{review.content}</div>
+      <div className='flex'>
+        <div className='text-md mt-6 mr-4 dark:text-gray-300'>
+          {review.content}
+        </div>
+        <div className='mt-auto'>
+          <div className='rounded-full bg-gray-200 p-8' />
+        </div>
+      </div>
     </div>
   );
 };
