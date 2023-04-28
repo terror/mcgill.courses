@@ -596,13 +596,11 @@ dependencies = [
  "futures",
  "include_dir",
  "itertools",
- "lazy_static",
  "log",
  "model",
  "mongodb",
  "pretty_assertions",
  "serde_json",
- "stop-words",
  "tempdir",
  "tokio",
 ]
@@ -2462,6 +2460,8 @@ dependencies = [
  "extractor",
  "http",
  "hyper",
+ "itertools",
+ "lazy_static",
  "log",
  "model",
  "oauth2",
@@ -2470,6 +2470,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "stop-words",
  "tokio",
  "tower",
  "tower-http",
@@ -2585,9 +2586,12 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
 
 [[package]]
 name = "stop-words"
-version = "0.2.2"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b43b51d9b26eb378bbe8d88fa35212bc4828254c87ac8ea175aec72165cac00b"
+checksum = "30c71f6546118f8f8fbc16434ff5ba695bc9c31616b14b1a589738d0b6ace15e"
+dependencies = [
+ "serde_json",
+]
 
 [[package]]
 name = "string_cache"

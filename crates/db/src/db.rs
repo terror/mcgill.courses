@@ -1,16 +1,8 @@
 use super::*;
 
-use lazy_static::lazy_static;
-use std::collections::HashSet;
-
 #[derive(Debug, Clone)]
 pub struct Db {
   database: Database,
-}
-
-lazy_static! {
-  static ref STOP_WORDS: HashSet<String> =
-    HashSet::from_iter(stop_words::get("english"));
 }
 
 impl Db {
@@ -83,7 +75,6 @@ impl Db {
           "title": "text",
           "idNgrams": "text",
           "titleNgrams": "text",
-          "description": "text"
         },
         doc! {
           "subject": 10,
@@ -92,7 +83,6 @@ impl Db {
           "title": 8,
           "idNgrams": 4,
           "titleNgrams": 2,
-          "description": 1
         },
       )
       .await?;
@@ -262,14 +252,7 @@ impl Db {
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
-        .insert_one(
-          Course {
-            id_ngrams: Some(ngrams(&course.id)),
-            title_ngrams: Some(ngrams(&filter_stopwords(&course.title))),
-            ..course
-          },
-          None,
-        )
+        .insert_one(course, None)
         .await?,
     )
   }
@@ -320,20 +303,6 @@ impl Db {
         .await?,
     )
   }
-}
-
-fn ngrams(s: &str) -> String {
-  s.split(' ')
-    .map(|word| {
-      (3..=word.len())
-        .map(|x| word.get(..x).unwrap_or(word))
-        .join(" ")
-    })
-    .join(" ")
-}
-
-fn filter_stopwords(s: &str) -> String {
-  s.split(' ').filter(|w| !STOP_WORDS.contains(*w)).join(" ")
 }
 
 #[cfg(test)]
@@ -459,11 +428,6 @@ mod tests {
       serde_json::from_str::<Vec<Course>>(&get_content("after_update.json"))
         .unwrap()
         .into_iter()
-        .map(|c| Course {
-          id_ngrams: Some(ngrams(&c.id)),
-          title_ngrams: Some(ngrams(&filter_stopwords(&c.title))),
-          ..c
-        })
         .collect::<Vec<Course>>()
     );
   }
@@ -556,35 +520,12 @@ mod tests {
 
     let courses = db.search("foundations of").await.unwrap();
 
-    assert_eq!(courses.len(), 5);
+    assert_eq!(courses.len(), 1);
 
     let first = courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
-  }
-
-  #[tokio::test(flavor = "multi_thread")]
-  async fn fuzzy_search_course_by_description() {
-    let TestContext { db, db_name } = TestContext::new().await;
-
-    let tempdir = TempDir::new(&db_name).unwrap();
-
-    let source = tempdir.path().join("courses.json");
-
-    fs::write(&source, get_content("search.json")).unwrap();
-    db.seed(source.clone()).await.unwrap();
-
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
-
-    let courses = db.search("computing systems").await.unwrap();
-
-    assert_eq!(courses.len(), 10);
-
-    let first = courses.first().unwrap();
-
-    assert_eq!(first.subject, "COMP");
-    assert_eq!(first.code, "350");
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -894,29 +835,5 @@ mod tests {
       })
       .await
       .is_ok());
-  }
-
-  #[test]
-  fn ngram_single_word_test() {
-    assert_eq!(
-      ngrams("MATH240"),
-      String::from("MAT MATH MATH2 MATH24 MATH240")
-    )
-  }
-
-  #[test]
-  fn ngram_multi_word_test() {
-    assert_eq!(
-      ngrams("Discrete Structures"),
-      String::from("Dis Disc Discr Discre Discret Discrete Str Stru Struc Struct Structu Structur Structure Structures")
-    )
-  }
-
-  #[test]
-  fn stop_word_filter_test() {
-    assert_eq!(
-      filter_stopwords("Algorithms and Data Structures"),
-      String::from("Algorithms Data Structures")
-    )
   }
 }
