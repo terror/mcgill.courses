@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { Edit } from 'react-feather';
-import { Link } from 'react-router-dom';
 
 import { Review } from '../model/Review';
 import { DeleteButton } from './DeleteButton';
