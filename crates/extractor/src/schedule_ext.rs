@@ -27,7 +27,7 @@ impl ScheduleExt for Schedule {
           .map(|block| {
             Ok(Block {
               campus: block.value().attr("campus").map(String::from),
-              display: block.value().attr("display").map(String::from),
+              display: block.value().attr("disp").map(String::from),
               location: block.value().attr("location").map(String::from),
               timeblocks: Some(
                 timeblocks
@@ -41,7 +41,7 @@ impl ScheduleExt for Schedule {
                       .any(|id| {
                         id == timeblock
                           .value()
-                          .attr("timeblockid")
+                          .attr("id")
                           .unwrap_or_default()
                       })
                   })
@@ -56,7 +56,7 @@ impl ScheduleExt for Schedule {
           })
           .collect::<Result<Vec<_>>>()?,
       ),
-      term: term(selection.select_single("term")?.value().attr("ssid")),
+      term: term(selection.select_single("selection")?.value().attr("ssid")),
     })
   }
 }

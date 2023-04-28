@@ -3,7 +3,8 @@ use {
   course_listing_ext::CourseListingExt,
   course_page_ext::CoursePageExt,
   model::{
-    CourseListing, CoursePage, Instructor, Requirement, Requirements, Schedule,
+    Block, CourseListing, CoursePage, Instructor, Requirement, Requirements,
+    Schedule, TimeBlock,
   },
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,
@@ -137,9 +138,11 @@ fn extract_course_requirements(html: &Html) -> Result<Requirements> {
 
 #[cfg(test)]
 mod tests {
+  // TODO: cfg test block/timeblock
   use {
     super::{
-      CourseListing, CoursePage, Html, Instructor, Requirements, Schedule,
+      Block, CourseListing, CoursePage, Html, Instructor, Requirements,
+      Schedule, TimeBlock,
     },
     include_dir::{include_dir, Dir},
     pretty_assertions::assert_eq,
@@ -376,9 +379,23 @@ mod tests {
       super::extract_course_schedules(&get_content("course_schedules.xml"))
         .unwrap(),
       vec![Schedule {
-        campus: Some("Downtown".into()),
-        display: Some("Lec 045".into()),
-        location: Some("BRONF 422".into()),
+        blocks: Some(vec![Block {
+          campus: Some("Downtown".into()),
+          display: Some("Lec 045".into()),
+          location: Some("BRONF 422".into()),
+          timeblocks: Some(vec![
+            TimeBlock {
+              day: Some("4".into()),
+              t1: Some("515".into()),
+              t2: Some("1255".into()),
+            },
+            TimeBlock {
+              day: Some("4".into()),
+              t1: Some("515".into()),
+              t2: Some("1255".into()),
+            }
+          ])
+        }]),
         term: Some("Summer 2023".into())
       }]
     );
