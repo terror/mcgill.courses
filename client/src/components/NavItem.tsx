@@ -15,7 +15,7 @@ export const NavItem = ({ name, href }: NavItemProps) => {
     <Link
       to={href}
       className={classNames(
-        'relative text-sm font-semibold leading-6 text-gray-900',
+        'relative text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200',
         location.pathname === href
           ? redUnderlineStyle
           : classNames(

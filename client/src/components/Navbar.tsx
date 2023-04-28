@@ -1,4 +1,4 @@
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { Bars3Icon, MoonIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import { CourseSearchBar } from './CourseSearchBar';
 import { NavItem } from './NavItem';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
+import { DarkModeToggle } from './DarkModeToggle';
 
 export const navigation = [
   { name: 'Explore', href: '/explore' },
@@ -18,6 +19,9 @@ export const navigation = [
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [arrowColor, setArrowColor] = useState(
+    'text-gray-900 dark:text-gray-200'
+  );
 
   const [results, setResults] = useState<SearchResults>({
     query: '',
@@ -56,7 +60,7 @@ export const Navbar = () => {
         <div className='flex lg:hidden'>
           <button
             type='button'
-            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700'
+            className='-m-6 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200'
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className='sr-only'>Open main menu</span>
@@ -72,7 +76,8 @@ export const Navbar = () => {
           </div>
         ) : null}
         <div className='ml-6 flex min-w-fit flex-row lg:flex-1'>
-          <div className='my-auto hidden lg:ml-auto lg:flex lg:gap-x-12'>
+          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
+            <DarkModeToggle />
             {navigation.map((item) => (
               <NavItem name={item.name} href={item.href} key={item.name} />
             ))}
@@ -83,9 +88,16 @@ export const Navbar = () => {
             ) : (
               <a
                 href={`${import.meta.env.VITE_API_URL}/auth/login`}
-                className='text-sm font-semibold leading-6 text-gray-900'
+                className='my-auto text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
+                onMouseEnter={() => setArrowColor('text-red-600')}
+                onMouseLeave={() =>
+                  setArrowColor('text-gray-900 dark:text-gray-200')
+                }
               >
-                Log in <span aria-hidden='true'>&rarr;</span>
+                Log in{' '}
+                <span className={arrowColor} aria-hidden='true'>
+                  &rarr;
+                </span>{' '}
               </a>
             )}
           </div>

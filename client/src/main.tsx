@@ -8,12 +8,15 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import AuthProvider from './providers/AuthProvider';
+import { DarkModeProvider } from './providers/DarkModeProvider';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <DarkModeProvider>
+          <App />
+        </DarkModeProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
