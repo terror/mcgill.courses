@@ -57,13 +57,8 @@ export const CourseReview = ({
           </h2>
         </div>
       </div>
-      <div className='flex'>
-        <div className='text-md mt-6 mr-4 dark:text-gray-300'>
-          {review.content}
-        </div>
-        <div className='mt-auto'>
-          <div className='rounded-full bg-gray-200 p-8' />
-        </div>
+      <div className='text-md mt-6 mr-4 dark:text-gray-300'>
+        {review.content}
       </div>
     </div>
   );
