@@ -47,7 +47,7 @@ export const ReviewForm = ({
 
   return (
     <>
-      <label htmlFor='instructor' className='mb-2'>
+      <label htmlFor='instructor' className='mb-2 dark:text-gray-200'>
         Instructor
       </label>
       <Autocomplete
@@ -63,20 +63,20 @@ export const ReviewForm = ({
           id='content'
           name='content'
           placeholder='Write your thoughts on this course...'
-          className='mt-6 resize-none rounded-md bg-gray-50 p-3 outline-none'
+          className='mt-6 resize-none rounded-md bg-gray-50 p-3 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
         />
-        <label htmlFor='rating' className='mt-4 mb-2'>
+        <label htmlFor='rating' className='mt-4 mb-2 dark:text-gray-200'>
           Rating
         </label>
         <Field
           type='number'
           id='rating'
           name='rating'
-          className='mb-4 w-fit rounded-md bg-gray-50 p-2'
+          className='mb-4 w-fit rounded-md bg-gray-50 p-2 dark:bg-neutral-700 dark:text-gray-200'
         />
         <button
           type='submit'
-          className='mt-4 w-fit rounded-md bg-red-400 px-3 py-2 text-white transition duration-300 hover:bg-red-500'
+          className='ml-auto mt-4 w-fit rounded-md bg-red-500 px-3 py-2 text-white transition duration-300 hover:bg-red-600'
         >
           Submit
         </button>

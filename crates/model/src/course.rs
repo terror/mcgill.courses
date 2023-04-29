@@ -16,7 +16,9 @@ use super::*;
 pub struct Course {
   #[serde(rename = "_id")]
   pub id: String,
+  pub id_ngrams: Option<String>,
   pub title: String,
+  pub title_ngrams: Option<String>,
   pub credits: String,
   pub subject: String,
   pub code: String,
