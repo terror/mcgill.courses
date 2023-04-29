@@ -12,16 +12,26 @@ import { ExploreFilter } from '../components/ExploreFilter';
 export const Explore = () => {
   const limit = 20;
 
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(limit);
+  const [error, setError] = useState(false);
 
   const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(limit);
-  const [error, setError] = useState(false);
+  const body = {
+    codes: selectedCodes,
+    levels: selectedLevels.map((l) => parseInt(l[0]) * 100), //turn 1XX into 100
+    terms: selectedTerms,
+  };
+
+  // useEffect(() => {
+  //   fetchClient
+  //     .post(`/courses?limits=${limit}`, body)
+  //     .catch((_) => setError(true));
+  // }, [selectedCodes, selectedLevels, selectedTerms]);
 
   useEffect(() => {
     fetchClient
