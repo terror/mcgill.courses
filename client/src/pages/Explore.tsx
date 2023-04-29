@@ -12,6 +12,12 @@ import { ExploreFilter } from '../components/ExploreFilter';
 export const Explore = () => {
   const limit = 20;
 
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
@@ -61,7 +67,14 @@ export const Explore = () => {
               ))}
             </div>
           </InfiniteScroll>
-          <ExploreFilter />
+          <ExploreFilter
+            selectedCodes={selectedCodes}
+            setSelectedCodes={setSelectedCodes}
+            selectedLevels={selectedLevels}
+            setSelectedLevels={setSelectedLevels}
+            selectedTerms={selectedTerms}
+            setSelectedTerms={setSelectedTerms}
+          />
         </div>
       </div>
     </Layout>
