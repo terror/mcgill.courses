@@ -7,6 +7,7 @@ import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
+import { ExploreFilter } from '../components/ExploreFilter';
 
 export const Explore = () => {
   const limit = 20;
@@ -39,26 +40,29 @@ export const Explore = () => {
     <Layout>
       {error ? <Alert status='error' /> : null}
       <div className='flex w-full flex-col items-center py-8'>
-        <h1 className='mb-4 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+        <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
           Showing all courses
         </h1>
-        <InfiniteScroll
-          dataLength={courses.length}
-          hasMore={hasMore}
-          loader={
-            <div className='mt-4 text-center'>
-              <Spinner />
+        <div className='flex flex-col md:flex-row'>
+          <InfiniteScroll
+            dataLength={courses.length}
+            hasMore={hasMore}
+            loader={
+              <div className='mt-4 text-center'>
+                <Spinner />
+              </div>
+            }
+            next={fetchMore}
+            style={{ overflowY: 'hidden' }}
+          >
+            <div className='mx-auto'>
+              {courses.map((course, i) => (
+                <CourseCard key={i} course={course} />
+              ))}
             </div>
-          }
-          next={fetchMore}
-          style={{ overflowY: 'hidden' }}
-        >
-          <div className='mx-auto'>
-            {courses.map((course, i) => (
-              <CourseCard key={i} course={course} />
-            ))}
-          </div>
-        </InfiniteScroll>
+          </InfiniteScroll>
+          <ExploreFilter />
+        </div>
       </div>
     </Layout>
   );
