@@ -8,7 +8,7 @@ const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
 const codesOptions = ValidCourseCodes;
 
-type SelectionBoxProps = {
+type InputBoxProp = {
   selected: string[];
   setSelected: (selected: string[]) => void;
   options: string[];
@@ -38,11 +38,12 @@ const Button = ({
 }: ButtonProp) => {
   const [selected, setSelected] = useState(isSelected);
   const selectedColor = 'bg-red-600 text-gray-100';
-  const unselectedColor = 'bg-gray-100 text-gray-800';
+  const unselectedColor =
+    'bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-gray-100';
 
   return (
     <button
-      className={`m-2 ml-0 rounded-full py-2 px-4 font-semibold tracking-wider transition duration-150 ease-in-out
+      className={`mx-2 ml-0 rounded-full py-2 px-4 font-semibold tracking-wider transition duration-150 ease-in-out
     ${selected ? selectedColor : unselectedColor}`}
       onClick={() => {
         setSelected(!selected);
@@ -68,8 +69,8 @@ const SelectedCode = ({
   setSelectedOptions: (selected: string[]) => void;
 }) => {
   return (
-    <div className='mx-1 mt-4 flex h-8 w-28 flex-wrap items-center justify-center rounded-2xl bg-gray-100'>
-      <p className='mx-auto my-auto flex text-xl font-medium tracking-wider text-black '>
+    <div className='mx-1 mt-4 flex h-8 w-28 flex-wrap items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-700'>
+      <p className='my-auto ml-auto flex text-xl font-medium tracking-wider text-black dark:text-gray-100 '>
         {selectedOption}
       </p>
       <button
@@ -82,17 +83,13 @@ const SelectedCode = ({
           )
         }
       >
-        <XMarkIcon className='ml-0 h-5 w-5 duration-300 hover:text-red-700' />
+        <XMarkIcon className='ml-0 h-5 w-5 duration-300 hover:text-red-700 dark:text-gray-100 dark:hover:text-red-700' />
       </button>
     </div>
   );
 };
 
-const SelectionBox = ({
-  selected,
-  setSelected,
-  options,
-}: SelectionBoxProps) => {
+const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
   const [query, setQuery] = useState('');
 
   const filteredData =
@@ -104,16 +101,16 @@ const SelectionBox = ({
 
   return (
     <div className='flex flex-col'>
-      <div className='rounded-full border'>
+      <div className='rounded-full border dark:border-neutral-700'>
         <Combobox
           value={selected}
           onChange={(val) => setSelected(val)}
           multiple
         >
           {' '}
-          <div className='relative z-10 w-full cursor-default overflow-hidden rounded-full bg-white text-left shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
+          <div className='relative z-10 w-full cursor-default overflow-hidden rounded-full bg-white text-left shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 dark:border-neutral-900 dark:bg-black sm:text-sm'>
             <Combobox.Input
-              className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none'
+              className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none dark:bg-neutral-800 dark:text-gray-200'
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
@@ -189,7 +186,7 @@ export const ExploreFilter = ({
       <div className='m-10 mt-2 space-y-5'>
         <div className='space-y-3'>
           <h1 className='text-2xl font-semibold'>Course Code</h1>
-          <SelectionBox
+          <InputBox
             selected={selectedCodes}
             setSelected={(value) => setSelectedCodes(value)}
             options={codesOptions}
