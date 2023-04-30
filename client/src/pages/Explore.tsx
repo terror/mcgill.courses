@@ -31,6 +31,8 @@ export const Explore = () => {
   // useEffect(() => {
   //   fetchClient
   //     .post(`/courses?limits=${limit}`, body)
+  //     .then((res) => res.json())
+  //     .then((data) => setCourses(data as Course[]))
   //     .catch((_) => setError(true));
   // }, [selectedCodes, selectedLevels, selectedTerms]);
 
