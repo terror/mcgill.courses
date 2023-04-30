@@ -12,12 +12,17 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
+import { AddReviewForm } from '../components/AddReviewForm';
+import { EditReviewForm } from '../components/EditReviewForm';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
   const [reviews, setReviews] = useState<Review[]>();
   const user = useAuth();
+
+  const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [editReviewOpen, setEditReviewOpen] = useState(false);
 
   useEffect(() => {
     fetchClient
@@ -29,7 +34,7 @@ export const CoursePage = () => {
       .then((data) => {
         setReviews(data);
       });
-  }, [params.id]);
+  }, [params.id, addReviewOpen, editReviewOpen]);
 
   if (course === null) {
     return <div>404 not found</div>;
@@ -64,25 +69,45 @@ export const CoursePage = () => {
     setReviews(reviews.filter((r) => r.userId !== review.userId));
   };
 
+  const userReview = reviews.find((r) => r.userId === user?.id);
+
   return (
     <Layout>
       <CourseInfo course={course} />
       <div className='flex'>
         <div>
           <div className='mt-8 ml-8'>
-            {canReview && <CourseReviewPrompt course={course} />}
+            {canReview && (
+              <CourseReviewPrompt
+                openAddReview={() => setAddReviewOpen(true)}
+              />
+            )}
             <div>
               {reviews &&
                 reviews.map((r) => (
                   <CourseReview
                     review={r}
                     canModify={Boolean(user && r.userId === user.id)}
+                    openEditReview={() => setEditReviewOpen(true)}
                     handleDelete={() => handleDelete(r)}
                   />
                 ))}
             </div>
           </div>
         </div>
+        <AddReviewForm
+          course={course}
+          open={addReviewOpen}
+          onClose={() => setAddReviewOpen(false)}
+        />
+        {userReview && (
+          <EditReviewForm
+            course={course}
+            open={editReviewOpen}
+            onClose={() => setEditReviewOpen(false)}
+            review={userReview}
+          />
+        )}
         <CourseRequirements requirements={requirements} />
       </div>
     </Layout>

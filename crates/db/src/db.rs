@@ -73,14 +73,16 @@ impl Db {
           "code": "text",
           "_id": "text",
           "title": "text",
-          "description": "text"
+          "idNgrams": "text",
+          "titleNgrams": "text",
         },
         doc! {
-          "subject": 4,
-          "code": 4,
-          "_id": 3,
-          "title": 2,
-          "description": 1
+          "subject": 10,
+          "code": 10,
+          "_id": 10,
+          "title": 8,
+          "idNgrams": 4,
+          "titleNgrams": 2,
         },
       )
       .await?;
@@ -250,7 +252,14 @@ impl Db {
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
-        .insert_one(course, None)
+        .insert_one(
+          Course {
+            id_ngrams: Some(course.id.ngrams()),
+            title_ngrams: Some(course.title.filter_stopwords().ngrams()),
+            ..course
+          },
+          None,
+        )
         .await?,
     )
   }
@@ -425,6 +434,13 @@ mod tests {
       courses,
       serde_json::from_str::<Vec<Course>>(&get_content("after_update.json"))
         .unwrap()
+        .into_iter()
+        .map(|c| Course {
+          id_ngrams: Some(c.id.ngrams()),
+          title_ngrams: Some(c.title.filter_stopwords().ngrams()),
+          ..c
+        })
+        .collect::<Vec<Course>>()
     );
   }
 
@@ -522,29 +538,6 @@ mod tests {
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
-  }
-
-  #[tokio::test(flavor = "multi_thread")]
-  async fn fuzzy_search_course_by_description() {
-    let TestContext { db, db_name } = TestContext::new().await;
-
-    let tempdir = TempDir::new(&db_name).unwrap();
-
-    let source = tempdir.path().join("courses.json");
-
-    fs::write(&source, get_content("search.json")).unwrap();
-    db.seed(source.clone()).await.unwrap();
-
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 123);
-
-    let courses = db.search("computing systems").await.unwrap();
-
-    assert_eq!(courses.len(), 10);
-
-    let first = courses.first().unwrap();
-
-    assert_eq!(first.subject, "COMP");
-    assert_eq!(first.code, "350");
   }
 
   #[tokio::test(flavor = "multi_thread")]

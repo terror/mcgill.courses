@@ -39,7 +39,7 @@ export const Explore = () => {
     <Layout>
       {error ? <Alert status='error' /> : null}
       <div className='flex w-full flex-col items-center py-8'>
-        <h1 className='mb-4 text-center text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
+        <h1 className='mb-4 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
           Showing all courses
         </h1>
         <InfiniteScroll
