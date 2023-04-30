@@ -8,16 +8,18 @@ pub(crate) trait ScheduleExt {
     Self: Sized;
 }
 
-fn term(ssid: Option<&str>) -> Option<String> {
-  match ssid {
-    Some("202305") => Some(String::from("Summer 2023")),
-    Some(_) | None => None,
-  }
-}
-
 impl ScheduleExt for Schedule {
   fn from_selection(selection: &ElementRef) -> Result<Self> {
     let timeblocks = selection.select_many("timeblock")?;
+
+    let term = |ssid: Option<&str>| -> Option<String> {
+      match (ssid.map(|ssid| &ssid[4..6]), ssid.map(|ssid| &ssid[0..4])) {
+        (Some("01"), Some(year)) => Some(format!("Winter {year}")),
+        (Some("05"), Some(year)) => Some(format!("Summer {year}")),
+        (Some("09"), Some(year)) => Some(format!("Fall {year}")),
+        _ => None,
+      }
+    };
 
     Ok(Self {
       blocks: Some(
