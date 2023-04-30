@@ -1,6 +1,5 @@
-import { Combobox } from '@headlessui/react';
+import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
-import { Transition } from '@headlessui/react';
 import { GoX } from 'react-icons/go';
 import ValidCourseCodes from '../assets/ValidCourseCodes.json';
 
@@ -130,12 +129,12 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
             leaveTo='opacity-0 scale-95'
           >
             <div className='absolute z-50 w-full bg-white'>
-              {query != '' && (
+              {query !== '' && (
                 <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800 sm:text-sm'>
                   {filteredData.length > 0 ? (
                     filteredData.map((data) => (
                       <Combobox.Option key={data} value={data}>
-                        {({ active, selected }) => (
+                        {({ active }) => (
                           <div
                             className={`${
                               active

@@ -24,7 +24,7 @@ export const Explore = () => {
 
   const body = {
     codes: selectedCodes,
-    levels: selectedLevels.map((l) => parseInt(l[0]) * 100), //turn 1XX into 100
+    levels: selectedLevels.map((l) => parseInt(l[0], 10) * 100),
     terms: selectedTerms,
   };
 
