@@ -21,5 +21,5 @@ pub use crate::{
   instructor::Instructor,
   requirements::{Requirement, Requirements},
   review::Review,
-  schedule::Schedule,
+  schedule::*,
 };
