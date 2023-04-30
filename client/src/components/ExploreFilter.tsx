@@ -1,7 +1,7 @@
 import { Combobox } from '@headlessui/react';
 import { useState } from 'react';
 import { Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { GoX } from 'react-icons/go';
 import ValidCourseCodes from '../assets/ValidCourseCodes.json';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
@@ -23,19 +23,19 @@ type ExploreFilterProp = {
   setSelectedTerms: (selected: string[]) => void;
 };
 
-type ButtonProp = {
+type FilterButtonProp = {
   name: string;
   isSelected: boolean;
   selections: string[];
   setSelections: (selected: string[]) => void;
 };
 
-const Button = ({
+const FilterButton = ({
   name,
   isSelected,
   selections,
   setSelections,
-}: ButtonProp) => {
+}: FilterButtonProp) => {
   const [selected, setSelected] = useState(isSelected);
   const selectedColor = 'bg-red-600 text-gray-100';
   const unselectedColor =
@@ -59,7 +59,7 @@ const Button = ({
   );
 };
 
-const SelectedCode = ({
+const CourseCodeBox = ({
   selectedOption,
   selectedOptions,
   setSelectedOptions,
@@ -69,12 +69,12 @@ const SelectedCode = ({
   setSelectedOptions: (selected: string[]) => void;
 }) => {
   return (
-    <div className='mx-1 mt-4 flex h-8 w-28 flex-wrap items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-700'>
-      <p className='my-auto ml-auto flex text-xl font-medium tracking-wider text-black dark:text-gray-100 '>
+    <div className='mx-1 mt-4 flex h-8 w-28 items-center justify-end rounded-full bg-gray-100 dark:bg-neutral-700'>
+      <p className='my-auto ml-auto pl-3 text-xl font-medium tracking-wider text-black dark:text-gray-100'>
         {selectedOption}
       </p>
       <button
-        className='my-auto mx-auto ml-1 rounded-lg p-1 text-black'
+        className='my-auto ml-1 ml-auto p-1 pr-2 text-black'
         onClick={() =>
           setSelectedOptions(
             selectedOptions.filter(
@@ -83,7 +83,7 @@ const SelectedCode = ({
           )
         }
       >
-        <XMarkIcon className='ml-0 h-5 w-5 duration-300 hover:text-red-700 dark:text-gray-100 dark:hover:text-red-700' />
+        <GoX className='ml-0 h-5 w-5 duration-300 hover:text-red-700 dark:text-gray-100 dark:hover:text-red-700' />
       </button>
     </div>
   );
@@ -131,14 +131,16 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
           >
             <div className='absolute z-50 w-full bg-white'>
               {query != '' && (
-                <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-800 sm:text-sm'>
                   {filteredData.length > 0 ? (
                     filteredData.map((data) => (
                       <Combobox.Option key={data} value={data}>
                         {({ active, selected }) => (
                           <div
                             className={`${
-                              active ? 'bg-red-600 text-white' : 'text-gray-700'
+                              active
+                                ? 'bg-red-600 text-gray-100'
+                                : 'text-gray-700 dark:text-gray-100'
                             } p-2 text-lg`}
                             onClick={() => {
                               setQuery('');
@@ -150,7 +152,9 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
                       </Combobox.Option>
                     ))
                   ) : (
-                    <p className='p-2 text-lg text-black'>Nothing Found.</p>
+                    <p className='p-2 text-lg text-gray-800 dark:text-gray-100'>
+                      Nothing Found.
+                    </p>
                   )}
                 </Combobox.Options>
               )}
@@ -158,19 +162,28 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
           </Transition>
         </Combobox>
       </div>
-      {selected.length > 0 ? (
-        <div className='flex flex-wrap'>
-          {selected.map((item) => (
-            <SelectedCode
-              selectedOption={item}
-              selectedOptions={selected}
-              setSelectedOptions={(value) => setSelected(value)}
-            />
-          ))}
-        </div>
-      ) : null}
     </div>
   );
+};
+
+const SelectedCourseCode = ({
+  selected,
+  setSelected,
+}: {
+  selected: string[];
+  setSelected: (selected: string[]) => void;
+}) => {
+  return selected.length > 0 ? (
+    <div className='flex flex-wrap'>
+      {selected.map((item) => (
+        <CourseCodeBox
+          selectedOption={item}
+          selectedOptions={selected}
+          setSelectedOptions={(value) => setSelected(value)}
+        />
+      ))}
+    </div>
+  ) : null;
 };
 
 export const ExploreFilter = ({
@@ -182,7 +195,7 @@ export const ExploreFilter = ({
   setSelectedTerms,
 }: ExploreFilterProp) => {
   return (
-    <div className='m-2 ml-5 box-border flex max-h-fit w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
+    <div className='m-2 ml-5 box-border flex w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
       <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
       <div className='m-10 mt-2 space-y-5'>
         <div className='space-y-3'>
@@ -193,10 +206,14 @@ export const ExploreFilter = ({
             options={codesOptions}
           />
         </div>
+        <SelectedCourseCode
+          selected={selectedCodes}
+          setSelected={setSelectedCodes}
+        />
         <div className='space-y-2'>
           <h1 className='text-2xl font-semibold'>Level</h1>
           {levelsOptions.map((level) => (
-            <Button
+            <FilterButton
               name={level}
               isSelected={false}
               selections={selectedLevels}
@@ -207,7 +224,7 @@ export const ExploreFilter = ({
         <div className='space-y-2'>
           <h1 className='text-2xl font-semibold'>Term</h1>
           {termsOptions.map((term) => (
-            <Button
+            <FilterButton
               name={term}
               isSelected={false}
               selections={selectedTerms}
