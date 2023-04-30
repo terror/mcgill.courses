@@ -8,6 +8,7 @@ import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { ExploreFilter } from '../components/ExploreFilter';
+import { JumpToTopButton } from '../components/JumpToTopButton';
 
 export const Explore = () => {
   const limit = 20;
@@ -87,6 +88,7 @@ export const Explore = () => {
           />
         </div>
       </div>
+      <JumpToTopButton />
     </Layout>
   );
 };
