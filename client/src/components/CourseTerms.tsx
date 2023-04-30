@@ -29,14 +29,13 @@ type CourseTermsProps = {
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
   const instructors = uniqueTermInstructors(course);
+  const container = classNames(
+    'flex',
+    variant === 'small' ? 'space-x-2' : 'space-x-3'
+  );
 
   return instructors.length !== 0 ? (
-    <div
-      className={classNames(
-        'flex',
-        variant === 'small' ? 'space-x-2' : 'space-x-3'
-      )}
-    >
+    <div className={container}>
       {instructors.map((instructor, i) => (
         <div
           key={i}
@@ -53,12 +52,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
       ))}
     </div>
   ) : (
-    <div
-      className={classNames(
-        'flex',
-        variant === 'small' ? 'space-x-2' : 'space-x-3'
-      )}
-    >
+    <div className={container}>
       <div
         className={classNames(
           'rounded-xl bg-gray-100 dark:bg-neutral-700',
