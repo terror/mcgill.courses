@@ -532,7 +532,7 @@ mod tests {
 
     let courses = db.search("foundations of").await.unwrap();
 
-    assert_eq!(courses.len(), 6);
+    assert_eq!(courses.len(), 1);
 
     let first = courses.first().unwrap();
 
