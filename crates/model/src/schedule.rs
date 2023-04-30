@@ -12,32 +12,6 @@ use super::*;
   PartialOrd,
   Serialize,
 )]
-pub struct Schedule {
-  pub blocks: Option<Vec<Block>>,
-  pub term: Option<String>,
-}
-
-impl Into<Bson> for Schedule {
-  fn into(self) -> bson::Bson {
-    Bson::Document(doc! {
-      "blocks": self.blocks.map(Vec::from),
-      "term": self.term.map(String::from),
-    })
-  }
-}
-
-#[derive(
-  Clone,
-  Debug,
-  Default,
-  Deserialize,
-  Eq,
-  Hash,
-  Ord,
-  PartialEq,
-  PartialOrd,
-  Serialize,
-)]
 pub struct Block {
   pub campus: Option<String>,
   pub display: Option<String>,
@@ -51,6 +25,7 @@ impl Into<Bson> for Block {
       "campus": self.campus.map(String::from),
       "display": self.display.map(String::from),
       "location": self.location.map(String::from),
+      "timeblocks": self.timeblocks.map(Vec::from),
     })
   }
 }
@@ -79,6 +54,32 @@ impl Into<Bson> for TimeBlock {
       "day": self.day.map(String::from),
       "t1": self.t1.map(String::from),
       "t2": self.t2.map(String::from),
+    })
+  }
+}
+
+#[derive(
+  Clone,
+  Debug,
+  Default,
+  Deserialize,
+  Eq,
+  Hash,
+  Ord,
+  PartialEq,
+  PartialOrd,
+  Serialize,
+)]
+pub struct Schedule {
+  pub blocks: Option<Vec<Block>>,
+  pub term: Option<String>,
+}
+
+impl Into<Bson> for Schedule {
+  fn into(self) -> bson::Bson {
+    Bson::Document(doc! {
+      "blocks": self.blocks.map(Vec::from),
+      "term": self.term.map(String::from),
     })
   }
 }
