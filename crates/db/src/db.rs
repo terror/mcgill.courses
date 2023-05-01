@@ -30,6 +30,10 @@ impl Db {
     })
   }
 
+  pub fn name(&self) -> String {
+    self.database.name().to_string()
+  }
+
   pub async fn seed(&self, source: PathBuf) -> Result {
     info!("Seeding courses...");
 

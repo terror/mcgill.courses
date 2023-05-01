@@ -59,6 +59,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-mongodb-session"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "07ff9ea6592b7450ab51aef18b513f9ea943c101be29403345f19c59727c46b1"
+dependencies = [
+ "async-session",
+ "mongodb",
+]
+
+[[package]]
 name = "async-session"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2451,6 +2461,7 @@ name = "server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-mongodb-session",
  "async-session",
  "axum",
  "axum-server",
