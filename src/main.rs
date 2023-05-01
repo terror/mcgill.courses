@@ -14,7 +14,8 @@ use {
     vsb_client::VsbClient,
   },
   anyhow::anyhow,
-  async_session::{async_trait, MemoryStore, Session, SessionStore},
+  async_mongodb_session::MongodbSessionStore,
+  async_session::{async_trait, Session, SessionStore},
   axum::{
     extract::{
       rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
@@ -78,6 +79,7 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 #[tokio::main]
 async fn main() {
   env_logger::init();
+
   dotenv().ok();
 
   if let Err(error) = Arguments::parse().run().await {

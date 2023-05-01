@@ -1,3 +1,5 @@
+use async_mongodb_session::MongodbSessionStore;
+
 use super::*;
 
 pub(crate) const COOKIE_NAME: &str = "session";
@@ -35,7 +37,7 @@ pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
   AppState(oauth_client): AppState<BasicClient>,
   AppState(request_client): AppState<reqwest::Client>,
-  AppState(session_store): AppState<Arc<MemoryStore>>,
+  AppState(session_store): AppState<MongodbSessionStore>,
 ) -> Result<impl IntoResponse> {
   log::debug!("Fetching token from oauth client...");
 
@@ -45,6 +47,7 @@ pub(crate) async fn login_authorized(
     .await?;
 
   log::debug!("Fetching user data from Microsoft...");
+
   let user: User = request_client
     .get("https://graph.microsoft.com/v1.0/me")
     .bearer_auth(token.access_token().secret())
@@ -86,7 +89,7 @@ pub(crate) async fn login_authorized(
 
 pub(crate) async fn logout(
   TypedHeader(cookies): TypedHeader<Cookie>,
-  AppState(session_store): AppState<Arc<MemoryStore>>,
+  AppState(session_store): AppState<MongodbSessionStore>,
 ) -> Result<impl IntoResponse> {
   let cookie = match cookies.get(COOKIE_NAME) {
     Some(c) => c,

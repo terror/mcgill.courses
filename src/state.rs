@@ -5,7 +5,7 @@ pub(crate) struct State {
   pub(crate) db: Arc<Db>,
   pub(crate) oauth_client: BasicClient,
   pub(crate) request_client: reqwest::Client,
-  pub(crate) session_store: Arc<MemoryStore>,
+  pub(crate) session_store: MongodbSessionStore,
 }
 
 impl FromRef<State> for Arc<Db> {
@@ -26,16 +26,19 @@ impl FromRef<State> for reqwest::Client {
   }
 }
 
-impl FromRef<State> for Arc<MemoryStore> {
+impl FromRef<State> for MongodbSessionStore {
   fn from_ref(state: &State) -> Self {
     state.session_store.clone()
   }
 }
 
 impl State {
-  pub(crate) fn new(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Self {
-    Self {
-      db,
+  pub(crate) async fn new(
+    db: Arc<Db>,
+    session_store: Option<MongodbSessionStore>,
+  ) -> Result<Self> {
+    Ok(Self {
+      db: db.clone(),
       oauth_client: BasicClient::new(
         ClientId::new(
           env::var("MS_CLIENT_ID")
@@ -67,7 +70,15 @@ impl State {
         .expect("Invalid redirect URL"),
       ),
       request_client: reqwest::Client::new(),
-      session_store,
-    }
+      session_store: session_store.unwrap_or(
+        MongodbSessionStore::new(
+          &env::var("MONGODB_URL")
+            .unwrap_or_else(|_| "mongodb://localhost:27017".into()),
+          &db.name(),
+          "store",
+        )
+        .await?,
+      ),
+    })
   }
 }
