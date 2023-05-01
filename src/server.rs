@@ -29,13 +29,16 @@ impl Server {
     }
 
     axum_server::Server::bind(addr)
-      .serve(Self::app(db).await?.into_make_service())
+      .serve(Self::app(db, None).await?.into_make_service())
       .await?;
 
     Ok(())
   }
 
-  async fn app(db: Arc<Db>) -> Result<Router> {
+  async fn app(
+    db: Arc<Db>,
+    session_store: Option<MongodbSessionStore>,
+  ) -> Result<Router> {
     Ok(
       Router::new()
         .route("/auth/authorized", get(auth::login_authorized))
@@ -53,7 +56,7 @@ impl Server {
         .route("/reviews/:id", get(reviews::get_review))
         .route("/search", get(search::search))
         .route("/user", get(user::get_user))
-        .with_state(State::new(db, None).await?)
+        .with_state(State::new(db, session_store).await?)
         .layer(CorsLayer::very_permissive()),
     )
   }
@@ -105,7 +108,9 @@ mod tests {
       .await
       .unwrap();
 
-      let app = Server::app(db.clone()).await.unwrap();
+      let app = Server::app(db.clone(), Some(session_store.clone()))
+        .await
+        .unwrap();
 
       TestContext {
         app,
