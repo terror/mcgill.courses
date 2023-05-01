@@ -69,11 +69,11 @@ const CourseCodeBox = ({
 }) => {
   return (
     <div className='mx-1 mt-4 flex h-8 w-28 items-center justify-end rounded-full bg-gray-100 dark:bg-neutral-700'>
-      <p className='my-auto ml-auto pl-3 text-xl font-medium tracking-wider text-black dark:text-gray-100'>
+      <p className='my-auto mx-auto pl-3 text-xl font-medium tracking-wider text-black dark:text-gray-100'>
         {selectedOption}
       </p>
       <button
-        className='my-auto ml-1 ml-auto p-1 pr-2 text-black'
+        className='my-auto ml-auto p-1 pr-2 text-black'
         onClick={() =>
           setSelectedOptions(
             selectedOptions.filter(
@@ -165,7 +165,7 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
   );
 };
 
-const SelectedCourseCode = ({
+const SelectedCourseCodes = ({
   selected,
   setSelected,
 }: {
@@ -194,7 +194,7 @@ export const ExploreFilter = ({
   setSelectedTerms,
 }: ExploreFilterProp) => {
   return (
-    <div className='m-2 ml-5 box-border flex w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
+    <div className='m-2 ml-5 box-border flex min-h-[475px] w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
       <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
       <div className='m-10 mt-2 space-y-5'>
         <div className='space-y-3'>
@@ -205,7 +205,7 @@ export const ExploreFilter = ({
             options={codesOptions}
           />
         </div>
-        <SelectedCourseCode
+        <SelectedCourseCodes
           selected={selectedCodes}
           setSelected={setSelectedCodes}
         />
