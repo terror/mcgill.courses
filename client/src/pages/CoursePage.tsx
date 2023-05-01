@@ -70,10 +70,17 @@ export const CoursePage = () => {
   };
 
   const userReview = reviews.find((r) => r.userId === user?.id);
+  const averageRating =
+    reviews.map((review) => review.rating).reduce((a, b) => a + b, 0) /
+    reviews.length;
 
   return (
     <Layout>
-      <CourseInfo course={course} />
+      <CourseInfo
+        course={course}
+        rating={averageRating}
+        numReviews={reviews.length}
+      />
       <div className='flex'>
         <div>
           <div className='mt-8 ml-8'>
