@@ -1,5 +1,3 @@
-use async_mongodb_session::MongodbSessionStore;
-
 use super::*;
 
 #[derive(Debug, Serialize, Deserialize)]
