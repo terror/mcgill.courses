@@ -1,5 +1,3 @@
-use async_mongodb_session::MongodbSessionStore;
-
 use super::*;
 
 pub(crate) const COOKIE_NAME: &str = "session";
