@@ -28,34 +28,37 @@ impl Server {
       });
     }
 
-    let session_store = Arc::new(MemoryStore::new());
-
     axum_server::Server::bind(addr)
-      .serve(Self::app(db, session_store).into_make_service())
+      .serve(Self::app(db, None).await?.into_make_service())
       .await?;
 
     Ok(())
   }
 
-  fn app(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Router {
-    Router::new()
-      .route("/auth/authorized", get(auth::login_authorized))
-      .route("/auth/login", get(auth::microsoft_auth))
-      .route("/auth/logout", get(auth::logout))
-      .route("/courses", get(courses::get_courses))
-      .route("/courses/:id", get(courses::get_course_by_id))
-      .route(
-        "/reviews",
-        get(reviews::get_reviews)
-          .delete(reviews::delete_review)
-          .post(reviews::add_review)
-          .put(reviews::update_review),
-      )
-      .route("/reviews/:id", get(reviews::get_review))
-      .route("/search", get(search::search))
-      .route("/user", get(user::get_user))
-      .with_state(State::new(db, session_store))
-      .layer(CorsLayer::very_permissive())
+  async fn app(
+    db: Arc<Db>,
+    session_store: Option<MongodbSessionStore>,
+  ) -> Result<Router> {
+    Ok(
+      Router::new()
+        .route("/auth/authorized", get(auth::login_authorized))
+        .route("/auth/login", get(auth::microsoft_auth))
+        .route("/auth/logout", get(auth::logout))
+        .route("/courses", get(courses::get_courses))
+        .route("/courses/:id", get(courses::get_course_by_id))
+        .route(
+          "/reviews",
+          get(reviews::get_reviews)
+            .delete(reviews::delete_review)
+            .post(reviews::add_review)
+            .put(reviews::update_review),
+        )
+        .route("/reviews/:id", get(reviews::get_review))
+        .route("/search", get(search::search))
+        .route("/user", get(user::get_user))
+        .with_state(State::new(db, session_store).await?)
+        .layer(CorsLayer::very_permissive()),
+    )
   }
 }
 
@@ -74,7 +77,7 @@ mod tests {
   struct TestContext {
     app: Router,
     db: Arc<Db>,
-    session_store: Arc<MemoryStore>,
+    session_store: MongodbSessionStore,
   }
 
   impl TestContext {
@@ -96,8 +99,18 @@ mod tests {
       );
 
       let db = Arc::new(Db::connect(&db_name).await.unwrap());
-      let session_store = Arc::new(MemoryStore::new());
-      let app = Server::app(db.clone(), session_store.clone());
+
+      let session_store = MongodbSessionStore::new(
+        "mongodb://localhost:27017",
+        &db.name(),
+        "store",
+      )
+      .await
+      .unwrap();
+
+      let app = Server::app(db.clone(), Some(session_store.clone()))
+        .await
+        .unwrap();
 
       TestContext {
         app,
@@ -112,7 +125,7 @@ mod tests {
   }
 
   async fn mock_login(
-    session_store: Arc<MemoryStore>,
+    session_store: MongodbSessionStore,
     id: &str,
     mail: &str,
   ) -> String {
