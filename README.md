@@ -1,4 +1,4 @@
-## mcgill.gg
+## mcgill.courses
 
 <div>
   <img width='100px' src='https://user-images.githubusercontent.com/31192478/235252457-6364a167-29d7-4b24-96f5-db73c38209e8.png'>
