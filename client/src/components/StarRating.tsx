@@ -11,7 +11,7 @@ export const StarRating = ({ rating }: StarRatingProps) => {
       <Star
         key={i}
         strokeWidth={0}
-        className={i < rating ? 'fill-yellow-400' : 'fill-gray-200'}
+        className={i < rating ? 'fill-red-600' : 'fill-gray-200'}
       />
     );
   }
