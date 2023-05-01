@@ -11,6 +11,9 @@ use {
   select::Select,
 };
 
+#[cfg(test)]
+use model::{Block, TimeBlock};
+
 mod course_listing_ext;
 mod course_page_ext;
 mod requirements_ext;
@@ -57,10 +60,10 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
       false => Vec::new(),
       _ => html
         .root_element()
-        .select_many("block")?
+        .select_many("uselection")?
         .iter()
-        .map(Schedule::from_block)
-        .collect(),
+        .map(Schedule::from_selection)
+        .collect::<Result<Vec<Schedule>>>()?,
     },
   )
 }
@@ -139,7 +142,8 @@ fn extract_course_requirements(html: &Html) -> Result<Requirements> {
 mod tests {
   use {
     super::{
-      CourseListing, CoursePage, Html, Instructor, Requirements, Schedule,
+      Block, CourseListing, CoursePage, Html, Instructor, Requirements,
+      Schedule, TimeBlock,
     },
     include_dir::{include_dir, Dir},
     pretty_assertions::assert_eq,
@@ -376,9 +380,24 @@ mod tests {
       super::extract_course_schedules(&get_content("course_schedules.xml"))
         .unwrap(),
       vec![Schedule {
-        campus: Some("Downtown".into()),
-        display: Some("Lec 045".into()),
-        location: Some("BRONF 422".into()),
+        blocks: Some(vec![Block {
+          campus: Some("Downtown".into()),
+          display: Some("Lec 045".into()),
+          location: Some("BRONF 422".into()),
+          timeblocks: Some(vec![
+            TimeBlock {
+              day: Some("4".into()),
+              t1: Some("515".into()),
+              t2: Some("1255".into()),
+            },
+            TimeBlock {
+              day: Some("4".into()),
+              t1: Some("515".into()),
+              t2: Some("1255".into()),
+            }
+          ])
+        }]),
+        term: Some("Summer 2023".into())
       }]
     );
   }
