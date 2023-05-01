@@ -29,11 +29,7 @@ export const CourseInfo = ({ course }: { course: Course }) => {
             <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
               {course.title}
             </h2>
-            {course.terms.length > 0 ? (
-              <CourseTerms course={course} variant='large' />
-            ) : (
-              <p>This course is not currently being offered.</p>
-            )}
+            <CourseTerms course={course} variant='large' />
             <p className='break-words text-gray-500 dark:text-gray-400'>
               {course.description}
             </p>
