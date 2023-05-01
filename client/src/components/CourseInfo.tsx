@@ -41,8 +41,8 @@ export const CourseInfo = ({ course, rating, numReviews }: CourseInfoProps) => {
               {course.description}
             </p>
           </div>
-          <div className='m-4 flex w-fit flex-col items-center justify-center space-y-3  md:m-4 md:w-1/2'>
-            <div className='w-2/3'>
+          <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3  md:m-4 md:w-1/2'>
+            <div className='w-full lg:w-3/4'>
               {numReviews > 0 ? (
                 <RatingPieChart
                   title={course.title}
