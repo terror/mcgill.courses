@@ -194,7 +194,7 @@ export const ExploreFilter = ({
   setSelectedTerms,
 }: ExploreFilterProp) => {
   return (
-    <div className='m-2 ml-5 box-border flex min-h-[475px] w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
+    <div className='m-2 ml-5 box-border flex h-fit w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
       <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
       <div className='m-10 mt-2 space-y-5'>
         <div className='space-y-3'>

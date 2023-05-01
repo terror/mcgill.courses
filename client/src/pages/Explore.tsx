@@ -57,38 +57,40 @@ export const Explore = () => {
 
   return (
     <Layout>
-      {error ? <Alert status='error' /> : null}
-      <div className='flex w-full flex-col items-center py-8'>
-        <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
-          Showing all courses
-        </h1>
-        <div className='flex flex-col md:flex-row'>
-          <InfiniteScroll
-            dataLength={courses.length}
-            hasMore={hasMore}
-            loader={
-              <div className='mt-4 text-center'>
-                <Spinner />
+      <div className='flex flex-row'>
+        {error ? <Alert status='error' /> : null}
+        <div className='flex w-full flex-col items-center py-8'>
+          <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+            Showing all courses
+          </h1>
+          <div className='flex flex-col md:flex-row'>
+            <InfiniteScroll
+              dataLength={courses.length}
+              hasMore={hasMore}
+              loader={
+                <div className='mt-4 text-center'>
+                  <Spinner />
+                </div>
+              }
+              next={fetchMore}
+              style={{ overflowY: 'hidden' }}
+            >
+              <div className='mx-auto'>
+                {courses.map((course, i) => (
+                  <CourseCard key={i} course={course} />
+                ))}
               </div>
-            }
-            next={fetchMore}
-            style={{ overflowY: 'hidden' }}
-          >
-            <div className='mx-auto'>
-              {courses.map((course, i) => (
-                <CourseCard key={i} course={course} />
-              ))}
-            </div>
-          </InfiniteScroll>
-          <ExploreFilter
-            selectedCodes={selectedCodes}
-            setSelectedCodes={setSelectedCodes}
-            selectedLevels={selectedLevels}
-            setSelectedLevels={setSelectedLevels}
-            selectedTerms={selectedTerms}
-            setSelectedTerms={setSelectedTerms}
-          />
-        </div>
+            </InfiniteScroll>
+            <ExploreFilter
+              selectedCodes={selectedCodes}
+              setSelectedCodes={setSelectedCodes}
+              selectedLevels={selectedLevels}
+              setSelectedLevels={setSelectedLevels}
+              selectedTerms={selectedTerms}
+              setSelectedTerms={setSelectedTerms}
+            />
+          </div>
+        </div>{' '}
       </div>
       <JumpToTopButton />
     </Layout>
