@@ -23,6 +23,7 @@
     "react-feather": "^2.0.10",
     "react-icons": "^4.8.0",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-minimal-pie-chart": "^8.4.0",
     "react-router-dom": "^6.9.0",
     "yup": "^1.0.2"
   },
