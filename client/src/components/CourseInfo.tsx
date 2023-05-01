@@ -2,11 +2,18 @@ import { ExternalLink } from 'react-feather';
 
 import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
+import { RatingPieChart } from './RatingPieChart';
 
-export const CourseInfo = ({ course }: { course: Course }) => {
+type CourseInfoProps = {
+  course: Course;
+  rating: number;
+  numReviews: number;
+};
+
+export const CourseInfo = ({ course, rating, numReviews }: CourseInfoProps) => {
   return (
     <div className='flex justify-center'>
-      <div className='mx-8 w-screen rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
+      <div className='mx-8 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
         <div className='flex flex-col md:flex-row'>
           <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
             <div className='flex flex-row space-x-2 align-middle'>
@@ -21,7 +28,7 @@ export const CourseInfo = ({ course }: { course: Course }) => {
                 >
                   <ExternalLink
                     size={20}
-                    className='ml-1 transition-colors duration-300 hover:stroke-red-500'
+                    className='ml-1 transition-colors duration-300 hover:stroke-red-600'
                   />
                 </a>
               ) : null}
@@ -34,7 +41,21 @@ export const CourseInfo = ({ course }: { course: Course }) => {
               {course.description}
             </p>
           </div>
-          <div className='m-4 flex w-fit flex-col space-y-3  md:m-4 md:w-1/2'></div>
+          <div className='m-4 flex w-fit flex-col items-center justify-center space-y-3  md:m-4 md:w-1/2'>
+            <div className='w-2/3'>
+              {numReviews > 0 ? (
+                <RatingPieChart
+                  title={course.title}
+                  rating={rating}
+                  numReviews={numReviews}
+                />
+              ) : (
+                <div className='text-center text-gray-700 dark:text-gray-200'>
+                  No reviews have been left for this course yet. Be the first!
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
