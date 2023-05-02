@@ -31,8 +31,6 @@ export const Explore = () => {
     terms: selectedTerms.length === 0 ? null : selectedTerms,
   };
 
-  console.log(body);
-
   useEffect(() => {
     fetchClient
       .post(`/courses?limit=${limit}`, body, {
@@ -43,9 +41,9 @@ export const Explore = () => {
       .then((res) => res.json())
       .then((data) => setCourses(data as Course[]))
       .catch((_) => setError(true));
+    setHasMore(true);
+    setOffset(limit);
   }, [selectedCodes, selectedLevels, selectedTerms]);
-
-  console.log(courses);
 
   const fetchMore = async () => {
     const batch = await fetchClient.postData<Course[]>(

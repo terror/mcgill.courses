@@ -107,7 +107,10 @@ impl Db {
     let mut document = Document::new();
 
     if let Some(ref course_subjects) = course_subjects {
-      document.insert("subject", doc! { "$in": course_subjects });
+      document.insert(
+        "subject" ,
+        doc! { "$regex": format!("^({})", course_subjects.join("|")) },
+      );
     }
 
     if let Some(ref course_levels) = course_levels {
