@@ -66,6 +66,8 @@ impl Server {
 
 #[cfg(test)]
 mod tests {
+  use http::Method;
+
   use {
     super::*,
     axum::body::Body,
@@ -148,11 +150,20 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let json = serde_json::to_string(&json!({
+    "codes": Option::<Vec<String>>::None,
+    "levels":Option::<Vec<String>>::None,
+    "terms": Option::<Vec<String>>::None,
+    }))
+    .unwrap();
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(json))
           .unwrap(),
       )
       .await
@@ -175,11 +186,20 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let json = serde_json::to_string(&json!({
+    "codes": Option::<Vec<String>>::None,
+    "levels":Option::<Vec<String>>::None,
+    "terms": Option::<Vec<String>>::None,
+    }))
+    .unwrap();
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses?limit=10&offset=40")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(json))
           .unwrap(),
       )
       .await
@@ -201,12 +221,20 @@ mod tests {
   #[tokio::test]
   async fn courses_route_does_not_allow_negative() {
     let TestContext { app, .. } = TestContext::new().await;
+    let json = serde_json::to_string(&json!({
+    "codes": Option::<Vec<String>>::None,
+    "levels":Option::<Vec<String>>::None,
+    "terms": Option::<Vec<String>>::None,
+    }))
+    .unwrap();
 
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses?limit=-10&offset=-10")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(json))
           .unwrap(),
       )
       .await
