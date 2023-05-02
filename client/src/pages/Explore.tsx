@@ -32,15 +32,11 @@ export const Explore = () => {
   };
 
   useEffect(() => {
-    fetchClient
-      .post(`/courses?limit=${limit}`, body, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((res) => res.json())
-      .then((data) => setCourses(data as Course[]))
-      .catch((_) => setError(true));
+    fetchClient.postData<Course[]>(`/courses?limit=${limit}&offset=0`, body, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     setHasMore(true);
     setOffset(limit);
   }, [selectedCodes, selectedLevels, selectedTerms]);

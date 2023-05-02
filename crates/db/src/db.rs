@@ -108,7 +108,7 @@ impl Db {
 
     if let Some(ref course_subjects) = course_subjects {
       document.insert(
-        "subject" ,
+        "subject",
         doc! { "$regex": format!("^({})", course_subjects.join("|")) },
       );
     }
