@@ -29,10 +29,7 @@ type CourseTermsProps = {
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
   const instructors = uniqueTermInstructors(course);
-  const container = classNames(
-    'flex',
-    variant === 'small' ? 'space-x-2' : 'space-x-3'
-  );
+  const container = classNames('flex flex-wrap mr-auto');
 
   return instructors.length !== 0 ? (
     <div className={container}>
@@ -40,8 +37,8 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         <div
           key={i}
           className={classNames(
-            'rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'py-1 px-2' : 'p-2'
+            'my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
+            variant === 'small' ? 'mr-2 py-1 px-2' : 'mr-4 p-2'
           )}
         >
           <div className='flex items-center space-x-2'>
