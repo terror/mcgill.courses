@@ -113,7 +113,15 @@ impl Loader {
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
     log::info!("{:?}", listing);
 
-    let course_page = extractor::extract_course_page(&listing.content()?)?;
+    let mut content = listing.content();
+
+    while let Err(ref error) = content {
+      log::error!("Error fetching course information: {}, retrying...", error);
+      thread::sleep(Duration::from_secs(10));
+      content = listing.content();
+    }
+
+    let course_page = extractor::extract_course_page(&content?)?;
 
     log::info!(
       "Parsed course {}{}",
