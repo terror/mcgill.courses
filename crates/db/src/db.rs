@@ -37,12 +37,19 @@ impl Db {
   pub async fn seed(&self, source: PathBuf) -> Result {
     info!("Seeding courses...");
 
-    for course in
-      serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
-    {
-      match self.find_course(doc! { "_id": &course.id, }).await? {
-        Some(found) => {
-          self
+    let mut courses = Vec::new();
+
+    for path in fs::read_dir(source)? {
+      courses.push(serde_json::from_str::<Vec<Course>>(&fs::read_to_string(
+        path?.path(),
+      )?)?);
+    }
+
+    for batch in courses {
+      for course in batch {
+        match self.find_course(doc! { "_id": &course.id, }).await? {
+          Some(found) => {
+            self
             .update_course(
               doc! { "_id": &course.id },
               doc! {
@@ -62,9 +69,10 @@ impl Db {
               },
             )
             .await?;
-        }
-        None => {
-          self.add_course(course).await?;
+          }
+          None => {
+            self.add_course(course).await?;
+          }
         }
       }
     }
