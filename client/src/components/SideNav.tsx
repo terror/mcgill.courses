@@ -51,7 +51,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className='-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                  className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
                 >
                   {item.name}
                 </a>
@@ -62,13 +62,13 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                 <>
                   <Link
                     to='/profile'
-                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                    className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
                   >
                     Profile
                   </Link>
                   <a
                     href={`${import.meta.env.VITE_API_URL}/auth/logout`}
-                    className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
+                    className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                   >
                     Log out
                   </a>
@@ -76,7 +76,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
               ) : (
                 <a
                   href={`${import.meta.env.VITE_API_URL}/auth/login`}
-                  className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
+                  className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                 >
                   Log in
                 </a>

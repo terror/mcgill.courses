@@ -65,7 +65,7 @@ export const ReviewForm = ({
           placeholder='Write your thoughts on this course...'
           className='mt-6 resize-none rounded-md bg-gray-50 p-3 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
         />
-        <label htmlFor='rating' className='mt-4 mb-2 dark:text-gray-200'>
+        <label htmlFor='rating' className='mb-2 mt-4 dark:text-gray-200'>
           Rating
         </label>
         <Field

@@ -52,12 +52,12 @@ export const CourseReview = ({
         </div>
         <div className='ml-auto w-fit'>
           <StarRating rating={review.rating} />
-          <h2 className='mt-2 ml-1 text-sm font-bold leading-none text-gray-700 dark:text-gray-200'>
+          <h2 className='ml-1 mt-2 text-sm font-bold leading-none text-gray-700 dark:text-gray-200'>
             {dateStr}
           </h2>
         </div>
       </div>
-      <div className='text-md mt-6 mr-4 dark:text-gray-300'>
+      <div className='text-md mr-4 mt-6 dark:text-gray-300'>
         {review.content}
       </div>
     </div>

@@ -12,7 +12,7 @@ type InfoBlockProps = {
 export const InfoBlock = ({ title, elements }: InfoBlockProps) => {
   return (
     <div>
-      <h2 className='mt-1 mb-2 font-semibold leading-none text-gray-700 dark:text-gray-200'>
+      <h2 className='mb-2 mt-1 font-semibold leading-none text-gray-700 dark:text-gray-200'>
         {title}
       </h2>
       {elements.map((element) => (
@@ -29,7 +29,7 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
     requirements.restrictions;
 
   return hasRequirements ? (
-    <div className='w-screen rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mx-4 md:mt-10 md:ml-auto md:mr-10 md:w-1/3'>
+    <div className='w-screen rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mx-4 md:ml-auto md:mr-10 md:mt-10 md:w-1/3'>
       <div className='flex-col space-y-3'>
         <div className='m-4 space-y-7'>
           {requirements.prereqs.length > 0 ? (
@@ -40,7 +40,7 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
           ) : null}
           {requirements.restrictions !== null ? (
             <div>
-              <h2 className='mt-1 mb-2 font-semibold leading-none text-gray-700 dark:text-gray-200'>
+              <h2 className='mb-2 mt-1 font-semibold leading-none text-gray-700 dark:text-gray-200'>
                 Restrictions
               </h2>
               <p className='text-gray-500 dark:text-gray-400'>

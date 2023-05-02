@@ -38,7 +38,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         <div
           className={classNames(
             'rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'py-1 px-2' : 'p-2'
+            variant === 'small' ? 'px-2 py-1' : 'p-2'
           )}
         >
           <div className='flex items-center space-x-2'>
@@ -56,7 +56,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
           key={i}
           className={classNames(
             'my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'mr-2 py-1 px-2' : 'mr-4 p-2'
+            variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 p-2'
           )}
         >
           <div className='flex items-center space-x-2'>

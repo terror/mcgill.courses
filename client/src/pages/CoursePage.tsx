@@ -83,7 +83,7 @@ export const CoursePage = () => {
       />
       <div className='flex'>
         <div>
-          <div className='mt-8 ml-8'>
+          <div className='ml-8 mt-8'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}

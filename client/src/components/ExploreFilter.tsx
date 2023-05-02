@@ -44,7 +44,7 @@ const FilterButton = ({
 
   return (
     <button
-      className={`mx-2 ml-0 rounded-full py-2 px-4 font-semibold tracking-wider transition duration-150 ease-in-out
+      className={`mx-2 ml-0 rounded-full px-4 py-2 font-semibold tracking-wider transition duration-150 ease-in-out
     ${selected ? selectedColor : unselectedColor}`}
       onClick={() => {
         setSelected(!selected);
@@ -71,7 +71,7 @@ const CourseCodeBox = ({
 }) => {
   return (
     <div className='mx-1 mt-4 flex h-8 w-28 items-center justify-end rounded-full bg-gray-100 dark:bg-neutral-700'>
-      <p className='my-auto mx-auto pl-3 text-xl font-medium tracking-wider text-black dark:text-gray-100'>
+      <p className='mx-auto my-auto pl-3 text-xl font-medium tracking-wider text-black dark:text-gray-100'>
         {selectedOption}
       </p>
       <button
