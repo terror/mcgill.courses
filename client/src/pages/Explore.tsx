@@ -9,6 +9,7 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { ExploreFilter } from '../components/ExploreFilter';
 import { JumpToTopButton } from '../components/JumpToTopButton';
+import { BoxToggle } from '../components/BoxToggle';
 
 export const Explore = () => {
   const limit = 20;
@@ -17,12 +18,13 @@ export const Explore = () => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
   const [error, setError] = useState(false);
+  const [filterIsToggled, setFilterIsToggled] = useState(false);
 
   const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
-  const body = {
+  const reqBody = {
     codes: selectedCodes.length === 0 ? null : selectedCodes,
     levels:
       selectedLevels.length === 0
@@ -33,7 +35,7 @@ export const Explore = () => {
 
   useEffect(() => {
     fetchClient
-      .post(`/courses?limit=${limit}`, body, {
+      .post(`/courses?limit=${limit}`, reqBody, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -48,7 +50,7 @@ export const Explore = () => {
   const fetchMore = async () => {
     const batch = await fetchClient.postData<Course[]>(
       `/courses?limit=${limit}&offset=${offset}`,
-      body,
+      reqBody,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -73,43 +75,59 @@ export const Explore = () => {
             {' '}
             Showing all courses
           </h1>
-          <div className='flex flex-col md:flex-row'>
+          <div className='w-xl flex flex-col md:flex-row'>
+            <div className='md:hidden'>
+              <BoxToggle
+                child={ExploreFilter({
+                  selectedCodes,
+                  setSelectedCodes,
+                  selectedLevels,
+                  setSelectedLevels,
+                  selectedTerms,
+                  setSelectedTerms,
+                  variant: 'mobile',
+                })}
+                isOpen={filterIsToggled}
+                setIsOpen={setFilterIsToggled}
+              />
+            </div>
             <InfiniteScroll
               dataLength={courses.length}
               hasMore={hasMore}
               loader={
-                courses.length !== 0 &&
-                hasMore && (
+                courses.length !== 0 && hasMore ? (
                   <div className='mt-4 text-center'>
                     <Spinner />
                   </div>
-                )
+                ) : null
               }
               next={fetchMore}
               style={{ overflowY: 'hidden' }}
             >
-              <div className='mx-auto'>
-                {courses.length !== 0 ? (
-                  courses.map((course, i) => (
-                    <CourseCard key={i} course={course} />
-                  ))
-                ) : (
-                  <div className='bg min-w-xl max-wl m-2 flex rounded-lg border p-5 duration-150 hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800 '>
-                    <div className='mx-[195px] text-center font-bold text-gray-500 dark:text-gray-400'>
-                      No courses found.
-                    </div>
+              <div className='mx-auto flex flex-col'>
+                {courses.map((course, i) => (
+                  <CourseCard key={i} course={course} />
+                ))}
+                {!hasMore || courses.length === 0 ? (
+                  <div className='m-[200px] mt-4 text-center'>
+                    <p className='text-gray-500 dark:text-gray-400'>
+                      No more courses to show
+                    </p>
                   </div>
-                )}
+                ) : null}
               </div>
             </InfiniteScroll>
-            <ExploreFilter
-              selectedCodes={selectedCodes}
-              setSelectedCodes={setSelectedCodes}
-              selectedLevels={selectedLevels}
-              setSelectedLevels={setSelectedLevels}
-              selectedTerms={selectedTerms}
-              setSelectedTerms={setSelectedTerms}
-            />
+            <div className='hidden md:flex'>
+              <ExploreFilter
+                selectedCodes={selectedCodes}
+                setSelectedCodes={setSelectedCodes}
+                selectedLevels={selectedLevels}
+                setSelectedLevels={setSelectedLevels}
+                selectedTerms={selectedTerms}
+                setSelectedTerms={setSelectedTerms}
+                variant='desktop'
+              />
+            </div>
           </div>
         </div>{' '}
       </div>

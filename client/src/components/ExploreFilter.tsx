@@ -2,6 +2,7 @@ import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { GoX } from 'react-icons/go';
 import ValidCourseCodes from '../assets/ValidCourseCodes.json';
+import { classNames } from '../lib/utils';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
@@ -20,6 +21,7 @@ type ExploreFilterProp = {
   setSelectedLevels: (selected: string[]) => void;
   selectedTerms: string[];
   setSelectedTerms: (selected: string[]) => void;
+  variant: 'mobile' | 'desktop';
 };
 
 type FilterButtonProp = {
@@ -192,9 +194,15 @@ export const ExploreFilter = ({
   setSelectedLevels,
   selectedTerms,
   setSelectedTerms,
+  variant,
 }: ExploreFilterProp) => {
   return (
-    <div className='m-2 ml-5 box-border flex h-fit w-96 flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'>
+    <div
+      className={classNames(
+        variant === 'mobile' ? 'mx-auto w-full' : 'ml-5 w-96 ',
+        'm-2 box-border flex h-fit flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'
+      )}
+    >
       <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
       <div className='m-10 mt-2 space-y-5'>
         <div className='space-y-3'>
