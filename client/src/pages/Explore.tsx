@@ -32,11 +32,15 @@ export const Explore = () => {
   };
 
   useEffect(() => {
-    fetchClient.postData<Course[]>(`/courses?limit=${limit}&offset=0`, body, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    fetchClient
+      .post(`/courses?limit=${limit}`, body, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => res.json())
+      .then((data) => setCourses(data as Course[]))
+      .catch((_) => setError(true));
     setHasMore(true);
     setOffset(limit);
   }, [selectedCodes, selectedLevels, selectedTerms]);
@@ -72,17 +76,28 @@ export const Explore = () => {
               dataLength={courses.length}
               hasMore={hasMore}
               loader={
-                <div className='mt-4 text-center'>
-                  <Spinner />
-                </div>
+                courses.length !== 0 &&
+                hasMore && (
+                  <div className='mt-4 text-center'>
+                    <Spinner />
+                  </div>
+                )
               }
               next={fetchMore}
               style={{ overflowY: 'hidden' }}
             >
               <div className='mx-auto'>
-                {courses.map((course, i) => (
-                  <CourseCard key={i} course={course} />
-                ))}
+                {courses.length !== 0 ? (
+                  courses.map((course, i) => (
+                    <CourseCard key={i} course={course} />
+                  ))
+                ) : (
+                  <div className='bg text-wrap m-2 max-w-xl rounded-lg border p-5 px-56 duration-150 hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800'>
+                    <p className='mb-2 w-80 text-xl font-medium text-gray-500 dark:text-gray-200'>
+                      No courses found.
+                    </p>
+                  </div>
+                )}
               </div>
             </InfiniteScroll>
             <ExploreFilter
