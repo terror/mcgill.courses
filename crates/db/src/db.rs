@@ -39,10 +39,16 @@ impl Db {
 
     let mut courses = Vec::new();
 
-    for path in fs::read_dir(source)? {
+    if source.is_file() {
       courses.push(serde_json::from_str::<Vec<Course>>(&fs::read_to_string(
-        path?.path(),
+        source,
       )?)?);
+    } else {
+      for path in fs::read_dir(source)? {
+        courses.push(serde_json::from_str::<Vec<Course>>(
+          &fs::read_to_string(path?.path())?,
+        )?);
+      }
     }
 
     for batch in courses {
