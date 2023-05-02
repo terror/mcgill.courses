@@ -4,19 +4,10 @@ import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 
 type CourseCardProps = {
-  course: Course | null;
+  course: Course;
 };
 
 export const CourseCard = ({ course }: CourseCardProps) => {
-  if (course === null)
-    return (
-      <div className='bg m-2 max-w-xl rounded-lg border p-5 duration-150 hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800'>
-        <div className='mb-2 font-bold dark:text-gray-200'>
-          No courses found.
-        </div>
-      </div>
-    );
-
   return (
     <Link to={`/course/${course._id}`} key={course._id}>
       <div className='bg m-2 max-w-xl rounded-lg border p-5 duration-150 hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800'>
