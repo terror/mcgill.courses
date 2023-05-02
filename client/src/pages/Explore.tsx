@@ -27,23 +27,21 @@ export const Explore = () => {
     levels: selectedLevels.map((l) => l.charAt(0)),
     terms: selectedTerms,
   };
+  console.log(body);
 
   useEffect(() => {
     fetchClient
-      .post(`/courses?limits=${limit}`, body)
+      .post(`/courses?limit=${limit}`, body, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then((res) => res.json())
       .then((data) => setCourses(data as Course[]))
       .catch((_) => setError(true));
   }, [selectedCodes, selectedLevels, selectedTerms]);
 
   console.log(courses);
-
-  // useEffect(() => {
-  //   fetchClient
-  //     .getData<Course[]>(`/courses?limit=${limit}`)
-  //     .then((data) => setCourses(data))
-  //     .catch((_) => setError(true));
-  // }, []);
 
   const fetchMore = async () => {
     const batch = await fetchClient.getData<Course[]>(

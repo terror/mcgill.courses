@@ -110,11 +110,13 @@ impl Db {
         .collection::<Course>(Db::COURSE_COLLECTION)
         .find(
           doc! {
-            "subject": { "$in": course_subjects.unwrap_or_else(|| vec![])},
+            "subject": { "$in": course_subjects},
             "code": {
-              "$regex": format!("^({})", course_levels.unwrap_or_else(|| vec![]).iter().map(|level| level.chars().next()).flatten().collect::<String>())
+              "$regex" : format!("^({})",
+              course_levels.unwrap_or_else(|| vec!["2".to_string()]).iter().map(|level| level.chars().next()).flatten().collect::<String>())
             },
-            "terms": { "$in": course_terms.unwrap_or_else(|| vec![])}
+            "terms": {
+              "$regex" : format!(r"/^(\S+)/", course_terms.unwrap_or_else(|| vec!["Fall".to_string()]).iter().map(|term| term.split_whitespace().next()).flatten().collect::<String>())}
         },
           FindOptions::builder().skip(offset).limit(limit).build(),
         )
