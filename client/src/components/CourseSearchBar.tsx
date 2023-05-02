@@ -76,8 +76,10 @@ export const CourseSearchBar = ({
               <Link to={`/course/${result._id}`}>
                 <div
                   className={classNames(
-                    'cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700',
-                    selectedIndex === index ? 'bg-gray-100' : ''
+                    'cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
+                    selectedIndex === index
+                      ? 'bg-gray-100 dark:bg-neutral-700'
+                      : 'bg-white dark:bg-neutral-800'
                   )}
                   key={result._id}
                 >
