@@ -33,5 +33,5 @@ pub struct Course {
   pub prerequisites: Vec<String>,
   pub corequisites: Vec<String>,
   pub restrictions: Option<String>,
-  pub schedule: Vec<Schedule>,
+  pub schedule: Option<Vec<Schedule>>,
 }

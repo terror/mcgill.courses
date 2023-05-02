@@ -71,9 +71,10 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
 fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
   let mut instructors = Vec::new();
 
-  let catalog = html
-    .root_element()
-    .select_single("div[class='node node-catalog clearfix']")?;
+  let catalog = html.root_element().try_select_single(vec![
+    "div[class='node node-catalog clearfix']",
+    "div[class='node node-catalog node-promoted clearfix']",
+  ])?;
 
   let raw = catalog
     .select_single("p[class='catalog-terms']")?
@@ -131,7 +132,8 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
 fn extract_course_requirements(html: &Html) -> Result<Requirements> {
   match html
     .root_element()
-    .select_optional("ul[class='catalog-notes']")?
+    .select_optional("ul[class='catalog-notes']")
+    .unwrap()
   {
     Some(notes) => Requirements::from_notes(notes),
     None => Ok(Requirements::default()),
@@ -161,11 +163,182 @@ mod tests {
   }
 
   #[test]
-  fn extract_course_listings() {
+  fn extract_course_listings_2009_2010() {
     assert_eq!(
-      super::extract_course_listings(&get_content("course_listings.html"))
-        .unwrap()
-        .unwrap(),
+      super::extract_course_listings(&get_content(
+        "course_listings_2009_2010.html"
+      ))
+      .unwrap()
+      .unwrap(),
+      vec![
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [].into(),
+          url: "/study/2009-2010/courses/acct-210".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [
+            "Fall 2009".into(),
+            "Winter 2010".into(),
+            "Summer 2010".into(),
+          ]
+          .into(),
+          url: "/study/2009-2010/courses/acct-351".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-352".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [
+            "Fall 2009".into(),
+            "Winter 2010".into(),
+            "Summer 2010".into(),
+          ]
+          .into(),
+          url: "/study/2009-2010/courses/acct-354".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [].into(),
+          url: "/study/2009-2010/courses/acct-356".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [
+            "Fall 2009".into(),
+            "Winter 2010".into(),
+            "Summer 2010".into(),
+          ]
+          .into(),
+          url: "/study/2009-2010/courses/acct-361".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-362".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-385".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [].into(),
+          url: "/study/2009-2010/courses/acct-434".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-452".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-453".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [].into(),
+          url: "/study/2009-2010/courses/acct-454".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-455".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-463".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: [].into(),
+          url: "/study/2009-2010/courses/acct-471".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-475".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-476".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-477".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Undergraduate".into(),
+          terms: ["Fall 2009".into(), "Winter 2010".into(),].into(),
+          url: "/study/2009-2010/courses/acct-486".into(),
+        },
+        CourseListing {
+          department: "Management".into(),
+          faculty: "Desautels Faculty of Management".into(),
+          level: "Graduate".into(),
+          terms: [].into(),
+          url: "/study/2009-2010/courses/acct-604".into(),
+        }
+      ]
+      .to_vec(),
+    );
+  }
+
+  #[test]
+  fn extract_course_listings_2022_2023() {
+    assert_eq!(
+      super::extract_course_listings(&get_content(
+        "course_listings_2022_2023.html"
+      ))
+      .unwrap()
+      .unwrap(),
       vec![
         CourseListing {
           department: "Bioresource Engineering".into(),
@@ -313,10 +486,10 @@ mod tests {
   }
 
   #[test]
-  fn extract_course_instructors() {
+  fn extract_course_instructors_2022_2023() {
     assert_eq!(
       super::extract_course_instructors(&Html::parse_fragment(&get_content(
-        "course_page.html"
+        "course_page_2022_2023.html"
       )))
       .unwrap(),
       vec![
@@ -341,10 +514,10 @@ mod tests {
   }
 
   #[test]
-  fn extract_course_requirements() {
+  fn extract_course_requirements_2022_2023() {
     assert_eq!(
       super::extract_course_requirements(&Html::parse_fragment(
-        &get_content("course_page.html")
+        &get_content("course_page_2022_2023.html")
       ))
       .unwrap(),
       Requirements {
@@ -356,10 +529,51 @@ mod tests {
   }
 
   #[test]
-  fn extract_course_page() {
+  fn extract_course_page_2009_2010() {
     assert_eq!(
       super::extract_course_page(
-        &get_content("course_page.html")
+        &get_content("course_page_2009_2010.html")
+      )
+      .unwrap(),
+      CoursePage {
+        title: "Intermediate Financial Accounting 1".into(),
+        credits: "3".into(),
+        subject: "ACCT".into(),
+        code: "351".into(),
+        faculty_url: "/study/2009-2010/faculties/desautels".into(),
+        description: "An examination of the theoretical foundation for financial reporting and revenue recognition. The tools of accounting, including a review of the accounting process and compound interest concepts. Asset recognition, measurement and disclosure. Partnership accounting.".into(),
+        instructors: vec![
+          Instructor {
+            name: "Desmond Tsang".into(),
+            term: "Fall 2009".into(),
+          },
+          Instructor {
+            name: "Ralph Cecere".into(),
+            term: "Fall 2009".into(),
+          },
+          Instructor {
+            name: "Robert Porrello".into(),
+            term: "Fall 2009".into(),
+          },
+          Instructor {
+            name: "Pietro Martucci".into(),
+            term: "Winter 2010".into(),
+          },
+          Instructor {
+            name: "Robert Porrello".into(),
+            term: "Winter 2010".into(),
+          },
+        ],
+        requirements: Requirements { corequisites: vec![], prerequisites: vec![], restrictions: None }
+      }
+    );
+  }
+
+  #[test]
+  fn extract_course_page_2022_2023() {
+    assert_eq!(
+      super::extract_course_page(
+        &get_content("course_page_2022_2023.html")
       )
       .unwrap(),
       CoursePage {
@@ -375,10 +589,12 @@ mod tests {
   }
 
   #[test]
-  fn extract_course_schedules() {
+  fn extract_course_schedules_202305() {
     assert_eq!(
-      super::extract_course_schedules(&get_content("course_schedules.xml"))
-        .unwrap(),
+      super::extract_course_schedules(&get_content(
+        "course_schedules_202305.xml"
+      ))
+      .unwrap(),
       vec![Schedule {
         blocks: Some(vec![Block {
           campus: Some("Downtown".into()),

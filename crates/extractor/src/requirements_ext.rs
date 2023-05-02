@@ -10,11 +10,15 @@ impl RequirementsExt for Requirements {
   fn from_notes(notes: ElementRef) -> Result<Self> {
     let mut requirements = Self::default();
 
-    let par = notes
-      .select_many("li")?
-      .iter()
-      .map(|note| note.select_single("p"))
-      .collect::<Result<Vec<ElementRef>, _>>()?;
+    let mut par = Vec::new();
+
+    for note in notes.select_many("li")? {
+      if let Some(p) = note.select_optional("p")? {
+        par.push(p);
+      } else {
+        par.push(note);
+      }
+    }
 
     par.iter().try_for_each(|par| -> Result {
       ["Prerequisite", "Corequisite", "Restriction"]

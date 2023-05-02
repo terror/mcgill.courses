@@ -25,13 +25,14 @@ forbid:
 lint:
   npm run lint
 
-load:
-  cargo run -- --source=courses.json \
+load source term:
+  cargo run -- --source={{source}} \
     load \
     --batch-size=10 \
-    --page-delay=500 \
     --course-delay=500 \
-    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+    --mcgill-term={{term}} \
+    --page-delay=500 \
+    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
 
 restart:
   docker-compose down --volumes && just services
