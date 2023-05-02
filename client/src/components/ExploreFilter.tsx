@@ -222,7 +222,7 @@ export const ExploreFilter = ({
           {levelsOptions.map((level) => (
             <FilterButton
               name={level}
-              isSelected={false}
+              isSelected={selectedLevels.includes(level)}
               selections={selectedLevels}
               setSelections={setSelectedLevels}
             />
@@ -233,7 +233,7 @@ export const ExploreFilter = ({
           {termsOptions.map((term) => (
             <FilterButton
               name={term}
-              isSelected={false}
+              isSelected={selectedTerms.includes(term)}
               selections={selectedTerms}
               setSelections={setSelectedTerms}
             />
