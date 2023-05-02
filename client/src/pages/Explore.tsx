@@ -23,10 +23,14 @@ export const Explore = () => {
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
   const body = {
-    codes: selectedCodes,
-    levels: selectedLevels.map((l) => l.charAt(0)),
-    terms: selectedTerms,
+    codes: selectedCodes.length === 0 ? null : selectedCodes,
+    levels:
+      selectedLevels.length === 0
+        ? null
+        : selectedLevels.map((l) => l.charAt(0)),
+    terms: selectedTerms.length === 0 ? null : selectedTerms,
   };
+
   console.log(body);
 
   useEffect(() => {
@@ -44,8 +48,14 @@ export const Explore = () => {
   console.log(courses);
 
   const fetchMore = async () => {
-    const batch = await fetchClient.getData<Course[]>(
-      `/courses?limit=${limit}&offset=${offset}`
+    const batch = await fetchClient.postData<Course[]>(
+      `/courses?limit=${limit}&offset=${offset}`,
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
 
     if (batch.length === 0) setHasMore(false);

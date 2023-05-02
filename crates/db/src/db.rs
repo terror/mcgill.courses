@@ -104,25 +104,32 @@ impl Db {
     course_levels: Option<Vec<String>>,
     course_terms: Option<Vec<String>>,
   ) -> Result<Vec<Course>> {
+    let mut document = Document::new();
+
+    log::info!("Got subjects: {:?}", course_subjects);
+
+    if let Some(ref course_subjects) = course_subjects {
+      document.insert("subject", doc! { "$in": course_subjects });
+    }
+
+    log::info!("Document is now: {:?}", document);
+
     Ok(
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
         .find(
-          doc! {
-            "subject": { "$in": course_subjects},
-            "code": {
-              "$regex" : format!("^({})",
-              course_levels.unwrap_or_else(|| vec!["2".to_string()]).iter().map(|level| level.chars().next()).flatten().collect::<String>())
-            },
-            "terms": {
-              "$regex" : format!(r"/^(\S+)/", course_terms.unwrap_or_else(|| vec!["Fall".to_string()]).iter().map(|term| term.split_whitespace().next()).flatten().collect::<String>())}
-        },
+          // TODO: Fix this bullshit?
+          if document.is_empty() {
+            None
+          } else {
+            Some(document)
+          },
           FindOptions::builder().skip(offset).limit(limit).build(),
         )
         .await?
         .try_collect::<Vec<Course>>()
-        .await?
+        .await?,
     )
   }
 
