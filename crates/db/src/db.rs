@@ -52,6 +52,7 @@ impl Db {
                   "description": course.description,
                   "facultyUrl": course.faculty_url,
                   "instructors": course.instructors.combine(found.instructors),
+                  "level": course.level,
                   "prerequisites": course.prerequisites,
                   "restrictions": course.restrictions,
                   "schedule": course.schedule.unwrap_or(Vec::new()).combine(found.schedule.unwrap_or(Vec::new())),
