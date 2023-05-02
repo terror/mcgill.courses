@@ -37,12 +37,25 @@ impl Db {
   pub async fn seed(&self, source: PathBuf) -> Result {
     info!("Seeding courses...");
 
-    for course in
-      serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
-    {
-      match self.find_course(doc! { "_id": &course.id, }).await? {
-        Some(found) => {
-          self
+    let mut courses = Vec::new();
+
+    if source.is_file() {
+      courses.push(serde_json::from_str::<Vec<Course>>(&fs::read_to_string(
+        source,
+      )?)?);
+    } else {
+      for path in fs::read_dir(source)? {
+        courses.push(serde_json::from_str::<Vec<Course>>(
+          &fs::read_to_string(path?.path())?,
+        )?);
+      }
+    }
+
+    for batch in courses {
+      for course in batch {
+        match self.find_course(doc! { "_id": &course.id, }).await? {
+          Some(found) => {
+            self
             .update_course(
               doc! { "_id": &course.id },
               doc! {
@@ -52,18 +65,20 @@ impl Db {
                   "description": course.description,
                   "facultyUrl": course.faculty_url,
                   "instructors": course.instructors.combine(found.instructors),
+                  "level": course.level,
                   "prerequisites": course.prerequisites,
                   "restrictions": course.restrictions,
-                  "schedule": course.schedule.combine(found.schedule),
+                  "schedule": course.schedule.unwrap_or(Vec::new()).combine(found.schedule.unwrap_or(Vec::new())),
                   "terms": course.terms.combine(found.terms),
                   "url": course.url
                 }
               },
             )
             .await?;
-        }
-        None => {
-          self.add_course(course).await?;
+          }
+          None => {
+            self.add_course(course).await?;
+          }
         }
       }
     }

@@ -14,6 +14,8 @@ pub(crate) struct Loader {
   mcgill_term: String,
   #[clap(long, default_value = "202305")]
   vsb_term: usize,
+  #[clap(long, default_value = "false")]
+  scrape_vsb: bool,
 }
 
 impl Loader {
@@ -111,7 +113,15 @@ impl Loader {
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
     log::info!("{:?}", listing);
 
-    let course_page = extractor::extract_course_page(&listing.content()?)?;
+    let mut content = listing.content();
+
+    while let Err(ref error) = content {
+      log::error!("Error fetching course information: {error}, retrying...");
+      thread::sleep(Duration::from_secs(10));
+      content = listing.content();
+    }
+
+    let course_page = extractor::extract_course_page(&content?)?;
 
     log::info!(
       "Parsed course {}{}",
@@ -140,10 +150,14 @@ impl Loader {
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
       restrictions: course_page.requirements.restrictions,
-      schedule: VsbClient::new(self.user_agent.to_string())?.schedule(
-        &format!("{}-{}", course_page.subject, course_page.code),
-        self.vsb_term,
-      )?,
+      schedule: if self.scrape_vsb {
+        Some(VsbClient::new(self.user_agent.to_string())?.schedule(
+          &format!("{}-{}", course_page.subject, course_page.code),
+          self.vsb_term,
+        )?)
+      } else {
+        None
+      },
     })
   }
 }
