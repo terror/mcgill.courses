@@ -24,24 +24,26 @@ export const Explore = () => {
 
   const body = {
     codes: selectedCodes,
-    levels: selectedLevels.map((l) => parseInt(l[0], 10) * 100),
+    levels: selectedLevels.map((l) => l.charAt(0)),
     terms: selectedTerms,
   };
 
-  // useEffect(() => {
-  //   fetchClient
-  //     .post(`/courses?limits=${limit}`, body)
-  //     .then((res) => res.json())
-  //     .then((data) => setCourses(data as Course[]))
-  //     .catch((_) => setError(true));
-  // }, [selectedCodes, selectedLevels, selectedTerms]);
-
   useEffect(() => {
     fetchClient
-      .getData<Course[]>(`/courses?limit=${limit}`)
-      .then((data) => setCourses(data))
+      .post(`/courses?limits=${limit}`, body)
+      .then((res) => res.json())
+      .then((data) => setCourses(data as Course[]))
       .catch((_) => setError(true));
-  }, []);
+  }, [selectedCodes, selectedLevels, selectedTerms]);
+
+  console.log(courses);
+
+  // useEffect(() => {
+  //   fetchClient
+  //     .getData<Course[]>(`/courses?limit=${limit}`)
+  //     .then((data) => setCourses(data))
+  //     .catch((_) => setError(true));
+  // }, []);
 
   const fetchMore = async () => {
     const batch = await fetchClient.getData<Course[]>(

@@ -6,11 +6,30 @@ pub(crate) struct GetCoursesParams {
   offset: Option<u64>,
 }
 
+#[derive(Deserialize)]
+pub(crate) struct GetCoursesBody {
+  code: Option<Vec<String>>,
+  level: Option<Vec<String>>,
+  name: Option<Vec<String>>,
+}
+
 pub(crate) async fn get_courses(
   Query(params): Query<GetCoursesParams>,
   AppState(state): AppState<State>,
+  filter: Json<GetCoursesBody>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(state.db.courses(params.limit, params.offset).await?))
+  Ok(Json(
+    state
+      .db
+      .courses(
+        params.limit,
+        params.offset,
+        filter.0.code,
+        filter.0.level,
+        filter.0.name,
+      )
+      .await?,
+  ))
 }
 
 pub(crate) async fn get_course_by_id(

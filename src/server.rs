@@ -1,3 +1,5 @@
+use axum::routing::post;
+
 use super::*;
 
 #[derive(Parser)]
@@ -44,7 +46,7 @@ impl Server {
         .route("/auth/authorized", get(auth::login_authorized))
         .route("/auth/login", get(auth::microsoft_auth))
         .route("/auth/logout", get(auth::logout))
-        .route("/courses", get(courses::get_courses))
+        .route("/courses", post(courses::get_courses))
         .route("/courses/:id", get(courses::get_course_by_id))
         .route(
           "/reviews",
@@ -163,7 +165,7 @@ mod tests {
         &hyper::body::to_bytes(response.into_body()).await.unwrap()
       )
       .unwrap(),
-      db.courses(None, None).await.unwrap()
+      db.courses(None, None, None, None, None).await.unwrap()
     );
   }
 
@@ -190,7 +192,9 @@ mod tests {
         &hyper::body::to_bytes(response.into_body()).await.unwrap()
       )
       .unwrap(),
-      db.courses(Some(10), Some(40)).await.unwrap()
+      db.courses(Some(10), Some(40), None, None, None)
+        .await
+        .unwrap()
     );
   }
 
