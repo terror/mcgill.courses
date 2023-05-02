@@ -106,20 +106,29 @@ impl Db {
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
-    log::info!("Got subjects: {:?}", course_subjects);
-
     if let Some(ref course_subjects) = course_subjects {
       document.insert("subject", doc! { "$in": course_subjects });
     }
 
-    log::info!("Document is now: {:?}", document);
+    if let Some(ref course_levels) = course_levels {
+      document.insert(
+        "code",
+        doc! { "$regex": format!("^({})", course_levels.join("|")) },
+      );
+    }
+
+    if let Some(ref course_terms) = course_terms {
+      document.insert(
+        "terms",
+        doc! { "$regex": format!("^({})", course_terms.join("|")) },
+      );
+    }
 
     Ok(
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
         .find(
-          // TODO: Fix this bullshit?
           if document.is_empty() {
             None
           } else {
