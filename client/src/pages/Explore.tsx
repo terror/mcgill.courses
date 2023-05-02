@@ -68,7 +68,9 @@ export const Explore = () => {
       <div className='flex flex-row'>
         {error ? <Alert status='error' /> : null}
         <div className='flex w-full flex-col items-center py-8'>
+          {' '}
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+            {' '}
             Showing all courses
           </h1>
           <div className='flex flex-col md:flex-row'>
@@ -92,10 +94,10 @@ export const Explore = () => {
                     <CourseCard key={i} course={course} />
                   ))
                 ) : (
-                  <div className='bg text-wrap m-2 max-w-xl rounded-lg border p-5 px-56 duration-150 hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800'>
-                    <p className='mb-2 w-80 text-xl font-medium text-gray-500 dark:text-gray-200'>
+                  <div className='bg min-w-xl max-wl m-2 flex rounded-lg border p-5 duration-150 hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800 '>
+                    <div className='mx-[195px] text-center font-bold text-gray-500 dark:text-gray-400'>
                       No courses found.
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>
