@@ -29,9 +29,27 @@ type CourseTermsProps = {
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
   const instructors = uniqueTermInstructors(course);
+  const terms = course.terms;
   const container = classNames('flex flex-wrap mr-auto');
 
-  return instructors.length !== 0 ? (
+  if (terms.length === 0)
+    return (
+      <div className={container}>
+        <div
+          className={classNames(
+            'rounded-xl bg-gray-100 dark:bg-neutral-700',
+            variant === 'small' ? 'py-1 px-2' : 'p-2'
+          )}
+        >
+          <div className='flex items-center space-x-2'>
+            <GoX size={variantToSize(variant)} color='DarkGray' />
+            <div className='pr-1 dark:text-gray-200'>Not Offered</div>
+          </div>
+        </div>
+      </div>
+    );
+
+  return (
     <div className={container}>
       {instructors.map((instructor, i) => (
         <div
@@ -43,24 +61,11 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         >
           <div className='flex items-center space-x-2'>
             {termToIcon(instructor.term, variant)}
-            <div className='dark:text-gray-200'>{instructor.name}</div>
+
+            <div className='pr-1 dark:text-gray-200'>{instructor.name}</div>
           </div>
         </div>
       ))}
-    </div>
-  ) : (
-    <div className={container}>
-      <div
-        className={classNames(
-          'rounded-xl bg-gray-100 dark:bg-neutral-700',
-          variant === 'small' ? 'py-1 px-2' : 'p-2'
-        )}
-      >
-        <div className='flex items-center space-x-2'>
-          <GoX size={variantToSize(variant)} color='DarkGray' />
-          <div className='pr-1 dark:text-gray-200'>Not Offered</div>
-        </div>
-      </div>
     </div>
   );
 };
