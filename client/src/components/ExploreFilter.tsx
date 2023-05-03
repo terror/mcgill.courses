@@ -1,12 +1,12 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { GoX } from 'react-icons/go';
-import ValidCourseCodes from '../assets/ValidCourseCodes.json';
+import courseCodes from '../assets/courseCodes.json';
 import { classNames } from '../lib/utils';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
-const codesOptions = ValidCourseCodes;
+const codesOptions = courseCodes;
 
 type InputBoxProp = {
   selected: string[];
