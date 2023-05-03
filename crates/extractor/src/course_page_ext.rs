@@ -8,9 +8,10 @@ pub(crate) trait CoursePageExt {
 
 impl CoursePageExt for CoursePage {
   fn from_html(html: Html) -> Result<Self> {
-    let content = html
-      .root_element()
-      .select_single("div[class='node node-catalog clearfix']")?;
+    let content = html.root_element().try_select_single(vec![
+      "div[class='node node-catalog clearfix']",
+      "div[class='node node-catalog node-promoted clearfix']",
+    ])?;
 
     let full_title = html
       .root_element()

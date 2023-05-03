@@ -29,8 +29,8 @@ load:
   cargo run -- --source=courses.json \
     load \
     --batch-size=10 \
-    --page-delay=500 \
     --course-delay=500 \
+    --page-delay=500 \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
 restart:
@@ -38,6 +38,12 @@ restart:
 
 run *args:
   cargo run -- {{args}}
+
+seed:
+  cargo run -- --source=data serve --seed --db-name=mcgill-courses
+
+serve:
+  cargo run -- serve --db-name=mcgill-courses
 
 services:
   docker-compose up -d
