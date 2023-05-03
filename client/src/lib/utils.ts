@@ -24,3 +24,14 @@ export const uniqueTermInstructors = (course: Course) => {
 
   return unique;
 };
+
+export const getCurrentTerm = (): [string, string, string] => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+
+  if (month >= 8)
+    return [`Fall ${year}`, `Winter ${year + 1}`, `Summer ${year + 1}`];
+
+  return [`Fall ${year}`, `Winter ${year - 1}`, `Summer ${year - 1}`];
+};
