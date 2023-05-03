@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
@@ -14,6 +14,7 @@ import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { AddReviewForm } from '../components/AddReviewForm';
 import { EditReviewForm } from '../components/EditReviewForm';
+import { NotFound } from '../components/NotFound';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -37,7 +38,11 @@ export const CoursePage = () => {
   }, [params.id, addReviewOpen, editReviewOpen]);
 
   if (course === null) {
-    return <div>404 not found</div>;
+    return (
+      <Layout>
+        <NotFound />
+      </Layout>
+    );
   }
 
   if (course === undefined || reviews === undefined) {
@@ -83,7 +88,7 @@ export const CoursePage = () => {
       />
       <div className='flex'>
         <div>
-          <div className='mt-8 ml-8'>
+          <div className='ml-8 mt-8'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}

@@ -49,10 +49,10 @@ export const Navbar = () => {
   return (
     <header className='z-50'>
       <nav
-        className='flex items-center justify-between p-6 lg:px-8'
+        className='z-50 flex items-center justify-between p-6 lg:px-8'
         aria-label='Global'
       >
-        <div className='my-auto mr-auto flex lg:flex-1'>
+        <div className='z-50 my-auto mr-auto flex lg:flex-1'>
           <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='/bird.png' alt='bird' />
           </Link>
