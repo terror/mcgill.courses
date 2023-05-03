@@ -177,8 +177,9 @@ const SelectedCourseCodes = ({
 }) => {
   return selected.length > 0 ? (
     <div className='flex flex-wrap'>
-      {selected.map((item) => (
+      {selected.map((item, i) => (
         <CourseCodeBox
+          key={i}
           selectedOption={item}
           selectedOptions={selected}
           setSelectedOptions={(value) => setSelected(value)}
@@ -220,8 +221,9 @@ export const ExploreFilter = ({
         />
         <div className='space-y-2'>
           <h1 className='mt-3 text-2xl font-semibold'>Level</h1>
-          {levelsOptions.map((level) => (
+          {levelsOptions.map((level, i) => (
             <FilterButton
+              key={i}
               name={level}
               isSelected={selectedLevels.includes(level)}
               selections={selectedLevels}
@@ -231,8 +233,9 @@ export const ExploreFilter = ({
         </div>
         <div className='space-y-2'>
           <h1 className='mt-3 text-2xl font-semibold'>Term</h1>
-          {termsOptions.map((term) => (
+          {termsOptions.map((term, i) => (
             <FilterButton
+              key={i}
               name={term}
               isSelected={selectedTerms.includes(term)}
               selections={selectedTerms}
