@@ -1,7 +1,12 @@
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
-import { classNames, uniqueTermInstructors } from '../lib/utils';
+import {
+  classNames,
+  filterCurrentInstructors,
+  getCurrentTerm,
+  uniqueTermInstructors,
+} from '../lib/utils';
 import { Course } from '../model/Course';
 import { GoX } from 'react-icons/go';
 
@@ -28,7 +33,7 @@ type CourseTermsProps = {
 };
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
-  const instructors = uniqueTermInstructors(course);
+  const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
   const container = classNames(
     'flex',
     variant === 'small' ? 'space-x-2' : 'space-x-3'
