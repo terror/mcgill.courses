@@ -1,4 +1,5 @@
 import { Course } from '../model/Course';
+import { Instructor } from '../model/Instructor';
 
 export const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
@@ -23,4 +24,20 @@ export const uniqueTermInstructors = (course: Course) => {
   unique.sort((a, b) => order.indexOf(a.term) - order.indexOf(b.term));
 
   return unique;
+};
+
+export const getCurrentTerm = (): [string, string, string] => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+
+  if (month >= 8)
+    return [`Fall ${year}`, `Winter ${year + 1}`, `Summer ${year + 1}`];
+
+  return [`Fall ${year - 1}`, `Winter ${year}`, `Summer ${year}`];
+};
+
+export const filterCurrentInstructors = (instructors: Instructor[]) => {
+  const currentTerm = getCurrentTerm();
+  return instructors.filter((i) => currentTerm.includes(i.term));
 };
