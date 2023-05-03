@@ -19,10 +19,11 @@ First, mount a local mongodb instance with docker:
 $ docker compose up -d
 ```
 
-Spawn the server with a data source:
+Spawn the server with a data source (in this case the `/seed` directory)
+and seed the database:
 
 ```bash
-$ cargo run -- --source=courses.json serve
+$ cargo run -- --source=seed serve --seed --db-name=mcgill-courses
 ```
 
 Refer to `.env.example` and `client/.env.example` for what environment variables

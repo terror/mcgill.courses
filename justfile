@@ -40,7 +40,7 @@ run *args:
   cargo run -- {{args}}
 
 seed:
-  cargo run -- --source=data serve --seed --db-name=mcgill-courses
+  cargo run -- --source=seed serve --seed --db-name=mcgill-courses
 
 serve:
   cargo run -- serve --db-name=mcgill-courses
