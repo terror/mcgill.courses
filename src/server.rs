@@ -148,12 +148,11 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
-    let json = serde_json::to_string(&json!({
-    "subjects": Option::<Vec<String>>::None,
-    "levels":Option::<Vec<String>>::None,
-    "terms": Option::<Vec<String>>::None,
-    }))
-    .unwrap();
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
 
     let response = app
       .oneshot(
@@ -161,7 +160,7 @@ mod tests {
           .method(Method::POST)
           .uri("/courses")
           .header("Content-Type", "application/json")
-          .body(Body::from(json))
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
@@ -184,12 +183,11 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
-    let json = serde_json::to_string(&json!({
-    "subjects": Option::<Vec<String>>::None,
-    "levels":Option::<Vec<String>>::None,
-    "terms": Option::<Vec<String>>::None,
-    }))
-    .unwrap();
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
 
     let response = app
       .oneshot(
@@ -197,7 +195,7 @@ mod tests {
           .method(Method::POST)
           .uri("/courses?limit=10&offset=40")
           .header("Content-Type", "application/json")
-          .body(Body::from(json))
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
@@ -219,12 +217,12 @@ mod tests {
   #[tokio::test]
   async fn courses_route_does_not_allow_negative() {
     let TestContext { app, .. } = TestContext::new().await;
-    let json = serde_json::to_string(&json!({
-    "subjects": Option::<Vec<String>>::None,
-    "levels":Option::<Vec<String>>::None,
-    "terms": Option::<Vec<String>>::None,
-    }))
-    .unwrap();
+
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
 
     let response = app
       .oneshot(
@@ -232,7 +230,7 @@ mod tests {
           .method(Method::POST)
           .uri("/courses?limit=-10&offset=-10")
           .header("Content-Type", "application/json")
-          .body(Body::from(json))
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
