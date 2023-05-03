@@ -34,9 +34,6 @@ type CourseTermsProps = {
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
-  console.log(course);
-  console.log(instructors);
-  console.log(getCurrentTerm());
   const container = classNames(
     'flex',
     variant === 'small' ? 'space-x-2' : 'space-x-3'
