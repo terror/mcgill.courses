@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
@@ -20,6 +20,7 @@ export const CoursePage = () => {
   const [course, setCourse] = useState<Course>();
   const [reviews, setReviews] = useState<Review[]>();
   const user = useAuth();
+  const navigate = useNavigate();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
@@ -37,7 +38,7 @@ export const CoursePage = () => {
   }, [params.id, addReviewOpen, editReviewOpen]);
 
   if (course === null) {
-    return <div>404 not found</div>;
+    navigate('/404');
   }
 
   if (course === undefined || reviews === undefined) {
@@ -83,7 +84,7 @@ export const CoursePage = () => {
       />
       <div className='flex'>
         <div>
-          <div className='mt-8 ml-8'>
+          <div className='ml-8 mt-8'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}
