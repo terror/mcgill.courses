@@ -8,7 +8,7 @@ pub(crate) struct GetCoursesParams {
 
 #[derive(Deserialize)]
 pub(crate) struct GetCoursesBody {
-  codes: Option<Vec<String>>,
+  subjects: Option<Vec<String>>,
   levels: Option<Vec<String>>,
   terms: Option<Vec<String>>,
 }
@@ -24,7 +24,7 @@ pub(crate) async fn get_courses(
       .courses(
         params.limit,
         params.offset,
-        filter.0.codes,
+        filter.0.subjects,
         filter.0.levels,
         filter.0.terms,
       )

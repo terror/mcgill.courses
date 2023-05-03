@@ -15,8 +15,8 @@ type InputBoxProp = {
 };
 
 type ExploreFilterProp = {
-  selectedCodes: string[];
-  setSelectedCodes: (selected: string[]) => void;
+  selectedSubjects: string[];
+  setSelectedSubjects: (selected: string[]) => void;
   selectedLevels: string[];
   setSelectedLevels: (selected: string[]) => void;
   selectedTerms: string[];
@@ -189,8 +189,8 @@ const SelectedCourseCodes = ({
 };
 
 export const ExploreFilter = ({
-  selectedCodes,
-  setSelectedCodes,
+  selectedSubjects,
+  setSelectedSubjects,
   selectedLevels,
   setSelectedLevels,
   selectedTerms,
@@ -209,15 +209,15 @@ export const ExploreFilter = ({
         <div className='space-y-3'>
           <h1 className='text-2xl font-semibold'>Course Code</h1>
           <InputBox
-            selected={selectedCodes}
-            setSelected={(value) => setSelectedCodes(value)}
+            selected={selectedSubjects}
+            setSelected={(value) => setSelectedSubjects(value)}
             options={codesOptions}
           />
         </div>
         <div className='mb-3'>
           <SelectedCourseCodes
-            selected={selectedCodes}
-            setSelected={setSelectedCodes}
+            selected={selectedSubjects}
+            setSelected={setSelectedSubjects}
           />
         </div>
         <div className='space-y-2'>

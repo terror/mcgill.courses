@@ -20,12 +20,12 @@ export const Explore = () => {
   const [error, setError] = useState(false);
   const [filterIsToggled, setFilterIsToggled] = useState(false);
 
-  const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
   const reqBody = {
-    codes: selectedCodes.length === 0 ? null : selectedCodes,
+    codes: selectedSubjects.length === 0 ? null : selectedSubjects,
     levels:
       selectedLevels.length === 0
         ? null
@@ -35,17 +35,16 @@ export const Explore = () => {
 
   useEffect(() => {
     fetchClient
-      .post(`/courses?limit=${limit}`, reqBody, {
+      .postData<Course[]>(`/courses?limit=${limit}`, reqBody, {
         headers: {
           'Content-Type': 'application/json',
         },
       })
-      .then((res) => res.json())
-      .then((data) => setCourses(data as Course[]))
+      .then((data) => setCourses(data))
       .catch((_) => setError(true));
     setHasMore(true);
     setOffset(limit);
-  }, [selectedCodes, selectedLevels, selectedTerms]);
+  }, [selectedSubjects, selectedLevels, selectedTerms]);
 
   const fetchMore = async () => {
     const batch = await fetchClient.postData<Course[]>(
@@ -79,8 +78,8 @@ export const Explore = () => {
             <div className='md:hidden'>
               <BoxToggle
                 child={ExploreFilter({
-                  selectedCodes,
-                  setSelectedCodes,
+                  selectedSubjects,
+                  setSelectedSubjects,
                   selectedLevels,
                   setSelectedLevels,
                   selectedTerms,
@@ -119,8 +118,8 @@ export const Explore = () => {
             </InfiniteScroll>
             <div className='hidden md:flex'>
               <ExploreFilter
-                selectedCodes={selectedCodes}
-                setSelectedCodes={setSelectedCodes}
+                selectedSubjects={selectedSubjects}
+                setSelectedSubjects={setSelectedSubjects}
                 selectedLevels={selectedLevels}
                 setSelectedLevels={setSelectedLevels}
                 selectedTerms={selectedTerms}

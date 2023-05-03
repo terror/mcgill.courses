@@ -151,7 +151,7 @@ mod tests {
     db.seed(seed()).await.unwrap();
 
     let json = serde_json::to_string(&json!({
-    "codes": Option::<Vec<String>>::None,
+    "subjects": Option::<Vec<String>>::None,
     "levels":Option::<Vec<String>>::None,
     "terms": Option::<Vec<String>>::None,
     }))
@@ -187,7 +187,7 @@ mod tests {
     db.seed(seed()).await.unwrap();
 
     let json = serde_json::to_string(&json!({
-    "codes": Option::<Vec<String>>::None,
+    "subjects": Option::<Vec<String>>::None,
     "levels":Option::<Vec<String>>::None,
     "terms": Option::<Vec<String>>::None,
     }))
@@ -222,7 +222,7 @@ mod tests {
   async fn courses_route_does_not_allow_negative() {
     let TestContext { app, .. } = TestContext::new().await;
     let json = serde_json::to_string(&json!({
-    "codes": Option::<Vec<String>>::None,
+    "subjects": Option::<Vec<String>>::None,
     "levels":Option::<Vec<String>>::None,
     "terms": Option::<Vec<String>>::None,
     }))
