@@ -76,6 +76,7 @@ impl Db {
                   "restrictions": course.restrictions,
                   "schedule": course.schedule.unwrap_or(Vec::new()).combine(found.schedule.unwrap_or(Vec::new())),
                   "terms": course.terms.combine(found.terms),
+                  "title": course.title,
                   "url": course.url
                 }
               },
