@@ -970,4 +970,91 @@ mod tests {
       .await
       .is_ok());
   }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_subject() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let total = db.courses(None, None, None, None, None).await.unwrap();
+
+    assert_eq!(total.len(), 314);
+
+    let filtered = db
+      .courses(None, None, Some(vec!["MATH".into()]), None, None)
+      .await
+      .unwrap();
+
+    assert!(filtered.len() < total.len());
+
+    for course in filtered {
+      assert_eq!(course.subject, "MATH");
+    }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_level() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let total = db.courses(None, None, None, None, None).await.unwrap();
+
+    assert_eq!(total.len(), 314);
+
+    let filtered = db
+      .courses(None, None, None, Some(vec!["100".into()]), None)
+      .await
+      .unwrap();
+
+    assert!(filtered.len() < total.len());
+
+    for course in filtered {
+      assert!(course.code.starts_with('1'));
+    }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_term() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let total = db.courses(None, None, None, None, None).await.unwrap();
+
+    assert_eq!(total.len(), 314);
+
+    let filtered = db
+      .courses(None, None, None, None, Some(vec!["Winter".into()]))
+      .await
+      .unwrap();
+
+    assert!(filtered.len() < total.len());
+
+    for course in filtered {
+      assert!(course
+        .terms
+        .iter()
+        .any(|term| term.starts_with(&"Winter".to_string())));
+    }
+  }
 }
