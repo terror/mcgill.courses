@@ -25,7 +25,7 @@ export const Explore = () => {
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
   const reqBody = {
-    codes: selectedSubjects.length === 0 ? null : selectedSubjects,
+    subjects: selectedSubjects.length === 0 ? null : selectedSubjects,
     levels:
       selectedLevels.length === 0
         ? null
