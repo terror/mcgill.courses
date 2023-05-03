@@ -66,7 +66,7 @@ export const Explore = () => {
 
   return (
     <Layout>
-      <div className='flex flex-row'>
+      <div className='flex flex-row p-4'>
         {error ? <Alert status='error' /> : null}
         <div className='flex w-full flex-col items-center py-8'>
           {' '}
