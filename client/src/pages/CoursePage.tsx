@@ -21,7 +21,6 @@ export const CoursePage = () => {
   const [course, setCourse] = useState<Course>();
   const [reviews, setReviews] = useState<Review[]>();
   const user = useAuth();
-  const navigate = useNavigate();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
