@@ -204,7 +204,7 @@ export const ExploreFilter = ({
       )}
     >
       <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
-      <div className='m-10 mt-2 space-y-5'>
+      <div className='m-10 mt-2'>
         <div className='space-y-3'>
           <h1 className='text-2xl font-semibold'>Course Code</h1>
           <InputBox
@@ -213,10 +213,12 @@ export const ExploreFilter = ({
             options={codesOptions}
           />
         </div>
-        <SelectedCourseCodes
-          selected={selectedCodes}
-          setSelected={setSelectedCodes}
-        />
+        <div className='mb-3'>
+          <SelectedCourseCodes
+            selected={selectedCodes}
+            setSelected={setSelectedCodes}
+          />
+        </div>
         <div className='space-y-2'>
           <h1 className='text-2xl font-semibold'>Level</h1>
           {levelsOptions.map((level) => (
