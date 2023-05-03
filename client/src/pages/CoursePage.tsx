@@ -14,6 +14,7 @@ import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { AddReviewForm } from '../components/AddReviewForm';
 import { EditReviewForm } from '../components/EditReviewForm';
+import { NotFound } from '../components/NotFound';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -38,7 +39,11 @@ export const CoursePage = () => {
   }, [params.id, addReviewOpen, editReviewOpen]);
 
   if (course === null) {
-    navigate('/404');
+    return (
+      <Layout>
+        <NotFound />
+      </Layout>
+    );
   }
 
   if (course === undefined || reviews === undefined) {
