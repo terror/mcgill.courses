@@ -44,7 +44,7 @@ impl Server {
         .route("/auth/authorized", get(auth::login_authorized))
         .route("/auth/login", get(auth::microsoft_auth))
         .route("/auth/logout", get(auth::logout))
-        .route("/courses", get(courses::get_courses))
+        .route("/courses", post(courses::get_courses))
         .route("/courses/:id", get(courses::get_course_by_id))
         .route(
           "/reviews",
@@ -64,6 +64,8 @@ impl Server {
 
 #[cfg(test)]
 mod tests {
+  use http::Method;
+
   use {
     super::*,
     axum::body::Body,
@@ -146,11 +148,19 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
@@ -163,7 +173,7 @@ mod tests {
         &hyper::body::to_bytes(response.into_body()).await.unwrap()
       )
       .unwrap(),
-      db.courses(None, None).await.unwrap()
+      db.courses(None, None, None, None, None).await.unwrap()
     );
   }
 
@@ -173,11 +183,19 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses?limit=10&offset=40")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
@@ -190,7 +208,9 @@ mod tests {
         &hyper::body::to_bytes(response.into_body()).await.unwrap()
       )
       .unwrap(),
-      db.courses(Some(10), Some(40)).await.unwrap()
+      db.courses(Some(10), Some(40), None, None, None)
+        .await
+        .unwrap()
     );
   }
 
@@ -198,11 +218,19 @@ mod tests {
   async fn courses_route_does_not_allow_negative() {
     let TestContext { app, .. } = TestContext::new().await;
 
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses?limit=-10&offset=-10")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await

@@ -5,6 +5,11 @@ export const fetchClient = {
   async getData<T>(endpoint: string, init?: RequestInit) {
     return (await (await this.get(endpoint, init)).json()) as T;
   },
+  async postData<T>(endpoint: string, data: any, init?: RequestInit) {
+    return (await (
+      await this.reqWithBody(endpoint, 'POST', data, init)
+    ).json()) as T;
+  },
   async reqWithBody(
     endpoint: string,
     method: string,

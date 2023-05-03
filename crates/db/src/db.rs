@@ -122,13 +122,43 @@ impl Db {
     &self,
     limit: Option<i64>,
     offset: Option<u64>,
+    course_subjects: Option<Vec<String>>,
+    course_levels: Option<Vec<String>>,
+    course_terms: Option<Vec<String>>,
   ) -> Result<Vec<Course>> {
+    let mut document = Document::new();
+
+    if let Some(ref course_subjects) = course_subjects {
+      document.insert(
+        "subject",
+        doc! { "$regex": format!("^({})", course_subjects.join("|")) },
+      );
+    }
+
+    if let Some(ref course_levels) = course_levels {
+      document.insert(
+        "code",
+        doc! { "$regex": format!("^({})", course_levels.join("|")) },
+      );
+    }
+
+    if let Some(ref course_terms) = course_terms {
+      document.insert(
+        "terms",
+        doc! { "$regex": format!("^({})", course_terms.join("|")) },
+      );
+    }
+
     Ok(
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
         .find(
-          None,
+          if document.is_empty() {
+            None
+          } else {
+            Some(document)
+          },
           FindOptions::builder().skip(offset).limit(limit).build(),
         )
         .await?
@@ -384,17 +414,35 @@ mod tests {
   async fn on_disk_database_is_persistent() {
     let TestContext { db, db_name } = TestContext::new().await;
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 0);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      0
+    );
 
     db.add_course(Course::default()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 1);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
 
     drop(db);
 
     let db = Db::connect(&db_name).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 1);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -409,7 +457,13 @@ mod tests {
 
     db.seed(source).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 2);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      2
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -431,7 +485,13 @@ mod tests {
 
     db.seed(source).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 1);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -446,13 +506,19 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 2);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      2
+    );
 
     fs::write(&source, get_content("update.json")).unwrap();
 
     db.seed(source).await.unwrap();
 
-    let courses = db.courses(None, None).await.unwrap();
+    let courses = db.courses(None, None, None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 3);
 
@@ -482,7 +548,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 123);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
 
     let courses = db.search("COMP 202").await.unwrap();
 
@@ -506,7 +578,7 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    let courses = db.courses(None, None).await.unwrap();
+    let courses = db.courses(None, None, None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 123);
 
@@ -530,7 +602,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 123);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
 
     let courses = db.search("COMP202").await.unwrap();
 
@@ -554,7 +632,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 123);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
 
     let courses = db.search("foundations of").await.unwrap();
 
@@ -578,7 +662,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(Some(10), None).await.unwrap().len(), 10);
+    assert_eq!(
+      db.courses(Some(10), None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      10
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -593,7 +683,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, Some(20)).await.unwrap().len(), 103);
+    assert_eq!(
+      db.courses(None, Some(20), None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      103
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]

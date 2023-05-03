@@ -21,6 +21,13 @@ export const uniqueTermInstructors = (course: Course) => {
   }
 
   const order = ['Fall', 'Winter', 'Summer'];
+
+  for (const term of course.terms) {
+    if (!filledTerms.has(term)) {
+      unique.push({ term, name: 'No Instructor Assigned' });
+    }
+  }
+
   unique.sort((a, b) => order.indexOf(a.term) - order.indexOf(b.term));
 
   return unique;

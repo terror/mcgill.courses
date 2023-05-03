@@ -24,6 +24,7 @@ use {
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
     routing::get,
+    routing::post,
     routing::Router,
     Json, RequestPartsExt,
   },
