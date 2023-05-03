@@ -38,6 +38,7 @@ const FilterButton = ({
   setSelections,
 }: FilterButtonProp) => {
   const [selected, setSelected] = useState(isSelected);
+
   const selectedColor = 'bg-red-600 text-gray-100';
   const unselectedColor =
     'bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-gray-100';
@@ -84,7 +85,7 @@ const CourseCodeBox = ({
           )
         }
       >
-        <GoX className='ml-0 h-5 w-5 duration-300 hover:text-red-700 dark:text-gray-100 dark:hover:text-red-700' />
+        <GoX className='ml-0 h-5 w-5 duration-300 hover:text-red-600 dark:text-gray-100 dark:hover:text-red-700' />
       </button>
     </div>
   );

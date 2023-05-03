@@ -95,7 +95,7 @@ export const Explore = () => {
               dataLength={courses.length}
               hasMore={hasMore}
               loader={
-                courses.length !== 0 && hasMore ? (
+                courses.length >= 20 && hasMore ? (
                   <div className='mt-4 text-center'>
                     <Spinner />
                   </div>
@@ -109,7 +109,7 @@ export const Explore = () => {
                   <CourseCard key={i} course={course} />
                 ))}
                 {!hasMore || courses.length === 0 ? (
-                  <div className='m-[200px] mt-4 text-center'>
+                  <div className='mx-[200px] mt-4 text-center'>
                     <p className='text-gray-500 dark:text-gray-400'>
                       No more courses to show
                     </p>
