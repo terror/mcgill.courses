@@ -44,9 +44,15 @@ impl Db {
         source,
       )?)?);
     } else {
-      for path in fs::read_dir(source)? {
+      let mut paths = fs::read_dir(source)?
+        .map(|path| path.unwrap().path())
+        .collect::<Vec<_>>();
+
+      paths.sort();
+
+      for path in paths {
         courses.push(serde_json::from_str::<Vec<Course>>(
-          &fs::read_to_string(path?.path())?,
+          &fs::read_to_string(path)?,
         )?);
       }
     }
