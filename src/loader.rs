@@ -8,6 +8,8 @@ pub(crate) struct Loader {
   course_delay: u64,
   #[clap(long, default_value = "0")]
   page_delay: u64,
+  #[clap(long, default_value = "10")]
+  retries: usize,
   #[clap(long, default_value = "20")]
   batch_size: usize,
   #[clap(long, default_value = "2022-2023")]
@@ -118,7 +120,7 @@ impl Loader {
         .user_agent(&self.user_agent)
         .build()?
         .get(&listing.url)
-        .retry(10)?
+        .retry(self.retries)?
         .text()?,
     )?;
 
@@ -149,14 +151,12 @@ impl Loader {
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
       restrictions: course_page.requirements.restrictions,
-      schedule: if self.scrape_vsb {
-        Some(VsbClient::new(self.user_agent.to_string())?.schedule(
+      schedule: self.scrape_vsb.then_some(
+        VsbClient::new(self.user_agent.to_string(), self.retries)?.schedule(
           &format!("{}-{}", course_page.subject, course_page.code),
           self.vsb_term,
-        )?)
-      } else {
-        None
-      },
+        )?,
+      ),
     })
   }
 }

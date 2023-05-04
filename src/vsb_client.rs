@@ -3,16 +3,18 @@ use super::*;
 #[derive(Debug)]
 pub(crate) struct VsbClient {
   client: reqwest::blocking::Client,
+  retries: usize,
 }
 
 impl VsbClient {
   const BASE_URL: &str = "https://vsb.mcgill.ca/vsb/getclassdata.jsp";
 
-  pub(crate) fn new(user_agent: String) -> Result<Self> {
+  pub(crate) fn new(user_agent: String, retries: usize) -> Result<Self> {
     Ok(Self {
       client: reqwest::blocking::Client::builder()
         .user_agent(user_agent)
         .build()?,
+      retries,
     })
   }
 
@@ -22,7 +24,11 @@ impl VsbClient {
     term: usize,
   ) -> Result<Vec<Schedule>> {
     Ok(extractor::extract_course_schedules(
-      &self.client.get(self.url(code, term)).retry(10)?.text()?,
+      &self
+        .client
+        .get(self.url(code, term))
+        .retry(self.retries)?
+        .text()?,
     )?)
   }
 
