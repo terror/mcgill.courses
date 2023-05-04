@@ -28,7 +28,7 @@ const questionsAnswers = [
         </Link>{' '}
         and{' '}
         <Link
-          to='demetrios-koziris.github.io/McGillEnhanced/support'
+          to='https://demetrios-koziris.github.io/McGillEnhanced/support'
           className='underline'
         >
           {' '}
