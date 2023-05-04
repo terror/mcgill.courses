@@ -3,13 +3,16 @@ export RUST_LOG := 'info'
 default:
   just --list
 
-all: forbid build test clippy lint fmt-check
+all: forbid build test clippy lint fmt-check readme
 
 build:
   cargo build
 
 clippy:
   ./bin/clippy
+
+dev-deps:
+  cargo install present
 
 fmt:
   cargo fmt --all
@@ -28,10 +31,12 @@ lint:
 load:
   cargo run -- --source=courses.json \
     load \
-    --batch-size=10 \
-    --course-delay=500 \
-    --page-delay=500 \
+    --batch-size=200 \
+    --scrape-vsb \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+
+readme:
+  present --in-place README.md
 
 restart:
   docker-compose down --volumes && just services

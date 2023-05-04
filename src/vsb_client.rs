@@ -21,14 +21,15 @@ impl VsbClient {
     code: &str,
     term: usize,
   ) -> Result<Vec<Schedule>> {
-    Ok(extractor::extract_course_schedules(
-      &self
-        .client
-        .get(self.url(code, term))
-        .header("Accept-Encoding", "")
-        .send()?
-        .text()?,
-    )?)
+    let mut response = self.client.get(self.url(code, term)).send();
+
+    while let Err(error) = response {
+      log::error!("Error fetching vsb schedule: {}, retrying...", error);
+      std::thread::sleep(std::time::Duration::from_secs(1));
+      response = self.client.get(self.url(code, term)).send();
+    }
+
+    Ok(extractor::extract_course_schedules(&response?.text()?)?)
   }
 
   fn url(&self, code: &str, term: usize) -> String {

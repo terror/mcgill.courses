@@ -117,7 +117,7 @@ impl Loader {
 
     while let Err(ref error) = content {
       log::error!("Error fetching course information: {error}, retrying...");
-      thread::sleep(Duration::from_secs(10));
+      thread::sleep(Duration::from_secs(1));
       content = listing.content();
     }
 
