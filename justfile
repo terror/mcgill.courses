@@ -3,7 +3,7 @@ export RUST_LOG := 'info'
 default:
   just --list
 
-all: forbid build test clippy lint fmt-check readme
+all: forbid build test clippy lint fmt-check
 
 build:
   cargo build
