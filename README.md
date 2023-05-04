@@ -42,8 +42,8 @@ $ RUST_LOG=info cargo run -- --source=courses.json \
 ```
 
 This takes around ~2 minutes to run on an M2 macbook pro. It includes scraping
-all current 10,000+ courses offered by McGill alongside schedule information from the
-[visual schedule builder](https://vsb.mcgill.ca).
+all current 10,000+ courses offered by McGill alongside schedule information
+from the [visual schedule builder](https://vsb.mcgill.ca).
 
 For full usage information, see the output below:
 
