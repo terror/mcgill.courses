@@ -41,6 +41,7 @@ use {
     TokenResponse, TokenUrl,
   },
   rayon::prelude::*,
+  reqwest::blocking::RequestBuilder,
   serde::{Deserialize, Serialize},
   std::{
     collections::HashSet,
