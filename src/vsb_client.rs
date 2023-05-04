@@ -1,21 +1,19 @@
 use super::*;
 
 #[derive(Debug)]
-pub(crate) struct VsbClient {
-  client: reqwest::blocking::Client,
+pub(crate) struct VsbClient<'a> {
+  client: &'a reqwest::blocking::Client,
   retries: usize,
 }
 
-impl VsbClient {
+impl<'a> VsbClient<'a> {
   const BASE_URL: &str = "https://vsb.mcgill.ca/vsb/getclassdata.jsp";
 
-  pub(crate) fn new(user_agent: String, retries: usize) -> Result<Self> {
-    Ok(Self {
-      client: reqwest::blocking::Client::builder()
-        .user_agent(user_agent)
-        .build()?,
-      retries,
-    })
+  pub(crate) fn new(
+    client: &'a reqwest::blocking::Client,
+    retries: usize,
+  ) -> Result<Self> {
+    Ok(Self { client, retries })
   }
 
   pub(crate) fn schedule(

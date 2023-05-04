@@ -93,7 +93,14 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     log::info!("Parsing html on page: {}...", page.number);
 
-    let listings = extractor::extract_course_listings(&page.content()?)?;
+    let listings = extractor::extract_course_listings(
+      &reqwest::blocking::Client::builder()
+        .user_agent(&self.user_agent)
+        .build()?
+        .get(&page.url)
+        .retry(self.retries)?
+        .text()?,
+    )?;
 
     thread::sleep(Duration::from_millis(self.page_delay));
 
@@ -115,13 +122,12 @@ impl Loader {
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
     log::info!("{:?}", listing);
 
+    let client = reqwest::blocking::Client::builder()
+      .user_agent(&self.user_agent)
+      .build()?;
+
     let course_page = extractor::extract_course_page(
-      &reqwest::blocking::Client::builder()
-        .user_agent(&self.user_agent)
-        .build()?
-        .get(&listing.url)
-        .retry(self.retries)?
-        .text()?,
+      &client.get(&listing.url).retry(self.retries)?.text()?,
     )?;
 
     log::info!(
@@ -152,7 +158,7 @@ impl Loader {
       corequisites: course_page.requirements.corequisites,
       restrictions: course_page.requirements.restrictions,
       schedule: self.scrape_vsb.then_some(
-        VsbClient::new(self.user_agent.to_string(), self.retries)?.schedule(
+        VsbClient::new(&client, self.retries)?.schedule(
           &format!("{}-{}", course_page.subject, course_page.code),
           self.vsb_term,
         )?,
