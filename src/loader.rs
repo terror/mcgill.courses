@@ -113,15 +113,14 @@ impl Loader {
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
     log::info!("{:?}", listing);
 
-    let mut content = listing.content();
-
-    while let Err(ref error) = content {
-      log::error!("Error fetching course information: {error}, retrying...");
-      thread::sleep(Duration::from_secs(1));
-      content = listing.content();
-    }
-
-    let course_page = extractor::extract_course_page(&content?)?;
+    let course_page = extractor::extract_course_page(
+      &reqwest::blocking::Client::builder()
+        .user_agent(&self.user_agent)
+        .build()?
+        .get(&listing.url)
+        .retry(10)?
+        .text()?,
+    )?;
 
     log::info!(
       "Parsed course {}{}",

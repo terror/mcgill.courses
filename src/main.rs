@@ -6,6 +6,7 @@ use {
     loader::Loader,
     options::Options,
     page::Page,
+    retry::Retry,
     server::Server,
     state::State,
     subcommand::Subcommand,
@@ -64,6 +65,7 @@ mod error;
 mod loader;
 mod options;
 mod page;
+mod retry;
 mod reviews;
 mod search;
 mod server;
