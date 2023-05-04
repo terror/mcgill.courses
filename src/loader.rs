@@ -2,21 +2,45 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Loader {
-  #[clap(long)]
+  #[clap(long, help = "A user agent")]
   user_agent: String,
-  #[clap(long, default_value = "0")]
+  #[clap(
+    long,
+    default_value = "0",
+    help = "Time delay between course requests in milliseconds"
+  )]
   course_delay: u64,
-  #[clap(long, default_value = "0")]
+  #[clap(
+    long,
+    default_value = "0",
+    help = "Time delay between page requests in milliseconds"
+  )]
   page_delay: u64,
-  #[clap(long, default_value = "10")]
+  #[clap(long, default_value = "10", help = "Number of retries")]
   retries: usize,
-  #[clap(long, default_value = "20")]
+  #[clap(
+    long,
+    default_value = "20",
+    help = "Number of pages to scrape per concurrent batch"
+  )]
   batch_size: usize,
-  #[clap(long, default_value = "2022-2023")]
+  #[clap(
+    long,
+    default_value = "2022-2023",
+    help = "The mcgill term to scrape"
+  )]
   mcgill_term: String,
-  #[clap(long, default_value = "202305")]
+  #[clap(
+    long,
+    default_value = "202305",
+    help = "The schedule builder term to scrape"
+  )]
   vsb_term: usize,
-  #[clap(long, default_value = "false")]
+  #[clap(
+    long,
+    default_value = "false",
+    help = "Scrape visual schedule builder information"
+  )]
   scrape_vsb: bool,
 }
 

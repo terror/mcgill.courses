@@ -51,14 +51,14 @@ For full usage information, see the output below:
 Usage: server load [OPTIONS] --user-agent <USER_AGENT>
 
 Options:
-      --user-agent <USER_AGENT>
-      --course-delay <COURSE_DELAY>  [default: 0]
-      --page-delay <PAGE_DELAY>      [default: 0]
-      --retries <RETRIES>            [default: 10]
-      --batch-size <BATCH_SIZE>      [default: 20]
-      --mcgill-term <MCGILL_TERM>    [default: 2022-2023]
-      --vsb-term <VSB_TERM>          [default: 202305]
-      --scrape-vsb
+      --user-agent <USER_AGENT>      A user agent
+      --course-delay <COURSE_DELAY>  Time delay between course requests in milliseconds [default: 0]
+      --page-delay <PAGE_DELAY>      Time delay between page requests in milliseconds [default: 0]
+      --retries <RETRIES>            Number of retries [default: 10]
+      --batch-size <BATCH_SIZE>      Number of pages to scrape per concurrent batch [default: 20]
+      --mcgill-term <MCGILL_TERM>    The mcgill term to scrape [default: 2022-2023]
+      --vsb-term <VSB_TERM>          The schedule builder term to scrape [default: 202305]
+      --scrape-vsb                   Scrape visual schedule builder information
   -h, --help                         Print help
 ```
 
