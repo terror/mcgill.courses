@@ -12,7 +12,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <div className='min-h-screen dark:bg-neutral-900'>
+      <div className='mb-2 min-h-screen overflow-auto dark:bg-neutral-900'>
         <Navbar />
         <main>{children}</main>
       </div>
