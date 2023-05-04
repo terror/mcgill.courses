@@ -37,6 +37,7 @@ load:
 
 readme:
   present --in-place README.md
+  @prettier --write README.md
 
 restart:
   docker-compose down --volumes && just services
