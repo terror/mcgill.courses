@@ -51,14 +51,14 @@ For full usage information, see the output below:
 Usage: server load [OPTIONS] --user-agent <USER_AGENT>
 
 Options:
-      --user-agent <USER_AGENT>      
+      --user-agent <USER_AGENT>
       --course-delay <COURSE_DELAY>  [default: 0]
       --page-delay <PAGE_DELAY>      [default: 0]
       --retries <RETRIES>            [default: 10]
       --batch-size <BATCH_SIZE>      [default: 20]
       --mcgill-term <MCGILL_TERM>    [default: 2022-2023]
       --vsb-term <VSB_TERM>          [default: 202305]
-      --scrape-vsb                   
+      --scrape-vsb
   -h, --help                         Print help
 ```
 
