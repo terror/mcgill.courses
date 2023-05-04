@@ -182,7 +182,7 @@ impl Loader {
       corequisites: course_page.requirements.corequisites,
       restrictions: course_page.requirements.restrictions,
       schedule: self.scrape_vsb.then_some(
-        VsbClient::new(self.user_agent.to_string(), self.retries)?.schedule(
+        VsbClient::new(&client, self.retries)?.schedule(
           &format!("{}-{}", course_page.subject, course_page.code),
           self.vsb_term,
         )?,
