@@ -15,7 +15,7 @@ export const CourseSearchBar = ({
   results,
   handleInputChange,
 }: CourseSearchBarProps) => {
-  const parser = new DOMParser();
+  // const parser = new DOMParser();
   const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
@@ -65,7 +65,8 @@ export const CourseSearchBar = ({
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
           {results.courses.map((result, index) => {
             const courseText = `${result._id} - ${
-              parser.parseFromString(result.title, 'text/html').body.textContent
+              result.title
+              // parser.parseFromString(result.title, 'text/html').body.textContent
             }`;
 
             const parts = courseText.split(
