@@ -18,7 +18,8 @@ impl CoursePageExt for CoursePage {
       .select_single("h1[id='page-title']")?
       .inner_html()
       .trim()
-      .to_owned();
+      .to_owned()
+      .replace("&amp;", "&");
 
     let full_code = full_title
       .split(' ')
@@ -34,7 +35,8 @@ impl CoursePageExt for CoursePage {
         .split(" (")
         .next()
         .unwrap_or("")
-        .to_owned(),
+        .to_owned()
+        .replace("&amp;", "&"),
       credits: full_title
         .split('(')
         .skip(1)
@@ -70,7 +72,8 @@ impl CoursePageExt for CoursePage {
         .collect::<Vec<&str>>()
         .join(" ")
         .trim()
-        .to_owned(),
+        .to_owned()
+        .replace("&amp;", "&"),
       instructors: extract_course_instructors(&html)?,
       requirements: extract_course_requirements(&html)?,
     })

@@ -4,8 +4,6 @@ use {
   serde::{Deserialize, Serialize},
 };
 
-type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
-
 mod course;
 mod course_listing;
 mod course_page;

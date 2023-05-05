@@ -342,14 +342,14 @@ mod tests {
       vec![
         CourseListing {
           department: "Bioresource Engineering".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Fall 2022".into()].to_vec(),
           url: "/study/2022-2023/courses/aeph-120".into(),
         },
         CourseListing {
           department: "Bioresource Engineering".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Winter 2023".into()].to_vec(),
           url: "/study/2022-2023/courses/aeph-122".into(),
@@ -426,56 +426,56 @@ mod tests {
         },
         CourseListing {
           department: "Agricultural Economics".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Fall 2022".into()].to_vec(),
           url: "/study/2022-2023/courses/agec-200".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Winter 2023".into()].to_vec(),
           url: "/study/2022-2023/courses/agec-201".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Winter 2023".into()].to_vec(),
           url: "/study/2022-2023/courses/agec-231".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: [].to_vec(),
           url: "/study/2022-2023/courses/agec-242".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Winter 2023".into()].to_vec(),
           url: "/study/2022-2023/courses/agec-320".into(),
         },
         CourseListing {
           department: "Natural Resource Sciences".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: [].to_vec(),
           url: "/study/2022-2023/courses/agec-330".into(),
         },
         CourseListing {
           department: "Natural Resource Sciences".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Fall 2022".into()].to_vec(),
           url: "/study/2022-2023/courses/agec-332".into(),
         },
         CourseListing {
           department: "Agricultural Economics".into(),
-          faculty: "Agricultural &amp; Environmental Sciences".into(),
+          faculty: "Agricultural & Environmental Sciences".into(),
           level: "Undergraduate".into(),
           terms: ["Fall 2022".into()].to_vec(),
           url: "/study/2022-2023/courses/agec-333".into(),
@@ -615,6 +615,33 @@ mod tests {
         }]),
         term: Some("Summer 2023".into())
       }]
+    );
+  }
+
+  #[test]
+  fn extract_course_page_with_amp() {
+    assert_eq!(
+      super::extract_course_page(&get_content("course_page_with_amp.html"))
+        .unwrap(),
+      CoursePage {
+        title: "E & M Laboratory".into(),
+        credits: "1".into(),
+        subject: "PHYS".into(),
+        code: "118".into(),
+        faculty_url: "/study/2022-2023/faculties/science".into(),
+        description: "The laboratory component of PHYS 142.".into(),
+        instructors: vec![Instructor {
+          name: "Hong Guo".into(),
+          term: "Winter 2023".into()
+        }],
+        requirements: Requirements {
+          corequisites: vec![],
+          prerequisites: vec!["PHYS 142".into()],
+          restrictions: Some(
+            "Not open to students who have taken or are taking PHYS 142".into()
+          )
+        }
+      }
     );
   }
 }

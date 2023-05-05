@@ -2,11 +2,11 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Server {
-  #[clap(long, default_value = "admin")]
+  #[clap(long, default_value = "admin", help = "Database name")]
   db_name: String,
-  #[clap(long, default_value = "8000")]
+  #[clap(long, default_value = "8000", help = "Port to listen on")]
   port: u16,
-  #[clap(long, default_value = "false")]
+  #[clap(long, default_value = "false", help = "Seed the database")]
   seed: bool,
 }
 
