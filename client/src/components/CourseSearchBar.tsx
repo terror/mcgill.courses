@@ -1,12 +1,13 @@
+import _ from 'lodash';
 import { useState } from 'react';
 import { Layers, Search } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { classNames } from '../lib/classNames';
-import { Course } from '../model/course';
+import { classNames } from '../lib/utils';
+import { SearchResults } from '../model/SearchResults';
 
 type CourseSearchBarProps = {
-  results: Course[];
+  results: SearchResults;
   handleInputChange: (query: string) => void;
 };
 
@@ -14,7 +15,7 @@ export const CourseSearchBar = ({
   results,
   handleInputChange,
 }: CourseSearchBarProps) => {
-  const parser = new DOMParser();
+  // const parser = new DOMParser();
   const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
@@ -24,23 +25,23 @@ export const CourseSearchBar = ({
     if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSelectedIndex((prevIndex) =>
-        prevIndex > 0 ? prevIndex - 1 : results.length - 1
+        prevIndex > 0 ? prevIndex - 1 : results.courses.length - 1
       );
     } else if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedIndex((prevIndex) =>
-        prevIndex < results.length - 1 ? prevIndex + 1 : 0
+        prevIndex < results.courses.length - 1 ? prevIndex + 1 : 0
       );
     }
-    if (selectedIndex > -1 && event.key === 'Enter') {
-      navigate(`/course/${results[selectedIndex]._id}`);
-    }
+
+    if (selectedIndex > -1 && event.key === 'Enter')
+      navigate(`/course/${results.courses[selectedIndex]._id}`);
   };
 
   return (
     <div className='relative'>
-      <div className='relative w-full mt-4'>
-        <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+      <div className='relative w-full'>
+        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
           <Search
             size={20}
             className={classNames(
@@ -52,35 +53,58 @@ export const CourseSearchBar = ({
         </div>
         <input
           type='text'
-          className='outline-none border-none bg-neutral-50 border border-neutral-50 text-black text-sm rounded-lg block w-full pl-10 p-3 dark:bg-neutral-50 dark:border-neutral-50 dark:placeholder-neutral-500 dark:text-black'
+          className='block w-full rounded-lg border border-none border-neutral-50 bg-neutral-50 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder-neutral-500 lg:min-w-[600px]'
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
-          onBlur={() => setTimeout(() => setSearchSelected(false), 80)}
+          onBlur={() => setTimeout(() => setSearchSelected(false), 100)}
           onKeyDown={handleKeyDown}
         />
       </div>
       {searchSelected && (
-        <div className='absolute top-full w-full bg-white rounded-b-lg shadow-md overflow-hidden z-10'>
-          {results.map((result, index) => (
-            <Link to={`/course/${result._id}`}>
-              <div
-                className={classNames(
-                  'p-3 hover:bg-gray-100 cursor-pointer text-left border-b border-gray-200',
-                  selectedIndex === index ? 'bg-gray-100' : ''
-                )}
-                key={result._id}
-              >
-                {result._id} -{' '}
-                {
-                  parser.parseFromString(result.title, 'text/html').body
-                    .textContent
-                }
-              </div>
-            </Link>
-          ))}
+        <div className='absolute top-full z-10 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
+          {results.courses.map((result, index) => {
+            const courseText = `${result._id} - ${
+              result.title
+              // parser.parseFromString(result.title, 'text/html').body.textContent
+            }`;
+
+            const parts = courseText.split(
+              new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
+            );
+
+            return (
+              <Link to={`/course/${result._id}`}>
+                <div
+                  className={classNames(
+                    'cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
+                    selectedIndex === index
+                      ? 'bg-gray-100 dark:bg-neutral-700'
+                      : 'bg-white dark:bg-neutral-800'
+                  )}
+                  key={result._id}
+                >
+                  <span className='dark:text-gray-200'>
+                    {parts.map((part, i) => (
+                      <span
+                        key={i}
+                        className={
+                          part.toLowerCase().trim() ===
+                          results.query.toLowerCase().trim()
+                            ? 'underline'
+                            : ''
+                        }
+                      >
+                        {part}
+                      </span>
+                    ))}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
           <Link to={`/explore`}>
-            <div className='p-3 hover:bg-gray-100 cursor-pointer text-left flex items-center'>
+            <div className='flex cursor-pointer items-center p-3 text-left hover:bg-gray-100 dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700'>
               <Layers /> <div className='ml-2'>Explore all courses</div>
             </div>
           </Link>

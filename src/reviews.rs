@@ -23,6 +23,14 @@ pub(crate) async fn get_reviews(
   Ok(Json(reviews.into_iter().collect::<HashSet<Review>>()))
 }
 
+pub(crate) async fn get_review(
+  user: User,
+  Path(id): Path<String>,
+  AppState(db): AppState<Arc<Db>>,
+) -> Result<impl IntoResponse> {
+  Ok(Json(db.find_review(&id, &user.id()).await?))
+}
+
 #[derive(Debug, Deserialize)]
 pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) content: String,
@@ -50,7 +58,7 @@ pub(crate) async fn add_review(
     course_id,
     instructor,
     rating,
-    timestamp: Utc::now(),
+    timestamp: Utc::now().into(),
     user_id: user.id(),
   })
   .await?;
@@ -77,7 +85,7 @@ pub(crate) async fn update_review(
     course_id,
     instructor,
     rating,
-    timestamp: Utc::now(),
+    timestamp: Utc::now().into(),
     user_id: user.id(),
   })
   .await?;

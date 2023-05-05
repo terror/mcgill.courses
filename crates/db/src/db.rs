@@ -30,15 +30,38 @@ impl Db {
     })
   }
 
+  pub fn name(&self) -> String {
+    self.database.name().to_string()
+  }
+
   pub async fn seed(&self, source: PathBuf) -> Result {
     info!("Seeding courses...");
 
-    for course in
-      serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?
-    {
-      match self.find_course(doc! { "_id": &course.id, }).await? {
-        Some(found) => {
-          self
+    let mut courses = Vec::new();
+
+    if source.is_file() {
+      courses.push(serde_json::from_str::<Vec<Course>>(&fs::read_to_string(
+        source,
+      )?)?);
+    } else {
+      let mut paths = fs::read_dir(source)?
+        .map(|path| path.unwrap().path())
+        .collect::<Vec<_>>();
+
+      paths.sort();
+
+      for path in paths {
+        courses.push(serde_json::from_str::<Vec<Course>>(
+          &fs::read_to_string(path)?,
+        )?);
+      }
+    }
+
+    for batch in courses {
+      for course in batch {
+        match self.find_course(doc! { "_id": &course.id, }).await? {
+          Some(found) => {
+            self
             .update_course(
               doc! { "_id": &course.id },
               doc! {
@@ -48,18 +71,21 @@ impl Db {
                   "description": course.description,
                   "facultyUrl": course.faculty_url,
                   "instructors": course.instructors.combine(found.instructors),
+                  "level": course.level,
                   "prerequisites": course.prerequisites,
                   "restrictions": course.restrictions,
-                  "schedule": course.schedule.combine(found.schedule),
+                  "schedule": course.schedule.unwrap_or(Vec::new()).combine(found.schedule.unwrap_or(Vec::new())),
                   "terms": course.terms.combine(found.terms),
+                  "title": course.title,
                   "url": course.url
                 }
               },
             )
             .await?;
-        }
-        None => {
-          self.add_course(course).await?;
+          }
+          None => {
+            self.add_course(course).await?;
+          }
         }
       }
     }
@@ -73,14 +99,16 @@ impl Db {
           "code": "text",
           "_id": "text",
           "title": "text",
-          "description": "text"
+          "idNgrams": "text",
+          "titleNgrams": "text",
         },
         doc! {
-          "subject": 4,
-          "code": 4,
-          "_id": 3,
-          "title": 2,
-          "description": 1
+          "subject": 10,
+          "code": 10,
+          "_id": 10,
+          "title": 8,
+          "idNgrams": 4,
+          "titleNgrams": 2,
         },
       )
       .await?;
@@ -94,13 +122,43 @@ impl Db {
     &self,
     limit: Option<i64>,
     offset: Option<u64>,
+    course_subjects: Option<Vec<String>>,
+    course_levels: Option<Vec<String>>,
+    course_terms: Option<Vec<String>>,
   ) -> Result<Vec<Course>> {
+    let mut document = Document::new();
+
+    if let Some(ref course_subjects) = course_subjects {
+      document.insert(
+        "subject",
+        doc! { "$regex": format!("^({})", course_subjects.join("|")) },
+      );
+    }
+
+    if let Some(ref course_levels) = course_levels {
+      document.insert(
+        "code",
+        doc! { "$regex": format!("^({})", course_levels.join("|")) },
+      );
+    }
+
+    if let Some(ref course_terms) = course_terms {
+      document.insert(
+        "terms",
+        doc! { "$regex": format!("^({})", course_terms.join("|")) },
+      );
+    }
+
     Ok(
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
         .find(
-          None,
+          if document.is_empty() {
+            None
+          } else {
+            Some(document)
+          },
           FindOptions::builder().skip(offset).limit(limit).build(),
         )
         .await?
@@ -166,7 +224,7 @@ impl Db {
               "content": &review.content,
               "instructor": &review.instructor,
               "rating": review.rating,
-              "timestamp": review.timestamp.format("%Y-%m-%dT%H:%M:%S%.6fZ").to_string()
+              "timestamp": review.timestamp
             },
           }),
           None,
@@ -250,7 +308,14 @@ impl Db {
       self
         .database
         .collection::<Course>(Db::COURSE_COLLECTION)
-        .insert_one(course, None)
+        .insert_one(
+          Course {
+            id_ngrams: Some(course.id.ngrams()),
+            title_ngrams: Some(course.title.filter_stopwords().ngrams()),
+            ..course
+          },
+          None,
+        )
         .await?,
     )
   }
@@ -349,17 +414,35 @@ mod tests {
   async fn on_disk_database_is_persistent() {
     let TestContext { db, db_name } = TestContext::new().await;
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 0);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      0
+    );
 
     db.add_course(Course::default()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 1);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
 
     drop(db);
 
     let db = Db::connect(&db_name).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 1);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -374,7 +457,13 @@ mod tests {
 
     db.seed(source).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 2);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      2
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -396,7 +485,13 @@ mod tests {
 
     db.seed(source).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 1);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -411,13 +506,19 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 2);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      2
+    );
 
     fs::write(&source, get_content("update.json")).unwrap();
 
     db.seed(source).await.unwrap();
 
-    let courses = db.courses(None, None).await.unwrap();
+    let courses = db.courses(None, None, None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 3);
 
@@ -425,6 +526,13 @@ mod tests {
       courses,
       serde_json::from_str::<Vec<Course>>(&get_content("after_update.json"))
         .unwrap()
+        .into_iter()
+        .map(|c| Course {
+          id_ngrams: Some(c.id.ngrams()),
+          title_ngrams: Some(c.title.filter_stopwords().ngrams()),
+          ..c
+        })
+        .collect::<Vec<Course>>()
     );
   }
 
@@ -440,7 +548,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
 
     let courses = db.search("COMP 202").await.unwrap();
 
@@ -464,9 +578,9 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    let courses = db.courses(None, None).await.unwrap();
+    let courses = db.courses(None, None, None, None, None).await.unwrap();
 
-    assert_eq!(courses.len(), 83);
+    assert_eq!(courses.len(), 123);
 
     let first = courses.first().unwrap();
 
@@ -488,7 +602,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
 
     let courses = db.search("COMP202").await.unwrap();
 
@@ -512,39 +632,22 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
 
     let courses = db.search("foundations of").await.unwrap();
 
-    assert_eq!(courses.len(), 5);
+    assert_eq!(courses.len(), 1);
 
     let first = courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
-  }
-
-  #[tokio::test(flavor = "multi_thread")]
-  async fn fuzzy_search_course_by_description() {
-    let TestContext { db, db_name } = TestContext::new().await;
-
-    let tempdir = TempDir::new(&db_name).unwrap();
-
-    let source = tempdir.path().join("courses.json");
-
-    fs::write(&source, get_content("search.json")).unwrap();
-    db.seed(source.clone()).await.unwrap();
-
-    assert_eq!(db.courses(None, None).await.unwrap().len(), 83);
-
-    let courses = db.search("computing systems").await.unwrap();
-
-    assert_eq!(courses.len(), 10);
-
-    let first = courses.first().unwrap();
-
-    assert_eq!(first.subject, "COMP");
-    assert_eq!(first.code, "350");
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -559,7 +662,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(Some(10), None).await.unwrap().len(), 10);
+    assert_eq!(
+      db.courses(Some(10), None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      10
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -574,7 +683,13 @@ mod tests {
 
     db.seed(source.clone()).await.unwrap();
 
-    assert_eq!(db.courses(None, Some(20)).await.unwrap().len(), 63);
+    assert_eq!(
+      db.courses(None, Some(20), None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      103
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -747,12 +862,12 @@ mod tests {
       instructor: "bar".into(),
       rating: 5,
       user_id: "1".into(),
-      timestamp: Utc::now(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
     })
     .await
     .unwrap();
 
-    let timestamp = Utc::now();
+    let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
 
     assert_eq!(
       db.update_review(Review {
@@ -854,5 +969,92 @@ mod tests {
       })
       .await
       .is_ok());
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_subject() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let total = db.courses(None, None, None, None, None).await.unwrap();
+
+    assert_eq!(total.len(), 314);
+
+    let filtered = db
+      .courses(None, None, Some(vec!["MATH".into()]), None, None)
+      .await
+      .unwrap();
+
+    assert!(filtered.len() < total.len());
+
+    for course in filtered {
+      assert_eq!(course.subject, "MATH");
+    }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_level() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let total = db.courses(None, None, None, None, None).await.unwrap();
+
+    assert_eq!(total.len(), 314);
+
+    let filtered = db
+      .courses(None, None, None, Some(vec!["100".into()]), None)
+      .await
+      .unwrap();
+
+    assert!(filtered.len() < total.len());
+
+    for course in filtered {
+      assert!(course.code.starts_with('1'));
+    }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_term() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    let total = db.courses(None, None, None, None, None).await.unwrap();
+
+    assert_eq!(total.len(), 314);
+
+    let filtered = db
+      .courses(None, None, None, None, Some(vec!["Winter".into()]))
+      .await
+      .unwrap();
+
+    assert!(filtered.len() < total.len());
+
+    for course in filtered {
+      assert!(course
+        .terms
+        .iter()
+        .any(|term| term.starts_with(&"Winter".to_string())));
+    }
   }
 }

@@ -59,6 +59,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-mongodb-session"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "07ff9ea6592b7450ab51aef18b513f9ea943c101be29403345f19c59727c46b1"
+dependencies = [
+ "async-session",
+ "mongodb",
+]
+
+[[package]]
 name = "async-session"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -242,6 +252,7 @@ dependencies = [
  "ahash",
  "base64 0.13.1",
  "bitvec",
+ "chrono",
  "hex",
  "indexmap",
  "js-sys",
@@ -590,15 +601,18 @@ name = "db"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "bson",
  "chrono",
  "futures",
  "include_dir",
  "itertools",
+ "lazy_static",
  "log",
  "model",
  "mongodb",
  "pretty_assertions",
  "serde_json",
+ "stop-words",
  "tempdir",
  "tokio",
 ]
@@ -1475,10 +1489,8 @@ dependencies = [
 name = "model"
 version = "0.0.0"
 dependencies = [
- "anyhow",
  "bson",
  "chrono",
- "reqwest",
  "serde",
 ]
 
@@ -2447,6 +2459,7 @@ name = "server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-mongodb-session",
  "async-session",
  "axum",
  "axum-server",
@@ -2578,6 +2591,15 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+
+[[package]]
+name = "stop-words"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "30c71f6546118f8f8fbc16434ff5ba695bc9c31616b14b1a589738d0b6ace15e"
+dependencies = [
+ "serde_json",
+]
 
 [[package]]
 name = "string_cache"

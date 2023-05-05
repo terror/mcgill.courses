@@ -6,6 +6,7 @@ use {
     loader::Loader,
     options::Options,
     page::Page,
+    retry::Retry,
     server::Server,
     state::State,
     subcommand::Subcommand,
@@ -14,7 +15,8 @@ use {
     vsb_client::VsbClient,
   },
   anyhow::anyhow,
-  async_session::{async_trait, MemoryStore, Session, SessionStore},
+  async_mongodb_session::MongodbSessionStore,
+  async_session::{async_trait, Session, SessionStore},
   axum::{
     extract::{
       rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
@@ -23,6 +25,7 @@ use {
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
     routing::get,
+    routing::post,
     routing::Router,
     Json, RequestPartsExt,
   },
@@ -38,6 +41,7 @@ use {
     TokenResponse, TokenUrl,
   },
   rayon::prelude::*,
+  reqwest::blocking::RequestBuilder,
   serde::{Deserialize, Serialize},
   std::{
     collections::HashSet,
@@ -62,6 +66,7 @@ mod error;
 mod loader;
 mod options;
 mod page;
+mod retry;
 mod reviews;
 mod search;
 mod server;
@@ -78,6 +83,7 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 #[tokio::main]
 async fn main() {
   env_logger::init();
+
   dotenv().ok();
 
   if let Err(error) = Arguments::parse().run().await {

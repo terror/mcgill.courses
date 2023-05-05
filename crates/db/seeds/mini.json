@@ -31,9 +31,31 @@
     "restrictions": "COMP 202 and COMP 208 cannot both be taken for credit. COMP 202 is intended as a general introductory course, while COMP 208 is intended for students interested in scientific computation. COMP 202 cannot be taken for credit with or after COMP 250",
     "schedule": [
       {
-        "campus": "Downtown",
-        "display": "Lec 001",
-        "location": "ENGTR 0100; STBIO S1/3"
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Lec 001",
+            "location": "ENGTR 0100; STBIO S1/3",
+            "timeblocks": [
+              {
+                "day": "2",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "4",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "6",
+                "t1": "635",
+                "t2": "775"
+              }
+            ]
+          }
+        ],
+        "term": "Summer 2023"
       }
     ]
   },

@@ -1,8 +1,8 @@
 use {
-  crate::vec_ext::VecExt,
   anyhow::anyhow,
   futures::stream::TryStreamExt,
   itertools::Itertools,
+  lazy_static::lazy_static,
   log::info,
   model::{Course, Review},
   mongodb::{
@@ -12,11 +12,13 @@ use {
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Database, IndexModel,
   },
-  std::{fs, hash::Hash, path::PathBuf},
+  std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
+  {crate::vec_ext::VecExt, str_ext::StrExt},
 };
 
 #[cfg(test)]
 use {
+  bson::DateTime,
   chrono::prelude::*,
   include_dir::{include_dir, Dir},
   std::sync::atomic::{AtomicUsize, Ordering},
@@ -26,6 +28,7 @@ use {
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
 mod db;
+mod str_ext;
 mod vec_ext;
 
 pub use crate::db::Db;

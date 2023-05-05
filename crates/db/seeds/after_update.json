@@ -43,9 +43,41 @@
     "restrictions": "Not open to students who have taken or are taking COMP 252 or COMP 360.",
     "schedule": [
       {
-        "campus": "Downtown",
-        "display": "Lec 013",
-        "location": "BRONF 340"
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Lec 013",
+            "location": "BRONF 340",
+            "timeblocks": [
+              {
+                "day": "2",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "3",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "4",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "5",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "6",
+                "t1": "635",
+                "t2": "715"
+              }
+            ]
+          }
+        ],
+        "term": "Summer 2023"
       }
     ]
   },

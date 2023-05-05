@@ -2,11 +2,11 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Server {
-  #[clap(long, default_value = "admin")]
+  #[clap(long, default_value = "admin", help = "Database name")]
   db_name: String,
-  #[clap(long, default_value = "8000")]
+  #[clap(long, default_value = "8000", help = "Port to listen on")]
   port: u16,
-  #[clap(long, default_value = "false")]
+  #[clap(long, default_value = "false", help = "Seed the database")]
   seed: bool,
 }
 
@@ -28,38 +28,44 @@ impl Server {
       });
     }
 
-    let session_store = Arc::new(MemoryStore::new());
-
     axum_server::Server::bind(addr)
-      .serve(Self::app(db, session_store).into_make_service())
+      .serve(Self::app(db, None).await?.into_make_service())
       .await?;
 
     Ok(())
   }
 
-  fn app(db: Arc<Db>, session_store: Arc<MemoryStore>) -> Router {
-    Router::new()
-      .route("/auth/authorized", get(auth::login_authorized))
-      .route("/auth/login", get(auth::microsoft_auth))
-      .route("/auth/logout", get(auth::logout))
-      .route("/courses", get(courses::get_courses))
-      .route("/courses/:id", get(courses::get_course_by_id))
-      .route(
-        "/reviews",
-        get(reviews::get_reviews)
-          .delete(reviews::delete_review)
-          .post(reviews::add_review)
-          .put(reviews::update_review),
-      )
-      .route("/search", get(search::search))
-      .route("/user", get(user::get_user))
-      .with_state(State::new(db, session_store))
-      .layer(CorsLayer::very_permissive())
+  async fn app(
+    db: Arc<Db>,
+    session_store: Option<MongodbSessionStore>,
+  ) -> Result<Router> {
+    Ok(
+      Router::new()
+        .route("/auth/authorized", get(auth::login_authorized))
+        .route("/auth/login", get(auth::microsoft_auth))
+        .route("/auth/logout", get(auth::logout))
+        .route("/courses", post(courses::get_courses))
+        .route("/courses/:id", get(courses::get_course_by_id))
+        .route(
+          "/reviews",
+          get(reviews::get_reviews)
+            .delete(reviews::delete_review)
+            .post(reviews::add_review)
+            .put(reviews::update_review),
+        )
+        .route("/reviews/:id", get(reviews::get_review))
+        .route("/search", get(search::search))
+        .route("/user", get(user::get_user))
+        .with_state(State::new(db, session_store).await?)
+        .layer(CorsLayer::very_permissive()),
+    )
   }
 }
 
 #[cfg(test)]
 mod tests {
+  use http::Method;
+
   use {
     super::*,
     axum::body::Body,
@@ -73,7 +79,7 @@ mod tests {
   struct TestContext {
     app: Router,
     db: Arc<Db>,
-    session_store: Arc<MemoryStore>,
+    session_store: MongodbSessionStore,
   }
 
   impl TestContext {
@@ -95,8 +101,18 @@ mod tests {
       );
 
       let db = Arc::new(Db::connect(&db_name).await.unwrap());
-      let session_store = Arc::new(MemoryStore::new());
-      let app = Server::app(db.clone(), session_store.clone());
+
+      let session_store = MongodbSessionStore::new(
+        "mongodb://localhost:27017",
+        &db.name(),
+        "store",
+      )
+      .await
+      .unwrap();
+
+      let app = Server::app(db.clone(), Some(session_store.clone()))
+        .await
+        .unwrap();
 
       TestContext {
         app,
@@ -111,7 +127,7 @@ mod tests {
   }
 
   async fn mock_login(
-    session_store: Arc<MemoryStore>,
+    session_store: MongodbSessionStore,
     id: &str,
     mail: &str,
   ) -> String {
@@ -132,11 +148,19 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
@@ -149,7 +173,7 @@ mod tests {
         &hyper::body::to_bytes(response.into_body()).await.unwrap()
       )
       .unwrap(),
-      db.courses(None, None).await.unwrap()
+      db.courses(None, None, None, None, None).await.unwrap()
     );
   }
 
@@ -159,11 +183,19 @@ mod tests {
 
     db.seed(seed()).await.unwrap();
 
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses?limit=10&offset=40")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await
@@ -176,7 +208,9 @@ mod tests {
         &hyper::body::to_bytes(response.into_body()).await.unwrap()
       )
       .unwrap(),
-      db.courses(Some(10), Some(40)).await.unwrap()
+      db.courses(Some(10), Some(40), None, None, None)
+        .await
+        .unwrap()
     );
   }
 
@@ -184,11 +218,19 @@ mod tests {
   async fn courses_route_does_not_allow_negative() {
     let TestContext { app, .. } = TestContext::new().await;
 
+    let body = json!({
+      "subjects": None::<Vec<String>>,
+      "levels": None::<Vec<String>>,
+      "terms": None::<Vec<String>>,
+    });
+
     let response = app
       .oneshot(
         Request::builder()
+          .method(Method::POST)
           .uri("/courses?limit=-10&offset=-10")
-          .body(Body::empty())
+          .header("Content-Type", "application/json")
+          .body(Body::from(body.to_string()))
           .unwrap(),
       )
       .await

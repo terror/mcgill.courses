@@ -1,10 +1,8 @@
 use {
-  bson::{doc, Bson},
+  bson::{doc, Bson, DateTime},
   chrono::prelude::*,
   serde::{Deserialize, Serialize},
 };
-
-type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
 mod course;
 mod course_listing;
@@ -21,5 +19,5 @@ pub use crate::{
   instructor::Instructor,
   requirements::{Requirement, Requirements},
   review::Review,
-  schedule::Schedule,
+  schedule::*,
 };

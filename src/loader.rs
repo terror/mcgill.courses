@@ -2,18 +2,46 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Loader {
-  #[clap(long)]
+  #[clap(long, help = "A user agent")]
   user_agent: String,
-  #[clap(long, default_value = "0")]
+  #[clap(
+    long,
+    default_value = "0",
+    help = "Time delay between course requests in milliseconds"
+  )]
   course_delay: u64,
-  #[clap(long, default_value = "0")]
+  #[clap(
+    long,
+    default_value = "0",
+    help = "Time delay between page requests in milliseconds"
+  )]
   page_delay: u64,
-  #[clap(long, default_value = "20")]
+  #[clap(long, default_value = "10", help = "Number of retries")]
+  retries: usize,
+  #[clap(
+    long,
+    default_value = "20",
+    help = "Number of pages to scrape per concurrent batch"
+  )]
   batch_size: usize,
-  #[clap(long, default_value = "2022-2023")]
+  #[clap(
+    long,
+    default_value = "2022-2023",
+    help = "The mcgill term to scrape"
+  )]
   mcgill_term: String,
-  #[clap(long, default_value = "202305")]
+  #[clap(
+    long,
+    default_value = "202305",
+    help = "The schedule builder term to scrape"
+  )]
   vsb_term: usize,
+  #[clap(
+    long,
+    default_value = "false",
+    help = "Scrape visual schedule builder information"
+  )]
+  scrape_vsb: bool,
 }
 
 impl Loader {
@@ -89,7 +117,14 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     log::info!("Parsing html on page: {}...", page.number);
 
-    let listings = extractor::extract_course_listings(&page.content()?)?;
+    let listings = extractor::extract_course_listings(
+      &reqwest::blocking::Client::builder()
+        .user_agent(&self.user_agent)
+        .build()?
+        .get(&page.url)
+        .retry(self.retries)?
+        .text()?,
+    )?;
 
     thread::sleep(Duration::from_millis(self.page_delay));
 
@@ -111,7 +146,13 @@ impl Loader {
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
     log::info!("{:?}", listing);
 
-    let course_page = extractor::extract_course_page(&listing.content()?)?;
+    let client = reqwest::blocking::Client::builder()
+      .user_agent(&self.user_agent)
+      .build()?;
+
+    let course_page = extractor::extract_course_page(
+      &client.get(&listing.url).retry(self.retries)?.text()?,
+    )?;
 
     log::info!(
       "Parsed course {}{}",
@@ -123,7 +164,9 @@ impl Loader {
 
     Ok(Course {
       id: format!("{}{}", course_page.subject, course_page.code),
-      title: course_page.title,
+      id_ngrams: None,
+      title: course_page.title.clone(),
+      title_ngrams: None,
       credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
@@ -138,10 +181,12 @@ impl Loader {
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
       restrictions: course_page.requirements.restrictions,
-      schedule: VsbClient::new(self.user_agent.to_string())?.schedule(
-        &format!("{}-{}", course_page.subject, course_page.code),
-        self.vsb_term,
-      )?,
+      schedule: self.scrape_vsb.then_some(
+        VsbClient::new(&client, self.retries)?.schedule(
+          &format!("{}-{}", course_page.subject, course_page.code),
+          self.vsb_term,
+        )?,
+      ),
     })
   }
 }

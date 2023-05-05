@@ -11,6 +11,10 @@ impl User {
     self.id
   }
 
+  pub(crate) fn mail(&self) -> &str {
+    &self.mail
+  }
+
   #[cfg(test)]
   pub(crate) fn new(id: &str, mail: &str) -> Self {
     User {
@@ -32,7 +36,7 @@ pub(crate) async fn get_user(user: Option<User>) -> impl IntoResponse {
 #[async_trait]
 impl<S> FromRequestParts<S> for User
 where
-  Arc<MemoryStore>: FromRef<S>,
+  MongodbSessionStore: FromRef<S>,
   S: Send + Sync,
 {
   type Rejection = AuthRedirect;
@@ -41,7 +45,7 @@ where
     parts: &mut Parts,
     state: &S,
   ) -> Result<Self, Self::Rejection> {
-    let session_store = Arc::<MemoryStore>::from_ref(state);
+    let session_store = MongodbSessionStore::from_ref(state);
 
     let cookies =
       parts.extract::<TypedHeader<Cookie>>().await.map_err(|e| {

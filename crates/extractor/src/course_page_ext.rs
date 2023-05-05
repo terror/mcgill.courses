@@ -8,16 +8,18 @@ pub(crate) trait CoursePageExt {
 
 impl CoursePageExt for CoursePage {
   fn from_html(html: Html) -> Result<Self> {
-    let content = html
-      .root_element()
-      .select_single("div[class='node node-catalog clearfix']")?;
+    let content = html.root_element().try_select_single(vec![
+      "div[class='node node-catalog clearfix']",
+      "div[class='node node-catalog node-promoted clearfix']",
+    ])?;
 
     let full_title = html
       .root_element()
       .select_single("h1[id='page-title']")?
       .inner_html()
       .trim()
-      .to_owned();
+      .to_owned()
+      .replace("&amp;", "&");
 
     let full_code = full_title
       .split(' ')
@@ -33,7 +35,8 @@ impl CoursePageExt for CoursePage {
         .split(" (")
         .next()
         .unwrap_or("")
-        .to_owned(),
+        .to_owned()
+        .replace("&amp;", "&"),
       credits: full_title
         .split('(')
         .skip(1)
@@ -69,7 +72,8 @@ impl CoursePageExt for CoursePage {
         .collect::<Vec<&str>>()
         .join(" ")
         .trim()
-        .to_owned(),
+        .to_owned()
+        .replace("&amp;", "&"),
       instructors: extract_course_instructors(&html)?,
       requirements: extract_course_requirements(&html)?,
     })

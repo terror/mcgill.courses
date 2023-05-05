@@ -16,7 +16,9 @@ use super::*;
 pub struct Course {
   #[serde(rename = "_id")]
   pub id: String,
+  pub id_ngrams: Option<String>,
   pub title: String,
+  pub title_ngrams: Option<String>,
   pub credits: String,
   pub subject: String,
   pub code: String,
@@ -31,5 +33,5 @@ pub struct Course {
   pub prerequisites: Vec<String>,
   pub corequisites: Vec<String>,
   pub restrictions: Option<String>,
-  pub schedule: Vec<Schedule>,
+  pub schedule: Option<Vec<Schedule>>,
 }

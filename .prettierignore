@@ -1,5 +1,6 @@
 /crates/extractor/mocks
 /mocks
 /node_modules
+/seed
 /target
 courses.json
