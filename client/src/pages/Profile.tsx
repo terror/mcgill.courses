@@ -45,8 +45,8 @@ export const Profile = () => {
               userReviews
                 .sort(
                   (a, b) =>
-                    parseInt(a.timestamp.$date.$numberLong) -
-                    parseInt(b.timestamp.$date.$numberLong)
+                    parseInt(a.timestamp.$date.$numberLong, 10) -
+                    parseInt(b.timestamp.$date.$numberLong, 10)
                 )
                 .map((r) => {
                   return (
