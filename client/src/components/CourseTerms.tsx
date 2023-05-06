@@ -76,7 +76,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
           )}
         >
           <div className='flex items-center space-x-2'>
-            {variant == 'large' ? (
+            {variant === 'large' ? (
               <div
                 onMouseEnter={() => setHoveringOn(instructor.term)}
                 onMouseLeave={() => setHoveringOn('')}
