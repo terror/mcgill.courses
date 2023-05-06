@@ -9,7 +9,8 @@
     "format": "prettier --write .",
     "format-check": "prettier --check .",
     "lint": "tslint -c tslint.json 'client/**/{*.ts,*.tsx}'",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@fontsource/inter": "^4.5.15",
@@ -42,6 +43,7 @@
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "vite": "^4.1.0",
+    "husky": "^8.0.0"
   }
 }
