@@ -20,7 +20,7 @@ import { Review } from '../model/Review';
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
-  const [reviews, setReviews] = useState<Review[]>();
+  const [reviews, setReviews] = useState<Review[]>([]);
   const user = useAuth();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
@@ -134,7 +134,7 @@ export const CoursePage = () => {
               )}
               {reviews &&
                 reviews
-                  .filter((r) => user && r.userId !== user.id)
+                  .filter((r) => (user ? r.userId !== user.id : true))
                   .map((r) => (
                     <CourseReview
                       review={r}
