@@ -30,7 +30,7 @@ export const QuestionsAnswers = ({ input }: QuestionsAnswersProp) => {
                     } h-5 w-5 text-gray-900 dark:text-gray-300`}
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className='px-4 pt-4 pb-2 text-sm text-gray-700 dark:text-gray-200'>
+                <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
                   {item.content}
                 </Disclosure.Panel>
               </>
@@ -91,7 +91,7 @@ const Title = ({ title }: { title: string }) => {
 export const About = () => {
   return (
     <Layout>
-      <div className='my-auto mx-4 flex flex-col justify-center text-center align-middle '>
+      <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle '>
         <Title title='About Us' />
         <p className='mx-10 text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60'>
           {' '}

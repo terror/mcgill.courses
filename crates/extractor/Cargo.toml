@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-anyhow = "1.0.69"
+anyhow = "1.0.71"
 model = { path = "../../crates/model" }
 scraper = "0.15.0"
 
