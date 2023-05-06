@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Requirements } from '../model/Requirements';
 
 type RequirementsProps = {
@@ -16,7 +17,11 @@ export const InfoBlock = ({ title, elements }: InfoBlockProps) => {
         {title}
       </h2>
       {elements.map((element) => (
-        <p className='text-gray-500 dark:text-gray-400'>{element}</p>
+        <Link to={`/course/${element.replace(' ', '')}`}>
+          <p className='text-gray-500 hover:underline dark:text-gray-400'>
+            {element}
+          </p>
+        </Link>
       ))}
     </div>
   );
