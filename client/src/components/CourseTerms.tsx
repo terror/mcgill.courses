@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
@@ -33,6 +34,8 @@ type CourseTermsProps = {
 };
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
+  const [isHovering, setIsHovering] = useState('');
+
   const container = classNames('flex flex-wrap mr-auto');
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
 
@@ -59,14 +62,22 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         <div
           key={i}
           className={classNames(
-            'my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
+            'relative my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
             variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 p-2'
           )}
         >
           <div className='flex items-center space-x-2'>
-            {termToIcon(instructor.term, variant)}
-
-            <div className='pr-1 dark:text-gray-200'>{instructor.name}</div>
+            <div
+              onMouseEnter={() => setIsHovering(instructor.term)}
+              onMouseLeave={() => setIsHovering('')}
+            >
+              {termToIcon(instructor.term, variant)}
+            </div>
+            {isHovering === instructor.term ? (
+              <div className='pr-1 dark:text-gray-200'>{instructor.term}</div>
+            ) : (
+              <div className='pr-1 dark:text-gray-200'>{instructor.name}</div>
+            )}
           </div>
         </div>
       ))}
