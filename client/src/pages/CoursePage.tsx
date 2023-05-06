@@ -124,7 +124,7 @@ export const CoursePage = () => {
               />
             )}
             <div>
-              {reviews && userReview && (
+              {userReview && (
                 <CourseReview
                   review={userReview}
                   canModify={Boolean(user && userReview.userId === user.id)}
