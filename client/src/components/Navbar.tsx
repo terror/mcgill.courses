@@ -68,14 +68,14 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='my-auto hidden flex-1 justify-center align-middle lg:flex'>
+          <div className='my-auto mx-3 hidden flex-1 justify-center align-middle lg:flex'>
             <CourseSearchBar
               results={results}
               handleInputChange={handleInputChange}
             />
           </div>
         ) : null}
-        <div className='ml-6 flex min-w-fit flex-row lg:flex-1'>
+        <div className='flex min-w-fit flex-row lg:flex-1'>
           <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
             <DarkModeToggle />
             {navigation.map((item) => (
