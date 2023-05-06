@@ -15,6 +15,7 @@ type EditReviewFormProps = {
   review: Review;
   open: boolean;
   onClose: () => void;
+  handleSubmit: (res: Response) => void;
 };
 
 export const EditReviewForm = ({
@@ -22,6 +23,7 @@ export const EditReviewForm = ({
   review,
   open,
   onClose,
+  handleSubmit,
 }: EditReviewFormProps) => {
   const params = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -76,7 +78,7 @@ export const EditReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    await fetchClient.put(
+                    const res = await fetchClient.put(
                       `/reviews`,
                       {
                         course_id: course._id,
@@ -86,9 +88,10 @@ export const EditReviewForm = ({
                     );
                     actions.setSubmitting(false);
                     onClose();
+                    handleSubmit(res);
                   }}
                 >
-                  {({ values, setFieldValue }) => (
+                  {({ values, setFieldValue, handleChange }) => (
                     <Form>
                       <ReviewForm
                         course={course}
