@@ -1,10 +1,11 @@
-import { ErrorMessage, Field } from 'formik';
+import { ErrorMessage, Field, FormikState } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
 import { Course } from '../model/Course';
 import { Autocomplete } from './Autocomplete';
 import { StarRatingInput } from './StarRatingInput';
+import { PersistFormikValues } from 'formik-persist-values';
 
 export const ReviewSchema = Yup.object().shape({
   content: Yup.string()
@@ -12,7 +13,7 @@ export const ReviewSchema = Yup.object().shape({
     .max(3000, 'Must be less than 3000 characters'),
   instructor: Yup.string().required('Instructor is required'),
   rating: Yup.number()
-    .min(0, 'Rating must be between 0 and 5')
+    .min(1, 'Rating must be between 0 and 5')
     .max(5, 'Rating must be between 0 and 5')
     .required('Rating is required'),
 });
@@ -31,12 +32,16 @@ type ReviewFormProps = {
     shouldValidate?: boolean | undefined
   ) => void;
   values: ReviewFormInitialValues;
+  resetForm: (
+    nextState?: Partial<FormikState<ReviewFormInitialValues>> | undefined
+  ) => void;
 };
 
 export const ReviewForm = ({
   course,
   setFieldValue,
   values,
+  resetForm,
 }: ReviewFormProps) => {
   const [query, setQuery] = useState('');
 
@@ -82,18 +87,27 @@ export const ReviewForm = ({
         </label>
         <StarRatingInput
           name='rating'
-          rating={values['rating']}
+          rating={values.rating}
           setFieldValue={setFieldValue}
         />
         <div className='italic text-red-400'>
           <ErrorMessage name='rating' />
         </div>
-        <button
-          type='submit'
-          className='ml-auto mt-4 w-fit rounded-md bg-red-500 px-3 py-2 text-white transition duration-300 hover:bg-red-600'
-        >
-          Submit
-        </button>
+        <div className='mt-4 flex justify-end space-x-4'>
+          <div
+            onClick={() => resetForm()}
+            className='w-fit cursor-pointer rounded-md bg-gray-100 px-3 py-2 text-gray-700 hover:bg-gray-200 dark:bg-neutral-700 dark:text-gray-200 dark:hover:bg-neutral-600'
+          >
+            Discard
+          </div>
+          <button
+            type='submit'
+            className='ml-auto w-fit rounded-md bg-red-500 px-3 py-2 text-white transition duration-300 hover:bg-red-600'
+          >
+            Submit
+          </button>
+        </div>
+        <PersistFormikValues name={course._id} />
       </div>
     </>
   );

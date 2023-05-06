@@ -100,6 +100,7 @@ export const CoursePage = () => {
       setReviews(reviews.filter((r) => r.userId !== review.userId));
     }
     handleSubmit('Review deleted successfully.')(res);
+    localStorage.removeItem(course._id);
   };
 
   const userReview = reviews.find((r) => r.userId === user?.id);

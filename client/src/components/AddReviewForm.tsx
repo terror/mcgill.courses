@@ -87,12 +87,13 @@ export const AddReviewForm = ({
                     handleSubmit(res);
                   }}
                 >
-                  {({ values, setFieldValue }) => (
+                  {({ values, setFieldValue, resetForm }) => (
                     <Form>
                       <ReviewForm
                         course={course}
                         values={values}
                         setFieldValue={setFieldValue}
+                        resetForm={resetForm}
                       />
                     </Form>
                   )}
