@@ -36,7 +36,7 @@ export const RatingPieChart = ({
       </div>
       <div className='flex justify-between'>
         <div className='mx-auto text-sm text-gray-500 dark:text-gray-400'>
-          {numReviews} reviews
+          {numReviews} review{numReviews === 1 ? '' : 's'}
         </div>
       </div>
     </div>
