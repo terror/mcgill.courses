@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import { ScrollRestoration } from 'react-router-dom';
-
 import { classNames } from '../lib/utils';
 
 type NavItemProps = {

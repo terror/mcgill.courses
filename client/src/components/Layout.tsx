@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Navbar } from './Navbar';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames } from '../lib/utils';
 import { Footer } from './Footer';
 
 type LayoutProps = {
@@ -13,7 +12,7 @@ export const Layout = ({ children, preventScroll }: LayoutProps) => {
   const [darkMode, _] = useDarkMode();
 
   useEffect(() => {
-    !preventScroll ? window.scrollTo(0, 0) : null;
+    if (!preventScroll) window.scrollTo(0, 0);
   }, []);
 
   return (
