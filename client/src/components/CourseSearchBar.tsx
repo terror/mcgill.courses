@@ -15,7 +15,6 @@ export const CourseSearchBar = ({
   results,
   handleInputChange,
 }: CourseSearchBarProps) => {
-  // const parser = new DOMParser();
   const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
@@ -53,7 +52,7 @@ export const CourseSearchBar = ({
         </div>
         <input
           type='text'
-          className='block w-full rounded-lg border border-none border-neutral-50 bg-neutral-50 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder-neutral-500 lg:min-w-[600px]'
+          className='block w-full rounded-lg border border-none border-neutral-50 bg-neutral-50 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder-neutral-500 lg:min-w-[575px]'
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
@@ -64,10 +63,7 @@ export const CourseSearchBar = ({
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
           {results.courses.map((result, index) => {
-            const courseText = `${result._id} - ${
-              result.title
-              // parser.parseFromString(result.title, 'text/html').body.textContent
-            }`;
+            const courseText = `${result._id} - ${result.title}`;
 
             const parts = courseText.split(
               new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
