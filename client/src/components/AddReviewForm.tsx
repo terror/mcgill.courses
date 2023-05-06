@@ -13,9 +13,15 @@ type ReviewFormProps = {
   course: Course;
   open: boolean;
   onClose: () => void;
+  handleSubmit: (res: Response) => void;
 };
 
-export const AddReviewForm = ({ course, open, onClose }: ReviewFormProps) => {
+export const AddReviewForm = ({
+  course,
+  open,
+  onClose,
+  handleSubmit,
+}: ReviewFormProps) => {
   const params = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -68,7 +74,7 @@ export const AddReviewForm = ({ course, open, onClose }: ReviewFormProps) => {
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    await fetchClient.post(
+                    const res = await fetchClient.post(
                       `/reviews`,
                       {
                         course_id: course._id,
@@ -78,14 +84,16 @@ export const AddReviewForm = ({ course, open, onClose }: ReviewFormProps) => {
                     );
                     actions.setSubmitting(false);
                     onClose();
+                    handleSubmit(res);
                   }}
                 >
-                  {({ values, setFieldValue }) => (
+                  {({ values, setFieldValue, resetForm }) => (
                     <Form>
                       <ReviewForm
                         course={course}
                         values={values}
                         setFieldValue={setFieldValue}
+                        resetForm={resetForm}
                       />
                     </Form>
                   )}
