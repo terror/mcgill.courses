@@ -51,7 +51,7 @@ const questionsAnswers = [
   {
     title: 'When will instructors ratings be available?',
     content:
-      'Instructors ratings are a work in progress.It is our current priority and will be available as soon as possible!',
+      'Instructors ratings are a work in progress. It is our current priority and will be available as soon as possible!',
   },
   {
     title:

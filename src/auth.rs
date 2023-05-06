@@ -63,6 +63,8 @@ pub(crate) async fn login_authorized(
 
   let mut session = Session::new();
 
+  session.expire_in(Duration::from_secs(60 * 60 * 24 * 7));
+
   log::debug!("Inserting user data into session...");
 
   session.insert("user", user)?;
