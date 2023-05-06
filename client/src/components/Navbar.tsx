@@ -63,7 +63,7 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='my-auto mx-3 hidden flex-1 justify-center align-middle lg:flex'>
+          <div className='mx-3 my-auto hidden flex-1 justify-center align-middle lg:flex'>
             <CourseSearchBar
               results={results}
               handleInputChange={handleInputChange}
