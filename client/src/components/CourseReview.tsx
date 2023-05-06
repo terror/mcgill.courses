@@ -24,7 +24,7 @@ export const CourseReview = ({
   );
 
   return (
-    <div className='max-w-screen rounded-md bg-slate-50 p-6 dark:bg-neutral-800 sm:w-96'>
+    <div className='rounded-md bg-slate-50 p-6 dark:bg-neutral-800 sm:w-96'>
       <div className='flex'>
         <div className='flex w-full flex-col'>
           <div className='flex'>
