@@ -6,6 +6,7 @@ use {
     loader::Loader,
     options::Options,
     page::Page,
+    retry::Retry,
     server::Server,
     state::State,
     subcommand::Subcommand,
@@ -40,6 +41,7 @@ use {
     TokenResponse, TokenUrl,
   },
   rayon::prelude::*,
+  reqwest::blocking::RequestBuilder,
   serde::{Deserialize, Serialize},
   std::{
     collections::HashSet,
@@ -64,6 +66,7 @@ mod error;
 mod loader;
 mod options;
 mod page;
+mod retry;
 mod reviews;
 mod search;
 mod server;

@@ -12,11 +12,13 @@ impl CourseListingExt for CourseListing {
       department: listing
         .select_single("span[class~='views-field-field-dept-code']")?
         .select_single("span[class='field-content']")?
-        .inner_html(),
+        .inner_html()
+        .replace("&amp;", "&"),
       faculty: listing
         .select_single("span[class~='views-field-field-faculty-code']")?
         .select_single("span[class='field-content']")?
-        .inner_html(),
+        .inner_html()
+        .replace("&amp;", "&"),
       level: listing
         .select_single("span[class~='views-field-level']")?
         .select_single("span[class='field-content']")?

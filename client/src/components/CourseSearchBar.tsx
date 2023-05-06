@@ -15,7 +15,7 @@ export const CourseSearchBar = ({
   results,
   handleInputChange,
 }: CourseSearchBarProps) => {
-  const parser = new DOMParser();
+  // const parser = new DOMParser();
   const navigate = useNavigate();
 
   const [searchSelected, setSearchSelected] = useState(false);
@@ -62,10 +62,11 @@ export const CourseSearchBar = ({
         />
       </div>
       {searchSelected && (
-        <div className='absolute top-full z-10 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
+        <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
           {results.courses.map((result, index) => {
             const courseText = `${result._id} - ${
-              parser.parseFromString(result.title, 'text/html').body.textContent
+              result.title
+              // parser.parseFromString(result.title, 'text/html').body.textContent
             }`;
 
             const parts = courseText.split(
@@ -104,7 +105,7 @@ export const CourseSearchBar = ({
           })}
           <Link to={`/explore`}>
             <div className='flex cursor-pointer items-center p-3 text-left hover:bg-gray-100 dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700'>
-              <Layers /> <div className='ml-2'>Explore all courses</div>
+              <Layers /> <div className='z-50 ml-2'>Explore all courses</div>
             </div>
           </Link>
         </div>
