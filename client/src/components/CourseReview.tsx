@@ -57,7 +57,10 @@ export const CourseReview = ({
           </h2>
         </div>
       </div>
-      <div className='text-md mr-4 mt-6 dark:text-gray-300'>
+      <div
+        className='text-md mr-4 mt-6 dark:text-gray-300'
+        style={{ hyphens: 'auto' }}
+      >
         {review.content}
       </div>
     </div>
