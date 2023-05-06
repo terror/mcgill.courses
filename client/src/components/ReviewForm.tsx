@@ -87,7 +87,7 @@ export const ReviewForm = ({
         </label>
         <StarRatingInput
           name='rating'
-          rating={values['rating']}
+          rating={values.rating}
           setFieldValue={setFieldValue}
         />
         <div className='italic text-red-400'>
