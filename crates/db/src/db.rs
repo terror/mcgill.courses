@@ -1,3 +1,5 @@
+use model::Instructor;
+
 use super::*;
 
 #[derive(Debug, Clone)]
@@ -7,6 +9,7 @@ pub struct Db {
 
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
+  const INSTRUCTOR_COLLECTION: &str = "instructors";
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
@@ -57,7 +60,7 @@ impl Db {
       }
     }
 
-    for batch in courses {
+    for batch in courses.clone() {
       for course in batch {
         match self.find_course(doc! { "_id": &course.id, }).await? {
           Some(found) => {
@@ -90,7 +93,37 @@ impl Db {
       }
     }
 
-    info!("Finished seeding courses, building index...");
+    for instructor in courses
+      .iter()
+      .flatten()
+      .map(|course| course.instructors.clone())
+      .flatten()
+      .collect::<Vec<Instructor>>()
+    {
+      match self
+        .find_instructor(doc! { "name": &instructor.name })
+        .await?
+      {
+        Some(found) => {
+          self
+            .update_instructor(
+              doc! { "name": &instructor.name },
+              doc! {
+                "$set": {
+                  "name": found.name,
+                  "term": found.term
+                }
+              },
+            )
+            .await?;
+        }
+        None => {
+          self.add_instructor(instructor).await?;
+        }
+      }
+    }
+
+    info!("Finished seeding courses and instructors, building indices...");
 
     self
       .create_course_index(
@@ -350,6 +383,46 @@ impl Db {
             .build(),
           None,
         )
+        .await?,
+    )
+  }
+
+  async fn add_instructor(
+    &self,
+    instructor: Instructor,
+  ) -> Result<InsertOneResult> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Db::INSTRUCTOR_COLLECTION)
+        .insert_one(instructor, None)
+        .await?,
+    )
+  }
+
+  async fn update_instructor(
+    &self,
+    filter: Document,
+    update: Document,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Db::INSTRUCTOR_COLLECTION)
+        .update_one(filter, update, None)
+        .await?,
+    )
+  }
+
+  async fn find_instructor(
+    &self,
+    filter: Document,
+  ) -> Result<Option<Instructor>> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Db::INSTRUCTOR_COLLECTION)
+        .find_one(filter, None)
         .await?,
     )
   }
