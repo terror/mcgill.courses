@@ -26,12 +26,17 @@ export const Navbar = () => {
   const pathName = location.pathname;
 
   const handleInputChange = async (query: string) => {
+    const results = await fetchClient.getData<SearchResults>(
+      `/search?query=${encodeURIComponent(query)}`
+    );
+
+    console.log(results);
+
     try {
       setResults({
         query,
-        ...(await fetchClient.getData<SearchResults>(
-          `/search?query=${encodeURIComponent(query)}`
-        )),
+        courses: results.courses,
+        instructors: results.instructors,
       });
     } catch (err) {
       console.error(err);

@@ -147,32 +147,8 @@ impl Db {
 
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
-      courses: self
-        .database
-        .collection::<Course>(Self::COURSE_COLLECTION)
-        .find(
-          doc! { "$text" : { "$search": query } },
-          FindOptions::builder()
-            .sort(doc! { "score": { "$meta" : "textScore" }})
-            .limit(10)
-            .build(),
-        )
-        .await?
-        .try_collect::<Vec<Course>>()
-        .await?,
-      instructors: self
-        .database
-        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-        .find(
-          doc! { "$text" : { "$search": query } },
-          FindOptions::builder()
-            .sort(doc! { "score": { "$meta" : "textScore" }})
-            .limit(10)
-            .build(),
-        )
-        .await?
-        .try_collect::<Vec<Instructor>>()
-        .await?,
+      courses: self.search_course(query).await?,
+      instructors: self.search_instructor(query).await?,
     })
   }
 
@@ -348,6 +324,28 @@ impl Db {
     )
   }
 
+  async fn search_course(&self, query: &str) -> Result<Vec<Course>> {
+    Ok(
+      self
+        .database
+        .collection::<Course>(Self::COURSE_COLLECTION)
+        .find(
+          doc! {
+            "$text": {
+              "$search": query
+            }
+          },
+          FindOptions::builder()
+            .sort(doc! { "score": { "$meta" : "textScore" }})
+            .limit(10)
+            .build(),
+        )
+        .await?
+        .try_collect::<Vec<Course>>()
+        .await?,
+    )
+  }
+
   async fn create_course_index(
     &self,
     keys: Document,
@@ -393,6 +391,28 @@ impl Db {
         .database
         .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
         .find_one(query, None)
+        .await?,
+    )
+  }
+
+  async fn search_instructor(&self, query: &str) -> Result<Vec<Instructor>> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .find(
+          doc! {
+            "$text": {
+              "$search": query
+            }
+          },
+          FindOptions::builder()
+            .sort(doc! { "score": { "$meta" : "textScore" }})
+            .limit(10)
+            .build(),
+        )
+        .await?
+        .try_collect::<Vec<Instructor>>()
         .await?,
     )
   }
@@ -1158,5 +1178,32 @@ mod tests {
     }
 
     assert_eq!(db.instructors().await.unwrap().len(), 2);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn search_instructor_by_name_exact() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
+
+    let results = db.search("Giulia Alberini").await.unwrap();
+
+    assert_eq!(results.instructors.len(), 1);
+
+    assert_eq!(results.instructors.first().unwrap().name, "Giulia Alberini");
   }
 }

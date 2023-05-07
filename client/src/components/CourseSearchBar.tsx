@@ -37,6 +37,8 @@ export const CourseSearchBar = ({
       navigate(`/course/${results.courses[selectedIndex]._id}`);
   };
 
+console.log(results);
+
   return (
     <div className='relative'>
       <div className='relative w-full'>
@@ -62,7 +64,7 @@ export const CourseSearchBar = ({
       </div>
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
-          {results.courses?.map((result, index) => {
+          {results.courses && results.courses.map((result, index) => {
             const courseText = `${result._id} - ${result.title}`;
 
             const parts = courseText.split(
@@ -99,7 +101,7 @@ export const CourseSearchBar = ({
               </Link>
             );
           })}
-          {results.instructors?.map((result, index) => {
+          {results.instructors && results.instructors.map((result, index) => {
             const parts = result.name.split(
               new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
             );
