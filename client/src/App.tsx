@@ -6,6 +6,7 @@ import { CoursePage } from './pages/CoursePage';
 import { Explore } from './pages/Explore';
 import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
+import { Profile } from './pages/Profile';
 
 const App = () => {
   return (
@@ -16,6 +17,10 @@ const App = () => {
       </Route>
       <Route path='/explore' element={<Explore />} />
       <Route path='/about' element={<About />} />
+      <Route
+        path='/profile'
+        element={<PrivateRoute children={<Profile />} />}
+      />
       <Route path='*' element={<NotFound />} />
     </Routes>
   );
