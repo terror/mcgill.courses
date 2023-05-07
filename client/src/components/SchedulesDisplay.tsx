@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { classNames, getCurrentTerm } from '../lib/utils';
-import { Block, Schedule } from '../model/Schedule';
+import { useEffect, useState } from 'react';
+import { classNames } from '../lib/utils';
+import { TimeBlock, Block, Schedule } from '../model/Schedule';
 import { dedupe, sortTerms, sortBlocks } from '../lib/utils';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Transition } from '@headlessui/react';
@@ -26,16 +26,19 @@ const dayToWeekday = (day: string) => {
   }
 };
 
-const timeToDisplay = (time: string) => {
-  const minutes = parseInt(time.slice(-2), 10);
-  const hour = parseInt(time.slice(0, -2), 10);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const displayHour = hour % 12 === 0 ? 12 : hour % 12;
-  return `${displayHour}:${minutes} ${ampm}`;
+const VSBtimeToDisplay = (time: string) => {
+  const approxTimeOfTheDay = parseInt(time, 10) / 60;
+  const hour = Math.floor(approxTimeOfTheDay);
+  const minute = Math.round((approxTimeOfTheDay - hour) * 60);
+  return `${hour.toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+  })}:${minute.toLocaleString('en-US', {
+    minimumIntegerDigits: 2,
+  })}
+  `;
 };
 
 export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
-  schedules = test_schedules;
   const offeredTerms = sortTerms(
     dedupe(schedules.map((schedule) => schedule.term))
   );
@@ -46,8 +49,13 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
     useState<Schedule[]>(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
-
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
+
+  useEffect(() => {
+    setCurrentlyDisplayingSchedules(
+      schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
+    );
+  }, [schedules, currentlyDisplayingTerm]);
 
   const handleClick = (term: string) => {
     setCurrentlyDisplayingTerm(term);
@@ -76,9 +84,9 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
         ))}
       </div>
       <div className='mx-8 flex flex-col rounded-b-lg dark:bg-neutral-700 dark:text-gray-200'>
-        {currentlyDisplayingSchedules.map((schedule) => (
-          <>
-            {sortBlocks(schedule.blocks).map((block) => (
+        {currentlyDisplayingSchedules.map((schedule: Schedule) => (
+          <div>
+            {sortBlocks(schedule.blocks)?.map((block: Block) => (
               <div className='flex flex-col'>
                 <div
                   className={classNames(
@@ -116,12 +124,12 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
                   leaveTo='opacity-0 -translate-y-2'
                 >
                   <div className='flex flex-col'>
-                    {block.timeBlocks.map((timeBlock) => (
+                    {block.timeblocks?.map((timeblock: TimeBlock) => (
                       <div className='flex flex-row justify-between px-3 py-2 font-medium'>
-                        <p>{dayToWeekday(timeBlock.day)}</p>
+                        <p>{dayToWeekday(timeblock.day)}</p>
                         <p>
-                          {timeToDisplay(timeBlock.t1)} -{' '}
-                          {timeToDisplay(timeBlock.t2)}
+                          {VSBtimeToDisplay(timeblock.t1)} -{' '}
+                          {VSBtimeToDisplay(timeblock.t2)}
                         </p>
                       </div>
                     ))}
@@ -129,7 +137,7 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
                 </Transition>
               </div>
             ))}
-          </>
+          </div>
         ))}
       </div>
     </div>
