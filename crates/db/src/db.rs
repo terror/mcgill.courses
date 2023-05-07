@@ -358,14 +358,11 @@ impl Db {
 
   async fn add_instructor(&self, instructor: Instructor) -> Result {
     Ok(
-      match self
-        .find_instructor(doc! { "name": &instructor.name })
-        .await?
-      {
+      match self.find_instructor(doc! { "id": &instructor.id }).await? {
         Some(_) => {
           self
             .update_instructor(
-              doc! { "name": &instructor.name },
+              doc! { "id": &instructor.id },
               doc! {
                 "$set": {
                   "name": instructor.name,
@@ -379,7 +376,13 @@ impl Db {
           self
             .database
             .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-            .insert_one(instructor, None)
+            .insert_one(
+              Instructor {
+                id: Some(Uuid::new_v4().to_string()),
+                ..instructor
+              },
+              None,
+            )
             .await?;
         }
       },

@@ -14,6 +14,7 @@ use {
   },
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
   {crate::vec_ext::VecExt, str_ext::StrExt},
+  uuid::Uuid,
 };
 
 #[cfg(test)]
