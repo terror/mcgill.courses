@@ -1,5 +1,5 @@
-import { Requirements } from '../model/Requirements';
 import { Link } from 'react-router-dom';
+import { Requirements } from '../model/Requirements';
 
 type RequirementsProps = {
   requirements: Requirements;
@@ -13,7 +13,7 @@ type ReqsBlockProps = {
 export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
   return (
     <div>
-      <h2 className='mb-2 mt-1 font-semibold leading-none text-gray-700 dark:text-gray-200'>
+      <h2 className='mb-2 mt-1 text-2xl font-medium leading-none text-gray-700 dark:text-gray-200'>
         {title}
       </h2>
       {reqs.map((req) => (
@@ -46,7 +46,7 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
           ) : null}
           {requirements.restrictions !== null ? (
             <div>
-              <h2 className='mb-2 mt-1 font-semibold leading-none text-gray-700 dark:text-gray-200'>
+              <h2 className='mb-2 mt-1 text-2xl font-medium leading-none text-gray-700 dark:text-gray-200'>
                 Restrictions
               </h2>
               <p className='text-gray-500 dark:text-gray-400'>
