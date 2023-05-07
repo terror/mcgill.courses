@@ -2,7 +2,7 @@ export type Block = {
   campus: string;
   display: string;
   location: string;
-  timeBlocks: TimeBlock[];
+  timeblocks: TimeBlock[];
 };
 
 export type TimeBlock = {
