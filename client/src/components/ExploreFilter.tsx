@@ -40,9 +40,7 @@ const FilterButton = ({
 }: FilterButtonProp) => {
   const [selected, setSelected] = useState(isSelected);
 
-  if (isSelected !== selected) {
-    setSelected(isSelected);
-  }
+  isSelected !== selected ? setSelected(isSelected) : null;
 
   const selectedColor = 'bg-red-600 text-gray-100';
   const unselectedColor =
