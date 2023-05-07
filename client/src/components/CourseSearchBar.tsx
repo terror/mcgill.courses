@@ -95,14 +95,16 @@ export const CourseSearchBar = ({
     }
 
     if (selectedIndex > -1 && event.key === 'Enter')
-      navigate(selectedIndex < results.courses.length
-        ? `/course/${results.courses[selectedIndex]._id}`
-        : `/instructor/${results.instructors[
-          selectedIndex - results.courses.length
-        ].name
-          .toLowerCase()
-          .split(' ')
-          .join('-')}`);
+      navigate(
+        selectedIndex < results.courses.length
+          ? `/course/${results.courses[selectedIndex]._id}`
+          : `/instructor/${results.instructors[
+              selectedIndex - results.courses.length
+            ].name
+              .toLowerCase()
+              .split(' ')
+              .join('-')}`
+      );
   };
 
   return (
