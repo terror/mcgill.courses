@@ -68,7 +68,7 @@ impl Db {
       }
     }
 
-    info!("Build course index...");
+    info!("Building course index...");
 
     self
       .create_index::<Course>(
@@ -92,7 +92,7 @@ impl Db {
       )
       .await?;
 
-    info!("Build instructor index...");
+    info!("Building instructor index...");
 
     self
       .create_index::<Instructor>(
