@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { GoX } from 'react-icons/go';
 import courseCodes from '../assets/courseCodes.json';
 import { classNames } from '../lib/utils';
+import { set } from 'lodash';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
@@ -38,6 +39,10 @@ const FilterButton = ({
   setSelections,
 }: FilterButtonProp) => {
   const [selected, setSelected] = useState(isSelected);
+
+  if (isSelected !== selected) {
+    setSelected(isSelected);
+  }
 
   const selectedColor = 'bg-red-600 text-gray-100';
   const unselectedColor =
@@ -189,6 +194,29 @@ const SelectedCourseCodes = ({
   ) : null;
 };
 
+const ClearButton = ({
+  setSelectedSubjects,
+  setSelectedLevels,
+  setSelectedTerms,
+}: {
+  setSelectedSubjects: (selected: string[]) => void;
+  setSelectedLevels: (selected: string[]) => void;
+  setSelectedTerms: (selected: string[]) => void;
+}) => {
+  return (
+    <button
+      className='mx-auto mb-5 w-80 rounded-2xl bg-neutral-100 px-5 py-2 text-lg font-semibold transition duration-200 hover:bg-red-600 focus:outline-none dark:bg-neutral-700 dark:text-gray-100 dark:hover:bg-red-600'
+      onClick={() => {
+        setSelectedSubjects([]);
+        setSelectedLevels([]);
+        setSelectedTerms([]);
+      }}
+    >
+      Clear
+    </button>
+  );
+};
+
 export const ExploreFilter = ({
   selectedSubjects,
   setSelectedSubjects,
@@ -206,7 +234,7 @@ export const ExploreFilter = ({
       )}
     >
       <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
-      <div className='m-10 mt-2'>
+      <div className='m-10 my-5'>
         <div className='space-y-3'>
           <h1 className='text-2xl font-semibold'>Course Code</h1>
           <InputBox
@@ -244,6 +272,17 @@ export const ExploreFilter = ({
           ))}
         </div>
       </div>
+      {[selectedLevels, selectedSubjects, selectedTerms].some(
+        (arr) => arr.length > 0
+      ) ? (
+        <ClearButton
+          setSelectedSubjects={setSelectedSubjects}
+          setSelectedLevels={setSelectedLevels}
+          setSelectedTerms={setSelectedTerms}
+        />
+      ) : (
+        <div className='my-1 '></div>
+      )}
     </div>
   );
 };
