@@ -16,6 +16,7 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
+import { SchedulesDisplay } from '../components/SchedulesDisplay';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -115,6 +116,7 @@ export const CoursePage = () => {
         rating={averageRating}
         numReviews={reviews.length}
       />
+      <SchedulesDisplay schedules={course.schedule} />
       <div className='flex flex-col md:flex-row'>
         <div className='mx-8 mt-4 flex md:hidden'>
           <CourseRequirements requirements={requirements} />
@@ -137,13 +139,13 @@ export const CoursePage = () => {
               )}
               {reviews &&
                 reviews
-                  .filter((r) => (user ? r.userId !== user.id : true))
-                  .map((r) => (
+                  .filter((review) => (user ? review.userId !== user.id : true))
+                  .map((review) => (
                     <CourseReview
-                      review={r}
-                      canModify={Boolean(user && r.userId === user.id)}
+                      review={review}
+                      canModify={Boolean(user && review.userId === user.id)}
                       openEditReview={() => setEditReviewOpen(true)}
-                      handleDelete={() => handleDelete(r)}
+                      handleDelete={() => handleDelete(review)}
                     />
                   ))}
             </div>
