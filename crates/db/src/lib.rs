@@ -4,7 +4,7 @@ use {
   itertools::Itertools,
   lazy_static::lazy_static,
   log::info,
-  model::{Course, Review, Instructor},
+  model::{Course, Instructor, Review},
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
