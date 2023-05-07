@@ -544,27 +544,22 @@ mod tests {
         description: "An examination of the theoretical foundation for financial reporting and revenue recognition. The tools of accounting, including a review of the accounting process and compound interest concepts. Asset recognition, measurement and disclosure. Partnership accounting.".into(),
         instructors: vec![
           Instructor {
-
             name: "Desmond Tsang".into(),
             term: "Fall 2009".into(),
           },
           Instructor {
-
             name: "Ralph Cecere".into(),
             term: "Fall 2009".into(),
           },
           Instructor {
-
             name: "Robert Porrello".into(),
             term: "Fall 2009".into(),
           },
           Instructor {
-
             name: "Pietro Martucci".into(),
             term: "Winter 2010".into(),
           },
           Instructor {
-
             name: "Robert Porrello".into(),
             term: "Winter 2010".into(),
           },

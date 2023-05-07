@@ -40,13 +40,9 @@ const SeachResult: React.FC<SeachResultProps> = ({
         key={index}
       >
         {type === SearchResultType.Course ? (
-          <span className='mr-2'>
-            <Layers />
-          </span>
+          <Layers className='mr-2 dark:text-white' />
         ) : (
-          <span className='mr-2'>
-            <User />
-          </span>
+          <User className='mr-2 dark:text-white' />
         )}
         <span className='dark:text-gray-200'>
           {text
@@ -144,7 +140,7 @@ export const CourseSearchBar = ({
               selectedIndex={selectedIndex}
               text={result.name}
               type={SearchResultType.Instructor}
-              url={`/instructor/${result.name.split(' ').join('-')}`}
+              url={`/instructor/${result.name.toLowerCase().split(' ').join('-')}`}
             />
           ))}
           <Link to={`/explore`}>
