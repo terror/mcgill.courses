@@ -68,10 +68,11 @@ impl Db {
       }
     }
 
-    info!("Finished seeding courses and instructors, building indices...");
+    info!("Build course index...");
 
     self
-      .create_course_index(
+      .create_index::<Course>(
+        Self::COURSE_COLLECTION,
         doc! {
           "subject": "text",
           "code": "text",
@@ -91,11 +92,17 @@ impl Db {
       )
       .await?;
 
+    info!("Build instructor index...");
+
     self
-      .create_instructor_index(doc! { "name": "text" }, doc! { "name": 10 })
+      .create_index::<Instructor>(
+        Self::INSTRUCTOR_COLLECTION,
+        doc! { "name": "text" },
+        doc! { "name": 10 },
+      )
       .await?;
 
-    info!("Course index complete.");
+    info!("All indices complete.");
 
     Ok(())
   }
@@ -147,8 +154,16 @@ impl Db {
 
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
-      courses: self.search_course(query).await?,
-      instructors: self.search_instructor(query).await?,
+      courses: self
+        .text_search::<Course>(Self::COURSE_COLLECTION, query, 10)
+        .await?
+        .try_collect()
+        .await?,
+      instructors: self
+        .text_search::<Instructor>(Self::INSTRUCTOR_COLLECTION, query, 5)
+        .await?
+        .try_collect()
+        .await?,
     })
   }
 
@@ -324,11 +339,19 @@ impl Db {
     )
   }
 
-  async fn search_course(&self, query: &str) -> Result<Vec<Course>> {
+  async fn text_search<T>(
+    &self,
+    collection: &str,
+    query: &str,
+    limit: i64,
+  ) -> Result<Cursor<T>>
+  where
+    T: Serialize + DeserializeOwned,
+  {
     Ok(
       self
         .database
-        .collection::<Course>(Self::COURSE_COLLECTION)
+        .collection::<T>(collection)
         .find(
           doc! {
             "$text": {
@@ -337,24 +360,26 @@ impl Db {
           },
           FindOptions::builder()
             .sort(doc! { "score": { "$meta" : "textScore" }})
-            .limit(10)
+            .limit(limit)
             .build(),
         )
-        .await?
-        .try_collect::<Vec<Course>>()
         .await?,
     )
   }
 
-  async fn create_course_index(
+  async fn create_index<T>(
     &self,
+    collection: &str,
     keys: Document,
     weights: Document,
-  ) -> Result<CreateIndexResult> {
+  ) -> Result<CreateIndexResult>
+  where
+    T: Serialize + DeserializeOwned,
+  {
     Ok(
       self
         .database
-        .collection::<Course>(Self::COURSE_COLLECTION)
+        .collection::<T>(collection)
         .create_index(
           IndexModel::builder()
             .keys(keys)
@@ -391,48 +416,6 @@ impl Db {
         .database
         .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
         .find_one(query, None)
-        .await?,
-    )
-  }
-
-  async fn search_instructor(&self, query: &str) -> Result<Vec<Instructor>> {
-    Ok(
-      self
-        .database
-        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-        .find(
-          doc! {
-            "$text": {
-              "$search": query
-            }
-          },
-          FindOptions::builder()
-            .sort(doc! { "score": { "$meta" : "textScore" }})
-            .limit(5)
-            .build(),
-        )
-        .await?
-        .try_collect::<Vec<Instructor>>()
-        .await?,
-    )
-  }
-
-  async fn create_instructor_index(
-    &self,
-    keys: Document,
-    weights: Document,
-  ) -> Result<CreateIndexResult> {
-    Ok(
-      self
-        .database
-        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-        .create_index(
-          IndexModel::builder()
-            .keys(keys)
-            .options(IndexOptions::builder().weights(weights).build())
-            .build(),
-          None,
-        )
         .await?,
     )
   }

@@ -10,8 +10,9 @@ use {
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions},
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
-    Client, Database, IndexModel,
+    Client, Cursor, Database, IndexModel,
   },
+  serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
   {crate::combine::Combine, str_ext::StrExt},
 };
