@@ -675,7 +675,6 @@ dependencies = [
  "stop-words",
  "tempdir",
  "tokio",
- "uuid",
 ]
 
 [[package]]

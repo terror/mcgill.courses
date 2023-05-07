@@ -370,48 +370,17 @@ impl Db {
 
   async fn add_instructor(&self, instructor: Instructor) -> Result {
     Ok(
-      match self.find_instructor(doc! { "id": &instructor.id }).await? {
-        Some(_) => {
-          self
-            .update_instructor(
-              doc! { "id": &instructor.id },
-              doc! {
-                "$set": {
-                  "name": instructor.name,
-                  "term": instructor.term
-                }
-              },
-            )
-            .await?;
-        }
-        None => {
-          self
-            .database
-            .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-            .insert_one(
-              Instructor {
-                id: Some(Uuid::new_v4().to_string()),
-                ..instructor
-              },
-              None,
-            )
-            .await?;
-        }
+      if self
+        .find_instructor(doc! { "name": &instructor.name })
+        .await?
+        .is_none()
+      {
+        self
+          .database
+          .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+          .insert_one(instructor, None)
+          .await?;
       },
-    )
-  }
-
-  async fn update_instructor(
-    &self,
-    filter: Document,
-    update: Document,
-  ) -> Result<UpdateResult> {
-    Ok(
-      self
-        .database
-        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-        .update_one(filter, UpdateModifications::Document(update), None)
-        .await?,
     )
   }
 

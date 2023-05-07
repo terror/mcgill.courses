@@ -13,8 +13,6 @@ use super::*;
   Serialize,
 )]
 pub struct Instructor {
-  #[serde(rename = "_id")]
-  pub id: Option<String>,
   pub name: String,
   pub term: String,
 }
@@ -22,7 +20,6 @@ pub struct Instructor {
 impl Into<Bson> for Instructor {
   fn into(self) -> bson::Bson {
     Bson::Document(doc! {
-      "id": self.id,
       "name": self.name,
       "term": self.term,
     })

@@ -62,7 +62,7 @@ export const CourseSearchBar = ({
       </div>
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
-          {results.courses.map((result, index) => {
+          {results.courses?.map((result, index) => {
             const courseText = `${result._id} - ${result.title}`;
 
             const parts = courseText.split(
@@ -86,7 +86,42 @@ export const CourseSearchBar = ({
                         key={i}
                         className={
                           part.toLowerCase().trim() ===
-                          results.query.toLowerCase().trim()
+                          results.query?.toLowerCase().trim()
+                            ? 'underline'
+                            : ''
+                        }
+                      >
+                        {part}
+                      </span>
+                    ))}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+          {results.instructors?.map((result, index) => {
+            const parts = result.name.split(
+              new RegExp(`(${_.escapeRegExp(results.query)})`, 'gi')
+            );
+
+            return (
+              <Link to={`/instructor/${result.name.split(' ').join('-')}`}>
+                <div
+                  className={classNames(
+                    'cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
+                    selectedIndex === index
+                      ? 'bg-gray-100 dark:bg-neutral-700'
+                      : 'bg-white dark:bg-neutral-800'
+                  )}
+                  key={result.name}
+                >
+                  <span className='dark:text-gray-200'>
+                    {parts.map((part, i) => (
+                      <span
+                        key={i}
+                        className={
+                          part.toLowerCase().trim() ===
+                          results.query?.toLowerCase().trim()
                             ? 'underline'
                             : ''
                         }

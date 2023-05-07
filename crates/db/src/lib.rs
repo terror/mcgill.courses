@@ -13,7 +13,6 @@ use {
     Client, Database, IndexModel,
   },
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  uuid::Uuid,
   {crate::vec_ext::VecExt, str_ext::StrExt},
 };
 
