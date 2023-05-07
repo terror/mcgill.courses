@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { Requirements } from '../model/Requirements';
-import { Link } from 'react-router-dom';
 
 type RequirementsProps = {
   requirements: Requirements;
