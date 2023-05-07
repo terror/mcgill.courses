@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { classNames } from '../lib/utils';
 import { TimeBlock, Block, Schedule } from '../model/Schedule';
-import { dedupe, sortTerms, sortBlocks } from '../lib/utils';
+import { dedupe, sortTerms, sortBlocks, classNames } from '../lib/utils';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Transition } from '@headlessui/react';
 
