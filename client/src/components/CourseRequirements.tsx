@@ -1,22 +1,28 @@
 import { Requirements } from '../model/Requirements';
+import { Link } from 'react-router-dom';
 
 type RequirementsProps = {
   requirements: Requirements;
 };
 
-type InfoBlockProps = {
+type ReqsBlockProps = {
   title: string;
-  elements: string[];
+  reqs: string[];
 };
 
-export const InfoBlock = ({ title, elements }: InfoBlockProps) => {
+export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 font-semibold leading-none text-gray-700 dark:text-gray-200'>
         {title}
       </h2>
-      {elements.map((element) => (
-        <p className='text-gray-500 dark:text-gray-400'>{element}</p>
+      {reqs.map((req) => (
+        <Link
+          to={`/course/${req.replace(' ', '')}`}
+          className='block text-gray-800 underline transition duration-100 hover:text-gray-600 dark:text-gray-200 hover:dark:text-gray-400'
+        >
+          {req}
+        </Link>
       ))}
     </div>
   );
@@ -33,10 +39,10 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
       <div className='flex-col space-y-3'>
         <div className='m-4 space-y-7'>
           {requirements.prereqs.length > 0 ? (
-            <InfoBlock title='Prerequisites' elements={requirements.prereqs} />
+            <ReqsBlock title='Prerequisites' reqs={requirements.prereqs} />
           ) : null}
           {requirements.coreqs.length > 0 ? (
-            <InfoBlock title='Corequisites' elements={requirements.coreqs} />
+            <ReqsBlock title='Corequisites' reqs={requirements.coreqs} />
           ) : null}
           {requirements.restrictions !== null ? (
             <div>
