@@ -1,5 +1,3 @@
-use model::Instructor;
-
 use super::*;
 
 #[derive(Debug, Clone)]
