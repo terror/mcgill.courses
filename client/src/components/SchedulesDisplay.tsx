@@ -1,0 +1,243 @@
+import { useState } from 'react';
+import { classNames, getCurrentTerm } from '../lib/utils';
+import { Block, Schedule } from '../model/Schedule';
+import { dedupe, sortTerms, sortBlocks } from '../lib/utils';
+import { IoIosArrowDown } from 'react-icons/io';
+import { Transition } from '@headlessui/react';
+
+const test_schedules: Schedule[] = [
+  {
+    blocks: [
+      {
+        campus: 'Macdonald',
+        display: 'Lec 002',
+        location: 'ENGTR 0100; STBIO S1/3',
+        timeBlocks: [
+          {
+            day: '2',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '4',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '6',
+            t1: '635',
+            t2: '775',
+          },
+        ],
+      },
+      {
+        campus: 'Macdonald',
+        display: 'Lec 001',
+        location: 'ENGTR 0100; STBIO S1/3',
+        timeBlocks: [
+          {
+            day: '2',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '4',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '6',
+            t1: '635',
+            t2: '775',
+          },
+        ],
+      },
+    ],
+    term: 'Fall 2022',
+  },
+  {
+    blocks: [
+      {
+        campus: 'Downtown',
+        display: 'Lec 001',
+        location: 'ENGTR 0100; STBIO S1/3',
+        timeBlocks: [
+          {
+            day: '2',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '4',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '6',
+            t1: '635',
+            t2: '775',
+          },
+        ],
+      },
+    ],
+    term: 'Summer 2023',
+  },
+  {
+    blocks: [
+      {
+        campus: 'Downtown',
+        display: 'Lec 001',
+        location: 'ENGTR 0100; STBIO S1/3',
+        timeBlocks: [
+          {
+            day: '2',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '4',
+            t1: '635',
+            t2: '715',
+          },
+          {
+            day: '6',
+            t1: '635',
+            t2: '775',
+          },
+        ],
+      },
+    ],
+    term: 'Winter 2023',
+  },
+];
+
+const dayToWeekday = (day: string) => {
+  switch (day) {
+    case '1':
+      return 'Sunday';
+    case '2':
+      return 'Monday';
+    case '3':
+      return 'Tuesday';
+    case '4':
+      return 'Wednesday';
+    case '5':
+      return 'Thursday';
+    case '6':
+      return 'Friday';
+    case '7':
+      return 'Saturday';
+    default:
+      throw new Error('Invalid day');
+  }
+};
+
+const timeToDisplay = (time: string) => {
+  const minutes = parseInt(time.slice(-2), 10);
+  const hour = parseInt(time.slice(0, -2), 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+  return `${displayHour}:${minutes} ${ampm}`;
+};
+
+export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
+  schedules = test_schedules;
+  const offeredTerms = sortTerms(
+    dedupe(schedules.map((schedule) => schedule.term))
+  );
+
+  const [currentlyDisplayingTerm, setCurrentlyDisplayingTerm] =
+    useState<string>(offeredTerms[0]);
+  const [currentlyDisplayingSchedules, setCurrentlyDisplayingSchedules] =
+    useState<Schedule[]>(
+      schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
+    );
+
+  const [openBlock, setOpenBlock] = useState<Block | null>(null);
+
+  const handleClick = (term: string) => {
+    setCurrentlyDisplayingTerm(term);
+    setCurrentlyDisplayingSchedules(
+      schedules.filter((schedule) => schedule.term === term)
+    );
+  };
+
+  return offeredTerms.length !== 0 ? (
+    <div className='flex flex-col'>
+      <div className='mx-8 mt-4 flex '>
+        {offeredTerms.map((term, i) => (
+          <button
+            className={classNames(
+              `flex-1 py-2 text-center transition duration-300 hover:cursor-pointer dark:text-gray-200`,
+              term === currentlyDisplayingTerm
+                ? 'dark:bg-neutral-700'
+                : 'dark:bg-neutral-800 dark:hover:bg-neutral-700',
+              i === 0 ? 'rounded-tl-lg' : '',
+              i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
+            )}
+            onClick={() => handleClick(term)}
+          >
+            {term}
+          </button>
+        ))}
+      </div>
+      <div className='mx-8 flex flex-col rounded-b-lg dark:bg-neutral-700 dark:text-gray-200'>
+        {currentlyDisplayingSchedules.map((schedule) => (
+          <>
+            {sortBlocks(schedule.blocks).map((block) => (
+              <div className='flex flex-col'>
+                <div
+                  className={classNames(
+                    'flex flex-row justify-between border-t border-neutral-600 p-2 px-3'
+                  )}
+                >
+                  <div>
+                    <span className='font-semibold'>{block.display}</span>{' '}
+                    <span className='ml-2 font-semibold'>Campus: </span>
+                    {block.campus}{' '}
+                    <span className='ml-2 font-semibold'>Classroom(s): </span>
+                    {block.location.replace(';', ',')}{' '}
+                  </div>
+                  <button
+                    onClick={() =>
+                      openBlock === block
+                        ? setOpenBlock(null)
+                        : setOpenBlock(block)
+                    }
+                  >
+                    <IoIosArrowDown
+                      className={`${
+                        openBlock === block ? 'rotate-180 transform' : ''
+                      } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
+                    />
+                  </button>
+                </div>
+                <Transition
+                  show={openBlock === block}
+                  enter='transition duration-300 ease-in-out transform'
+                  enterFrom='opacity-0 -translate-y-2'
+                  enterTo='opacity-100 translate-y-0'
+                  leave='transition duration-300 ease-in-out transform'
+                  leaveFrom='opacity-100 translate-y-0'
+                  leaveTo='opacity-0 -translate-y-2'
+                >
+                  <div className='flex flex-col'>
+                    {block.timeBlocks.map((timeBlock) => (
+                      <div className='flex flex-row justify-between px-3 py-2 font-medium'>
+                        <p>{dayToWeekday(timeBlock.day)}</p>
+                        <p>
+                          {timeToDisplay(timeBlock.t1)} -{' '}
+                          {timeToDisplay(timeBlock.t2)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </Transition>
+              </div>
+            ))}
+          </>
+        ))}
+      </div>
+    </div>
+  ) : null;
+};
