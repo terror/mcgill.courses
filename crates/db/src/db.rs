@@ -97,8 +97,8 @@ impl Db {
     self
       .create_index::<Instructor>(
         Self::INSTRUCTOR_COLLECTION,
-        doc! { "name": "text" },
-        doc! { "name": 10 },
+        doc! { "name": "text", "nameNgrams": "text" },
+        doc! { "name": 10, "nameNgrams": 4 },
       )
       .await?;
 
@@ -401,7 +401,13 @@ impl Db {
         self
           .database
           .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-          .insert_one(instructor, None)
+          .insert_one(
+            Instructor {
+              name_ngrams: Some(instructor.name.ngrams()),
+              ..instructor
+            },
+            None,
+          )
           .await?;
       },
     )
@@ -1145,14 +1151,17 @@ mod tests {
       Instructor {
         name: "foo".into(),
         term: "Summer 2023".into(),
+        ..Default::default()
       },
       Instructor {
         name: "bar".into(),
         term: "Summer 2023".into(),
+        ..Default::default()
       },
       Instructor {
         name: "bar".into(),
         term: "Winter 2023".into(),
+        ..Default::default()
       },
     ];
 

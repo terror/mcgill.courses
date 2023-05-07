@@ -3,7 +3,9 @@ import { Schedule } from './Schedule';
 
 export type Course = {
   _id: string;
+  idNgrams?: string;
   title: string;
+  titleNgrams?: string;
   credits: string;
   subject: string;
   code: string;

@@ -495,18 +495,22 @@ mod tests {
       vec![
         Instructor {
           name: "Adrian Roshan Vetta".into(),
+          name_ngrams: None,
           term: "Fall 2022".into()
         },
         Instructor {
           name: "Jérôme Fortier".into(),
+          name_ngrams: None,
           term: "Fall 2022".into()
         },
         Instructor {
           name: "Jérôme Fortier".into(),
+          name_ngrams: None,
           term: "Winter 2023".into()
         },
         Instructor {
           name: "Jeremy Macdonald".into(),
+          name_ngrams: None,
           term: "Winter 2023".into()
         }
       ]
@@ -545,22 +549,27 @@ mod tests {
         instructors: vec![
           Instructor {
             name: "Desmond Tsang".into(),
+            name_ngrams: None,
             term: "Fall 2009".into(),
           },
           Instructor {
             name: "Ralph Cecere".into(),
+            name_ngrams: None,
             term: "Fall 2009".into(),
           },
           Instructor {
             name: "Robert Porrello".into(),
+            name_ngrams: None,
             term: "Fall 2009".into(),
           },
           Instructor {
             name: "Pietro Martucci".into(),
+            name_ngrams: None,
             term: "Winter 2010".into(),
           },
           Instructor {
             name: "Robert Porrello".into(),
+            name_ngrams: None,
             term: "Winter 2010".into(),
           },
         ],
@@ -586,18 +595,22 @@ mod tests {
         instructors: vec![
           Instructor {
             name: "Adrian Roshan Vetta".into(),
+            name_ngrams: None,
             term: "Fall 2022".into()
           },
           Instructor {
             name: "Jérôme Fortier".into(),
+            name_ngrams: None,
             term: "Fall 2022".into()
           },
           Instructor {
             name: "Jérôme Fortier".into(),
+            name_ngrams: None,
             term: "Winter 2023".into()
           },
           Instructor {
             name: "Jeremy Macdonald".into(),
+            name_ngrams: None,
             term: "Winter 2023".into()
           }
         ],
@@ -654,7 +667,8 @@ mod tests {
         description: "The laboratory component of PHYS 142.".into(),
         instructors: vec![Instructor {
           name: "Hong Guo".into(),
-          term: "Winter 2023".into()
+          name_ngrams: None,
+          term: "Winter 2023".into(),
         }],
         requirements: Requirements {
           corequisites: vec![],
