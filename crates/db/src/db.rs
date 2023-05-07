@@ -408,7 +408,7 @@ impl Db {
           },
           FindOptions::builder()
             .sort(doc! { "score": { "$meta" : "textScore" }})
-            .limit(10)
+            .limit(5)
             .build(),
         )
         .await?
