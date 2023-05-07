@@ -65,15 +65,15 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
   };
 
   return offeredTerms.length !== 0 ? (
-    <div className='flex flex-col'>
+    <div className='flex flex-col text-gray-800'>
       <div className='mx-8 mt-4 flex '>
         {offeredTerms.map((term, i) => (
           <button
             className={classNames(
-              `flex-1 py-2 text-center transition duration-300 hover:cursor-pointer dark:text-gray-200`,
+              `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
-                ? 'dark:bg-neutral-700'
-                : 'dark:bg-neutral-800 dark:hover:bg-neutral-700',
+                ? 'bg-neutral-100 dark:bg-neutral-700'
+                : 'bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
             )}
@@ -83,22 +83,30 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
           </button>
         ))}
       </div>
-      <div className='mx-8 flex flex-col rounded-b-lg dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='mx-8 flex flex-col rounded-b-lg bg-neutral-100 dark:bg-neutral-700 dark:text-gray-200'>
         {currentlyDisplayingSchedules.map((schedule: Schedule) => (
           <div>
             {sortBlocks(schedule.blocks)?.map((block: Block) => (
               <div className='flex flex-col'>
                 <div
                   className={classNames(
-                    'flex flex-row justify-between border-t border-neutral-600 p-2 px-3'
+                    'flex flex-row justify-between border-t border-neutral-300 p-2 px-3 dark:border-neutral-600'
                   )}
                 >
-                  <div>
-                    <span className='font-semibold'>{block.display}</span>{' '}
-                    <span className='ml-2 font-semibold'>Campus: </span>
-                    {block.campus}{' '}
-                    <span className='ml-2 font-semibold'>Classroom(s): </span>
-                    {block.location.replace(';', ',')}{' '}
+                  <div className='flex flex-wrap gap-x-4 whitespace-pre-wrap text-left'>
+                    <p>
+                      <span className='font-semibold'>{block.display}</span>
+                    </p>
+                    <p>
+                      <span className='font-semibold'>Campus: </span>
+                      {block.campus}
+                    </p>
+                    <p>
+                      <span className='font-semibold'>Classroom(s): </span>
+                      {block.location
+                        ? block.location.replace(';', ',')
+                        : 'N/A'}
+                    </p>
                   </div>
                   <button
                     onClick={() =>
@@ -124,15 +132,21 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
                   leaveTo='opacity-0 -translate-y-2'
                 >
                   <div className='flex flex-col'>
-                    {block.timeblocks?.map((timeblock: TimeBlock) => (
-                      <div className='flex flex-row justify-between px-3 py-2 font-medium'>
-                        <p>{dayToWeekday(timeblock.day)}</p>
-                        <p>
-                          {VSBtimeToDisplay(timeblock.t1)} -{' '}
-                          {VSBtimeToDisplay(timeblock.t2)}
-                        </p>
+                    {block.timeblocks.length > 0 ? (
+                      block.timeblocks?.map((timeblock: TimeBlock) => (
+                        <div className='flex flex-row justify-between px-3 py-2 font-medium text-gray-600 dark:text-neutral-300'>
+                          <p>{dayToWeekday(timeblock.day)}</p>
+                          <p>
+                            {VSBtimeToDisplay(timeblock.t1)} -{' '}
+                            {VSBtimeToDisplay(timeblock.t2)}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className='flex flex-row justify-center px-3 py-2 dark:text-neutral-400'>
+                        <p>No scheduled time block.</p>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </Transition>
               </div>
