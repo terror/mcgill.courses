@@ -429,6 +429,19 @@ impl Db {
         .await?,
     )
   }
+
+  #[cfg(test)]
+  async fn instructors(&self) -> Result<Vec<Instructor>> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Instructor>>()
+        .await?,
+    )
+  }
 }
 
 #[cfg(test)]
@@ -1119,5 +1132,31 @@ mod tests {
         .iter()
         .any(|term| term.starts_with(&"Winter".to_string())));
     }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn add_instructors() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let instructors = vec![
+      Instructor {
+        name: "foo".into(),
+        term: "Summer 2023".into(),
+      },
+      Instructor {
+        name: "bar".into(),
+        term: "Summer 2023".into(),
+      },
+      Instructor {
+        name: "bar".into(),
+        term: "Winter 2023".into(),
+      },
+    ];
+
+    for instructor in instructors {
+      db.add_instructor(instructor).await.unwrap();
+    }
+
+    assert_eq!(db.instructors().await.unwrap().len(), 2);
   }
 }
