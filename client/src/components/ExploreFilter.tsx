@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { GoX } from 'react-icons/go';
 import courseCodes from '../assets/courseCodes.json';
 import { classNames } from '../lib/utils';
+import { RefreshCw } from 'react-feather';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
@@ -38,6 +39,8 @@ const FilterButton = ({
   setSelections,
 }: FilterButtonProp) => {
   const [selected, setSelected] = useState(isSelected);
+
+  if (isSelected !== selected) setSelected(isSelected);
 
   const selectedColor = 'bg-red-600 text-gray-100';
   const unselectedColor =
@@ -189,6 +192,30 @@ const SelectedCourseCodes = ({
   ) : null;
 };
 
+const ClearButton = ({
+  setSelectedSubjects,
+  setSelectedLevels,
+  setSelectedTerms,
+}: {
+  setSelectedSubjects: (selected: string[]) => void;
+  setSelectedLevels: (selected: string[]) => void;
+  setSelectedTerms: (selected: string[]) => void;
+}) => {
+  return (
+    <div className='ml-auto mr-10 mt-10 flex h-8 w-8 items-center justify-center rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-neutral-700'>
+      <button
+        onClick={() => {
+          setSelectedSubjects([]);
+          setSelectedLevels([]);
+          setSelectedTerms([]);
+        }}
+      >
+        <RefreshCw className={'h-5 w-5 text-gray-700 dark:text-neutral-200'} />
+      </button>
+    </div>
+  );
+};
+
 export const ExploreFilter = ({
   selectedSubjects,
   setSelectedSubjects,
@@ -205,8 +232,15 @@ export const ExploreFilter = ({
         'm-2 box-border flex h-fit flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'
       )}
     >
-      <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
-      <div className='m-10 mt-2'>
+      <div className='flex flex-row'>
+        <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
+        <ClearButton
+          setSelectedSubjects={setSelectedSubjects}
+          setSelectedLevels={setSelectedLevels}
+          setSelectedTerms={setSelectedTerms}
+        />
+      </div>
+      <div className='m-10 my-5'>
         <div className='space-y-3'>
           <h1 className='text-2xl font-semibold'>Course Code</h1>
           <InputBox
