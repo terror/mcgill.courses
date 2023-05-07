@@ -202,7 +202,7 @@ const ClearButton = ({
   setSelectedTerms: (selected: string[]) => void;
 }) => {
   return (
-    <div className='mr-10 mt-10 ml-auto flex h-8 w-8 items-center justify-center rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-neutral-700'>
+    <div className='ml-auto mr-10 mt-10 flex h-8 w-8 items-center justify-center rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-neutral-700'>
       <button
         onClick={() => {
           setSelectedSubjects([]);
