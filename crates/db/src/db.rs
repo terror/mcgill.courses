@@ -284,7 +284,7 @@ impl Db {
                 "level": course.level,
                 "prerequisites": course.prerequisites,
                 "restrictions": course.restrictions,
-                "schedule": course.schedule.unwrap_or(Vec::new()).combine_option(found.schedule),
+                "schedule": course.schedule.combine_opt(found.schedule),
                 "terms": course.terms.combine(found.terms),
                 "title": course.title,
                 "url": course.url

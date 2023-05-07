@@ -13,7 +13,7 @@ use {
     Client, Database, IndexModel,
   },
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  {crate::vec_ext::VecExt, str_ext::StrExt},
+  {crate::combine::Combine, str_ext::StrExt},
 };
 
 #[cfg(test)]
@@ -27,8 +27,8 @@ use {
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
+mod combine;
 mod db;
 mod str_ext;
-mod vec_ext;
 
 pub use crate::db::Db;
