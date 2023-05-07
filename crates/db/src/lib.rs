@@ -13,8 +13,8 @@ use {
     Client, Database, IndexModel,
   },
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  {crate::vec_ext::VecExt, str_ext::StrExt},
   uuid::Uuid,
+  {crate::vec_ext::VecExt, str_ext::StrExt},
 };
 
 #[cfg(test)]
