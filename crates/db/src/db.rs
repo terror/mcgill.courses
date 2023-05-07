@@ -128,21 +128,21 @@ impl Db {
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
-    if let Some(ref course_subjects) = course_subjects {
+    if let Some(course_subjects) = course_subjects {
       document.insert(
         "subject",
         doc! { "$regex": format!("^({})", course_subjects.join("|")) },
       );
     }
 
-    if let Some(ref course_levels) = course_levels {
+    if let Some(course_levels) = course_levels {
       document.insert(
         "code",
         doc! { "$regex": format!("^({})", course_levels.join("|")) },
       );
     }
 
-    if let Some(ref course_terms) = course_terms {
+    if let Some(course_terms) = course_terms {
       document.insert(
         "terms",
         doc! { "$regex": format!("^({})", course_terms.join("|")) },
