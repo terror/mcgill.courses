@@ -1,21 +1,13 @@
 import { PieChart } from 'react-minimal-pie-chart';
 
 type RatingPieChartProps = {
-  title: string;
   rating: number;
   numReviews: number;
 };
 
-export const RatingPieChart = ({
-  title,
-  rating,
-  numReviews,
-}: RatingPieChartProps) => {
+export const RatingPieChart = ({ rating, numReviews }: RatingPieChartProps) => {
   return (
     <div className='flex flex-col'>
-      <h1 className='mx-auto text-3xl font-semibold text-gray-700 dark:text-gray-200'>
-        Rating
-      </h1>
       <div className='relative z-10 mx-auto my-5 flex h-1/2 w-1/2 rounded-full '>
         <PieChart
           data={[
