@@ -18,8 +18,6 @@ export const Profile = () => {
       .catch((err) => console.log(err));
   }, [user?.id]);
 
-  console.log(userReviews);
-
   return (
     <Layout>
       <div className='flex flex-col justify-center'>
@@ -30,7 +28,7 @@ export const Profile = () => {
             </h1>
             <hr className='mx-auto my-5 w-32 border-gray-200 text-4xl' />
           </div>
-          <div className='mx-5 mb-4 box-border flex h-fit max-w-xl flex-col flex-wrap rounded-lg border p-4 py-8 dark:border-neutral-700'>
+          <div className='py- mx-5 mb-4 box-border flex h-fit max-w-xl flex-col flex-wrap rounded-lg border p-4 dark:border-neutral-700'>
             {userReviews === undefined ? (
               <div className='mx-auto'>
                 <Spinner />
@@ -48,16 +46,16 @@ export const Profile = () => {
                     parseInt(a.timestamp.$date.$numberLong, 10) -
                     parseInt(b.timestamp.$date.$numberLong, 10)
                 )
-                .map((r) => {
+                .map((review) => {
                   return (
                     <div className='mx-5'>
                       <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
-                        {r.courseId}
+                        {review.courseId}
                       </h2>
-                      <Link to={`/course/${r.courseId}`}>
+                      <Link to={`/course/${review.courseId}`}>
                         <div className='my-4 rounded-lg border-gray-800 duration-300 ease-in-out hover:scale-[103%]'>
                           <CourseReview
-                            review={r}
+                            review={review}
                             canModify={false}
                             openEditReview={() => null}
                             handleDelete={() => null}
