@@ -18,7 +18,7 @@ const RatingInfo = ({
   numReviews: number;
 }) => {
   return (
-    <div className='lg:w-3/4 w-full'>
+    <div className='w-full lg:w-3/4'>
       {numReviews > 0 ? (
         <RatingPieChart rating={rating} numReviews={numReviews} />
       ) : (
@@ -35,7 +35,7 @@ export const CourseInfo = ({ course, rating, numReviews }: CourseInfoProps) => {
     <div className='flex justify-center'>
       <div className='mx-8 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
         <div className='flex flex-col md:flex-row'>
-          <div className='md:w-1/2 m-4 flex w-fit flex-col space-y-3 md:m-4'>
+          <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
             <div className='flex flex-row space-x-2 align-middle'>
               <h1 className='break-words text-4xl font-semibold text-gray-800 dark:text-gray-200'>
                 {course._id}
@@ -64,7 +64,7 @@ export const CourseInfo = ({ course, rating, numReviews }: CourseInfoProps) => {
               {course.description}
             </p>
           </div>
-          <div className='md:w-1/2 m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex'>
+          <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2'>
             <RatingInfo rating={rating} numReviews={numReviews} />
           </div>
         </div>
