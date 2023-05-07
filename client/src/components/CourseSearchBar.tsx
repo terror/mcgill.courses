@@ -140,7 +140,10 @@ export const CourseSearchBar = ({
               selectedIndex={selectedIndex}
               text={result.name}
               type={SearchResultType.Instructor}
-              url={`/instructor/${result.name.toLowerCase().split(' ').join('-')}`}
+              url={`/instructor/${result.name
+                .toLowerCase()
+                .split(' ')
+                .join('-')}`}
             />
           ))}
           <Link to={`/explore`}>
