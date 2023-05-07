@@ -20,7 +20,7 @@ import { Review } from '../model/Review';
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
-  const [reviews, setReviews] = useState<Review[]>();
+  const [reviews, setReviews] = useState<Review[]>([]);
   const user = useAuth();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
@@ -124,15 +124,25 @@ export const CoursePage = () => {
               />
             )}
             <div>
+              {userReview && (
+                <CourseReview
+                  review={userReview}
+                  canModify={Boolean(user && userReview.userId === user.id)}
+                  openEditReview={() => setEditReviewOpen(true)}
+                  handleDelete={() => handleDelete(userReview)}
+                />
+              )}
               {reviews &&
-                reviews.map((r) => (
-                  <CourseReview
-                    review={r}
-                    canModify={Boolean(user && r.userId === user.id)}
-                    openEditReview={() => setEditReviewOpen(true)}
-                    handleDelete={() => handleDelete(r)}
-                  />
-                ))}
+                reviews
+                  .filter((r) => (user ? r.userId !== user.id : true))
+                  .map((r) => (
+                    <CourseReview
+                      review={r}
+                      canModify={Boolean(user && r.userId === user.id)}
+                      openEditReview={() => setEditReviewOpen(true)}
+                      handleDelete={() => handleDelete(r)}
+                    />
+                  ))}
             </div>
           </div>
         </div>
