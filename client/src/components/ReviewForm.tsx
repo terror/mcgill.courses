@@ -13,8 +13,8 @@ export const ReviewSchema = Yup.object().shape({
     .max(3000, 'Must be less than 3000 characters'),
   instructor: Yup.string().required('Instructor is required'),
   rating: Yup.number()
-    .min(1, 'Rating must be between 0 and 5')
-    .max(5, 'Rating must be between 0 and 5')
+    .min(1, 'Rating must be between 1 and 5')
+    .max(5, 'Rating must be between 1 and 5')
     .required('Rating is required'),
 });
 

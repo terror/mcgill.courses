@@ -115,15 +115,18 @@ export const CoursePage = () => {
         rating={averageRating}
         numReviews={reviews.length}
       />
-      <div className='flex'>
-        <div>
-          <div className='ml-8 mt-8'>
+      <div className='flex flex-col md:flex-row'>
+        <div className='mx-8 mt-4 flex md:hidden'>
+          <CourseRequirements requirements={requirements} />
+        </div>
+        <div className='flex w-full flex-row justify-between'>
+          <div className='my-4 ml-8 mr-8 w-full md:mr-4 md:mt-4'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}
               />
             )}
-            <div>
+            <div className='w-full'>
               {userReview && (
                 <CourseReview
                   review={userReview}
@@ -161,7 +164,9 @@ export const CoursePage = () => {
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
         )}
-        <CourseRequirements requirements={requirements} />
+        <div className='hidden w-5/12 md:flex md:flex-none'>
+          <CourseRequirements requirements={requirements} />
+        </div>
       </div>
       {alertStatus && (
         <Alert status={alertStatus} key={key} message={alertMessage} />
