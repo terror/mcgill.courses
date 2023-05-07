@@ -3,7 +3,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
-import { navigation } from './Navbar';
+import { navigationItems } from './Footer';
 import { DarkModeToggle } from './DarkModeToggle';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { classNames } from '../lib/utils';
@@ -47,7 +47,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
         <div className='mt-6 flow-root'>
           <div className='-my-6 divide-y divide-gray-500/10'>
             <div className='space-y-2 py-6'>
-              {navigation.map((item) => (
+              {navigationItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}

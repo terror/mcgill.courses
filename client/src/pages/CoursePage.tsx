@@ -1,29 +1,36 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
+import { AddReviewForm } from '../components/AddReviewForm';
+import { Alert } from '../components/Alert';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
 import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
+import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
+import { NotFound } from '../components/NotFound';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
-import { AddReviewForm } from '../components/AddReviewForm';
-import { EditReviewForm } from '../components/EditReviewForm';
-import { NotFound } from '../components/NotFound';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
-  const [reviews, setReviews] = useState<Review[]>();
+  const [reviews, setReviews] = useState<Review[]>([]);
   const user = useAuth();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
+  const [key, setKey] = useState(0);
+
+  const [alertStatus, setAlertStatus] = useState<'success' | 'error' | null>(
+    null
+  );
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     fetchClient
@@ -65,13 +72,35 @@ export const CoursePage = () => {
     user && reviews.filter((r) => r.userId === user.id).length === 0
   );
 
+  const remountAlert = () => {
+    setKey(key + 1);
+  };
+
+  const handleSubmit = (successMessage: string) => {
+    return (res: Response) => {
+      remountAlert();
+      if (res.ok) {
+        setAlertStatus('success');
+        setAlertMessage(successMessage);
+        setAddReviewOpen(false);
+      } else {
+        setAlertMessage('An error occurred.');
+        setAlertStatus('error');
+      }
+    };
+  };
+
   const handleDelete = async (review: Review) => {
-    await fetchClient.delete(
+    const res = await fetchClient.delete(
       '/reviews',
       { course_id: review.courseId },
       { headers: { 'Content-Type': 'application/json' } }
     );
-    setReviews(reviews.filter((r) => r.userId !== review.userId));
+    if (res.ok) {
+      setReviews(reviews.filter((r) => r.userId !== review.userId));
+    }
+    handleSubmit('Review deleted successfully.')(res);
+    localStorage.removeItem(course._id);
   };
 
   const userReview = reviews.find((r) => r.userId === user?.id);
@@ -95,15 +124,25 @@ export const CoursePage = () => {
               />
             )}
             <div>
+              {userReview && (
+                <CourseReview
+                  review={userReview}
+                  canModify={Boolean(user && userReview.userId === user.id)}
+                  openEditReview={() => setEditReviewOpen(true)}
+                  handleDelete={() => handleDelete(userReview)}
+                />
+              )}
               {reviews &&
-                reviews.map((r) => (
-                  <CourseReview
-                    review={r}
-                    canModify={Boolean(user && r.userId === user.id)}
-                    openEditReview={() => setEditReviewOpen(true)}
-                    handleDelete={() => handleDelete(r)}
-                  />
-                ))}
+                reviews
+                  .filter((r) => (user ? r.userId !== user.id : true))
+                  .map((r) => (
+                    <CourseReview
+                      review={r}
+                      canModify={Boolean(user && r.userId === user.id)}
+                      openEditReview={() => setEditReviewOpen(true)}
+                      handleDelete={() => handleDelete(r)}
+                    />
+                  ))}
             </div>
           </div>
         </div>
@@ -111,6 +150,7 @@ export const CoursePage = () => {
           course={course}
           open={addReviewOpen}
           onClose={() => setAddReviewOpen(false)}
+          handleSubmit={handleSubmit('Review added successfully.')}
         />
         {userReview && (
           <EditReviewForm
@@ -118,10 +158,14 @@ export const CoursePage = () => {
             open={editReviewOpen}
             onClose={() => setEditReviewOpen(false)}
             review={userReview}
+            handleSubmit={handleSubmit('Review edited successfully.')}
           />
         )}
         <CourseRequirements requirements={requirements} />
       </div>
+      {alertStatus && (
+        <Alert status={alertStatus} key={key} message={alertMessage} />
+      )}
     </Layout>
   );
 };

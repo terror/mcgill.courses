@@ -110,9 +110,9 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
           multiple
         >
           {' '}
-          <div className='relative z-10 w-full cursor-default overflow-hidden rounded-full bg-white text-left shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 dark:border-neutral-900 dark:bg-black sm:text-sm'>
+          <div className='relative z-10 w-full cursor-default overflow-hidden rounded-full bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 dark:border-neutral-900 dark:bg-black sm:text-sm'>
             <Combobox.Input
-              className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none dark:bg-neutral-800 dark:text-gray-200'
+              className='w-full border-none bg-neutral-50 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none dark:bg-neutral-800 dark:text-gray-200'
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => {

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 
@@ -9,6 +10,7 @@ import {
 } from '../lib/utils';
 import { Course } from '../model/Course';
 import { GoX } from 'react-icons/go';
+import { Transition } from '@headlessui/react';
 
 const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 25;
@@ -32,7 +34,17 @@ type CourseTermsProps = {
   variant: 'large' | 'small';
 };
 
+const ToolTip = ({ term }: { term: string }) => {
+  return (
+    <div className='absolute	 -top-1 left-0 z-10 w-28 -translate-x-0 -translate-y-full transform rounded-lg bg-white p-2 text-center text-xs font-bold text-gray-700 dark:bg-neutral-500 dark:text-gray-100'>
+      {term}
+    </div>
+  );
+};
+
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
+  const [hoveringOn, setHoveringOn] = useState('');
+
   const container = classNames('flex flex-wrap mr-auto');
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
 
@@ -59,15 +71,38 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         <div
           key={i}
           className={classNames(
-            'my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 p-2'
+            'relative my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
+            variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 max-w-fit p-2'
           )}
         >
           <div className='flex items-center space-x-2'>
-            {termToIcon(instructor.term, variant)}
-
-            <div className='pr-1 dark:text-gray-200'>{instructor.name}</div>
+            {variant === 'large' ? (
+              <div
+                onMouseEnter={() => setHoveringOn(instructor.term)}
+                onMouseLeave={() => setHoveringOn('')}
+              >
+                {termToIcon(instructor.term, variant)}
+              </div>
+            ) : (
+              <div>{termToIcon(instructor.term, variant)}</div>
+            )}
+            <div className='pr-1 text-gray-700 dark:text-gray-200'>
+              {instructor.name}
+            </div>
           </div>
+          <Transition
+            show={hoveringOn === instructor.term}
+            enter='transition-opacity duration-200'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='transition-opacity duration-200'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
+            <div>
+              <ToolTip term={instructor.term} />
+            </div>
+          </Transition>
         </div>
       ))}
     </div>

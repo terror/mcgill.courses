@@ -12,11 +12,6 @@ import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 import { DarkModeToggle } from './DarkModeToggle';
 
-export const navigation = [
-  { name: 'Explore', href: '/explore' },
-  { name: 'About', href: '/about' },
-];
-
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [arrowColor, setArrowColor] = useState(
@@ -68,21 +63,18 @@ export const Navbar = () => {
           </button>
         </div>
         {pathName !== '/' ? (
-          <div className='my-auto hidden flex-1 justify-center align-middle lg:flex'>
+          <div className='mx-3 my-auto hidden flex-1 justify-center align-middle lg:flex'>
             <CourseSearchBar
               results={results}
               handleInputChange={handleInputChange}
             />
           </div>
         ) : null}
-        <div className='ml-6 flex min-w-fit flex-row lg:flex-1'>
+        <div className='flex min-w-fit flex-row lg:flex-1'>
           <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
             <DarkModeToggle />
-            {navigation.map((item) => (
-              <NavItem name={item.name} href={item.href} key={item.name} />
-            ))}
           </div>
-          <div className='hidden lg:ml-12 lg:flex lg:justify-end'>
+          <div className='hidden lg:ml-5 lg:flex lg:justify-end'>
             {user ? (
               <ProfileDropdown />
             ) : (
