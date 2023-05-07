@@ -120,7 +120,7 @@ export const CoursePage = () => {
           <CourseRequirements requirements={requirements} />
         </div>
         <div className='flex w-full flex-row justify-between'>
-          <div className='mx-8 my-4 w-full md:mt-8'>
+          <div className='my-4 ml-8 mr-8 w-full md:mr-4 md:mt-4'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}
