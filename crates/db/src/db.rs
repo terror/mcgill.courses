@@ -91,6 +91,10 @@ impl Db {
       )
       .await?;
 
+    self
+      .create_instructor_index(doc! { "name": "text" }, doc! { "name": 10 })
+      .await?;
+
     info!("Course index complete.");
 
     Ok(())
@@ -141,9 +145,9 @@ impl Db {
     )
   }
 
-  pub async fn search(&self, query: &str) -> Result<Vec<Course>> {
-    Ok(
-      self
+  pub async fn search(&self, query: &str) -> Result<SearchResults> {
+    Ok(SearchResults {
+      courses: self
         .database
         .collection::<Course>(Self::COURSE_COLLECTION)
         .find(
@@ -156,7 +160,20 @@ impl Db {
         .await?
         .try_collect::<Vec<Course>>()
         .await?,
-    )
+      instructors: self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .find(
+          doc! { "$text" : { "$search": query } },
+          FindOptions::builder()
+            .sort(doc! { "score": { "$meta" : "textScore" }})
+            .limit(10)
+            .build(),
+        )
+        .await?
+        .try_collect::<Vec<Instructor>>()
+        .await?,
+    })
   }
 
   pub async fn find_course_by_id(&self, id: &str) -> Result<Option<Course>> {
@@ -411,6 +428,26 @@ impl Db {
     )
   }
 
+  async fn create_instructor_index(
+    &self,
+    keys: Document,
+    weights: Document,
+  ) -> Result<CreateIndexResult> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .create_index(
+          IndexModel::builder()
+            .keys(keys)
+            .options(IndexOptions::builder().weights(weights).build())
+            .build(),
+          None,
+        )
+        .await?,
+    )
+  }
+
   #[cfg(test)]
   async fn reviews(&self) -> Result<Vec<Review>> {
     Ok(
@@ -613,11 +650,11 @@ mod tests {
       123
     );
 
-    let courses = db.search("COMP 202").await.unwrap();
+    let results = db.search("COMP 202").await.unwrap();
 
-    assert_eq!(courses.len(), 10);
+    assert_eq!(results.courses.len(), 10);
 
-    let first = courses.first().unwrap();
+    let first = results.courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
@@ -667,11 +704,11 @@ mod tests {
       123
     );
 
-    let courses = db.search("COMP202").await.unwrap();
+    let results = db.search("COMP202").await.unwrap();
 
-    assert_eq!(courses.len(), 1);
+    assert_eq!(results.courses.len(), 1);
 
-    let first = courses.first().unwrap();
+    let first = results.courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
@@ -697,11 +734,11 @@ mod tests {
       123
     );
 
-    let courses = db.search("foundations of").await.unwrap();
+    let results = db.search("foundations of").await.unwrap();
 
-    assert_eq!(courses.len(), 1);
+    assert_eq!(results.courses.len(), 1);
 
-    let first = courses.first().unwrap();
+    let first = results.courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
