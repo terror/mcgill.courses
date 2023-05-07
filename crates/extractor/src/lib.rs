@@ -494,18 +494,22 @@ mod tests {
       .unwrap(),
       vec![
         Instructor {
+          id: None,
           name: "Adrian Roshan Vetta".into(),
           term: "Fall 2022".into()
         },
         Instructor {
+          id: None,
           name: "Jérôme Fortier".into(),
           term: "Fall 2022".into()
         },
         Instructor {
+          id: None,
           name: "Jérôme Fortier".into(),
           term: "Winter 2023".into()
         },
         Instructor {
+          id: None,
           name: "Jeremy Macdonald".into(),
           term: "Winter 2023".into()
         }
@@ -544,22 +548,27 @@ mod tests {
         description: "An examination of the theoretical foundation for financial reporting and revenue recognition. The tools of accounting, including a review of the accounting process and compound interest concepts. Asset recognition, measurement and disclosure. Partnership accounting.".into(),
         instructors: vec![
           Instructor {
+            id: None,
             name: "Desmond Tsang".into(),
             term: "Fall 2009".into(),
           },
           Instructor {
+            id: None,
             name: "Ralph Cecere".into(),
             term: "Fall 2009".into(),
           },
           Instructor {
+            id: None,
             name: "Robert Porrello".into(),
             term: "Fall 2009".into(),
           },
           Instructor {
+            id: None,
             name: "Pietro Martucci".into(),
             term: "Winter 2010".into(),
           },
           Instructor {
+            id: None,
             name: "Robert Porrello".into(),
             term: "Winter 2010".into(),
           },
@@ -583,7 +592,7 @@ mod tests {
         code: "240".into(),
         faculty_url: "/study/2022-2023/faculties/science".into(),
         description: "Introduction to discrete mathematics and applications. Logical reasoning and methods of proof. Elementary number theory and cryptography  prime numbers, modular equations, RSA encryption. Combinatorics  basic enumeration, combinatorial methods, recurrence equations. Graph theory  trees, cycles, planar\ngraphs.".into(),
-        instructors: vec![Instructor { name: "Adrian Roshan Vetta".into(), term: "Fall 2022".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Fall 2022".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Winter 2023".into() }, Instructor { name: "Jeremy Macdonald".into(), term: "Winter 2023".into() }],
+        instructors: vec![Instructor { id: None, name: "Adrian Roshan Vetta".into(), term: "Fall 2022".into() }, Instructor { id: None, name: "Jérôme Fortier".into(), term: "Fall 2022".into() }, Instructor { id: None, name: "Jérôme Fortier".into(), term: "Winter 2023".into() }, Instructor { id: None, name: "Jeremy Macdonald".into(), term: "Winter 2023".into() }],
         requirements: Requirements { corequisites: vec!["MATH 133".into()], prerequisites: vec![], restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()) } }
     );
   }
@@ -631,6 +640,7 @@ mod tests {
         faculty_url: "/study/2022-2023/faculties/science".into(),
         description: "The laboratory component of PHYS 142.".into(),
         instructors: vec![Instructor {
+          id: None,
           name: "Hong Guo".into(),
           term: "Winter 2023".into()
         }],

@@ -58,19 +58,14 @@ impl Db {
       }
     }
 
-    for batch in courses.clone() {
+    for batch in courses {
       for course in batch {
-        self.add_course(course).await?;
-      }
-    }
+        self.add_course(course.clone()).await?;
 
-    for instructor in courses
-      .iter()
-      .flatten()
-      .map(|course| course.instructors.clone())
-      .flatten()
-    {
-      self.add_instructor(instructor).await?;
+        for instructor in course.instructors {
+          self.add_instructor(instructor).await?;
+        }
+      }
     }
 
     info!("Finished seeding courses and instructors, building indices...");
@@ -398,20 +393,20 @@ impl Db {
       self
         .database
         .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-        .update_one(filter, update, None)
+        .update_one(filter, UpdateModifications::Document(update), None)
         .await?,
     )
   }
 
   async fn find_instructor(
     &self,
-    filter: Document,
+    query: Document,
   ) -> Result<Option<Instructor>> {
     Ok(
       self
         .database
         .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-        .find_one(filter, None)
+        .find_one(query, None)
         .await?,
     )
   }

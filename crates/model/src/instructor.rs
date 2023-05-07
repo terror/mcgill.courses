@@ -13,6 +13,7 @@ use super::*;
   Serialize,
 )]
 pub struct Instructor {
+  #[serde(rename = "_id")]
   pub id: Option<String>,
   pub name: String,
   pub term: String,
