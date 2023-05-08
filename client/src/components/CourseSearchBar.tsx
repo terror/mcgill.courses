@@ -11,7 +11,7 @@ enum SearchResultType {
   Instructor,
 }
 
-interface SeachResultProps {
+interface SearchResultProps {
   index: number;
   query?: string;
   selectedIndex: number;
@@ -20,14 +20,14 @@ interface SeachResultProps {
   url: string;
 }
 
-const SeachResult: React.FC<SeachResultProps> = ({
+const SearchResult = ({
   index,
   query,
   selectedIndex,
   text,
   type,
   url,
-}) => {
+}: SearchResultProps) => {
   return (
     <Link to={url}>
       <div
@@ -133,7 +133,7 @@ export const CourseSearchBar = ({
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
           {results.courses.map((result, index) => (
-            <SeachResult
+            <SearchResult
               index={index}
               query={results.query}
               selectedIndex={selectedIndex}
@@ -143,7 +143,7 @@ export const CourseSearchBar = ({
             />
           ))}
           {results.instructors.map((result, index) => (
-            <SeachResult
+            <SearchResult
               index={results.courses.length + index}
               query={results.query}
               selectedIndex={selectedIndex}
