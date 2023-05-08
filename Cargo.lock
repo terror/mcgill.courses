@@ -671,6 +671,7 @@ dependencies = [
  "model",
  "mongodb",
  "pretty_assertions",
+ "serde",
  "serde_json",
  "stop-words",
  "tempdir",

@@ -14,7 +14,7 @@ impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
     let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
 
-    log::debug!("Listening on port: {}", addr.port());
+    debug!("Listening on port: {}", addr.port());
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
@@ -23,7 +23,7 @@ impl Server {
 
       tokio::spawn(async move {
         if let Err(error) = clone.seed(source).await {
-          log::error!("error: {error}");
+          error!("error: {error}");
         }
       });
     }

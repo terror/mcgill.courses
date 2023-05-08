@@ -495,18 +495,22 @@ mod tests {
       vec![
         Instructor {
           name: "Adrian Roshan Vetta".into(),
+          name_ngrams: None,
           term: "Fall 2022".into()
         },
         Instructor {
           name: "Jérôme Fortier".into(),
+          name_ngrams: None,
           term: "Fall 2022".into()
         },
         Instructor {
           name: "Jérôme Fortier".into(),
+          name_ngrams: None,
           term: "Winter 2023".into()
         },
         Instructor {
           name: "Jeremy Macdonald".into(),
+          name_ngrams: None,
           term: "Winter 2023".into()
         }
       ]
@@ -545,22 +549,27 @@ mod tests {
         instructors: vec![
           Instructor {
             name: "Desmond Tsang".into(),
+            name_ngrams: None,
             term: "Fall 2009".into(),
           },
           Instructor {
             name: "Ralph Cecere".into(),
+            name_ngrams: None,
             term: "Fall 2009".into(),
           },
           Instructor {
             name: "Robert Porrello".into(),
+            name_ngrams: None,
             term: "Fall 2009".into(),
           },
           Instructor {
             name: "Pietro Martucci".into(),
+            name_ngrams: None,
             term: "Winter 2010".into(),
           },
           Instructor {
             name: "Robert Porrello".into(),
+            name_ngrams: None,
             term: "Winter 2010".into(),
           },
         ],
@@ -583,8 +592,34 @@ mod tests {
         code: "240".into(),
         faculty_url: "/study/2022-2023/faculties/science".into(),
         description: "Introduction to discrete mathematics and applications. Logical reasoning and methods of proof. Elementary number theory and cryptography  prime numbers, modular equations, RSA encryption. Combinatorics  basic enumeration, combinatorial methods, recurrence equations. Graph theory  trees, cycles, planar\ngraphs.".into(),
-        instructors: vec![Instructor { name: "Adrian Roshan Vetta".into(), term: "Fall 2022".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Fall 2022".into() }, Instructor { name: "Jérôme Fortier".into(), term: "Winter 2023".into() }, Instructor { name: "Jeremy Macdonald".into(), term: "Winter 2023".into() }],
-        requirements: Requirements { corequisites: vec!["MATH 133".into()], prerequisites: vec![], restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()) } }
+        instructors: vec![
+          Instructor {
+            name: "Adrian Roshan Vetta".into(),
+            name_ngrams: None,
+            term: "Fall 2022".into()
+          },
+          Instructor {
+            name: "Jérôme Fortier".into(),
+            name_ngrams: None,
+            term: "Fall 2022".into()
+          },
+          Instructor {
+            name: "Jérôme Fortier".into(),
+            name_ngrams: None,
+            term: "Winter 2023".into()
+          },
+          Instructor {
+            name: "Jeremy Macdonald".into(),
+            name_ngrams: None,
+            term: "Winter 2023".into()
+          }
+        ],
+        requirements: Requirements {
+          corequisites: vec!["MATH 133".into()],
+          prerequisites: vec![],
+          restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into())
+        }
+      }
     );
   }
 
@@ -632,7 +667,8 @@ mod tests {
         description: "The laboratory component of PHYS 142.".into(),
         instructors: vec![Instructor {
           name: "Hong Guo".into(),
-          term: "Winter 2023".into()
+          name_ngrams: None,
+          term: "Winter 2023".into(),
         }],
         requirements: Requirements {
           corequisites: vec![],

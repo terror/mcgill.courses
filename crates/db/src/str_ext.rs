@@ -31,7 +31,7 @@ impl StrExt for &str {
 }
 
 #[test]
-fn ngram_single_word_test() {
+fn ngram_single_word() {
   assert_eq!(
     "MATH240".ngrams(),
     String::from("MAT MATH MATH2 MATH24 MATH240")
@@ -39,7 +39,7 @@ fn ngram_single_word_test() {
 }
 
 #[test]
-fn ngram_multi_word_test() {
+fn ngram_multi_word() {
   assert_eq!(
       "Discrete Structures".ngrams(),
       String::from("Dis Disc Discr Discre Discret Discrete Str Stru Struc Struct Structu Structur Structure Structures")
@@ -47,7 +47,7 @@ fn ngram_multi_word_test() {
 }
 
 #[test]
-fn stop_word_filter_test() {
+fn stop_word_filter() {
   assert_eq!(
     "Algorithms and Data Structures".filter_stopwords(),
     String::from("Algorithms Data Structures")

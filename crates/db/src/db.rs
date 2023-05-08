@@ -7,6 +7,7 @@ pub struct Db {
 
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
+  const INSTRUCTOR_COLLECTION: &str = "instructors";
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
@@ -59,41 +60,19 @@ impl Db {
 
     for batch in courses {
       for course in batch {
-        match self.find_course(doc! { "_id": &course.id, }).await? {
-          Some(found) => {
-            self
-            .update_course(
-              doc! { "_id": &course.id },
-              doc! {
-                "$set": {
-                  "corequisites": course.corequisites,
-                  "credits": course.credits,
-                  "description": course.description,
-                  "facultyUrl": course.faculty_url,
-                  "instructors": course.instructors.combine(found.instructors),
-                  "level": course.level,
-                  "prerequisites": course.prerequisites,
-                  "restrictions": course.restrictions,
-                  "schedule": course.schedule.unwrap_or(Vec::new()).combine(found.schedule.unwrap_or(Vec::new())),
-                  "terms": course.terms.combine(found.terms),
-                  "title": course.title,
-                  "url": course.url
-                }
-              },
-            )
-            .await?;
-          }
-          None => {
-            self.add_course(course).await?;
-          }
+        self.add_course(course.clone()).await?;
+
+        for instructor in course.instructors {
+          self.add_instructor(instructor).await?;
         }
       }
     }
 
-    info!("Finished seeding courses, building index...");
+    info!("Building course index...");
 
     self
-      .create_course_index(
+      .create_index::<Course>(
+        Self::COURSE_COLLECTION,
         doc! {
           "subject": "text",
           "code": "text",
@@ -113,7 +92,17 @@ impl Db {
       )
       .await?;
 
-    info!("Course index complete.");
+    info!("Building instructor index...");
+
+    self
+      .create_index::<Instructor>(
+        Self::INSTRUCTOR_COLLECTION,
+        doc! { "name": "text", "nameNgrams": "text" },
+        doc! { "name": 10, "nameNgrams": 4 },
+      )
+      .await?;
+
+    info!("All indices complete.");
 
     Ok(())
   }
@@ -152,13 +141,9 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>(Db::COURSE_COLLECTION)
+        .collection::<Course>(Self::COURSE_COLLECTION)
         .find(
-          if document.is_empty() {
-            None
-          } else {
-            Some(document)
-          },
+          (!document.is_empty()).then_some(document),
           FindOptions::builder().skip(offset).limit(limit).build(),
         )
         .await?
@@ -167,24 +152,19 @@ impl Db {
     )
   }
 
-  pub async fn search(&self, query: &str) -> Result<Vec<Course>> {
-    info!("Received query: {query}");
-
-    Ok(
-      self
-        .database
-        .collection::<Course>(Db::COURSE_COLLECTION)
-        .find(
-          doc! { "$text" : { "$search": query } },
-          FindOptions::builder()
-            .sort(doc! { "score": { "$meta" : "textScore" }})
-            .limit(10)
-            .build(),
-        )
+  pub async fn search(&self, query: &str) -> Result<SearchResults> {
+    Ok(SearchResults {
+      courses: self
+        .text_search::<Course>(Self::COURSE_COLLECTION, query, 10)
         .await?
-        .try_collect::<Vec<Course>>()
+        .try_collect()
         .await?,
-    )
+      instructors: self
+        .text_search::<Instructor>(Self::INSTRUCTOR_COLLECTION, query, 5)
+        .await?
+        .try_collect()
+        .await?,
+    })
   }
 
   pub async fn find_course_by_id(&self, id: &str) -> Result<Option<Course>> {
@@ -202,7 +182,7 @@ impl Db {
       Ok(
         self
           .database
-          .collection::<Review>(Db::REVIEW_COLLECTION)
+          .collection::<Review>(Self::REVIEW_COLLECTION)
           .insert_one(review, None)
           .await?,
       )
@@ -213,7 +193,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .collection::<Review>(Self::REVIEW_COLLECTION)
         .update_one(
           doc! {
             "courseId": review.course_id,
@@ -241,7 +221,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .collection::<Review>(Self::REVIEW_COLLECTION)
         .delete_one(
           doc! {
             "courseId": course_id,
@@ -275,7 +255,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .collection::<Review>(Self::REVIEW_COLLECTION)
         .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?,
     )
@@ -285,7 +265,7 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .collection::<Review>(Self::REVIEW_COLLECTION)
         .find(query, None)
         .await?
         .try_collect::<Vec<Review>>()
@@ -297,27 +277,52 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>(Db::COURSE_COLLECTION)
+        .collection::<Course>(Self::COURSE_COLLECTION)
         .find_one(query, None)
         .await?,
     )
   }
 
-  async fn add_course(&self, course: Course) -> Result<InsertOneResult> {
-    Ok(
-      self
-        .database
-        .collection::<Course>(Db::COURSE_COLLECTION)
-        .insert_one(
-          Course {
-            id_ngrams: Some(course.id.ngrams()),
-            title_ngrams: Some(course.title.filter_stopwords().ngrams()),
-            ..course
-          },
-          None,
-        )
-        .await?,
-    )
+  async fn add_course(&self, course: Course) -> Result {
+    Ok(match self.find_course(doc! { "_id": &course.id }).await? {
+      Some(found) => {
+        self
+          .update_course(
+            doc! { "_id": &course.id },
+            doc! {
+              "$set": {
+                "corequisites": course.corequisites,
+                "credits": course.credits,
+                "description": course.description,
+                "facultyUrl": course.faculty_url,
+                "instructors": course.instructors.combine(found.instructors),
+                "level": course.level,
+                "prerequisites": course.prerequisites,
+                "restrictions": course.restrictions,
+                "schedule": course.schedule.combine_opt(found.schedule),
+                "terms": course.terms.combine(found.terms),
+                "title": course.title,
+                "url": course.url
+              }
+            },
+          )
+          .await?;
+      }
+      None => {
+        self
+          .database
+          .collection::<Course>(Self::COURSE_COLLECTION)
+          .insert_one(
+            Course {
+              id_ngrams: Some(course.id.ngrams()),
+              title_ngrams: Some(course.title.filter_stopwords().ngrams()),
+              ..course
+            },
+            None,
+          )
+          .await?;
+      }
+    })
   }
 
   async fn update_course(
@@ -328,21 +333,53 @@ impl Db {
     Ok(
       self
         .database
-        .collection::<Course>(Db::COURSE_COLLECTION)
+        .collection::<Course>(Self::COURSE_COLLECTION)
         .update_one(query, UpdateModifications::Document(update), None)
         .await?,
     )
   }
 
-  async fn create_course_index(
+  async fn text_search<T>(
     &self,
-    keys: Document,
-    weights: Document,
-  ) -> Result<CreateIndexResult> {
+    collection: &str,
+    query: &str,
+    limit: i64,
+  ) -> Result<Cursor<T>>
+  where
+    T: Serialize + DeserializeOwned,
+  {
     Ok(
       self
         .database
-        .collection::<Course>(Db::COURSE_COLLECTION)
+        .collection::<T>(collection)
+        .find(
+          doc! {
+            "$text": {
+              "$search": query
+            }
+          },
+          FindOptions::builder()
+            .sort(doc! { "score": { "$meta" : "textScore" }})
+            .limit(limit)
+            .build(),
+        )
+        .await?,
+    )
+  }
+
+  async fn create_index<T>(
+    &self,
+    collection: &str,
+    keys: Document,
+    weights: Document,
+  ) -> Result<CreateIndexResult>
+  where
+    T: Serialize + DeserializeOwned,
+  {
+    Ok(
+      self
+        .database
+        .collection::<T>(collection)
         .create_index(
           IndexModel::builder()
             .keys(keys)
@@ -354,15 +391,63 @@ impl Db {
     )
   }
 
+  async fn add_instructor(&self, instructor: Instructor) -> Result {
+    Ok(
+      if self
+        .find_instructor(doc! { "name": &instructor.name })
+        .await?
+        .is_none()
+      {
+        self
+          .database
+          .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+          .insert_one(
+            Instructor {
+              name_ngrams: Some(instructor.name.ngrams()),
+              ..instructor
+            },
+            None,
+          )
+          .await?;
+      },
+    )
+  }
+
+  async fn find_instructor(
+    &self,
+    query: Document,
+  ) -> Result<Option<Instructor>> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .find_one(query, None)
+        .await?,
+    )
+  }
+
   #[cfg(test)]
   async fn reviews(&self) -> Result<Vec<Review>> {
     Ok(
       self
         .database
-        .collection::<Review>(Db::REVIEW_COLLECTION)
+        .collection::<Review>(Self::REVIEW_COLLECTION)
         .find(None, None)
         .await?
         .try_collect::<Vec<Review>>()
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn instructors(&self) -> Result<Vec<Instructor>> {
+    Ok(
+      self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Instructor>>()
         .await?,
     )
   }
@@ -556,11 +641,11 @@ mod tests {
       123
     );
 
-    let courses = db.search("COMP 202").await.unwrap();
+    let results = db.search("COMP 202").await.unwrap();
 
-    assert_eq!(courses.len(), 10);
+    assert_eq!(results.courses.len(), 10);
 
-    let first = courses.first().unwrap();
+    let first = results.courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
@@ -610,11 +695,11 @@ mod tests {
       123
     );
 
-    let courses = db.search("COMP202").await.unwrap();
+    let results = db.search("COMP202").await.unwrap();
 
-    assert_eq!(courses.len(), 1);
+    assert_eq!(results.courses.len(), 1);
 
-    let first = courses.first().unwrap();
+    let first = results.courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
@@ -640,11 +725,11 @@ mod tests {
       123
     );
 
-    let courses = db.search("foundations of").await.unwrap();
+    let results = db.search("foundations of").await.unwrap();
 
-    assert_eq!(courses.len(), 1);
+    assert_eq!(results.courses.len(), 1);
 
-    let first = courses.first().unwrap();
+    let first = results.courses.first().unwrap();
 
     assert_eq!(first.subject, "COMP");
     assert_eq!(first.code, "202");
@@ -1056,5 +1141,61 @@ mod tests {
         .iter()
         .any(|term| term.starts_with(&"Winter".to_string())));
     }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn add_instructors() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let instructors = vec![
+      Instructor {
+        name: "foo".into(),
+        term: "Summer 2023".into(),
+        ..Default::default()
+      },
+      Instructor {
+        name: "bar".into(),
+        term: "Summer 2023".into(),
+        ..Default::default()
+      },
+      Instructor {
+        name: "bar".into(),
+        term: "Winter 2023".into(),
+        ..Default::default()
+      },
+    ];
+
+    for instructor in instructors {
+      db.add_instructor(instructor).await.unwrap();
+    }
+
+    assert_eq!(db.instructors().await.unwrap().len(), 2);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn search_instructor_by_name_exact() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("search.json")).unwrap();
+
+    db.seed(source.clone()).await.unwrap();
+
+    assert_eq!(
+      db.courses(None, None, None, None, None)
+        .await
+        .unwrap()
+        .len(),
+      123
+    );
+
+    let results = db.search("Giulia Alberini").await.unwrap();
+
+    assert_eq!(results.instructors.len(), 1);
+
+    assert_eq!(results.instructors.first().unwrap().name, "Giulia Alberini");
   }
 }

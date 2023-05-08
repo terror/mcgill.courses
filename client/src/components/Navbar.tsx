@@ -1,13 +1,11 @@
-import { Bars3Icon, MoonIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
 import { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
-import { NavItem } from './NavItem';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 import { DarkModeToggle } from './DarkModeToggle';
@@ -21,6 +19,7 @@ export const Navbar = () => {
   const [results, setResults] = useState<SearchResults>({
     query: '',
     courses: [],
+    instructors: [],
   });
 
   const location = useLocation();
@@ -30,9 +29,9 @@ export const Navbar = () => {
     try {
       setResults({
         query,
-        courses: await fetchClient.getData<Course[]>(
+        ...(await fetchClient.getData<SearchResults>(
           `/search?query=${encodeURIComponent(query)}`
-        ),
+        )),
       });
     } catch (err) {
       console.error(err);

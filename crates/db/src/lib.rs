@@ -4,16 +4,17 @@ use {
   itertools::Itertools,
   lazy_static::lazy_static,
   log::info,
-  model::{Course, Review},
+  model::{Course, Instructor, Review, SearchResults},
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions},
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
-    Client, Database, IndexModel,
+    Client, Cursor, Database, IndexModel,
   },
+  serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  {crate::vec_ext::VecExt, str_ext::StrExt},
+  {crate::combine::Combine, str_ext::StrExt},
 };
 
 #[cfg(test)]
@@ -27,8 +28,8 @@ use {
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
+mod combine;
 mod db;
 mod str_ext;
-mod vec_ext;
 
 pub use crate::db::Db;

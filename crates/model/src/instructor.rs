@@ -12,8 +12,10 @@ use super::*;
   PartialOrd,
   Serialize,
 )]
+#[serde(rename_all = "camelCase")]
 pub struct Instructor {
   pub name: String,
+  pub name_ngrams: Option<String>,
   pub term: String,
 }
 
@@ -21,6 +23,7 @@ impl Into<Bson> for Instructor {
   fn into(self) -> bson::Bson {
     Bson::Document(doc! {
       "name": self.name,
+      "name_ngrams": self.name_ngrams,
       "term": self.term,
     })
   }

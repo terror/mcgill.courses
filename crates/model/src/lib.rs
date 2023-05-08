@@ -11,6 +11,7 @@ mod instructor;
 mod requirements;
 mod review;
 mod schedule;
+mod search_results;
 
 pub use crate::{
   course::Course,
@@ -20,4 +21,5 @@ pub use crate::{
   requirements::{Requirement, Requirements},
   review::Review,
   schedule::*,
+  search_results::SearchResults,
 };
