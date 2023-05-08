@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { Review } from '../model/Review';
 import { Spinner } from '../components/Spinner';
+import { JumpToTopButton } from '../components/JumpToTopButton';
 
 export const Profile = () => {
   const user = useAuth();
@@ -20,6 +21,7 @@ export const Profile = () => {
 
   return (
     <Layout>
+      <JumpToTopButton />
       <div className='flex flex-col justify-center'>
         <div className='mx-auto'>
           <div className='mt-10'>
@@ -49,19 +51,25 @@ export const Profile = () => {
                 .map((review) => {
                   return (
                     <div className='mx-5'>
-                      <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
-                        {review.courseId}
-                      </h2>
-                      <Link to={`/course/${review.courseId}`}>
-                        <div className='my-4 rounded-lg border-gray-800 duration-300 ease-in-out hover:scale-[103%]'>
-                          <CourseReview
-                            review={review}
-                            canModify={false}
-                            openEditReview={() => null}
-                            handleDelete={() => null}
-                          />
-                        </div>
-                      </Link>
+                      <div className='flex'>
+                        <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
+                          {review.courseId}
+                        </h2>
+                        <Link
+                          to={`/course/${review.courseId}`}
+                          className='flex-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
+                        >
+                          View Course
+                        </Link>
+                      </div>
+                      <div className='my-4 rounded-lg border-gray-800 duration-300 ease-in-out'>
+                        <CourseReview
+                          review={review}
+                          canModify={false}
+                          openEditReview={() => null}
+                          handleDelete={() => null}
+                        />
+                      </div>
                     </div>
                   );
                 })
