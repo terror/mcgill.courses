@@ -99,7 +99,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               <div className='flex flex-col'>
                 <div
                   className={classNames(
-                    'flex flex-row justify-between border-t border-neutral-300 p-2 px-3 dark:border-neutral-600'
+                    'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 dark:border-neutral-600'
                   )}
                 >
                   <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
