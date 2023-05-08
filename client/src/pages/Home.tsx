@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
+import { Alert } from '../components/Alert';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
 import { SearchResults } from '../model/SearchResults';
-import { Alert } from '../components/Alert';
+import { fetchClient } from '../lib/fetchClient';
 import { useSearchParams } from 'react-router-dom';
 
 const alerts: Map<string, string> = new Map([
@@ -13,19 +12,21 @@ const alerts: Map<string, string> = new Map([
 ]);
 
 export const Home = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
+
   const [results, setResults] = useState<SearchResults>({
     query: '',
     courses: [],
+    instructors: [],
   });
 
   const handleInputChange = async (query: string) => {
     try {
       setResults({
         query,
-        courses: await fetchClient.getData<Course[]>(
+        ...(await fetchClient.getData<SearchResults>(
           `/search?query=${encodeURIComponent(query)}`
-        ),
+        )),
       });
     } catch (err) {
       console.error(err);
