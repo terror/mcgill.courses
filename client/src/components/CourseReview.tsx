@@ -46,7 +46,7 @@ export const CourseReview = ({
                   {review.content.substring(0, 200) + '...'}
                 </div>
                 <button
-                  className='ml-1 mr-auto text-gray-700 underline dark:text-gray-300'
+                  className='duratio-300 ml-1 mr-auto text-gray-700 underline transition ease-in-out hover:text-red-500 dark:text-gray-300 dark:hover:text-red-500'
                   onClick={() => setReadMore(true)}
                 >
                   Read More
