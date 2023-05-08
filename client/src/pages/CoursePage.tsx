@@ -164,7 +164,7 @@ export const CoursePage = () => {
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
         )}
-        <div className='hidden w-5/12 md:flex md:flex-none'>
+        <div className='hidden h-fit w-5/12 md:flex md:flex-none'>
           <CourseRequirements requirements={requirements} />
         </div>
       </div>
