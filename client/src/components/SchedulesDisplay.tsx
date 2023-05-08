@@ -51,6 +51,7 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
 
   useEffect(() => {
+    setCurrentlyDisplayingTerm(offeredTerms[0]);
     setCurrentlyDisplayingSchedules(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
