@@ -93,20 +93,21 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
                     'flex flex-row justify-between border-t border-neutral-300 p-2 px-3 dark:border-neutral-600'
                   )}
                 >
-                  <div className='flex flex-wrap gap-x-4 whitespace-pre-wrap text-left'>
-                    <p>
+                  <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
+                    <div className='w-20 '>
                       <span className='font-semibold'>{block.display}</span>
-                    </p>
-                    <p>
+                    </div>
+                    <div className='w-44'>
                       <span className='font-semibold'>Campus: </span>
                       {block.campus}
-                    </p>
-                    <p>
+                    </div>
+                    <div className='w-56'>
                       <span className='font-semibold'>Classroom(s): </span>
+
                       {block.location
                         ? block.location.replace(';', ',')
                         : 'N/A'}
-                    </p>
+                    </div>
                   </div>
                   <button
                     onClick={() =>
