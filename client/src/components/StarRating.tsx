@@ -12,6 +12,7 @@ export const StarRating = ({ rating }: StarRatingProps) => {
         key={i}
         strokeWidth={0}
         className={i < rating ? 'fill-red-600' : 'fill-gray-200'}
+        size={20}
       />
     );
   }
