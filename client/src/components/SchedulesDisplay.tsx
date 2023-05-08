@@ -3,6 +3,7 @@ import { TimeBlock, Block, Schedule } from '../model/Schedule';
 import { dedupe, sortTerms, sortBlocks, classNames } from '../lib/utils';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Transition } from '@headlessui/react';
+import { Course } from '../model/Course';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -37,11 +38,15 @@ const VSBtimeToDisplay = (time: string) => {
   `;
 };
 
-export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
+export const SchedulesDisplay = ({ course }: { course: Course }) => {
+  const schedules = course.schedule;
+
   const offeredTerms = sortTerms(
     dedupe(schedules.map((schedule) => schedule.term))
   );
 
+  const [currrentlyDisplayingCourse, setCurrentlyDisplayingCourse] =
+    useState<string>(course._id);
   const [currentlyDisplayingTerm, setCurrentlyDisplayingTerm] =
     useState<string>(offeredTerms[0]);
   const [currentlyDisplayingSchedules, setCurrentlyDisplayingSchedules] =
@@ -49,9 +54,14 @@ export const SchedulesDisplay = ({ schedules }: { schedules: Schedule[] }) => {
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
+  console.log(currrentlyDisplayingCourse);
+
+  if (currrentlyDisplayingCourse !== course._id) {
+    setCurrentlyDisplayingCourse(course._id);
+    setCurrentlyDisplayingTerm(offeredTerms[0]);
+  }
 
   useEffect(() => {
-    setCurrentlyDisplayingTerm(offeredTerms[0]);
     setCurrentlyDisplayingSchedules(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );

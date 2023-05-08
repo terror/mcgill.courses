@@ -116,7 +116,7 @@ export const CoursePage = () => {
         rating={averageRating}
         numReviews={reviews.length}
       />
-      <SchedulesDisplay schedules={course.schedule} />
+      <SchedulesDisplay course={course} />
       <div className='flex flex-col md:flex-row'>
         <div className='mx-8 mt-4 flex md:hidden'>
           <CourseRequirements requirements={requirements} />
