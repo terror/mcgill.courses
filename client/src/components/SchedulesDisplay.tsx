@@ -54,7 +54,6 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
-  console.log(currrentlyDisplayingCourse);
 
   if (currrentlyDisplayingCourse !== course._id) {
     setCurrentlyDisplayingCourse(course._id);
