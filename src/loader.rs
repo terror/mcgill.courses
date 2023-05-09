@@ -32,10 +32,10 @@ pub(crate) struct Loader {
   mcgill_term: String,
   #[clap(
     long,
-    default_value = "202305",
+    default_values = ["202305", "202309", "202401"],
     help = "The schedule builder term to scrape"
   )]
-  vsb_term: usize,
+  vsb_terms: Vec<usize>,
   #[clap(
     long,
     default_value = "false",
@@ -184,7 +184,7 @@ impl Loader {
       schedule: self.scrape_vsb.then_some(
         VsbClient::new(&client, self.retries)?.schedule(
           &format!("{}-{}", course_page.subject, course_page.code),
-          self.vsb_term,
+          self.vsb_terms.clone(),
         )?,
       ),
     })
