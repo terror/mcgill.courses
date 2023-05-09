@@ -54,7 +54,11 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
               <p className='text-gray-500 dark:text-gray-400'>
                 {requirements.restrictions}
               </p>
-            ) : null}
+            ) : (
+              <p className='text-gray-500 dark:text-gray-400'>
+                This course has no restrictions.
+              </p>
+            )}
           </div>
         </div>
       </div>
