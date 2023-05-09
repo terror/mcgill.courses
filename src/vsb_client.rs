@@ -19,15 +19,27 @@ impl<'a> VsbClient<'a> {
   pub(crate) fn schedule(
     &self,
     code: &str,
-    term: usize,
+    terms: Vec<usize>,
   ) -> Result<Vec<Schedule>> {
-    Ok(extractor::extract_course_schedules(
-      &self
-        .client
-        .get(self.url(code, term))
-        .retry(self.retries)?
-        .text()?,
-    )?)
+    log::info!("Scraping schedules for {}...", code);
+
+    Ok(
+      terms
+        .into_iter()
+        .map(|term| -> Result<Vec<Schedule>> {
+          Ok(extractor::extract_course_schedules(
+            &self
+              .client
+              .get(self.url(code, term))
+              .retry(self.retries)?
+              .text()?,
+          )?)
+        })
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
+        .flatten()
+        .collect(),
+    )
   }
 
   fn url(&self, code: &str, term: usize) -> String {
