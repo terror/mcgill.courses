@@ -78,6 +78,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       <div className='mx-8 mt-4 flex '>
         {offeredTerms.map((term, i) => (
           <button
+            key={i}
             className={classNames(
               `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
@@ -93,76 +94,81 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
         ))}
       </div>
       <div className='mx-8 flex flex-col rounded-b-lg bg-neutral-100 dark:bg-neutral-700 dark:text-gray-200'>
-        {currentlyDisplayingSchedules.map((schedule: Schedule) => (
-          <div>
-            {sortBlocks(schedule.blocks)?.map((block: Block) => (
-              <div className='flex flex-col'>
-                <div
-                  className={classNames(
-                    'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 dark:border-neutral-600'
-                  )}
-                >
-                  <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
-                    <div className='w-20 '>
-                      <span className='font-semibold'>{block.display}</span>
-                    </div>
-                    <div className='w-44'>
-                      <span className='font-semibold'>Campus: </span>
-                      {block.campus}
-                    </div>
-                    <div className='w-56'>
-                      <span className='font-semibold'>Classroom(s): </span>
-
-                      {block.location
-                        ? block.location.replace(';', ',')
-                        : 'N/A'}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() =>
-                      openBlock === block
-                        ? setOpenBlock(null)
-                        : setOpenBlock(block)
-                    }
-                  >
-                    <IoIosArrowDown
-                      className={`${
-                        openBlock === block ? 'rotate-180 transform' : ''
-                      } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
-                    />
-                  </button>
-                </div>
-                <Transition
-                  show={openBlock === block}
-                  enter='transition duration-300 ease-in-out transform'
-                  enterFrom='opacity-0 -translate-y-2'
-                  enterTo='opacity-100 translate-y-0'
-                  leave='transition duration-300 ease-in-out transform'
-                  leaveFrom='opacity-100 translate-y-0'
-                  leaveTo='opacity-0 -translate-y-2'
-                >
-                  <div className='flex flex-col'>
-                    {block.timeblocks.length > 0 ? (
-                      block.timeblocks?.map((timeblock: TimeBlock) => (
-                        <div className='flex flex-row justify-between px-3 py-2 font-medium text-gray-600 dark:text-neutral-300'>
-                          <p>{dayToWeekday(timeblock.day)}</p>
-                          <p>
-                            {VSBtimeToDisplay(timeblock.t1)} -{' '}
-                            {VSBtimeToDisplay(timeblock.t2)}
-                          </p>
-                        </div>
-                      ))
-                    ) : (
-                      <div className='flex flex-row justify-center px-3 py-2 dark:text-neutral-400'>
-                        <p>No scheduled time block.</p>
-                      </div>
+        {currentlyDisplayingSchedules.map(
+          (schedule: Schedule, scheduleIndex) => (
+            <div key={scheduleIndex}>
+              {sortBlocks(schedule.blocks)?.map((block: Block, blockIndex) => (
+                <div key={blockIndex} className='flex flex-col'>
+                  <div
+                    className={classNames(
+                      'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 dark:border-neutral-600'
                     )}
+                  >
+                    <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
+                      <div className='w-20 '>
+                        <span className='font-semibold'>{block.display}</span>
+                      </div>
+                      <div className='w-44'>
+                        <span className='font-semibold'>Campus: </span>
+                        {block.campus}
+                      </div>
+                      <div className='w-56'>
+                        <span className='font-semibold'>Classroom(s): </span>
+
+                        {block.location
+                          ? block.location.replace(';', ',')
+                          : 'N/A'}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() =>
+                        openBlock === block
+                          ? setOpenBlock(null)
+                          : setOpenBlock(block)
+                      }
+                    >
+                      <IoIosArrowDown
+                        className={`${
+                          openBlock === block ? 'rotate-180 transform' : ''
+                        } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
+                      />
+                    </button>
                   </div>
-                </Transition>
-              </div>
-            ))}
-          </div>
-        ))}
+                  <Transition
+                    show={openBlock === block}
+                    enter='transition duration-300 ease-in-out transform'
+                    enterFrom='opacity-0 -translate-y-2'
+                    enterTo='opacity-100 translate-y-0'
+                    leave='transition duration-300 ease-in-out transform'
+                    leaveFrom='opacity-100 translate-y-0'
+                    leaveTo='opacity-0 -translate-y-2'
+                  >
+                    <div className='flex flex-col'>
+                      {block.timeblocks.length > 0 ? (
+                        block.timeblocks?.map((timeblock: TimeBlock, i) => (
+                          <div
+                            key={i}
+                            className='flex flex-row justify-between px-3 py-2 font-medium text-gray-600 dark:text-neutral-300'
+                          >
+                            <p>{dayToWeekday(timeblock.day)}</p>
+                            <p>
+                              {VSBtimeToDisplay(timeblock.t1)} -{' '}
+                              {VSBtimeToDisplay(timeblock.t2)}
+                            </p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className='flex flex-row justify-center px-3 py-2 dark:text-neutral-400'>
+                          <p>No scheduled time block.</p>
+                        </div>
+                      )}
+                    </div>
+                  </Transition>
+                </div>
+              ))}
+            </div>
+          )
+        )}
       </div>
     </div>
   ) : null;

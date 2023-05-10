@@ -1,12 +1,12 @@
-import { Layout } from '../components/Layout';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { CourseReview } from '../components/CourseReview';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
+import { JumpToTopButton } from '../components/JumpToTopButton';
+import { Layout } from '../components/Layout';
+import { Link } from 'react-router-dom';
 import { Review } from '../model/Review';
 import { Spinner } from '../components/Spinner';
-import { JumpToTopButton } from '../components/JumpToTopButton';
+import { fetchClient } from '../lib/fetchClient';
+import { useAuth } from '../hooks/useAuth';
+import { useEffect, useState } from 'react';
 
 export const Profile = () => {
   const user = useAuth();
@@ -48,9 +48,9 @@ export const Profile = () => {
                     parseInt(a.timestamp.$date.$numberLong, 10) -
                     parseInt(b.timestamp.$date.$numberLong, 10)
                 )
-                .map((review) => {
+                .map((review, i) => {
                   return (
-                    <div className='mx-5'>
+                    <div key={i} className='mx-5'>
                       <div className='flex'>
                         <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
                           {review.courseId}
@@ -64,10 +64,11 @@ export const Profile = () => {
                       </div>
                       <div className='my-4 rounded-lg border-gray-800 duration-300 ease-in-out'>
                         <CourseReview
-                          review={review}
                           canModify={false}
-                          openEditReview={() => null}
                           handleDelete={() => null}
+                          isLast={i === userReviews.length - 1}
+                          openEditReview={() => null}
+                          review={review}
                         />
                       </div>
                     </div>

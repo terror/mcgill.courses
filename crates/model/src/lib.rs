@@ -1,7 +1,11 @@
 use {
   bson::{doc, Bson, DateTime},
   chrono::prelude::*,
-  serde::{Deserialize, Serialize},
+  serde::{
+    de::{self, MapAccess, Visitor},
+    Deserialize, Deserializer, Serialize,
+  },
+  std::fmt,
 };
 
 mod course;

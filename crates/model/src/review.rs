@@ -7,8 +7,64 @@ pub struct Review {
   pub course_id: String,
   pub instructor: String,
   pub rating: u32,
+  #[serde(deserialize_with = "deserialize_timestamp")]
   pub timestamp: DateTime,
   pub user_id: String,
+}
+
+struct TimestampVisitor;
+
+impl<'de> Visitor<'de> for TimestampVisitor {
+  type Value = DateTime;
+
+  fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+    formatter.write_str("an integer or a DateTime map")
+  }
+
+  fn visit_u64<E>(self, value: u64) -> Result<Self::Value, E>
+  where
+    E: de::Error,
+  {
+    Ok(DateTime::from_chrono(
+      Utc
+        .timestamp_millis_opt(value.try_into().map_err(|_| {
+          de::Error::custom("Failed to convert u64".to_string())
+        })?)
+        .unwrap(),
+    ))
+  }
+
+  fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+  where
+    A: MapAccess<'de>,
+  {
+    let mut timestamp = None;
+
+    while let Some(key) = map.next_key::<String>()? {
+      if key == "$date" {
+        if let Some(number) =
+          map.next_value::<serde_json::Value>()?.get("$numberLong")
+        {
+          timestamp = number.as_str().and_then(|s| s.parse::<i64>().ok());
+        }
+      }
+    }
+
+    Ok(DateTime::from_chrono(
+      Utc
+        .timestamp_millis_opt(
+          timestamp.ok_or_else(|| de::Error::custom("Invalid timestamp"))?,
+        )
+        .unwrap(),
+    ))
+  }
+}
+
+fn deserialize_timestamp<'de, D>(deserializer: D) -> Result<DateTime, D::Error>
+where
+  D: Deserializer<'de>,
+{
+  deserializer.deserialize_any(TimestampVisitor)
 }
 
 impl Default for Review {

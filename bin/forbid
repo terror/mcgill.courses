@@ -9,4 +9,5 @@ which rg
   --ignore-case \
   --glob !bin/forbid \
   --glob !package-lock.json \
+  --glob !seed \
   'dbg!|fixme|todo|xxx'

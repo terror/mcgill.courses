@@ -5,18 +5,21 @@ import { useState } from 'react';
 import { Review } from '../model/Review';
 import { DeleteButton } from './DeleteButton';
 import { StarRating } from './StarRating';
+import { classNames } from '../lib/utils';
 
 type CourseReviewProps = {
-  review: Review;
   canModify: boolean;
-  openEditReview: () => void;
   handleDelete: () => void;
+  isLast: boolean;
+  openEditReview: () => void;
+  review: Review;
   showCourse?: boolean;
 };
 
 export const CourseReview = ({
   review,
   canModify,
+  isLast,
   openEditReview,
   handleDelete,
   showCourse,
@@ -31,7 +34,12 @@ export const CourseReview = ({
   );
 
   return (
-    <div className='flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'>
+    <div
+      className={classNames(
+        isLast ? 'mb-8' : 'mb-4',
+        'flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
+      )}
+    >
       <div className='flex flex-col '>
         <div className='flex justify-between'>
           <div className='flex flex-col'>
@@ -49,7 +57,7 @@ export const CourseReview = ({
                   className='duratio-300 ml-1 mr-auto text-gray-700 underline transition ease-in-out hover:text-red-500 dark:text-gray-300 dark:hover:text-red-500'
                   onClick={() => setReadMore(true)}
                 >
-                  Read More
+                  Show more
                 </button>
               </>
             )}
