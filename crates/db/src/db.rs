@@ -36,34 +36,30 @@ impl Db {
   }
 
   pub async fn seed(&self, source: PathBuf) -> Result {
-    info!("Seeding courses...");
+    info!("Seeding the database...");
 
-    let mut courses = Vec::new();
+    for seed in Seed::from_path(source)? {
+      match seed {
+        Seed::Courses(courses) => {
+          log::info!("Seeding courses...");
 
-    if source.is_file() {
-      courses.push(serde_json::from_str::<Vec<Course>>(&fs::read_to_string(
-        source,
-      )?)?);
-    } else {
-      let mut paths = fs::read_dir(source)?
-        .map(|path| path.unwrap().path())
-        .collect::<Vec<_>>();
+          for course in courses {
+            self.add_course(course.clone()).await?;
 
-      paths.sort();
+            for instructor in course.instructors {
+              self.add_instructor(instructor).await?;
+            }
+          }
+        }
+        Seed::Reviews(reviews) => {
+          log::info!("Seeding reviews...");
 
-      for path in paths {
-        courses.push(serde_json::from_str::<Vec<Course>>(
-          &fs::read_to_string(path)?,
-        )?);
-      }
-    }
-
-    for batch in courses {
-      for course in batch {
-        self.add_course(course.clone()).await?;
-
-        for instructor in course.instructors {
-          self.add_instructor(instructor).await?;
+          for review in reviews {
+            self.add_review(review).await?;
+          }
+        }
+        Seed::Unknown => {
+          log::warn!("Unknown seed type encountered, continuing...");
         }
       }
     }

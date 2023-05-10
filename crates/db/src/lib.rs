@@ -1,6 +1,6 @@
 use {
   anyhow::anyhow,
-  futures::stream::TryStreamExt,
+  futures::TryStreamExt,
   itertools::Itertools,
   lazy_static::lazy_static,
   log::info,
@@ -14,7 +14,7 @@ use {
   },
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  {crate::combine::Combine, str_ext::StrExt},
+  {crate::combine::Combine, seed::Seed, str_ext::StrExt},
 };
 
 #[cfg(test)]
@@ -30,6 +30,7 @@ type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
 mod combine;
 mod db;
+mod seed;
 mod str_ext;
 
 pub use crate::db::Db;
