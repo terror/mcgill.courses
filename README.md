@@ -57,7 +57,7 @@ Options:
       --retries <RETRIES>            Number of retries [default: 10]
       --batch-size <BATCH_SIZE>      Number of pages to scrape per concurrent batch [default: 20]
       --mcgill-term <MCGILL_TERM>    The mcgill term to scrape [default: 2022-2023]
-      --vsb-term <VSB_TERM>          The schedule builder term to scrape [default: 202305]
+      --vsb-terms <VSB_TERMS>        The schedule builder term to scrape [default: 202305 202309 202401]
       --scrape-vsb                   Scrape visual schedule builder information
   -h, --help                         Print help
 ```
