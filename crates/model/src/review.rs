@@ -31,7 +31,7 @@ impl<'de> Visitor<'de> for TimestampVisitor {
       Utc.from_utc_datetime(
         &NaiveDateTime::from_timestamp_opt(
           value.try_into().map_err(|_| {
-            de::Error::custom(format!("Invalid timestamp value"))
+            de::Error::custom("Invalid timestamp value".to_string())
           })?,
           0,
         )
@@ -49,15 +49,12 @@ impl<'de> Visitor<'de> for TimestampVisitor {
     let mut timestamp: Option<i64> = None;
 
     while let Some(key) = map.next_key::<String>()? {
-      match key.as_str() {
-        "$date" => {
-          if let Some(number) =
-            map.next_value::<serde_json::Value>()?.get("$numberLong")
-          {
-            timestamp = number.as_str().unwrap_or("0").parse::<i64>().ok();
-          }
+      if key.as_str() == "$date" {
+        if let Some(number) =
+          map.next_value::<serde_json::Value>()?.get("$numberLong")
+        {
+          timestamp = number.as_str().unwrap_or("0").parse::<i64>().ok();
         }
-        _ => (),
       }
     }
 
