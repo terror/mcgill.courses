@@ -31,12 +31,12 @@ impl<'de> Visitor<'de> for TimestampVisitor {
       Utc.from_utc_datetime(
         &NaiveDateTime::from_timestamp_opt(
           value.try_into().map_err(|_| {
-            de::Error::custom("Invalid timestamp value".to_string())
+            de::Error::custom("Failed to convert u64".to_string())
           })?,
           0,
         )
         .ok_or_else(|| {
-          de::Error::custom(format!("Invalid timestamp: {}", value))
+          de::Error::custom(format!("Invalid timestamp value: {}", value))
         })?,
       ),
     ))
@@ -46,7 +46,7 @@ impl<'de> Visitor<'de> for TimestampVisitor {
   where
     A: MapAccess<'de>,
   {
-    let mut timestamp: Option<i64> = None;
+    let mut timestamp = None;
 
     while let Some(key) = map.next_key::<String>()? {
       if key.as_str() == "$date" {
