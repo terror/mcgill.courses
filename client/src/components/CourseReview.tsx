@@ -29,8 +29,8 @@ export const CourseReview = ({
   const [readMore, setReadMore] = useState(false);
 
   const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'MMM d, yyyy'
+    new Date(parseInt(review.timestamp.$date.$numberLong, 10) * 1000),
+    'PPP'
   );
 
   return (
@@ -85,7 +85,7 @@ export const CourseReview = ({
         </div>
       </div>
 
-      <div className='flex flex-row justify-between align-bottom'>
+      <div className='flex flex-row justify-between gap-3 align-bottom'>
         <p className='mb-2 mt-2 text-sm italic leading-none text-gray-700 dark:text-gray-200'>
           Taught by: {review.instructor}
         </p>
