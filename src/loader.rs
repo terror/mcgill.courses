@@ -33,7 +33,7 @@ pub(crate) struct Loader {
   #[clap(
     long,
     default_values = ["202305", "202309", "202401"],
-    help = "The schedule builder term to scrape"
+    help = "The schedule builder terms to scrape"
   )]
   vsb_terms: Vec<usize>,
   #[clap(
