@@ -101,7 +101,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                 <div key={blockIndex} className='flex flex-col'>
                   <div
                     className={classNames(
-                      'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 dark:border-neutral-600'
+                      'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-10 dark:border-neutral-600'
                     )}
                   >
                     <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
@@ -148,7 +148,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                         block.timeblocks?.map((timeblock: TimeBlock, i) => (
                           <div
                             key={i}
-                            className='flex flex-row justify-between px-3 py-2 font-medium text-gray-600 dark:text-neutral-300'
+                            className='flex flex-row justify-between px-3 py-2 pl-10 font-medium text-gray-600 dark:text-neutral-300'
                           >
                             <p>{dayToWeekday(timeblock.day)}</p>
                             <p>
