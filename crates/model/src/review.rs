@@ -1,7 +1,5 @@
 use super::*;
 
-use serde::de::MapAccess;
-
 #[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Review {
@@ -27,18 +25,12 @@ impl<'de> Visitor<'de> for TimestampVisitor {
   where
     E: de::Error,
   {
-    Ok(DateTime::from_chrono::<Utc>(
-      Utc.from_utc_datetime(
-        &NaiveDateTime::from_timestamp_opt(
-          value.try_into().map_err(|_| {
-            de::Error::custom("Failed to convert u64".to_string())
-          })?,
-          0,
-        )
-        .ok_or_else(|| {
-          de::Error::custom(format!("Invalid timestamp value: {}", value))
-        })?,
-      ),
+    Ok(DateTime::from_chrono(
+      Utc
+        .timestamp_millis_opt(value.try_into().map_err(|_| {
+          de::Error::custom("Failed to convert u64".to_string())
+        })?)
+        .unwrap(),
     ))
   }
 
@@ -58,14 +50,11 @@ impl<'de> Visitor<'de> for TimestampVisitor {
       }
     }
 
+    let timestamp =
+      timestamp.ok_or_else(|| de::Error::custom("Invalid timestamp"))?;
+
     Ok(DateTime::from_chrono(
-      Utc
-        .timestamp_millis_opt(timestamp.ok_or_else(|| {
-          de::Error::custom(
-            "Invalid timestamp: expected $date with $numberLong",
-          )
-        })?)
-        .unwrap(),
+      Utc.timestamp_millis_opt(timestamp).unwrap(),
     ))
   }
 }

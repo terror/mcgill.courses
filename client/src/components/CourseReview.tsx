@@ -31,7 +31,7 @@ export const CourseReview = ({
   );
 
   return (
-    <div className='flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'>
+    <div className='mb-4 flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'>
       <div className='flex flex-col '>
         <div className='flex justify-between'>
           <div className='flex flex-col'>
@@ -49,7 +49,7 @@ export const CourseReview = ({
                   className='duratio-300 ml-1 mr-auto text-gray-700 underline transition ease-in-out hover:text-red-500 dark:text-gray-300 dark:hover:text-red-500'
                   onClick={() => setReadMore(true)}
                 >
-                  Read More
+                  Show more
                 </button>
               </>
             )}

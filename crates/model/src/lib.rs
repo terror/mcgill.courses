@@ -2,7 +2,7 @@ use {
   bson::{doc, Bson, DateTime},
   chrono::prelude::*,
   serde::{
-    de::{self, Visitor},
+    de::{self, MapAccess, Visitor},
     Deserialize, Deserializer, Serialize,
   },
   std::fmt,
