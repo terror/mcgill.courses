@@ -141,6 +141,11 @@ export const CoursePage = () => {
               {reviews &&
                 reviews
                   .filter((review) => (user ? review.userId !== user.id : true))
+                  .sort(
+                    (a, b) =>
+                      (b.timestamp.$date.$numberLong as any) -
+                      (a.timestamp.$date.$numberLong as any)
+                  )
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
