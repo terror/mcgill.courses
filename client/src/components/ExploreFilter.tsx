@@ -265,7 +265,7 @@ export const ExploreFilter = ({
             />
           ))}
         </div>
-        <div className='space-y-2 mb-8'>
+        <div className='mb-8 space-y-2'>
           <h1 className='mt-3 text-2xl font-semibold'>Term</h1>
           {termsOptions.map((term, i) => (
             <FilterButton
