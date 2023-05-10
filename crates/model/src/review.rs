@@ -27,9 +27,12 @@ impl<'de> Visitor<'de> for TimestampVisitor {
   {
     Ok(DateTime::from_chrono(
       Utc
-        .timestamp_millis_opt(value.try_into().map_err(|_| {
-          de::Error::custom("Failed to convert u64".to_string())
-        })?)
+        .timestamp_opt(
+          value.try_into().map_err(|_| {
+            de::Error::custom("Failed to convert u64".to_string())
+          })?,
+          0,
+        )
         .unwrap(),
     ))
   }
@@ -42,11 +45,12 @@ impl<'de> Visitor<'de> for TimestampVisitor {
 
     while let Some(key) = map.next_key::<String>()? {
       if key == "$date" {
-        if let Some(number) =
-          map.next_value::<serde_json::Value>()?.get("$numberLong")
-        {
-          timestamp = number.as_str().and_then(|s| s.parse::<i64>().ok());
-        }
+        timestamp = map
+          .next_value::<serde_json::Value>()?
+          .get("$numberLong")
+          .and_then(|number| {
+            number.as_str().and_then(|s| s.parse::<i64>().ok())
+          });
       }
     }
 
