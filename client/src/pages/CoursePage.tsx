@@ -140,9 +140,11 @@ export const CoursePage = () => {
               {reviews &&
                 reviews
                   .filter((review) => (user ? review.userId !== user.id : true))
-                  .map((review) => (
+                  .map((review, i) => (
                     <CourseReview
                       review={review}
+                      isLast={i == reviews.length - 1}
+                      key={i}
                       canModify={Boolean(user && review.userId === user.id)}
                       openEditReview={() => setEditReviewOpen(true)}
                       handleDelete={() => handleDelete(review)}

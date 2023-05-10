@@ -78,6 +78,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       <div className='mx-8 mt-4 flex '>
         {offeredTerms.map((term, i) => (
           <button
+            key={i}
             className={classNames(
               `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
@@ -93,10 +94,10 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
         ))}
       </div>
       <div className='mx-8 flex flex-col rounded-b-lg bg-neutral-100 dark:bg-neutral-700 dark:text-gray-200'>
-        {currentlyDisplayingSchedules.map((schedule: Schedule) => (
-          <div>
-            {sortBlocks(schedule.blocks)?.map((block: Block) => (
-              <div className='flex flex-col'>
+        {currentlyDisplayingSchedules.map((schedule: Schedule, i) => (
+          <div key={i}>
+            {sortBlocks(schedule.blocks)?.map((block: Block, i) => (
+              <div key={i} className='flex flex-col'>
                 <div
                   className={classNames(
                     'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 dark:border-neutral-600'
@@ -143,8 +144,11 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                 >
                   <div className='flex flex-col'>
                     {block.timeblocks.length > 0 ? (
-                      block.timeblocks?.map((timeblock: TimeBlock) => (
-                        <div className='flex flex-row justify-between px-3 py-2 font-medium text-gray-600 dark:text-neutral-300'>
+                      block.timeblocks?.map((timeblock: TimeBlock, i) => (
+                        <div
+                          key={i}
+                          className='flex flex-row justify-between px-3 py-2 font-medium text-gray-600 dark:text-neutral-300'
+                        >
                           <p>{dayToWeekday(timeblock.day)}</p>
                           <p>
                             {VSBtimeToDisplay(timeblock.t1)} -{' '}

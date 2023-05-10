@@ -5,10 +5,12 @@ import { useState } from 'react';
 import { Review } from '../model/Review';
 import { DeleteButton } from './DeleteButton';
 import { StarRating } from './StarRating';
+import { classNames } from '../lib/utils';
 
 type CourseReviewProps = {
   review: Review;
   canModify: boolean;
+  isLast: boolean;
   openEditReview: () => void;
   handleDelete: () => void;
   showCourse?: boolean;
@@ -17,6 +19,7 @@ type CourseReviewProps = {
 export const CourseReview = ({
   review,
   canModify,
+  isLast,
   openEditReview,
   handleDelete,
   showCourse,
@@ -31,7 +34,12 @@ export const CourseReview = ({
   );
 
   return (
-    <div className='mb-4 flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'>
+    <div
+      className={classNames(
+        isLast ? 'mb-8' : 'mb-4',
+        'flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
+      )}
+    >
       <div className='flex flex-col '>
         <div className='flex justify-between'>
           <div className='flex flex-col'>
