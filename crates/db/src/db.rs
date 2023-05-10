@@ -937,18 +937,18 @@ mod tests {
   async fn update_review() {
     let TestContext { db, .. } = TestContext::new().await;
 
-    let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
-
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
       instructor: "bar".into(),
       rating: 5,
       user_id: "1".into(),
-      timestamp: timestamp.clone(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
     })
     .await
     .unwrap();
+
+    let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
 
     assert_eq!(
       db.update_review(Review {
@@ -957,7 +957,7 @@ mod tests {
         instructor: "foo".into(),
         rating: 4,
         user_id: "1".into(),
-        timestamp: timestamp.clone()
+        timestamp
       })
       .await
       .unwrap()
@@ -972,7 +972,6 @@ mod tests {
         instructor: "foo".into(),
         rating: 4,
         user_id: "2".into(),
-        timestamp: timestamp.clone(),
         ..Default::default()
       })
       .await
@@ -986,14 +985,7 @@ mod tests {
     assert_eq!(review.content, "bar");
     assert_eq!(review.instructor, "foo");
     assert_eq!(review.rating, 4);
-    // assert_eq!(review.timestamp, timestamp);
-    let duration_diff =
-      (review.timestamp.timestamp_millis() - timestamp.timestamp_millis()).abs();
-    assert!(
-      duration_diff < 1,
-      "Timestamp difference is too large: {} seconds",
-      duration_diff
-    );
+    assert_eq!(review.timestamp, timestamp);
   }
 
   #[tokio::test(flavor = "multi_thread")]
