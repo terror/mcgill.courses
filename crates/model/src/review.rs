@@ -34,27 +34,28 @@ impl<'de> Visitor<'de> for TimestampVisitor {
     ))
   }
 
-  fn visit_map<A>(self, mut map: A) -> Result<DateTime, A::Error>
+  fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
   where
     A: MapAccess<'de>,
   {
     let mut timestamp = None;
 
     while let Some(key) = map.next_key::<String>()? {
-      if key.as_str() == "$date" {
+      if key == "$date" {
         if let Some(number) =
           map.next_value::<serde_json::Value>()?.get("$numberLong")
         {
-          timestamp = number.as_str().unwrap_or("0").parse::<i64>().ok();
+          timestamp = number.as_str().and_then(|s| s.parse::<i64>().ok());
         }
       }
     }
 
-    let timestamp =
-      timestamp.ok_or_else(|| de::Error::custom("Invalid timestamp"))?;
-
     Ok(DateTime::from_chrono(
-      Utc.timestamp_millis_opt(timestamp).unwrap(),
+      Utc
+        .timestamp_millis_opt(
+          timestamp.ok_or_else(|| de::Error::custom("Invalid timestamp"))?,
+        )
+        .unwrap(),
     ))
   }
 }

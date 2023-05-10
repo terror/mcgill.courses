@@ -8,11 +8,11 @@ import { StarRating } from './StarRating';
 import { classNames } from '../lib/utils';
 
 type CourseReviewProps = {
-  review: Review;
   canModify: boolean;
+  handleDelete: () => void;
   isLast: boolean;
   openEditReview: () => void;
-  handleDelete: () => void;
+  review: Review;
   showCourse?: boolean;
 };
 

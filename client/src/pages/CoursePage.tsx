@@ -131,10 +131,11 @@ export const CoursePage = () => {
             <div className='w-full'>
               {userReview && (
                 <CourseReview
-                  review={userReview}
                   canModify={Boolean(user && userReview.userId === user.id)}
-                  openEditReview={() => setEditReviewOpen(true)}
                   handleDelete={() => handleDelete(userReview)}
+                  isLast={reviews.length === 1}
+                  openEditReview={() => setEditReviewOpen(true)}
+                  review={userReview}
                 />
               )}
               {reviews &&
@@ -142,12 +143,12 @@ export const CoursePage = () => {
                   .filter((review) => (user ? review.userId !== user.id : true))
                   .map((review, i) => (
                     <CourseReview
-                      review={review}
-                      isLast={i == reviews.length - 1}
-                      key={i}
                       canModify={Boolean(user && review.userId === user.id)}
-                      openEditReview={() => setEditReviewOpen(true)}
                       handleDelete={() => handleDelete(review)}
+                      isLast={i === reviews.length - 1}
+                      key={i}
+                      openEditReview={() => setEditReviewOpen(true)}
+                      review={review}
                     />
                   ))}
             </div>
