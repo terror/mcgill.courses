@@ -51,9 +51,9 @@ impl<'de> Visitor<'de> for TimestampVisitor {
     while let Some(key) = map.next_key::<String>()? {
       match key.as_str() {
         "$date" => {
-          let next = map.next_value::<serde_json::Value>()?;
-
-          if let Some(number) = next.get("$numberLong") {
+          if let Some(number) =
+            map.next_value::<serde_json::Value>()?.get("$numberLong")
+          {
             timestamp = number.as_str().unwrap_or("0").parse::<i64>().ok();
           }
         }
@@ -61,15 +61,15 @@ impl<'de> Visitor<'de> for TimestampVisitor {
       }
     }
 
-    let value = timestamp.ok_or_else(|| {
-      de::Error::custom("Invalid timestamp: expected $date with $numberLong")
-    })?;
-
-    Ok(DateTime::from_chrono(Utc.from_utc_datetime(
-      &NaiveDateTime::from_timestamp_opt(value, 0).ok_or_else(|| {
-        de::Error::custom(format!("Invalid timestamp: {}", value))
-      })?,
-    )))
+    Ok(DateTime::from_chrono(
+      Utc
+        .timestamp_millis_opt(timestamp.ok_or_else(|| {
+          de::Error::custom(
+            "Invalid timestamp: expected $date with $numberLong",
+          )
+        })?)
+        .unwrap(),
+    ))
   }
 }
 
