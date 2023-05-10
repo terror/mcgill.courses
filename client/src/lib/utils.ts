@@ -55,10 +55,12 @@ export const dedupe = (arr: any[]) => {
 };
 
 export const sortTerms = (terms: string[]) => {
-  const order = ['Fall', 'Winter', 'Summer'];
-  return terms.sort(
-    (a, b) => order.indexOf(a.split(' ')[0]) - order.indexOf(b.split(' ')[0])
-  );
+  const order = ['Summer', 'Fall', 'Winter'];
+  return terms.sort((a, b) => {
+    return a.split(' ')[1] === b.split(' ')[1]
+      ? order.indexOf(a.split(' ')[0]) - order.indexOf(b.split(' ')[0])
+      : parseInt(a.split(' ')[1], 10) - parseInt(b.split(' ')[1], 10);
+  });
 };
 
 export const sortBlocks = (blocks: Block[]) => {
