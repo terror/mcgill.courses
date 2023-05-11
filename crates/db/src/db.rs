@@ -40,8 +40,8 @@ impl Db {
 
     for seed in Seed::from_path(source)? {
       match seed {
-        Seed::Courses(courses) => {
-          log::info!("Seeding courses...");
+        Seed::Courses((path, courses)) => {
+          log::info!("Seeding courses from {}...", path.display());
 
           for course in courses {
             self.add_course(course.clone()).await?;
@@ -51,15 +51,18 @@ impl Db {
             }
           }
         }
-        Seed::Reviews(reviews) => {
-          log::info!("Seeding reviews...");
+        Seed::Reviews((path, reviews)) => {
+          log::info!("Seeding reviews from {}...", path.display());
 
           for review in reviews {
             self.add_review(review).await?;
           }
         }
-        Seed::Unknown => {
-          log::warn!("Unknown seed type encountered, continuing...");
+        Seed::Unknown(path) => {
+          log::warn!(
+            "Unknown seed type encountered from {}, continuing...",
+            path.display()
+          );
         }
       }
     }

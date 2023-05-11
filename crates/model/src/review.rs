@@ -25,12 +25,14 @@ impl<'de> Visitor<'de> for TimestampVisitor {
   where
     E: de::Error,
   {
+    let value = value
+      .try_into()
+      .map_err(|_| de::Error::custom("Failed to convert u64".to_string()))?;
+
     Ok(DateTime::from_chrono(
-      Utc
-        .timestamp_millis_opt(value.try_into().map_err(|_| {
-          de::Error::custom("Failed to convert u64".to_string())
-        })?)
-        .unwrap(),
+      Utc.timestamp_opt(value, 0).single().ok_or_else(|| {
+        de::Error::custom("Failed to get unique conversion result")
+      })?,
     ))
   }
 
@@ -42,20 +44,26 @@ impl<'de> Visitor<'de> for TimestampVisitor {
 
     while let Some(key) = map.next_key::<String>()? {
       if key == "$date" {
-        if let Some(number) =
-          map.next_value::<serde_json::Value>()?.get("$numberLong")
-        {
-          timestamp = number.as_str().and_then(|s| s.parse::<i64>().ok());
-        }
+        timestamp = map
+          .next_value::<serde_json::Value>()?
+          .get("$numberLong")
+          .and_then(|number| {
+            number.as_str().and_then(|s| s.parse::<i64>().ok())
+          });
       }
     }
 
+    let timestamp = timestamp.ok_or_else(|| {
+      de::Error::custom("Failed to get timestamp from map".to_string())
+    })?;
+
     Ok(DateTime::from_chrono(
       Utc
-        .timestamp_millis_opt(
-          timestamp.ok_or_else(|| de::Error::custom("Invalid timestamp"))?,
-        )
-        .unwrap(),
+        .timestamp_millis_opt(timestamp)
+        .single()
+        .ok_or_else(|| {
+          de::Error::custom("Failed to get unique conversion result")
+        })?,
     ))
   }
 }
