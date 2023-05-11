@@ -1,6 +1,6 @@
 import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
-import { Block } from '../model/Schedule';
+import { Block, Schedule } from '../model/Schedule';
 
 export const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
@@ -54,6 +54,21 @@ export const dedupe = (arr: any[]) => {
   return [...new Set(arr)];
 };
 
+export const dedupeSchedulesByBlocks = (schedules: Schedule[]) => {
+  const deduped = [];
+  const filled = new Set();
+
+  for (const schedule of schedules) {
+    const block = schedule.blocks[0];
+    if (!filled.has(block.display)) {
+      deduped.push(schedule);
+      filled.add(block.display);
+    }
+  }
+
+  return deduped;
+};
+
 export const sortTerms = (terms: string[]) => {
   const order = ['Summer', 'Fall', 'Winter'];
   return terms.sort((a, b) => {
@@ -63,17 +78,16 @@ export const sortTerms = (terms: string[]) => {
   });
 };
 
-export const sortBlocks = (blocks: Block[]) => {
-  const campusOrder = ['Downtown', 'Macdonald'];
+export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
+  const order = ['Lec', 'Lab', 'Seminar', 'Tut'];
+  return schedules.sort((a, b) => {
+    const aNum = parseInt(a.blocks[0].display.split(' ')[1], 10);
+    const bNum = parseInt(b.blocks[0].display.split(' ')[1], 10);
+    const aType = a.blocks[0].display.split(' ')[0];
+    const bType = b.blocks[0].display.split(' ')[0];
 
-  return blocks.sort((a, b) => {
-    const aLec = parseInt(a.display.split(' ')[1], 10);
-    const bLec = parseInt(b.display.split(' ')[1], 10);
-
-    if (aLec === bLec) {
-      return campusOrder.indexOf(a.campus) - campusOrder.indexOf(b.campus);
-    }
-
-    return aLec - bLec;
+    return aType === bType
+      ? aNum - bNum
+      : order.indexOf(aType) - order.indexOf(bType);
   });
 };

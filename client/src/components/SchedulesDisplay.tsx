@@ -3,9 +3,9 @@ import { TimeBlock, Block, Schedule } from '../model/Schedule';
 import {
   dedupe,
   sortTerms,
-  sortBlocks,
+  sortSchedulesByBlocks,
   classNames,
-  dedupeSchedulesBlocks,
+  dedupeSchedulesByBlocks,
 } from '../lib/utils';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Transition } from '@headlessui/react';
@@ -73,7 +73,22 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
     setCurrentlyDisplayingSchedules(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
-  }, [schedules, currentlyDisplayingTerm]);
+
+    const uniqueTimeSlots: Schedule[] = [];
+
+    for (const schedule of schedules) {
+      for (const block of schedule.blocks) {
+        uniqueTimeSlots.push({
+          ...schedule,
+          blocks: [block],
+        });
+      }
+    }
+
+    setCurrentlyDisplayingSchedules(
+      sortSchedulesByBlocks(dedupeSchedulesByBlocks(uniqueTimeSlots))
+    );
+  });
 
   const handleClick = (term: string) => {
     setCurrentlyDisplayingTerm(term);
@@ -112,6 +127,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                 {schedule.blocks?.map((block: Block, blockIndex) => {
                   if (cache.has(block.display)) return null;
                   cache.add(block.display);
+
                   return (
                     <div key={blockIndex} className='flex flex-col'>
                       <div
@@ -120,7 +136,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                         )}
                       >
                         <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
-                          <div className='w-20 '>
+                          <div className='w-20'>
                             <span className='font-semibold'>
                               {block.display}
                             </span>
