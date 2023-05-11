@@ -44,17 +44,17 @@ export const CourseReview = ({
         <div className='flex justify-between'>
           <div className='flex flex-col'>
             <StarRating rating={review.rating} />
-            {review.content.length < 200 || readMore ? (
-              <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-justify dark:text-gray-300'>
+            {review.content.length < 300 || readMore ? (
+              <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
                 {review.content}
               </div>
             ) : (
               <>
-                <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-justify dark:text-gray-300'>
-                  {review.content.substring(0, 200) + '...'}
+                <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+                  {review.content.substring(0, 300) + '...'}
                 </div>
                 <button
-                  className='duratio-300 ml-1 mr-auto text-gray-700 underline transition ease-in-out hover:text-red-500 dark:text-gray-300 dark:hover:text-red-500'
+                  className='duratio-300 ml-1 mr-auto pt-1 text-gray-700 underline transition ease-in-out hover:text-red-500 dark:text-gray-300 dark:hover:text-red-500'
                   onClick={() => setReadMore(true)}
                 >
                   Show more
