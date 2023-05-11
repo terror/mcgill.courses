@@ -79,7 +79,7 @@ export const sortTerms = (terms: string[]) => {
 };
 
 export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
-  const order = ['Lec', 'Lab', 'Seminar', 'Tut'];
+  const order = ['Lec', 'Lab', 'Seminar', 'Tut', 'Conf'];
   return schedules.sort((a, b) => {
     const aNum = parseInt(a.blocks[0].display.split(' ')[1], 10);
     const bNum = parseInt(b.blocks[0].display.split(' ')[1], 10);
