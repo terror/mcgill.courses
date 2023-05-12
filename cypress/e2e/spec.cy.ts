@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-describe('Vite the root page', () => {
+describe('Visit the root page', () => {
   it('should visit', () => {
     cy.visit('/');
     cy.contains(
