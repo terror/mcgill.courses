@@ -2,5 +2,7 @@
 /.DS_Store
 /target
 courses.json
+cypress/downloads
+cypress/videos
 node_modules/
 notes
