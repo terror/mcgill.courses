@@ -21,7 +21,7 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
           <Link
             key={i}
             to={`/course/${req.replace(' ', '')}`}
-            className='block text-gray-800 underline transition duration-100 hover:text-gray-600 dark:text-gray-200 hover:dark:text-gray-400'
+            className='block text-gray-500 underline transition duration-100 hover:text-gray-600 dark:text-gray-400 hover:dark:text-gray-200'
           >
             {req}
           </Link>

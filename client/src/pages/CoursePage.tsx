@@ -43,7 +43,13 @@ export const CoursePage = () => {
     fetchClient
       .getData<Review[]>(`/reviews?course_id=${params.id}`)
       .then((data) => {
-        setReviews(data);
+        setReviews(
+          data.sort(
+            (a, b) =>
+              parseInt(b.timestamp.$date.$numberLong, 10) -
+              parseInt(a.timestamp.$date.$numberLong, 10)
+          )
+        );
       });
   }, [params.id, addReviewOpen, editReviewOpen]);
 
@@ -141,11 +147,6 @@ export const CoursePage = () => {
               {reviews &&
                 reviews
                   .filter((review) => (user ? review.userId !== user.id : true))
-                  .sort(
-                    (a, b) =>
-                      parseInt(b.timestamp.$date.$numberLong, 10) -
-                      parseInt(a.timestamp.$date.$numberLong, 10)
-                  )
                   .slice(0, showAllReviews ? reviews.length : 8)
                   .map((review, i) => (
                     <CourseReview
