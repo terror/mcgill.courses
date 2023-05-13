@@ -82,7 +82,7 @@ export const Explore = () => {
             Showing all courses
           </h1>
           <div className='w-xl flex flex-col md:flex-row'>
-            <div className='md:hidden'>
+            <div className='mx-2 flex max-w-xl items-center justify-center md:hidden'>
               <BoxToggle
                 child={ExploreFilter({
                   selectedSubjects,
