@@ -143,8 +143,8 @@ export const CoursePage = () => {
                   .filter((review) => (user ? review.userId !== user.id : true))
                   .sort(
                     (a, b) =>
-                      parseInt(b.timestamp.$date.$numberLong) -
-                      parseInt(a.timestamp.$date.$numberLong)
+                      parseInt(b.timestamp.$date.$numberLong, 10) -
+                      parseInt(a.timestamp.$date.$numberLong, 10)
                   )
                   .slice(0, showAllReviews ? reviews.length : 8)
                   .map((review, i) => (
