@@ -21,7 +21,7 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
           <Link
             key={i}
             to={`/course/${req.replace(' ', '')}`}
-            className='block text-gray-800 underline transition duration-100 hover:text-gray-600 dark:text-gray-200 hover:dark:text-gray-400'
+            className='block text-gray-500 underline transition duration-100 hover:text-gray-600 dark:text-gray-400 hover:dark:text-gray-200'
           >
             {req}
           </Link>
@@ -36,12 +36,7 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
 };
 
 export const CourseRequirements = ({ requirements }: RequirementsProps) => {
-  const hasRequirements =
-    requirements.prereqs.length > 0 ||
-    requirements.coreqs.length > 0 ||
-    requirements.restrictions;
-
-  return hasRequirements ? (
+  return (
     <div className='max-h-fit w-full rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mx-4 md:ml-auto md:mr-8 md:mt-4'>
       <div className='flex-col space-y-3'>
         <div className='m-4 space-y-7'>
@@ -64,5 +59,5 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 };

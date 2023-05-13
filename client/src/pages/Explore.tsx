@@ -10,9 +10,11 @@ import { Course } from '../model/Course';
 import { ExploreFilter } from '../components/ExploreFilter';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { BoxToggle } from '../components/BoxToggle';
+import { getCurrentTerms } from '../lib/utils';
 
 export const Explore = () => {
   const limit = 20;
+  const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -30,7 +32,12 @@ export const Explore = () => {
       selectedLevels.length === 0
         ? null
         : selectedLevels.map((l) => l.charAt(0)),
-    terms: selectedTerms.length === 0 ? null : selectedTerms,
+    terms:
+      selectedTerms.length === 0
+        ? null
+        : selectedTerms.map(
+            (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
+          ),
   };
 
   useEffect(() => {
