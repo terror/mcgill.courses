@@ -29,7 +29,7 @@ export const CourseReview = ({
   const [readMore, setReadMore] = useState(false);
 
   const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong, 10) * 1000),
+    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
     'PPP'
   );
 
