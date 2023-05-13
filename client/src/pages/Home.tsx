@@ -32,7 +32,6 @@ export const Home = () => {
       console.error(err);
     }
   };
-
   const err = searchParams.get('err');
 
   return (
@@ -41,7 +40,7 @@ export const Home = () => {
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='mb-6 text-left text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+            <h1 className='mb-6 text-left text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>

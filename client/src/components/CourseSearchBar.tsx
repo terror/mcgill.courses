@@ -32,7 +32,7 @@ const SearchResult = ({
     <Link to={url}>
       <div
         className={classNames(
-          'flex cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
+          'z-50 flex cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
           selectedIndex === index
             ? 'bg-gray-100 dark:bg-neutral-700'
             : 'bg-white dark:bg-neutral-800'
@@ -40,9 +40,9 @@ const SearchResult = ({
         key={index}
       >
         {type === SearchResultType.Course ? (
-          <Layers className='mr-2 dark:text-white' />
+          <Layers className='mr-2 text-ellipsis dark:text-white' />
         ) : (
-          <User className='mr-2 dark:text-white' />
+          <User className='mr-2 text-ellipsis dark:text-white' />
         )}
         <span className='dark:text-gray-200'>
           {text
@@ -130,38 +130,40 @@ export const CourseSearchBar = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      {searchSelected && (
-        <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
-          {results.courses.slice(0, 5).map((result, index) => (
-            <SearchResult
-              index={index}
-              query={results.query}
-              selectedIndex={selectedIndex}
-              text={`${result._id} - ${result.title}`}
-              type={SearchResultType.Course}
-              url={`/course/${result._id}`}
-            />
-          ))}
-          {results.instructors.slice(0, 2).map((result, index) => (
-            <SearchResult
-              index={results.courses.length + index}
-              query={results.query}
-              selectedIndex={selectedIndex}
-              text={result.name}
-              type={SearchResultType.Instructor}
-              url={`/instructor/${result.name
-                .toLowerCase()
-                .split(' ')
-                .join('-')}`}
-            />
-          ))}
-          <Link to={`/explore`}>
-            <div className='flex cursor-pointer items-center p-3 text-left hover:bg-gray-100 dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700'>
-              <Layers /> <div className='z-50 ml-2'>Explore all courses</div>
-            </div>
-          </Link>
-        </div>
-      )}
+      <div className='mb-3'>
+        {searchSelected && (
+          <div className='absolute top-full z-50 w-full rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
+            {results.courses.slice(0, 4).map((result, index) => (
+              <SearchResult
+                index={index}
+                query={results.query}
+                selectedIndex={selectedIndex}
+                text={`${result._id} - ${result.title}`}
+                type={SearchResultType.Course}
+                url={`/course/${result._id}`}
+              />
+            ))}
+            {results.instructors.slice(0, 2).map((result, index) => (
+              <SearchResult
+                index={results.courses.length + index}
+                query={results.query}
+                selectedIndex={selectedIndex}
+                text={result.name}
+                type={SearchResultType.Instructor}
+                url={`/instructor/${result.name
+                  .toLowerCase()
+                  .split(' ')
+                  .join('-')}`}
+              />
+            ))}
+            <Link to={`/explore`}>
+              <div className='z-50 flex cursor-pointer items-center rounded-b-lg p-3 text-left hover:bg-gray-100 dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700'>
+                <Layers /> <div className='z-50 ml-2'>Explore all courses</div>
+              </div>
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
