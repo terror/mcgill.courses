@@ -11,18 +11,34 @@ impl IntoResponse for AuthRedirect {
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(dead_code)]
 pub struct AuthRequest {
   code: String,
   state: String,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct LoginRequest {
+  redirect: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct LogoutRequest {
+  redirect: String,
+}
+
 pub(crate) async fn microsoft_auth(
+  Query(query): Query<LoginRequest>,
   AppState(client): AppState<BasicClient>,
 ) -> impl IntoResponse {
   Redirect::to(
     client
-      .authorize_url(CsrfToken::new_random)
+      .authorize_url(|| {
+        CsrfToken::new(format!(
+          "{}{}",
+          CsrfToken::new_random().secret(),
+          &STANDARD.encode(query.redirect)
+        ))
+      })
       .add_scope(Scope::new(String::from("openid")))
       .add_scope(Scope::new(String::from("User.Read")))
       .url()
@@ -54,10 +70,16 @@ pub(crate) async fn login_authorized(
     .json()
     .await?;
 
+  let url =
+    Url::parse(&String::from_utf8(STANDARD.decode(&query.state[22..])?)?)?;
+
   if !user.mail().ends_with("mcgill.ca") {
     return Ok((
       HeaderMap::new(),
-      Redirect::to(&format!("{}?err=invalidMail", CLIENT_URL)),
+      Redirect::to(&format!(
+        "{}?err=invalidMail",
+        url.origin().ascii_serialization()
+      )),
     ));
   }
 
@@ -84,26 +106,27 @@ pub(crate) async fn login_authorized(
     .parse()?,
   );
 
-  Ok((headers, Redirect::to(CLIENT_URL)))
+  Ok((headers, Redirect::to(url.as_ref())))
 }
 
 pub(crate) async fn logout(
+  Query(query): Query<LogoutRequest>,
   TypedHeader(cookies): TypedHeader<Cookie>,
   AppState(session_store): AppState<MongodbSessionStore>,
 ) -> Result<impl IntoResponse> {
   let cookie = match cookies.get(COOKIE_NAME) {
     Some(c) => c,
-    None => return Ok(Redirect::to(CLIENT_URL)),
+    None => return Ok(Redirect::to(&query.redirect)),
   };
 
   let session = match session_store.load_session(cookie.to_string()).await? {
     Some(s) => s,
-    None => return Ok(Redirect::to(CLIENT_URL)),
+    None => return Ok(Redirect::to(&query.redirect)),
   };
 
   log::debug!("Destroying session...");
 
   session_store.destroy_session(session).await?;
 
-  Ok(Redirect::to(CLIENT_URL))
+  Ok(Redirect::to(&query.redirect))
 }

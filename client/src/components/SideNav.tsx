@@ -67,7 +67,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                     Profile
                   </Link>
                   <a
-                    href={`${import.meta.env.VITE_API_URL}/auth/logout`}
+                    href={`${
+                      import.meta.env.VITE_API_URL
+                    }/auth/logout?redirect=${window.location.origin}`}
                     className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                   >
                     Log out
@@ -75,7 +77,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                 </>
               ) : (
                 <a
-                  href={`${import.meta.env.VITE_API_URL}/auth/login`}
+                  href={`${import.meta.env.VITE_API_URL}/auth/login?redirect=${
+                    window.location.href
+                  }`}
                   className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                 >
                   Log in
