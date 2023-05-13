@@ -10,11 +10,11 @@ import { Course } from '../model/Course';
 import { ExploreFilter } from '../components/ExploreFilter';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { BoxToggle } from '../components/BoxToggle';
-import { getCurrentTerm } from '../lib/utils';
+import { getCurrentTerms } from '../lib/utils';
 
 export const Explore = () => {
   const limit = 20;
-  const currentTerms = getCurrentTerm();
+  const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [hasMore, setHasMore] = useState(true);

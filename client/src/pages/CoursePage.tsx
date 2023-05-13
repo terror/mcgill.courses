@@ -16,7 +16,7 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
-import { getCurrentTerm } from '../lib/utils';
+import { getCurrentTerms } from '../lib/utils';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import _ from 'lodash';
 
@@ -26,7 +26,7 @@ export const CoursePage = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const user = useAuth();
-  const currentTerms = getCurrentTerm();
+  const currentTerms = getCurrentTerms();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [editReviewOpen, setEditReviewOpen] = useState(false);

@@ -34,7 +34,7 @@ export const uniqueTermInstructors = (course: Course) => {
   return unique;
 };
 
-export const getCurrentTerm = (): [string, string, string] => {
+export const getCurrentTerms = (): [string, string, string] => {
   const now = new Date();
   const month = now.getMonth() + 1;
   const year = now.getFullYear();
@@ -46,7 +46,7 @@ export const getCurrentTerm = (): [string, string, string] => {
 };
 
 export const filterCurrentInstructors = (instructors: Instructor[]) => {
-  const currentTerm = getCurrentTerm();
+  const currentTerm = getCurrentTerms();
   return instructors.filter((i) => currentTerm.includes(i.term));
 };
 
