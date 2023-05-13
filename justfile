@@ -14,6 +14,9 @@ clippy:
 dev-deps:
   cargo install present
 
+e2e:
+  npm run cy:e2e
+
 fmt:
   cargo fmt --all
   npm run format
