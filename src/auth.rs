@@ -17,12 +17,22 @@ pub struct AuthRequest {
   state: String,
 }
 
+#[derive(Debug, Deserialize)]
+#[allow(dead_code)]
+pub struct LoginRequest {
+  came_from: String,
+}
+
 pub(crate) async fn microsoft_auth(
+  Query(query): Query<LoginRequest>,
   AppState(client): AppState<BasicClient>,
 ) -> impl IntoResponse {
+  let mut token = CsrfToken::new_random().secret().to_string();
+  token.push_str(&STANDARD.encode(query.came_from));
+
   Redirect::to(
     client
-      .authorize_url(CsrfToken::new_random)
+      .authorize_url(|| CsrfToken::new(token))
       .add_scope(Scope::new(String::from("openid")))
       .add_scope(Scope::new(String::from("User.Read")))
       .url()
@@ -84,7 +94,13 @@ pub(crate) async fn login_authorized(
     .parse()?,
   );
 
-  Ok((headers, Redirect::to(CLIENT_URL)))
+  let decoded = STANDARD.decode(&query.state[22..])?;
+  let came_from = String::from_utf8(decoded)?;
+
+  Ok((
+    headers,
+    Redirect::to(&format!("{}{}", CLIENT_URL, came_from)),
+  ))
 }
 
 pub(crate) async fn logout(

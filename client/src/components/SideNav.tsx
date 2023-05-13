@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 import { navigationItems } from './Footer';
@@ -16,6 +16,7 @@ type SideNavProps = {
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
   const [darkMode, _] = useDarkMode();
+  const location = useLocation();
 
   return (
     <Dialog
@@ -75,7 +76,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                 </>
               ) : (
                 <a
-                  href={`${import.meta.env.VITE_API_URL}/auth/login`}
+                  href={`${import.meta.env.VITE_API_URL}/auth/login?came_from=${
+                    location.pathname
+                  }`}
                   className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                 >
                   Log in

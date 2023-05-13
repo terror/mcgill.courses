@@ -12,6 +12,7 @@ async-mongodb-session = { version = "3.0.0", default-features = false }
 async-session = "3.0.0"
 axum = { version = "0.6.18", features = ["headers", "json"] }
 axum-server = "0.4.7"
+base64 = "0.21.0"
 chrono = "0.4.24"
 clap = { version = "4.2.7", features = ["derive"] }
 db = { path = "crates/db" }

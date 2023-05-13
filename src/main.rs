@@ -29,6 +29,7 @@ use {
     routing::Router,
     Json, RequestPartsExt,
   },
+  base64::{engine::general_purpose::STANDARD, Engine},
   chrono::prelude::*,
   clap::Parser,
   db::Db,
