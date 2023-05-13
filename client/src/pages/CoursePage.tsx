@@ -16,6 +16,7 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
+import { getCurrentTerm } from '../lib/utils';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import _ from 'lodash';
 
@@ -25,6 +26,7 @@ export const CoursePage = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const user = useAuth();
+  const currentTerms = getCurrentTerm();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
@@ -70,6 +72,15 @@ export const CoursePage = () => {
       </div>
     );
   }
+
+  if (course.terms.some((term) => !currentTerms.includes(term))) {
+    setCourse({
+      ...course,
+      terms: course.terms.filter((term) => currentTerms.includes(term)),
+    });
+  }
+
+  console.log(course);
 
   const requirements: Requirements = {
     prereqs: course.prerequisites,
