@@ -78,9 +78,9 @@ export const Navbar = () => {
               <ProfileDropdown />
             ) : (
               <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/auth/login?came_from=${pathName}`}
+                href={`${import.meta.env.VITE_API_URL}/auth/login?redirect=${
+                  window.location.href
+                }`}
                 className='my-auto text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
                 onMouseEnter={() => setArrowColor('text-red-600')}
                 onMouseLeave={() =>

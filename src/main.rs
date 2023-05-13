@@ -59,6 +59,7 @@ use {
     time::Duration,
   },
   tower_http::cors::CorsLayer,
+  url::Url,
 };
 
 mod arguments;
@@ -77,8 +78,6 @@ mod subcommand;
 mod user;
 mod vec_ext;
 mod vsb_client;
-
-const CLIENT_URL: &str = "http://localhost:5173";
 
 type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
