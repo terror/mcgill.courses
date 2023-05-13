@@ -17,6 +17,7 @@ import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
+import _ from 'lodash';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -106,9 +107,7 @@ export const CoursePage = () => {
   };
 
   const userReview = reviews.find((r) => r.userId === user?.id);
-  const averageRating =
-    reviews.map((review) => review.rating).reduce((a, b) => a + b, 0) /
-    reviews.length;
+  const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
 
   return (
     <Layout>
