@@ -188,11 +188,11 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
         {currentlyDisplayingSchedules.length <= 5 || showAll
           ? currentlyDisplayingSchedules.map(singleScheduleRow)
           : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}
-        {!showAll && currentlyDisplayingSchedules.length > 5 && (
+        {currentlyDisplayingSchedules.length > 5 && (
           <div className='flex flex-row justify-center'>
             <button
               className='flex flex-row items-center justify-center py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200'
-              onClick={() => setShowAll(true)}
+              onClick={() => setShowAll(!showAll)}
             >
               {showAll ? 'Show less' : 'Show all'}
               <IoIosArrowDown
