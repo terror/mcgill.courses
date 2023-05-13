@@ -17,11 +17,13 @@ import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
+import _ from 'lodash';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [showAllReviews, setShowAllReviews] = useState(false);
   const user = useAuth();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
@@ -105,9 +107,7 @@ export const CoursePage = () => {
   };
 
   const userReview = reviews.find((r) => r.userId === user?.id);
-  const averageRating =
-    reviews.map((review) => review.rating).reduce((a, b) => a + b, 0) /
-    reviews.length;
+  const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
 
   return (
     <Layout>
@@ -143,9 +143,10 @@ export const CoursePage = () => {
                   .filter((review) => (user ? review.userId !== user.id : true))
                   .sort(
                     (a, b) =>
-                      (b.timestamp.$date.$numberLong as any) -
-                      (a.timestamp.$date.$numberLong as any)
+                      parseInt(b.timestamp.$date.$numberLong, 10) -
+                      parseInt(a.timestamp.$date.$numberLong, 10)
                   )
+                  .slice(0, showAllReviews ? reviews.length : 8)
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
@@ -156,6 +157,16 @@ export const CoursePage = () => {
                       review={review}
                     />
                   ))}
+              {!showAllReviews && reviews.length > 8 && (
+                <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
+                  <button
+                    className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+                    onClick={() => setShowAllReviews(true)}
+                  >
+                    Show all {reviews.length} reviews
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
