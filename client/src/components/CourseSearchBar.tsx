@@ -132,7 +132,7 @@ export const CourseSearchBar = ({
       </div>
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
-          {results.courses.map((result, index) => (
+          {results.courses.slice(0, 5).map((result, index) => (
             <SearchResult
               index={index}
               query={results.query}
@@ -142,7 +142,7 @@ export const CourseSearchBar = ({
               url={`/course/${result._id}`}
             />
           ))}
-          {results.instructors.map((result, index) => (
+          {results.instructors.slice(0, 2).map((result, index) => (
             <SearchResult
               index={results.courses.length + index}
               query={results.query}
