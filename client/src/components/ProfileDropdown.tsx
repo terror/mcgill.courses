@@ -41,7 +41,9 @@ export const ProfileDropdown = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href={`${import.meta.env.VITE_API_URL}/auth/logout`}
+                  href={`${import.meta.env.VITE_API_URL}/auth/logout?redirect=${
+                    window.location.origin
+                  }`}
                   className={classNames(
                     active
                       ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200'
