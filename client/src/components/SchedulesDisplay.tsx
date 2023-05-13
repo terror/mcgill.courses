@@ -89,7 +89,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
     setCurrentlyDisplayingSchedules(
       sortSchedulesByBlocks(dedupeSchedulesByBlocks(uniqueTimeSlots))
     );
-  });
+  }, [currentlyDisplayingTerm]);
 
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
     <div key={scheduleIndex}>

@@ -68,20 +68,20 @@ jobs:
       - name: Build
         run: cargo build --workspace --all-features --all-targets
 
-      - name: Clippy
-        run: ./bin/clippy
-
-      - name: Check lockfile
+      - name: Lockfile
         run: cargo update --locked --package server
 
-      - name: Check rust formatting
-        run: cargo fmt --all -- --check
+      - name: Lint
+        run: |
+          ./bin/clippy
+          npm run lint
 
-      - name: Lint typescript code
-        run: npm run lint
-
-      - name: Check typescript formatting
-        run: npm run format-check
+      - name: Format
+        run: |
+          cargo fmt --all -- --check
+          npm run format-check
 
       - name: Test
-        run: cargo test --workspace --all-features --all-targets
+        run: |
+          cargo test --workspace --all-features --all-targets
+          npm run cy:e2e

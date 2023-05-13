@@ -5,7 +5,7 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import {
   classNames,
   filterCurrentInstructors,
-  getCurrentTerm,
+  getCurrentTerms,
   uniqueTermInstructors,
 } from '../lib/utils';
 import { Course } from '../model/Course';

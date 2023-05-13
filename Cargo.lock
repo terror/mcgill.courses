@@ -2505,6 +2505,7 @@ dependencies = [
  "async-session",
  "axum",
  "axum-server",
+ "base64 0.21.0",
  "chrono",
  "clap",
  "db",
@@ -2524,6 +2525,7 @@ dependencies = [
  "tokio",
  "tower",
  "tower-http",
+ "url",
 ]
 
 [[package]]
