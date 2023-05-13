@@ -1,7 +1,11 @@
 /// <reference types="cypress" />
-describe('Visit the root page', () => {
-  it('should visit', () => {
-    cy.visit('/');
+describe('All', () => {
+  beforeEach(() => {
+    cy.intercept('GET', '**/user', { fixture: 'user.json' })
+    cy.visit('/')
+  })
+
+  it('Should visit the root', () => {
     cy.contains(
       'Explore thousands of course and professor reviews from McGill students'
     );

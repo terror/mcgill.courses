@@ -4,9 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "all": "concurrently \"npm run dev\" \"cargo run -- serve --db-name=mcgill-courses\"",
     "build": "tsc && vite build",
-    "cy:e2e": "start-server-and-test all http-get://localhost:5173 cy:run-e2e",
+    "cy:e2e": "start-server-and-test dev http-get://localhost:5173 cy:run-e2e",
     "cy:open-e2e": "cypress open --e2e --browser chrome",
     "cy:open-unit": "cypress open --component --browser chrome",
     "cy:run-e2e": "cypress run --e2e",

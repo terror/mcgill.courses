@@ -3,6 +3,7 @@
 /target
 courses.json
 cypress/downloads
+cypress/screenshots
 cypress/videos
 node_modules/
 notes
