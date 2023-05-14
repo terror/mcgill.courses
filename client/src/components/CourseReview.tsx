@@ -6,6 +6,7 @@ import { Review } from '../model/Review';
 import { DeleteButton } from './DeleteButton';
 import { StarRating } from './StarRating';
 import { classNames } from '../lib/utils';
+import { Link } from 'react-router-dom';
 
 type CourseReviewProps = {
   canModify: boolean;
@@ -87,7 +88,15 @@ export const CourseReview = ({
 
       <div className='flex flex-row justify-between gap-3 align-bottom'>
         <p className='mb-2 mt-2 text-sm italic leading-none text-gray-700 dark:text-gray-200'>
-          Taught by: {review.instructor}
+          Taught by:{' '}
+          <Link
+            to={`/instructor/${review.instructor
+              .split(' ')
+              .map((x) => x.toLowerCase())
+              .join('-')}`}
+          >
+            {review.instructor}
+          </Link>
         </p>
         <h2 className='ml-auto mt-2 text-sm font-bold leading-none text-gray-700 dark:text-gray-200'>
           {dateStr}

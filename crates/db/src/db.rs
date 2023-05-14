@@ -246,6 +246,15 @@ impl Db {
     self.find_reviews(doc! { "userId": user_id }).await
   }
 
+  pub async fn find_reviews_by_instructor_name(
+    &self,
+    instructor_name: &str,
+  ) -> Result<Vec<Review>> {
+    self
+      .find_reviews(doc! { "instructor": instructor_name })
+      .await
+  }
+
   pub async fn find_review(
     &self,
     course_id: &str,
