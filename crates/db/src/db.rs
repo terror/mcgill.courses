@@ -154,12 +154,12 @@ impl Db {
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
       courses: self
-        .text_search::<Course>(Self::COURSE_COLLECTION, query, 10)
+        .text_search::<Course>(Self::COURSE_COLLECTION, query, 4)
         .await?
         .try_collect()
         .await?,
       instructors: self
-        .text_search::<Instructor>(Self::INSTRUCTOR_COLLECTION, query, 5)
+        .text_search::<Instructor>(Self::INSTRUCTOR_COLLECTION, query, 2)
         .await?
         .try_collect()
         .await?,
