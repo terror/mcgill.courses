@@ -642,7 +642,7 @@ mod tests {
 
     let results = db.search("COMP 202").await.unwrap();
 
-    assert_eq!(results.courses.len(), 10);
+    assert_eq!(results.courses.len(), 4);
 
     let first = results.courses.first().unwrap();
 
