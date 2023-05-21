@@ -4,9 +4,9 @@ import { Layout } from '../components/Layout';
 import { RatingInfo } from '../components/RatingInfo';
 import { Review } from '../model/Review';
 import { fetchClient } from '../lib/fetchClient';
+import { useAuth } from '../hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -36,6 +36,7 @@ export const Instructor = () => {
   });
 
   const userReview = reviews.find((r) => r.userId === user?.id);
+  const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
 
   return (
@@ -58,16 +59,20 @@ export const Instructor = () => {
                   numReviews={reviews.length}
                 />
               </div>
-              <p className='break-words text-gray-500 dark:text-gray-400'>
-                Teaches or has taught the following courses:{' '}
-                {[...new Set(reviews.map((review) => review.courseId))]
-                  .sort()
-                  .join(', ')}
-                .
+              <p className='text-gray-500 dark:text-gray-400'>
+                {uniqueReviews.length
+                  ? `Teaches or has taught the following courses: ${uniqueReviews
+                      .map((review) => review.courseId)
+                      .join(', ')}.`
+                  : "This professor hasn't taught any courses that have been reviewed yet."}
               </p>
             </div>
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2'>
-              <RatingInfo rating={averageRating} numReviews={reviews.length} />
+              <RatingInfo
+                rating={averageRating}
+                numReviews={reviews.length}
+                content=''
+              />
             </div>
           </div>
         </div>
@@ -77,7 +82,7 @@ export const Instructor = () => {
           <div className='w-full'>
             {userReview && (
               <CourseReview
-                canModify={Boolean(user && userReview.userId === user.id)}
+                canModify={false}
                 handleDelete={() => {}}
                 isLast={reviews.length === 1}
                 openEditReview={() => {}}
@@ -90,7 +95,7 @@ export const Instructor = () => {
                 .slice(0, showAllReviews ? reviews.length : 8)
                 .map((review, i) => (
                   <CourseReview
-                    canModify={Boolean(user && review.userId === user.id)}
+                    canModify={false}
                     handleDelete={() => {}}
                     isLast={i === reviews.length - 1}
                     key={i}
