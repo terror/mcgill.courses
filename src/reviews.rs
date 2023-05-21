@@ -37,6 +37,7 @@ pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) course_id: String,
   pub(crate) instructor: String,
   pub(crate) rating: u32,
+  pub(crate) difficulty: u32,
 }
 
 pub(crate) async fn add_review(
@@ -49,6 +50,7 @@ pub(crate) async fn add_review(
     course_id,
     instructor,
     rating,
+    difficulty,
   } = body.0;
 
   log::trace!("Adding review to database...");
@@ -58,6 +60,7 @@ pub(crate) async fn add_review(
     course_id,
     instructor,
     rating,
+    difficulty,
     timestamp: Utc::now().into(),
     user_id: user.id(),
   })
@@ -76,6 +79,7 @@ pub(crate) async fn update_review(
     course_id,
     instructor,
     rating,
+    difficulty,
   } = body.0;
 
   log::trace!("Updating review...");
@@ -85,6 +89,7 @@ pub(crate) async fn update_review(
     course_id,
     instructor,
     rating,
+    difficulty,
     timestamp: Utc::now().into(),
     user_id: user.id(),
   })

@@ -7,6 +7,7 @@ pub struct Review {
   pub course_id: String,
   pub instructor: String,
   pub rating: u32,
+  pub difficulty: u32,
   #[serde(deserialize_with = "deserialize_timestamp")]
   pub timestamp: DateTime,
   pub user_id: String,
@@ -82,6 +83,7 @@ impl Default for Review {
       course_id: String::new(),
       instructor: String::new(),
       rating: 0,
+      difficulty: 0,
       timestamp: DateTime::from_chrono::<Utc>(
         Utc.from_utc_datetime(&NaiveDateTime::default()),
       ),

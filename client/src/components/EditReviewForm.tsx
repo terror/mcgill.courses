@@ -34,6 +34,7 @@ export const EditReviewForm = ({
     content: review.content,
     instructor: review.instructor,
     rating: review.rating,
+    difficulty: review.difficulty,
   };
 
   return (

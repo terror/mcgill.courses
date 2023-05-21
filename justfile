@@ -50,6 +50,9 @@ run *args:
 
 seed:
   cargo run -- --source=seed serve --seed --db-name=mcgill-courses
+  
+seed-skip:
+  cargo run -- --source=seed serve --seed --skip-courses --db-name=mcgill-courses
 
 serve:
   cargo run -- serve --db-name=mcgill-courses
