@@ -4,6 +4,7 @@ use super::*;
 pub(crate) struct GetReviewsParams {
   pub(crate) course_id: Option<String>,
   pub(crate) user_id: Option<String>,
+  pub(crate) instructor_name: Option<String>,
 }
 
 pub(crate) async fn get_reviews(
@@ -18,6 +19,10 @@ pub(crate) async fn get_reviews(
 
   if let Some(user_id) = &params.user_id {
     reviews.extend(db.find_reviews_by_user_id(user_id).await?)
+  }
+
+  if let Some(instructor_name) = &params.instructor_name {
+    reviews.extend(db.find_reviews_by_instructor_name(instructor_name).await?)
   }
 
   Ok(Json(reviews.into_iter().collect::<HashSet<Review>>()))

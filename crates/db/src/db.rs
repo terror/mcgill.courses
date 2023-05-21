@@ -247,6 +247,15 @@ impl Db {
     self.find_reviews(doc! { "userId": user_id }).await
   }
 
+  pub async fn find_reviews_by_instructor_name(
+    &self,
+    instructor_name: &str,
+  ) -> Result<Vec<Review>> {
+    self
+      .find_reviews(doc! { "instructor": instructor_name })
+      .await
+  }
+
   pub async fn find_review(
     &self,
     course_id: &str,
@@ -394,7 +403,7 @@ impl Db {
   async fn add_instructor(&self, instructor: Instructor) -> Result {
     Ok(
       if self
-        .find_instructor(doc! { "name": &instructor.name })
+        .find_instructor_by_name(&instructor.name)
         .await?
         .is_none()
       {
@@ -424,6 +433,13 @@ impl Db {
         .find_one(query, None)
         .await?,
     )
+  }
+
+  pub async fn find_instructor_by_name(
+    &self,
+    name: &str,
+  ) -> Result<Option<Instructor>> {
+    self.find_instructor(doc! { "name": name }).await
   }
 
   #[cfg(test)]
