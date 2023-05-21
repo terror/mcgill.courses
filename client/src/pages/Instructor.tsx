@@ -6,10 +6,15 @@ import { Review } from '../model/Review';
 import { fetchClient } from '../lib/fetchClient';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
+
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const user = useAuth();
 
   useEffect(() => {
     fetchClient
@@ -30,6 +35,7 @@ export const Instructor = () => {
       });
   });
 
+  const userReview = reviews.find((r) => r.userId === user?.id);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
 
   return (
@@ -69,16 +75,39 @@ export const Instructor = () => {
       <div className='flex w-full flex-row justify-between'>
         <div className='my-4 ml-8 mr-8 w-full md:mr-8 md:mt-4'>
           <div className='w-full'>
-            {reviews.map((review, i) => (
-              <CourseReview
-                key={i}
-                canModify={false}
-                handleDelete={() => null}
-                isLast={i === reviews.length - 1}
-                openEditReview={() => null}
-                review={review}
-              />
-            ))}
+              {userReview && (
+                <CourseReview
+                  canModify={Boolean(user && userReview.userId === user.id)}
+                  handleDelete={() => {}}
+                  isLast={reviews.length === 1}
+                  openEditReview={() => {}}
+                  review={userReview}
+                />
+              )}
+              {reviews &&
+                reviews
+                  .filter((review) => (user ? review.userId !== user.id : true))
+                  .slice(0, showAllReviews ? reviews.length : 8)
+                  .map((review, i) => (
+                    <CourseReview
+                      canModify={Boolean(user && review.userId === user.id)}
+                      handleDelete={() => {}}
+                      isLast={i === reviews.length - 1}
+                      key={i}
+                      openEditReview={() => {}}
+                      review={review}
+                    />
+                  ))}
+              {!showAllReviews && reviews.length > 8 && (
+                <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
+                  <button
+                    className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+                    onClick={() => setShowAllReviews(true)}
+                  >
+                    Show all {reviews.length} reviews
+                  </button>
+                </div>
+              )}
           </div>
         </div>
       </div>
