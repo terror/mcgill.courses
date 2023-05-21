@@ -11,7 +11,7 @@ build:
 clippy:
   ./bin/clippy
 
-dev:
+dev: services
   concurrently \
     --kill-others \
     --names 'SERVER,CLIENT' \
@@ -23,7 +23,7 @@ dev:
     --timestamp-format 'HH:mm:ss' \
     --color \
     -- \
-    'just watch run serve' \
+    'just watch run serve --db-name=mcgill-courses' \
     'npm run dev'
 
 dev-deps:
