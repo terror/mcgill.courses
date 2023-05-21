@@ -70,7 +70,11 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
       {instructors.map((instructor, i) => (
         <Link
           key={i}
-          className={classNames(instructor.name === 'No Instructor Assigned' ? 'pointer-events-none' : '')}
+          className={classNames(
+            instructor.name === 'No Instructor Assigned'
+              ? 'pointer-events-none'
+              : ''
+          )}
           to={`/instructor/${instructor.name
             .split(' ')
             .map((x) => x.toLowerCase())
