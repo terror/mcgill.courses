@@ -1,17 +1,20 @@
-import { Fragment, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { CourseReview } from '../components/CourseReview';
+import { Fragment, useEffect, useState } from 'react';
+import { Instructor as InstructorType } from '../model/Instructor';
 import { Layout } from '../components/Layout';
+import { Link, useParams } from 'react-router-dom';
+import { NotFound } from './NotFound';
 import { RatingInfo } from '../components/RatingInfo';
 import { Review } from '../model/Review';
 import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
-import { Link, useParams } from 'react-router-dom';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
 
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [instructor, setInstructor] = useState<InstructorType | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
 
   const user = useAuth();
@@ -33,7 +36,19 @@ export const Instructor = () => {
           )
         );
       });
-  });
+    fetchClient
+      .getData<InstructorType>(
+        `/instructors/${params.name
+          ?.split('-')
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ')}`
+      )
+      .then((data) => {
+        setInstructor(data);
+      });
+  }, [params.name]);
+
+  if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id);
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);

@@ -66,6 +66,7 @@ mod arguments;
 mod auth;
 mod courses;
 mod error;
+mod instructors;
 mod loader;
 mod options;
 mod page;

@@ -48,6 +48,7 @@ impl Server {
         .route("/auth/logout", get(auth::logout))
         .route("/courses", post(courses::get_courses))
         .route("/courses/:id", get(courses::get_course_by_id))
+        .route("/instructors/:name", get(instructors::get_instructor))
         .route(
           "/reviews",
           get(reviews::get_reviews)
