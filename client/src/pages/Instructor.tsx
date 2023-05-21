@@ -65,7 +65,9 @@ export const Instructor = () => {
                     Teaches or has taught the following courses:{' '}
                     {uniqueReviews.map((review, index) => (
                       <Fragment key={index}>
-                        <Link to={`/course/${review.courseId}`}>{review.courseId}</Link>
+                        <Link to={`/course/${review.courseId}`}>
+                          {review.courseId}
+                        </Link>
                         {index !== uniqueReviews.length - 1 ? ', ' : '.'}
                       </Fragment>
                     ))}
@@ -91,9 +93,9 @@ export const Instructor = () => {
             {userReview && (
               <CourseReview
                 canModify={false}
-                handleDelete={() => { }}
+                handleDelete={() => {}}
                 isLast={reviews.length === 1}
-                openEditReview={() => { }}
+                openEditReview={() => {}}
                 review={userReview}
               />
             )}
@@ -104,10 +106,10 @@ export const Instructor = () => {
                 .map((review, i) => (
                   <CourseReview
                     canModify={false}
-                    handleDelete={() => { }}
+                    handleDelete={() => {}}
                     isLast={i === reviews.length - 1}
                     key={i}
-                    openEditReview={() => { }}
+                    openEditReview={() => {}}
                     review={review}
                   />
                 ))}
