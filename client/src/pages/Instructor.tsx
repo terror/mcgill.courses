@@ -93,10 +93,10 @@ export const Instructor = () => {
             {userReview && (
               <CourseReview
                 canModify={false}
-                handleDelete={() => {}}
+                handleDelete={() => undefined}
                 includeTaughtBy={false}
                 isLast={reviews.length === 1}
-                openEditReview={() => {}}
+                openEditReview={() => undefined}
                 review={userReview}
               />
             )}
@@ -107,11 +107,11 @@ export const Instructor = () => {
                 .map((review, i) => (
                   <CourseReview
                     canModify={false}
-                    handleDelete={() => {}}
+                    handleDelete={() => undefined}
                     includeTaughtBy={false}
                     isLast={i === reviews.length - 1}
                     key={i}
-                    openEditReview={() => {}}
+                    openEditReview={() => undefined}
                     review={review}
                   />
                 ))}
