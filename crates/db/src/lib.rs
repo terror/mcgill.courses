@@ -3,7 +3,7 @@ use {
   futures::TryStreamExt,
   itertools::Itertools,
   lazy_static::lazy_static,
-  log::info,
+  log::{info, warn},
   model::{Course, Instructor, Review, SearchResults},
   mongodb::{
     bson::{doc, Document},

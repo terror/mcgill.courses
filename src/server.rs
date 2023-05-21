@@ -8,6 +8,8 @@ pub(crate) struct Server {
   port: u16,
   #[clap(long, default_value = "false", help = "Seed the database")]
   seed: bool,
+  #[clap(long, default_value = "false", help = "Skip course seeding")]
+  skip_courses: bool,
 }
 
 impl Server {
@@ -22,7 +24,7 @@ impl Server {
       let clone = db.clone();
 
       tokio::spawn(async move {
-        if let Err(error) = clone.seed(source).await {
+        if let Err(error) = clone.seed(source, self.skip_courses).await {
           error!("error: {error}");
         }
       });
@@ -146,7 +148,7 @@ mod tests {
   async fn courses_route_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let body = json!({
       "subjects": None::<Vec<String>>,
@@ -181,7 +183,7 @@ mod tests {
   async fn courses_route_offset_limit() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let body = json!({
       "subjects": None::<Vec<String>>,
@@ -243,7 +245,7 @@ mod tests {
   async fn course_by_id_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let response = app
       .oneshot(
@@ -270,7 +272,7 @@ mod tests {
   async fn course_by_id_invalid_course_code() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let response = app
       .oneshot(
@@ -297,7 +299,7 @@ mod tests {
   async fn unauthenticated_cant_add_review() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let response = app
       .oneshot(
@@ -324,13 +326,14 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let review = json!({
       "content": "test",
       "course_id": "MATH240",
       "instructor": "test",
-      "rating": 5
+      "rating": 5,
+      "difficulty": 5
     })
     .to_string();
 
@@ -363,7 +366,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
 
@@ -371,7 +374,8 @@ mod tests {
       "content": "test",
       "course_id": "MATH240",
       "instructor": "test",
-      "rating": 5
+      "rating": 5,
+      "difficulty": 5
     })
     .to_string();
 
@@ -417,7 +421,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
 
@@ -425,7 +429,8 @@ mod tests {
         "content": "test",
         "course_id": "MATH240",
         "instructor": "foo",
-        "rating": 1
+        "rating": 1,
+        "difficulty": 5
     })
     .to_string();
 
@@ -446,7 +451,8 @@ mod tests {
       "content": "updated",
       "course_id": "MATH240",
       "instructor": "bar",
-      "rating": 5
+      "rating": 5,
+      "difficulty": 2
     })
     .to_string();
 
@@ -481,26 +487,29 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let reviews = vec![
       json!({
         "content": "test",
         "course_id": "COMP202",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
       json!({
         "content": "test2",
         "course_id": "MATH240",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
       json!({
         "content": "test3",
         "course_id": "COMP252",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
     ];
 
@@ -573,7 +582,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(seed()).await.unwrap();
+    db.seed(seed(), false).await.unwrap();
 
     let cookies = vec![
       mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await,
@@ -585,13 +594,15 @@ mod tests {
         "content": "test",
         "course_id": "MATH240",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
       json!({
          "content": "test2",
          "course_id": "MATH240",
          "instructor": "test",
-         "rating": 5
+         "rating": 5,
+         "difficulty": 5
       }),
     ];
 

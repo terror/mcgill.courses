@@ -46,7 +46,21 @@ export const CourseReview = ({
       <div className='flex flex-col '>
         <div className='flex justify-between'>
           <div className='flex flex-col'>
-            <StarRating rating={review.rating} />
+            <div className='mb-2 flex flex-col sm:flex-row sm:gap-4'>
+              <div className='flex items-center'>
+                <div className='text-md mr-1 font-bold text-gray-700 dark:text-gray-200'>
+                  Rating:
+                </div>
+                <StarRating rating={review.rating} />
+              </div>
+              <div className='flex items-center'>
+                <div className='text-md mr-1 font-bold text-gray-700 dark:text-gray-200'>
+                  Difficulty:
+                </div>
+                <StarRating rating={review.difficulty} />
+              </div>
+            </div>
+
             {review.content.length < 300 || readMore ? (
               <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
                 {review.content}
