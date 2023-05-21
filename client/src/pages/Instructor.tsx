@@ -1,3 +1,4 @@
+import { Fragment, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
@@ -5,8 +6,7 @@ import { RatingInfo } from '../components/RatingInfo';
 import { Review } from '../model/Review';
 import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -60,11 +60,19 @@ export const Instructor = () => {
                 />
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
-                {uniqueReviews.length
-                  ? `Teaches or has taught the following courses: ${uniqueReviews
-                      .map((review) => review.courseId)
-                      .join(', ')}.`
-                  : "This professor hasn't taught any courses that have been reviewed yet."}
+                {uniqueReviews.length ? (
+                  <Fragment>
+                    Teaches or has taught the following courses:{' '}
+                    {uniqueReviews.map((review, index) => (
+                      <Fragment key={index}>
+                        <Link to={`/course/${review.courseId}`}>{review.courseId}</Link>
+                        {index !== uniqueReviews.length - 1 ? ', ' : '.'}
+                      </Fragment>
+                    ))}
+                  </Fragment>
+                ) : (
+                  "This professor hasn't taught any courses that have been reviewed yet."
+                )}
               </p>
             </div>
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2'>
@@ -83,9 +91,9 @@ export const Instructor = () => {
             {userReview && (
               <CourseReview
                 canModify={false}
-                handleDelete={() => {}}
+                handleDelete={() => { }}
                 isLast={reviews.length === 1}
-                openEditReview={() => {}}
+                openEditReview={() => { }}
                 review={userReview}
               />
             )}
@@ -96,10 +104,10 @@ export const Instructor = () => {
                 .map((review, i) => (
                   <CourseReview
                     canModify={false}
-                    handleDelete={() => {}}
+                    handleDelete={() => { }}
                     isLast={i === reviews.length - 1}
                     key={i}
-                    openEditReview={() => {}}
+                    openEditReview={() => { }}
                     review={review}
                   />
                 ))}
