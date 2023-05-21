@@ -154,12 +154,12 @@ impl Db {
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
       courses: self
-        .text_search::<Course>(Self::COURSE_COLLECTION, query, 10)
+        .text_search::<Course>(Self::COURSE_COLLECTION, query, 4)
         .await?
         .try_collect()
         .await?,
       instructors: self
-        .text_search::<Instructor>(Self::INSTRUCTOR_COLLECTION, query, 5)
+        .text_search::<Instructor>(Self::INSTRUCTOR_COLLECTION, query, 2)
         .await?
         .try_collect()
         .await?,
@@ -651,7 +651,7 @@ mod tests {
 
     let results = db.search("COMP 202").await.unwrap();
 
-    assert_eq!(results.courses.len(), 10);
+    assert_eq!(results.courses.len(), 4);
 
     let first = results.courses.first().unwrap();
 
