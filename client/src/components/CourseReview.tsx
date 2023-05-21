@@ -60,7 +60,6 @@ export const CourseReview = ({
                 <StarRating rating={review.difficulty} />
               </div>
             </div>
-
             {review.content.length < 300 || readMore ? (
               <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
                 {review.content}
@@ -101,7 +100,6 @@ export const CourseReview = ({
           </div>
         </div>
       </div>
-
       <div className='flex flex-row justify-between gap-3 align-bottom'>
         <p className='mb-2 mt-2 text-sm italic leading-none text-gray-700 dark:text-gray-200'>
           {includeTaughtBy ? (

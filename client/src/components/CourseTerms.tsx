@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { BsSun } from 'react-icons/bs';
-import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
-
 import {
   classNames,
   filterCurrentInstructors,
   uniqueTermInstructors,
 } from '../lib/utils';
+
+import { BsSun } from 'react-icons/bs';
 import { Course } from '../model/Course';
+import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { GoX } from 'react-icons/go';
-import { Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
+import { Transition } from '@headlessui/react';
+import { useState } from 'react';
 
 const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 25;
@@ -69,6 +69,8 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
     <div className={container}>
       {instructors.map((instructor, i) => (
         <Link
+          key={i}
+          className={classNames(instructor.name === 'No Instructor Assigned' ? 'pointer-events-none' : '')}
           to={`/instructor/${instructor.name
             .split(' ')
             .map((x) => x.toLowerCase())
