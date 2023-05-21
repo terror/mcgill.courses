@@ -106,7 +106,7 @@ export const CourseReview = ({
         <p className='mb-2 mt-2 text-sm italic leading-none text-gray-700 dark:text-gray-200'>
           {includeTaughtBy ? (
             <Fragment>
-              Taught by:{' '}
+              Taught by{' '}
               <Link
                 to={`/instructor/${review.instructor
                   .split(' ')
