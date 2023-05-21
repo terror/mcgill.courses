@@ -94,6 +94,7 @@ export const Instructor = () => {
               <CourseReview
                 canModify={false}
                 handleDelete={() => {}}
+                includeTaughtBy={false}
                 isLast={reviews.length === 1}
                 openEditReview={() => {}}
                 review={userReview}
@@ -107,6 +108,7 @@ export const Instructor = () => {
                   <CourseReview
                     canModify={false}
                     handleDelete={() => {}}
+                    includeTaughtBy={false}
                     isLast={i === reviews.length - 1}
                     key={i}
                     openEditReview={() => {}}
