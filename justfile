@@ -11,6 +11,21 @@ build:
 clippy:
   ./bin/clippy
 
+dev: services
+  concurrently \
+    --kill-others \
+    --names 'SERVER,CLIENT' \
+    --prefix-colors 'green.bold,magenta.bold' \
+    --prefix '[{name}] ' \
+    --prefix-length 2 \
+    --success first \
+    --handle-input \
+    --timestamp-format 'HH:mm:ss' \
+    --color \
+    -- \
+    'just watch run serve --db-name=mcgill-courses' \
+    'npm run dev'
+
 dev-deps:
   cargo install present
 
@@ -42,8 +57,8 @@ readme:
   present --in-place README.md
   @prettier --write README.md
 
-restart:
-  docker-compose down --volumes && just services
+restart-services:
+  docker compose down --volumes && just services
 
 run *args:
   cargo run -- {{args}}
@@ -58,7 +73,7 @@ serve:
   cargo run -- serve --db-name=mcgill-courses
 
 services:
-  docker-compose up -d
+  docker compose up --no-recreate -d
 
 test:
   cargo test --all
