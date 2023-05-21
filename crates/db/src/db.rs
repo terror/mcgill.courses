@@ -40,16 +40,8 @@ impl Db {
 
     for seed in Seed::from_path(source)? {
       match seed {
-        Seed::Courses((path, courses)) => {
-          if skip_courses {
-            log::info!(
-              "Flag set, skipping seeding courses from {}...",
-              path.display()
-            );
-            continue;
-          }
-
-          log::info!("Seeding courses from {}...", path.display());
+        Seed::Courses((path, courses)) if !skip_courses => {
+          info!("Seeding courses from {}...", path.display());
 
           for course in courses {
             self.add_course(course.clone()).await?;
@@ -60,17 +52,19 @@ impl Db {
           }
         }
         Seed::Reviews((path, reviews)) => {
-          log::info!("Seeding reviews from {}...", path.display());
+          info!("Seeding reviews from {}...", path.display());
+
           for review in reviews {
             self.add_review(review).await?;
           }
         }
         Seed::Unknown(path) => {
-          log::warn!(
+          warn!(
             "Unknown seed type encountered from {}, continuing...",
             path.display()
           );
         }
+        _ => continue,
       }
     }
 
