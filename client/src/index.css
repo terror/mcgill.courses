@@ -17,5 +17,5 @@
 }
 
 .autocomplete::-webkit-scrollbar:horizontal {
-    display: none;
+  display: none;
 }
