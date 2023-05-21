@@ -11,7 +11,7 @@ build:
 clippy:
   ./bin/clippy
 
-dev: services
+dev:
   concurrently \
     --kill-others \
     --names 'SERVER,CLIENT' \
