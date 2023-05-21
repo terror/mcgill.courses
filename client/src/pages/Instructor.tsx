@@ -62,7 +62,7 @@ export const Instructor = () => {
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
                   <Fragment>
-                    Teaches or has taught the following courses:{' '}
+                    Teaches or has taught the following course(s):{' '}
                     {uniqueReviews.map((review, index) => (
                       <Fragment key={index}>
                         <Link to={`/course/${review.courseId}`}>
