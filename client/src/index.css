@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.autocomplete::-webkit-scrollbar {
+  width: 3px;
+}
+
+.autocomplete::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.autocomplete::-webkit-scrollbar-thumb {
+  background-color: rgb(182, 182, 182);
+  border-radius: 20px;
+  border: transparent;
+}
+
+.autocomplete::-webkit-scrollbar:horizontal {
+    display: none;
+}

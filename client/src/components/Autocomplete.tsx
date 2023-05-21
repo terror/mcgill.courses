@@ -43,7 +43,7 @@ export const Autocomplete = ({
             leaveFrom='transform scale-100 opacity-100'
             leaveTo='transform scale-95 opacity-0'
           >
-            <Combobox.Options className='absolute h-80 w-full overflow-scroll rounded-md shadow-md'>
+            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md shadow-md'>
               {arr.map((val, i) => (
                 <Combobox.Option
                   key={i}
