@@ -332,7 +332,8 @@ mod tests {
       "content": "test",
       "course_id": "MATH240",
       "instructor": "test",
-      "rating": 5
+      "rating": 5,
+      "difficulty": 5
     })
     .to_string();
 
@@ -373,7 +374,8 @@ mod tests {
       "content": "test",
       "course_id": "MATH240",
       "instructor": "test",
-      "rating": 5
+      "rating": 5,
+      "difficulty": 5
     })
     .to_string();
 
@@ -427,7 +429,8 @@ mod tests {
         "content": "test",
         "course_id": "MATH240",
         "instructor": "foo",
-        "rating": 1
+        "rating": 1,
+        "difficulty": 5
     })
     .to_string();
 
@@ -448,7 +451,8 @@ mod tests {
       "content": "updated",
       "course_id": "MATH240",
       "instructor": "bar",
-      "rating": 5
+      "rating": 5,
+      "difficulty": 2
     })
     .to_string();
 
@@ -490,19 +494,22 @@ mod tests {
         "content": "test",
         "course_id": "COMP202",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
       json!({
         "content": "test2",
         "course_id": "MATH240",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
       json!({
         "content": "test3",
         "course_id": "COMP252",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
     ];
 
@@ -587,13 +594,15 @@ mod tests {
         "content": "test",
         "course_id": "MATH240",
         "instructor": "test",
-        "rating": 5
+        "rating": 5,
+        "difficulty": 5
       }),
       json!({
          "content": "test2",
          "course_id": "MATH240",
          "instructor": "test",
-         "rating": 5
+         "rating": 5,
+         "difficulty": 5
       }),
     ];
 
