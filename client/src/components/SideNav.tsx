@@ -1,12 +1,11 @@
-import { Dialog } from '@headlessui/react';
+import { Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
-import { navigationItems } from './Footer';
-import { DarkModeToggle } from './DarkModeToggle';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames } from '../lib/utils';
+import { DarkModeToggle } from './DarkModeToggle';
+import { navigationItems } from './Footer';
 
 type SideNavProps = {
   open: boolean;
@@ -15,17 +14,19 @@ type SideNavProps = {
 
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
-  const [darkMode, _] = useDarkMode();
 
   return (
-    <Dialog
-      as='div'
-      className={classNames('lg:hidden', darkMode ? 'dark' : '')}
-      open={open}
-      onClose={onClose}
+    <Transition
+      show={open}
+      enter='transition-all duration-200'
+      enterFrom='translate-x-full'
+      enterTo='translate-x-0'
+      leave='transition-all duration-200'
+      leaveFrom='translate-x-0'
+      leaveTo='translate-x-full'
+      className='fixed right-0 top-0 z-50 w-96'
     >
-      <div className='fixed inset-0 z-50' />
-      <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+      <div className='h-screen w-full overflow-y-auto bg-white px-6 py-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
         <div className='mt-1 flex items-center justify-between'>
           <div className='flex items-center'>
             <a href='/' className=''>
@@ -88,7 +89,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             </div>
           </div>
         </div>
-      </Dialog.Panel>
-    </Dialog>
+      </div>
+    </Transition>
   );
 };
