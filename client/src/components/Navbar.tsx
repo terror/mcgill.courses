@@ -41,12 +41,12 @@ export const Navbar = () => {
   const user = useAuth();
 
   return (
-    <header className='z-50'>
+    <header className='z-40'>
       <nav
-        className='z-50 flex items-center justify-between p-6 lg:px-8'
+        className='z-40 flex items-center justify-between p-6 lg:px-8'
         aria-label='Global'
       >
-        <div className='z-50 my-auto mr-auto flex lg:flex-1'>
+        <div className='z-40 my-auto mr-auto flex lg:flex-1'>
           <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src='/bird.png' alt='bird' />
           </Link>
@@ -54,7 +54,7 @@ export const Navbar = () => {
         <div className='flex lg:hidden'>
           <button
             type='button'
-            className='-m-6 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200'
+            className='inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200'
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className='sr-only'>Open main menu</span>
