@@ -26,7 +26,7 @@ pub(crate) struct Loader {
   batch_size: usize,
   #[clap(
     long,
-    default_value = "2022-2023",
+    default_value = "2023-2024",
     help = "The mcgill term to scrape"
   )]
   mcgill_term: String,
