@@ -9,6 +9,7 @@ export type Review = {
   courseId: string;
   instructor: string;
   rating: number; // 0-5
+  difficulty: number; // 0-5
   timestamp: Timestamp;
   userId: string;
 };

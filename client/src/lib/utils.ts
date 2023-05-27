@@ -1,6 +1,6 @@
 import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
-import { Block, Schedule } from '../model/Schedule';
+import { Schedule } from '../model/Schedule';
 
 export const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');

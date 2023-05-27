@@ -89,6 +89,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
     setCurrentlyDisplayingSchedules(
       sortSchedulesByBlocks(dedupeSchedulesByBlocks(uniqueTimeSlots))
     );
+    setOpenBlock(null);
   }, [currentlyDisplayingTerm]);
 
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
@@ -126,36 +127,36 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               />
             </button>
           </div>
-          <Transition
-            show={openBlock === block}
-            enter='transition duration-300 ease-in-out transform'
-            enterFrom='opacity-0 -translate-y-2'
-            enterTo='opacity-100 translate-y-0'
-            leave='transition duration-300 ease-in-out transform'
-            leaveFrom='opacity-100 translate-y-0'
-            leaveTo='opacity-0 -translate-y-2'
+          <div
+            className={'transition-all duration-300 ease-in-out'}
+            style={{
+              height: openBlock === block ? block.timeblocks.length * 40 : 0,
+              opacity: openBlock === block ? 1 : 0,
+            }}
           >
-            <div className='flex flex-col'>
-              {block.timeblocks.length > 0 ? (
-                block.timeblocks?.map((timeblock: TimeBlock, i) => (
-                  <div
-                    key={i}
-                    className='flex flex-row justify-between px-3 py-2 pl-10 font-medium text-gray-600 dark:text-neutral-300'
-                  >
-                    <p>{dayToWeekday(timeblock.day)}</p>
-                    <p>
-                      {VSBtimeToDisplay(timeblock.t1)} -{' '}
-                      {VSBtimeToDisplay(timeblock.t2)}
-                    </p>
+            {openBlock && (
+              <div className='flex flex-col'>
+                {block.timeblocks.length > 0 ? (
+                  block.timeblocks?.map((timeblock: TimeBlock, i) => (
+                    <div
+                      key={i}
+                      className='flex flex-row justify-between px-3 py-2 pl-10 font-medium text-gray-600 dark:text-neutral-300'
+                    >
+                      <p>{dayToWeekday(timeblock.day)}</p>
+                      <p>
+                        {VSBtimeToDisplay(timeblock.t1)} -{' '}
+                        {VSBtimeToDisplay(timeblock.t2)}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className='flex flex-row justify-center px-3 py-2 dark:text-neutral-400'>
+                    <p>No scheduled time block.</p>
                   </div>
-                ))
-              ) : (
-                <div className='flex flex-row justify-center px-3 py-2 dark:text-neutral-400'>
-                  <p>No scheduled time block.</p>
-                </div>
-              )}
-            </div>
-          </Transition>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       ))}
     </div>

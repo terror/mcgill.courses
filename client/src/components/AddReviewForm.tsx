@@ -31,6 +31,7 @@ export const AddReviewForm = ({
     content: '',
     instructor: '',
     rating: 0,
+    difficulty: 0,
   };
 
   return (

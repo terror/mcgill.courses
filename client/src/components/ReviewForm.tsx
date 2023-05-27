@@ -16,12 +16,17 @@ export const ReviewSchema = Yup.object().shape({
     .min(1, 'Rating must be between 1 and 5')
     .max(5, 'Rating must be between 1 and 5')
     .required('Rating is required'),
+  difficulty: Yup.number()
+    .min(1, 'Difficulty must be between 1 and 5')
+    .max(5, 'Difficulty must be between 1 and 5')
+    .required('Difficulty is required'),
 });
 
 type ReviewFormInitialValues = {
   content: string;
   instructor: string;
   rating: number;
+  difficulty: number;
 };
 
 type ReviewFormProps = {
@@ -48,6 +53,7 @@ export const ReviewForm = ({
   const instructorNames = Array.from(
     new Set(course.instructors.map((instructor) => instructor.name))
   );
+  instructorNames.push('Other');
 
   const filteredInstructors =
     query === ''
@@ -92,6 +98,17 @@ export const ReviewForm = ({
         />
         <div className='italic text-red-400'>
           <ErrorMessage name='rating' />
+        </div>
+        <label htmlFor='difficulty' className='mb-2 mt-2 dark:text-gray-200'>
+          Difficulty
+        </label>
+        <StarRatingInput
+          name='difficulty'
+          rating={values.difficulty}
+          setFieldValue={setFieldValue}
+        />
+        <div className='italic text-red-400'>
+          <ErrorMessage name='difficulty' />
         </div>
         <div className='mt-4 flex justify-end space-x-4'>
           <div
