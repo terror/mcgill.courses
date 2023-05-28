@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
+import { BoxToggle } from '../components/BoxToggle';
 import { Alert } from '../components/Alert';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
@@ -16,11 +17,14 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
+import { ReviewFilter } from '../components/ReviewFilter';
 import { getCurrentTerms } from '../lib/utils';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import _ from 'lodash';
+import { Instructor } from '../model/Instructor';
 
 export const CoursePage = () => {
+  let allReviews: Review[] = [];
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -37,6 +41,10 @@ export const CoursePage = () => {
   );
   const [alertMessage, setAlertMessage] = useState('');
 
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [filteredInstructors, setFilteredInstructors] = useState<string[]>([]);
+  const [filteredRatings, setFilteredRatings] = useState<number[]>([]);
+
   useEffect(() => {
     fetchClient
       .getData<Course>(`/courses/${params.id?.toUpperCase()}`)
@@ -52,7 +60,8 @@ export const CoursePage = () => {
               parseInt(a.timestamp.$date.$numberLong, 10)
           )
         );
-      });
+      })
+      .catch((err) => console.log(err));
   }, [params.id, addReviewOpen, editReviewOpen]);
 
   if (course === null) {
@@ -143,6 +152,23 @@ export const CoursePage = () => {
                 openAddReview={() => setAddReviewOpen(true)}
               />
             )}
+            <div className='mb-5'>
+              <BoxToggle
+                title=''
+                child={
+                  <ReviewFilter
+                    selectedInstructors={filteredInstructors}
+                    setSelectedInstructors={setFilteredInstructors}
+                    selectedRatings={filteredRatings}
+                    setSelectedRatings={setFilteredRatings}
+                    allReviews={allReviews}
+                    setReviews={setReviews}
+                  />
+                }
+                isOpen={filterIsOpen}
+                setIsOpen={setFilterIsOpen}
+              />
+            </div>
             <div className='w-full'>
               {userReview && (
                 <CourseReview
