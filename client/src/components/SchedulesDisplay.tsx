@@ -117,7 +117,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
             </div>
             <button
               onClick={() =>
-                openBlock === block ? setOpenBlock(null) : setOpenBlock(block)
+                openBlock !== block ? setOpenBlock(block) : setOpenBlock(null)
               }
             >
               <IoIosArrowDown
@@ -130,7 +130,10 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
           <div
             className={'transition-all duration-300 ease-in-out'}
             style={{
-              height: openBlock === block ? block.timeblocks.length * 40 : 0,
+              height:
+                openBlock === block
+                  ? Math.max(block.timeblocks.length * 40, 40)
+                  : 0,
               opacity: openBlock === block ? 1 : 0,
             }}
           >
@@ -150,8 +153,10 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                     </div>
                   ))
                 ) : (
-                  <div className='flex flex-row justify-center px-3 py-2 dark:text-neutral-400'>
-                    <p>No scheduled time block.</p>
+                  <div className='flex flex-col'>
+                    <div className='flex flex-row justify-center bg-neutral-700 px-3 py-2 dark:text-neutral-400'>
+                      <p>No scheduled time block.</p>
+                    </div>
                   </div>
                 )}
               </div>
