@@ -30,7 +30,7 @@ export const Profile = () => {
             </h1>
             <hr className='mx-auto my-5 w-32 border-gray-200 text-4xl' />
           </div>
-          <div className='py- mx-5 mb-4 box-border flex h-fit max-w-xl flex-col flex-wrap rounded-lg border p-4 dark:border-neutral-700'>
+          <div className='py- mx-5 mb-4 flex h-fit max-w-xl flex-col flex-wrap rounded-lg p-4'>
             {userReviews === undefined ? (
               <div className='mx-auto'>
                 <Spinner />
