@@ -16,7 +16,7 @@ impl Retry for RequestBuilder {
       {
         Ok(response) => return Ok(response),
         Err(error) => {
-          log::error!("Request failed: {error}");
+          error!("Request failed: {error}");
           attempts += 1;
           thread::sleep(Duration::from_secs(1));
         }

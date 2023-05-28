@@ -21,7 +21,7 @@ impl<'a> VsbClient<'a> {
     code: &str,
     terms: Vec<usize>,
   ) -> Result<Vec<Schedule>> {
-    log::info!("Scraping schedules for {}...", code);
+    info!("Scraping schedules for {}...", code);
 
     Ok(
       terms

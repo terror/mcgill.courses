@@ -53,14 +53,14 @@ pub(crate) async fn login_authorized(
   AppState(request_client): AppState<reqwest::Client>,
   AppState(session_store): AppState<MongodbSessionStore>,
 ) -> Result<impl IntoResponse> {
-  log::debug!("Fetching token from oauth client...");
+  debug!("Fetching token from oauth client...");
 
   let token = oauth_client
     .exchange_code(AuthorizationCode::new(query.code.clone()))
     .request_async(async_http_client)
     .await?;
 
-  log::debug!("Fetching user data from Microsoft...");
+  debug!("Fetching user data from Microsoft...");
 
   let user: User = request_client
     .get("https://graph.microsoft.com/v1.0/me")
@@ -87,7 +87,7 @@ pub(crate) async fn login_authorized(
 
   session.expire_in(Duration::from_secs(60 * 60 * 24 * 7));
 
-  log::debug!("Inserting user data into session...");
+  debug!("Inserting user data into session...");
 
   session.insert("user", user)?;
 
@@ -124,7 +124,7 @@ pub(crate) async fn logout(
     None => return Ok(Redirect::to(&query.redirect)),
   };
 
-  log::debug!("Destroying session...");
+  debug!("Destroying session...");
 
   session_store.destroy_session(session).await?;
 

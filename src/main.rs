@@ -35,7 +35,7 @@ use {
   db::Db,
   dotenv::dotenv,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
-  log::{debug, error},
+  log::{debug, error, info, trace},
   model::{Course, CourseListing, Review, Schedule},
   oauth2::{
     basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,

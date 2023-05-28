@@ -53,12 +53,12 @@ where
           header::COOKIE => match e.reason() {
             TypedHeaderRejectionReason::Missing => AuthRedirect,
             _ => {
-              log::error!("Unexpected error getting cookie header(s): {}", e);
+              error!("Unexpected error getting cookie header(s): {}", e);
               AuthRedirect
             }
           },
           _ => {
-            log::error!("Unexpected error getting cookies: {}", e);
+            error!("Unexpected error getting cookies: {}", e);
             AuthRedirect
           }
         }
