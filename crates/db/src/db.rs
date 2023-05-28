@@ -57,7 +57,7 @@ impl Db {
             })
           });
 
-          for result in futures::future::join_all(tasks).await {
+          for result in join_all(tasks).await {
             if let Err(err) = result {
               return Err(err.into());
             }
@@ -72,7 +72,7 @@ impl Db {
             tokio::task::spawn(async move { db.add_review(review).await })
           });
 
-          for result in futures::future::join_all(tasks).await {
+          for result in join_all(tasks).await {
             if let Err(err) = result {
               return Err(err.into());
             }
