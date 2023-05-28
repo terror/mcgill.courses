@@ -43,19 +43,39 @@ impl Db {
         Seed::Courses((path, courses)) if !skip_courses => {
           info!("Seeding courses from {}...", path.display());
 
-          for course in courses {
-            self.add_course(course.clone()).await?;
+          let tasks = courses.into_iter().map(|course| {
+            let db = self.clone();
 
-            for instructor in course.instructors {
-              self.add_instructor(instructor).await?;
+            tokio::task::spawn(async move {
+              db.add_course(course.clone()).await?;
+
+              for instructor in course.instructors {
+                db.add_instructor(instructor).await?;
+              }
+
+              Ok::<(), anyhow::Error>(())
+            })
+          });
+
+          for result in join_all(tasks).await {
+            if let Err(err) = result {
+              return Err(err.into());
             }
           }
         }
         Seed::Reviews((path, reviews)) => {
           info!("Seeding reviews from {}...", path.display());
 
-          for review in reviews {
-            self.add_review(review).await?;
+          let tasks = reviews.into_iter().map(|review| {
+            let db = self.clone();
+
+            tokio::task::spawn(async move { db.add_review(review).await })
+          });
+
+          for result in join_all(tasks).await {
+            if let Err(err) = result {
+              return Err(err.into());
+            }
           }
         }
         Seed::Unknown(path) => {

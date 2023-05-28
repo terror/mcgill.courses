@@ -1,6 +1,6 @@
 use {
   anyhow::anyhow,
-  futures::TryStreamExt,
+  futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
   log::{info, warn},
