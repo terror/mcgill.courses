@@ -222,7 +222,7 @@ impl Db {
           UpdateModifications::Document(doc! {
             "$set": {
               "content": &review.content,
-              "instructor": &review.instructors,
+              "instructors": &review.instructors,
               "rating": review.rating,
               "timestamp": review.timestamp
             },
