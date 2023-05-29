@@ -332,7 +332,7 @@ mod tests {
     let review = json!({
       "content": "test",
       "course_id": "MATH240",
-      "instructor": "test",
+      "instructors": ["test"],
       "rating": 5,
       "difficulty": 5
     })
@@ -374,7 +374,7 @@ mod tests {
     let review = json!({
       "content": "test",
       "course_id": "MATH240",
-      "instructor": "test",
+      "instructors": ["test"],
       "rating": 5,
       "difficulty": 5
     })
@@ -429,7 +429,7 @@ mod tests {
     let review = json!({
         "content": "test",
         "course_id": "MATH240",
-        "instructor": "foo",
+        "instructors": ["foo"],
         "rating": 1,
         "difficulty": 5
     })
@@ -451,7 +451,7 @@ mod tests {
     let review = json!({
       "content": "updated",
       "course_id": "MATH240",
-      "instructor": "bar",
+      "instructors": ["bar"],
       "rating": 5,
       "difficulty": 2
     })
@@ -475,7 +475,7 @@ mod tests {
     let review = db.find_review("MATH240", "test").await.unwrap().unwrap();
 
     assert_eq!(review.content, "updated");
-    assert_eq!(review.instructor, "bar");
+    assert_eq!(review.instructors, vec![String::from("bar")]);
     assert_eq!(review.rating, 5);
   }
 
@@ -494,21 +494,21 @@ mod tests {
       json!({
         "content": "test",
         "course_id": "COMP202",
-        "instructor": "test",
+        "instructors": ["test"],
         "rating": 5,
         "difficulty": 5
       }),
       json!({
         "content": "test2",
         "course_id": "MATH240",
-        "instructor": "test",
+        "instructors": ["test"],
         "rating": 5,
         "difficulty": 5
       }),
       json!({
         "content": "test3",
         "course_id": "COMP252",
-        "instructor": "test",
+        "instructors": ["test"],
         "rating": 5,
         "difficulty": 5
       }),
@@ -594,14 +594,14 @@ mod tests {
       json!({
         "content": "test",
         "course_id": "MATH240",
-        "instructor": "test",
+        "instructors": ["test"],
         "rating": 5,
         "difficulty": 5
       }),
       json!({
          "content": "test2",
          "course_id": "MATH240",
-         "instructor": "test",
+         "instructors": ["test"],
          "rating": 5,
          "difficulty": 5
       }),

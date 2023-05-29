@@ -222,7 +222,7 @@ impl Db {
           UpdateModifications::Document(doc! {
             "$set": {
               "content": &review.content,
-              "instructor": &review.instructor,
+              "instructor": &review.instructors,
               "rating": review.rating,
               "timestamp": review.timestamp
             },
@@ -821,7 +821,7 @@ mod tests {
       Review {
         content: "foo".into(),
         course_id: "MATH240".into(),
-        instructor: "test".into(),
+        instructors: vec![String::from("test")],
         rating: 5,
         user_id: "1".into(),
         ..Default::default()
@@ -829,7 +829,7 @@ mod tests {
       Review {
         content: "foo".into(),
         course_id: "MATH240".into(),
-        instructor: "test".into(),
+        instructors: vec![String::from("test")],
         rating: 5,
         user_id: "2".into(),
         ..Default::default()
@@ -837,7 +837,7 @@ mod tests {
       Review {
         content: "foo".into(),
         course_id: "MATH240".into(),
-        instructor: "test".into(),
+        instructors: vec![String::from("test")],
         rating: 5,
         user_id: "3".into(),
         ..Default::default()
@@ -860,7 +860,7 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "1".into(),
-        instructor: "test".into(),
+        instructors: vec![String::from("test")],
         rating: 5,
         course_id: "MATH240".into(),
         ..Default::default()
@@ -868,7 +868,7 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "2".into(),
-        instructor: "test".into(),
+        instructors: vec![String::from("test")],
         rating: 5,
         course_id: "MATH240".into(),
         ..Default::default()
@@ -876,7 +876,7 @@ mod tests {
       Review {
         content: "foo".into(),
         user_id: "3".into(),
-        instructor: "test".into(),
+        instructors: vec![String::from("test")],
         rating: 5,
         course_id: "MATH340".into(),
         ..Default::default()
@@ -896,7 +896,7 @@ mod tests {
         Review {
           content: "foo".into(),
           user_id: "1".into(),
-          instructor: "test".into(),
+          instructors: vec![String::from("test")],
           rating: 5,
           course_id: "MATH240".into(),
           ..Default::default()
@@ -904,7 +904,7 @@ mod tests {
         Review {
           content: "foo".into(),
           course_id: "MATH240".into(),
-          instructor: "test".into(),
+          instructors: vec![String::from("test")],
           rating: 5,
           user_id: "2".into(),
           ..Default::default()
@@ -950,8 +950,6 @@ mod tests {
       vec![Review {
         content: "foo".into(),
         user_id: "2".into(),
-        instructor: "".into(),
-        rating: 0,
         course_id: "MATH240".into(),
         ..Default::default()
       },]
@@ -980,7 +978,7 @@ mod tests {
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
-      instructor: "bar".into(),
+      instructors: vec![String::from("bar")],
       rating: 5,
       difficulty: 5,
       user_id: "1".into(),
@@ -995,7 +993,7 @@ mod tests {
       db.update_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
-        instructor: "foo".into(),
+        instructors: vec![String::from("foo")],
         rating: 4,
         difficulty: 4,
         user_id: "1".into(),
@@ -1011,7 +1009,7 @@ mod tests {
       db.update_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
-        instructor: "foo".into(),
+        instructors: vec![String::from("foo")],
         rating: 4,
         difficulty: 4,
         user_id: "2".into(),
@@ -1026,7 +1024,7 @@ mod tests {
     let review = db.find_review("MATH240", "1").await.unwrap().unwrap();
 
     assert_eq!(review.content, "bar");
-    assert_eq!(review.instructor, "foo");
+    assert_eq!(review.instructors, vec![String::from("foo")]);
     assert_eq!(review.rating, 4);
     assert_eq!(review.timestamp, timestamp);
   }

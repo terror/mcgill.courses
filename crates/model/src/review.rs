@@ -5,7 +5,7 @@ use super::*;
 pub struct Review {
   pub content: String,
   pub course_id: String,
-  pub instructor: String,
+  pub instructors: Vec<String>,
   pub rating: u32,
   pub difficulty: u32,
   #[serde(deserialize_with = "deserialize_timestamp")]
@@ -81,7 +81,7 @@ impl Default for Review {
     Self {
       content: String::new(),
       course_id: String::new(),
-      instructor: String::new(),
+      instructors: vec![],
       rating: 0,
       difficulty: 0,
       timestamp: DateTime::from_chrono::<Utc>(
