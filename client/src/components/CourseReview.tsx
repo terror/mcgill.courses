@@ -1,12 +1,12 @@
 import { format } from 'date-fns';
-import { Edit } from 'react-feather';
 import { Fragment, useState } from 'react';
+import { Edit } from 'react-feather';
+import { Link } from 'react-router-dom';
 
+import { classNames } from '../lib/utils';
 import { Review } from '../model/Review';
 import { DeleteButton } from './DeleteButton';
 import { StarRating } from './StarRating';
-import { classNames } from '../lib/utils';
-import { Link } from 'react-router-dom';
 
 type CourseReviewProps = {
   canModify: boolean;
@@ -101,18 +101,24 @@ export const CourseReview = ({
         </div>
       </div>
       <div className='flex flex-row justify-between gap-3 align-bottom'>
-        <p className='mb-2 mt-2 text-sm italic leading-none text-gray-700 dark:text-gray-200'>
+        <p className='flex-1 mb-2 mt-auto text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
           {includeTaughtBy ? (
             <Fragment>
               Taught by{' '}
-              <Link
-                to={`/instructor/${review.instructor
-                  .split(' ')
-                  .map((x) => x.toLowerCase())
-                  .join('-')}`}
-              >
-                {review.instructor}
-              </Link>
+              {review.instructors.map((instructor, i) => (
+                <>
+                  <Link
+                    to={`/instructor/${instructor
+                      .split(' ')
+                      .map((x) => x.toLowerCase())
+                      .join('-')}`}
+                    className='hover:text-red-600 transition'
+                  >
+                    {instructor}
+                  </Link>
+                  {i < review.instructors.length - 1 && <span>, </span>}
+                </>
+              ))}
             </Fragment>
           ) : (
             <Fragment>
@@ -121,7 +127,7 @@ export const CourseReview = ({
             </Fragment>
           )}
         </p>
-        <h2 className='ml-auto mt-2 text-sm font-bold leading-none text-gray-700 dark:text-gray-200'>
+        <h2 className='ml-auto mt-auto text-sm font-bold leading-none text-gray-700 dark:text-gray-200'>
           {dateStr}
         </h2>
       </div>
