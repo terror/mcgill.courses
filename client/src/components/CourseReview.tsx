@@ -101,7 +101,7 @@ export const CourseReview = ({
         </div>
       </div>
       <div className='flex flex-row justify-between gap-3 align-bottom'>
-        <p className='flex-1 mb-2 mt-auto text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
+        <p className='mb-2 mt-auto flex-1 text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
           {includeTaughtBy ? (
             <Fragment>
               Taught by{' '}
@@ -112,7 +112,7 @@ export const CourseReview = ({
                       .split(' ')
                       .map((x) => x.toLowerCase())
                       .join('-')}`}
-                    className='hover:text-red-600 transition'
+                    className='transition hover:text-red-600'
                   >
                     {instructor}
                   </Link>

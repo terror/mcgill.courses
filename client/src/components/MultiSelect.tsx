@@ -62,7 +62,7 @@ export const MultiSelect = ({
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `p-2 cursor-pointer
+                  className={({ active }) => `cursor-pointer p-2
                     ${
                       active
                         ? 'bg-red-500 text-white'
@@ -81,14 +81,14 @@ export const MultiSelect = ({
           </Transition>
         </div>
       </Combobox>
-      <div className='flex flex-wrap mt-2 gap-1 w-full'>
+      <div className='mt-2 flex w-full flex-wrap gap-1'>
         {values.map((val) => (
-          <div className='flex px-2.5 py-1 bg-gray-100 dark:bg-neutral-700 dark:text-gray-200 rounded-3xl space-x-1'>
+          <div className='flex space-x-1 rounded-3xl bg-gray-100 px-2.5 py-1 dark:bg-neutral-700 dark:text-gray-200'>
             <div>{val}</div>
             <button type='button' onClick={() => removeVal(val)}>
               <X
                 size={18}
-                className='hover:stroke-red-600 transition duration-75'
+                className='transition duration-75 hover:stroke-red-600'
               />
             </button>
           </div>
