@@ -1,14 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { fetchClient } from '../lib/fetchClient';
 import { classNames } from '../lib/utils';
 import { Course } from '../model/Course';
-import { ReviewForm, ReviewSchema } from './ReviewForm';
-import { ReviewFormInitialValues } from './ReviewForm';
+import {
+  ReviewForm,
+  ReviewFormInitialValues,
+  ReviewSchema,
+} from './ReviewForm';
 
 type ReviewFormProps = {
   course: Course;
