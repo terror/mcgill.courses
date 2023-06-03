@@ -105,20 +105,28 @@ export const CourseReview = ({
           {includeTaughtBy ? (
             <Fragment>
               Taught by{' '}
-              {review.instructors.map((instructor, i) => (
-                <>
-                  <Link
-                    to={`/instructor/${instructor
-                      .split(' ')
-                      .map((x) => x.toLowerCase())
-                      .join('-')}`}
-                    className='transition hover:text-red-600'
-                  >
-                    {instructor}
-                  </Link>
-                  {i < review.instructors.length - 1 && <span>, </span>}
-                </>
-              ))}
+              {review.instructors.map((instructor, i) => {
+                let separator = null;
+                if (i === review.instructors.length - 2) {
+                  separator = ' and ';
+                } else if (i < review.instructors.length - 2) {
+                  separator = ', ';
+                }
+                return (
+                  <>
+                    <Link
+                      to={`/instructor/${instructor
+                        .split(' ')
+                        .map((x) => x.toLowerCase())
+                        .join('-')}`}
+                      className='transition hover:text-red-600'
+                    >
+                      {instructor}
+                    </Link>
+                    {separator}
+                  </>
+                );
+              })}
             </Fragment>
           ) : (
             <Fragment>
