@@ -14,7 +14,7 @@ impl Seeder {
   pub(crate) async fn run(self) -> Result {
     info!("Seeding the database...");
 
-    for seed in Seed::from_path(&self.options.source)? {
+    for seed in Collector::new(&self.options.source).run()? {
       match seed {
         Seed::Courses((path, courses)) if !self.options.skip_courses => {
           info!("Seeding courses from {}...", path.display());

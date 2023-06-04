@@ -15,7 +15,7 @@ use {
   },
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  {crate::combine::Combine, seed::Seed, seeder::Seeder, str_ext::StrExt},
+  {crate::combine::Combine, seed::Seed, seeder::Seeder, str_ext::StrExt, collector::Collector},
 };
 
 #[cfg(test)]
@@ -30,6 +30,7 @@ use {
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
 mod combine;
+mod collector;
 mod db;
 mod seed;
 mod seeder;

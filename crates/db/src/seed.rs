@@ -8,23 +8,7 @@ pub(crate) enum Seed {
 }
 
 impl Seed {
-  pub(crate) fn from_path(path: &PathBuf) -> Result<Vec<Self>> {
-    Ok(if path.is_file() {
-      vec![Self::from_content(path.clone(), fs::read_to_string(path)?)]
-    } else {
-      fs::read_dir(path)?
-        .map(|path| -> Result<PathBuf> { Ok(path?.path()) })
-        .collect::<Result<Vec<_>>>()?
-        .into_iter()
-        .sorted()
-        .map(|path| -> Result<Self> {
-          Ok(Self::from_content(path.clone(), fs::read_to_string(path)?))
-        })
-        .collect::<Result<Vec<_>>>()?
-    })
-  }
-
-  fn from_content(path: PathBuf, content: String) -> Self {
+  pub(crate) fn from_content(path: PathBuf, content: String) -> Self {
     match (
       serde_json::from_str::<Vec<Course>>(&content).ok(),
       serde_json::from_str::<Vec<Review>>(&content).ok(),
