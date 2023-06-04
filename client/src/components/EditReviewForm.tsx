@@ -1,14 +1,14 @@
+import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
+import { Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { useDarkMode } from '../hooks/useDarkMode';
 import { fetchClient } from '../lib/fetchClient';
+import { classNames } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { ReviewForm, ReviewSchema } from './ReviewForm';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import { classNames } from '../lib/utils';
-import { useDarkMode } from '../hooks/useDarkMode';
 
 type EditReviewFormProps = {
   course: Course;
@@ -32,7 +32,7 @@ export const EditReviewForm = ({
 
   const initialValues = {
     content: review.content,
-    instructor: review.instructor,
+    instructors: review.instructors,
     rating: review.rating,
     difficulty: review.difficulty,
   };
