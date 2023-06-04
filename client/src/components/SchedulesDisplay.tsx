@@ -176,8 +176,8 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
             className={classNames(
               `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
-                ? 'bg-neutral-100 dark:bg-neutral-700'
-                : 'bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
+                ? 'bg-slate-100 dark:bg-neutral-700'
+                : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
             )}
@@ -190,7 +190,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
           </button>
         ))}
       </div>
-      <div className='mx-8 flex flex-col rounded-b-lg bg-neutral-100 dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='mx-8 flex flex-col rounded-b-lg bg-slate-100 dark:bg-neutral-700 dark:text-gray-200'>
         {currentlyDisplayingSchedules.length <= 5 || showAll
           ? currentlyDisplayingSchedules.map(singleScheduleRow)
           : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}
