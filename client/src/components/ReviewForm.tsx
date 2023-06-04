@@ -1,17 +1,18 @@
 import { ErrorMessage, Field, FormikState } from 'formik';
+import { PersistFormikValues } from 'formik-persist-values';
 import { useState } from 'react';
 import * as Yup from 'yup';
 
 import { Course } from '../model/Course';
 import { Autocomplete } from './Autocomplete';
+import { MultiSelect } from './MultiSelect';
 import { StarRatingInput } from './StarRatingInput';
-import { PersistFormikValues } from 'formik-persist-values';
 
 export const ReviewSchema = Yup.object().shape({
   content: Yup.string()
     .required('Review body is required')
     .max(3000, 'Must be less than 3000 characters'),
-  instructor: Yup.string().required('Instructor is required'),
+  instructors: Yup.array().min(1, 'At least 1 instructor is required'),
   rating: Yup.number()
     .min(1, 'Rating must be between 1 and 5')
     .max(5, 'Rating must be between 1 and 5')
@@ -22,9 +23,9 @@ export const ReviewSchema = Yup.object().shape({
     .required('Difficulty is required'),
 });
 
-type ReviewFormInitialValues = {
+export type ReviewFormInitialValues = {
   content: string;
-  instructor: string;
+  instructors: string[];
   rating: number;
   difficulty: number;
 };
@@ -48,33 +49,23 @@ export const ReviewForm = ({
   values,
   resetForm,
 }: ReviewFormProps) => {
-  const [query, setQuery] = useState('');
-
   const instructorNames = Array.from(
     new Set(course.instructors.map((instructor) => instructor.name))
   );
   instructorNames.push('Other');
 
-  const filteredInstructors =
-    query === ''
-      ? instructorNames
-      : instructorNames.filter((instructor) => {
-          return instructor.toLowerCase().includes(query.toLowerCase());
-        });
-
   return (
     <>
-      <label htmlFor='instructor' className='mb-2 dark:text-gray-200'>
-        Instructor
+      <label htmlFor='instructors' className='mb-2 dark:text-gray-200'>
+        Instructor(s)
       </label>
-      <Autocomplete
-        arr={filteredInstructors}
-        setValue={(instructor) => setFieldValue('instructor', instructor)}
-        value={values.instructor}
-        setQuery={setQuery}
+      <MultiSelect
+        options={instructorNames}
+        setValues={(instructors) => setFieldValue('instructors', instructors)}
+        values={values.instructors}
       />
       <div className='italic text-red-400'>
-        <ErrorMessage name='instructor' />
+        <ErrorMessage name='instructors' />
       </div>
       <div className='flex flex-col'>
         <Field

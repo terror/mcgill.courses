@@ -40,7 +40,7 @@ pub(crate) async fn get_review(
 pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) content: String,
   pub(crate) course_id: String,
-  pub(crate) instructor: String,
+  pub(crate) instructors: Vec<String>,
   pub(crate) rating: u32,
   pub(crate) difficulty: u32,
 }
@@ -53,7 +53,7 @@ pub(crate) async fn add_review(
   let AddOrUpdateReviewBody {
     content,
     course_id,
-    instructor,
+    instructors,
     rating,
     difficulty,
   } = body.0;
@@ -63,7 +63,7 @@ pub(crate) async fn add_review(
   db.add_review(Review {
     content,
     course_id,
-    instructor,
+    instructors,
     rating,
     difficulty,
     timestamp: Utc::now().into(),
@@ -82,7 +82,7 @@ pub(crate) async fn update_review(
   let AddOrUpdateReviewBody {
     content,
     course_id,
-    instructor,
+    instructors,
     rating,
     difficulty,
   } = body.0;
@@ -92,7 +92,7 @@ pub(crate) async fn update_review(
   db.update_review(Review {
     content,
     course_id,
-    instructor,
+    instructors,
     rating,
     difficulty,
     timestamp: Utc::now().into(),
