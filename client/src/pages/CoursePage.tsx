@@ -187,6 +187,7 @@ export const CoursePage = () => {
                     setSelectedDifficulties={setFilteredDifficulties}
                     allReviews={allReviews}
                     setReviews={setShowingReviews}
+                    setShowAllReviews={setShowAllReviews}
                   />
                 }
                 isOpen={filterIsOpen}

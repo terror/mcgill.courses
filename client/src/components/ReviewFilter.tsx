@@ -20,6 +20,7 @@ type ReviewFilterProps = {
   setSelectedDifficulties: any;
   allReviews: any;
   setReviews: any;
+  setShowAllReviews: any;
 };
 
 const sorts = [
@@ -292,19 +293,19 @@ export const ReviewFilter = ({
   setSelectedDifficulties,
   allReviews,
   setReviews,
+  setShowAllReviews,
 }: ReviewFilterProps) => {
   const title = 'text-xl my-2';
 
   useEffect(() => {
-    console.log('instructors', selectedInstructors);
     setReviews(
       allReviews
         .filter(
           (review: Review) =>
             selectedInstructors.length === 0 ||
             selectedInstructors
-              .map((_: Instructor) => _.name)
-              .includes(review.instructor)
+              .map((_: Instructor) => _.name.toLowerCase())
+              .includes(review.instructor.toLowerCase())
         )
         .filter(
           (review: Review) =>
@@ -344,6 +345,7 @@ export const ReviewFilter = ({
           }
         })
     );
+    setShowAllReviews(false);
   }, [sortBy, selectedDifficulties, selectedInstructors, selectedRatings]);
 
   return (
