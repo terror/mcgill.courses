@@ -8,7 +8,7 @@ pub(crate) enum Seed {
 }
 
 impl Seed {
-  pub(crate) fn from_path(path: PathBuf) -> Result<Vec<Self>> {
+  pub(crate) fn from_path(path: &PathBuf) -> Result<Vec<Self>> {
     Ok(if path.is_file() {
       vec![Self::from_content(path.clone(), fs::read_to_string(path)?)]
     } else {
