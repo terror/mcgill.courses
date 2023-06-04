@@ -21,6 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Info
+        run: |
+          node --version
+          npm --version
+
       - name: Install dependencies
         run: npm ci
 
