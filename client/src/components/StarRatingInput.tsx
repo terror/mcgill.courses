@@ -1,4 +1,3 @@
-import React from 'react';
 import { Star } from 'react-feather';
 
 type StarRatingInputProps = {

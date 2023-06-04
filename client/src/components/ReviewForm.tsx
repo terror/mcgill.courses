@@ -1,10 +1,8 @@
 import { ErrorMessage, Field, FormikState } from 'formik';
 import { PersistFormikValues } from 'formik-persist-values';
-import { useState } from 'react';
 import * as Yup from 'yup';
 
 import { Course } from '../model/Course';
-import { Autocomplete } from './Autocomplete';
 import { MultiSelect } from './MultiSelect';
 import { StarRatingInput } from './StarRatingInput';
 
