@@ -51,7 +51,7 @@ const StarToggle = ({
 }) => {
   return (
     <button
-      className='flex flex-row items-center justify-between rounded-md p-0.5 py-1 transition duration-200 ease-in-out hover:bg-neutral-700'
+      className='flex flex-row items-center justify-between rounded-md p-0.5 py-1 transition duration-200 ease-in-out hover:bg-slate-50 dark:hover:bg-neutral-700 '
       onClick={onToggle}
     >
       <StarRating rating={rating} />
@@ -71,7 +71,7 @@ const SortDropdown = ({
     <div className='w-full'>
       <Listbox value={selectedSort} onChange={setSelectedSort}>
         <div className='relative mt-1'>
-          <Listbox.Button className='relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300 dark:bg-neutral-700 sm:text-sm'>
+          <Listbox.Button className='relative w-full cursor-default rounded-md bg-slate-50 py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300 dark:bg-neutral-700 sm:text-sm'>
             <span className='block truncate'>{selectedSort.name}</span>
             <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
               <ChevronUpDownIcon
@@ -85,7 +85,7 @@ const SortDropdown = ({
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-700 sm:text-sm'>
+            <Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-50 py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-700 sm:text-sm'>
               {sorts.map((sort, sortId) => (
                 <Listbox.Option
                   key={sortId}
@@ -149,7 +149,7 @@ const InstructorsDropdown = ({
         >
           {' '}
           <Combobox.Input
-            className='w-full rounded-md border-none bg-neutral-50 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none dark:bg-neutral-700 dark:text-gray-200'
+            className='w-full rounded-md border-none bg-slate-50 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none dark:bg-neutral-700 dark:text-gray-200'
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
