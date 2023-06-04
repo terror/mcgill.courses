@@ -13,6 +13,21 @@ defaults:
     shell: bash
 
 jobs:
+  check:
+    name: Check
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download actionlint
+        id: actionlint
+        run:
+          bash <(curl
+          https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+
+      - name: Check workflow
+        run: ${{ steps.actionlint.outputs.executable }} -color
+
   client:
     name: Client
 
@@ -54,15 +69,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Download actionlint
-        id: actionlint
-        run:
-          bash <(curl
-          https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-
-      - name: Check workflow
-        run: ${{ steps.actionlint.outputs.executable }} -color
 
       - name: Install rust toolchain components
         uses: actions-rs/toolchain@v1
