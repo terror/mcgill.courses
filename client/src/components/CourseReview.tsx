@@ -113,7 +113,7 @@ export const CourseReview = ({
                   separator = ', ';
                 }
                 return (
-                  <>
+                  <Fragment key={instructor + review.userId}>
                     <Link
                       to={`/instructor/${instructor
                         .split(' ')
@@ -124,7 +124,7 @@ export const CourseReview = ({
                       {instructor}
                     </Link>
                     {separator}
-                  </>
+                  </Fragment>
                 );
               })}
             </Fragment>
