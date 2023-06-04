@@ -1,7 +1,6 @@
 import { Review } from '../model/Review';
 import { Course } from '../model/Course';
 import { dedupeInstructors } from '../lib/utils';
-import { StarRatingInput } from './StarRatingInput';
 import { StarRating } from './StarRating';
 import { Instructor } from '../model/Instructor';
 import { useState, useEffect } from 'react';
@@ -50,19 +49,13 @@ const StarToggle = ({
   onToggle: any;
   toggled: boolean;
 }) => {
-  const [isOn, setIsOn] = useState(toggled);
-  const handleClick = () => {
-    setIsOn(!isOn);
-    onToggle;
-  };
-
   return (
     <button
-      className='flex flex-row items-center justify-between rounded-md p-0.5 transition duration-200 ease-in-out hover:bg-neutral-700'
-      onClick={handleClick}
+      className='flex flex-row items-center justify-between rounded-md p-0.5 py-1 transition duration-200 ease-in-out hover:bg-neutral-700'
+      onClick={onToggle}
     >
       <StarRating rating={rating} />
-      <Toggle isOn={isOn} />
+      <Toggle isOn={toggled} />
     </button>
   );
 };
@@ -240,7 +233,7 @@ const RatingFilter = ({
     type: 'rating' | 'difficulty';
     rating: number;
   }) => {
-    useEffect(() => {
+    return () => {
       if (ratingTypeMap[type][0].includes(rating)) {
         ratingTypeMap[type][1](
           ratingTypeMap[type][0].filter((r: number) => r !== rating)
@@ -248,7 +241,7 @@ const RatingFilter = ({
       } else {
         ratingTypeMap[type][1]([...ratingTypeMap[type][0], rating]);
       }
-    }, [type, rating]);
+    };
   };
 
   return (
@@ -256,27 +249,27 @@ const RatingFilter = ({
       <StarToggle
         rating={5}
         onToggle={toggleRating({ type: type, rating: 5 })}
-        toggled={selectedDifficulties.includes(5)}
+        toggled={ratingTypeMap[type][0].includes(5)}
       />
       <StarToggle
         rating={4}
         onToggle={toggleRating({ type: type, rating: 4 })}
-        toggled={selectedDifficulties.includes(4)}
+        toggled={ratingTypeMap[type][0].includes(4)}
       />
       <StarToggle
         rating={3}
         onToggle={toggleRating({ type: type, rating: 3 })}
-        toggled={selectedDifficulties.includes(3)}
+        toggled={ratingTypeMap[type][0].includes(3)}
       />
       <StarToggle
         rating={2}
         onToggle={toggleRating({ type: type, rating: 2 })}
-        toggled={selectedDifficulties.includes(2)}
+        toggled={ratingTypeMap[type][0].includes(2)}
       />
       <StarToggle
         rating={1}
         onToggle={toggleRating({ type: type, rating: 1 })}
-        toggled={selectedDifficulties.includes(1)}
+        toggled={ratingTypeMap[type][0].includes(1)}
       />
     </div>
   );
@@ -296,16 +289,57 @@ export const ReviewFilter = ({
   setReviews,
 }: ReviewFilterProps) => {
   const title = 'text-xl my-2';
-  useEffect(() => {
-    const filteredReviews = allReviews.filter((review: Review) => {
-      (selectedInstructors.includes(review.instructor) ||
-        selectedInstructors.length === 0) &&
-        (selectedRatings.includes(review.rating) ||
-          selectedRatings.length === 0);
-    });
 
-    setReviews(filteredReviews);
-  }, []);
+  useEffect(() => {
+    console.log('instructors', selectedInstructors);
+    setReviews(
+      allReviews
+        .filter(
+          (review: Review) =>
+            selectedInstructors.length === 0 ||
+            selectedInstructors
+              .map((_: Instructor) => _.name)
+              .includes(review.instructor)
+        )
+        .filter(
+          (review: Review) =>
+            selectedRatings.length === 0 ||
+            selectedRatings.includes(review.rating)
+        )
+        .filter(
+          (review: Review) =>
+            selectedDifficulties.length === 0 ||
+            selectedDifficulties.includes(review.difficulty)
+        )
+        .sort((a: Review, b: Review) => {
+          switch (sortBy.id) {
+            case 1:
+              return (
+                parseInt(b.timestamp.$date.$numberLong, 10) -
+                parseInt(a.timestamp.$date.$numberLong, 10)
+              );
+            case 2:
+              return (
+                parseInt(a.timestamp.$date.$numberLong, 10) -
+                parseInt(b.timestamp.$date.$numberLong, 10)
+              );
+            case 3:
+              return b.rating - a.rating;
+            case 4:
+              return a.rating - b.rating;
+            case 5:
+              return b.difficulty - a.difficulty;
+            case 6:
+              return a.difficulty - b.difficulty;
+            default:
+              return (
+                parseInt(b.timestamp.$date.$numberLong, 10) -
+                parseInt(a.timestamp.$date.$numberLong, 10)
+              );
+          }
+        })
+    );
+  }, [sortBy, selectedDifficulties, selectedInstructors, selectedRatings]);
 
   return (
     <div className='mt-3 flex w-full flex-col rounded-lg p-3 px-5 dark:bg-neutral-800 dark:text-gray-200'>

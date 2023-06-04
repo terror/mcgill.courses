@@ -58,11 +58,6 @@ export const CoursePage = () => {
     []
   );
 
-  console.log('sortBy', sortBy);
-  console.log('intructors', filteredInstructors);
-  console.log('ratings', filteredRatings);
-  console.log('difficulties', filteredDifficulties);
-
   useEffect(() => {
     fetchClient
       .getData<Course>(`/courses/${params.id?.toUpperCase()}`)
