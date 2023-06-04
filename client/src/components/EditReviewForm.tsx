@@ -1,8 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { useDarkMode } from '../hooks/useDarkMode';
 import { fetchClient } from '../lib/fetchClient';
 import { classNames } from '../lib/utils';
@@ -25,9 +23,6 @@ export const EditReviewForm = ({
   onClose,
   handleSubmit,
 }: EditReviewFormProps) => {
-  const params = useParams<{ id: string }>();
-  const navigate = useNavigate();
-
   const [darkMode, _] = useDarkMode();
 
   const initialValues = {

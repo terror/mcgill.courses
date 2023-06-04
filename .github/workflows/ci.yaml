@@ -13,16 +13,10 @@ defaults:
     shell: bash
 
 jobs:
-  all:
-    name: All
+  check:
+    name: Check
 
-    runs-on: macos-latest
-
-    env:
-      RUSTFLAGS: --deny warnings
-      MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
-      MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
-      MS_REDIRECT_URI: ${{ secrets.MS_REDIRECT_URI }}
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -36,6 +30,48 @@ jobs:
       - name: Check workflow
         run: ${{ steps.actionlint.outputs.executable }} -color
 
+  client:
+    name: Client
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Info
+        run: |
+          node --version
+          npm --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Format
+        run: npm run format-check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run cy:e2e
+
+  server:
+    name: Server
+
+    runs-on: macos-latest
+
+    env:
+      RUSTFLAGS: --deny warnings
+      MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+      MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+      MS_REDIRECT_URI: ${{ secrets.MS_REDIRECT_URI }}
+
+    steps:
+      - uses: actions/checkout@v2
+
       - name: Install rust toolchain components
         uses: actions-rs/toolchain@v1
         with:
@@ -44,9 +80,6 @@ jobs:
           toolchain: stable
 
       - uses: Swatinem/rust-cache@v1
-
-      - name: Install client dependencies
-        run: npm ci
 
       - name: Install mongodb
         run: |
@@ -72,16 +105,10 @@ jobs:
         run: cargo update --locked --package server
 
       - name: Lint
-        run: |
-          ./bin/clippy
-          npm run lint
+        run: ./bin/clippy
 
       - name: Format
-        run: |
-          cargo fmt --all -- --check
-          npm run format-check
+        run: cargo fmt --all -- --check
 
       - name: Test
-        run: |
-          cargo test --workspace --all-features --all-targets
-          npm run cy:e2e
+        run: cargo test --workspace --all-features --all-targets

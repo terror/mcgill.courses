@@ -1,9 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-
 import { useAuth } from '../hooks/useAuth';
-import { useDarkMode } from '../hooks/useDarkMode';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
