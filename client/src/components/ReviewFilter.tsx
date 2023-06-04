@@ -133,7 +133,12 @@ const InstructorsDropdown = ({
 }) => {
   const [query, setQuery] = useState('');
 
-  const filteredData = dedupeInstructors(allInstructors);
+  const filteredData =
+    query === ''
+      ? dedupeInstructors(allInstructors)
+      : dedupeInstructors(allInstructors).filter((instructor: Instructor) =>
+          instructor.name.toLowerCase().includes(query.toLowerCase())
+        );
   return (
     <div className='flex flex-col'>
       <div className='rounded-md'>
@@ -163,7 +168,7 @@ const InstructorsDropdown = ({
             leaveTo='opacity-0 scale-95'
           >
             <div className='absolute z-50 w-full bg-white'>
-              {query !== '' && (
+              {
                 <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-700 sm:text-sm'>
                   {filteredData.length > 0 ? (
                     filteredData.map((data, i) => (
@@ -199,7 +204,7 @@ const InstructorsDropdown = ({
                     </p>
                   )}
                 </Combobox.Options>
-              )}
+              }
             </div>
           </Transition>
         </Combobox>
