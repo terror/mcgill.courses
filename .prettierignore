@@ -1,5 +1,5 @@
+/client/dist
 /crates/extractor/mocks
-/dist
 /mocks
 /node_modules
 /seed
