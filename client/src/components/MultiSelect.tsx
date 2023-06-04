@@ -1,18 +1,18 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
-import { ChevronDown } from 'react-feather';
+import { Check, ChevronDown, X } from 'react-feather';
 
-type AutocompleteProps = {
+type MultiSelectProps = {
   options: string[];
-  value: string;
-  setValue: (value: string) => void;
+  values: string[];
+  setValues: (values: string[]) => void;
 };
 
-export const Autocomplete = ({
+export const MultiSelect = ({
   options,
-  value,
-  setValue,
-}: AutocompleteProps) => {
+  values,
+  setValues,
+}: MultiSelectProps) => {
   const [query, setQuery] = useState('');
 
   const filtered =
@@ -22,19 +22,25 @@ export const Autocomplete = ({
           return x.toLowerCase().includes(query.toLowerCase());
         });
 
+  const removeVal = (val: string) => {
+    setValues(values.filter((x) => x !== val));
+  };
+
   return (
-    <div className='w-72'>
+    <div className='w-full'>
       <Combobox
-        value={value}
+        value={values}
         onChange={(val) => {
-          setValue(val);
+          setValues(val);
         }}
+        multiple
       >
-        <div className='relative w-full'>
+        <div className='relative w-72'>
           <div className='relative rounded-md bg-gray-50 p-2 dark:bg-neutral-700'>
             <Combobox.Input
               className='bg-gray-50 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
+              onBlur={() => setQuery('')}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
               <ChevronDown
@@ -56,20 +62,38 @@ export const Autocomplete = ({
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `p-2
+                  className={({ active }) => `cursor-pointer p-2
                     ${
                       active
                         ? 'bg-red-500 text-white'
                         : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
                     }`}
                 >
-                  {val}
+                  <div className='flex space-x-1'>
+                    <div>{val}</div>
+                    {values.includes(val) && (
+                      <Check className='stroke-red-600' />
+                    )}
+                  </div>
                 </Combobox.Option>
               ))}
             </Combobox.Options>
           </Transition>
         </div>
       </Combobox>
+      <div className='mt-2 flex w-full flex-wrap gap-1'>
+        {values.map((val) => (
+          <div className='flex space-x-1 rounded-3xl bg-gray-100 px-2.5 py-1 dark:bg-neutral-700 dark:text-gray-200'>
+            <div>{val}</div>
+            <button type='button' onClick={() => removeVal(val)}>
+              <X
+                size={18}
+                className='transition duration-75 hover:stroke-red-600'
+              />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,10 +1,10 @@
-import { useState } from 'react';
-
 import _ from 'lodash';
+import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
-import { SearchResults } from '../model/SearchResults';
+
 import { classNames } from '../lib/utils';
+import { SearchResults } from '../model/SearchResults';
 
 enum SearchResultType {
   Course,
@@ -140,6 +140,7 @@ export const CourseSearchBar = ({
               text={`${result._id} - ${result.title}`}
               type={SearchResultType.Course}
               url={`/course/${result._id}`}
+              key={result._id}
             />
           ))}
           {results.instructors.map((result, index) => (
@@ -153,6 +154,7 @@ export const CourseSearchBar = ({
                 .toLowerCase()
                 .split(' ')
                 .join('-')}`}
+              key={result.name + index}
             />
           ))}
           <Link to={`/explore`}>
