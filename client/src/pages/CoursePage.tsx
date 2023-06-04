@@ -147,7 +147,7 @@ export const CoursePage = () => {
 
   const userReview = showingReviews.find((r) => r.userId === user?.id);
   const averageRating =
-    _.sumBy(allReviews, (r) => r.rating) / showingReviews.length;
+    _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
 
   return (
     <Layout>
