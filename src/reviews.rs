@@ -58,7 +58,7 @@ pub(crate) async fn add_review(
     difficulty,
   } = body.0;
 
-  log::trace!("Adding review to database...");
+  trace!("Adding review to database...");
 
   db.add_review(Review {
     content,
@@ -87,7 +87,7 @@ pub(crate) async fn update_review(
     difficulty,
   } = body.0;
 
-  log::trace!("Updating review...");
+  trace!("Updating review...");
 
   db.update_review(Review {
     content,
@@ -113,7 +113,7 @@ pub(crate) async fn delete_review(
   user: User,
   body: Json<DeleteReviewBody>,
 ) -> Result<impl IntoResponse> {
-  log::trace!("Deleting review from the database...");
+  trace!("Deleting review from the database...");
 
   db.delete_review(&body.course_id, &user.id()).await?;
 

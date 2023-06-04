@@ -48,7 +48,7 @@ impl Loader {
   const BASE_URL: &str = "https://www.mcgill.ca";
 
   pub(crate) fn run(&self, source: PathBuf) -> Result {
-    log::info!("Running extractor...");
+    info!("Running extractor...");
 
     let mut courses = Vec::new();
 
@@ -115,7 +115,7 @@ impl Loader {
     &self,
     page: &Page,
   ) -> Result<Option<Vec<CourseListing>>> {
-    log::info!("Parsing html on page: {}...", page.number);
+    info!("Parsing html on page: {}...", page.number);
 
     let listings = extractor::extract_course_listings(
       &reqwest::blocking::Client::builder()
@@ -144,7 +144,7 @@ impl Loader {
   }
 
   fn parse_course(&self, listing: CourseListing) -> Result<Course> {
-    log::info!("{:?}", listing);
+    info!("{:?}", listing);
 
     let client = reqwest::blocking::Client::builder()
       .user_agent(&self.user_agent)
@@ -154,10 +154,9 @@ impl Loader {
       &client.get(&listing.url).retry(self.retries)?.text()?,
     )?;
 
-    log::info!(
+    info!(
       "Parsed course {}{}",
-      &course_page.subject,
-      &course_page.code
+      &course_page.subject, &course_page.code
     );
 
     thread::sleep(Duration::from_millis(self.course_delay));
