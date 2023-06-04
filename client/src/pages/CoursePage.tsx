@@ -23,11 +23,20 @@ import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import _ from 'lodash';
 import { Instructor } from '../model/Instructor';
 
+const sortBy = [
+  { id: 1, name: 'Most Recent' },
+  { id: 2, name: 'Least Recent' },
+  { id: 3, name: 'Highest Rating' },
+  { id: 4, name: 'Lowest Rating' },
+  { id: 5, name: 'Hardest' },
+  { id: 6, name: 'Easiest' },
+];
+
 export const CoursePage = () => {
-  let allReviews: Review[] = [];
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const params = useParams<{ id: string }>();
   const [course, setCourse] = useState<Course>();
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const user = useAuth();
   const currentTerms = getCurrentTerms();
@@ -42,8 +51,17 @@ export const CoursePage = () => {
   const [alertMessage, setAlertMessage] = useState('');
 
   const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [sortBy, setSortBy] = useState({ id: 1, name: 'Most Recent' });
   const [filteredInstructors, setFilteredInstructors] = useState<string[]>([]);
   const [filteredRatings, setFilteredRatings] = useState<number[]>([]);
+  const [filteredDifficulties, setFilteredDifficulties] = useState<number[]>(
+    []
+  );
+
+  console.log('sortBy', sortBy);
+  console.log('intructors', filteredInstructors);
+  console.log('ratings', filteredRatings);
+  console.log('difficulties', filteredDifficulties);
 
   useEffect(() => {
     fetchClient
@@ -53,13 +71,13 @@ export const CoursePage = () => {
     fetchClient
       .getData<Review[]>(`/reviews?course_id=${params.id}`)
       .then((data) => {
-        setReviews(
-          data.sort(
-            (a, b) =>
-              parseInt(b.timestamp.$date.$numberLong, 10) -
-              parseInt(a.timestamp.$date.$numberLong, 10)
-          )
+        data = data.sort(
+          (a, b) =>
+            parseInt(b.timestamp.$date.$numberLong, 10) -
+            parseInt(a.timestamp.$date.$numberLong, 10)
         );
+        setShowingReviews(data);
+        setAllReviews(data);
       })
       .catch((err) => console.log(err));
   }, [params.id, addReviewOpen, editReviewOpen]);
@@ -72,7 +90,7 @@ export const CoursePage = () => {
     );
   }
 
-  if (course === undefined || reviews === undefined) {
+  if (course === undefined || showingReviews === undefined) {
     return (
       <div className='flex min-h-screen items-center justify-center'>
         <div className='text-center'>
@@ -96,7 +114,7 @@ export const CoursePage = () => {
   };
 
   const canReview = Boolean(
-    user && reviews.filter((r) => r.userId === user.id).length === 0
+    user && showingReviews.filter((r) => r.userId === user.id).length === 0
   );
 
   const remountAlert = () => {
@@ -124,21 +142,24 @@ export const CoursePage = () => {
       { headers: { 'Content-Type': 'application/json' } }
     );
     if (res.ok) {
-      setReviews(reviews.filter((r) => r.userId !== review.userId));
+      setShowingReviews(
+        showingReviews.filter((r) => r.userId !== review.userId)
+      );
     }
     handleSubmit('Review deleted successfully.')(res);
     localStorage.removeItem(course._id);
   };
 
-  const userReview = reviews.find((r) => r.userId === user?.id);
-  const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
+  const userReview = showingReviews.find((r) => r.userId === user?.id);
+  const averageRating =
+    _.sumBy(allReviews, (r) => r.rating) / showingReviews.length;
 
   return (
     <Layout>
       <CourseInfo
         course={course}
         rating={averageRating}
-        numReviews={reviews.length}
+        numReviews={allReviews.length}
       />
       <SchedulesDisplay course={course} />
       <div className='flex flex-col md:flex-row'>
@@ -157,12 +178,17 @@ export const CoursePage = () => {
                 title=''
                 child={
                   <ReviewFilter
+                    course={course}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
                     selectedInstructors={filteredInstructors}
                     setSelectedInstructors={setFilteredInstructors}
                     selectedRatings={filteredRatings}
                     setSelectedRatings={setFilteredRatings}
+                    selectedDifficulties={filteredDifficulties}
+                    setSelectedDifficulties={setFilteredDifficulties}
                     allReviews={allReviews}
-                    setReviews={setReviews}
+                    setReviews={setShowingReviews}
                   />
                 }
                 isOpen={filterIsOpen}
@@ -174,32 +200,32 @@ export const CoursePage = () => {
                 <CourseReview
                   canModify={Boolean(user && userReview.userId === user.id)}
                   handleDelete={() => handleDelete(userReview)}
-                  isLast={reviews.length === 1}
+                  isLast={showingReviews.length === 1}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
                 />
               )}
-              {reviews &&
-                reviews
+              {showingReviews &&
+                showingReviews
                   .filter((review) => (user ? review.userId !== user.id : true))
-                  .slice(0, showAllReviews ? reviews.length : 8)
+                  .slice(0, showAllReviews ? showingReviews.length : 8)
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
                       handleDelete={() => handleDelete(review)}
-                      isLast={i === reviews.length - 1}
+                      isLast={i === showingReviews.length - 1}
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
                       review={review}
                     />
                   ))}
-              {!showAllReviews && reviews.length > 8 && (
+              {!showAllReviews && showingReviews.length > 8 && (
                 <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                   <button
                     className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                     onClick={() => setShowAllReviews(true)}
                   >
-                    Show all {reviews.length} reviews
+                    Show all {showingReviews.length} reviews
                   </button>
                 </div>
               )}
