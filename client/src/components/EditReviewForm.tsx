@@ -1,6 +1,4 @@
 import { Form, Formik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
@@ -25,9 +23,6 @@ export const EditReviewForm = ({
   onClose,
   handleSubmit,
 }: EditReviewFormProps) => {
-  const params = useParams<{ id: string }>();
-  const navigate = useNavigate();
-
   const [darkMode, _] = useDarkMode();
 
   const initialValues = {

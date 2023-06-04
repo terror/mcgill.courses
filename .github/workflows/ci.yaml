@@ -13,8 +13,8 @@ defaults:
     shell: bash
 
 jobs:
-  all:
-    name: All
+  server:
+    name: Server
 
     runs-on: macos-latest
 
@@ -45,9 +45,6 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
-      - name: Install client dependencies
-        run: npm ci
-
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
@@ -72,16 +69,33 @@ jobs:
         run: cargo update --locked --package server
 
       - name: Lint
-        run: |
-          ./bin/clippy
-          npm run lint
+        run: ./bin/clippy
 
       - name: Format
-        run: |
-          cargo fmt --all -- --check
-          npm run format-check
+        run: cargo fmt --all -- --check
 
       - name: Test
-        run: |
-          cargo test --workspace --all-features --all-targets
-          npm run cy:e2e
+        run: cargo test --workspace --all-features --all-targets
+
+  client:
+    name: Client
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: tsc
+
+      - name: Format
+        run: npm run format-check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run cy:e2e
