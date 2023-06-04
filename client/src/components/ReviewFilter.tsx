@@ -232,10 +232,10 @@ const RatingFilter = ({
   };
 
   const toggleRating = ({
-    type,
+    ratingType,
     rating,
   }: {
-    type: 'rating' | 'difficulty';
+    ratingType: 'rating' | 'difficulty';
     rating: number;
   }) => {
     return () => {
@@ -253,27 +253,27 @@ const RatingFilter = ({
     <div className='flex flex-col'>
       <StarToggle
         rating={5}
-        onToggle={toggleRating({ type: type, rating: 5 })}
+        onToggle={toggleRating({ ratingType: type, rating: 5 })}
         toggled={ratingTypeMap[type][0].includes(5)}
       />
       <StarToggle
         rating={4}
-        onToggle={toggleRating({ type: type, rating: 4 })}
+        onToggle={toggleRating({ ratingType: type, rating: 4 })}
         toggled={ratingTypeMap[type][0].includes(4)}
       />
       <StarToggle
         rating={3}
-        onToggle={toggleRating({ type: type, rating: 3 })}
+        onToggle={toggleRating({ ratingType: type, rating: 3 })}
         toggled={ratingTypeMap[type][0].includes(3)}
       />
       <StarToggle
         rating={2}
-        onToggle={toggleRating({ type: type, rating: 2 })}
+        onToggle={toggleRating({ ratingType: type, rating: 2 })}
         toggled={ratingTypeMap[type][0].includes(2)}
       />
       <StarToggle
         rating={1}
-        onToggle={toggleRating({ type: type, rating: 1 })}
+        onToggle={toggleRating({ ratingType: type, rating: 1 })}
         toggled={ratingTypeMap[type][0].includes(1)}
       />
     </div>

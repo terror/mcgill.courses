@@ -51,7 +51,10 @@ export const CoursePage = () => {
   const [alertMessage, setAlertMessage] = useState('');
 
   const [filterIsOpen, setFilterIsOpen] = useState(false);
-  const [sortBy, setSortBy] = useState({ id: 1, name: 'Most Recent' });
+  const [sortByFilter, setSortByFilter] = useState({
+    id: 1,
+    name: 'Most Recent',
+  });
   const [filteredInstructors, setFilteredInstructors] = useState<string[]>([]);
   const [filteredRatings, setFilteredRatings] = useState<number[]>([]);
   const [filteredDifficulties, setFilteredDifficulties] = useState<number[]>(
@@ -174,8 +177,8 @@ export const CoursePage = () => {
                 child={
                   <ReviewFilter
                     course={course}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
+                    sortBy={sortByFilter}
+                    setSortBy={setSortByFilter}
                     selectedInstructors={filteredInstructors}
                     setSelectedInstructors={setFilteredInstructors}
                     selectedRatings={filteredRatings}
