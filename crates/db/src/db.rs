@@ -272,7 +272,7 @@ impl Db {
     instructor_name: &str,
   ) -> Result<Vec<Review>> {
     self
-      .find_reviews(doc! { "instructor": instructor_name })
+      .find_reviews(doc! { "instructors": { "$in": vec![instructor_name] } })
       .await
   }
 
