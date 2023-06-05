@@ -957,6 +957,70 @@ mod tests {
   }
 
   #[tokio::test(flavor = "multi_thread")]
+  async fn find_reviews_by_user_instructor_name() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let reviews = vec![
+      Review {
+        content: "foo".into(),
+        user_id: "1".into(),
+        course_id: "MATH240".into(),
+        instructors: vec![
+          String::from("test"),
+          String::from("foo"),
+          String::from("bar"),
+        ],
+        ..Default::default()
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "2".into(),
+        course_id: "MATH240".into(),
+        instructors: vec![String::from("test"), String::from("foo")],
+        ..Default::default()
+      },
+      Review {
+        content: "foo".into(),
+        user_id: "3".into(),
+        course_id: "MATH340".into(),
+        instructors: vec![String::from("foo"), String::from("bar")],
+        ..Default::default()
+      },
+    ];
+
+    for review in &reviews {
+      db.add_review(review.clone()).await.unwrap();
+    }
+
+    assert_eq!(db.reviews().await.unwrap().len(), 3);
+    assert_eq!(db.reviews().await.unwrap(), reviews);
+
+    assert_eq!(
+      db.find_reviews_by_instructor_name("test").await.unwrap(),
+      vec![
+        Review {
+          content: "foo".into(),
+          user_id: "1".into(),
+          course_id: "MATH240".into(),
+          instructors: vec![
+            String::from("test"),
+            String::from("foo"),
+            String::from("bar"),
+          ],
+          ..Default::default()
+        },
+        Review {
+          content: "foo".into(),
+          user_id: "2".into(),
+          course_id: "MATH240".into(),
+          instructors: vec![String::from("test"), String::from("foo")],
+          ..Default::default()
+        },
+      ]
+    )
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
   async fn dont_add_multiple_reviews_per_user() {
     let TestContext { db, .. } = TestContext::new().await;
 
