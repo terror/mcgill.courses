@@ -23,7 +23,7 @@ export const Layout = ({ children, preventScroll }: LayoutProps) => {
           <Navbar />
           <main>{children}</main>
         </div>
-        <div className='hidden lg:flex z-10'>
+        <div className='z-10 hidden lg:flex'>
           <Footer />
         </div>
       </div>

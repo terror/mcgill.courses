@@ -99,11 +99,11 @@ export const CourseSearchBar = ({
         selectedIndex < results.courses.length
           ? `/course/${results.courses[selectedIndex]._id}`
           : `/instructor/${results.instructors[
-            selectedIndex - results.courses.length
-          ].name
-            .toLowerCase()
-            .split(' ')
-            .join('-')}`
+              selectedIndex - results.courses.length
+            ].name
+              .toLowerCase()
+              .split(' ')
+              .join('-')}`
       );
   };
 
@@ -130,9 +130,9 @@ export const CourseSearchBar = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      <div className='mb-3 z-50'>
+      <div className='z-50 mb-3'>
         {searchSelected && (
-          <div className='absolute top-full z-50 w-full rounded-b-lg bg-white shadow-md dark:bg-neutral-800 lg:max-h-[30vh] max-h-[40vh] overflow-auto h-fit'>
+          <div className='absolute top-full z-50 h-fit max-h-[40vh] w-full overflow-auto rounded-b-lg bg-white shadow-md dark:bg-neutral-800 lg:max-h-[30vh]'>
             {results.courses.slice(0, 4).map((result, index) => (
               <SearchResult
                 index={index}
