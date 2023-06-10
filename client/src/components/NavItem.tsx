@@ -14,13 +14,13 @@ export const NavItem = ({ name, href }: NavItemProps) => {
     <Link
       to={href}
       className={classNames(
-        'relative text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 -z-10',
+        'relative -z-10 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200',
         location.pathname === href
           ? redUnderlineStyle
           : classNames(
-            redUnderlineStyle,
-            'before:origin-top-left before:scale-x-0 before:transition before:duration-300 before:ease-in-out before:hover:scale-x-100'
-          )
+              redUnderlineStyle,
+              'before:origin-top-left before:scale-x-0 before:transition before:duration-300 before:ease-in-out before:hover:scale-x-100'
+            )
       )}
     >
       {name}
