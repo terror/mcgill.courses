@@ -127,10 +127,10 @@ pub(crate) async fn delete_review(
 async fn validate_instructors(
   db: Arc<Db>,
   course_id: &str,
-  instructors: &Vec<String>,
+  instructors: &[String],
 ) -> Result {
   let course = db
-    .find_course_by_id(&course_id)
+    .find_course_by_id(course_id)
     .await?
     .ok_or(anyhow!("Invalid course"))?;
 
