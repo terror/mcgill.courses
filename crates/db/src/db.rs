@@ -35,58 +35,8 @@ impl Db {
     self.database.name().to_string()
   }
 
-  pub async fn seed(&self, source: PathBuf, skip_courses: bool) -> Result {
-    info!("Seeding the database...");
-
-    for seed in Seed::from_path(source)? {
-      match seed {
-        Seed::Courses((path, courses)) if !skip_courses => {
-          info!("Seeding courses from {}...", path.display());
-
-          let tasks = courses.into_iter().map(|course| {
-            let db = self.clone();
-
-            tokio::task::spawn(async move {
-              db.add_course(course.clone()).await?;
-
-              for instructor in course.instructors {
-                db.add_instructor(instructor).await?;
-              }
-
-              Ok::<(), anyhow::Error>(())
-            })
-          });
-
-          for result in join_all(tasks).await {
-            if let Err(err) = result {
-              return Err(err.into());
-            }
-          }
-        }
-        Seed::Reviews((path, reviews)) => {
-          info!("Seeding reviews from {}...", path.display());
-
-          let tasks = reviews.into_iter().map(|review| {
-            let db = self.clone();
-
-            tokio::task::spawn(async move { db.add_review(review).await })
-          });
-
-          for result in join_all(tasks).await {
-            if let Err(err) = result {
-              return Err(err.into());
-            }
-          }
-        }
-        Seed::Unknown(path) => {
-          warn!(
-            "Unknown seed type encountered from {}, continuing...",
-            path.display()
-          );
-        }
-        _ => continue,
-      }
-    }
+  pub async fn seed(&self, options: SeedOptions) -> Result {
+    Seeder::new(self.clone(), options).run().await?;
 
     info!("Building course index...");
 
@@ -312,8 +262,8 @@ impl Db {
     )
   }
 
-  async fn add_course(&self, course: Course) -> Result {
-    Ok(match self.find_course(doc! { "_id": &course.id }).await? {
+  pub(crate) async fn add_course(&self, course: Course) -> Result {
+    match self.find_course(doc! { "_id": &course.id }).await? {
       Some(found) => {
         self
           .update_course(
@@ -351,7 +301,9 @@ impl Db {
           )
           .await?;
       }
-    })
+    }
+
+    Ok(())
   }
 
   async fn update_course(
@@ -396,7 +348,7 @@ impl Db {
     )
   }
 
-  async fn create_index<T>(
+  pub(crate) async fn create_index<T>(
     &self,
     collection: &str,
     keys: Document,
@@ -420,26 +372,26 @@ impl Db {
     )
   }
 
-  async fn add_instructor(&self, instructor: Instructor) -> Result {
-    Ok(
-      if self
-        .find_instructor_by_name(&instructor.name)
-        .await?
-        .is_none()
-      {
-        self
-          .database
-          .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
-          .insert_one(
-            Instructor {
-              name_ngrams: Some(instructor.name.ngrams()),
-              ..instructor
-            },
-            None,
-          )
-          .await?;
-      },
-    )
+  pub(crate) async fn add_instructor(&self, instructor: Instructor) -> Result {
+    if self
+      .find_instructor_by_name(&instructor.name)
+      .await?
+      .is_none()
+    {
+      self
+        .database
+        .collection::<Instructor>(Self::INSTRUCTOR_COLLECTION)
+        .insert_one(
+          Instructor {
+            name_ngrams: Some(instructor.name.ngrams()),
+            ..instructor
+          },
+          None,
+        )
+        .await?;
+    };
+
+    Ok(())
   }
 
   async fn find_instructor(
@@ -576,7 +528,12 @@ mod tests {
 
     fs::write(&source, get_content("before_update.json")).unwrap();
 
-    db.seed(source, false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
@@ -604,7 +561,12 @@ mod tests {
     )
     .unwrap();
 
-    db.seed(source, false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
@@ -625,7 +587,12 @@ mod tests {
 
     fs::write(&source, get_content("before_update.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source: source.clone(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
@@ -637,7 +604,12 @@ mod tests {
 
     fs::write(&source, get_content("update.json")).unwrap();
 
-    db.seed(source, false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let courses = db.courses(None, None, None, None, None).await.unwrap();
 
@@ -667,7 +639,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
@@ -697,7 +674,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let courses = db.courses(None, None, None, None, None).await.unwrap();
 
@@ -721,7 +703,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
@@ -751,7 +738,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
@@ -781,7 +773,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(Some(10), None, None, None, None)
@@ -802,7 +799,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, Some(20), None, None, None)
@@ -1167,7 +1169,13 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let total = db.courses(None, None, None, None, None).await.unwrap();
 
@@ -1195,7 +1203,13 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let total = db.courses(None, None, None, None, None).await.unwrap();
 
@@ -1223,7 +1237,13 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let total = db.courses(None, None, None, None, None).await.unwrap();
 
@@ -1283,7 +1303,12 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(source.clone(), false).await.unwrap();
+    db.seed(SeedOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     assert_eq!(
       db.courses(None, None, None, None, None)
