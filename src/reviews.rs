@@ -60,6 +60,8 @@ pub(crate) async fn add_review(
 
   trace!("Adding review to database...");
 
+  validate_instructors(db.clone(), &course_id, &instructors).await?;
+
   db.add_review(Review {
     content,
     course_id,
@@ -86,6 +88,8 @@ pub(crate) async fn update_review(
     rating,
     difficulty,
   } = body.0;
+
+  validate_instructors(db.clone(), &course_id, &instructors).await?;
 
   trace!("Updating review...");
 
@@ -116,6 +120,29 @@ pub(crate) async fn delete_review(
   trace!("Deleting review from the database...");
 
   db.delete_review(&body.course_id, &user.id()).await?;
+
+  Ok(())
+}
+
+async fn validate_instructors(
+  db: Arc<Db>,
+  course_id: &str,
+  instructors: &Vec<String>,
+) -> Result {
+  let course = db
+    .find_course_by_id(&course_id)
+    .await?
+    .ok_or(anyhow!("Invalid course"))?;
+
+  let valid_instructors: Vec<String> =
+    course.instructors.into_iter().map(|ins| ins.name).collect();
+
+  if !instructors
+    .iter()
+    .all(|ins| valid_instructors.contains(ins))
+  {
+    return Err(anyhow!("Invalid instructor(s)").into());
+  }
 
   Ok(())
 }
