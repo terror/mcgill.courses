@@ -18,9 +18,9 @@ export const NavItem = ({ name, href }: NavItemProps) => {
         location.pathname === href
           ? redUnderlineStyle
           : classNames(
-            redUnderlineStyle,
-            'before:origin-top-left before:scale-x-0 before:transition before:duration-300 before:ease-in-out before:hover:scale-x-100'
-          )
+              redUnderlineStyle,
+              'before:origin-top-left before:scale-x-0 before:transition before:duration-300 before:ease-in-out before:hover:scale-x-100'
+            )
       )}
     >
       {name}

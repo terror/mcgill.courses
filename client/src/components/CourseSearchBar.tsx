@@ -44,7 +44,7 @@ const SearchResult = ({
         ) : (
           <User className='mr-2 text-ellipsis dark:text-white' />
         )}
-        <span className='dark:text-gray-200'>
+        <span className='z-50 dark:text-gray-200'>
           {text
             .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
             .map((part, i) => (
@@ -99,16 +99,16 @@ export const CourseSearchBar = ({
         selectedIndex < results.courses.length
           ? `/course/${results.courses[selectedIndex]._id}`
           : `/instructor/${results.instructors[
-              selectedIndex - results.courses.length
-            ].name
-              .toLowerCase()
-              .split(' ')
-              .join('-')}`
+            selectedIndex - results.courses.length
+          ].name
+            .toLowerCase()
+            .split(' ')
+            .join('-')}`
       );
   };
 
   return (
-    <div className='relative'>
+    <div className='relative z-50'>
       <div className='relative w-full'>
         <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
           <Search
@@ -130,9 +130,9 @@ export const CourseSearchBar = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      <div className='mb-3'>
+      <div className='mb-3 z-50'>
         {searchSelected && (
-          <div className='absolute top-full z-50 w-full rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
+          <div className='absolute top-full z-50 w-full rounded-b-lg bg-white shadow-md dark:bg-neutral-800 lg:max-h-[30vh] max-h-[40vh] overflow-auto h-fit'>
             {results.courses.slice(0, 4).map((result, index) => (
               <SearchResult
                 index={index}
