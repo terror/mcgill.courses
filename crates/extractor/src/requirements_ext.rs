@@ -27,25 +27,29 @@ impl RequirementsExt for Requirements {
           match par.inner_html().starts_with(title) {
             false => Ok(()),
             _ => match Requirement::from(*title) {
-              Requirement::Prerequisites => Ok(
+              Requirement::Prerequisites => {
                 requirements.set_prerequisites(
                   par
                     .select_many("a")?
                     .iter()
                     .map(|link| link.inner_html())
                     .collect(),
-                ),
-              ),
-              Requirement::Corequisites => Ok(
+                );
+
+                Ok(())
+              }
+              Requirement::Corequisites => {
                 requirements.set_corequisites(
                   par
                     .select_many("a")?
                     .iter()
                     .map(|link| link.inner_html())
                     .collect(),
-                ),
-              ),
-              Requirement::Restrictions => Ok(
+                );
+
+                Ok(())
+              }
+              Requirement::Restrictions => {
                 requirements.set_restrictions(
                   par
                     .text()
@@ -54,8 +58,10 @@ impl RequirementsExt for Requirements {
                     .skip(1)
                     .collect::<Vec<&str>>()
                     .join(" "),
-                ),
-              ),
+                );
+
+                Ok(())
+              }
               Requirement::Unknown => {
                 Err(anyhow!("Unknown course requirement"))
               }

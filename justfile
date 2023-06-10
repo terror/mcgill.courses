@@ -64,7 +64,7 @@ run *args:
   cargo run -- {{args}}
 
 seed *args: restart-services
-  cargo run -- --source=seed serve --seed --db-name=mcgill-courses {{args}}
+  cargo run -- --source=seed serve --seed --multithreaded --db-name=mcgill-courses {{args}}
 
 serve:
   cargo run -- serve --db-name=mcgill-courses

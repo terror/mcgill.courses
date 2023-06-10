@@ -4,5 +4,4 @@ set -euo pipefail
 
 cargo clippy --workspace --all-targets --all-features -- \
   --deny clippy::all \
-  --allow clippy::from_over_into \
-  --allow clippy::unit-arg
+  --allow clippy::from_over_into
