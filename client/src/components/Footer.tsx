@@ -35,7 +35,7 @@ export const Footer = () => {
 
   return (
     <nav
-      className='transition-all duration-100 sticky overflow-hidden bottom-0 flex w-full flex-row items-center justify-between bg-neutral-100 dark:bg-neutral-800'
+      className='sticky bottom-0 flex w-full flex-row items-center justify-between overflow-hidden bg-neutral-100 transition-all duration-100 dark:bg-neutral-800'
       style={{ height: show ? 64 : 0 }}
     >
       <div className='ml-10 flex flex-row'>
