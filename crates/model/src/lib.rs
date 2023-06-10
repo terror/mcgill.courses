@@ -5,7 +5,7 @@ use {
     de::{self, MapAccess, Visitor},
     Deserialize, Deserializer, Serialize,
   },
-  std::fmt,
+  std::{fmt, path::PathBuf},
 };
 
 mod course;
@@ -16,6 +16,7 @@ mod requirements;
 mod review;
 mod schedule;
 mod search_results;
+mod seed_options;
 
 pub use crate::{
   course::Course,
@@ -26,4 +27,5 @@ pub use crate::{
   review::Review,
   schedule::*,
   search_results::SearchResults,
+  seed_options::SeedOptions,
 };
