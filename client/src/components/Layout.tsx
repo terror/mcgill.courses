@@ -17,13 +17,15 @@ export const Layout = ({ children, preventScroll }: LayoutProps) => {
   }, []);
 
   return (
-    <div className={classNames(darkMode ? 'dark' : '', 'min-h-screen', 'z-10')}>
-      <div className='transition-color min-h-screen overflow-auto pb-5 transition duration-300 ease-in-out dark:bg-neutral-900 sm:overflow-visible'>
-        <Navbar />
-        <main>{children}</main>
-      </div>
-      <div className='z-10 hidden sm:block'>
-        <Footer />
+    <div className={classNames(darkMode ? 'dark' : '', 'min-h-screen z-10')}>
+      <div className='transition-color overflow-auto transition duration-300 ease-in-out dark:bg-neutral-900 sm:overflow-visible absolute min-h-screen w-full flex flex-col justify-between'>
+        <div>
+          <Navbar />
+          <main>{children}</main>
+        </div>
+        <div className=''>
+          <Footer />
+        </div>
       </div>
     </div>
   );
