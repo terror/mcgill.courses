@@ -2,7 +2,7 @@ import {
   classNames,
   filterCurrentInstructors,
   uniqueTermInstructors,
-  getCurrentTerms
+  getCurrentTerms,
 } from '../lib/utils';
 
 import { BsSun } from 'react-icons/bs';
@@ -48,7 +48,9 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
 
   const container = classNames('flex flex-wrap mr-auto');
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
-  const currentlyOfferedTerms = course.terms.filter(course => getCurrentTerms().includes(course))
+  const currentlyOfferedTerms = course.terms.filter((c) =>
+    getCurrentTerms().includes(c)
+  );
 
   if (currentlyOfferedTerms.length === 0)
     return (
