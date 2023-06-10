@@ -99,11 +99,11 @@ export const CourseSearchBar = ({
         selectedIndex < results.courses.length
           ? `/course/${results.courses[selectedIndex]._id}`
           : `/instructor/${results.instructors[
-            selectedIndex - results.courses.length
-          ].name
-            .toLowerCase()
-            .split(' ')
-            .join('-')}`
+              selectedIndex - results.courses.length
+            ].name
+              .toLowerCase()
+              .split(' ')
+              .join('-')}`
       );
   };
 
@@ -164,6 +164,6 @@ export const CourseSearchBar = ({
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 };
