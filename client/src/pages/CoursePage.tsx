@@ -21,16 +21,6 @@ import { ReviewFilter } from '../components/ReviewFilter';
 import { getCurrentTerms } from '../lib/utils';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import _ from 'lodash';
-import { Instructor } from '../model/Instructor';
-
-const sortBy = [
-  { id: 1, name: 'Most Recent' },
-  { id: 2, name: 'Least Recent' },
-  { id: 3, name: 'Highest Rating' },
-  { id: 4, name: 'Lowest Rating' },
-  { id: 5, name: 'Hardest' },
-  { id: 6, name: 'Easiest' },
-];
 
 export const CoursePage = () => {
   const [allReviews, setAllReviews] = useState<Review[]>([]);
