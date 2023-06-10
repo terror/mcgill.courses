@@ -148,15 +148,17 @@ export const CoursePage = () => {
     localStorage.removeItem(course._id);
   };
 
-  const userReview = showingReviews.find((r) => r.userId === user?.id);
-  const averageRating =
-    _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
+  const userReview = allReviews.find((r) => r.userId === user?.id);
+  const averageRating = _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
+  const averageDifficulty =
+    _.sumBy(allReviews, (r) => r.difficulty) / allReviews.length;
 
   return (
     <Layout>
       <CourseInfo
         course={course}
         rating={averageRating}
+        difficulty={averageDifficulty}
         numReviews={allReviews.length}
       />
       <SchedulesDisplay course={course} />

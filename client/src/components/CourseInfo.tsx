@@ -7,10 +7,16 @@ import { RatingInfo } from './RatingInfo';
 type CourseInfoProps = {
   course: Course;
   rating: number;
+  difficulty: number;
   numReviews: number;
 };
 
-export const CourseInfo = ({ course, rating, numReviews }: CourseInfoProps) => {
+export const CourseInfo = ({
+  course,
+  rating,
+  difficulty,
+  numReviews,
+}: CourseInfoProps) => {
   return (
     <div className='flex justify-center'>
       <div className='mx-8 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
@@ -37,15 +43,36 @@ export const CourseInfo = ({ course, rating, numReviews }: CourseInfoProps) => {
               {course.title}
             </h2>
             <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-              <RatingInfo rating={rating} numReviews={numReviews} />
+              <RatingInfo
+                title={'Rating'}
+                rating={rating}
+                numReviews={numReviews}
+              />
+              <RatingInfo
+                title={'Difficulty'}
+                rating={difficulty}
+                numReviews={numReviews}
+              />
             </div>
             <CourseTerms course={course} variant='large' />
             <p className='break-words text-gray-500 dark:text-gray-400'>
               {course.description}
             </p>
+            <p className='text-sm text-gray-500 dark:text-gray-400'>
+              {numReviews} reviews
+            </p>
           </div>
-          <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2'>
-            <RatingInfo rating={rating} numReviews={numReviews} />
+          <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
+            <RatingInfo
+              title={'Rating'}
+              rating={rating}
+              numReviews={numReviews}
+            />
+            <RatingInfo
+              title={'Difficulty'}
+              rating={difficulty}
+              numReviews={numReviews}
+            />
           </div>
         </div>
       </div>
