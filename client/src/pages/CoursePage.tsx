@@ -149,7 +149,8 @@ export const CoursePage = () => {
   };
 
   const userReview = allReviews.find((r) => r.userId === user?.id);
-  const averageRating = _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
+  const averageRating =
+    _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
   const averageDifficulty =
     _.sumBy(allReviews, (r) => r.difficulty) / allReviews.length;
 

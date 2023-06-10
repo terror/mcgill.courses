@@ -232,13 +232,7 @@ const RatingFilter = ({
     difficulty: [selectedDifficulties, setSelectedDifficulties],
   };
 
-  const toggleRating = ({
-    ratingType,
-    rating,
-  }: {
-    ratingType: 'rating' | 'difficulty';
-    rating: number;
-  }) => {
+  const toggleRating = ({ rating }: { rating: number }) => {
     return () => {
       if (ratingTypeMap[type][0].includes(rating)) {
         ratingTypeMap[type][1](
@@ -254,27 +248,27 @@ const RatingFilter = ({
     <div className='flex flex-col'>
       <StarToggle
         rating={5}
-        onToggle={toggleRating({ ratingType: type, rating: 5 })}
+        onToggle={toggleRating({ rating: 5 })}
         toggled={ratingTypeMap[type][0].includes(5)}
       />
       <StarToggle
         rating={4}
-        onToggle={toggleRating({ ratingType: type, rating: 4 })}
+        onToggle={toggleRating({ rating: 4 })}
         toggled={ratingTypeMap[type][0].includes(4)}
       />
       <StarToggle
         rating={3}
-        onToggle={toggleRating({ ratingType: type, rating: 3 })}
+        onToggle={toggleRating({ rating: 3 })}
         toggled={ratingTypeMap[type][0].includes(3)}
       />
       <StarToggle
         rating={2}
-        onToggle={toggleRating({ ratingType: type, rating: 2 })}
+        onToggle={toggleRating({ rating: 2 })}
         toggled={ratingTypeMap[type][0].includes(2)}
       />
       <StarToggle
         rating={1}
-        onToggle={toggleRating({ ratingType: type, rating: 1 })}
+        onToggle={toggleRating({ rating: 1 })}
         toggled={ratingTypeMap[type][0].includes(1)}
       />
     </div>
@@ -303,9 +297,11 @@ export const ReviewFilter = ({
         .filter(
           (review: Review) =>
             selectedInstructors.length === 0 ||
-            selectedInstructors
-              .map((_: Instructor) => _.name.toLowerCase())
-              .includes(review.instructor.toLowerCase())
+            selectedInstructors.filter((instructor: Instructor) =>
+              review.instructors
+                .map((_) => _.toLowerCase())
+                .includes(instructor.name.toLowerCase())
+            ).length !== 0
         )
         .filter(
           (review: Review) =>
