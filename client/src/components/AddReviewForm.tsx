@@ -1,13 +1,15 @@
-import { Form, Formik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
-import { ReviewForm, ReviewSchema } from './ReviewForm';
 import { Dialog, Transition } from '@headlessui/react';
+import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { fetchClient } from '../lib/fetchClient';
 import { classNames } from '../lib/utils';
+import { Course } from '../model/Course';
+import {
+  ReviewForm,
+  ReviewFormInitialValues,
+  ReviewSchema,
+} from './ReviewForm';
 
 type ReviewFormProps = {
   course: Course;
@@ -22,14 +24,11 @@ export const AddReviewForm = ({
   onClose,
   handleSubmit,
 }: ReviewFormProps) => {
-  const params = useParams<{ id: string }>();
-  const navigate = useNavigate();
-
   const [darkMode, _] = useDarkMode();
 
-  const initialValues = {
+  const initialValues: ReviewFormInitialValues = {
     content: '',
-    instructor: '',
+    instructors: [],
     rating: 0,
     difficulty: 0,
   };

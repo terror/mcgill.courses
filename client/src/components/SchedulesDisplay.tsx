@@ -8,7 +8,6 @@ import {
   dedupeSchedulesByBlocks,
 } from '../lib/utils';
 import { IoIosArrowDown } from 'react-icons/io';
-import { Transition } from '@headlessui/react';
 import { Course } from '../model/Course';
 
 const dayToWeekday = (day: string) => {
