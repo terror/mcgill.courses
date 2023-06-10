@@ -1,10 +1,11 @@
 use {
   anyhow::anyhow,
+  futures::Future,
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
   log::{info, warn},
-  model::{Course, Instructor, Review, SearchResults},
+  model::{Course, Instructor, Review, SearchResults, SeedOptions},
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
@@ -14,7 +15,10 @@ use {
   },
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
-  {crate::combine::Combine, seed::Seed, str_ext::StrExt},
+  {
+    crate::combine::Combine, collector::Collector, seed::Seed, seeder::Seeder,
+    str_ext::StrExt,
+  },
 };
 
 #[cfg(test)]
@@ -28,9 +32,11 @@ use {
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
+mod collector;
 mod combine;
 mod db;
 mod seed;
+mod seeder;
 mod str_ext;
 
 pub use crate::db::Db;
