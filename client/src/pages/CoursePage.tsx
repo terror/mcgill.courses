@@ -123,12 +123,15 @@ export const CoursePage = () => {
 
   const userReview = reviews.find((r) => r.userId === user?.id);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
+  const averageDifficulty =
+    _.sumBy(reviews, (r) => r.difficulty) / reviews.length;
 
   return (
     <Layout>
       <CourseInfo
         course={course}
         rating={averageRating}
+        difficulty={averageDifficulty}
         numReviews={reviews.length}
       />
       <SchedulesDisplay course={course} />
