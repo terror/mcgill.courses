@@ -32,7 +32,7 @@ const StarToggle = ({
   toggled,
 }: {
   rating: number;
-  onToggle: any;
+  onToggle: () => void;
   toggled: boolean;
 }) => {
   return (
@@ -54,32 +54,18 @@ const StarToggle = ({
   );
 };
 
-const RatingFilter = ({
-  type,
-  selectedRatings,
-  setSelectedRatings,
-  selectedDifficulties,
-  setSelectedDifficulties,
-}: {
-  type: 'rating' | 'difficulty';
-  selectedRatings: number[];
-  setSelectedRatings: any;
-  selectedDifficulties: number[];
-  setSelectedDifficulties: any;
-}) => {
-  const ratingTypeMap = {
-    rating: [selectedRatings, setSelectedRatings],
-    difficulty: [selectedDifficulties, setSelectedDifficulties],
-  };
+type RatingFilterProps = {
+  ratings: number[];
+  setRatings: Dispatch<SetStateAction<number[]>>;
+};
 
-  const toggleRating = ({ rating }: { rating: number }) => {
+const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
+  const toggleRating = (rating: number) => {
     return () => {
-      if (ratingTypeMap[type][0].includes(rating)) {
-        ratingTypeMap[type][1](
-          ratingTypeMap[type][0].filter((r: number) => r !== rating)
-        );
+      if (ratings.includes(rating)) {
+        setRatings(ratings.filter((r: number) => r !== rating));
       } else {
-        ratingTypeMap[type][1]([...ratingTypeMap[type][0], rating]);
+        setRatings([...ratings, rating]);
       }
     };
   };
@@ -90,8 +76,8 @@ const RatingFilter = ({
         <StarToggle
           key={`star-rating-${x}`}
           rating={x}
-          onToggle={toggleRating({ rating: x })}
-          toggled={ratingTypeMap[type][0].includes(x)}
+          onToggle={toggleRating(x)}
+          toggled={ratings.includes(x)}
         />
       ))}
     </div>
@@ -110,7 +96,6 @@ export const ReviewFilter = ({
   const [selectedDifficulties, setSelectedDifficulties] = useState<number[]>(
     []
   );
-  const title = 'text-xl my-2';
 
   useEffect(() => {
     setReviews(
@@ -171,8 +156,8 @@ export const ReviewFilter = ({
   return (
     <div className='mt-3 flex w-full flex-col rounded-lg p-3 px-5 dark:bg-neutral-800 dark:text-gray-200'>
       <div>
-        <h2 className={title}>Sort By</h2>
-        <div style={{ position: 'relative', zIndex: 2 }}>
+        <h2 className='text-lg my-2 font-bold'>Sort By</h2>
+        <div className='relative z-20'>
           <Autocomplete
             options={sorts}
             value={sortBy}
@@ -181,8 +166,8 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className={title}>Instructor(s)</h2>
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <h2 className='text-lg my-2 font-bold'>Instructor(s)</h2>
+        <div className='relative z-10'>
           <MultiSelect
             options={uniqueInstructors}
             values={selectedInstructors}
@@ -191,21 +176,15 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className={title}>Rating</h2>
+        <h2 className='text-lg my-2 font-bold'>Rating</h2>
         <RatingFilter
-          type='rating'
-          selectedRatings={selectedRatings}
-          setSelectedRatings={setSelectedRatings}
-          selectedDifficulties={selectedDifficulties}
-          setSelectedDifficulties={setSelectedDifficulties}
+          ratings={selectedRatings}
+          setRatings={setSelectedRatings}
         />
-        <h2 className={title}>Difficulty</h2>
+        <h2 className='text-lg my-2 font-bold'>Difficulty</h2>
         <RatingFilter
-          type='difficulty'
-          selectedRatings={selectedRatings}
-          setSelectedRatings={setSelectedRatings}
-          selectedDifficulties={selectedDifficulties}
-          setSelectedDifficulties={setSelectedDifficulties}
+          ratings={selectedDifficulties}
+          setRatings={setSelectedDifficulties}
         />
       </div>
     </div>
