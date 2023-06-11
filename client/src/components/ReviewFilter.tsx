@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Star } from 'react-feather';
 
-import { classNames } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
@@ -27,7 +26,6 @@ type ReviewFilterProps = {
 };
 
 const StarToggle = ({
-  rating,
   onToggle,
   toggled,
 }: {
@@ -38,18 +36,10 @@ const StarToggle = ({
   return (
     <button className='relative w-fit' onClick={onToggle}>
       <Star
-        size={36}
+        size={28}
         stroke='none'
         className={toggled ? 'fill-red-600' : 'fill-gray-200'}
       />
-      <div
-        className={classNames(
-          'absolute inset-2.5 text-xs',
-          toggled ? 'text-white' : 'text-gray-800'
-        )}
-      >
-        {rating}
-      </div>
     </button>
   );
 };
@@ -154,9 +144,10 @@ export const ReviewFilter = ({
   const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
 
   return (
-    <div className='mt-3 flex w-full flex-col rounded-lg p-3 px-5 dark:bg-neutral-800 dark:text-gray-200'>
+    <div className='mt-3 flex w-full flex-col rounded-lg p-8 dark:bg-neutral-800 dark:text-gray-200'>
+      <h1 className='text-xl font-bold'>Filter reviews...</h1>
       <div>
-        <h2 className='text-lg my-2 font-bold'>Sort By</h2>
+        <h2 className='my-2 text-md font-semibold'>Sort By</h2>
         <div className='relative z-20'>
           <Autocomplete
             options={sorts}
@@ -166,7 +157,7 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className='text-lg my-2 font-bold'>Instructor(s)</h2>
+        <h2 className='my-2 text-md font-semibold'>Instructor(s)</h2>
         <div className='relative z-10'>
           <MultiSelect
             options={uniqueInstructors}
@@ -176,12 +167,12 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className='text-lg my-2 font-bold'>Rating</h2>
+        <h2 className='my-2 text-md font-semibold'>Rating</h2>
         <RatingFilter
           ratings={selectedRatings}
           setRatings={setSelectedRatings}
         />
-        <h2 className='text-lg my-2 font-bold'>Difficulty</h2>
+        <h2 className='my-2 text-md font-semibold'>Difficulty</h2>
         <RatingFilter
           ratings={selectedDifficulties}
           setRatings={setSelectedDifficulties}
