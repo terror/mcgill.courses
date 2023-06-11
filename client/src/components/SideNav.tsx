@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
+import { useDarkMode } from '../hooks/useDarkMode';
+import { classNames } from '../lib/utils';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
@@ -27,11 +29,17 @@ type SideNavProps = {
 
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
+  const [darkMode, _] = useDarkMode();
 
   return (
     <Transition appear show={open}>
       <Overlay>
-        <div className='fixed inset-0 z-50 flex items-end justify-end'>
+        <div
+          className={classNames(
+            'fixed inset-0 z-50 flex items-end justify-end',
+            darkMode ? 'dark' : ''
+          )}
+        >
           <Transition.Child
             as={Fragment}
             enter='ease-out duration-300'
