@@ -132,7 +132,7 @@ async fn validate_instructors(
   let course = db
     .find_course_by_id(course_id)
     .await?
-    .ok_or(anyhow!("Invalid course"))?;
+    .ok_or(anyhow!("Failed to find course with id: {}", course_id))?;
 
   let valid_instructors: Vec<String> =
     course.instructors.into_iter().map(|ins| ins.name).collect();
