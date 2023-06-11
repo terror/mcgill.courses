@@ -31,7 +31,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
   return (
     <Transition appear show={open}>
       <Overlay>
-        <div className='fixed inset-0 flex items-end justify-end z-50'>
+        <div className='fixed inset-0 z-50 flex items-end justify-end'>
           <Transition.Child
             as={Fragment}
             enter='ease-out duration-300'
