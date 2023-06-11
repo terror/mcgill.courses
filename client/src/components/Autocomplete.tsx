@@ -56,7 +56,7 @@ export const Autocomplete = ({
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `p-2 z-50
+                  className={({ active }) => `z-50 p-2
                     ${
                       active
                         ? 'bg-red-500 text-white'
