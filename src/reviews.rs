@@ -134,8 +134,8 @@ async fn validate_instructors(
     .await?
     .ok_or(anyhow!("Failed to find course with id: {}", course_id))?;
 
-  let valid_instructors: Vec<String> =
-    course.instructors.into_iter().map(|ins| ins.name).collect();
+  let valid_instructors =
+    course.instructors.into_iter().map(|ins| ins.name).collect::<Vec<String>>();
 
   if !instructors
     .iter()
