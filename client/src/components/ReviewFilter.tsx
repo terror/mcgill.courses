@@ -147,7 +147,7 @@ export const ReviewFilter = ({
     <div className='mt-3 flex w-full flex-col rounded-lg p-8 dark:bg-neutral-800 dark:text-gray-200'>
       <h1 className='text-xl font-bold'>Filter reviews...</h1>
       <div>
-        <h2 className='my-2 text-md font-semibold'>Sort By</h2>
+        <h2 className='text-md my-2 font-semibold'>Sort By</h2>
         <div className='relative z-20'>
           <Autocomplete
             options={sorts}
@@ -157,7 +157,7 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className='my-2 text-md font-semibold'>Instructor(s)</h2>
+        <h2 className='text-md my-2 font-semibold'>Instructor(s)</h2>
         <div className='relative z-10'>
           <MultiSelect
             options={uniqueInstructors}
@@ -167,12 +167,12 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className='my-2 text-md font-semibold'>Rating</h2>
+        <h2 className='text-md my-2 font-semibold'>Rating</h2>
         <RatingFilter
           ratings={selectedRatings}
           setRatings={setSelectedRatings}
         />
-        <h2 className='my-2 text-md font-semibold'>Difficulty</h2>
+        <h2 className='text-md my-2 font-semibold'>Difficulty</h2>
         <RatingFilter
           ratings={selectedDifficulties}
           setRatings={setSelectedDifficulties}

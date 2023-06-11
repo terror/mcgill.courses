@@ -69,7 +69,7 @@ export const MultiSelect = ({
                         : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
                     }`}
                 >
-                  <div className='flex space-x-1'>
+                  <div className='flex justify-between'>
                     <div>{val}</div>
                     {values.includes(val) && (
                       <Check className='stroke-red-600' />
