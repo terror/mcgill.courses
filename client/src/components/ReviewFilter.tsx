@@ -95,7 +95,7 @@ export const ReviewFilter = ({
             selectedInstructors.length === 0 ||
             selectedInstructors.filter((instructor: string) =>
               review.instructors
-                .map((_) => _.toLowerCase())
+                .map((ins) => ins.toLowerCase())
                 .includes(instructor.toLowerCase())
             ).length !== 0
         )
