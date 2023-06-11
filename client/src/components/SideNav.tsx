@@ -17,7 +17,7 @@ type OverlayProps = {
 const Overlay = ({ children }: OverlayProps) => {
   const root = document.getElementById('overlay-root');
   if (!root) {
-    throw new Error('Overlay root element not present in document!');
+    throw new Error('Overlay root element not present in document');
   }
   return ReactDOM.createPortal(children, root);
 };
