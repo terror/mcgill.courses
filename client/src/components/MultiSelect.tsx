@@ -35,7 +35,7 @@ export const MultiSelect = ({
         }}
         multiple
       >
-        <div className='relative w-72'>
+        <div className='w-72'>
           <div className='relative rounded-md bg-gray-50 p-2 dark:bg-neutral-700'>
             <Combobox.Input
               className='bg-gray-50 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
@@ -57,7 +57,7 @@ export const MultiSelect = ({
             leaveFrom='transform scale-100 opacity-100'
             leaveTo='transform scale-95 opacity-0'
           >
-            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md shadow-md z-10'>
+            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md shadow-md'>
               {filtered.map((val, i) => (
                 <Combobox.Option
                   key={i}

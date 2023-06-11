@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-import { BsFillXSquareFill, BsSquare } from 'react-icons/bs';
+import { Star } from 'react-feather';
 
+import { classNames } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
 import { MultiSelect } from './MultiSelect';
-import { StarRating } from './StarRating';
 
 const sortTypes = [
   'Most Recent',
@@ -26,15 +26,6 @@ type ReviewFilterProps = {
   setShowAllReviews: Dispatch<SetStateAction<boolean>>;
 };
 
-const Toggle = ({ isOn }: { isOn: boolean }) => {
-  const size = 15;
-  return isOn ? (
-    <BsFillXSquareFill size={size} color='pink' />
-  ) : (
-    <BsSquare size={size} />
-  );
-};
-
 const StarToggle = ({
   rating,
   onToggle,
@@ -45,12 +36,20 @@ const StarToggle = ({
   toggled: boolean;
 }) => {
   return (
-    <button
-      className='flex flex-row items-center justify-between rounded-md p-0.5 py-1 transition duration-200 ease-in-out hover:bg-slate-50 dark:hover:bg-neutral-700 '
-      onClick={onToggle}
-    >
-      <StarRating rating={rating} />
-      <Toggle isOn={toggled} />
+    <button className='relative w-fit' onClick={onToggle}>
+      <Star
+        size={36}
+        stroke='none'
+        className={toggled ? 'fill-red-600' : 'fill-gray-200'}
+      />
+      <div
+        className={classNames(
+          'absolute inset-2.5 text-xs',
+          toggled ? 'text-white' : 'text-gray-800'
+        )}
+      >
+        {rating}
+      </div>
     </button>
   );
 };
@@ -86,32 +85,15 @@ const RatingFilter = ({
   };
 
   return (
-    <div className='flex flex-col'>
-      <StarToggle
-        rating={5}
-        onToggle={toggleRating({ rating: 5 })}
-        toggled={ratingTypeMap[type][0].includes(5)}
-      />
-      <StarToggle
-        rating={4}
-        onToggle={toggleRating({ rating: 4 })}
-        toggled={ratingTypeMap[type][0].includes(4)}
-      />
-      <StarToggle
-        rating={3}
-        onToggle={toggleRating({ rating: 3 })}
-        toggled={ratingTypeMap[type][0].includes(3)}
-      />
-      <StarToggle
-        rating={2}
-        onToggle={toggleRating({ rating: 2 })}
-        toggled={ratingTypeMap[type][0].includes(2)}
-      />
-      <StarToggle
-        rating={1}
-        onToggle={toggleRating({ rating: 1 })}
-        toggled={ratingTypeMap[type][0].includes(1)}
-      />
+    <div className='flex'>
+      {[1, 2, 3, 4, 5].map((x) => (
+        <StarToggle
+          key={`star-rating-${x}`}
+          rating={x}
+          onToggle={toggleRating({ rating: x })}
+          toggled={ratingTypeMap[type][0].includes(x)}
+        />
+      ))}
     </div>
   );
 };
@@ -190,19 +172,23 @@ export const ReviewFilter = ({
     <div className='mt-3 flex w-full flex-col rounded-lg p-3 px-5 dark:bg-neutral-800 dark:text-gray-200'>
       <div>
         <h2 className={title}>Sort By</h2>
-        <Autocomplete
-          options={sorts}
-          value={sortBy}
-          setValue={(val: string) => setSortBy(val as ReviewSortType)}
-        />
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <Autocomplete
+            options={sorts}
+            value={sortBy}
+            setValue={(val: string) => setSortBy(val as ReviewSortType)}
+          />
+        </div>
       </div>
       <div>
         <h2 className={title}>Instructor(s)</h2>
-        <MultiSelect
-          options={uniqueInstructors}
-          values={selectedInstructors}
-          setValues={setSelectedInstructors}
-        />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <MultiSelect
+            options={uniqueInstructors}
+            values={selectedInstructors}
+            setValues={setSelectedInstructors}
+          />
+        </div>
       </div>
       <div>
         <h2 className={title}>Rating</h2>
