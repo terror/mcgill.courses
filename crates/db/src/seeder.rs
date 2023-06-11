@@ -57,7 +57,7 @@ impl Seeder {
   async fn seed<Item, Fut, F>(&self, items: Vec<Item>, runner: F) -> Result
   where
     Item: Clone + Send + 'static,
-    Fut: Future<Output = Result<(), anyhow::Error>> + Send + 'static,
+    Fut: Future<Output = Result> + Send + 'static,
     F: Fn(Db, Item) -> Fut + Send + Sync + 'static,
   {
     if self.options.multithreaded {
