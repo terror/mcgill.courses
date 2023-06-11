@@ -1,36 +1,30 @@
-import { Review } from '../model/Review';
+import _ from 'lodash';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { BsFillXSquareFill, BsSquare } from 'react-icons/bs';
+
 import { Course } from '../model/Course';
-import { dedupeInstructors } from '../lib/utils';
+import { Review } from '../model/Review';
+import { Autocomplete } from './Autocomplete';
+import { MultiSelect } from './MultiSelect';
 import { StarRating } from './StarRating';
-import { Instructor } from '../model/Instructor';
-import { useState, useEffect } from 'react';
-import { BsSquare, BsFillXSquareFill } from 'react-icons/bs';
-import { Combobox, Listbox, Transition } from '@headlessui/react';
-import { ChevronUpDownIcon, CheckIcon } from '@heroicons/react/20/solid';
+
+const sortTypes = [
+  'Most Recent',
+  'Least Recent',
+  'Highest Rating',
+  'Lowest Rating',
+  'Hardest',
+  'Easiest',
+] as const;
+
+export type ReviewSortType = (typeof sortTypes)[number];
 
 type ReviewFilterProps = {
   course: Course;
-  sortBy: any;
-  setSortBy: any;
-  selectedInstructors: any;
-  setSelectedInstructors: any;
-  selectedRatings: any;
-  setSelectedRatings: any;
-  selectedDifficulties: any;
-  setSelectedDifficulties: any;
-  allReviews: any;
-  setReviews: any;
-  setShowAllReviews: any;
+  allReviews: Review[];
+  setReviews: Dispatch<SetStateAction<Review[]>>;
+  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
 };
-
-const sorts = [
-  { id: 1, name: 'Most Recent' },
-  { id: 2, name: 'Least Recent' },
-  { id: 3, name: 'Highest Rating' },
-  { id: 4, name: 'Lowest Rating' },
-  { id: 5, name: 'Hardest' },
-  { id: 6, name: 'Easiest' },
-];
 
 const Toggle = ({ isOn }: { isOn: boolean }) => {
   const size = 15;
@@ -58,159 +52,6 @@ const StarToggle = ({
       <StarRating rating={rating} />
       <Toggle isOn={toggled} />
     </button>
-  );
-};
-
-const SortDropdown = ({
-  selectedSort,
-  setSelectedSort,
-}: {
-  selectedSort: any;
-  setSelectedSort: any;
-}) => {
-  return (
-    <div className='w-full'>
-      <Listbox value={selectedSort} onChange={setSelectedSort}>
-        <div className='relative mt-1'>
-          <Listbox.Button className='relative w-full cursor-default rounded-md bg-slate-50 py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300 dark:bg-neutral-700 sm:text-sm'>
-            <span className='block truncate'>{selectedSort.name}</span>
-            <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-              <ChevronUpDownIcon
-                className='h-5 w-5 text-gray-400'
-                aria-hidden='true'
-              />
-            </span>
-          </Listbox.Button>
-          <Transition
-            leave='transition ease-in duration-100'
-            leaveFrom='opacity-100'
-            leaveTo='opacity-0'
-          >
-            <Listbox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-50 py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-700 sm:text-sm'>
-              {sorts.map((sort, sortId) => (
-                <Listbox.Option
-                  key={sortId}
-                  className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? 'bg-red-100 text-red-900' : '900'
-                    }`
-                  }
-                  value={sort}
-                >
-                  {({ selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected ? 'font-medium' : 'font-normal'
-                        }`}
-                      >
-                        {sort.name}
-                      </span>
-                      {selected || sort.name === selectedSort.name ? (
-                        <span className='absolute inset-y-0 left-0 flex items-center pl-3 text-red-600'>
-                          <CheckIcon className='h-5 w-5' aria-hidden='true' />
-                        </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
-        </div>
-      </Listbox>
-    </div>
-  );
-};
-
-const InstructorsDropdown = ({
-  selectedInstructors,
-  setSelectedInstructors,
-  allInstructors,
-}: {
-  selectedInstructors: Instructor[];
-  setSelectedInstructors: any;
-  allInstructors: Instructor[];
-}) => {
-  const [query, setQuery] = useState('');
-
-  const filteredData =
-    query === ''
-      ? dedupeInstructors(allInstructors)
-      : dedupeInstructors(allInstructors).filter((instructor: Instructor) =>
-          instructor.name.toLowerCase().includes(query.toLowerCase())
-        );
-  return (
-    <div className='flex flex-col'>
-      <div className='rounded-md'>
-        <Combobox
-          value={selectedInstructors}
-          onChange={(val) => setSelectedInstructors(val)}
-          multiple
-        >
-          {' '}
-          <Combobox.Input
-            className='w-full rounded-md border-none bg-slate-50 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:outline-none dark:bg-neutral-700 dark:text-gray-200'
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && filteredData.length > 0) {
-                setQuery('');
-              }
-            }}
-            autoComplete='off'
-          />
-          <Transition
-            enter='transition ease-in-out duration-100 transform'
-            enterFrom='opacity-0 scale-95'
-            enterTo='opacity-100 scale-100'
-            leave='transition ease-in-out duration-75 transform'
-            leaveFrom='opacity-100 scale-100'
-            leaveTo='opacity-0 scale-95'
-          >
-            <div className='absolute z-50 w-full bg-white'>
-              {
-                <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-gray-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-700 sm:text-sm'>
-                  {filteredData.length > 0 ? (
-                    filteredData.map((data, i) => (
-                      <Combobox.Option key={i} value={data}>
-                        {({ active, selected }) => (
-                          <div
-                            className={`${
-                              active
-                                ? 'bg-red-600 text-gray-100'
-                                : 'text-gray-700 dark:text-gray-100'
-                            } flex flex-row justify-between p-2 text-lg`}
-                            onClick={() => {
-                              setQuery('');
-                            }}
-                          >
-                            {data.name}
-                            {selected && (
-                              <span className='flex items-center pl-3 text-red-600'>
-                                <CheckIcon
-                                  className='h-5 w-5'
-                                  color='pink'
-                                  aria-hidden='true'
-                                />
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </Combobox.Option>
-                    ))
-                  ) : (
-                    <p className='text-md p-2  text-gray-800 dark:text-gray-100'>
-                      Nothing Found.
-                    </p>
-                  )}
-                </Combobox.Options>
-              }
-            </div>
-          </Transition>
-        </Combobox>
-      </div>
-    </div>
   );
 };
 
@@ -277,18 +118,16 @@ const RatingFilter = ({
 
 export const ReviewFilter = ({
   course,
-  sortBy,
-  setSortBy,
-  selectedInstructors,
-  setSelectedInstructors,
-  selectedRatings,
-  setSelectedRatings,
-  selectedDifficulties,
-  setSelectedDifficulties,
   allReviews,
   setReviews,
   setShowAllReviews,
 }: ReviewFilterProps) => {
+  const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
+  const [selectedInstructors, setSelectedInstructors] = useState<string[]>([]);
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [selectedDifficulties, setSelectedDifficulties] = useState<number[]>(
+    []
+  );
   const title = 'text-xl my-2';
 
   useEffect(() => {
@@ -297,10 +136,10 @@ export const ReviewFilter = ({
         .filter(
           (review: Review) =>
             selectedInstructors.length === 0 ||
-            selectedInstructors.filter((instructor: Instructor) =>
+            selectedInstructors.filter((instructor: string) =>
               review.instructors
                 .map((_) => _.toLowerCase())
-                .includes(instructor.name.toLowerCase())
+                .includes(instructor.toLowerCase())
             ).length !== 0
         )
         .filter(
@@ -314,24 +153,24 @@ export const ReviewFilter = ({
             selectedDifficulties.includes(review.difficulty)
         )
         .sort((a: Review, b: Review) => {
-          switch (sortBy.id) {
-            case 1:
+          switch (sortBy) {
+            case 'Most Recent':
               return (
                 parseInt(b.timestamp.$date.$numberLong, 10) -
                 parseInt(a.timestamp.$date.$numberLong, 10)
               );
-            case 2:
+            case 'Least Recent':
               return (
                 parseInt(a.timestamp.$date.$numberLong, 10) -
                 parseInt(b.timestamp.$date.$numberLong, 10)
               );
-            case 3:
+            case 'Highest Rating':
               return b.rating - a.rating;
-            case 4:
+            case 'Lowest Rating':
               return a.rating - b.rating;
-            case 5:
+            case 'Hardest':
               return b.difficulty - a.difficulty;
-            case 6:
+            case 'Easiest':
               return a.difficulty - b.difficulty;
             default:
               return (
@@ -344,18 +183,25 @@ export const ReviewFilter = ({
     setShowAllReviews(false);
   }, [sortBy, selectedDifficulties, selectedInstructors, selectedRatings]);
 
+  const sorts = useMemo(() => sortTypes.slice(), []);
+  const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
+
   return (
     <div className='mt-3 flex w-full flex-col rounded-lg p-3 px-5 dark:bg-neutral-800 dark:text-gray-200'>
       <div>
         <h2 className={title}>Sort By</h2>
-        <SortDropdown selectedSort={sortBy} setSelectedSort={setSortBy} />
+        <Autocomplete
+          options={sorts}
+          value={sortBy}
+          setValue={(val: string) => setSortBy(val as ReviewSortType)}
+        />
       </div>
       <div>
         <h2 className={title}>Instructor(s)</h2>
-        <InstructorsDropdown
-          selectedInstructors={selectedInstructors}
-          setSelectedInstructors={setSelectedInstructors}
-          allInstructors={course.instructors}
+        <MultiSelect
+          options={uniqueInstructors}
+          values={selectedInstructors}
+          setValues={setSelectedInstructors}
         />
       </div>
       <div>

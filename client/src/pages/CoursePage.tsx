@@ -1,9 +1,10 @@
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
-import { BoxToggle } from '../components/BoxToggle';
 import { Alert } from '../components/Alert';
+import { BoxToggle } from '../components/BoxToggle';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -11,16 +12,15 @@ import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
+import { ReviewFilter } from '../components/ReviewFilter';
+import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
+import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
-import { ReviewFilter } from '../components/ReviewFilter';
-import { getCurrentTerms } from '../lib/utils';
-import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import _ from 'lodash';
 
 export const CoursePage = () => {
   const [allReviews, setAllReviews] = useState<Review[]>([]);
@@ -28,7 +28,6 @@ export const CoursePage = () => {
   const [course, setCourse] = useState<Course>();
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
-  const user = useAuth();
   const currentTerms = getCurrentTerms();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
@@ -41,15 +40,8 @@ export const CoursePage = () => {
   const [alertMessage, setAlertMessage] = useState('');
 
   const [filterIsOpen, setFilterIsOpen] = useState(false);
-  const [sortByFilter, setSortByFilter] = useState({
-    id: 1,
-    name: 'Most Recent',
-  });
-  const [filteredInstructors, setFilteredInstructors] = useState<string[]>([]);
-  const [filteredRatings, setFilteredRatings] = useState<number[]>([]);
-  const [filteredDifficulties, setFilteredDifficulties] = useState<number[]>(
-    []
-  );
+
+  const user = useAuth();
 
   useEffect(() => {
     fetchClient
@@ -170,14 +162,6 @@ export const CoursePage = () => {
                 child={
                   <ReviewFilter
                     course={course}
-                    sortBy={sortByFilter}
-                    setSortBy={setSortByFilter}
-                    selectedInstructors={filteredInstructors}
-                    setSelectedInstructors={setFilteredInstructors}
-                    selectedRatings={filteredRatings}
-                    setSelectedRatings={setFilteredRatings}
-                    selectedDifficulties={filteredDifficulties}
-                    setSelectedDifficulties={setFilteredDifficulties}
                     allReviews={allReviews}
                     setReviews={setShowingReviews}
                     setShowAllReviews={setShowAllReviews}
