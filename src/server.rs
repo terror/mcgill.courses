@@ -1,7 +1,5 @@
 use super::*;
 
-use model::SeedOptions;
-
 #[derive(Parser)]
 pub(crate) struct Server {
   #[clap(long, default_value = "admin", help = "Database name")]
@@ -9,7 +7,7 @@ pub(crate) struct Server {
   #[clap(long, default_value = "8000", help = "Port to listen on")]
   port: u16,
   #[clap(long, default_value = "false", help = "Seed the database")]
-  seed: bool,
+  initialize: bool,
   #[clap(
     long,
     default_value = "false",
@@ -28,12 +26,12 @@ impl Server {
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
-    if self.seed {
+    if self.initialize {
       let clone = db.clone();
 
       tokio::spawn(async move {
         if let Err(error) = clone
-          .seed(SeedOptions {
+          .initialize(InitializeOptions {
             multithreaded: self.multithreaded,
             skip_courses: self.skip_courses,
             source: source.clone(),
@@ -164,7 +162,7 @@ mod tests {
   async fn courses_route_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -204,7 +202,7 @@ mod tests {
   async fn courses_route_offset_limit() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -271,7 +269,7 @@ mod tests {
   async fn course_by_id_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -303,7 +301,7 @@ mod tests {
   async fn course_by_id_invalid_course_code() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -335,7 +333,7 @@ mod tests {
   async fn unauthenticated_cant_add_review() {
     let TestContext { db, app, .. } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -367,7 +365,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -412,7 +410,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -456,7 +454,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -516,7 +514,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -587,7 +585,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })
@@ -687,7 +685,7 @@ mod tests {
       ..
     } = TestContext::new().await;
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: seed(),
       ..Default::default()
     })

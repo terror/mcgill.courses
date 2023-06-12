@@ -1,0 +1,158 @@
+use super::*;
+
+#[derive(Debug)]
+pub(crate) struct Initializer {
+  db: Db,
+  options: InitializeOptions,
+}
+
+impl Initializer {
+  const COURSE_COLLECTION: &str = "courses";
+  const INSTRUCTOR_COLLECTION: &str = "instructors";
+
+  pub(crate) fn new(db: Db, options: InitializeOptions) -> Self {
+    Self { db, options }
+  }
+
+  pub(crate) async fn run(&self) -> Result {
+    self.seed().await?;
+    self.index().await?;
+    Ok(())
+  }
+
+  fn collect(&self) -> Result<Vec<Seed>> {
+    Ok(if self.options.source.is_file() {
+      vec![Seed::from_content(
+        self.options.source.clone(),
+        fs::read_to_string(&self.options.source)?,
+      )]
+    } else {
+      fs::read_dir(&self.options.source)?
+        .map(|path| -> Result<PathBuf> { Ok(path?.path()) })
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
+        .sorted()
+        .map(|path| -> Result<Seed> {
+          Ok(Seed::from_content(path.clone(), fs::read_to_string(path)?))
+        })
+        .collect::<Result<Vec<_>>>()?
+    })
+  }
+
+  async fn index(&self) -> Result {
+    info!("Building course index...");
+
+    self
+      .db
+      .create_index::<Course>(
+        Self::COURSE_COLLECTION,
+        doc! {
+          "subject": "text",
+          "code": "text",
+          "_id": "text",
+          "title": "text",
+          "idNgrams": "text",
+          "titleNgrams": "text",
+        },
+        doc! {
+          "subject": 10,
+          "code": 10,
+          "_id": 10,
+          "title": 8,
+          "idNgrams": 4,
+          "titleNgrams": 2,
+        },
+      )
+      .await?;
+
+    info!("Building instructor index...");
+
+    self
+      .db
+      .create_index::<Instructor>(
+        Self::INSTRUCTOR_COLLECTION,
+        doc! { "name": "text", "nameNgrams": "text" },
+        doc! { "name": 10, "nameNgrams": 4 },
+      )
+      .await?;
+
+    info!("All indices complete.");
+
+    Ok(())
+  }
+
+  async fn populate<
+    Item: Clone + Send,
+    Fut: Future<Output = Result> + Send + 'static,
+    F: Fn(Db, Item) -> Fut,
+  >(
+    &self,
+    items: Vec<Item>,
+    runner: F,
+  ) -> Result {
+    let tasks =
+      self
+        .options
+        .multithreaded
+        .then_some(items.clone().into_iter().map(|item| {
+          let db = self.db.clone();
+          tokio::task::spawn(runner(db, item))
+        }));
+
+    if let Some(tasks) = tasks {
+      join_all(tasks)
+        .await
+        .into_iter()
+        .collect::<Result<Vec<_>, _>>()?;
+    } else {
+      for item in items {
+        runner(self.db.clone(), item).await?;
+      }
+    }
+
+    Ok(())
+  }
+
+  async fn seed(&self) -> Result {
+    info!("Seeding the database...");
+
+    for seed in self.collect()? {
+      match seed {
+        Seed::Courses((path, courses)) if !self.options.skip_courses => {
+          info!("Seeding courses from {}...", path.display());
+
+          let runner = |db: Db, item: Course| async move {
+            db.add_course(item.clone()).await?;
+
+            for instructor in item.instructors {
+              db.add_instructor(instructor).await?;
+            }
+
+            Ok(())
+          };
+
+          self.populate(courses, runner).await?;
+        }
+        Seed::Reviews((path, reviews)) => {
+          info!("Seeding reviews from {}...", path.display());
+
+          let runner = |db: Db, item: Review| async move {
+            db.add_review(item).await?;
+            Ok(())
+          };
+
+          self.populate(reviews, runner).await?;
+        }
+        Seed::Unknown(path) => {
+          warn!(
+            "Unknown seed type encountered from {}, continuing...",
+            path.display()
+          );
+        }
+        _ => continue,
+      }
+    }
+
+    Ok(())
+  }
+}

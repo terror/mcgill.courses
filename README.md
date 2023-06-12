@@ -20,10 +20,10 @@ $ docker compose up -d
 ```
 
 Spawn the server with a data source (in this case the `/seed` directory) and
-seed the database:
+initialize the database:
 
 ```bash
-$ cargo run -- --source=seed serve --seed --db-name=mcgill-courses
+$ cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
 ```
 
 Refer to `.env.example` and `client/.env.example` for what environment variables
@@ -56,7 +56,7 @@ Options:
       --page-delay <PAGE_DELAY>      Time delay between page requests in milliseconds [default: 0]
       --retries <RETRIES>            Number of retries [default: 10]
       --batch-size <BATCH_SIZE>      Number of pages to scrape per concurrent batch [default: 20]
-      --mcgill-term <MCGILL_TERM>    The mcgill term to scrape [default: 2022-2023]
+      --mcgill-term <MCGILL_TERM>    The mcgill term to scrape [default: 2023-2024]
       --vsb-terms <VSB_TERMS>        The schedule builder terms to scrape [default: 202305 202309 202401]
       --scrape-vsb                   Scrape visual schedule builder information
   -h, --help                         Print help
