@@ -35,46 +35,8 @@ impl Db {
     self.database.name().to_string()
   }
 
-  pub async fn seed(&self, options: SeedOptions) -> Result {
-    Seeder::new(self.clone(), options).run().await?;
-
-    info!("Building course index...");
-
-    self
-      .create_index::<Course>(
-        Self::COURSE_COLLECTION,
-        doc! {
-          "subject": "text",
-          "code": "text",
-          "_id": "text",
-          "title": "text",
-          "idNgrams": "text",
-          "titleNgrams": "text",
-        },
-        doc! {
-          "subject": 10,
-          "code": 10,
-          "_id": 10,
-          "title": 8,
-          "idNgrams": 4,
-          "titleNgrams": 2,
-        },
-      )
-      .await?;
-
-    info!("Building instructor index...");
-
-    self
-      .create_index::<Instructor>(
-        Self::INSTRUCTOR_COLLECTION,
-        doc! { "name": "text", "nameNgrams": "text" },
-        doc! { "name": 10, "nameNgrams": 4 },
-      )
-      .await?;
-
-    info!("All indices complete.");
-
-    Ok(())
+  pub async fn initialize(&self, options: InitializeOptions) -> Result {
+    Initializer::new(self.clone(), options).run().await
   }
 
   pub async fn courses(
@@ -528,7 +490,7 @@ mod tests {
 
     fs::write(&source, get_content("before_update.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -561,7 +523,7 @@ mod tests {
     )
     .unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -587,7 +549,7 @@ mod tests {
 
     fs::write(&source, get_content("before_update.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: source.clone(),
       ..Default::default()
     })
@@ -604,7 +566,7 @@ mod tests {
 
     fs::write(&source, get_content("update.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -639,7 +601,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -674,7 +636,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -703,7 +665,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -738,7 +700,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -773,7 +735,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -799,7 +761,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -1169,7 +1131,7 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
 
       ..Default::default()
@@ -1203,7 +1165,7 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
 
       ..Default::default()
@@ -1237,7 +1199,7 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
 
       ..Default::default()
@@ -1303,7 +1265,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
