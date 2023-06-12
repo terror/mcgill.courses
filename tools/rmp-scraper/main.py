@@ -36,9 +36,12 @@ def get_professors(school_id: str) -> List[Tuple[str, str]]:
     }
     """
   )
-  variables = {"query": {"schoolID": school_id}}
 
-  result = client.execute(query, variable_values=variables)
+  result = client.execute(
+    query, variable_values={"query": {
+      "schoolID": school_id
+    }}
+  )
 
   return [(
     edge["node"]["id"],
@@ -76,14 +79,16 @@ def get_professor_reviews(professor_id: str,
     """
   )
 
-  variables = {
-    "count": 10000,
-    "courseFilter": None,
-    "cursor": None,
-    "id": professor_id,
-  }
+  result = client.execute(
+    query,
+    variable_values={
+      "count": 10000,
+      "courseFilter": None,
+      "cursor": None,
+      "id": professor_id,
+    }
+  )
 
-  result = client.execute(query, variable_values=variables)
   node = result["node"]
   prof_name = f"{node['firstName']} {node['lastName']}"
   reviews = [edge["node"] for edge in result["node"]["ratings"]["edges"]]
@@ -113,23 +118,18 @@ def get_professor_reviews(professor_id: str,
   ]
 
 def main(seed_dir: str):
-  ids = get_professors(MCGILL_SCHOOL_ID)
-  num_profs = len(ids)
-  all_reviews = []
+  ids, all_reviews = get_professors(MCGILL_SCHOOL_ID), []
 
   with open(os.path.join(seed_dir, '2023-2024.json')) as f:
     valid_courses = set([course["_id"] for course in json.loads(f.read())])
 
   for i, (id, prof_name) in enumerate(ids):
-    print(f"({i + 1}/{num_profs}) Scraping reviews for {prof_name}")
+    print(f"({i + 1}/{len(ids)}) Scraping reviews for {prof_name}")
 
     try:
-      res = get_professor_reviews(id, valid_courses)
-      for review in res:
-        all_reviews.append(review)
+      all_reviews.extend(get_professor_reviews(id, valid_courses))
     except Exception as e:
       print(e)
-      continue
 
   all_reviews = sorted(all_reviews, key=lambda x: x["courseId"])
 
@@ -140,11 +140,13 @@ def main(seed_dir: str):
   instructors = set()
 
   for file in os.listdir(seed_dir):
-      if file == "reviews.json":
-          continue
-      with open(os.path.join(seed_dir, file), encoding="utf-8") as f:
-          for course in json.load(f):
-            instructors = instructors.union(map(lambda x: x["name"], course["instructors"]))
+    if file == "reviews.json":
+      continue
+    with open(os.path.join(seed_dir, file), encoding="utf-8") as f:
+      for course in json.load(f):
+        instructors = instructors.union(
+          map(lambda x: x["name"], course["instructors"])
+        )
 
   instructors = list(instructors)
   name_parts = [name.split() for name in instructors]
@@ -157,24 +159,22 @@ def main(seed_dir: str):
   for instructor in review_instructors:
     if instructor in instructors:
       instructor_map[instructor] = instructor
-      continue
-    # ...otherwise we check for a partial match
-    parts = set(instructor.split())
-    best = max(name_parts, key=lambda x: len(parts.intersection(set(x))))
-    best_match = instructors[name_parts.index(best)] if len(
-      parts.intersection(set(best))
-    ) > 1 else None
-    if best_match: print('Matched', instructor, 'to', best_match)
-    instructor_map[instructor] = best_match
+    else:
+      parts = set(instructor.split())
+      best = max(name_parts, key=lambda x: len(parts.intersection(set(x))))
+      instructor_map[instructor] = instructors[name_parts.index(best)] if len(
+        parts.intersection(set(best))
+      ) > 1 else None
 
   print('[~] Filtering reviews...')
 
   reviews = []
 
   for review in all_reviews:
-    ins = review['instructors'][0]
-    if ins not in instructor_map or not instructor_map[ins]: continue
-    review['instructors'] = [instructor_map[ins]]
+    instructor = review['instructors'][0]
+    if instructor not in instructor_map or not instructor_map[instructor]:
+      continue
+    review['instructors'] = [instructor_map[instructor]]
     reviews.append(review)
 
   print(
