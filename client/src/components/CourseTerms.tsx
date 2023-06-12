@@ -79,10 +79,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
               ? 'pointer-events-none'
               : ''
           )}
-          to={`/instructor/${instructor.name
-            .split(' ')
-            .map((x) => x.toLowerCase())
-            .join('-')}`}
+          to={`/instructor/${encodeURIComponent(instructor.name)}`}
         >
           <div
             key={i}
