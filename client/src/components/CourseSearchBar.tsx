@@ -98,9 +98,9 @@ export const CourseSearchBar = ({
       navigate(
         selectedIndex < results.courses.length
           ? `/course/${results.courses[selectedIndex]._id}`
-          : `/instructor/${encodeURIComponent(results.instructors[
-            selectedIndex - results.courses.length
-          ].name)}`
+          : `/instructor/${encodeURIComponent(
+              results.instructors[selectedIndex - results.courses.length].name
+            )}`
       );
   };
 

@@ -47,6 +47,8 @@ export const Instructor = () => {
   const userReview = reviews.find((r) => r.userId === user?.id);
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
+  const averageDifficulty =
+    _.sumBy(reviews, (r) => r.difficulty) / reviews.length;
 
   return (
     <Layout>
@@ -59,12 +61,21 @@ export const Instructor = () => {
                   {params.name && decodeURIComponent(params.name)}
                 </h1>
               </div>
-              <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                <RatingInfo
-                  title='Rating'
-                  rating={averageRating}
-                  numReviews={reviews.length}
-                />
+            <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
+                {uniqueReviews.length && (
+                  <RatingInfo
+                    title='Rating'
+                    rating={averageRating}
+                    numReviews={reviews.length}
+                  />
+                )}
+                {uniqueReviews.length && (
+                  <RatingInfo
+                    title='Difficulty'
+                    rating={averageDifficulty}
+                    numReviews={reviews.length}
+                  />
+                )}
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -84,13 +95,22 @@ export const Instructor = () => {
                 )}
               </p>
             </div>
-            <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2'>
-              <RatingInfo
-                title='Difficulty'
-                rating={averageRating}
-                numReviews={reviews.length}
-                content=''
-              />
+
+          <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
+              {uniqueReviews.length && (
+                <RatingInfo
+                  title='Rating'
+                  rating={averageRating}
+                  numReviews={reviews.length}
+                />
+              )}
+              {uniqueReviews.length && (
+                <RatingInfo
+                  title='Difficulty'
+                  rating={averageDifficulty}
+                  numReviews={reviews.length}
+                />
+              )}
             </div>
           </div>
         </div>
