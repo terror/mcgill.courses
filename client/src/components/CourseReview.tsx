@@ -115,10 +115,7 @@ export const CourseReview = ({
                 return (
                   <Fragment key={instructor + review.userId}>
                     <Link
-                      to={`/instructor/${instructor
-                        .split(' ')
-                        .map((x) => x.toLowerCase())
-                        .join('-')}`}
+                      to={`/instructor/${encodeURIComponent(instructor)}`}
                       className='transition hover:text-red-600'
                     >
                       {instructor}
