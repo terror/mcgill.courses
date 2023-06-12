@@ -98,12 +98,9 @@ export const CourseSearchBar = ({
       navigate(
         selectedIndex < results.courses.length
           ? `/course/${results.courses[selectedIndex]._id}`
-          : `/instructor/${results.instructors[
-              selectedIndex - results.courses.length
-            ].name
-              .toLowerCase()
-              .split(' ')
-              .join('-')}`
+          : `/instructor/${encodeURIComponent(results.instructors[
+            selectedIndex - results.courses.length
+          ].name)}`
       );
   };
 
@@ -150,10 +147,7 @@ export const CourseSearchBar = ({
               selectedIndex={selectedIndex}
               text={result.name}
               type={SearchResultType.Instructor}
-              url={`/instructor/${result.name
-                .toLowerCase()
-                .split(' ')
-                .join('-')}`}
+              url={`/instructor/${encodeURIComponent(result.name)}`}
               key={result.name + index}
             />
           ))}
