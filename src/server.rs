@@ -377,7 +377,7 @@ mod tests {
     let review = json!({
       "content": "test",
       "course_id": "MATH240",
-      "instructors": ["test"],
+      "instructors": ["Adrian Roshan Vetta"],
       "rating": 5,
       "difficulty": 5
     })
@@ -404,6 +404,50 @@ mod tests {
   }
 
   #[tokio::test]
+  async fn throws_error_when_invalid_instructor() {
+    let TestContext {
+      db,
+      app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.seed(SeedOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta", "lmao"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .oneshot(
+        Request::builder()
+          .method(http::Method::POST)
+          .header(
+            "Cookie",
+            mock_login(session_store, "test", "test@mail.mcgill.ca").await,
+          )
+          .header("Content-Type", "application/json")
+          .uri("/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::INTERNAL_SERVER_ERROR);
+  }
+
+  #[tokio::test]
   async fn can_delete_review() {
     let TestContext {
       db,
@@ -424,7 +468,7 @@ mod tests {
     let review = json!({
       "content": "test",
       "course_id": "MATH240",
-      "instructors": ["test"],
+      "instructors": ["Adrian Roshan Vetta"],
       "rating": 5,
       "difficulty": 5
     })
@@ -484,7 +528,7 @@ mod tests {
     let review = json!({
         "content": "test",
         "course_id": "MATH240",
-        "instructors": ["foo"],
+        "instructors": ["Adrian Roshan Vetta"],
         "rating": 1,
         "difficulty": 5
     })
@@ -506,7 +550,7 @@ mod tests {
     let review = json!({
       "content": "updated",
       "course_id": "MATH240",
-      "instructors": ["bar"],
+      "instructors": ["Jeremy Macdonald"],
       "rating": 5,
       "difficulty": 2
     })
@@ -530,7 +574,7 @@ mod tests {
     let review = db.find_review("MATH240", "test").await.unwrap().unwrap();
 
     assert_eq!(review.content, "updated");
-    assert_eq!(review.instructors, vec![String::from("bar")]);
+    assert_eq!(review.instructors, vec![String::from("Jeremy Macdonald")]);
     assert_eq!(review.rating, 5);
   }
 
@@ -554,21 +598,21 @@ mod tests {
       json!({
         "content": "test",
         "course_id": "COMP202",
-        "instructors": ["test"],
+        "instructors": ["Jonathan Campbell"],
         "rating": 5,
         "difficulty": 5
       }),
       json!({
         "content": "test2",
         "course_id": "MATH240",
-        "instructors": ["test"],
+        "instructors": ["Adrian Roshan Vetta"],
         "rating": 5,
         "difficulty": 5
       }),
       json!({
         "content": "test3",
         "course_id": "COMP252",
-        "instructors": ["test"],
+        "instructors": ["Luc P Devroye"],
         "rating": 5,
         "difficulty": 5
       }),
@@ -659,14 +703,14 @@ mod tests {
       json!({
         "content": "test",
         "course_id": "MATH240",
-        "instructors": ["test"],
+        "instructors": ["Adrian Roshan Vetta"],
         "rating": 5,
         "difficulty": 5
       }),
       json!({
          "content": "test2",
          "course_id": "MATH240",
-         "instructors": ["test"],
+         "instructors": ["Adrian Roshan Vetta"],
          "rating": 5,
          "difficulty": 5
       }),
