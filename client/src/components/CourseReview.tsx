@@ -41,34 +41,40 @@ export const CourseReview = ({
 
   useEffect(() => {
     fetchClient
-      .getData<Like[]>(`/likes?course_id=${review.courseId}&user_id=${review.userId}`)
+      .getData<Like[]>(
+        `/likes?course_id=${review.courseId}&user_id=${review.userId}`
+      )
       .then((data) => setLikes(data.length))
       .catch((err) => console.log(err));
-  })
+  });
 
   const handleLike = () => {
     fetchClient
-      .post('/likes', {
-        course_id: review.courseId,
-        user_id: review.userId,
-      },
+      .post(
+        '/likes',
+        {
+          course_id: review.courseId,
+          user_id: review.userId,
+        },
         { headers: { 'Content-Type': 'application/json' } }
       )
       .then((_) => setLikes(likes + 1))
       .catch((err) => console.log(err));
-  }
+  };
 
   const handleDislike = () => {
     fetchClient
-      .delete('/likes', {
-        course_id: review.courseId,
-        user_id: review.userId,
-      },
+      .delete(
+        '/likes',
+        {
+          course_id: review.courseId,
+          user_id: review.userId,
+        },
         { headers: { 'Content-Type': 'application/json' } }
       )
       .then((_) => setLikes(likes + 1))
       .catch((err) => console.log(err));
-  }
+  };
 
   return (
     <div
