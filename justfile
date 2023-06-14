@@ -9,7 +9,7 @@ default:
 all: forbid build test clippy lint fmt-check
 
 build:
-  cargo build
+  cargo build && tsc
 
 clippy:
   ./bin/clippy

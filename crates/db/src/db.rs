@@ -8,7 +8,7 @@ pub struct Db {
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
-  const LIKE_COLLECTION: &str = "likes";
+  const INTERACTION_COLLECTION: &str = "interactions";
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
@@ -203,33 +203,54 @@ impl Db {
     )
   }
 
-  pub async fn add_like(&self, like: Like) -> Result<InsertOneResult> {
-    if self
-      .find_like(&like.course_id, &like.user_id)
-      .await?
-      .is_some()
-    {
-      Err(anyhow!("Cannot like this review twice"))
-    } else {
-      Ok(
+  pub async fn add_interaction(&self, interaction: Interaction) -> Result {
+    match self.find_interaction(&interaction).await? {
+      Some(found) => {
         self
           .database
-          .collection::<Like>(Self::LIKE_COLLECTION)
-          .insert_one(like, None)
-          .await?,
-      )
+          .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+          .update_one(
+            doc! {
+              "courseId": found.course_id,
+              "userId": found.user_id,
+              "referrer": found.referrer,
+            },
+            UpdateModifications::Document(doc! {
+              "$set": {
+                "kind": Into::<Bson>::into(interaction.kind)
+              },
+            }),
+            None,
+          )
+          .await?;
+      }
+      None => {
+        self
+          .database
+          .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+          .insert_one(interaction, None)
+          .await?;
+      }
     }
+
+    Ok(())
   }
 
-  pub async fn remove_like(&self, like: Like) -> Result<DeleteResult> {
+  pub async fn remove_interaction(
+    &self,
+    course_id: &str,
+    user_id: &str,
+    referrer: &str,
+  ) -> Result<DeleteResult> {
     Ok(
       self
         .database
-        .collection::<Like>(Self::LIKE_COLLECTION)
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
         .delete_one(
           doc! {
-            "courseId": like.course_id,
-            "userId": like.user_id
+            "courseId": course_id,
+            "userId": user_id,
+            "referrer": referrer,
           },
           None,
         )
@@ -237,32 +258,38 @@ impl Db {
     )
   }
 
-  pub async fn likes_for_review(
+  pub async fn interactions_for_review(
     &self,
     course_id: &str,
     user_id: &str,
-  ) -> Result<Vec<Like>> {
+  ) -> Result<Vec<Interaction>> {
     Ok(
       self
         .database
-        .collection::<Like>(Self::LIKE_COLLECTION)
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
         .find(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?
-        .try_collect::<Vec<Like>>()
+        .try_collect::<Vec<Interaction>>()
         .await?,
     )
   }
 
-  async fn find_like(
+  async fn find_interaction(
     &self,
-    course_id: &str,
-    user_id: &str,
-  ) -> Result<Option<Like>> {
+    interaction: &Interaction,
+  ) -> Result<Option<Interaction>> {
     Ok(
       self
         .database
-        .collection::<Like>(Self::LIKE_COLLECTION)
-        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find_one(
+          doc! {
+            "courseId": &interaction.course_id,
+            "userId": &interaction.user_id,
+            "referrer": &interaction.referrer
+          },
+          None,
+        )
         .await?,
     )
   }
@@ -1353,7 +1380,7 @@ mod tests {
   }
 
   #[tokio::test(flavor = "multi_thread")]
-  async fn like_and_dislike_review_flow() {
+  async fn review_interaction_flow() {
     let TestContext { db, .. } = TestContext::new().await;
 
     let review = Review {
@@ -1367,38 +1394,46 @@ mod tests {
 
     assert_eq!(db.reviews().await.unwrap().len(), 1);
 
-    db.add_like(Like {
+    db.add_interaction(Interaction {
+      kind: InteractionKind::Like,
       course_id: review.course_id.clone(),
       user_id: review.user_id.clone(),
+      referrer: "10".into(),
     })
     .await
     .unwrap();
 
-    assert_eq!(
-      db.likes_for_review(&review.course_id, &review.user_id)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
-
-    assert!(db
-      .add_like(Like {
-        course_id: review.course_id.clone(),
-        user_id: review.user_id.clone(),
-      })
+    let interactions = db
+      .interactions_for_review(&review.course_id, &review.user_id)
       .await
-      .is_err());
+      .unwrap();
 
-    db.remove_like(Like {
+    assert_eq!(interactions.len(), 1);
+    assert_eq!(interactions.first().unwrap().kind, InteractionKind::Like);
+
+    db.add_interaction(Interaction {
+      kind: InteractionKind::Dislike,
       course_id: review.course_id.clone(),
       user_id: review.user_id.clone(),
+      referrer: "10".into(),
     })
     .await
     .unwrap();
 
+    let interactions = db
+      .interactions_for_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap();
+
+    assert_eq!(interactions.len(), 1);
+    assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
+
+    db.remove_interaction(&review.course_id, &review.user_id, "10")
+      .await
+      .unwrap();
+
     assert_eq!(
-      db.likes_for_review(&review.course_id, &review.user_id)
+      db.interactions_for_review(&review.course_id, &review.user_id)
         .await
         .unwrap()
         .len(),

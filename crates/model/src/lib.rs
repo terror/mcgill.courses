@@ -5,7 +5,10 @@ use {
     de::{self, MapAccess, Visitor},
     Deserialize, Deserializer, Serialize,
   },
-  std::{fmt, path::PathBuf},
+  std::{
+    fmt::{self, Display, Formatter},
+    path::PathBuf,
+  },
 };
 
 mod course;
@@ -13,7 +16,7 @@ mod course_listing;
 mod course_page;
 mod initialize_options;
 mod instructor;
-mod like;
+mod interaction;
 mod requirements;
 mod review;
 mod schedule;
@@ -25,7 +28,7 @@ pub use crate::{
   course_page::CoursePage,
   initialize_options::InitializeOptions,
   instructor::Instructor,
-  like::Like,
+  interaction::{Interaction, InteractionKind},
   requirements::{Requirement, Requirements},
   review::Review,
   schedule::*,
