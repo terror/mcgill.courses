@@ -34,10 +34,8 @@ export const CourseReview = ({
 
   showCourse = showCourse ?? false;
 
+  const [kind, setKind] = useState<InteractionKind | undefined>();
   const [likes, setLikes] = useState(0);
-  const [userInteractionState, setUserInteractionState] = useState<
-    InteractionKind | undefined
-  >();
   const [readMore, setReadMore] = useState(false);
 
   const dateStr = format(
@@ -63,8 +61,8 @@ export const CourseReview = ({
               (interaction) => interaction.kind === InteractionKind.Dislike
             ).length
         );
-        user &&
-          setUserInteractionState(
+        if (user)
+          setKind(
             interactions.find(
               (interaction: Interaction) => interaction.referrer === user.id
             )?.kind
@@ -73,68 +71,51 @@ export const CourseReview = ({
       .catch((err) => console.log(err));
   };
 
-  const handleLike = () => {
+  const addInteraction = (interactionKind: InteractionKind) => {
     if (!user) return;
 
-    if (userInteractionState === InteractionKind.Like)
-      fetchClient
-        .delete(
-          '/interactions',
-          {
-            course_id: review.courseId,
-            user_id: review.userId,
-            referrer: user.id,
-          },
-          { headers: { 'Content-Type': 'application/json' } }
-        )
-        .then(() => refreshInteractions())
-        .catch((err) => console.log(err));
-    else
-      fetchClient
-        .post(
-          '/interactions',
-          {
-            kind: InteractionKind.Like,
-            course_id: review.courseId,
-            user_id: review.userId,
-            referrer: user.id,
-          },
-          { headers: { 'Content-Type': 'application/json' } }
-        )
-        .then(() => refreshInteractions())
-        .catch((err) => console.log(err));
+    fetchClient
+      .post(
+        '/interactions',
+        {
+          kind: interactionKind,
+          course_id: review.courseId,
+          user_id: review.userId,
+          referrer: user.id,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then(() => refreshInteractions())
+      .catch((err) => console.log(err));
+  };
+
+  const removeInteraction = () => {
+    if (!user) return;
+
+    fetchClient
+      .delete(
+        '/interactions',
+        {
+          course_id: review.courseId,
+          user_id: review.userId,
+          referrer: user.id,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then(() => refreshInteractions())
+      .catch((err) => console.log(err));
+  };
+
+  const handleLike = () => {
+    kind === InteractionKind.Like
+      ? removeInteraction()
+      : addInteraction(InteractionKind.Like);
   };
 
   const handleDislike = () => {
-    if (!user) return;
-
-    if (userInteractionState === InteractionKind.Dislike)
-      fetchClient
-        .delete(
-          '/interactions',
-          {
-            course_id: review.courseId,
-            user_id: review.userId,
-            referrer: user.id,
-          },
-          { headers: { 'Content-Type': 'application/json' } }
-        )
-        .then(() => refreshInteractions())
-        .catch((err) => console.log(err));
-    else
-      fetchClient
-        .post(
-          '/interactions',
-          {
-            kind: InteractionKind.Dislike,
-            course_id: review.courseId,
-            user_id: review.userId,
-            referrer: user.id,
-          },
-          { headers: { 'Content-Type': 'application/json' } }
-        )
-        .then(() => refreshInteractions())
-        .catch((err) => console.log(err));
+    kind === InteractionKind.Dislike
+      ? removeInteraction()
+      : addInteraction(InteractionKind.Dislike);
   };
 
   return (
@@ -243,9 +224,7 @@ export const CourseReview = ({
                 onClick={handleLike}
                 className={classNames(
                   'h-4 w-4',
-                  userInteractionState === InteractionKind.Like
-                    ? 'fill-red-600'
-                    : ''
+                  kind === InteractionKind.Like ? 'fill-red-600' : ''
                 )}
               />
             </button>
@@ -258,9 +237,7 @@ export const CourseReview = ({
               onClick={handleDislike}
               className={classNames(
                 'h-4 w-4',
-                userInteractionState === InteractionKind.Dislike
-                  ? 'fill-red-600'
-                  : ''
+                kind === InteractionKind.Dislike ? 'fill-red-600' : ''
               )}
             />
           </button>
