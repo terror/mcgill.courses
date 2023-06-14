@@ -1,12 +1,14 @@
-import { format } from 'date-fns';
-import { Fragment, useState } from 'react';
-import { Edit } from 'react-feather';
-import { Link } from 'react-router-dom';
-
-import { classNames } from '../lib/utils';
-import { Review } from '../model/Review';
+import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { DeleteButton } from './DeleteButton';
+import { Edit } from 'react-feather';
+import { Fragment, useEffect, useState } from 'react';
+import { Like } from '../model/Like';
+import { Link } from 'react-router-dom';
+import { Review } from '../model/Review';
 import { StarRating } from './StarRating';
+import { classNames } from '../lib/utils';
+import { fetchClient } from '../lib/fetchClient';
+import { format } from 'date-fns';
 
 type CourseReviewProps = {
   canModify: boolean;
@@ -29,12 +31,44 @@ export const CourseReview = ({
 }: CourseReviewProps) => {
   showCourse = showCourse ?? false;
 
+  const [likes, setLikes] = useState(0);
   const [readMore, setReadMore] = useState(false);
 
   const dateStr = format(
     new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
     'PPP'
   );
+
+  useEffect(() => {
+    fetchClient
+      .getData<Like[]>(`/likes?course_id=${review.courseId}&user_id=${review.userId}`)
+      .then((data) => setLikes(data.length))
+      .catch((err) => console.log(err));
+  })
+
+  const handleLike = () => {
+    fetchClient
+      .post('/likes', {
+        course_id: review.courseId,
+        user_id: review.userId,
+      },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then((_) => setLikes(likes + 1))
+      .catch((err) => console.log(err));
+  }
+
+  const handleDislike = () => {
+    fetchClient
+      .delete('/likes', {
+        course_id: review.courseId,
+        user_id: review.userId,
+      },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then((_) => setLikes(likes + 1))
+      .catch((err) => console.log(err));
+  }
 
   return (
     <div
@@ -132,9 +166,22 @@ export const CourseReview = ({
             </Fragment>
           )}
         </p>
-        <h2 className='ml-auto mt-auto text-sm font-bold leading-none text-gray-700 dark:text-gray-200'>
-          {dateStr}
-        </h2>
+        <div className='flex items-center justify-end'>
+          <p className='mr-4 text-sm font-bold text-gray-700 dark:text-gray-200'>
+            {dateStr}
+          </p>
+          <div className='flex items-center'>
+            <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+              <AiFillLike onClick={handleLike} className='h-4 w-4' />
+            </button>
+            <span className='text-sm font-bold text-gray-700 dark:text-white'>
+              {likes === 0 ? likes : likes >= 0 ? `+${likes}` : `-${likes}`}
+            </span>
+          </div>
+          <button className='ml-0.5 flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+            <AiFillDislike onClick={handleDislike} className='h-4 w-4' />
+          </button>
+        </div>
       </div>
     </div>
   );

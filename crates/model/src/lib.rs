@@ -13,6 +13,7 @@ mod course_listing;
 mod course_page;
 mod initialize_options;
 mod instructor;
+mod like;
 mod requirements;
 mod review;
 mod schedule;
@@ -24,6 +25,7 @@ pub use crate::{
   course_page::CoursePage,
   initialize_options::InitializeOptions,
   instructor::Instructor,
+  like::Like,
   requirements::{Requirement, Requirements},
   review::Review,
   schedule::*,

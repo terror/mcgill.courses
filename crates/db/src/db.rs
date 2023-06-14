@@ -8,6 +8,7 @@ pub struct Db {
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
+  const LIKE_COLLECTION: &str = "likes";
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
@@ -197,6 +198,70 @@ impl Db {
       self
         .database
         .collection::<Review>(Self::REVIEW_COLLECTION)
+        .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
+        .await?,
+    )
+  }
+
+  pub async fn add_like(&self, like: Like) -> Result<InsertOneResult> {
+    if self
+      .find_like(&like.course_id, &like.user_id)
+      .await?
+      .is_some()
+    {
+      Err(anyhow!("Cannot like this review twice"))
+    } else {
+      Ok(
+        self
+          .database
+          .collection::<Like>(Self::LIKE_COLLECTION)
+          .insert_one(like, None)
+          .await?,
+      )
+    }
+  }
+
+  pub async fn remove_like(&self, like: Like) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Like>(Self::LIKE_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": like.course_id,
+            "userId": like.user_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn likes_for_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Vec<Like>> {
+    Ok(
+      self
+        .database
+        .collection::<Like>(Self::LIKE_COLLECTION)
+        .find(doc! { "courseId": course_id, "userId": user_id }, None)
+        .await?
+        .try_collect::<Vec<Like>>()
+        .await?,
+    )
+  }
+
+  async fn find_like(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Option<Like>> {
+    Ok(
+      self
+        .database
+        .collection::<Like>(Self::LIKE_COLLECTION)
         .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?,
     )
@@ -1285,5 +1350,59 @@ mod tests {
     assert_eq!(results.instructors.len(), 1);
 
     assert_eq!(results.instructors.first().unwrap().name, "Giulia Alberini");
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn like_and_dislike_review_flow() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    };
+
+    db.add_review(review.clone()).await.unwrap();
+
+    assert_eq!(db.reviews().await.unwrap().len(), 1);
+
+    db.add_like(Like {
+      course_id: review.course_id.clone(),
+      user_id: review.user_id.clone(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.likes_for_review(&review.course_id, &review.user_id)
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
+
+    assert!(db
+      .add_like(Like {
+        course_id: review.course_id.clone(),
+        user_id: review.user_id.clone(),
+      })
+      .await
+      .is_err());
+
+    db.remove_like(Like {
+      course_id: review.course_id.clone(),
+      user_id: review.user_id.clone(),
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(
+      db.likes_for_review(&review.course_id, &review.user_id)
+        .await
+        .unwrap()
+        .len(),
+      0
+    );
   }
 }

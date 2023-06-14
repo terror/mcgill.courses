@@ -5,7 +5,7 @@ use {
   itertools::Itertools,
   lazy_static::lazy_static,
   log::{info, warn},
-  model::{Course, InitializeOptions, Instructor, Review, SearchResults},
+  model::{Course, InitializeOptions, Instructor, Like, Review, SearchResults},
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
