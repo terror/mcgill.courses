@@ -65,6 +65,10 @@ jobs:
 
     env:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      RUSTFLAGS: --deny warnings
+      MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+      MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+      MS_REDIRECT_URI: ${{ secrets.MS_REDIRECT_URI }}
 
     steps:
       - uses: actions/checkout@v2
@@ -78,7 +82,15 @@ jobs:
           override: true
           components: llvm-tools-preview
 
-      - name: Download grcov
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Install mongodb
+        run: |
+          brew tap mongodb/brew
+          brew install mongodb-community@6.0
+          brew services start mongodb-community@6.0
+
+      - name: Install grcov
         run: cargo install grcov
 
       - name: Run coverage script
