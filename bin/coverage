@@ -4,8 +4,6 @@ set -euox pipefail
 
 export RUSTFLAGS="-Cinstrument-coverage"
 
-cargo build --all --all-targets
-
 MODE=${1:-"debug"}
 
 rm -rf coverage
