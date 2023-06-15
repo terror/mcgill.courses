@@ -6,8 +6,7 @@ export RUSTFLAGS="-Cinstrument-coverage"
 
 MODE=${1:-"debug"}
 
-rm -rf coverage
-mkdir coverage
+rm -rf coverage && mkdir coverage
 
 echo '[~] Running coverage...'
 
