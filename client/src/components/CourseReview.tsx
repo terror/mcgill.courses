@@ -10,6 +10,7 @@ import { classNames } from '../lib/utils';
 import { fetchClient } from '../lib/fetchClient';
 import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
+import { Alert } from './Alert';
 
 type CourseReviewProps = {
   canModify: boolean;
@@ -37,6 +38,7 @@ export const CourseReview = ({
   const [kind, setKind] = useState<InteractionKind | undefined>();
   const [likes, setLikes] = useState(0);
   const [readMore, setReadMore] = useState(false);
+  const [error, setError] = useState('');
 
   const dateStr = format(
     new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
@@ -68,7 +70,7 @@ export const CourseReview = ({
             )?.kind
           );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err));
   };
 
   const addInteraction = (interactionKind: InteractionKind) => {
@@ -86,7 +88,7 @@ export const CourseReview = ({
         { headers: { 'Content-Type': 'application/json' } }
       )
       .then(() => refreshInteractions())
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err));
   };
 
   const removeInteraction = () => {
@@ -103,7 +105,7 @@ export const CourseReview = ({
         { headers: { 'Content-Type': 'application/json' } }
       )
       .then(() => refreshInteractions())
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err));
   };
 
   const handleLike = () => {
@@ -125,6 +127,7 @@ export const CourseReview = ({
         'flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
       )}
     >
+      {error ? <Alert status='error' message={error} /> : null}
       <div className='flex flex-col '>
         <div className='flex justify-between'>
           <div className='flex flex-col'>
