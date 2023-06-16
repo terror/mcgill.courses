@@ -1,9 +1,10 @@
 .env
 /.DS_Store
+/courses.json
+/coverage
+/cypress/downloads
+/cypress/screenshots
+/cypress/videos
+/node_modules/
+/notes
 /target
-courses.json
-cypress/downloads
-cypress/screenshots
-cypress/videos
-node_modules/
-notes

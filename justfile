@@ -14,6 +14,9 @@ build:
 clippy:
   ./bin/clippy
 
+coverage:
+  ./bin/coverage
+
 dev: services
   concurrently \
     --kill-others \
