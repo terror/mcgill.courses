@@ -47,7 +47,7 @@ export const CourseReview = ({
 
   useEffect(() => {
     refreshInteractions();
-  });
+  }, []);
 
   const refreshInteractions = () => {
     fetchClient
@@ -70,7 +70,7 @@ export const CourseReview = ({
             )?.kind
           );
       })
-      .catch((err) => setError(err));
+      .catch((err) => setError(err.toString()));
   };
 
   const addInteraction = (interactionKind: InteractionKind) => {
@@ -88,7 +88,7 @@ export const CourseReview = ({
         { headers: { 'Content-Type': 'application/json' } }
       )
       .then(() => refreshInteractions())
-      .catch((err) => setError(err));
+      .catch((err) => setError(err.toString()));
   };
 
   const removeInteraction = () => {
@@ -105,7 +105,7 @@ export const CourseReview = ({
         { headers: { 'Content-Type': 'application/json' } }
       )
       .then(() => refreshInteractions())
-      .catch((err) => setError(err));
+      .catch((err) => setError(err.toString()));
   };
 
   const handleLike = () => {

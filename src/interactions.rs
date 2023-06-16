@@ -9,7 +9,6 @@ pub(crate) struct GetInteractionsParams {
 pub(crate) async fn get_interactions(
   params: Query<GetInteractionsParams>,
   AppState(db): AppState<Arc<Db>>,
-  _user: User,
 ) -> Result<impl IntoResponse> {
   Ok(Json(
     db.interactions_for_review(&params.course_id, &params.user_id)
