@@ -3,6 +3,7 @@ import { Alert } from './Alert';
 import { DeleteButton } from './DeleteButton';
 import { Edit } from 'react-feather';
 import { Fragment, useEffect, useState } from 'react';
+import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
 import { Link } from 'react-router-dom';
 import { Review } from '../model/Review';
@@ -15,11 +16,6 @@ import { useAuth } from '../hooks/useAuth';
 type ReviewInteractionsProps = {
   courseId: string;
   userId: string;
-};
-
-type GetInteractionsPayload = {
-  kind?: InteractionKind;
-  likes: number;
 };
 
 const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
