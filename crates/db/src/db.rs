@@ -1,5 +1,3 @@
-use mongodb::options::UpdateOptions;
-
 use super::*;
 
 #[derive(Debug, Clone)]
