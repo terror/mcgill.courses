@@ -1,7 +1,4 @@
-export enum InteractionKind {
-  Like = 'like',
-  Dislike = 'dislike',
-}
+export type InteractionKind = 'like' | 'dislike';
 
 export type Interaction = {
   kind: InteractionKind;

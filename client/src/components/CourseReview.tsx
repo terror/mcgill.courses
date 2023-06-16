@@ -56,12 +56,10 @@ export const CourseReview = ({
       )
       .then((interactions) => {
         setLikes(
-          interactions.filter(
-            (interaction) => interaction.kind === InteractionKind.Like
-          ).length -
-            interactions.filter(
-              (interaction) => interaction.kind === InteractionKind.Dislike
-            ).length
+          interactions.filter((interaction) => interaction.kind === 'like')
+            .length -
+            interactions.filter((interaction) => interaction.kind === 'dislike')
+              .length
         );
         if (user)
           setKind(
@@ -109,15 +107,11 @@ export const CourseReview = ({
   };
 
   const handleLike = () => {
-    kind === InteractionKind.Like
-      ? removeInteraction()
-      : addInteraction(InteractionKind.Like);
+    kind === 'like' ? removeInteraction() : addInteraction('like');
   };
 
   const handleDislike = () => {
-    kind === InteractionKind.Dislike
-      ? removeInteraction()
-      : addInteraction(InteractionKind.Dislike);
+    kind === 'dislike' ? removeInteraction() : addInteraction('dislike');
   };
 
   return (
@@ -227,7 +221,7 @@ export const CourseReview = ({
                 onClick={handleLike}
                 className={classNames(
                   'h-4 w-4',
-                  kind === InteractionKind.Like ? 'fill-red-600' : ''
+                  kind === 'like' ? 'fill-red-600' : ''
                 )}
               />
             </button>
@@ -240,7 +234,7 @@ export const CourseReview = ({
               onClick={handleDislike}
               className={classNames(
                 'h-4 w-4',
-                kind === InteractionKind.Dislike ? 'fill-red-600' : ''
+                kind === 'dislike' ? 'fill-red-600' : ''
               )}
             />
           </button>
