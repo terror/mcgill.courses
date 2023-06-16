@@ -1,8 +1,9 @@
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
+import { Alert } from './Alert';
 import { DeleteButton } from './DeleteButton';
 import { Edit } from 'react-feather';
 import { Fragment, useEffect, useState } from 'react';
-import { Interaction, InteractionKind } from '../model/Interaction';
+import { InteractionKind } from '../model/Interaction';
 import { Link } from 'react-router-dom';
 import { Review } from '../model/Review';
 import { StarRating } from './StarRating';
@@ -10,19 +11,23 @@ import { classNames } from '../lib/utils';
 import { fetchClient } from '../lib/fetchClient';
 import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
-import { Alert } from './Alert';
 
 type ReviewInteractionsProps = {
   courseId: string;
   userId: string;
 };
 
+type GetInteractionsPayload = {
+  kind?: InteractionKind;
+  likes: number;
+};
+
 const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
   const user = useAuth();
 
-  const [likes, setLikes] = useState(0);
-  const [kind, setKind] = useState<InteractionKind | undefined>();
   const [error, setError] = useState('');
+  const [kind, setKind] = useState<InteractionKind | undefined>();
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     refreshInteractions();
@@ -30,22 +35,12 @@ const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
 
   const refreshInteractions = () => {
     fetchClient
-      .getData<Interaction[]>(
-        `/interactions?course_id=${courseId}&user_id=${userId}`
+      .getData<GetInteractionsPayload>(
+        `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
       )
-      .then((interactions) => {
-        setLikes(
-          interactions.filter((interaction) => interaction.kind === 'like')
-            .length -
-            interactions.filter((interaction) => interaction.kind === 'dislike')
-              .length
-        );
-        if (user)
-          setKind(
-            interactions.find(
-              (interaction: Interaction) => interaction.referrer === user.id
-            )?.kind
-          );
+      .then((payload: GetInteractionsPayload) => {
+        setKind(payload.kind);
+        setLikes(payload.likes);
       })
       .catch((err) => setError(err.toString()));
   };

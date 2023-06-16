@@ -4,16 +4,45 @@ use super::*;
 pub(crate) struct GetInteractionsParams {
   pub(crate) course_id: String,
   pub(crate) user_id: String,
+  pub(crate) referrer: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+struct GetInteractionsPayload {
+  kind: Option<InteractionKind>,
+  likes: i64,
 }
 
 pub(crate) async fn get_interactions(
   params: Query<GetInteractionsParams>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(
-    db.interactions_for_review(&params.course_id, &params.user_id)
-      .await?,
-  ))
+  let interactions = db
+    .interactions_for_review(&params.course_id, &params.user_id)
+    .await?;
+
+  let likes = interactions
+    .iter()
+    .filter(|i| i.kind == InteractionKind::Like)
+    .count() as i64;
+
+  let dislikes = interactions
+    .iter()
+    .filter(|i| i.kind == InteractionKind::Dislike)
+    .count() as i64;
+
+  let kind = match params.referrer.clone() {
+    Some(referrer) => interactions
+      .into_iter()
+      .find(|i| i.referrer == referrer)
+      .map(|i| i.kind),
+    None => None,
+  };
+
+  Ok(Json(GetInteractionsPayload {
+    kind,
+    likes: likes - dislikes,
+  }))
 }
 
 #[derive(Debug, Deserialize)]
