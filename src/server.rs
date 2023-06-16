@@ -63,6 +63,12 @@ impl Server {
         .route("/courses/:id", get(courses::get_course_by_id))
         .route("/instructors/:name", get(instructors::get_instructor))
         .route(
+          "/interactions",
+          get(interactions::get_interactions)
+            .post(interactions::add_interaction)
+            .delete(interactions::remove_interaction),
+        )
+        .route(
           "/reviews",
           get(reviews::get_reviews)
             .delete(reviews::delete_review)

@@ -36,7 +36,10 @@ use {
   dotenv::dotenv,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   log::{debug, error, info, trace},
-  model::{Course, CourseListing, InitializeOptions, Review, Schedule},
+  model::{
+    Course, CourseListing, InitializeOptions, Interaction, InteractionKind,
+    Review, Schedule,
+  },
   oauth2::{
     basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
     AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
@@ -67,6 +70,7 @@ mod auth;
 mod courses;
 mod error;
 mod instructors;
+mod interactions;
 mod loader;
 mod options;
 mod page;

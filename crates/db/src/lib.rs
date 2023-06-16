@@ -1,15 +1,18 @@
 use {
   anyhow::anyhow,
+  bson::Bson,
   futures::Future,
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
   log::{info, warn},
-  model::{Course, InitializeOptions, Instructor, Review, SearchResults},
+  model::{
+    Course, InitializeOptions, Instructor, Interaction, Review, SearchResults,
+  },
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
-    options::{ClientOptions, FindOptions, IndexOptions},
+    options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Cursor, Database, IndexModel,
   },
@@ -26,6 +29,7 @@ use {
   bson::DateTime,
   chrono::prelude::*,
   include_dir::{include_dir, Dir},
+  model::InteractionKind,
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };
