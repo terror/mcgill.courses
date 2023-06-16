@@ -12,38 +12,17 @@ import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
 import { Alert } from './Alert';
 
-type CourseReviewProps = {
-  canModify: boolean;
-  handleDelete: () => void;
-  isLast: boolean;
-  openEditReview: () => void;
-  review: Review;
-  showCourse?: boolean;
-  includeTaughtBy?: boolean;
+type ReviewInteractionsProps = {
+  courseId: string;
+  userId: string;
 };
 
-export const CourseReview = ({
-  review,
-  canModify,
-  isLast,
-  openEditReview,
-  handleDelete,
-  showCourse,
-  includeTaughtBy = true,
-}: CourseReviewProps) => {
+const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
   const user = useAuth();
 
-  showCourse = showCourse ?? false;
-
-  const [kind, setKind] = useState<InteractionKind | undefined>();
   const [likes, setLikes] = useState(0);
-  const [readMore, setReadMore] = useState(false);
+  const [kind, setKind] = useState<InteractionKind | undefined>();
   const [error, setError] = useState('');
-
-  const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'PPP'
-  );
 
   useEffect(() => {
     refreshInteractions();
@@ -52,7 +31,7 @@ export const CourseReview = ({
   const refreshInteractions = () => {
     fetchClient
       .getData<Interaction[]>(
-        `/interactions?course_id=${review.courseId}&user_id=${review.userId}`
+        `/interactions?course_id=${courseId}&user_id=${userId}`
       )
       .then((interactions) => {
         setLikes(
@@ -79,8 +58,8 @@ export const CourseReview = ({
         '/interactions',
         {
           kind: interactionKind,
-          course_id: review.courseId,
-          user_id: review.userId,
+          course_id: courseId,
+          user_id: userId,
           referrer: user.id,
         },
         { headers: { 'Content-Type': 'application/json' } }
@@ -96,8 +75,8 @@ export const CourseReview = ({
       .delete(
         '/interactions',
         {
-          course_id: review.courseId,
-          user_id: review.userId,
+          course_id: courseId,
+          user_id: userId,
           referrer: user.id,
         },
         { headers: { 'Content-Type': 'application/json' } }
@@ -115,13 +94,67 @@ export const CourseReview = ({
   };
 
   return (
+    <Fragment>
+      {error ? <Alert status='error' message={error} /> : null}
+      <div className='mb-0.5 flex items-center'>
+        <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+          <AiFillLike
+            onClick={handleLike}
+            className={classNames(
+              'h-4 w-4',
+              kind === 'like' ? 'fill-red-600' : ''
+            )}
+          />
+        </button>
+        <span className='text-sm font-bold text-gray-700 dark:text-white'>
+          {likes}
+        </span>
+        <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+          <AiFillDislike
+            onClick={handleDislike}
+            className={classNames(
+              'h-4 w-4',
+              kind === 'dislike' ? 'fill-red-600' : ''
+            )}
+          />
+        </button>
+      </div>
+    </Fragment>
+  );
+};
+
+type CourseReviewProps = {
+  canModify: boolean;
+  handleDelete: () => void;
+  isLast: boolean;
+  openEditReview: () => void;
+  review: Review;
+  showCourse?: boolean;
+  includeTaughtBy?: boolean;
+};
+
+export const CourseReview = ({
+  review,
+  canModify,
+  isLast,
+  openEditReview,
+  handleDelete,
+  includeTaughtBy = true,
+}: CourseReviewProps) => {
+  const [readMore, setReadMore] = useState(false);
+
+  const dateStr = format(
+    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
+    'PPP'
+  );
+
+  return (
     <div
       className={classNames(
         isLast ? 'mb-8' : 'mb-4',
         'flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
       )}
     >
-      {error ? <Alert status='error' message={error} /> : null}
       <div className='flex flex-col '>
         <div className='flex justify-between'>
           <div className='flex flex-col'>
@@ -215,29 +248,10 @@ export const CourseReview = ({
           <p className='mr-4 text-sm font-bold text-gray-700 dark:text-gray-200'>
             {dateStr}
           </p>
-          <div className='mb-0.5 flex items-center'>
-            <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-              <AiFillLike
-                onClick={handleLike}
-                className={classNames(
-                  'h-4 w-4',
-                  kind === 'like' ? 'fill-red-600' : ''
-                )}
-              />
-            </button>
-            <span className='text-sm font-bold text-gray-700 dark:text-white'>
-              {likes}
-            </span>
-          </div>
-          <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-            <AiFillDislike
-              onClick={handleDislike}
-              className={classNames(
-                'h-4 w-4',
-                kind === 'dislike' ? 'fill-red-600' : ''
-              )}
-            />
-          </button>
+          <ReviewInteractions
+            courseId={review.courseId}
+            userId={review.userId}
+          />
         </div>
       </div>
     </div>
