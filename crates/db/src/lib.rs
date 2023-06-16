@@ -12,7 +12,7 @@ use {
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
-    options::{ClientOptions, FindOptions, IndexOptions},
+    options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Cursor, Database, IndexModel,
   },

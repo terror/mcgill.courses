@@ -203,37 +203,29 @@ impl Db {
     )
   }
 
-  pub async fn add_interaction(&self, interaction: Interaction) -> Result {
-    match self.find_interaction(&interaction).await? {
-      Some(found) => {
-        self
-          .database
-          .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-          .update_one(
-            doc! {
-              "courseId": found.course_id,
-              "userId": found.user_id,
-              "referrer": found.referrer,
+  pub async fn add_interaction(
+    &self,
+    interaction: Interaction,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .update_one(
+          doc! {
+            "courseId": interaction.course_id,
+            "userId": interaction.user_id,
+            "referrer": interaction.referrer,
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "kind": Into::<Bson>::into(interaction.kind)
             },
-            UpdateModifications::Document(doc! {
-              "$set": {
-                "kind": Into::<Bson>::into(interaction.kind)
-              },
-            }),
-            None,
-          )
-          .await?;
-      }
-      None => {
-        self
-          .database
-          .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-          .insert_one(interaction, None)
-          .await?;
-      }
-    }
-
-    Ok(())
+          }),
+          UpdateOptions::builder().upsert(true).build(),
+        )
+        .await?,
+    )
   }
 
   pub async fn remove_interaction(
@@ -270,26 +262,6 @@ impl Db {
         .find(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?
         .try_collect::<Vec<Interaction>>()
-        .await?,
-    )
-  }
-
-  async fn find_interaction(
-    &self,
-    interaction: &Interaction,
-  ) -> Result<Option<Interaction>> {
-    Ok(
-      self
-        .database
-        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-        .find_one(
-          doc! {
-            "courseId": &interaction.course_id,
-            "userId": &interaction.user_id,
-            "referrer": &interaction.referrer
-          },
-          None,
-        )
         .await?,
     )
   }

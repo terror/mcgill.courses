@@ -1,8 +1,10 @@
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
+import { Alert } from './Alert';
 import { DeleteButton } from './DeleteButton';
 import { Edit } from 'react-feather';
 import { Fragment, useEffect, useState } from 'react';
-import { Interaction, InteractionKind } from '../model/Interaction';
+import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
+import { InteractionKind } from '../model/Interaction';
 import { Link } from 'react-router-dom';
 import { Review } from '../model/Review';
 import { StarRating } from './StarRating';
@@ -10,6 +12,107 @@ import { classNames } from '../lib/utils';
 import { fetchClient } from '../lib/fetchClient';
 import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
+
+type ReviewInteractionsProps = {
+  courseId: string;
+  userId: string;
+};
+
+const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
+  const user = useAuth();
+
+  const [error, setError] = useState('');
+  const [kind, setKind] = useState<InteractionKind | undefined>();
+  const [likes, setLikes] = useState(0);
+
+  useEffect(() => {
+    refreshInteractions();
+  }, []);
+
+  const refreshInteractions = () => {
+    fetchClient
+      .getData<GetInteractionsPayload>(
+        `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
+      )
+      .then((payload: GetInteractionsPayload) => {
+        setKind(payload.kind);
+        setLikes(payload.likes);
+      })
+      .catch((err) => setError(err.toString()));
+  };
+
+  const addInteraction = (interactionKind: InteractionKind) => {
+    if (!user) return;
+
+    fetchClient
+      .post(
+        '/interactions',
+        {
+          kind: interactionKind,
+          course_id: courseId,
+          user_id: userId,
+          referrer: user.id,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then(() => refreshInteractions())
+      .catch((err) => setError(err.toString()));
+  };
+
+  const removeInteraction = () => {
+    if (!user) return;
+
+    fetchClient
+      .delete(
+        '/interactions',
+        {
+          course_id: courseId,
+          user_id: userId,
+          referrer: user.id,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then(() => refreshInteractions())
+      .catch((err) => setError(err.toString()));
+  };
+
+  const handleLike = () => {
+    kind === 'like' ? removeInteraction() : addInteraction('like');
+  };
+
+  const handleDislike = () => {
+    kind === 'dislike' ? removeInteraction() : addInteraction('dislike');
+  };
+
+  return (
+    <Fragment>
+      {error ? <Alert status='error' message={error} /> : null}
+      <div className='mb-0.5 flex items-center'>
+        <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+          <AiFillLike
+            onClick={handleLike}
+            className={classNames(
+              'h-4 w-4',
+              kind === 'like' ? 'fill-red-600' : ''
+            )}
+          />
+        </button>
+        <span className='text-sm font-bold text-gray-700 dark:text-white'>
+          {likes}
+        </span>
+        <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+          <AiFillDislike
+            onClick={handleDislike}
+            className={classNames(
+              'h-4 w-4',
+              kind === 'dislike' ? 'fill-red-600' : ''
+            )}
+          />
+        </button>
+      </div>
+    </Fragment>
+  );
+};
 
 type CourseReviewProps = {
   canModify: boolean;
@@ -27,15 +130,8 @@ export const CourseReview = ({
   isLast,
   openEditReview,
   handleDelete,
-  showCourse,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
-  const user = useAuth();
-
-  showCourse = showCourse ?? false;
-
-  const [kind, setKind] = useState<InteractionKind | undefined>();
-  const [likes, setLikes] = useState(0);
   const [readMore, setReadMore] = useState(false);
 
   const dateStr = format(
@@ -218,29 +314,10 @@ export const CourseReview = ({
           <p className='mr-4 text-sm font-bold text-gray-700 dark:text-gray-200'>
             {dateStr}
           </p>
-          <div className='mb-0.5 flex items-center'>
-            <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-              <AiFillLike
-                onClick={handleLike}
-                className={classNames(
-                  'h-4 w-4',
-                  kind === InteractionKind.Like ? 'fill-red-600' : ''
-                )}
-              />
-            </button>
-            <span className='text-sm font-bold text-gray-700 dark:text-white'>
-              {likes}
-            </span>
-          </div>
-          <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-            <AiFillDislike
-              onClick={handleDislike}
-              className={classNames(
-                'h-4 w-4',
-                kind === InteractionKind.Dislike ? 'fill-red-600' : ''
-              )}
-            />
-          </button>
+          <ReviewInteractions
+            courseId={review.courseId}
+            userId={review.userId}
+          />
         </div>
       </div>
     </div>
