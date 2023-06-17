@@ -1,15 +1,21 @@
 export RUST_LOG := 'info'
 
+alias d := dev
+alias f := fmt
+
 default:
   just --list
 
 all: forbid build test clippy lint fmt-check
 
 build:
-  cargo build
+  cargo build && tsc
 
 clippy:
   ./bin/clippy
+
+coverage:
+  ./bin/coverage
 
 dev: services
   concurrently \
@@ -43,6 +49,9 @@ fmt-check:
 forbid:
   ./bin/forbid
 
+initialize *args: restart-services
+  cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
+
 lint:
   npm run lint
 
@@ -62,9 +71,6 @@ restart-services:
 
 run *args:
   cargo run -- {{args}}
-
-seed *args: restart-services
-  cargo run -- --source=seed serve --seed --multithreaded --db-name=mcgill-courses {{args}}
 
 serve:
   cargo run -- serve --db-name=mcgill-courses

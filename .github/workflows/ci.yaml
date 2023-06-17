@@ -58,6 +58,49 @@ jobs:
       - name: Test
         run: npm run cy:e2e
 
+  coverage:
+    name: Coverage
+
+    runs-on: macos-latest
+
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      RUSTFLAGS: --deny warnings
+      MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+      MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+      MS_REDIRECT_URI: ${{ secrets.MS_REDIRECT_URI }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install toolchain
+        id: toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-musl
+          override: true
+          components: llvm-tools-preview
+
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Install mongodb
+        run: |
+          brew tap mongodb/brew
+          brew install mongodb-community@6.0
+          brew services start mongodb-community@6.0
+
+      - name: Install grcov
+        run: cargo install grcov
+
+      - name: Run coverage script
+        run: ./bin/coverage release
+
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage/*.lcov
+
   server:
     name: Server
 

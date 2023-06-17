@@ -229,7 +229,7 @@ export const ExploreFilter = ({
     <div
       className={classNames(
         variant === 'mobile' ? 'mx-auto w-full' : 'ml-5 w-96 ',
-        'm-2 box-border flex h-fit flex-col flex-wrap rounded-lg border bg-white dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-200'
+        'm-2 flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
       <div className='flex flex-row'>
