@@ -1,7 +1,9 @@
 /client/dist
+/coverage
 /crates/extractor/mocks
 /mocks
 /node_modules
 /seed
 /target
+/tools
 courses.json

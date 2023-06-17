@@ -8,6 +8,7 @@ pub struct Db {
 impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
+  const INTERACTION_COLLECTION: &str = "interactions";
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
@@ -35,46 +36,8 @@ impl Db {
     self.database.name().to_string()
   }
 
-  pub async fn seed(&self, options: SeedOptions) -> Result {
-    Seeder::new(self.clone(), options).run().await?;
-
-    info!("Building course index...");
-
-    self
-      .create_index::<Course>(
-        Self::COURSE_COLLECTION,
-        doc! {
-          "subject": "text",
-          "code": "text",
-          "_id": "text",
-          "title": "text",
-          "idNgrams": "text",
-          "titleNgrams": "text",
-        },
-        doc! {
-          "subject": 10,
-          "code": 10,
-          "_id": 10,
-          "title": 8,
-          "idNgrams": 4,
-          "titleNgrams": 2,
-        },
-      )
-      .await?;
-
-    info!("Building instructor index...");
-
-    self
-      .create_index::<Instructor>(
-        Self::INSTRUCTOR_COLLECTION,
-        doc! { "name": "text", "nameNgrams": "text" },
-        doc! { "name": 10, "nameNgrams": 4 },
-      )
-      .await?;
-
-    info!("All indices complete.");
-
-    Ok(())
+  pub async fn initialize(&self, options: InitializeOptions) -> Result {
+    Initializer::new(self.clone(), options).run().await
   }
 
   pub async fn courses(
@@ -236,6 +199,69 @@ impl Db {
         .database
         .collection::<Review>(Self::REVIEW_COLLECTION)
         .find_one(doc! { "courseId": course_id, "userId": user_id }, None)
+        .await?,
+    )
+  }
+
+  pub async fn add_interaction(
+    &self,
+    interaction: Interaction,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .update_one(
+          doc! {
+            "courseId": interaction.course_id,
+            "userId": interaction.user_id,
+            "referrer": interaction.referrer,
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "kind": Into::<Bson>::into(interaction.kind)
+            },
+          }),
+          UpdateOptions::builder().upsert(true).build(),
+        )
+        .await?,
+    )
+  }
+
+  pub async fn remove_interaction(
+    &self,
+    course_id: &str,
+    user_id: &str,
+    referrer: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+            "referrer": referrer,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn interactions_for_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<Vec<Interaction>> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find(doc! { "courseId": course_id, "userId": user_id }, None)
+        .await?
+        .try_collect::<Vec<Interaction>>()
         .await?,
     )
   }
@@ -528,7 +554,7 @@ mod tests {
 
     fs::write(&source, get_content("before_update.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -561,7 +587,7 @@ mod tests {
     )
     .unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -587,7 +613,7 @@ mod tests {
 
     fs::write(&source, get_content("before_update.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source: source.clone(),
       ..Default::default()
     })
@@ -604,7 +630,7 @@ mod tests {
 
     fs::write(&source, get_content("update.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -639,7 +665,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -674,7 +700,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -703,7 +729,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -738,7 +764,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -773,7 +799,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -799,7 +825,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -1169,7 +1195,7 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
 
       ..Default::default()
@@ -1203,7 +1229,7 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
 
       ..Default::default()
@@ -1237,7 +1263,7 @@ mod tests {
 
     fs::write(&source, get_content("mix.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
 
       ..Default::default()
@@ -1303,7 +1329,7 @@ mod tests {
 
     fs::write(&source, get_content("search.json")).unwrap();
 
-    db.seed(SeedOptions {
+    db.initialize(InitializeOptions {
       source,
       ..Default::default()
     })
@@ -1323,5 +1349,67 @@ mod tests {
     assert_eq!(results.instructors.len(), 1);
 
     assert_eq!(results.instructors.first().unwrap().name, "Giulia Alberini");
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn review_interaction_flow() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    };
+
+    db.add_review(review.clone()).await.unwrap();
+
+    assert_eq!(db.reviews().await.unwrap().len(), 1);
+
+    db.add_interaction(Interaction {
+      kind: InteractionKind::Like,
+      course_id: review.course_id.clone(),
+      user_id: review.user_id.clone(),
+      referrer: "10".into(),
+    })
+    .await
+    .unwrap();
+
+    let interactions = db
+      .interactions_for_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap();
+
+    assert_eq!(interactions.len(), 1);
+    assert_eq!(interactions.first().unwrap().kind, InteractionKind::Like);
+
+    db.add_interaction(Interaction {
+      kind: InteractionKind::Dislike,
+      course_id: review.course_id.clone(),
+      user_id: review.user_id.clone(),
+      referrer: "10".into(),
+    })
+    .await
+    .unwrap();
+
+    let interactions = db
+      .interactions_for_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap();
+
+    assert_eq!(interactions.len(), 1);
+    assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
+
+    db.remove_interaction(&review.course_id, &review.user_id, "10")
+      .await
+      .unwrap();
+
+    assert_eq!(
+      db.interactions_for_review(&review.course_id, &review.user_id)
+        .await
+        .unwrap()
+        .len(),
+      0
+    );
   }
 }

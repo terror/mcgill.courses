@@ -22,10 +22,7 @@ export const Instructor = () => {
   useEffect(() => {
     fetchClient
       .getData<Review[]>(
-        `/reviews?instructor_name=${params.name
-          ?.split('-')
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ')}`
+        `/reviews?instructor_name=${decodeURIComponent(params.name!)}`
       )
       .then((data) => {
         setReviews(
@@ -38,10 +35,7 @@ export const Instructor = () => {
       });
     fetchClient
       .getData<InstructorType>(
-        `/instructors/${params.name
-          ?.split('-')
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ')}`
+        `/instructors/${decodeURIComponent(params.name!)}`
       )
       .then((data) => {
         setInstructor(data);
@@ -53,6 +47,8 @@ export const Instructor = () => {
   const userReview = reviews.find((r) => r.userId === user?.id);
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
+  const averageDifficulty =
+    _.sumBy(reviews, (r) => r.difficulty) / reviews.length;
 
   return (
     <Layout>
@@ -62,18 +58,24 @@ export const Instructor = () => {
             <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
               <div className='flex flex-row space-x-2 align-middle'>
                 <h1 className='break-words text-4xl font-semibold text-gray-800 dark:text-gray-200'>
-                  {params.name
-                    ?.split('-')
-                    .map((x) => x.charAt(0).toUpperCase() + x.slice(1))
-                    .join(' ')}
+                  {params.name && decodeURIComponent(params.name)}
                 </h1>
               </div>
               <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                <RatingInfo
-                  title='Rating'
-                  rating={averageRating}
-                  numReviews={reviews.length}
-                />
+                {uniqueReviews.length && (
+                  <RatingInfo
+                    title='Rating'
+                    rating={averageRating}
+                    numReviews={reviews.length}
+                  />
+                )}
+                {uniqueReviews.length && (
+                  <RatingInfo
+                    title='Difficulty'
+                    rating={averageDifficulty}
+                    numReviews={reviews.length}
+                  />
+                )}
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -93,13 +95,22 @@ export const Instructor = () => {
                 )}
               </p>
             </div>
-            <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2'>
-              <RatingInfo
-                title='Difficulty'
-                rating={averageRating}
-                numReviews={reviews.length}
-                content=''
-              />
+
+            <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
+              {uniqueReviews.length && (
+                <RatingInfo
+                  title='Rating'
+                  rating={averageRating}
+                  numReviews={reviews.length}
+                />
+              )}
+              {uniqueReviews.length && (
+                <RatingInfo
+                  title='Difficulty'
+                  rating={averageDifficulty}
+                  numReviews={reviews.length}
+                />
+              )}
             </div>
           </div>
         </div>
