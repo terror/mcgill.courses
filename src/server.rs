@@ -2,18 +2,14 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Server {
-  #[clap(long, default_value = "admin", help = "Database name")]
-  db_name: String,
   #[clap(long, default_value = "8000", help = "Port to listen on")]
   port: u16,
-  #[clap(long, default_value = "false", help = "Seed the database")]
-  initialize: bool,
-  #[clap(
-    long,
-    default_value = "false",
-    help = "Enabled multithreaded seeding"
-  )]
+  #[clap(long, default_value = "admin", help = "Database name")]
+  db_name: String,
+  #[clap(long, default_value = "false", help = "Enable multithreaded seeding")]
   multithreaded: bool,
+  #[clap(long, default_value = "false", help = "Initialize the database")]
+  initialize: bool,
   #[clap(long, default_value = "false", help = "Skip course seeding")]
   skip_courses: bool,
 }
@@ -86,13 +82,13 @@ impl Server {
 
 #[cfg(test)]
 mod tests {
-  use http::Method;
-
   use {
     super::*,
     axum::body::Body,
-    http::Request,
+    http::{Method, Request},
+    interactions::GetInteractionsPayload,
     pretty_assertions::assert_eq,
+    serde::de::DeserializeOwned,
     serde_json::json,
     std::sync::atomic::{AtomicUsize, Ordering},
     tower::{Service, ServiceExt},
@@ -114,7 +110,7 @@ mod tests {
         TEST_DATABASE_NUMBER.fetch_add(1, Ordering::Relaxed);
 
       let db_name = format!(
-        "mcgill-gg-test-{}-{}",
+        "mcgill-courses-test-{}-{}",
         std::time::SystemTime::now()
           .duration_since(std::time::SystemTime::UNIX_EPOCH)
           .unwrap()
@@ -164,6 +160,21 @@ mod tests {
     )
   }
 
+  #[async_trait]
+  trait ResponseExt {
+    async fn convert<T: DeserializeOwned>(self) -> T;
+  }
+
+  #[async_trait]
+  impl ResponseExt for Response {
+    async fn convert<T: DeserializeOwned>(self) -> T {
+      serde_json::from_slice::<T>(
+        &hyper::body::to_bytes(self.into_body()).await.unwrap(),
+      )
+      .unwrap()
+    }
+  }
+
   #[tokio::test]
   async fn courses_route_works() {
     let TestContext { db, app, .. } = TestContext::new().await;
@@ -196,10 +207,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      serde_json::from_slice::<Vec<Course>>(
-        &hyper::body::to_bytes(response.into_body()).await.unwrap()
-      )
-      .unwrap(),
+      response.convert::<Vec<Course>>().await,
       db.courses(None, None, None, None, None).await.unwrap()
     );
   }
@@ -236,10 +244,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      serde_json::from_slice::<Vec<Course>>(
-        &hyper::body::to_bytes(response.into_body()).await.unwrap()
-      )
-      .unwrap(),
+      response.convert::<Vec<Course>>().await,
       db.courses(Some(10), Some(40), None, None, None)
         .await
         .unwrap()
@@ -247,7 +252,7 @@ mod tests {
   }
 
   #[tokio::test]
-  async fn courses_route_does_not_allow_negative() {
+  async fn courses_route_disallows_negative_limit_or_offset() {
     let TestContext { app, .. } = TestContext::new().await;
 
     let body = json!({
@@ -257,6 +262,7 @@ mod tests {
     });
 
     let response = app
+      .clone()
       .oneshot(
         Request::builder()
           .method(Method::POST)
@@ -295,10 +301,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      serde_json::from_slice::<Course>(
-        &hyper::body::to_bytes(response.into_body()).await.unwrap()
-      )
-      .unwrap(),
+      response.convert::<Course>().await,
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
   }
@@ -326,13 +329,7 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::NOT_FOUND);
 
-    assert_eq!(
-      serde_json::from_slice::<Option<Course>>(
-        &hyper::body::to_bytes(response.into_body()).await.unwrap()
-      )
-      .unwrap(),
-      None
-    );
+    assert_eq!(response.convert::<Option<Course>>().await, None);
   }
 
   #[tokio::test]
@@ -404,6 +401,7 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
+
     assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
   }
 
@@ -598,6 +596,9 @@ mod tests {
     .await
     .unwrap();
 
+    let cookie =
+      mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await;
+
     let reviews = vec![
       json!({
         "content": "test",
@@ -627,11 +628,7 @@ mod tests {
         .call(
           Request::builder()
             .method(http::Method::POST)
-            .header(
-              "Cookie",
-              mock_login(session_store.clone(), "test", "test@mail.mcgill.ca")
-                .await,
-            )
+            .header("Cookie", cookie.clone())
             .header("Content-Type", "application/json")
             .uri("/reviews")
             .body(Body::from(review.to_string()))
@@ -671,15 +668,7 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-
-    assert_eq!(
-      serde_json::from_slice::<Vec<Review>>(
-        &hyper::body::to_bytes(response.into_body()).await.unwrap()
-      )
-      .unwrap()
-      .len(),
-      3
-    );
+    assert_eq!(response.convert::<Vec<Review>>().await.len(), 3);
   }
 
   #[tokio::test]
@@ -747,14 +736,177 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(response.convert::<Vec<Review>>().await.len(), 2)
+  }
+
+  #[tokio::test]
+  async fn can_interact_with_reviews() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
 
     assert_eq!(
-      serde_json::from_slice::<Vec<Review>>(
-        &hyper::body::to_bytes(response.into_body()).await.unwrap()
+      response.convert::<GetInteractionsPayload>().await,
+      GetInteractionsPayload {
+        kind: None,
+        likes: 0
+      }
+    );
+
+    let interaction = json! ({
+      "kind": "like",
+      "course_id": "MATH240",
+      "user_id": "test",
+      "referrer": "test"
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions")
+          .body(Body::from(interaction))
+          .unwrap(),
       )
-      .unwrap()
-      .len(),
-      2
-    )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      db.interactions_for_review("MATH240", "test")
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      response.convert::<GetInteractionsPayload>().await,
+      GetInteractionsPayload {
+        kind: Some(InteractionKind::Like),
+        likes: 1,
+      }
+    );
+
+    let interaction = json! ({
+      "course_id": "MATH240",
+      "user_id": "test",
+      "referrer": "test"
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::DELETE)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions")
+          .body(Body::from(interaction))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      db.interactions_for_review("MATH240", "test")
+        .await
+        .unwrap()
+        .len(),
+      0
+    );
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      response.convert::<GetInteractionsPayload>().await,
+      GetInteractionsPayload {
+        kind: None,
+        likes: 0
+      }
+    );
   }
 }
