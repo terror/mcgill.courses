@@ -781,6 +781,27 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(
+      response.convert::<GetInteractionsPayload>().await,
+      GetInteractionsPayload {
+        kind: None,
+        likes: 0
+      }
+    );
+
     let interaction = json! ({
       "kind": "like",
       "course_id": "MATH240",
@@ -833,6 +854,59 @@ mod tests {
         kind: Some(InteractionKind::Like),
         likes: 1,
       }
-    )
+    );
+
+    let interaction = json! ({
+      "course_id": "MATH240",
+      "user_id": "test",
+      "referrer": "test"
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::DELETE)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions")
+          .body(Body::from(interaction))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      db.interactions_for_review("MATH240", "test")
+        .await
+        .unwrap()
+        .len(),
+      0
+    );
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      response.convert::<GetInteractionsPayload>().await,
+      GetInteractionsPayload {
+        kind: None,
+        likes: 0
+      }
+    );
   }
 }
