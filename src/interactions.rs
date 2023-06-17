@@ -7,10 +7,10 @@ pub(crate) struct GetInteractionsParams {
   pub(crate) referrer: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
-struct GetInteractionsPayload {
-  kind: Option<InteractionKind>,
-  likes: i64,
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+pub(crate) struct GetInteractionsPayload {
+  pub(crate) kind: Option<InteractionKind>,
+  pub(crate) likes: i64,
 }
 
 pub(crate) async fn get_interactions(
