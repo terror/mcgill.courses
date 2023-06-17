@@ -19,6 +19,7 @@ import { Review } from '../model/Review';
 import { getCurrentTerms } from '../lib/utils';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import _ from 'lodash';
+import { JumpToTopButton } from '../components/JumpToTopButton';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -205,6 +206,7 @@ export const CoursePage = () => {
       {alertStatus && (
         <Alert status={alertStatus} key={key} message={alertMessage} />
       )}
+      <JumpToTopButton />
     </Layout>
   );
 };

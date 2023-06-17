@@ -21,7 +21,6 @@ export const Profile = () => {
 
   return (
     <Layout>
-      <JumpToTopButton />
       <div className='flex flex-col justify-center'>
         <div className='mx-auto'>
           <div className='mt-10'>
@@ -78,6 +77,7 @@ export const Profile = () => {
           </div>
         </div>
       </div>
+      <JumpToTopButton />
     </Layout>
   );
 };

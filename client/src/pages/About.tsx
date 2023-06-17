@@ -1,11 +1,9 @@
-import { Link } from 'react-router-dom';
 import { AiOutlineGithub } from 'react-icons/ai';
-import { FiMail } from 'react-icons/fi';
-
-import { Layout } from '../components/Layout';
-
 import { Disclosure } from '@headlessui/react';
+import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
+import { Layout } from '../components/Layout';
+import { Link } from 'react-router-dom';
 
 type QuestionsAnswersProp = {
   input: {
@@ -91,7 +89,7 @@ const Title = ({ title }: { title: string }) => {
 export const About = () => {
   return (
     <Layout>
-      <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle '>
+      <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle'>
         <Title title='About Us' />
         <p className='mx-10 text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60'>
           {' '}

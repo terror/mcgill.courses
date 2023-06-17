@@ -9,23 +9,21 @@ export const navigationItems = [
   { name: 'About', href: '/about' },
 ];
 
+const ignore = ['/', '/about', '/privacy'];
+
 export const Footer = () => {
   const location = useLocation();
-  const [show, setShow] = useState(location.pathname === '/');
+
   let scrollPosition = window.pageYOffset;
 
+  const [show, setShow] = useState(ignore.includes(location.pathname));
+
   useEffect(() => {
-    if (location.pathname === '/') {
-      return;
-    }
+    if (ignore.includes(location.pathname)) return;
 
     const handleScroll = () => {
       const currentPosition = window.pageYOffset;
-      if (currentPosition < scrollPosition) {
-        setShow(false);
-      } else {
-        setShow(true);
-      }
+      setShow(currentPosition >= scrollPosition);
       scrollPosition = currentPosition;
     };
 
