@@ -12,13 +12,27 @@ import { classNames } from '../lib/utils';
 import { fetchClient } from '../lib/fetchClient';
 import { format } from 'date-fns';
 import { useAuth } from '../hooks/useAuth';
+import { Transition } from '@headlessui/react';
+
+const LoginPrompt = () => {
+  return (
+    <div className='min-w-2xl absolute bottom-20 end-4 h-fit rounded-md border bg-gray-100 px-2 py-1 text-neutral-800 dark:border-0 dark:bg-neutral-700 dark:text-gray-200 sm:bottom-16'>
+      You must be logged in
+    </div>
+  );
+};
 
 type ReviewInteractionsProps = {
   courseId: string;
   userId: string;
+  setPromptLogin: (_: boolean) => void;
 };
 
-const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
+const ReviewInteractions = ({
+  courseId,
+  userId,
+  setPromptLogin,
+}: ReviewInteractionsProps) => {
   const user = useAuth();
 
   const [error, setError] = useState('');
@@ -43,7 +57,6 @@ const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
 
   const addInteraction = (interactionKind: InteractionKind) => {
     if (!user) return;
-
     fetchClient
       .post(
         '/interactions',
@@ -61,7 +74,6 @@ const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
 
   const removeInteraction = () => {
     if (!user) return;
-
     fetchClient
       .delete(
         '/interactions',
@@ -76,39 +88,52 @@ const ReviewInteractions = ({ courseId, userId }: ReviewInteractionsProps) => {
       .catch((err) => setError(err.toString()));
   };
 
+  const displayLoginPrompt = () => {
+    setPromptLogin(true);
+    setTimeout(() => setPromptLogin(false), 3000);
+  };
+
   const handleLike = () => {
-    kind === 'like' ? removeInteraction() : addInteraction('like');
+    user
+      ? kind === 'like'
+        ? removeInteraction()
+        : addInteraction('like')
+      : displayLoginPrompt();
   };
 
   const handleDislike = () => {
-    kind === 'dislike' ? removeInteraction() : addInteraction('dislike');
+    user
+      ? kind === 'dislike'
+        ? removeInteraction()
+        : addInteraction('dislike')
+      : displayLoginPrompt();
   };
 
   return (
     <Fragment>
       {error ? <Alert status='error' message={error} /> : null}
       <div className='mb-0.5 flex items-center'>
-        <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+        <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <AiFillLike
             onClick={handleLike}
             className={classNames(
-              'h-4 w-4',
+              'h-4 w-4 cursor-pointer',
               kind === 'like' ? 'fill-red-600' : ''
             )}
           />
-        </button>
+        </div>
         <span className='text-sm font-bold text-gray-700 dark:text-white'>
           {likes}
         </span>
-        <button className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+        <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <AiFillDislike
             onClick={handleDislike}
             className={classNames(
-              'h-4 w-4',
+              'h-4 w-4 cursor-pointer',
               kind === 'dislike' ? 'fill-red-600' : ''
             )}
           />
-        </button>
+        </div>
       </div>
     </Fragment>
   );
@@ -133,6 +158,7 @@ export const CourseReview = ({
   includeTaughtBy = true,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
+  const [promptLogin, setPromptLogin] = useState(false);
 
   const dateStr = format(
     new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
@@ -143,7 +169,7 @@ export const CourseReview = ({
     <div
       className={classNames(
         isLast ? 'mb-8' : 'mb-4',
-        'flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
+        'relative flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
       )}
     >
       <div className='flex flex-col '>
@@ -239,9 +265,21 @@ export const CourseReview = ({
           <p className='mr-4 text-sm font-bold text-gray-700 dark:text-gray-200'>
             {dateStr}
           </p>
+          <Transition
+            show={promptLogin}
+            enter='transition-opacity duration-150'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='transition-opacity duration-150'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
+            <LoginPrompt />
+          </Transition>
           <ReviewInteractions
             courseId={review.courseId}
             userId={review.userId}
+            setPromptLogin={setPromptLogin}
           />
         </div>
       </div>
