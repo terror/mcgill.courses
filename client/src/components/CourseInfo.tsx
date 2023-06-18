@@ -74,7 +74,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
             <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
               {course.title}
             </h2>
-            <div className='m-4 mx-auto flex w-full flex-col items-center justify-center space-y-3 md:hidden px-'>
+            <div className='px- m-4 mx-auto flex w-full flex-col items-center justify-center space-y-3 md:hidden'>
               <RatingInfo
                 title={'Rating'}
                 chartType={chartType}
