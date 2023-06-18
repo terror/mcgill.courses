@@ -1,0 +1,10 @@
+{
+  "*.ts": [
+    "prettier --write",
+    "tslint"
+  ],
+  "*.rs": [
+    "cargo fmt",
+    "just clippy"
+  ]
+}
