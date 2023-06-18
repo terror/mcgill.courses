@@ -12,6 +12,7 @@ import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
 import { GetInstructorPayload } from '../model/GetInstructorPayload';
+import { countRatings } from '../lib/utils';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -41,12 +42,12 @@ export const Instructor = () => {
   if (instructor === undefined) return <Loading />;
   if (instructor === null) return <NotFound />;
 
+  const ratingMap = countRatings('rating', reviews);
+  const difficultyMap = countRatings('difficulty', reviews);
+
   const userReview = reviews.find((r) => r.userId === user?.id);
 
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
-  const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
-  const averageDifficulty =
-    _.sumBy(reviews, (r) => r.difficulty) / reviews.length;
 
   return (
     <Layout>
@@ -60,12 +61,18 @@ export const Instructor = () => {
                 </h1>
               </div>
               <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                {uniqueReviews.length ? (
-                  <>
-                    <RatingInfo title='Rating' rating={averageRating} />
-                    <RatingInfo title='Difficulty' rating={averageDifficulty} />
-                  </>
-                ) : null}
+                <RatingInfo
+                  title='Rating'
+                  chartType='pie'
+                  ratings={ratingMap}
+                  numReviews={reviews.length}
+                />
+                <RatingInfo
+                  title='Difficulty'
+                  chartType='pie'
+                  ratings={difficultyMap}
+                  numReviews={reviews.length}
+                />
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -86,12 +93,18 @@ export const Instructor = () => {
               </p>
             </div>
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-              {uniqueReviews.length ? (
-                <>
-                  <RatingInfo title='Rating' rating={averageRating} />
-                  <RatingInfo title='Difficulty' rating={averageDifficulty} />
-                </>
-              ) : null}
+              <RatingInfo
+                title='Rating'
+                chartType={'pie'}
+                ratings={ratingMap}
+                numReviews={reviews.length}
+              />
+              <RatingInfo
+                title='Difficulty'
+                chartType={'pie'}
+                ratings={difficultyMap}
+                numReviews={reviews.length}
+              />
             </div>
           </div>
         </div>

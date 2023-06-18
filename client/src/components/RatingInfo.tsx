@@ -49,8 +49,7 @@ export const RatingInfo = ({
         chart(chartType)
       ) : (
         <div className='text-left text-gray-700 dark:text-gray-200 md:text-center'>
-          {content ??
-            'No reviews have been left for this course yet. Be the first!'}
+          {content ?? 'No reviews have been left yet. Be the first!'}
         </div>
       )}
     </div>
