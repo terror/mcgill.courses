@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { Trash2 } from 'react-feather';
+
 import { useDarkMode } from '../hooks/useDarkMode';
 import { classNames } from '../lib/utils';
 
@@ -52,7 +53,7 @@ export const DeleteButton = ({
             <div className='fixed inset-0 bg-black bg-opacity-25' />
           </Transition.Child>
 
-          <div className='fixed inset-0 overflow-y-auto'>
+          <div className='fixed inset-y-0 left-0 w-screen overflow-y-auto'>
             <div className='flex min-h-full items-center justify-center p-4 text-center'>
               <Transition.Child
                 as={Fragment}

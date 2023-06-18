@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -10,15 +11,14 @@ import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
+import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
+import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
-import { getCurrentTerms } from '../lib/utils';
-import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import _ from 'lodash';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -183,25 +183,25 @@ export const CoursePage = () => {
             </div>
           </div>
         </div>
-        <AddReviewForm
-          course={course}
-          open={addReviewOpen}
-          onClose={() => setAddReviewOpen(false)}
-          handleSubmit={handleSubmit('Review added successfully.')}
-        />
-        {userReview && (
-          <EditReviewForm
-            course={course}
-            open={editReviewOpen}
-            onClose={() => setEditReviewOpen(false)}
-            review={userReview}
-            handleSubmit={handleSubmit('Review edited successfully.')}
-          />
-        )}
         <div className='hidden h-fit w-5/12 md:flex md:flex-none'>
           <CourseRequirements requirements={requirements} />
         </div>
       </div>
+      <AddReviewForm
+        course={course}
+        open={addReviewOpen}
+        onClose={() => setAddReviewOpen(false)}
+        handleSubmit={handleSubmit('Review added successfully.')}
+      />
+      {userReview && (
+        <EditReviewForm
+          course={course}
+          open={editReviewOpen}
+          onClose={() => setEditReviewOpen(false)}
+          review={userReview}
+          handleSubmit={handleSubmit('Review edited successfully.')}
+        />
+      )}
       {alertStatus && (
         <Alert status={alertStatus} key={key} message={alertMessage} />
       )}
