@@ -147,7 +147,7 @@ export const ReviewFilter = ({
     <div className='flex w-full flex-col space-y-4 rounded-lg bg-gray-50 p-10 dark:bg-neutral-800 dark:text-gray-200'>
       <h1 className='text-xl font-bold'>Filter</h1>
       <div>
-        <h2 className='mb-2 text-sm font-semibold'>Sort By</h2>
+        <h2 className='mb-2 text-sm font-semibold'>Sort by</h2>
         <div className='relative z-20'>
           <Autocomplete
             options={sorts}
