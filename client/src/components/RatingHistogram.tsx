@@ -37,7 +37,7 @@ export const RatingHistogram = ({ ratings }: RatingHistogramProps) => {
   const total = ratings[1] + ratings[2] + ratings[3] + ratings[4] + ratings[5];
 
   return (
-    <div className='flex w-full flex-col space-y-4 mb-2'>
+    <div className='mb-2 flex w-full flex-col space-y-4'>
       <IndividualRating rating={5} num={ratings[5]} total={total} />
       <IndividualRating rating={4} num={ratings[4]} total={total} />
       <IndividualRating rating={3} num={ratings[3]} total={total} />
