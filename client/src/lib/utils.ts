@@ -1,6 +1,7 @@
 import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import { Schedule } from '../model/Schedule';
+import { Review } from '../model/Review';
 
 export const uniqueTermInstructors = (course: Course) => {
   const termInstructors = course.instructors.filter((i) =>
@@ -72,3 +73,26 @@ export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
 export const getUrl = (): string => {
   return import.meta.env.VITE_API_URL ?? '';
 };
+
+export const countRatings = (type: 'rating' | 'difficulty', reviews: Review[]) => {
+  type validRating = 1 | 2 | 3 | 4 | 5
+  var ratings = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0
+  }
+  const target = (r: Review): validRating => {
+    switch (type) {
+      case 'rating': return r.rating as validRating
+      case 'difficulty': return r.difficulty as validRating
+    }
+  }
+
+
+  reviews.forEach((r: Review) => ratings[target(r)]++)
+
+
+  return ratings
+}

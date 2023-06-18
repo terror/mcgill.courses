@@ -32,7 +32,7 @@ export const CoursePage = () => {
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
-  const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const [course, setCourse] = useState<Course>();
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
@@ -122,21 +122,12 @@ export const CoursePage = () => {
     localStorage.removeItem(course._id);
   };
 
-  const userReview = allReviews?.find((r) => r.userId === user?.id);
-
-  const averageRating =
-    _.sumBy(allReviews, (r) => r.rating) / (allReviews ?? []).length;
-
-  const averageDifficulty =
-    _.sumBy(allReviews, (r) => r.difficulty) / (allReviews ?? []).length;
-
+  const userReview = allReviews.find((r) => r.userId === user?.id);
   return (
     <Layout>
       <CourseInfo
         course={course}
-        rating={averageRating}
-        difficulty={averageDifficulty}
-        numReviews={allReviews?.length}
+        reviews={allReviews}
       />
       <SchedulesDisplay course={course} />
       <div className='flex flex-col lg:flex-row'>
