@@ -41,7 +41,7 @@ export const RatingInfo = ({
   };
 
   return (
-    <div className='w-full lg:w-3/4'>
+    <div className='w-full lg:w-3/4 md:px-8 lg:p-0'>
       <h1 className='mb-3 text-center text-xl font-semibold text-gray-800 dark:text-gray-200'>
         {title}
       </h1>

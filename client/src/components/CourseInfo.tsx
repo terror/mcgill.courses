@@ -74,7 +74,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
             <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
               {course.title}
             </h2>
-            <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
+            <div className='m-4 mx-auto flex w-full flex-col items-center justify-center space-y-3 md:hidden px-'>
               <RatingInfo
                 title={'Rating'}
                 chartType={chartType}
@@ -86,6 +86,15 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
                 chartType={chartType}
                 ratings={difficultyMap}
                 numReviews={numReviews}
+              />
+            </div>
+            <div className='mx-auto md:hidden'>
+              <Toggle
+                onToggle={() =>
+                  chartType === 'pie'
+                    ? setChartType('histogram')
+                    : setChartType('pie')
+                }
               />
             </div>
             <CourseTerms course={course} variant='large' />
@@ -111,7 +120,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
                 numReviews={numReviews}
               />
             </div>
-            <div className='mx-auto'>
+            <div className='mx-auto hidden md:flex'>
               <Toggle
                 onToggle={() =>
                   chartType === 'pie'
