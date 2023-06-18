@@ -47,6 +47,7 @@ impl Db {
     course_subjects: Option<Vec<String>>,
     course_levels: Option<Vec<String>>,
     course_terms: Option<Vec<String>>,
+    min_reviews: Option<u64>,
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
@@ -71,18 +72,30 @@ impl Db {
       );
     }
 
-    Ok(
-      self
-        .database
-        .collection::<Course>(Self::COURSE_COLLECTION)
-        .find(
-          (!document.is_empty()).then_some(document),
-          FindOptions::builder().skip(offset).limit(limit).build(),
-        )
-        .await?
-        .try_collect::<Vec<Course>>()
-        .await?,
-    )
+    let courses = self
+      .database
+      .collection::<Course>(Self::COURSE_COLLECTION)
+      .find(
+        (!document.clone().is_empty()).then_some(document.clone()),
+        FindOptions::builder().skip(offset).limit(limit).build(),
+      )
+      .await?
+      .try_collect::<Vec<Course>>()
+      .await?;
+
+    if let Some(min_reviews) = min_reviews {
+      let mut filtered = Vec::new();
+
+      for course in courses {
+        (self.find_reviews_by_course_id(&course.id).await?.len()
+          >= min_reviews.try_into()?)
+        .then(|| filtered.push(course));
+      }
+
+      return Ok(filtered);
+    }
+
+    Ok(courses)
   }
 
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
@@ -514,7 +527,7 @@ mod tests {
     let TestContext { db, db_name } = TestContext::new().await;
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -524,7 +537,7 @@ mod tests {
     db.add_course(Course::default()).await.unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -536,7 +549,7 @@ mod tests {
     let db = Db::connect(&db_name).await.unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -562,7 +575,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -595,7 +608,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -621,7 +634,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -637,7 +650,10 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db
+      .courses(None, None, None, None, None, None)
+      .await
+      .unwrap();
 
     assert_eq!(courses.len(), 3);
 
@@ -673,7 +689,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -707,7 +723,10 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db
+      .courses(None, None, None, None, None, None)
+      .await
+      .unwrap();
 
     assert_eq!(courses.len(), 123);
 
@@ -737,7 +756,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -772,7 +791,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -807,7 +826,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(Some(10), None, None, None, None)
+      db.courses(Some(10), None, None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -833,7 +852,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, Some(20), None, None, None)
+      db.courses(None, Some(20), None, None, None, None)
         .await
         .unwrap()
         .len(),
@@ -1203,12 +1222,15 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db
+      .courses(None, None, None, None, None, None)
+      .await
+      .unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, Some(vec!["MATH".into()]), None, None)
+      .courses(None, None, Some(vec!["MATH".into()]), None, None, None)
       .await
       .unwrap();
 
@@ -1237,12 +1259,15 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db
+      .courses(None, None, None, None, None, None)
+      .await
+      .unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, Some(vec!["100".into()]), None)
+      .courses(None, None, None, Some(vec!["100".into()]), None, None)
       .await
       .unwrap();
 
@@ -1271,12 +1296,15 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db
+      .courses(None, None, None, None, None, None)
+      .await
+      .unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, None, Some(vec!["Winter".into()]))
+      .courses(None, None, None, None, Some(vec!["Winter".into()]), None)
       .await
       .unwrap();
 
@@ -1337,7 +1365,7 @@ mod tests {
     .unwrap();
 
     assert_eq!(
-      db.courses(None, None, None, None, None)
+      db.courses(None, None, None, None, None, None)
         .await
         .unwrap()
         .len(),

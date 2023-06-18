@@ -2,7 +2,7 @@ import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import { Schedule } from '../model/Schedule';
 
-export const classNames = (...classes: string[]) => {
+export const classNames = (...classes: (string | undefined)[]) => {
   return classes.filter(Boolean).join(' ');
 };
 

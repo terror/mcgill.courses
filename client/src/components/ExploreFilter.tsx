@@ -1,13 +1,13 @@
-import { Combobox, Transition } from '@headlessui/react';
-import { useState } from 'react';
-import { GoX } from 'react-icons/go';
 import courseCodes from '../assets/courseCodes.json';
-import { classNames } from '../lib/utils';
+import { useState } from 'react';
+import { Combobox, Transition } from '@headlessui/react';
+import { GoX } from 'react-icons/go';
 import { RefreshCw } from 'react-feather';
+import { Slider } from './Slider';
+import { classNames } from '../lib/utils';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
-const codesOptions = courseCodes;
 
 type InputBoxProp = {
   selected: string[];
@@ -22,6 +22,8 @@ type ExploreFilterProp = {
   setSelectedLevels: (selected: string[]) => void;
   selectedTerms: string[];
   setSelectedTerms: (selected: string[]) => void;
+  minReviews: number;
+  setMinReviews: (selected: number) => void;
   variant: 'mobile' | 'desktop';
 };
 
@@ -223,17 +225,19 @@ export const ExploreFilter = ({
   setSelectedLevels,
   selectedTerms,
   setSelectedTerms,
+  setMinReviews,
+  minReviews,
   variant,
 }: ExploreFilterProp) => {
   return (
     <div
       className={classNames(
-        variant === 'mobile' ? 'mx-auto w-full' : 'ml-5 w-96 ',
+        variant === 'mobile' ? 'mx-auto w-full' : 'ml-2 w-96 ',
         'm-2 flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
       <div className='flex flex-row'>
-        <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
+        <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter</h1>
         <ClearButton
           setSelectedSubjects={setSelectedSubjects}
           setSelectedLevels={setSelectedLevels}
@@ -246,13 +250,23 @@ export const ExploreFilter = ({
           <InputBox
             selected={selectedSubjects}
             setSelected={(value) => setSelectedSubjects(value)}
-            options={codesOptions}
+            options={courseCodes}
           />
         </div>
         <SelectedCourseCodes
           selected={selectedSubjects}
           setSelected={setSelectedSubjects}
         />
+        <div className='mb-4 mt-4 space-y-2'>
+          <h1 className='text-2xl font-semibold'>Number of reviews</h1>
+          <Slider
+            max={100}
+            min={0}
+            onSliderChange={setMinReviews}
+            step={20}
+            value={minReviews}
+          />
+        </div>
         <div className='space-y-2'>
           <h1 className='mt-3 text-2xl font-semibold'>Level</h1>
           {levelsOptions.map((level, i) => (
