@@ -1,13 +1,16 @@
 import { Layout } from '../components/Layout';
 
 export const PrivacyPolicy = () => {
+  const h2 = 'text-2xl text-neutral-700 dark:text-gray-300';
+  const h1 = 'text-4xl font-bold text-neutral-700 dark:text-gray-300';
+  const p =
+    'text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500';
+
   return (
     <Layout>
       <div className='space-y-5 px-10 py-7'>
-        <h1 className='text-4xl font-bold text-neutral-700 dark:text-gray-300'>
-          Privacy Policy
-        </h1>
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <h1 className={h1}>Privacy Policy</h1>
+        <p className={p}>
           mcgill.courses is an Open-Sourced app. This service is provided at no
           cost and is intended for use as is. This page is used to inform
           visitors regarding our policies with the collection, use, and
@@ -21,20 +24,16 @@ export const PrivacyPolicy = () => {
           unless otherwise defined in this Privacy Policy.
         </p>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Information Collection and Use
-        </h2>
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <h2 className={h2}>Information Collection and Use</h2>
+        <p className={p}>
           For a better experience, while using our Service, we may require you
           to provide us with certain personally identifiable information.The
           information that we request will be not retained by us.
         </p>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Cookies
-        </h2>
+        <h2 className={h2}>Cookies</h2>
 
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <p className={p}>
           Cookies are files with a small amount of data that are commonly used
           as anonymous unique identifiers. These are sent to your browser from
           the websites that you visit and are stored on your device's internal
@@ -52,11 +51,9 @@ export const PrivacyPolicy = () => {
           usability of our Service.
         </p>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Security
-        </h2>
+        <h2 className={h2}>Security</h2>
 
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <p className={p}>
           We value your trust in providing us your Personal Information, thus we
           are striving to use commercially acceptable means of protecting it.
           But remember that no method of transmission over the internet, or
@@ -64,11 +61,9 @@ export const PrivacyPolicy = () => {
           cannot guarantee its absolute security.
         </p>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Links to Other Sites
-        </h2>
+        <h2 className={h2}>Links to Other Sites</h2>
 
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <p className={p}>
           This Service may contain links to other sites. If you click on a
           third-party link, you will be directed to that site. Note that these
           external sites are not operated by us. Therefore, we strongly advise
@@ -77,21 +72,18 @@ export const PrivacyPolicy = () => {
           or practices of any third-party sites or services.
         </p>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Changes to This Privacy Policy
-        </h2>
+        <h2 className={h2}>Changes to This Privacy Policy</h2>
 
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <p className={p}>
           We may update our Privacy Policy from time to time. Thus, you are
           advised to review this page periodically for any changes. We will
           notify you of any changes by posting the new Privacy Policy on this
           page. This policy is effective as of 2023-06-18.
         </p>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Contact Us
-        </h2>
-        <p className='text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500'>
+        <h2 className={h2}>Contact Us</h2>
+
+        <p className={p}>
           If you have any questions or suggestions about our Privacy Policy, do
           not hesitate to contact us at admin@mcgill.courses.
         </p>

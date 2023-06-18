@@ -93,6 +93,20 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                         {item.name}
                       </Link>
                     ))}
+                    <Link
+                      key={'privacy'}
+                      to={'/privacy'}
+                      className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                    >
+                      Privacy Policy
+                    </Link>
+                    <Link
+                      key={'tos'}
+                      to={'/tos'}
+                      className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                    >
+                      Terms and Conditions
+                    </Link>
                   </div>
                   <div className='py-6'>
                     {user ? (
