@@ -3,6 +3,10 @@
     "prettier --write",
     "tslint"
   ],
+  "*.tsx": [
+    "prettier --write",
+    "tslint"
+  ],
   "*.rs": [
     "cargo fmt",
     "just clippy"
