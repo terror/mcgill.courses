@@ -1,6 +1,10 @@
 import { PieChart } from 'react-minimal-pie-chart';
 
-export const RatingPieChart = ({ averageRating }: { averageRating: number }) => {
+export const RatingPieChart = ({
+  averageRating,
+}: {
+  averageRating: number;
+}) => {
   return (
     <div className='flex flex-col'>
       <div className='relative z-10 mx-auto mb-5 flex h-1/2 w-3/5 rounded-full'>
@@ -23,4 +27,4 @@ export const RatingPieChart = ({ averageRating }: { averageRating: number }) => 
       </div>
     </div>
   );
-}
+};

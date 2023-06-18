@@ -74,25 +74,29 @@ export const getUrl = (): string => {
   return import.meta.env.VITE_API_URL ?? '';
 };
 
-export const countRatings = (type: 'rating' | 'difficulty', reviews: Review[]) => {
-  type validRating = 1 | 2 | 3 | 4 | 5
+
+export const countRatings = (
+  type: 'rating' | 'difficulty',
+  reviews: Review[]
+) => {
+  type validRating = 1 | 2 | 3 | 4 | 5;
   var ratings = {
     1: 0,
     2: 0,
     3: 0,
     4: 0,
-    5: 0
-  }
+    5: 0,
+  };
   const target = (r: Review): validRating => {
     switch (type) {
-      case 'rating': return r.rating as validRating
-      case 'difficulty': return r.difficulty as validRating
+      case 'rating':
+        return r.rating as validRating;
+      case 'difficulty':
+        return r.difficulty as validRating;
     }
-  }
+  };
 
+  reviews.forEach((r: Review) => ratings[target(r)]++);
 
-  reviews.forEach((r: Review) => ratings[target(r)]++)
-
-
-  return ratings
-}
+  return ratings;
+};

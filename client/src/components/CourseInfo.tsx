@@ -1,20 +1,20 @@
 import { ExternalLink } from 'react-feather';
-import { useState } from 'react'
+import { useState } from 'react';
 import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
-import { Review } from '../model/Review'
-import { countRatings } from '../lib/utils'
-import { Toggle } from './Toggle'
+import { Review } from '../model/Review';
+import { countRatings } from '../lib/utils';
+import { Toggle } from './Toggle';
 import _ from 'lodash';
 
 export type map = {
-  1: number,
-  2: number,
-  3: number,
-  4: number,
-  5: number,
-}
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+};
 
 type ChartsProps = {
   numReviews?: number;
@@ -39,18 +39,15 @@ const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
 
 type CourseInfoProps = {
   course: Course;
-  reviews: Review[]
+  reviews: Review[];
 };
 
-export const CourseInfo = ({
-  course,
-  reviews
-}: CourseInfoProps) => {
-  const ratingMap: map = countRatings('rating', reviews)
-  const difficultyMap: map = countRatings('difficulty', reviews)
-  const numReviews = reviews.length
+export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
+  const ratingMap: map = countRatings('rating', reviews);
+  const difficultyMap: map = countRatings('difficulty', reviews);
+  const numReviews = reviews.length;
 
-  const [chartType, setChartType] = useState<'pie' | 'histogram'>('pie')
+  const [chartType, setChartType] = useState<'pie' | 'histogram'>('pie');
 
   return (
     <div className='flex justify-center'>
@@ -99,7 +96,7 @@ export const CourseInfo = ({
               {numReviews} reviews
             </p>
           </div>
-          <div className='mx-auto my-auto flex flex-col w-1/2'>
+          <div className='mx-auto my-auto flex w-1/2 flex-col'>
             <div className='m-4 mx-auto hidden w-full flex-col items-center justify-center space-x-5 md:m-4 md:flex lg:flex-row'>
               <RatingInfo
                 title={'Rating'}
@@ -115,7 +112,13 @@ export const CourseInfo = ({
               />
             </div>
             <div className='mx-auto'>
-              <Toggle onToggle={() => (chartType === 'pie') ? setChartType('histogram') : setChartType('pie')} />
+              <Toggle
+                onToggle={() =>
+                  chartType === 'pie'
+                    ? setChartType('histogram')
+                    : setChartType('pie')
+                }
+              />
             </div>
           </div>
         </div>
@@ -144,6 +147,6 @@ export const CourseInfo = ({
           difficulty={difficulty}
         />
       </div>
-    </div >
+    </div>
   );
 };
