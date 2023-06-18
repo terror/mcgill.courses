@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
 import { Alert } from '../components/Alert';
-import { BoxToggle } from '../components/BoxToggle';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -38,8 +37,6 @@ export const CoursePage = () => {
     null
   );
   const [alertMessage, setAlertMessage] = useState('');
-
-  const [filterIsOpen, setFilterIsOpen] = useState(false);
 
   const user = useAuth();
 
@@ -146,29 +143,22 @@ export const CoursePage = () => {
       />
       <SchedulesDisplay course={course} />
       <div className='flex flex-col md:flex-row'>
-        <div className='mx-8 mt-4 flex md:hidden'>
+        <div className='mt-4 flex md:hidden'>
           <CourseRequirements requirements={requirements} />
         </div>
         <div className='flex w-full flex-row justify-between'>
-          <div className='my-4 ml-8 mr-8 w-full md:mr-4 md:mt-4'>
+          <div className='my-4 w-full md:mr-4 md:mt-4'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}
               />
             )}
-            <div className='mb-5'>
-              <BoxToggle
-                title=''
-                child={
-                  <ReviewFilter
-                    course={course}
-                    allReviews={allReviews}
-                    setReviews={setShowingReviews}
-                    setShowAllReviews={setShowAllReviews}
-                  />
-                }
-                isOpen={filterIsOpen}
-                setIsOpen={setFilterIsOpen}
+            <div className='mb-4 md:hidden'>
+              <ReviewFilter
+                course={course}
+                allReviews={allReviews}
+                setReviews={setShowingReviews}
+                setShowAllReviews={setShowAllReviews}
               />
             </div>
             <div className='w-full'>
@@ -223,8 +213,16 @@ export const CoursePage = () => {
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
         )}
-        <div className='hidden h-fit w-5/12 md:flex md:flex-none'>
+        <div className='hidden h-fit w-5/12 md:block md:mt-4'>
           <CourseRequirements requirements={requirements} />
+          <div className='mt-3'>
+            <ReviewFilter
+              course={course}
+              allReviews={allReviews}
+              setReviews={setShowingReviews}
+              setShowAllReviews={setShowAllReviews}
+            />
+          </div>
         </div>
       </div>
       {alertStatus && (

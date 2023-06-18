@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { TimeBlock, Block, Schedule } from '../model/Schedule';
-import {
-  dedupe,
-  sortTerms,
-  sortSchedulesByBlocks,
-  classNames,
-  dedupeSchedulesByBlocks,
-} from '../lib/utils';
 import { IoIosArrowDown } from 'react-icons/io';
+
+import {
+  classNames,
+  dedupe,
+  dedupeSchedulesByBlocks,
+  sortSchedulesByBlocks,
+  sortTerms,
+} from '../lib/utils';
 import { Course } from '../model/Course';
+import { Block, Schedule, TimeBlock } from '../model/Schedule';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -168,7 +169,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
 
   return offeredTerms.length !== 0 ? (
     <div className='flex flex-col text-gray-800'>
-      <div className='mx-8 mt-4 flex '>
+      <div className='mt-4 flex '>
         {offeredTerms.map((term, i) => (
           <button
             key={i}
@@ -189,7 +190,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
           </button>
         ))}
       </div>
-      <div className='mx-8 flex flex-col rounded-b-lg bg-slate-100 dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='flex flex-col rounded-b-lg bg-slate-100 dark:bg-neutral-700 dark:text-gray-200'>
         {currentlyDisplayingSchedules.length <= 5 || showAll
           ? currentlyDisplayingSchedules.map(singleScheduleRow)
           : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}

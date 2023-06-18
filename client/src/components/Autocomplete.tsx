@@ -23,7 +23,7 @@ export const Autocomplete = ({
         });
 
   return (
-    <div className='w-72'>
+    <div className='max-w-72'>
       <Combobox
         value={value}
         onChange={(val) => {

@@ -35,7 +35,7 @@ export const MultiSelect = ({
         }}
         multiple
       >
-        <div className='w-72'>
+        <div className='max-w-72'>
           <div className='relative rounded-md bg-gray-50 p-2 dark:bg-neutral-700'>
             <Combobox.Input
               className='bg-gray-50 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
