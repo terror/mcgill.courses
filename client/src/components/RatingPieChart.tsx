@@ -7,7 +7,7 @@ export const RatingPieChart = ({
 }) => {
   return (
     <div className='flex flex-col'>
-      <div className='relative z-10 mx-auto mb-2 flex h-1/2 w-3/5 rounded-full'>
+      <div className='relative z-10 mx-auto flex h-1/2 w-3/5 rounded-full'>
         <PieChart
           data={[
             {

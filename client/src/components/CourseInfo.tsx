@@ -1,11 +1,11 @@
 import { ExternalLink } from 'react-feather';
+import { HiChartBar, HiChartPie } from 'react-icons/hi';
 import { useState } from 'react';
 import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
 import { Review } from '../model/Review';
-import { countRatings } from '../lib/utils';
-import { Toggle } from './Toggle';
+import { countRatings, classNames } from '../lib/utils';
 import _ from 'lodash';
 
 export type map = {
@@ -74,7 +74,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
             <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
               {course.title}
             </h2>
-            <div className='px- m-4 mx-auto flex w-full flex-col items-center justify-center space-y-3 md:hidden'>
+            <div className='m-4 mx-auto flex w-full flex-col items-center justify-center space-y-3 md:hidden'>
               <RatingInfo
                 title={'Rating'}
                 chartType={chartType}
@@ -87,15 +87,28 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
                 ratings={difficultyMap}
                 numReviews={numReviews}
               />
-            </div>
-            <div className='mx-auto md:hidden'>
-              <Toggle
-                onToggle={() =>
-                  chartType === 'pie'
-                    ? setChartType('histogram')
-                    : setChartType('pie')
-                }
-              />
+              <div className='mx-auto flex flex-row md:hidden'>
+                <HiChartPie
+                  className={classNames(
+                    'm-2 mr-2 cursor-pointer ',
+                    chartType === 'pie'
+                      ? 'text-red-600 dark:text-red-600'
+                      : 'text-neutral-800 dark:text-gray-200'
+                  )}
+                  onClick={() => setChartType('pie')}
+                  size={30}
+                />
+                <HiChartBar
+                  className={classNames(
+                    'm-2 mr-2 cursor-pointer ',
+                    chartType === 'histogram'
+                      ? 'text-red-600 dark:text-red-600'
+                      : 'text-neutral-800 dark:text-gray-200'
+                  )}
+                  onClick={() => setChartType('histogram')}
+                  size={30}
+                />
+              </div>
             </div>
             <CourseTerms course={course} variant='large' />
             <p className='break-words text-gray-500 dark:text-gray-400'>
@@ -106,7 +119,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
             </p>
           </div>
           <div className='mx-auto my-auto flex w-1/2 flex-col'>
-            <div className='m-4 mx-auto hidden w-full flex-col items-center justify-center space-y-5 md:m-4 md:flex lg:flex-row lg:space-x-5 lg:space-y-0'>
+            <div className='m-4 mx-auto hidden w-full flex-col items-center justify-center space-y-5 pr-8 md:m-4 md:flex lg:flex-row lg:space-x-5 lg:space-y-0'>
               <RatingInfo
                 title={'Rating'}
                 chartType={chartType}
@@ -120,13 +133,26 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
                 numReviews={numReviews}
               />
             </div>
-            <div className='mx-auto hidden md:flex'>
-              <Toggle
-                onToggle={() =>
+            <div className='mx-auto mt-6 hidden md:flex'>
+              <HiChartPie
+                className={classNames(
+                  'm-2 mr-2 cursor-pointer ',
                   chartType === 'pie'
-                    ? setChartType('histogram')
-                    : setChartType('pie')
-                }
+                    ? 'text-red-600 dark:text-red-600'
+                    : 'text-neutral-800 dark:text-gray-200'
+                )}
+                onClick={() => setChartType('pie')}
+                size={30}
+              />
+              <HiChartBar
+                className={classNames(
+                  'm-2 ml-2 cursor-pointer ',
+                  chartType === 'histogram'
+                    ? 'text-red-600 dark:text-red-600'
+                    : 'text-neutral-800 dark:text-gray-200'
+                )}
+                onClick={() => setChartType('histogram')}
+                size={30}
               />
             </div>
           </div>

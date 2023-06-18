@@ -24,11 +24,11 @@ const IndividualRating = ({
 }) => {
   return (
     <div className='flex flex-row space-x-2'>
-      <p className='flex-none dark:text-gray-200'>{rating}</p>
-      <div className='flex-1'>
+      <p className='w-3 flex-none dark:text-gray-200'>{rating}</p>
+      <div className='flex-auto'>
         <Bar num={num} total={total} />
       </div>
-      <p className='flex-none dark:text-gray-200'>{num}</p>
+      <p className='w-3 flex-none dark:text-gray-200'>{num}</p>
     </div>
   );
 };
@@ -37,7 +37,7 @@ export const RatingHistogram = ({ ratings }: RatingHistogramProps) => {
   const total = ratings[1] + ratings[2] + ratings[3] + ratings[4] + ratings[5];
 
   return (
-    <div className='mb-2 flex w-full flex-col space-y-4'>
+    <div className='flex w-full flex-col space-y-4'>
       <IndividualRating rating={5} num={ratings[5]} total={total} />
       <IndividualRating rating={4} num={ratings[4]} total={total} />
       <IndividualRating rating={3} num={ratings[3]} total={total} />

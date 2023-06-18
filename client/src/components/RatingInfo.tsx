@@ -23,8 +23,8 @@ export const RatingInfo = ({
       5 * ratings[5]) /
     numReviews;
 
-  const chart = (chartType: 'pie' | 'histogram') => {
-    switch (chartType) {
+  const chart = (type: 'pie' | 'histogram') => {
+    switch (type) {
       case 'pie':
         return (
           <div className='mx-1 pt-1'>

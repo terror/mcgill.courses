@@ -80,13 +80,14 @@ export const countRatings = (
   reviews: Review[]
 ) => {
   type validRating = 1 | 2 | 3 | 4 | 5;
-  var ratings = {
+  const ratings = {
     1: 0,
     2: 0,
     3: 0,
     4: 0,
     5: 0,
   };
+
   const target = (r: Review): validRating => {
     switch (type) {
       case 'rating':

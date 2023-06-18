@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
+import { HiChartBar, HiChartPie } from 'react-icons/hi';
+import { countRatings } from '../lib/utils';
+import { Instructor as InstructorType } from '../model/Instructor';
 import { Link, useParams } from 'react-router-dom';
 
 import { CourseReview } from '../components/CourseReview';
@@ -7,18 +10,18 @@ import { Layout } from '../components/Layout';
 import { RatingInfo } from '../components/RatingInfo';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
-import { Instructor as InstructorType } from '../model/Instructor';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
 import { GetInstructorPayload } from '../model/GetInstructorPayload';
-import { countRatings } from '../lib/utils';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [chartType, setChartType] = useState<'pie' | 'histogram'>('pie');
+  console.log(chartType);
 
   const [instructor, setInstructor] = useState<
     InstructorType | undefined | null
@@ -60,18 +63,40 @@ export const Instructor = () => {
                   {params.name && decodeURIComponent(params.name)}
                 </h1>
               </div>
-              <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
+              <div className='m-4 mx-auto flex w-full flex-col items-center justify-center space-y-3 md:hidden'>
                 <RatingInfo
                   title='Rating'
-                  chartType='pie'
+                  chartType={chartType}
                   ratings={ratingMap}
                   numReviews={reviews.length}
                 />
                 <RatingInfo
                   title='Difficulty'
-                  chartType='pie'
+                  chartType={chartType}
                   ratings={difficultyMap}
                   numReviews={reviews.length}
+                />
+              </div>
+              <div className='mx-auto flex flex-row md:hidden'>
+                <HiChartPie
+                  className={classNames(
+                    'm-2 mr-2 cursor-pointer ',
+                    chartType === 'pie'
+                      ? 'text-red-600 dark:text-red-600'
+                      : 'text-neutral-800 dark:text-gray-200'
+                  )}
+                  onClick={() => setChartType('pie')}
+                  size={30}
+                />
+                <HiChartBar
+                  className={classNames(
+                    'm-2 mr-2 cursor-pointer ',
+                    chartType === 'histogram'
+                      ? 'text-red-600 dark:text-red-600'
+                      : 'text-neutral-800 dark:text-gray-200'
+                  )}
+                  onClick={() => setChartType('histogram')}
+                  size={30}
                 />
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
@@ -92,19 +117,43 @@ export const Instructor = () => {
                 )}
               </p>
             </div>
-            <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-              <RatingInfo
-                title='Rating'
-                chartType={'pie'}
-                ratings={ratingMap}
-                numReviews={reviews.length}
-              />
-              <RatingInfo
-                title='Difficulty'
-                chartType={'pie'}
-                ratings={difficultyMap}
-                numReviews={reviews.length}
-              />
+            <div className='flex w-1/2 flex-col'>
+              <div className='m-4 mx-auto hidden w-1/2 flex-col items-center justify-center space-x-3 p-3 md:m-4 md:flex md:w-full lg:flex-row'>
+                <RatingInfo
+                  title='Rating'
+                  chartType={chartType}
+                  ratings={ratingMap}
+                  numReviews={reviews.length}
+                />
+                <RatingInfo
+                  title='Difficulty'
+                  chartType={chartType}
+                  ratings={difficultyMap}
+                  numReviews={reviews.length}
+                />
+              </div>
+              <div className='mx-auto hidden flex-row md:flex'>
+                <HiChartPie
+                  className={classNames(
+                    'm-2 mr-2 cursor-pointer ',
+                    chartType === 'pie'
+                      ? 'text-red-600 dark:text-red-600'
+                      : 'text-neutral-800 dark:text-gray-200'
+                  )}
+                  onClick={() => setChartType('pie')}
+                  size={30}
+                />
+                <HiChartBar
+                  className={classNames(
+                    'm-2 mr-2 cursor-pointer ',
+                    chartType === 'histogram'
+                      ? 'text-red-600 dark:text-red-600'
+                      : 'text-neutral-800 dark:text-gray-200'
+                  )}
+                  onClick={() => setChartType('histogram')}
+                  size={30}
+                />
+              </div>
             </div>
           </div>
         </div>
