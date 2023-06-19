@@ -25,7 +25,7 @@ export const AddReviewForm = ({
   onClose,
   handleSubmit,
 }: ReviewFormProps) => {
-  const [darkMode, _] = useDarkMode();
+  const [darkMode] = useDarkMode();
 
   const initialValues: ReviewFormInitialValues = {
     content: '',
