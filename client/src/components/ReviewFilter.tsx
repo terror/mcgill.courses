@@ -63,12 +63,15 @@ const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
   return (
     <div className='flex'>
       {[1, 2, 3, 4, 5].map((x) => (
-        <StarToggle
-          key={`star-rating-${x}`}
-          rating={x}
-          onToggle={toggleRating(x)}
-          toggled={ratings.includes(x)}
-        />
+        <div className='flex flex-col'>
+          <StarToggle
+            key={`star-rating-${x}`}
+            rating={x}
+            onToggle={toggleRating(x)}
+            toggled={ratings.includes(x)}
+          />
+          <div className='-mt-1 text-center text-xs font-bold'>{x}</div>
+        </div>
       ))}
     </div>
   );
@@ -144,7 +147,7 @@ export const ReviewFilter = ({
   const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
 
   return (
-    <div className='flex w-full flex-col space-y-4 rounded-lg bg-gray-50 p-10 dark:bg-neutral-800 dark:text-gray-200'>
+    <div className='flex w-full flex-col space-y-4 rounded-lg bg-gray-50 p-8 dark:bg-neutral-800 dark:text-gray-200'>
       <h1 className='text-xl font-bold'>Filter</h1>
       <div>
         <h2 className='mb-2 text-sm font-semibold'>Sort by</h2>
@@ -166,19 +169,21 @@ export const ReviewFilter = ({
           />
         </div>
       </div>
-      <div>
-        <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
-        <RatingFilter
-          ratings={selectedRatings}
-          setRatings={setSelectedRatings}
-        />
-      </div>
-      <div>
-        <h2 className='mb-2 text-sm font-semibold'>Difficulty</h2>
-        <RatingFilter
-          ratings={selectedDifficulties}
-          setRatings={setSelectedDifficulties}
-        />
+      <div className='flex flex-wrap gap-x-8 gap-y-4'>
+        <div>
+          <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
+          <RatingFilter
+            ratings={selectedRatings}
+            setRatings={setSelectedRatings}
+          />
+        </div>
+        <div>
+          <h2 className='mb-2 text-sm font-semibold'>Difficulty</h2>
+          <RatingFilter
+            ratings={selectedDifficulties}
+            setRatings={setSelectedDifficulties}
+          />
+        </div>
       </div>
     </div>
   );

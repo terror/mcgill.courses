@@ -198,7 +198,22 @@ export const CoursePage = () => {
             </div>
           </div>
         </div>
-        <div className='hidden h-fit w-5/12 md:flex md:flex-none'>
+        <AddReviewForm
+          course={course}
+          open={addReviewOpen}
+          onClose={() => setAddReviewOpen(false)}
+          handleSubmit={handleSubmit('Review added successfully.')}
+        />
+        {userReview && (
+          <EditReviewForm
+            course={course}
+            open={editReviewOpen}
+            onClose={() => setEditReviewOpen(false)}
+            review={userReview}
+            handleSubmit={handleSubmit('Review edited successfully.')}
+          />
+        )}
+        <div className='hidden h-fit w-5/12 md:mt-4 md:block'>
           <CourseRequirements requirements={requirements} />
           <div className='mt-3'>
             <ReviewFilter

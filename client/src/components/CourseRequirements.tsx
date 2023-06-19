@@ -38,7 +38,7 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
 
 export const CourseRequirements = ({ requirements }: RequirementsProps) => {
   return (
-    <div className='max-h-fit w-full rounded-md bg-slate-50 p-6 dark:bg-neutral-800'>
+    <div className='max-h-fit w-full rounded-md bg-slate-50 p-4 dark:bg-neutral-800'>
       <div className='flex-col space-y-3'>
         <div className='m-4 space-y-7'>
           <ReqsBlock title='Prerequisites' reqs={requirements.prereqs} />
