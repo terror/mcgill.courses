@@ -9,7 +9,7 @@ type LayoutProps = {
 };
 
 export const Layout = ({ children, preventScroll }: LayoutProps) => {
-  const [darkMode, _] = useDarkMode();
+  const [darkMode] = useDarkMode();
 
   useEffect(() => {
     if (!preventScroll) window.scrollTo(0, 0);

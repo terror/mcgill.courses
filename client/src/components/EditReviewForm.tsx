@@ -24,7 +24,7 @@ export const EditReviewForm = ({
   onClose,
   handleSubmit,
 }: EditReviewFormProps) => {
-  const [darkMode, _] = useDarkMode();
+  const [darkMode] = useDarkMode();
 
   const initialValues = {
     content: review.content,

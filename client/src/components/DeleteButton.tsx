@@ -20,7 +20,8 @@ export const DeleteButton = ({
 }: DeleteButtonProps) => {
   size = size ?? 20;
   const [open, setOpen] = useState(false);
-  const [darkMode, _] = useDarkMode();
+
+  const [darkMode] = useDarkMode();
 
   const onDeleteClick = () => {
     setOpen(false);

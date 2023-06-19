@@ -12,7 +12,7 @@ const alerts: Map<string, string> = new Map([
 ]);
 
 export const Home = () => {
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [results, setResults] = useState<SearchResults>({
     query: '',
