@@ -18,22 +18,17 @@ export const RatingInfo = ({
   const averageRating =
     _.sum(ratings.map((value, index) => value * (index + 1))) / numReviews;
 
-  const chart = (type: 'pie' | 'histogram') => {
-    switch (type) {
-      case 'pie':
-        return (
-          <div className='mx-1 pt-1'>
-            <RatingPieChart averageRating={averageRating} />
-          </div>
-        );
-      case 'histogram':
-        return (
-          <div className='mx-4'>
-            <RatingHistogram ratings={ratings} />
-          </div>
-        );
-    }
-  };
+  const pieChart = (
+    <div className='mx-1 pt-1'>
+      <RatingPieChart averageRating={averageRating} />
+    </div>
+  );
+
+  const histogramChart = (
+    <div className='mx-4'>
+      <RatingHistogram ratings={ratings} />
+    </div>
+  );
 
   return (
     <div className='w-full md:px-8 lg:w-3/4 lg:p-0'>
@@ -41,7 +36,11 @@ export const RatingInfo = ({
         {title}
       </h1>
       {numReviews > 0 ? (
-        chart(chartType)
+        chartType === 'pie' ? (
+          pieChart
+        ) : (
+          histogramChart
+        )
       ) : (
         <div className='text-left text-gray-700 dark:text-gray-200 md:text-center'>
           {content ?? 'No reviews have been left yet. Be the first!'}
