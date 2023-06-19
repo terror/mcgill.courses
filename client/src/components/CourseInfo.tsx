@@ -6,7 +6,6 @@ import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
 import { Review } from '../model/Review';
 import { countRatings, classNames } from '../lib/utils';
-import _ from 'lodash';
 
 export type map = {
   1: number;
