@@ -137,7 +137,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               opacity: openBlock === block ? 1 : 0,
             }}
           >
-            {openBlock && (
+            {openBlock && openBlock === block && (
               <div className='flex flex-col'>
                 {block.timeblocks.length > 0 ? (
                   block.timeblocks?.map((timeblock: TimeBlock, i) => (

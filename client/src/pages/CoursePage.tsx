@@ -198,22 +198,7 @@ export const CoursePage = () => {
             </div>
           </div>
         </div>
-        <AddReviewForm
-          course={course}
-          open={addReviewOpen}
-          onClose={() => setAddReviewOpen(false)}
-          handleSubmit={handleSubmit('Review added successfully.')}
-        />
-        {userReview && (
-          <EditReviewForm
-            course={course}
-            open={editReviewOpen}
-            onClose={() => setEditReviewOpen(false)}
-            review={userReview}
-            handleSubmit={handleSubmit('Review edited successfully.')}
-          />
-        )}
-        <div className='hidden h-fit w-5/12 md:mt-4 md:block'>
+        <div className='hidden h-fit w-5/12 md:flex md:flex-none'>
           <CourseRequirements requirements={requirements} />
           <div className='mt-3'>
             <ReviewFilter
@@ -225,6 +210,21 @@ export const CoursePage = () => {
           </div>
         </div>
       </div>
+      <AddReviewForm
+        course={course}
+        open={addReviewOpen}
+        onClose={() => setAddReviewOpen(false)}
+        handleSubmit={handleSubmit('Review added successfully.')}
+      />
+      {userReview && (
+        <EditReviewForm
+          course={course}
+          open={editReviewOpen}
+          onClose={() => setEditReviewOpen(false)}
+          review={userReview}
+          handleSubmit={handleSubmit('Review edited successfully.')}
+        />
+      )}
       {alertStatus && (
         <Alert status={alertStatus} key={key} message={alertMessage} />
       )}
