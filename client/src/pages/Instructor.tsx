@@ -21,7 +21,6 @@ export const Instructor = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [chartType, setChartType] = useState<'pie' | 'histogram'>('pie');
-  console.log(chartType);
 
   const [instructor, setInstructor] = useState<
     InstructorType | undefined | null
