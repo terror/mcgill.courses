@@ -31,9 +31,9 @@ export const Autocomplete = ({
         }}
       >
         <div className='w-full'>
-          <div className='relative rounded-md bg-gray-50 p-2 dark:bg-neutral-700'>
+          <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='bg-gray-50 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='bg-gray-100 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
@@ -56,7 +56,7 @@ export const Autocomplete = ({
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `z-50 p-2
+                  className={({ active }) => `p-2
                     ${
                       active
                         ? 'bg-red-500 text-white'
