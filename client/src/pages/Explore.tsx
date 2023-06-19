@@ -48,7 +48,7 @@ export const Explore = () => {
         },
       })
       .then((data) => setCourses(data))
-      .catch((_) => setError(true));
+      .catch(() => setError(true));
     setHasMore(true);
     setOffset(limit);
   }, [selectedSubjects, selectedLevels, selectedTerms]);

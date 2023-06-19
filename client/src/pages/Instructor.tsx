@@ -20,26 +20,28 @@ export const Instructor = () => {
   const user = useAuth();
 
   useEffect(() => {
-    fetchClient
-      .getData<Review[]>(
-        `/reviews?instructor_name=${decodeURIComponent(params.name!)}`
-      )
-      .then((data) => {
-        setReviews(
-          data.sort(
-            (a, b) =>
-              parseInt(b.timestamp.$date.$numberLong, 10) -
-              parseInt(a.timestamp.$date.$numberLong, 10)
-          )
-        );
-      });
-    fetchClient
-      .getData<InstructorType>(
-        `/instructors/${decodeURIComponent(params.name!)}`
-      )
-      .then((data) => {
-        setInstructor(data);
-      });
+    if (params.name) {
+      fetchClient
+        .getData<Review[]>(
+          `/reviews?instructor_name=${decodeURIComponent(params.name)}`
+        )
+        .then((data) => {
+          setReviews(
+            data.sort(
+              (a, b) =>
+                parseInt(b.timestamp.$date.$numberLong, 10) -
+                parseInt(a.timestamp.$date.$numberLong, 10)
+            )
+          );
+        });
+      fetchClient
+        .getData<InstructorType>(
+          `/instructors/${decodeURIComponent(params.name)}`
+        )
+        .then((data) => {
+          setInstructor(data);
+        });
+    }
   }, [params.name]);
 
   if (instructor === null) return <NotFound />;

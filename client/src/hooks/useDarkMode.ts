@@ -3,8 +3,7 @@ import { DarkModeContext } from '../providers/DarkModeProvider';
 
 export const useDarkMode = () => {
   const context = useContext(DarkModeContext);
-  if (!context) {
+  if (!context)
     throw new Error('DarkModeContext must be used inside DarkModeProvider');
-  }
   return context;
 };
