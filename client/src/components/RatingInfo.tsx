@@ -1,5 +1,6 @@
 import { RatingPieChart } from './RatingPieChart';
 import { RatingHistogram } from './RatingHistogram';
+import _ from 'lodash';
 
 export const RatingInfo = ({
   title,
@@ -15,12 +16,7 @@ export const RatingInfo = ({
   content?: string;
 }) => {
   const averageRating =
-    (1 * ratings[0] +
-      2 * ratings[1] +
-      3 * ratings[2] +
-      4 * ratings[3] +
-      5 * ratings[4]) /
-    numReviews;
+    _.sum(ratings.map((value, index) => value * (index + 1))) / numReviews;
 
   const chart = (type: 'pie' | 'histogram') => {
     switch (type) {

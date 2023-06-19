@@ -34,7 +34,7 @@ const IndividualRating = ({
 };
 
 export const RatingHistogram = ({ ratings }: { ratings: number[] }) => {
-  const total = _.sum(Object.values(ratings));
+  const total = _.sum(ratings);
 
   return (
     <div className='flex w-full flex-col space-y-4'>
