@@ -1,6 +1,5 @@
 import { RatingPieChart } from './RatingPieChart';
 import { RatingHistogram } from './RatingHistogram';
-import { map } from './CourseInfo';
 
 export const RatingInfo = ({
   title,
@@ -12,15 +11,15 @@ export const RatingInfo = ({
   title: string;
   chartType: 'pie' | 'histogram';
   numReviews: number;
-  ratings: map;
+  ratings: number[];
   content?: string;
 }) => {
   const averageRating =
-    (1 * ratings[1] +
-      2 * ratings[2] +
-      3 * ratings[3] +
-      4 * ratings[4] +
-      5 * ratings[5]) /
+    (1 * ratings[0] +
+      2 * ratings[1] +
+      3 * ratings[2] +
+      4 * ratings[3] +
+      5 * ratings[4]) /
     numReviews;
 
   const chart = (type: 'pie' | 'histogram') => {

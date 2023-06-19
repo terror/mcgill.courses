@@ -79,25 +79,17 @@ export const countRatings = (
   type: 'rating' | 'difficulty',
   reviews: Review[]
 ) => {
-  type validRating = 1 | 2 | 3 | 4 | 5;
-  const ratings = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-  };
-
-  const target = (r: Review): validRating => {
+  const ratings: number[] = [0, 0, 0, 0, 0];
+  const target = (r: Review) => {
     switch (type) {
       case 'rating':
-        return r.rating as validRating;
+        return r.rating;
       case 'difficulty':
-        return r.difficulty as validRating;
+        return r.difficulty;
     }
   };
 
-  reviews.forEach((r: Review) => ratings[target(r)]++);
+  reviews.forEach((r: Review) => ratings[target(r) - 1]++);
 
   return ratings;
 };

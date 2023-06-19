@@ -5,36 +5,7 @@ import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
 import { Review } from '../model/Review';
-import { countRatings, classNames } from '../lib/utils';
-
-export type map = {
-  1: number;
-  2: number;
-  3: number;
-  4: number;
-  5: number;
-};
-
-type ChartsProps = {
-  numReviews?: number;
-  rating: number;
-  difficulty: number;
-};
-
-const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
-  if (numReviews === undefined) return null;
-
-  return numReviews ? (
-    <>
-      <RatingInfo title={'Rating'} rating={rating} />
-      <RatingInfo title={'Difficulty'} rating={difficulty} />
-    </>
-  ) : (
-    <div className='w-[50%] text-left text-gray-700 dark:text-gray-200 md:text-center'>
-      No reviews have been left for this course yet. Be the first!
-    </div>
-  );
-};
+import { countRatings } from '../lib/utils';
 
 type CourseInfoProps = {
   course: Course;
@@ -42,8 +13,8 @@ type CourseInfoProps = {
 };
 
 export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
-  const ratingMap: map = countRatings('rating', reviews);
-  const difficultyMap: map = countRatings('difficulty', reviews);
+  const ratingMap: number[] = countRatings('rating', reviews);
+  const difficultyMap: number[] = countRatings('difficulty', reviews);
   const numReviews = reviews.length;
 
   const [chartType, setChartType] = useState<'pie' | 'histogram'>('pie');

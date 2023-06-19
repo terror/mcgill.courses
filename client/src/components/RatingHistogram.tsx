@@ -1,15 +1,5 @@
 import _ from 'lodash';
 
-type RatingHistogramProps = {
-  ratings: {
-    1: number;
-    2: number;
-    3: number;
-    4: number;
-    5: number;
-  };
-};
-
 const Bar = ({ num, total }: { num: number; total: number }) => {
   const percentage = (num / total) * 100; // Calculate the percentage
 
@@ -43,16 +33,14 @@ const IndividualRating = ({
   );
 };
 
-export const RatingHistogram = ({ ratings }: RatingHistogramProps) => {
+export const RatingHistogram = ({ ratings }: { ratings: number[] }) => {
   const total = _.sum(Object.values(ratings));
 
   return (
     <div className='flex w-full flex-col space-y-4'>
-      <IndividualRating rating={5} num={ratings[5]} total={total} />
-      <IndividualRating rating={4} num={ratings[4]} total={total} />
-      <IndividualRating rating={3} num={ratings[3]} total={total} />
-      <IndividualRating rating={2} num={ratings[2]} total={total} />
-      <IndividualRating rating={1} num={ratings[1]} total={total} />
+      {[5, 4, 3, 2, 1].map((n) => (
+        <IndividualRating rating={n} num={ratings[n - 1]} total={total} />
+      ))}
     </div>
   );
 };
