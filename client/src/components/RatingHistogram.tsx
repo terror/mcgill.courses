@@ -1,4 +1,12 @@
-type RatingHistogramProps = { ratings: any };
+type RatingHistogramProps = {
+  ratings: {
+    1: number;
+    2: number;
+    3: number;
+    4: number;
+    5: number;
+  };
+};
 
 const Bar = ({ num, total }: { num: number; total: number }) => {
   const percentage = (num / total) * 100; // Calculate the percentage
