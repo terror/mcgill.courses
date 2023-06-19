@@ -142,18 +142,18 @@ export const CoursePage = () => {
         numReviews={allReviews.length}
       />
       <SchedulesDisplay course={course} />
-      <div className='flex flex-col md:flex-row'>
-        <div className='mt-4 flex md:hidden'>
+      <div className='flex flex-col lg:flex-row'>
+        <div className='mt-4 flex lg:hidden'>
           <CourseRequirements requirements={requirements} />
         </div>
         <div className='flex w-full flex-row justify-between'>
-          <div className='my-4 w-full md:mr-4 md:mt-4'>
+          <div className='my-4 w-full lg:mr-4 lg:mt-4'>
             {canReview && (
               <CourseReviewPrompt
                 openAddReview={() => setAddReviewOpen(true)}
               />
             )}
-            <div className='mb-4 md:hidden'>
+            <div className='mb-4 lg:hidden'>
               <ReviewFilter
                 course={course}
                 allReviews={allReviews}
@@ -213,7 +213,7 @@ export const CoursePage = () => {
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
         )}
-        <div className='hidden h-fit w-5/12 md:mt-4 md:block'>
+        <div className='hidden h-fit lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
           <div className='mt-3'>
             <ReviewFilter

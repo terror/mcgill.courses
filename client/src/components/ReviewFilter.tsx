@@ -147,7 +147,7 @@ export const ReviewFilter = ({
   const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
 
   return (
-    <div className='flex w-full flex-col space-y-4 rounded-lg bg-gray-50 p-8 dark:bg-neutral-800 dark:text-gray-200'>
+    <div className='flex flex-col space-y-4 rounded-lg bg-gray-50 p-8 dark:bg-neutral-800 dark:text-gray-200'>
       <h1 className='text-xl font-bold'>Filter</h1>
       <div>
         <h2 className='mb-2 text-sm font-semibold'>Sort by</h2>
