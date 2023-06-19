@@ -169,7 +169,7 @@ export const ReviewFilter = ({
           />
         </div>
       </div>
-      <div className='flex flex-wrap gap-x-8 gap-y-4'>
+      <div className='flex flex-wrap gap-x-8'>
         <div>
           <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
           <RatingFilter
