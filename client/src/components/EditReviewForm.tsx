@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
+
 import { useDarkMode } from '../hooks/useDarkMode';
 import { fetchClient } from '../lib/fetchClient';
 import { classNames } from '../lib/utils';
@@ -23,7 +24,7 @@ export const EditReviewForm = ({
   onClose,
   handleSubmit,
 }: EditReviewFormProps) => {
-  const [darkMode, _] = useDarkMode();
+  const [darkMode] = useDarkMode();
 
   const initialValues = {
     content: review.content,
@@ -36,7 +37,7 @@ export const EditReviewForm = ({
     <Transition appear show={open} as={Fragment}>
       <Dialog
         as='div'
-        className={classNames('relative z-10', darkMode ? 'dark' : '')}
+        className={classNames('relative z-50', darkMode ? 'dark' : '')}
         onClose={onClose}
       >
         <Transition.Child
@@ -51,7 +52,7 @@ export const EditReviewForm = ({
           <div className='fixed inset-0 bg-black bg-opacity-25' />
         </Transition.Child>
 
-        <div className='fixed inset-0 overflow-y-auto'>
+        <div className='fixed inset-y-0 left-0 w-screen overflow-y-auto'>
           <div className='flex min-h-full items-center justify-center p-4 text-center'>
             <Transition.Child
               as={Fragment}

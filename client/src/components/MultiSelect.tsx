@@ -35,10 +35,10 @@ export const MultiSelect = ({
         }}
         multiple
       >
-        <div className='relative w-72'>
-          <div className='relative rounded-md bg-gray-50 p-2 dark:bg-neutral-700'>
+        <div className='max-w-72'>
+          <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='bg-gray-50 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='bg-gray-100 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
               onBlur={() => setQuery('')}
             />
@@ -69,7 +69,7 @@ export const MultiSelect = ({
                         : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
                     }`}
                 >
-                  <div className='flex space-x-1'>
+                  <div className='flex justify-between'>
                     <div>{val}</div>
                     {values.includes(val) && (
                       <Check className='stroke-red-600' />

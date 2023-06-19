@@ -1,9 +1,10 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
+import { RefreshCw } from 'react-feather';
 import { GoX } from 'react-icons/go';
+
 import courseCodes from '../assets/courseCodes.json';
 import { classNames } from '../lib/utils';
-import { RefreshCw } from 'react-feather';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
@@ -233,7 +234,7 @@ export const ExploreFilter = ({
       )}
     >
       <div className='flex flex-row'>
-        <h1 className='m-10 mb-2 text-3xl font-semibold'>Filter by:</h1>
+        <h1 className='m-10 mb-2 text-2xl font-semibold'>Filter</h1>
         <ClearButton
           setSelectedSubjects={setSelectedSubjects}
           setSelectedLevels={setSelectedLevels}
@@ -242,7 +243,7 @@ export const ExploreFilter = ({
       </div>
       <div className='m-10 my-5'>
         <div className='space-y-3'>
-          <h1 className='text-2xl font-semibold'>Course Code</h1>
+          <h1 className='text-xl font-semibold'>Course Code</h1>
           <InputBox
             selected={selectedSubjects}
             setSelected={(value) => setSelectedSubjects(value)}
@@ -254,7 +255,7 @@ export const ExploreFilter = ({
           setSelected={setSelectedSubjects}
         />
         <div className='space-y-2'>
-          <h1 className='mt-3 text-2xl font-semibold'>Level</h1>
+          <h1 className='mt-3 text-xl font-semibold'>Level</h1>
           {levelsOptions.map((level, i) => (
             <FilterButton
               key={i}
@@ -266,7 +267,7 @@ export const ExploreFilter = ({
           ))}
         </div>
         <div className='mb-8 space-y-2'>
-          <h1 className='mt-3 text-2xl font-semibold'>Term</h1>
+          <h1 className='mt-3 text-xl font-semibold'>Term</h1>
           {termsOptions.map((term, i) => (
             <FilterButton
               key={i}

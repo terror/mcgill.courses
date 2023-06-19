@@ -29,7 +29,8 @@ type SideNavProps = {
 
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
-  const [darkMode, _] = useDarkMode();
+
+  const [darkMode] = useDarkMode();
 
   return (
     <Transition appear show={open}>
