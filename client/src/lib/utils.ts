@@ -54,19 +54,6 @@ export const dedupe = (arr: any[]) => {
   return [...new Set(arr)];
 };
 
-export const dedupeInstructors = (instructors: Instructor[]) => {
-  const deduped = [];
-  const filled = new Set();
-
-  for (const instructor of instructors) {
-    if (!filled.has(instructor.name)) {
-      deduped.push(instructor);
-      filled.add(instructor.name);
-    }
-  }
-  return deduped;
-};
-
 export const dedupeSchedulesByBlocks = (schedules: Schedule[]) => {
   const deduped = [];
   const filled = new Set();
