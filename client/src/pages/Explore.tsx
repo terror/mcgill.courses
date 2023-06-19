@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Alert } from '../components/Alert';
+import { BoxToggle } from '../components/BoxToggle';
 import { CourseCard } from '../components/CourseCard';
+import { ExploreFilter } from '../components/ExploreFilter';
+import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
-import { ExploreFilter } from '../components/ExploreFilter';
-import { JumpToTopButton } from '../components/JumpToTopButton';
-import { BoxToggle } from '../components/BoxToggle';
 import { getCurrentTerms } from '../lib/utils';
+import { Course } from '../model/Course';
 
 export const Explore = () => {
   const limit = 20;
@@ -79,10 +79,10 @@ export const Explore = () => {
           {' '}
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             {' '}
-            Showing all courses
+            Explore all courses
           </h1>
-          <div className='w-xl flex flex-col md:flex-row'>
-            <div className='md:hidden'>
+          <div className='w-xl flex flex-col lg:flex-row'>
+            <div className='mx-2 flex max-w-xl items-center justify-center lg:hidden'>
               <BoxToggle
                 child={ExploreFilter({
                   selectedSubjects,
@@ -123,7 +123,7 @@ export const Explore = () => {
                 ) : null}
               </div>
             </InfiniteScroll>
-            <div className='hidden md:flex'>
+            <div className='hidden lg:flex'>
               <ExploreFilter
                 selectedSubjects={selectedSubjects}
                 setSelectedSubjects={setSelectedSubjects}

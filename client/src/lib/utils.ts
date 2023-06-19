@@ -65,7 +65,6 @@ export const dedupeSchedulesByBlocks = (schedules: Schedule[]) => {
       filled.add(block.display);
     }
   }
-
   return deduped;
 };
 

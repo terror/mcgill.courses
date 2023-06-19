@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import { Requirements } from '../model/Requirements';
 
 type RequirementsProps = {
@@ -13,7 +14,7 @@ type ReqsBlockProps = {
 export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
   return (
     <div>
-      <h2 className='mb-2 mt-1 text-2xl font-medium leading-none text-gray-700 dark:text-gray-200'>
+      <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
         {title}
       </h2>
       {reqs.length > 0 ? (
@@ -37,13 +38,13 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
 
 export const CourseRequirements = ({ requirements }: RequirementsProps) => {
   return (
-    <div className='max-h-fit w-full rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mx-4 md:ml-auto md:mr-8 md:mt-4'>
+    <div className='w-full rounded-md bg-slate-50 p-4 dark:bg-neutral-800'>
       <div className='flex-col space-y-3'>
         <div className='m-4 space-y-7'>
           <ReqsBlock title='Prerequisites' reqs={requirements.prereqs} />
           <ReqsBlock title='Corequisites' reqs={requirements.coreqs} />
           <div>
-            <h2 className='mb-2 mt-1 text-2xl font-medium leading-none text-gray-700 dark:text-gray-200'>
+            <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
               Restrictions
             </h2>
             {requirements.restrictions !== null ? (

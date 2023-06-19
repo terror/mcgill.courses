@@ -1,11 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Disclosure } from '@headlessui/react';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FiMail } from 'react-icons/fi';
+import { IoIosArrowDown } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 import { Layout } from '../components/Layout';
-
-import { Disclosure } from '@headlessui/react';
-import { IoIosArrowDown } from 'react-icons/io';
 
 type QuestionsAnswersProp = {
   input: {
@@ -16,7 +15,7 @@ type QuestionsAnswersProp = {
 
 export const QuestionsAnswers = ({ input }: QuestionsAnswersProp) => {
   return (
-    <div className='max-w-l mx-10 px-4 sm:mx-20 md:mx-40 lg:mx-60 xl:mx-80'>
+    <div className='max-w-l px-4 md:mx-16 lg:mx-28 xl:mx-48'>
       <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
         {input.map((item: { title: string; content: JSX.Element | string }) => (
           <Disclosure as='div' key={item.title} className='w-full'>
@@ -93,7 +92,7 @@ export const About = () => {
     <Layout>
       <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle '>
         <Title title='About Us' />
-        <p className='mx-10 text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60'>
+        <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 md:mx-16 lg:mx-40'>
           {' '}
           mcgill.courses is an open-sourced, student-made review website for
           courses offered and instructors teaching at McGill University. Our
@@ -104,7 +103,7 @@ export const About = () => {
         <Title title='FAQ' />
         <QuestionsAnswers input={questionsAnswers} />
         <Title title='Contact Us' />
-        <p className='mx-10 text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60'>
+        <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60 xl:mx-80'>
           {' '}
           If you have any questions or concerns, please reach out to us
         </p>

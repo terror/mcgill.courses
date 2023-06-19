@@ -19,7 +19,7 @@ export const CourseInfo = ({
 }: CourseInfoProps) => {
   return (
     <div className='flex justify-center'>
-      <div className='mx-8 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
+      <div className='flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
         <div className='flex flex-1 flex-col md:flex-row'>
           <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
             <div className='flex flex-row space-x-2 align-middle'>

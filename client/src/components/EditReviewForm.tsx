@@ -37,7 +37,7 @@ export const EditReviewForm = ({
     <Transition appear show={open} as={Fragment}>
       <Dialog
         as='div'
-        className={classNames('relative z-10', darkMode ? 'dark' : '')}
+        className={classNames('relative z-50', darkMode ? 'dark' : '')}
         onClose={onClose}
       >
         <Transition.Child

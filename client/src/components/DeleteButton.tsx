@@ -39,7 +39,7 @@ export const DeleteButton = ({
       <Transition appear show={open} as={Fragment}>
         <Dialog
           as='div'
-          className={classNames('relative z-10', darkMode ? 'dark' : '')}
+          className={classNames('relative z-50', darkMode ? 'dark' : '')}
           onClose={() => setOpen(false)}
         >
           <Transition.Child
