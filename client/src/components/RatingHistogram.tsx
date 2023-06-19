@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 type RatingHistogramProps = {
   ratings: {
     1: number;
@@ -42,7 +44,7 @@ const IndividualRating = ({
 };
 
 export const RatingHistogram = ({ ratings }: RatingHistogramProps) => {
-  const total = ratings[1] + ratings[2] + ratings[3] + ratings[4] + ratings[5];
+  const total = _.sum(Object.values(ratings));
 
   return (
     <div className='flex w-full flex-col space-y-4'>
