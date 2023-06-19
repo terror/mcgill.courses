@@ -29,7 +29,6 @@ const StarToggle = ({
   onToggle,
   toggled,
 }: {
-  rating: number;
   onToggle: () => void;
   toggled: boolean;
 }) => {
@@ -66,7 +65,6 @@ const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
         <div className='flex flex-col'>
           <StarToggle
             key={`star-rating-${x}`}
-            rating={x}
             onToggle={toggleRating(x)}
             toggled={ratings.includes(x)}
           />
