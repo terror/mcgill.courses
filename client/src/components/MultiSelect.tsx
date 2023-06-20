@@ -14,6 +14,8 @@ export const MultiSelect = ({
   setValues,
 }: MultiSelectProps) => {
   const [query, setQuery] = useState('');
+  // Need to prevent the onBlur (resetting query) from firing when just clicking an option
+  const [optionClicked, setOptionClicked] = useState(false);
 
   const filtered =
     query === ''
@@ -24,6 +26,24 @@ export const MultiSelect = ({
 
   const removeVal = (val: string) => {
     setValues(values.filter((x) => x !== val));
+  };
+
+  const handleInputBlur = () => {
+    // A hack to fix a flickering issue when closing the dropdown
+    setTimeout(() => {
+      if (!optionClicked) {
+        setQuery('');
+      }
+      setOptionClicked(false);
+    }, 200);
+  };
+
+  const handleOptionMouseDown = () => {
+    setOptionClicked(true);
+  };
+
+  const handleOptionMouseUp = () => {
+    setOptionClicked(false);
   };
 
   return (
@@ -40,7 +60,7 @@ export const MultiSelect = ({
             <Combobox.Input
               className='bg-gray-100 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
-              onBlur={() => setQuery('')}
+              onBlur={handleInputBlur}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
               <ChevronDown
@@ -65,9 +85,11 @@ export const MultiSelect = ({
                   className={({ active }) => `cursor-pointer p-2
                     ${
                       active
-                        ? 'bg-red-500 text-white'
+                        ? 'bg-gray-100 dark:bg-neutral-500'
                         : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
                     }`}
+                  onMouseDown={handleOptionMouseDown}
+                  onMouseUp={handleOptionMouseUp}
                 >
                   <div className='flex justify-between'>
                     <div>{val}</div>
