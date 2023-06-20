@@ -93,7 +93,7 @@ pub(crate) async fn update_review(
 
   trace!("Updating review...");
 
-  db.update_review(Review {
+  db.add_review(Review {
     content,
     course_id,
     instructors,

@@ -2,6 +2,7 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { SearchResults } from '../model/SearchResults';
@@ -9,6 +10,7 @@ import { CourseSearchBar } from './CourseSearchBar';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 import { DarkModeToggle } from './DarkModeToggle';
+import { getUrl } from '../lib/utils';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,7 +50,7 @@ export const Navbar = () => {
       >
         <div className='z-40 my-auto mr-auto flex lg:flex-1'>
           <Link to='/' className='-m-1.5 p-1.5'>
-            <img className='h-12 w-auto' src='/bird.png' alt='bird' />
+            <img className='h-12 w-auto' src={birdImageUrl} alt='bird' />
           </Link>
         </div>
         <div className='flex lg:hidden'>
@@ -78,9 +80,7 @@ export const Navbar = () => {
               <ProfileDropdown />
             ) : (
               <a
-                href={`${import.meta.env.VITE_API_URL}/auth/login?redirect=${
-                  window.location.href
-                }`}
+                href={`${getUrl()}/auth/login?redirect=${window.location.href}`}
                 className='my-auto text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
                 onMouseEnter={() => setArrowColor('text-red-600')}
                 onMouseLeave={() =>
