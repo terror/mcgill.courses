@@ -9,16 +9,15 @@ type DeleteButtonProps = {
   title: string;
   text: string;
   onConfirm: () => void;
-  size?: number;
+  size: number;
 };
 
 export const DeleteButton = ({
   title,
   text,
   onConfirm,
-  size,
+  size = 20,
 }: DeleteButtonProps) => {
-  size = size ?? 20;
   const [open, setOpen] = useState(false);
 
   const [darkMode] = useDarkMode();
