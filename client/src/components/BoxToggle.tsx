@@ -13,7 +13,7 @@ type BoxToggleProps = {
 export const BoxToggle = ({ title, child, open, setOpen }: BoxToggleProps) => {
   return (
     <div className='w-full'>
-      <div className='space-around flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'>
+      <div className='space-around mb-1 flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'>
         <button className='mr-auto' onClick={() => setOpen(!open)}>
           <FaBars className='text-gray-700 dark:text-neutral-400' />
         </button>
