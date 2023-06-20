@@ -41,7 +41,7 @@ export const ProfileDropdown = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href={`${getUrl()}/auth/logout?redirect=${
+                  href={`${getUrl()}/api/auth/logout?redirect=${
                     window.location.origin
                   }`}
                   className={classNames(
