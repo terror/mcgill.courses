@@ -69,11 +69,13 @@ export const CoursePage = () => {
 
   if (course === undefined || showingReviews === undefined) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <Spinner />
+      <Layout>
+        <div className='flex min-h-screen items-center justify-center'>
+          <div className='text-center'>
+            <Spinner />
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
