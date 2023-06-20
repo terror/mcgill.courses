@@ -32,6 +32,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-minimal-pie-chart": "^8.4.0",
     "react-router-dom": "^6.9.0",
+    "tailwind-merge": "^1.13.2",
     "yup": "^1.0.2"
   },
   "devDependencies": {
