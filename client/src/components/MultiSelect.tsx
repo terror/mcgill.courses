@@ -1,6 +1,7 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { Check, ChevronDown, X } from 'react-feather';
+import { twMerge } from 'tailwind-merge';
 
 type MultiSelectProps = {
   options: string[];
@@ -82,12 +83,14 @@ export const MultiSelect = ({
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `cursor-pointer p-2
-                    ${
+                  className={({ active }) =>
+                    twMerge(
+                      'cursor-pointer p-2',
                       active
                         ? 'bg-gray-100 dark:bg-neutral-500'
                         : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
-                    }`}
+                    )
+                  }
                   onMouseDown={handleOptionMouseDown}
                   onMouseUp={handleOptionMouseUp}
                 >
