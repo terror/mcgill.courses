@@ -46,24 +46,6 @@ export const filterCurrentInstructors = (instructors: Instructor[]) => {
   return instructors.filter((i) => currentTerm.includes(i.term));
 };
 
-export const dedupe = (arr: any[]) => {
-  return [...new Set(arr)];
-};
-
-export const dedupeSchedulesByBlocks = (schedules: Schedule[]) => {
-  const deduped = [];
-  const filled = new Set();
-
-  for (const schedule of schedules) {
-    const block = schedule.blocks[0];
-    if (!filled.has(block.display)) {
-      deduped.push(schedule);
-      filled.add(block.display);
-    }
-  }
-  return deduped;
-};
-
 export const sortTerms = (terms: string[]) => {
   const order = ['Summer', 'Fall', 'Winter'];
   return terms.sort((a, b) => {

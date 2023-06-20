@@ -3,11 +3,7 @@ import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
-import {
-  dedupeSchedulesByBlocks,
-  sortSchedulesByBlocks,
-  sortTerms,
-} from '../lib/utils';
+import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Block, Schedule, TimeBlock } from '../model/Schedule';
 
@@ -86,9 +82,12 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       }
     }
 
-    setCurrentlyDisplayingSchedules(
-      sortSchedulesByBlocks(dedupeSchedulesByBlocks(uniqueTimeSlots))
+    const uniqueByBlocks = _.uniqBy(
+      uniqueTimeSlots,
+      (t) => t.blocks[0].display
     );
+
+    setCurrentlyDisplayingSchedules(sortSchedulesByBlocks(uniqueByBlocks));
     setOpenBlock(null);
   }, [currentlyDisplayingTerm]);
 
