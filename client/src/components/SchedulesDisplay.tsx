@@ -1,9 +1,9 @@
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
 import {
-  dedupe,
   dedupeSchedulesByBlocks,
   sortSchedulesByBlocks,
   sortTerms,
@@ -51,7 +51,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
   if (!schedules) return null;
 
   const offeredTerms = sortTerms(
-    dedupe(schedules.map((schedule) => schedule.term))
+    _.uniq(schedules.map((schedule) => schedule.term))
   );
 
   const [currrentlyDisplayingCourse, setCurrentlyDisplayingCourse] =
@@ -121,14 +121,15 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               }
             >
               <IoIosArrowDown
-                className={`${
-                  openBlock === block ? 'rotate-180 transform' : ''
-                } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
+                className={twMerge(
+                  openBlock === block ? 'rotate-180 transform' : '',
+                  'mx-2 h-5 w-5 text-gray-900 dark:text-gray-300'
+                )}
               />
             </button>
           </div>
           <div
-            className={'transition-all duration-300 ease-in-out'}
+            className='overflow-y-hidden transition-all duration-300 ease-in-out'
             style={{
               height:
                 openBlock === block
@@ -169,7 +170,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
 
   return offeredTerms.length !== 0 ? (
     <div className='flex flex-col text-gray-800'>
-      <div className='mt-4 flex '>
+      <div className='mt-4 flex'>
         {offeredTerms.map((term, i) => (
           <button
             key={i}
