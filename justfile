@@ -80,7 +80,7 @@ restart-services:
 run *args:
   cargo run -- {{args}}
 
-run-container: build
+run-container: build-container
   docker run -d \
     -e MONGODB_URL=$MONGODB_URL \
     -e MS_CLIENT_ID=$MS_CLIENT_ID \
