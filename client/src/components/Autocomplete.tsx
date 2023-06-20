@@ -1,6 +1,7 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { ChevronDown } from 'react-feather';
+import { twMerge } from 'tailwind-merge';
 
 type AutocompleteProps = {
   options: string[];
@@ -16,20 +17,15 @@ export const Autocomplete = ({
   const [query, setQuery] = useState('');
 
   const filtered =
-    query === ''
-      ? options
-      : options.filter((x) => {
+    query !== ''
+      ? options.filter((x) => {
           return x.toLowerCase().includes(query.toLowerCase());
-        });
+        })
+      : options;
 
   return (
     <div className='max-w-72'>
-      <Combobox
-        value={value}
-        onChange={(val) => {
-          setValue(val);
-        }}
-      >
+      <Combobox value={value} onChange={(val) => setValue(val)}>
         <div className='w-full'>
           <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
             <Combobox.Input
@@ -56,12 +52,14 @@ export const Autocomplete = ({
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `p-2
-                    ${
+                  className={({ active }) =>
+                    twMerge(
+                      'p-2',
                       active
                         ? 'bg-red-500 text-white'
                         : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
-                    }`}
+                    )
+                  }
                 >
                   {val}
                 </Combobox.Option>
