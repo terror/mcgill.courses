@@ -20,7 +20,7 @@ pub(crate) struct Server {
 
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
-    let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
+    let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
     info!("Listening on port: {}", addr.port());
 
