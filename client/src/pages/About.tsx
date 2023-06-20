@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from '../components/Layout';
 
-type QuestionsAnswersProp = {
+type QuestionsAnswersProps = {
   input: {
     title: string;
     content: JSX.Element | string;
   }[];
 };
 
-export const QuestionsAnswers = ({ input }: QuestionsAnswersProp) => {
+const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
     <div className='max-w-l px-4 md:mx-16 lg:mx-28 xl:mx-48'>
       <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
@@ -76,11 +76,15 @@ const questionsAnswers = [
   },
 ];
 
-const Title = ({ title }: { title: string }) => {
+type TitleProps = {
+  children: string;
+};
+
+const Title = ({ children }: TitleProps) => {
   return (
     <div className='mt-10'>
       <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
-        {title}
+        {children}
       </h1>
       <hr className='mx-auto my-5 w-32 border-gray-200 text-4xl' />
     </div>
@@ -91,20 +95,18 @@ export const About = () => {
   return (
     <Layout>
       <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle '>
-        <Title title='About Us' />
+        <Title>About Us</Title>
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 md:mx-16 lg:mx-40'>
-          {' '}
           mcgill.courses is an open-sourced, student-made review website for
           courses offered and instructors teaching at McGill University. Our
           platform aims to provide transparent and accurate information to help
           with informed decision-making. We encourage contributions from the
           McGill community to ensure the resource remains valuable.
         </p>
-        <Title title='FAQ' />
+        <Title>FAQ</Title>
         <QuestionsAnswers input={questionsAnswers} />
-        <Title title='Contact Us' />
+        <Title>Contact Us</Title>
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60 xl:mx-80'>
-          {' '}
           If you have any questions or concerns, please reach out to us
         </p>
         <div className='m-2 flex justify-center'>
@@ -112,16 +114,16 @@ export const About = () => {
             <AiOutlineGithub
               className='mx-2 text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
-            ></AiOutlineGithub>
+            />
           </a>
           <a href='mailto:'>
             <FiMail
               className='mx-2 text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
-            ></FiMail>
+            />
           </a>
         </div>
-      </div>{' '}
+      </div>
     </Layout>
   );
 };
