@@ -6,10 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { SearchResults } from '../model/SearchResults';
 
-enum SearchResultType {
-  Course,
-  Instructor,
-}
+type SearchResultType = 'course' | 'instructor';
 
 interface SearchResultProps {
   index: number;
@@ -28,6 +25,28 @@ const SearchResult = ({
   type,
   url,
 }: SearchResultProps) => {
+  const icon =
+    type === 'course' ? (
+      <Layers className='mr-2 dark:text-white' />
+    ) : (
+      <User className='mr-2 dark:text-white' />
+    );
+
+  const textWithMatchHighlight = text
+    .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
+    .map((part, i) => (
+      <span
+        key={i}
+        className={
+          part.toLowerCase().trim() === query?.toLowerCase().trim()
+            ? 'underline'
+            : ''
+        }
+      >
+        {part}
+      </span>
+    ));
+
   return (
     <Link to={url}>
       <div
@@ -39,27 +58,8 @@ const SearchResult = ({
         )}
         key={index}
       >
-        {type === SearchResultType.Course ? (
-          <Layers className='mr-2 dark:text-white' />
-        ) : (
-          <User className='mr-2 dark:text-white' />
-        )}
-        <span className='dark:text-gray-200'>
-          {text
-            .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
-            .map((part, i) => (
-              <span
-                key={i}
-                className={
-                  part.toLowerCase().trim() === query?.toLowerCase().trim()
-                    ? 'underline'
-                    : ''
-                }
-              >
-                {part}
-              </span>
-            ))}
-        </span>
+        {icon}
+        <span className='dark:text-gray-200'>{textWithMatchHighlight}</span>
       </div>
     </Link>
   );
@@ -135,7 +135,7 @@ export const CourseSearchBar = ({
               query={results.query}
               selectedIndex={selectedIndex}
               text={`${result._id} - ${result.title}`}
-              type={SearchResultType.Course}
+              type='course'
               url={`/course/${result._id}`}
               key={result._id}
             />
@@ -146,7 +146,7 @@ export const CourseSearchBar = ({
               query={results.query}
               selectedIndex={selectedIndex}
               text={result.name}
-              type={SearchResultType.Instructor}
+              type='instructor'
               url={`/instructor/${encodeURIComponent(result.name)}`}
               key={result.name + index}
             />
