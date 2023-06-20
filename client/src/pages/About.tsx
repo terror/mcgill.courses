@@ -6,37 +6,37 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from '../components/Layout';
 
+type QuestionAnswer = {
+  title: string;
+  content: JSX.Element | string;
+};
+
 type QuestionsAnswersProps = {
-  input: {
-    title: string;
-    content: JSX.Element | string;
-  }[];
+  input: QuestionAnswer[];
 };
 
 const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
-    <div className='max-w-l px-4 md:mx-16 lg:mx-28 xl:mx-48'>
-      <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
-        {input.map((item: { title: string; content: JSX.Element | string }) => (
-          <Disclosure as='div' key={item.title} className='w-full'>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className='mx-auto flex w-full justify-between rounded-lg bg-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus-visible:ring-opacity-75 dark:bg-neutral-700 dark:text-gray-300 dark:hover:bg-neutral-600'>
-                  <span>{item.title}</span>
-                  <IoIosArrowDown
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-gray-900 dark:text-gray-300`}
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
-                  {item.content}
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-      </div>
+    <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
+      {input.map((item: QuestionAnswer) => (
+        <Disclosure as='div' key={item.title} className='w-full'>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className='mx-auto flex w-full justify-between rounded-lg bg-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus-visible:ring-opacity-75 dark:bg-neutral-700 dark:text-gray-300 dark:hover:bg-neutral-600'>
+                <span>{item.title}</span>
+                <IoIosArrowDown
+                  className={`${
+                    open ? 'rotate-180 transform' : ''
+                  } h-5 w-5 text-gray-900 dark:text-gray-300`}
+                />
+              </Disclosure.Button>
+              <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
+                {item.content}
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
+      ))}
     </div>
   );
 };
@@ -104,7 +104,9 @@ export const About = () => {
           McGill community to ensure the resource remains valuable.
         </p>
         <Title>FAQ</Title>
-        <QuestionsAnswers input={questionsAnswers} />
+        <div className='px-4 md:mx-16 lg:mx-28 xl:mx-48'>
+          <QuestionsAnswers input={questionsAnswers} />
+        </div>
         <Title>Contact Us</Title>
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60 xl:mx-80'>
           If you have any questions or concerns, please reach out to us
