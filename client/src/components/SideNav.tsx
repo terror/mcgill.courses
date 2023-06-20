@@ -51,7 +51,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveTo='opacity-0'
           >
             <div className='fixed inset-0' onClick={() => onClose(false)}>
-              <div className='absolute inset-0 bg-gray-900 opacity-70'></div>
+              <div className='absolute inset-0 bg-black opacity-60'></div>
             </div>
           </Transition.Child>
           <Transition.Child
