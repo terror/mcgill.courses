@@ -1,4 +1,3 @@
-import { Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
@@ -12,6 +11,7 @@ import {
   uniqueTermInstructors,
 } from '../lib/utils';
 import { Course } from '../model/Course';
+import { Tooltip } from './Tooltip';
 
 const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 25;
@@ -33,14 +33,6 @@ const termToIcon = (term: string, variant: 'small' | 'large') => {
 type CourseTermsProps = {
   course: Course;
   variant: 'large' | 'small';
-};
-
-const ToolTip = ({ term }: { term: string }) => {
-  return (
-    <div className='absolute	 -top-1 left-0 z-10 w-28 -translate-x-0 -translate-y-full transform rounded-lg bg-white p-2 text-center text-xs font-bold text-gray-700 dark:bg-neutral-500 dark:text-gray-100'>
-      {term}
-    </div>
-  );
 };
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
@@ -94,7 +86,12 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
                   onMouseEnter={() => setHoveringOn(instructor.term)}
                   onMouseLeave={() => setHoveringOn('')}
                 >
-                  {termToIcon(instructor.term, variant)}
+                  <Tooltip
+                    show={hoveringOn === instructor.term}
+                    text={instructor.term}
+                  >
+                    <div>{termToIcon(instructor.term, variant)}</div>
+                  </Tooltip>
                 </div>
               ) : (
                 <div>{termToIcon(instructor.term, variant)}</div>
@@ -103,19 +100,6 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
                 {instructor.name}
               </div>
             </div>
-            <Transition
-              show={hoveringOn === instructor.term}
-              enter='transition-opacity duration-200'
-              enterFrom='opacity-0'
-              enterTo='opacity-100'
-              leave='transition-opacity duration-200'
-              leaveFrom='opacity-100'
-              leaveTo='opacity-0'
-            >
-              <div>
-                <ToolTip term={instructor.term} />
-              </div>
-            </Transition>
           </div>
         </Link>
       ))}
