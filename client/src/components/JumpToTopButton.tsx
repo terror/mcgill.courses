@@ -4,10 +4,8 @@ import { FaArrowUp } from 'react-icons/fa';
 export const JumpToTopButton = () => {
   const [visible, setVisible] = useState(false);
 
-  const toggleVisible = () => {
-    if (window.scrollY > 300) setVisible(true);
-    else setVisible(false);
-  };
+  const toggleVisible = () =>
+    window.scrollY > 300 ? setVisible(true) : setVisible(false);
 
   const scrollToTop = () => {
     window.scrollTo({
