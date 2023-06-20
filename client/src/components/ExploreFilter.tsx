@@ -2,9 +2,9 @@ import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { RefreshCw } from 'react-feather';
 import { GoX } from 'react-icons/go';
+import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
-import { classNames } from '../lib/utils';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
@@ -228,7 +228,7 @@ export const ExploreFilter = ({
 }: ExploreFilterProp) => {
   return (
     <div
-      className={classNames(
+      className={twMerge(
         variant === 'mobile' ? 'mx-auto w-full' : 'ml-5 w-96 ',
         'm-2 flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'
       )}

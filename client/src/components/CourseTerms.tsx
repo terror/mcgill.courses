@@ -1,17 +1,17 @@
-import {
-  classNames,
-  filterCurrentInstructors,
-  uniqueTermInstructors,
-  getCurrentTerms,
-} from '../lib/utils';
-
+import { Transition } from '@headlessui/react';
+import { useState } from 'react';
 import { BsSun } from 'react-icons/bs';
-import { Course } from '../model/Course';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { GoX } from 'react-icons/go';
 import { Link } from 'react-router-dom';
-import { Transition } from '@headlessui/react';
-import { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+
+import {
+  filterCurrentInstructors,
+  getCurrentTerms,
+  uniqueTermInstructors,
+} from '../lib/utils';
+import { Course } from '../model/Course';
 
 const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 25;
@@ -46,7 +46,7 @@ const ToolTip = ({ term }: { term: string }) => {
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
   const [hoveringOn, setHoveringOn] = useState('');
 
-  const container = classNames('flex flex-wrap mr-auto');
+  const container = twMerge('flex flex-wrap mr-auto');
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
   const currentlyOfferedTerms = course.terms.filter((c) =>
     getCurrentTerms().includes(c)
@@ -56,7 +56,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
     return (
       <div className={container}>
         <div
-          className={classNames(
+          className={twMerge(
             'rounded-xl bg-gray-100 dark:bg-neutral-700',
             variant === 'small' ? 'px-2 py-1' : 'p-2'
           )}
@@ -74,7 +74,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
       {instructors.map((instructor, i) => (
         <Link
           key={i}
-          className={classNames(
+          className={twMerge(
             instructor.name === 'No Instructor Assigned'
               ? 'pointer-events-none'
               : ''
@@ -83,7 +83,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
         >
           <div
             key={i}
-            className={classNames(
+            className={twMerge(
               'relative my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
               variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 max-w-fit p-2'
             )}

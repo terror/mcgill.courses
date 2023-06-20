@@ -1,9 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { Trash2 } from 'react-feather';
+import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames } from '../lib/utils';
 
 type DeleteButtonProps = {
   title: string;
@@ -39,7 +39,7 @@ export const DeleteButton = ({
       <Transition appear show={open} as={Fragment}>
         <Dialog
           as='div'
-          className={classNames('relative z-50', darkMode ? 'dark' : '')}
+          className={twMerge('relative z-50', darkMode ? 'dark' : '')}
           onClose={() => setOpen(false)}
         >
           <Transition.Child

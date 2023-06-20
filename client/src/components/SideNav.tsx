@@ -3,10 +3,10 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames } from '../lib/utils';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
@@ -36,7 +36,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
     <Transition appear show={open}>
       <Overlay>
         <div
-          className={classNames(
+          className={twMerge(
             'fixed inset-0 z-50 flex items-end justify-end',
             darkMode ? 'dark' : ''
           )}

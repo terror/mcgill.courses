@@ -1,10 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { fetchClient } from '../lib/fetchClient';
-import { classNames } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { ReviewForm, ReviewSchema } from './ReviewForm';
@@ -37,7 +37,7 @@ export const EditReviewForm = ({
     <Transition appear show={open} as={Fragment}>
       <Dialog
         as='div'
-        className={classNames('relative z-50', darkMode ? 'dark' : '')}
+        className={twMerge('relative z-50', darkMode ? 'dark' : '')}
         onClose={onClose}
       >
         <Transition.Child

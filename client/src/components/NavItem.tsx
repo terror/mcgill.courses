@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { classNames } from '../lib/utils';
+import { twMerge } from 'tailwind-merge';
 
 type NavItemProps = {
   name: string;
@@ -13,11 +13,11 @@ export const NavItem = ({ name, href }: NavItemProps) => {
   return (
     <Link
       to={href}
-      className={classNames(
+      className={twMerge(
         'relative text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200',
         location.pathname === href
           ? redUnderlineStyle
-          : classNames(
+          : twMerge(
               redUnderlineStyle,
               'before:origin-top-left before:scale-x-0 before:transition before:duration-300 before:ease-in-out before:hover:scale-x-100'
             )

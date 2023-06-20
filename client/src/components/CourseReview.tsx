@@ -1,18 +1,19 @@
-import { AiFillDislike, AiFillLike } from 'react-icons/ai';
-import { Alert } from './Alert';
-import { DeleteButton } from './DeleteButton';
-import { Edit } from 'react-feather';
+import { Transition } from '@headlessui/react';
+import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
+import { Edit } from 'react-feather';
+import { AiFillDislike, AiFillLike } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+
+import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../lib/fetchClient';
 import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
-import { Link } from 'react-router-dom';
 import { Review } from '../model/Review';
+import { Alert } from './Alert';
+import { DeleteButton } from './DeleteButton';
 import { StarRating } from './StarRating';
-import { classNames } from '../lib/utils';
-import { fetchClient } from '../lib/fetchClient';
-import { format } from 'date-fns';
-import { useAuth } from '../hooks/useAuth';
-import { Transition } from '@headlessui/react';
 
 const LoginPrompt = () => {
   return (
@@ -116,7 +117,7 @@ const ReviewInteractions = ({
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <AiFillLike
             onClick={handleLike}
-            className={classNames(
+            className={twMerge(
               'h-4 w-4 cursor-pointer',
               kind === 'like' ? 'fill-red-600' : ''
             )}
@@ -128,7 +129,7 @@ const ReviewInteractions = ({
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <AiFillDislike
             onClick={handleDislike}
-            className={classNames(
+            className={twMerge(
               'h-4 w-4 cursor-pointer',
               kind === 'dislike' ? 'fill-red-600' : ''
             )}
@@ -167,7 +168,7 @@ export const CourseReview = ({
 
   return (
     <div
-      className={classNames(
+      className={twMerge(
         isLast ? 'mb-8' : 'mb-4',
         'relative flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
       )}

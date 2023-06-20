@@ -2,10 +2,6 @@ import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import { Schedule } from '../model/Schedule';
 
-export const classNames = (...classes: string[]) => {
-  return classes.filter(Boolean).join(' ');
-};
-
 export const uniqueTermInstructors = (course: Course) => {
   const termInstructors = course.instructors.filter((i) =>
     course.terms.includes(i.term)

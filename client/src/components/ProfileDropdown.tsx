@@ -1,8 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { User } from 'react-feather';
-
-import { classNames } from '../lib/utils';
+import { twMerge } from 'tailwind-merge';
 
 export const ProfileDropdown = () => {
   return (
@@ -27,7 +26,7 @@ export const ProfileDropdown = () => {
               {({ active }) => (
                 <a
                   href='/profile'
-                  className={classNames(
+                  className={twMerge(
                     active
                       ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200'
                       : 'text-gray-700 dark:bg-neutral-800 dark:text-gray-200',
@@ -44,7 +43,7 @@ export const ProfileDropdown = () => {
                   href={`${import.meta.env.VITE_API_URL}/auth/logout?redirect=${
                     window.location.origin
                   }`}
-                  className={classNames(
+                  className={twMerge(
                     active
                       ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200'
                       : 'text-gray-700 dark:bg-neutral-800 dark:text-gray-200',

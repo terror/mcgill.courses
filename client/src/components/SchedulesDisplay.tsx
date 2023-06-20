@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
+import { twMerge } from 'tailwind-merge';
 
 import {
-  classNames,
   dedupe,
   dedupeSchedulesByBlocks,
   sortSchedulesByBlocks,
@@ -97,7 +97,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       {schedule.blocks?.map((block: Block, blockIndex) => (
         <div key={blockIndex} className='flex flex-col'>
           <div
-            className={classNames(
+            className={twMerge(
               'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-10 dark:border-neutral-600'
             )}
           >
@@ -173,7 +173,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
         {offeredTerms.map((term, i) => (
           <button
             key={i}
-            className={classNames(
+            className={twMerge(
               `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
                 ? 'bg-slate-100 dark:bg-neutral-700'

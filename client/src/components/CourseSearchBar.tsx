@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
-import { classNames } from '../lib/utils';
 import { SearchResults } from '../model/SearchResults';
 
 enum SearchResultType {
@@ -31,7 +31,7 @@ const SearchResult = ({
   return (
     <Link to={url}>
       <div
-        className={classNames(
+        className={twMerge(
           'flex cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
           selectedIndex === index
             ? 'bg-gray-100 dark:bg-neutral-700'
@@ -110,7 +110,7 @@ export const CourseSearchBar = ({
         <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
           <Search
             size={20}
-            className={classNames(
+            className={twMerge(
               'transition duration-200',
               searchSelected ? 'stroke-red-600' : 'stroke-gray-400'
             )}
