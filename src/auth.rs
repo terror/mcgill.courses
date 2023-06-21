@@ -32,7 +32,6 @@ struct AccessTokenResponse {
   access_token: String,
   expires_in: u64,
   ext_expires_in: u64,
-  refresh_token: String,
   scope: String,
   token_type: String,
 }
@@ -76,7 +75,7 @@ pub(crate) async fn login_authorized(
         .redirect_url()
         .expect("Missing redirect url"),
     ),
-    ("scope", &"User.Read Mail.Read".into()),
+    ("scope", &"User.Read".into()),
   ];
 
   let response = state
