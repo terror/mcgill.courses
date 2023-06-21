@@ -1,0 +1,24 @@
+previewsEnabled: true
+
+services:
+  - type: web
+    name: mcgill.courses
+    runtime: docker
+    repo: https://github.com/terror/mcgill.courses.git
+    branch: master
+    envVars:
+      - key: MONGODB_URL
+        sync: false
+        fromService:
+          type: web
+          name: mcgill.courses
+          envVarKey: MONGODB_URL
+
+      - key: RUST_LOG
+        sync: false
+        fromService:
+          type: web
+          name: mcgill.courses
+          envVarKey: RUST_LOG
+
+      - fromGroup: development
