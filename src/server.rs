@@ -1,5 +1,3 @@
-use tower_http::services::ServeFile;
-
 use super::*;
 
 #[derive(Parser)]
