@@ -26,6 +26,17 @@ pub struct LogoutRequest {
   redirect: String,
 }
 
+#[derive(Debug, Deserialize)]
+#[allow(unused)]
+struct AccessTokenResponse {
+  access_token: String,
+  expires_in: u64,
+  ext_expires_in: u64,
+  refresh_token: String,
+  scope: String,
+  token_type: String,
+}
+
 pub(crate) async fn microsoft_auth(
   Query(query): Query<LoginRequest>,
   AppState(client): AppState<BasicClient>,
@@ -49,22 +60,41 @@ pub(crate) async fn microsoft_auth(
 
 pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
-  AppState(oauth_client): AppState<BasicClient>,
-  AppState(request_client): AppState<reqwest::Client>,
-  AppState(session_store): AppState<MongodbSessionStore>,
+  AppState(state): AppState<State>,
 ) -> Result<impl IntoResponse> {
   debug!("Fetching token from oauth client...");
 
-  let token = oauth_client
-    .exchange_code(AuthorizationCode::new(query.code.clone()))
-    .request_async(async_http_client)
+  let params = [
+    ("client_id", &state.oauth_client.client_id().to_string()),
+    ("client_secret", &state.client_secret),
+    ("code", &query.code),
+    ("grant_type", &"authorization_code".into()),
+    (
+      "redirect_uri",
+      state
+        .oauth_client
+        .redirect_url()
+        .expect("Missing redirect url"),
+    ),
+    ("scope", &"User.Read Mail.Read".into()),
+  ];
+
+  let response = state
+    .request_client
+    .post("https://login.microsoftonline.com/organizations/oauth2/v2.0/token")
+    .form(&params)
+    .header("Accept", "application/x-www-form-urlencoded")
+    .send()
+    .await?
+    .json::<AccessTokenResponse>()
     .await?;
 
   debug!("Fetching user data from Microsoft...");
 
-  let user: User = request_client
+  let user: User = state
+    .request_client
     .get("https://graph.microsoft.com/v1.0/me")
-    .bearer_auth(token.access_token().secret())
+    .bearer_auth(response.access_token)
     .send()
     .await?
     .json()
@@ -98,7 +128,8 @@ pub(crate) async fn login_authorized(
     format!(
       "{}={}; SameSite=Lax; Path=/",
       COOKIE_NAME,
-      session_store
+      state
+        .session_store
         .store_session(session)
         .await?
         .ok_or(anyhow!("Failed to store session"))?
