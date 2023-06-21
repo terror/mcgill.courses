@@ -1,8 +1,0 @@
-default:
-  just --list
-
-fmt:
-  isort . && yapf --in-place --recursive .
-
-run:
-  python3 main.py
