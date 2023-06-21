@@ -13,12 +13,10 @@ services:
           type: web
           name: mcgill.courses
           envVarKey: MONGODB_URL
-
       - key: RUST_LOG
         sync: false
         fromService:
           type: web
           name: mcgill.courses
           envVarKey: RUST_LOG
-
       - fromGroup: development
