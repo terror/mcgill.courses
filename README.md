@@ -26,8 +26,8 @@ initialize the database:
 $ cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
 ```
 
-Refer to `.env.example` and `client/.env.example` for what environment variables
-need to be set.
+Refer to `.env.dev.example` and `client/.env.dev.example` for what environment
+variables need to be set.
 
 _n.b._ The server command-line interface provides a load subcommand for scraping
 all courses from various McGill course information websites and building a JSON
@@ -75,3 +75,16 @@ Finally, spawn the react frontend:
 $ npm install
 $ npm run dev
 ```
+
+### Prior Art
+
+There are a few notable projects worth mentioning that are similar in nature to
+[mcgill.courses](https://mcgill.courses), and have either led to inspiration or
+new ideas with regard to its functionality and design, namely:
+
+- [uwflow.com](https://uwflow.com/) - A course search and review platform for
+  the University of Waterloo
+- [cloudberry.fyi](https://www.cloudberry.fyi/) - A post-modern schedule builder
+  for McGill students
+- [mcgill.wtf](https://mcgill.wtf/) - A fast full-text search engine for McGill
+  courses
