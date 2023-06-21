@@ -13,13 +13,13 @@ import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
+import { Loading } from './Loading';
 
 export const CoursePage = () => {
   const [allReviews, setAllReviews] = useState<Review[]>([]);
@@ -68,15 +68,7 @@ export const CoursePage = () => {
   }
 
   if (course === undefined || showingReviews === undefined) {
-    return (
-      <Layout>
-        <div className='flex min-h-screen items-center justify-center'>
-          <div className='text-center'>
-            <Spinner />
-          </div>
-        </div>
-      </Layout>
-    );
+    return <Loading />;
   }
 
   if (course.terms.some((term) => !currentTerms.includes(term))) {
