@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { User } from 'react-feather';
 
-import { classNames } from '../lib/utils';
+import { classNames, getUrl } from '../lib/utils';
 
 export const ProfileDropdown = () => {
   return (
@@ -41,7 +41,7 @@ export const ProfileDropdown = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href={`${import.meta.env.VITE_API_URL}/auth/logout?redirect=${
+                  href={`${getUrl()}/api/auth/logout?redirect=${
                     window.location.origin
                   }`}
                   className={classNames(

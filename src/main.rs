@@ -1,6 +1,7 @@
 use {
   crate::{
     arguments::Arguments,
+    assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
     loader::Loader,
@@ -24,9 +25,7 @@ use {
     },
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
-    routing::get,
-    routing::post,
-    routing::Router,
+    routing::{get, post, Router},
     Json, RequestPartsExt,
   },
   base64::{engine::general_purpose::STANDARD, Engine},
@@ -61,11 +60,15 @@ use {
     thread,
     time::Duration,
   },
-  tower_http::cors::CorsLayer,
+  tower_http::{
+    cors::CorsLayer,
+    services::{ServeDir, ServeFile},
+  },
   url::Url,
 };
 
 mod arguments;
+mod assets;
 mod auth;
 mod courses;
 mod error;

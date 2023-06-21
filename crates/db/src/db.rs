@@ -12,9 +12,13 @@ impl Db {
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
-    let mut client_options =
-      ClientOptions::parse(format!("mongodb://localhost:27017/{}", db_name))
-        .await?;
+    let mut client_options = ClientOptions::parse(format!(
+      "{}/{}",
+      env::var("MONGODB_URL")
+        .unwrap_or_else(|_| "mongodb://localhost:27017".into()),
+      db_name
+    ))
+    .await?;
 
     client_options.app_name = Some(db_name.to_string());
 
@@ -104,25 +108,7 @@ impl Db {
     self.find_course(doc! { "_id": id }).await
   }
 
-  pub async fn add_review(&self, review: Review) -> Result<InsertOneResult> {
-    if self
-      .find_review(&review.course_id, &review.user_id)
-      .await?
-      .is_some()
-    {
-      Err(anyhow!("Cannot review this course twice"))
-    } else {
-      Ok(
-        self
-          .database
-          .collection::<Review>(Self::REVIEW_COLLECTION)
-          .insert_one(review, None)
-          .await?,
-      )
-    }
-  }
-
-  pub async fn update_review(&self, review: Review) -> Result<UpdateResult> {
+  pub async fn add_review(&self, review: Review) -> Result<UpdateResult> {
     Ok(
       self
         .database
@@ -135,12 +121,13 @@ impl Db {
           UpdateModifications::Document(doc! {
             "$set": {
               "content": &review.content,
+              "difficulty": review.difficulty,
               "instructors": &review.instructors,
               "rating": review.rating,
               "timestamp": review.timestamp
             },
           }),
-          None,
+          UpdateOptions::builder().upsert(true).build(),
         )
         .await?,
     )
@@ -1058,9 +1045,11 @@ mod tests {
       ..Default::default()
     };
 
-    db.add_review(review.clone()).await.unwrap();
+    for _ in 0..10 {
+      db.add_review(review.clone()).await.unwrap();
+    }
 
-    assert!(db.add_review(review).await.is_err());
+    assert_eq!(db.reviews().await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -1082,7 +1071,7 @@ mod tests {
     let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
 
     assert_eq!(
-      db.update_review(Review {
+      db.add_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
         instructors: vec![String::from("foo")],
@@ -1098,7 +1087,7 @@ mod tests {
     );
 
     assert_eq!(
-      db.update_review(Review {
+      db.add_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
         instructors: vec![String::from("foo")],
