@@ -40,9 +40,8 @@ use {
     Review, Schedule,
   },
   oauth2::{
-    basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
-    AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
-    TokenResponse, TokenUrl,
+    basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
+    RedirectUrl, Scope, TokenUrl,
   },
   rayon::prelude::*,
   reqwest::blocking::RequestBuilder,
