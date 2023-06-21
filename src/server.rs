@@ -2,6 +2,8 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Server {
+  #[clap(long, help = "Directory to serve assets from")]
+  asset_dir: Option<PathBuf>,
   #[clap(long, default_value = "8000", help = "Port to listen on")]
   port: u16,
   #[clap(long, default_value = "admin", help = "Database name")]
@@ -16,9 +18,9 @@ pub(crate) struct Server {
 
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
-    let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
+    let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
-    debug!("Listening on port: {}", addr.port());
+    info!("Listening on port: {}", addr.port());
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
@@ -39,8 +41,14 @@ impl Server {
       });
     }
 
+    let assets = self.asset_dir.as_ref().map(|asset_dir| Assets {
+      dir: ServeDir::new(asset_dir.clone()),
+      index: ServeFile::new(asset_dir.join("index.html")),
+      route: "/assets",
+    });
+
     axum_server::Server::bind(addr)
-      .serve(Self::app(db, None).await?.into_make_service())
+      .serve(Self::app(db, assets, None).await?.into_make_service())
       .await?;
 
     Ok(())
@@ -48,32 +56,43 @@ impl Server {
 
   async fn app(
     db: Arc<Db>,
+    assets: Option<Assets<'_>>,
     session_store: Option<MongodbSessionStore>,
   ) -> Result<Router> {
+    let mut router = Router::new()
+      .route("/api/auth/authorized", get(auth::login_authorized))
+      .route("/api/auth/login", get(auth::microsoft_auth))
+      .route("/api/auth/logout", get(auth::logout))
+      .route("/api/courses", post(courses::get_courses))
+      .route("/api/courses/:id", get(courses::get_course_by_id))
+      .route("/api/instructors/:name", get(instructors::get_instructor))
+      .route(
+        "/api/interactions",
+        get(interactions::get_interactions)
+          .post(interactions::add_interaction)
+          .delete(interactions::remove_interaction),
+      )
+      .route(
+        "/api/reviews",
+        get(reviews::get_reviews)
+          .delete(reviews::delete_review)
+          .post(reviews::add_review)
+          .put(reviews::update_review),
+      )
+      .route("/api/reviews/:id", get(reviews::get_review))
+      .route("/api/search", get(search::search))
+      .route("/api/user", get(user::get_user));
+
+    if let Some(assets) = assets {
+      info!("Adding asset directory to router...");
+
+      router = router
+        .nest_service(assets.route, assets.dir)
+        .fallback_service(assets.index)
+    }
+
     Ok(
-      Router::new()
-        .route("/auth/authorized", get(auth::login_authorized))
-        .route("/auth/login", get(auth::microsoft_auth))
-        .route("/auth/logout", get(auth::logout))
-        .route("/courses", post(courses::get_courses))
-        .route("/courses/:id", get(courses::get_course_by_id))
-        .route("/instructors/:name", get(instructors::get_instructor))
-        .route(
-          "/interactions",
-          get(interactions::get_interactions)
-            .post(interactions::add_interaction)
-            .delete(interactions::remove_interaction),
-        )
-        .route(
-          "/reviews",
-          get(reviews::get_reviews)
-            .delete(reviews::delete_review)
-            .post(reviews::add_review)
-            .put(reviews::update_review),
-        )
-        .route("/reviews/:id", get(reviews::get_review))
-        .route("/search", get(search::search))
-        .route("/user", get(user::get_user))
+      router
         .with_state(State::new(db, session_store).await?)
         .layer(CorsLayer::very_permissive()),
     )
@@ -128,7 +147,7 @@ mod tests {
       .await
       .unwrap();
 
-      let app = Server::app(db.clone(), Some(session_store.clone()))
+      let app = Server::app(db.clone(), None, Some(session_store.clone()))
         .await
         .unwrap();
 
@@ -196,7 +215,7 @@ mod tests {
       .oneshot(
         Request::builder()
           .method(Method::POST)
-          .uri("/courses")
+          .uri("/api/courses")
           .header("Content-Type", "application/json")
           .body(Body::from(body.to_string()))
           .unwrap(),
@@ -233,7 +252,7 @@ mod tests {
       .oneshot(
         Request::builder()
           .method(Method::POST)
-          .uri("/courses?limit=10&offset=40")
+          .uri("/api/courses?limit=10&offset=40")
           .header("Content-Type", "application/json")
           .body(Body::from(body.to_string()))
           .unwrap(),
@@ -266,7 +285,7 @@ mod tests {
       .oneshot(
         Request::builder()
           .method(Method::POST)
-          .uri("/courses?limit=-10&offset=-10")
+          .uri("/api/courses?limit=-10&offset=-10")
           .header("Content-Type", "application/json")
           .body(Body::from(body.to_string()))
           .unwrap(),
@@ -291,7 +310,7 @@ mod tests {
     let response = app
       .oneshot(
         Request::builder()
-          .uri("/courses/COMP202")
+          .uri("/api/courses/COMP202")
           .body(Body::empty())
           .unwrap(),
       )
@@ -320,7 +339,7 @@ mod tests {
     let response = app
       .oneshot(
         Request::builder()
-          .uri("/courses/COMP1337")
+          .uri("/api/courses/COMP1337")
           .body(Body::empty())
           .unwrap(),
       )
@@ -347,7 +366,7 @@ mod tests {
       .oneshot(
         Request::builder()
           .method(http::Method::POST)
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(
             json!({"content": "test", "course_id": "MATH240"}).to_string(),
           ))
@@ -393,7 +412,7 @@ mod tests {
             mock_login(session_store, "test", "test@mail.mcgill.ca").await,
           )
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(review))
           .unwrap(),
       )
@@ -439,7 +458,7 @@ mod tests {
             mock_login(session_store, "test", "test@mail.mcgill.ca").await,
           )
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(review))
           .unwrap(),
       )
@@ -482,7 +501,7 @@ mod tests {
           .method(http::Method::POST)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(review))
           .unwrap(),
       )
@@ -498,7 +517,7 @@ mod tests {
           .method(http::Method::DELETE)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(json!({"course_id": "MATH240"}).to_string()))
           .unwrap(),
       )
@@ -542,7 +561,7 @@ mod tests {
           .method(http::Method::POST)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(review))
           .unwrap(),
       )
@@ -564,7 +583,7 @@ mod tests {
           .method(http::Method::PUT)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(review))
           .unwrap(),
       )
@@ -630,7 +649,7 @@ mod tests {
             .method(http::Method::POST)
             .header("Cookie", cookie.clone())
             .header("Content-Type", "application/json")
-            .uri("/reviews")
+            .uri("/api/reviews")
             .body(Body::from(review.to_string()))
             .unwrap(),
         )
@@ -647,7 +666,7 @@ mod tests {
             mock_login(session_store, "test2", "test2@mail.mcgill.ca").await,
           )
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(
             json!({"content": "test4", "course_id": "COMP202"}).to_string(),
           ))
@@ -660,7 +679,7 @@ mod tests {
       .call(
         Request::builder()
           .method(http::Method::GET)
-          .uri("/reviews?user_id=test")
+          .uri("/api/reviews?user_id=test")
           .body(Body::empty())
           .unwrap(),
       )
@@ -716,7 +735,7 @@ mod tests {
             .method(http::Method::POST)
             .header("Cookie", cookie.clone())
             .header("Content-Type", "application/json")
-            .uri("/reviews")
+            .uri("/api/reviews")
             .body(Body::from(review.to_string()))
             .unwrap(),
         )
@@ -728,7 +747,7 @@ mod tests {
       .call(
         Request::builder()
           .method(http::Method::GET)
-          .uri("/reviews?course_id=MATH240")
+          .uri("/api/reviews?course_id=MATH240")
           .body(Body::empty())
           .unwrap(),
       )
@@ -772,7 +791,7 @@ mod tests {
           .method(http::Method::POST)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/reviews")
+          .uri("/api/reviews")
           .body(Body::from(review))
           .unwrap(),
       )
@@ -787,7 +806,7 @@ mod tests {
           .method(http::Method::GET)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .uri("/api/interactions?course_id=MATH240&user_id=test&referrer=test")
           .body(Body::empty())
           .unwrap(),
       )
@@ -816,7 +835,7 @@ mod tests {
           .method(http::Method::POST)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/interactions")
+          .uri("/api/interactions")
           .body(Body::from(interaction))
           .unwrap(),
       )
@@ -839,7 +858,7 @@ mod tests {
           .method(http::Method::GET)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .uri("/api/interactions?course_id=MATH240&user_id=test&referrer=test")
           .body(Body::empty())
           .unwrap(),
       )
@@ -869,7 +888,7 @@ mod tests {
           .method(http::Method::DELETE)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/interactions")
+          .uri("/api/interactions")
           .body(Body::from(interaction))
           .unwrap(),
       )
@@ -892,7 +911,7 @@ mod tests {
           .method(http::Method::GET)
           .header("Cookie", cookie.clone())
           .header("Content-Type", "application/json")
-          .uri("/interactions?course_id=MATH240&user_id=test&referrer=test")
+          .uri("/api/interactions?course_id=MATH240&user_id=test&referrer=test")
           .body(Body::empty())
           .unwrap(),
       )

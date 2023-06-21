@@ -68,3 +68,7 @@ export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
       : order.indexOf(aType) - order.indexOf(bType);
   });
 };
+
+export const getUrl = (): string => {
+  return import.meta.env.VITE_API_URL ?? '';
+};

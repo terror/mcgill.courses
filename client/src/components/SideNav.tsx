@@ -5,8 +5,10 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
+import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { getUrl } from '../lib/utils';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
@@ -67,7 +69,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
                   <Link to='/' className=''>
-                    <img className='h-8 w-auto' src='/bird.png' alt='' />
+                    <img className='h-8 w-auto' src={birdImageUrl} alt='bird' />
                   </Link>
                   <div className='ml-6'>
                     <DarkModeToggle />
@@ -105,9 +107,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                           Profile
                         </Link>
                         <a
-                          href={`${
-                            import.meta.env.VITE_API_URL
-                          }/auth/logout?redirect=${window.location.origin}`}
+                          href={`${getUrl()}/api/auth/logout?redirect=${
+                            window.location.origin
+                          }`}
                           className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                         >
                           Log out
@@ -115,9 +117,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                       </>
                     ) : (
                       <a
-                        href={`${
-                          import.meta.env.VITE_API_URL
-                        }/auth/login?redirect=${window.location.href}`}
+                        href={`${getUrl()}/api/auth/login?redirect=${
+                          window.location.href
+                        }`}
                         className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                       >
                         Log in
