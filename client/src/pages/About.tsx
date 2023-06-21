@@ -78,11 +78,10 @@ const questionsAnswers = [
 
 const Title = ({ title }: { title: string }) => {
   return (
-    <div className='mt-10'>
+    <div className='mb-5 mt-10'>
       <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
         {title}
       </h1>
-      <hr className='mx-auto my-5 w-32 border-gray-200 text-4xl' />
     </div>
   );
 };
@@ -90,7 +89,7 @@ const Title = ({ title }: { title: string }) => {
 export const About = () => {
   return (
     <Layout>
-      <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle '>
+      <div className='mx-4 my-auto mb-10 flex flex-col justify-center text-center align-middle '>
         <Title title='About Us' />
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 md:mx-16 lg:mx-40'>
           {' '}
@@ -105,7 +104,8 @@ export const About = () => {
         <Title title='Contact Us' />
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60 xl:mx-80'>
           {' '}
-          If you have any questions or concerns, please reach out to us
+          If you have any questions or concerns, don't hesitate to reeach out to
+          us!
         </p>
         <div className='m-2 flex justify-center'>
           <a href='https://www.github.com/terror/mcgill.courses'>

@@ -25,10 +25,9 @@ export const Profile = () => {
       <div className='flex flex-col justify-center'>
         <div className='mx-auto'>
           <div className='mt-10'>
-            <h1 className='mb-auto text-center text-4xl font-bold text-gray-700 dark:text-gray-200'>
+            <h1 className='mb-5 text-center text-4xl font-bold text-gray-700 dark:text-gray-200'>
               Your Reviews
             </h1>
-            <hr className='mx-auto my-5 w-32 border-gray-200 text-4xl' />
           </div>
           <div className='py- mx-5 mb-4 flex h-fit max-w-xl flex-col flex-wrap rounded-lg p-4'>
             {userReviews === undefined ? (
