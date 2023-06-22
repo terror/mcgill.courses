@@ -1,10 +1,10 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
-import { RefreshCw } from 'react-feather';
 import { GoX } from 'react-icons/go';
 
 import courseCodes from '../assets/courseCodes.json';
 import { classNames } from '../lib/utils';
+import { ResetButton } from './ResetButton';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
@@ -193,30 +193,6 @@ const SelectedCourseCodes = ({
   ) : null;
 };
 
-const ClearButton = ({
-  setSelectedSubjects,
-  setSelectedLevels,
-  setSelectedTerms,
-}: {
-  setSelectedSubjects: (selected: string[]) => void;
-  setSelectedLevels: (selected: string[]) => void;
-  setSelectedTerms: (selected: string[]) => void;
-}) => {
-  return (
-    <div className='ml-auto mr-10 mt-10 flex h-8 w-8 items-center justify-center rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-neutral-700'>
-      <button
-        onClick={() => {
-          setSelectedSubjects([]);
-          setSelectedLevels([]);
-          setSelectedTerms([]);
-        }}
-      >
-        <RefreshCw className={'h-5 w-5 text-gray-700 dark:text-neutral-200'} />
-      </button>
-    </div>
-  );
-};
-
 export const ExploreFilter = ({
   selectedSubjects,
   setSelectedSubjects,
@@ -229,16 +205,19 @@ export const ExploreFilter = ({
   return (
     <div
       className={classNames(
-        variant === 'mobile' ? 'mx-auto w-full' : 'ml-5 w-96 ',
+        variant === 'mobile' ? 'mx-auto w-full' : 'ml-2 w-96 ',
         'm-2 flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
       <div className='flex flex-row'>
         <h1 className='m-10 mb-2 text-2xl font-semibold'>Filter</h1>
-        <ClearButton
-          setSelectedSubjects={setSelectedSubjects}
-          setSelectedLevels={setSelectedLevels}
-          setSelectedTerms={setSelectedTerms}
+        <ResetButton
+          className='ml-auto mr-10 mt-10'
+          onClear={() => {
+            setSelectedSubjects([]);
+            setSelectedLevels([]);
+            setSelectedTerms([]);
+          }}
         />
       </div>
       <div className='m-10 my-5'>
