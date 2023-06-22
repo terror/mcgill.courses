@@ -56,12 +56,15 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
 
   const [currrentlyDisplayingCourse, setCurrentlyDisplayingCourse] =
     useState<string>(course._id);
+
   const [currentlyDisplayingTerm, setCurrentlyDisplayingTerm] =
     useState<string>(offeredTerms[0]);
+
   const [currentlyDisplayingSchedules, setCurrentlyDisplayingSchedules] =
     useState<Schedule[]>(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
+
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
   const [showAll, setShowAll] = useState(false);
 
@@ -89,6 +92,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
     setCurrentlyDisplayingSchedules(
       sortSchedulesByBlocks(dedupeSchedulesByBlocks(uniqueTimeSlots))
     );
+
     setOpenBlock(null);
   }, [currentlyDisplayingTerm]);
 

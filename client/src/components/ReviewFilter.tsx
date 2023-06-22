@@ -6,6 +6,7 @@ import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
 import { MultiSelect } from './MultiSelect';
+import { ResetButton } from './ResetButton';
 
 const sortTypes = [
   'Most Recent',
@@ -146,7 +147,18 @@ export const ReviewFilter = ({
 
   return (
     <div className='flex flex-col space-y-4 rounded-lg bg-slate-50 p-8 dark:bg-neutral-800 dark:text-gray-200'>
-      <h1 className='text-xl font-bold'>Filter</h1>
+      <div className='flex flex-row'>
+        <h1 className='mb-2 text-2xl font-semibold'>Filter</h1>
+        <ResetButton
+          className='ml-auto'
+          onClear={() => {
+            setSortBy('Most Recent');
+            setSelectedInstructors([]);
+            setSelectedRatings([]);
+            setSelectedDifficulties([]);
+          }}
+        />
+      </div>
       <div>
         <h2 className='mb-2 text-sm font-semibold'>Sort by</h2>
         <div className='relative z-20'>
