@@ -68,7 +68,7 @@ const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
             onToggle={toggleRating(x)}
             toggled={ratings.includes(x)}
           />
-          <div className='-mt-1 text-center text-xs font-bold'>{x}</div>
+          <div className='text-center text-xs font-bold'>{x}</div>
         </div>
       ))}
     </div>
@@ -167,21 +167,19 @@ export const ReviewFilter = ({
           />
         </div>
       </div>
-      <div className='flex flex-wrap gap-x-8 gap-y-4'>
-        <div>
-          <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
-          <RatingFilter
-            ratings={selectedRatings}
-            setRatings={setSelectedRatings}
-          />
-        </div>
-        <div>
-          <h2 className='mb-2 text-sm font-semibold'>Difficulty</h2>
-          <RatingFilter
-            ratings={selectedDifficulties}
-            setRatings={setSelectedDifficulties}
-          />
-        </div>
+      <div>
+        <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
+        <RatingFilter
+          ratings={selectedRatings}
+          setRatings={setSelectedRatings}
+        />
+      </div>
+      <div>
+        <h2 className='mb-2 text-sm font-semibold'>Difficulty</h2>
+        <RatingFilter
+          ratings={selectedDifficulties}
+          setRatings={setSelectedDifficulties}
+        />
       </div>
     </div>
   );
