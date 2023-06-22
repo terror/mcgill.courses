@@ -17,32 +17,30 @@ export const Explore = () => {
   const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(limit);
   const [error, setError] = useState(false);
   const [filterIsToggled, setFilterIsToggled] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(limit);
 
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
-  const reqBody = {
-    subjects: selectedSubjects.length === 0 ? null : selectedSubjects,
-    levels:
-      selectedLevels.length === 0
-        ? null
-        : selectedLevels.map((l) => l.charAt(0)),
-    terms:
-      selectedTerms.length === 0
-        ? null
-        : selectedTerms.map(
-            (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
-          ),
+  const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
+
+  const body = {
+    subjects: nullable(selectedSubjects),
+    levels: nullable(selectedLevels.map((l) => l.charAt(0))),
+    terms: nullable(
+      selectedTerms.map(
+        (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
+      )
+    ),
   };
 
   useEffect(() => {
     fetchClient
-      .postData<Course[]>(`/courses?limit=${limit}`, reqBody, {
+      .postData<Course[]>(`/courses?limit=${limit}`, body, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -56,7 +54,7 @@ export const Explore = () => {
   const fetchMore = async () => {
     const batch = await fetchClient.postData<Course[]>(
       `/courses?limit=${limit}&offset=${offset}`,
-      reqBody,
+      body,
       {
         headers: {
           'Content-Type': 'application/json',
