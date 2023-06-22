@@ -4,11 +4,34 @@ import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
 
+const Charts = ({
+  numReviews,
+  rating,
+  difficulty,
+}: {
+  numReviews?: number;
+  rating: number;
+  difficulty: number;
+}) => {
+  if (numReviews === undefined) return null;
+
+  return numReviews ? (
+    <>
+      <RatingInfo title={'Rating'} rating={rating} />
+      <RatingInfo title={'Difficulty'} rating={difficulty} />
+    </>
+  ) : (
+    <div className='w-[50%] text-left text-gray-700 dark:text-gray-200 md:text-center'>
+      No reviews have been left for this course yet. Be the first!
+    </div>
+  );
+};
+
 type CourseInfoProps = {
   course: Course;
   rating: number;
   difficulty: number;
-  numReviews: number;
+  numReviews?: number;
 };
 
 export const CourseInfo = ({
@@ -43,15 +66,10 @@ export const CourseInfo = ({
               {course.title}
             </h2>
             <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-              <RatingInfo
-                title={'Rating'}
+              <Charts
+                numReviews={numReviews}
                 rating={rating}
-                numReviews={numReviews}
-              />
-              <RatingInfo
-                title={'Difficulty'}
-                rating={difficulty}
-                numReviews={numReviews}
+                difficulty={difficulty}
               />
             </div>
             <CourseTerms course={course} variant='large' />
@@ -63,15 +81,10 @@ export const CourseInfo = ({
             </p>
           </div>
           <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-            <RatingInfo
-              title={'Rating'}
+            <Charts
+              numReviews={numReviews}
               rating={rating}
-              numReviews={numReviews}
-            />
-            <RatingInfo
-              title={'Difficulty'}
-              rating={difficulty}
-              numReviews={numReviews}
+              difficulty={difficulty}
             />
           </div>
         </div>

@@ -22,11 +22,13 @@ import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 
 export const CoursePage = () => {
-  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const params = useParams<{ id: string }>();
+
+  const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
   const [course, setCourse] = useState<Course>();
-  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
+
   const currentTerms = getCurrentTerms();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
@@ -36,6 +38,7 @@ export const CoursePage = () => {
   const [alertStatus, setAlertStatus] = useState<'success' | 'error' | null>(
     null
   );
+
   const [alertMessage, setAlertMessage] = useState('');
 
   const user = useAuth();
@@ -69,11 +72,13 @@ export const CoursePage = () => {
 
   if (course === undefined || showingReviews === undefined) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <Spinner />
+      <Layout>
+        <div className='flex min-h-screen items-center justify-center'>
+          <div className='text-center'>
+            <Spinner />
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
@@ -118,20 +123,25 @@ export const CoursePage = () => {
       { course_id: review.courseId },
       { headers: { 'Content-Type': 'application/json' } }
     );
+
     if (res.ok) {
       setShowingReviews(
         showingReviews.filter((r) => r.userId !== review.userId)
       );
     }
+
     handleSubmit('Review deleted successfully.')(res);
+
     localStorage.removeItem(course._id);
   };
 
-  const userReview = allReviews.find((r) => r.userId === user?.id);
+  const userReview = allReviews?.find((r) => r.userId === user?.id);
+
   const averageRating =
-    _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
+    _.sumBy(allReviews, (r) => r.rating) / (allReviews ?? []).length;
+
   const averageDifficulty =
-    _.sumBy(allReviews, (r) => r.difficulty) / allReviews.length;
+    _.sumBy(allReviews, (r) => r.difficulty) / (allReviews ?? []).length;
 
   return (
     <Layout>
@@ -139,7 +149,7 @@ export const CoursePage = () => {
         course={course}
         rating={averageRating}
         difficulty={averageDifficulty}
-        numReviews={allReviews.length}
+        numReviews={allReviews?.length}
       />
       <SchedulesDisplay course={course} />
       <div className='flex flex-col lg:flex-row'>
@@ -156,7 +166,7 @@ export const CoursePage = () => {
             <div className='mb-4 lg:hidden'>
               <ReviewFilter
                 course={course}
-                allReviews={allReviews}
+                allReviews={allReviews ?? []}
                 setReviews={setShowingReviews}
                 setShowAllReviews={setShowAllReviews}
               />
@@ -215,10 +225,10 @@ export const CoursePage = () => {
         )}
         <div className='hidden h-fit w-[50%] lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
-          <div className='mt-3'>
+          <div className='mb-10 mt-3'>
             <ReviewFilter
               course={course}
-              allReviews={allReviews}
+              allReviews={allReviews ?? []}
               setReviews={setShowingReviews}
               setShowAllReviews={setShowAllReviews}
             />

@@ -71,16 +71,8 @@ export const Instructor = () => {
               <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
                 {uniqueReviews.length ? (
                   <>
-                    <RatingInfo
-                      title='Rating'
-                      rating={averageRating}
-                      numReviews={uniqueReviews.length}
-                    />
-                    <RatingInfo
-                      title='Difficulty'
-                      rating={averageDifficulty}
-                      numReviews={uniqueReviews.length}
-                    />
+                    <RatingInfo title='Rating' rating={averageRating} />
+                    <RatingInfo title='Difficulty' rating={averageDifficulty} />
                   </>
                 ) : null}
               </div>
@@ -105,16 +97,8 @@ export const Instructor = () => {
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
               {uniqueReviews.length ? (
                 <>
-                  <RatingInfo
-                    title='Rating'
-                    rating={averageRating}
-                    numReviews={uniqueReviews.length}
-                  />
-                  <RatingInfo
-                    title='Difficulty'
-                    rating={averageDifficulty}
-                    numReviews={uniqueReviews.length}
-                  />
+                  <RatingInfo title='Rating' rating={averageRating} />
+                  <RatingInfo title='Difficulty' rating={averageDifficulty} />
                 </>
               ) : null}
             </div>
