@@ -103,6 +103,7 @@ impl Server {
 mod tests {
   use {
     super::*,
+    crate::instructors::GetInstructorPayload,
     axum::body::Body,
     http::{Method, Request},
     interactions::GetInteractionsPayload,
@@ -927,5 +928,106 @@ mod tests {
         likes: 0
       }
     );
+  }
+
+  #[tokio::test]
+  async fn get_invalid_instructor() {
+    let TestContext { db, mut app, .. } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Content-Type", "application/json")
+          .uri("/api/instructors/foobar")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    let payload = response.convert::<GetInstructorPayload>().await;
+
+    assert_eq!(payload.instructor, None);
+    assert_eq!(payload.reviews.len(), 0);
+  }
+
+  #[tokio::test]
+  async fn can_get_instructors_with_reviews() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Content-Type", "application/json")
+          .uri("/api/instructors/Adrian%20Roshan%20Vetta")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response.convert::<GetInstructorPayload>().await;
+
+    assert_eq!(
+      payload.instructor,
+      Some(Instructor {
+        name: "Adrian Roshan Vetta".to_string(),
+        name_ngrams: Some(
+          "Adr Adri Adria Adrian Ros Rosh Rosha Roshan Vet Vett Vetta".into()
+        ),
+        term: "Fall 2022".into(),
+      })
+    );
+
+    assert_eq!(payload.reviews.len(), 1)
   }
 }
