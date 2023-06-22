@@ -36,8 +36,8 @@ use {
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   log::{debug, error, info, trace},
   model::{
-    Course, CourseListing, InitializeOptions, Interaction, InteractionKind,
-    Review, Schedule,
+    Course, CourseListing, InitializeOptions, Instructor, Interaction,
+    InteractionKind, Review, Schedule,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,

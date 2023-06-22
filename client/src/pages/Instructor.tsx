@@ -9,44 +9,49 @@ import { RatingInfo } from '../components/RatingInfo';
 import { Review } from '../model/Review';
 import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
+import { Spinner } from '../components/Spinner';
+import { GetInstructorPayload } from '../model/GetInstructorPayload';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
 
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [instructor, setInstructor] = useState<InstructorType | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const [instructor, setInstructor] = useState<
+    InstructorType | undefined | null
+  >(undefined);
 
   const user = useAuth();
 
   useEffect(() => {
     if (params.name) {
       fetchClient
-        .getData<Review[]>(
-          `/reviews?instructor_name=${decodeURIComponent(params.name)}`
-        )
-        .then((data) => {
-          setReviews(
-            data.sort(
-              (a, b) =>
-                parseInt(b.timestamp.$date.$numberLong, 10) -
-                parseInt(a.timestamp.$date.$numberLong, 10)
-            )
-          );
-        });
-      fetchClient
-        .getData<InstructorType>(
+        .getData<GetInstructorPayload>(
           `/instructors/${decodeURIComponent(params.name)}`
         )
-        .then((data) => {
-          setInstructor(data);
+        .then((payload) => {
+          setInstructor(payload.instructor);
+          setReviews(payload.reviews);
         });
     }
   }, [params.name]);
 
+  if (instructor === undefined)
+    return (
+      <Layout>
+        <div className='flex min-h-screen items-center justify-center'>
+          <div className='text-center'>
+            <Spinner />
+          </div>
+        </div>
+      </Layout>
+    );
+
   if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id);
+
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
   const averageDifficulty =
@@ -64,20 +69,20 @@ export const Instructor = () => {
                 </h1>
               </div>
               <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                {uniqueReviews.length && (
-                  <RatingInfo
-                    title='Rating'
-                    rating={averageRating}
-                    numReviews={reviews.length}
-                  />
-                )}
-                {uniqueReviews.length && (
-                  <RatingInfo
-                    title='Difficulty'
-                    rating={averageDifficulty}
-                    numReviews={reviews.length}
-                  />
-                )}
+                {uniqueReviews.length ? (
+                  <>
+                    <RatingInfo
+                      title='Rating'
+                      rating={averageRating}
+                      numReviews={uniqueReviews.length}
+                    />
+                    <RatingInfo
+                      title='Difficulty'
+                      rating={averageDifficulty}
+                      numReviews={uniqueReviews.length}
+                    />
+                  </>
+                ) : null}
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -97,22 +102,21 @@ export const Instructor = () => {
                 )}
               </p>
             </div>
-
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-              {uniqueReviews.length && (
-                <RatingInfo
-                  title='Rating'
-                  rating={averageRating}
-                  numReviews={reviews.length}
-                />
-              )}
-              {uniqueReviews.length && (
-                <RatingInfo
-                  title='Difficulty'
-                  rating={averageDifficulty}
-                  numReviews={reviews.length}
-                />
-              )}
+              {uniqueReviews.length ? (
+                <>
+                  <RatingInfo
+                    title='Rating'
+                    rating={averageRating}
+                    numReviews={uniqueReviews.length}
+                  />
+                  <RatingInfo
+                    title='Difficulty'
+                    rating={averageDifficulty}
+                    numReviews={uniqueReviews.length}
+                  />
+                </>
+              ) : null}
             </div>
           </div>
         </div>
