@@ -953,7 +953,10 @@ mod tests {
       .await
       .unwrap();
 
-    assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    let payload = response.convert::<GetInstructorPayload>().await;
+
+    assert_eq!(payload.instructor, None);
+    assert_eq!(payload.reviews.len(), 0);
   }
 
   #[tokio::test]
@@ -1016,13 +1019,13 @@ mod tests {
 
     assert_eq!(
       payload.instructor,
-      Instructor {
+      Some(Instructor {
         name: "Adrian Roshan Vetta".to_string(),
         name_ngrams: Some(
           "Adr Adri Adria Adrian Ros Rosh Rosha Roshan Vet Vett Vetta".into()
         ),
         term: "Fall 2022".into(),
-      }
+      })
     );
 
     assert_eq!(payload.reviews.len(), 1)

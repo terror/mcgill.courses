@@ -2,7 +2,7 @@ use super::*;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct GetInstructorPayload {
-  pub(crate) instructor: Instructor,
+  pub(crate) instructor: Option<Instructor>,
   pub(crate) reviews: Vec<Review>,
 }
 
@@ -14,15 +14,11 @@ pub(crate) async fn get_instructor(
 
   let instructor = db.find_instructor_by_name(&name).await?;
 
-  if let Some(instructor) = instructor {
-    return Ok((
-      StatusCode::OK,
-      Json(Some(GetInstructorPayload {
-        instructor,
-        reviews: db.find_reviews_by_instructor_name(&name).await?,
-      })),
-    ));
-  }
-
-  Ok((StatusCode::NOT_FOUND, Json(None)))
+  Ok(Json(GetInstructorPayload {
+    instructor: instructor.clone(),
+    reviews: match instructor {
+      Some(ins) => db.find_reviews_by_instructor_name(&ins.name).await?,
+      None => vec![],
+    },
+  }))
 }
