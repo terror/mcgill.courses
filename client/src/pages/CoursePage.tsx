@@ -128,6 +128,11 @@ export const CoursePage = () => {
       setShowingReviews(
         showingReviews.filter((r) => r.userId !== review.userId)
       );
+      setAllReviews(
+        allReviews?.filter(
+          (r) => r.userId !== review.userId && r.courseId === review.courseId
+        )
+      );
     }
 
     handleSubmit('Review deleted successfully.')(res);
