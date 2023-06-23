@@ -62,8 +62,8 @@ const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
 
   return (
     <div className='flex'>
-      {[1, 2, 3, 4, 5].map((x) => (
-        <div className='flex flex-col'>
+      {[1, 2, 3, 4, 5].map((x, i) => (
+        <div key={i} className='flex flex-col'>
           <StarToggle
             key={`star-rating-${x}`}
             onToggle={toggleRating(x)}

@@ -237,6 +237,26 @@ impl Db {
     )
   }
 
+  pub async fn remove_interactions(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .delete_many(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn interactions_for_review(
     &self,
     course_id: &str,
