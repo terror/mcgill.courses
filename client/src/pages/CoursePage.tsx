@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router-dom';
+// @ts-ignore
 import Graph from 'react-graph-vis';
 
 import { useNavigate } from 'react-router-dom';
@@ -51,7 +52,7 @@ export const CoursePage = () => {
   const connected = course?.prerequisites?.map((prereq, i) => {
     return {
       id: i + 2,
-      label: prereq,
+      label: prereq.split(' ').join(''),
     };
   });
 
@@ -83,7 +84,7 @@ export const CoursePage = () => {
     select: ({ nodes }: { nodes: number[] }) => {
       if (nodes.length === 0) return;
       const node = graphNodes.find((node) => node.id === nodes[0]);
-      if (node) navigate(`/course/${node.label!.split(' ').join('')}`);
+      if (node) navigate(`/course/${node.label}`);
     },
   };
 
