@@ -6,6 +6,6 @@ publish = false
 
 [dependencies]
 bson = { version = "2.6.1", features = ["chrono-0_4"] }
-chrono = "0.4.24"
-serde = { version = "1.0.162", features = ["derive"] }
-serde_json = "1.0.96"
+chrono = "0.4.26"
+serde = { version = "1.0.164", features = ["derive"] }
+serde_json = "1.0.99"
