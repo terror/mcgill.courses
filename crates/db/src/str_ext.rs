@@ -2,7 +2,7 @@ use super::*;
 
 lazy_static! {
   static ref STOP_WORDS: HashSet<String> =
-    HashSet::from_iter(stop_words::get("en"));
+    HashSet::from_iter(stop_words::get(stop_words::LANGUAGE::English));
 }
 
 pub(crate) trait StrExt {
@@ -14,7 +14,9 @@ impl StrExt for &str {
   fn filter_stopwords(self) -> String {
     self
       .split(' ')
-      .filter(|w| !STOP_WORDS.contains(*w))
+      .filter(|w| {
+        !STOP_WORDS.contains(&format!("\"{}\"", w.trim().to_lowercase()))
+      })
       .join(" ")
   }
 
@@ -49,7 +51,7 @@ fn ngram_multi_word() {
 #[test]
 fn stop_word_filter() {
   assert_eq!(
-    "Algorithms and Data Structures".filter_stopwords(),
+    "have Algorithms and Data being Structures are".filter_stopwords(),
     String::from("Algorithms Data Structures")
   )
 }
