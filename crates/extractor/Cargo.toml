@@ -7,7 +7,7 @@ publish = false
 [dependencies]
 anyhow = "1.0.71"
 model = { path = "../../crates/model" }
-scraper = "0.15.0"
+scraper = "0.16.0"
 
 [dev-dependencies]
 include_dir = "0.7.3"
