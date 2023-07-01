@@ -26,7 +26,7 @@ export const CourseGraph = ({ course }: { course: Course }) => {
   });
 
   const graphNodes = [
-    { id: 1, label: course?._id, title: course?.description },
+    { id: 1, label: course._id, title: course.description },
     ...prerequisites,
     ...leading,
   ];

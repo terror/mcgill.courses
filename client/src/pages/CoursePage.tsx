@@ -156,11 +156,9 @@ export const CoursePage = () => {
         <div className='mt-4 flex lg:hidden'>
           <CourseRequirements requirements={requirements} />
         </div>
-        {course.prerequisites.length !== 0 && (
-          <div className='mb-1 mt-4 rounded-lg bg-slate-50 dark:bg-neutral-800 lg:hidden'>
-            <CourseGraph course={course} />
-          </div>
-        )}
+        <div className='mb-1 mt-4 rounded-lg bg-slate-50 dark:bg-neutral-800 lg:hidden'>
+          <CourseGraph course={course} />
+        </div>
         <div className='flex w-full flex-row justify-between'>
           <div className='my-4 w-full lg:mr-4 lg:mt-4'>
             {canReview && (
@@ -230,11 +228,9 @@ export const CoursePage = () => {
         )}
         <div className='hidden h-fit w-[50%] lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
-          {course.prerequisites.length !== 0 && (
-            <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
-              <CourseGraph course={course} />
-            </div>
-          )}
+          <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
+            <CourseGraph course={course} />
+          </div>
           <div className='mb-10 mt-3'>
             <ReviewFilter
               course={course}
