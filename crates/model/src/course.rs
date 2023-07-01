@@ -32,7 +32,7 @@ pub struct Course {
   pub instructors: Vec<Instructor>,
   pub prerequisites: Vec<String>,
   pub corequisites: Vec<String>,
-  pub leading_to: Option<Vec<String>>,
+  pub leading_to: Vec<String>,
   pub restrictions: Option<String>,
   pub schedule: Option<Vec<Schedule>>,
 }

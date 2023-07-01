@@ -117,7 +117,7 @@ impl Loader {
     info!("Post processing courses...");
 
     for mut curr in courses.clone() {
-      let mut leading_to = None::<Vec<String>>;
+      let mut leading_to = Vec::new();
 
       for other in &courses {
         if curr.id == other.id {
@@ -137,11 +137,7 @@ impl Loader {
           .collect::<Vec<String>>();
 
         if prerequisites.contains(&curr.id) {
-          if let Some(leading_to) = &mut leading_to {
-            leading_to.push(other.id.clone());
-          } else {
-            leading_to = Some(vec![other.id.clone()]);
-          }
+          leading_to.push(other.id.clone());
         }
       }
 
@@ -255,7 +251,7 @@ impl Loader {
       instructors: course_page.instructors,
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
-      leading_to: None,
+      leading_to: Vec::new(),
       restrictions: course_page.requirements.restrictions,
       schedule: scrape_vsb.then_some(
         VsbClient::new(&client, self.retries)?.schedule(
