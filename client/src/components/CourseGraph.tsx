@@ -1,9 +1,8 @@
-// @ts-ignore
-import Graph from 'react-graph-vis';
+import VisGraph, { GraphData } from 'react-vis-graph-wrapper';
+import { Course } from '../model/Course';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { Course } from '../model/Course';
 
 export const CourseGraph = ({ course }: { course: Course }) => {
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ export const CourseGraph = ({ course }: { course: Course }) => {
     ...(connected || []),
   ];
 
-  const graph = {
+  const graph: GraphData = {
     nodes: graphNodes,
     edges: [
       ...(connected || []).map((c) => {
@@ -38,7 +37,7 @@ export const CourseGraph = ({ course }: { course: Course }) => {
   };
 
   return (
-    <Graph
+    <VisGraph
       key={uuidv4()}
       graph={graph}
       options={{
