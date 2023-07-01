@@ -17,18 +17,24 @@ export const CourseGraph = ({ course }: { course: Course }) => {
     };
   });
 
-  const nodes = [
+  const graphNodes = [
     { id: 1, label: course?._id, title: course?.description },
     ...(connected || []),
   ];
 
   const graph = {
-    nodes,
+    nodes: graphNodes,
     edges: [
       ...(connected || []).map((c) => {
         return { from: c.id, to: 1 };
       }),
     ],
+  };
+
+  const navigateToCourse = (nodes: number[]) => {
+    if (nodes.length === 0) return;
+    const node = graphNodes.find((node) => node.id === nodes[0]);
+    if (node) navigate(`/course/${node.label}`);
   };
 
   return (
@@ -41,10 +47,11 @@ export const CourseGraph = ({ course }: { course: Course }) => {
         layout: { hierarchical: false },
       }}
       events={{
-        select: ({ selected }: { selected: number[] }) => {
-          if (nodes.length === 0) return;
-          const node = nodes.find((node) => node.id === selected[0]);
-          if (node) navigate(`/course/${node.label}`);
+        select: ({ nodes }: { nodes: number[] }) => {
+          navigateToCourse(nodes);
+        },
+        doubleClick: ({ nodes }: { nodes: number[] }) => {
+          navigateToCourse(nodes);
         },
       }}
     />
