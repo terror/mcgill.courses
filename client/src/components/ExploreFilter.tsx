@@ -1,5 +1,7 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
+import { BsSun } from 'react-icons/bs';
+import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { GoX } from 'react-icons/go';
 
 import courseCodes from '../assets/courseCodes.json';
@@ -27,15 +29,17 @@ type ExploreFilterProp = {
 };
 
 type FilterButtonProp = {
-  name: string;
+  icon?: JSX.Element;
   isSelected: boolean;
+  name: string;
   selections: string[];
   setSelections: (selected: string[]) => void;
 };
 
 const FilterButton = ({
-  name,
+  icon,
   isSelected,
+  name,
   selections,
   setSelections,
 }: FilterButtonProp) => {
@@ -44,6 +48,7 @@ const FilterButton = ({
   if (isSelected !== selected) setSelected(isSelected);
 
   const selectedColor = 'bg-red-600 text-gray-100';
+
   const unselectedColor =
     'bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-gray-100';
 
@@ -60,7 +65,10 @@ const FilterButton = ({
         }
       }}
     >
-      {name}
+      <div className='flex items-center gap-x-2'>
+        {icon && icon}
+        {name}
+      </div>
     </button>
   );
 };
@@ -159,7 +167,7 @@ const InputBox = ({ selected, setSelected, options }: InputBoxProp) => {
                     ))
                   ) : (
                     <p className='p-2 text-lg text-gray-800 dark:text-gray-100'>
-                      Nothing Found.
+                      No results found.
                     </p>
                   )}
                 </Combobox.Options>
@@ -202,10 +210,21 @@ export const ExploreFilter = ({
   setSelectedTerms,
   variant,
 }: ExploreFilterProp) => {
+  const termToIcon = (term: 'Fall' | 'Winter' | 'Summer') => {
+    switch (term) {
+      case 'Fall':
+        return <FaLeaf color='brown' />;
+      case 'Winter':
+        return <FaRegSnowflake color='skyblue' />;
+      case 'Summer':
+        return <BsSun color='orange' />;
+    }
+  };
+
   return (
     <div
       className={classNames(
-        variant === 'mobile' ? 'mx-auto w-full' : 'ml-2 w-96 ',
+        variant === 'mobile' ? 'mx-auto w-full' : 'ml-2 w-[90%]',
         'm-2 flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
@@ -249,6 +268,7 @@ export const ExploreFilter = ({
           <h1 className='mt-3 text-xl font-semibold'>Term</h1>
           {termsOptions.map((term, i) => (
             <FilterButton
+              icon={termToIcon(term as 'Fall' | 'Winter' | 'Summer')}
               key={i}
               name={term}
               isSelected={selectedTerms.includes(term)}
