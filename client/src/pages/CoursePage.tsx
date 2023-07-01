@@ -1,13 +1,10 @@
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router-dom';
-// @ts-ignore
-import Graph from 'react-graph-vis';
 
-import { useNavigate } from 'react-router-dom';
 import { AddReviewForm } from '../components/AddReviewForm';
-import { Alert } from '../components/Alert';
+import { Alert, AlertStatus } from '../components/Alert';
+import { CourseGraph } from '../components/CourseGraph';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -28,65 +25,18 @@ import { Review } from '../model/Review';
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
 
-  const navigate = useNavigate();
+  const user = useAuth();
+  const currentTerms = getCurrentTerms();
 
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
   const [course, setCourse] = useState<Course>();
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
-
-  const currentTerms = getCurrentTerms();
-
   const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
-
-  const [alertStatus, setAlertStatus] = useState<'success' | 'error' | null>(
-    null
-  );
-
-  const [alertMessage, setAlertMessage] = useState('');
-
-  const user = useAuth();
-
-  const connected = course?.prerequisites?.map((prereq, i) => {
-    return {
-      id: i + 2,
-      label: prereq.split(' ').join(''),
-    };
-  });
-
-  const graphNodes = [
-    { id: 1, label: course?._id, title: course?.description },
-    ...(connected || []),
-  ];
-
-  const graph = {
-    nodes: graphNodes,
-    edges: [
-      ...(connected || []).map((c) => {
-        return { from: c.id, to: 1 };
-      }),
-    ],
-  };
-
-  const options = {
-    layout: {
-      hierarchical: false,
-    },
-    edges: {
-      color: '#FFFFFF',
-    },
-    height: '500px',
-  };
-
-  const events = {
-    select: ({ nodes }: { nodes: number[] }) => {
-      if (nodes.length === 0) return;
-      const node = graphNodes.find((node) => node.id === nodes[0]);
-      if (node) navigate(`/course/${node.label}`);
-    },
-  };
 
   useEffect(() => {
     fetchClient
@@ -208,12 +158,7 @@ export const CoursePage = () => {
         </div>
         {course.prerequisites.length !== 0 && (
           <div className='mb-1 mt-4 rounded-lg bg-slate-50 dark:bg-neutral-800 lg:hidden'>
-            <Graph
-              key={uuidv4()}
-              graph={graph}
-              options={options}
-              events={events}
-            />
+            <CourseGraph course={course} />
           </div>
         )}
         <div className='flex w-full flex-row justify-between'>
@@ -287,12 +232,7 @@ export const CoursePage = () => {
           <CourseRequirements requirements={requirements} />
           {course.prerequisites.length !== 0 && (
             <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
-              <Graph
-                key={uuidv4()}
-                graph={graph}
-                options={options}
-                events={events}
-              />
+              <CourseGraph course={course} />
             </div>
           )}
           <div className='mb-10 mt-3'>
