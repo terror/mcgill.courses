@@ -224,7 +224,7 @@ export const ExploreFilter = ({
   return (
     <div
       className={classNames(
-        variant === 'mobile' ? 'mx-auto w-full' : 'ml-2 w-[85%]',
+        variant === 'mobile' ? 'mx-auto w-full' : 'ml-2 w-[90%]',
         'm-2 flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
