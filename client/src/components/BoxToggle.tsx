@@ -1,6 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { ReactComponentElement } from 'react';
 import { FaBars } from 'react-icons/fa';
+import { classNames } from '../lib/utils';
 
 type BoxToggleProps = {
   title?: string;
@@ -16,8 +17,18 @@ export const BoxToggle = ({
   setIsOpen,
 }: BoxToggleProps) => {
   return (
-    <div className='mx-auto flex w-full flex-col sm:px-0'>
-      <div className='space-around flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'>
+    <div
+      className={classNames(
+        !isOpen ? 'mb-2' : '',
+        'mx-auto flex w-full flex-col sm:px-0'
+      )}
+    >
+      <div
+        className={classNames(
+          isOpen ? 'mb-2' : '',
+          'space-around flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'
+        )}
+      >
         <button className='mr-auto' onClick={() => setIsOpen(!isOpen)}>
           <FaBars className='text-gray-700 dark:text-neutral-400' />
         </button>
