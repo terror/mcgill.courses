@@ -74,17 +74,16 @@ impl Loader {
       while let Some(listings) = self.parse_course_listing_pages(
         self.aggregate_urls(term, page, page + self.batch_size),
       )? {
+        let scrape_vsb =
+          self.scrape_vsb && index == self.mcgill_terms.len() - 1;
+
         courses.extend(
           listings
             .par_iter()
-            .map(|listing| {
-              self.parse_course(
-                listing.clone(),
-                self.scrape_vsb && index == self.mcgill_terms.len() - 1,
-              )
-            })
+            .map(|listing| self.parse_course(listing.clone(), scrape_vsb))
             .collect::<Result<Vec<Course>, _>>()?,
         );
+
         page += self.batch_size;
       }
 
@@ -97,14 +96,12 @@ impl Loader {
 
       courses.sort();
 
-      let path = if source.is_file() {
-        source.clone()
-      } else {
-        source.join(format!("courses-{term}.json"))
-      };
-
       fs::write(
-        &path,
+        &if source.is_file() {
+          source.clone()
+        } else {
+          source.join(format!("courses-{term}.json"))
+        },
         serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
       )
       .map_err(|err| Error(anyhow::Error::from(err)))?;
@@ -119,16 +116,11 @@ impl Loader {
   ) -> Result<Vec<Course>, Error> {
     info!("Post processing courses...");
 
-    for curr_index in 0..courses.len() {
+    for i in 0..courses.len() {
       let mut leading_to = Vec::new();
 
-      for other_index in 0..courses.len() {
-        if curr_index == other_index {
-          continue;
-        }
-
-        let curr = &courses[curr_index];
-        let other = &courses[other_index];
+      for j in (0..courses.len()).filter(|&j| j != i) {
+        let (curr, other) = (&courses[i], &courses[j]);
 
         let prerequisites = other
           .prerequisites
@@ -147,7 +139,7 @@ impl Loader {
         }
       }
 
-      courses[curr_index].leading_to = leading_to;
+      courses[i].leading_to = leading_to;
     }
 
     Ok(courses.to_vec())

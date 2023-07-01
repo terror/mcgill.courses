@@ -43,8 +43,8 @@ $ RUST_LOG=info cargo run -- --source=courses.json \
 
 The current defaults include scraping all current 10,000+ courses offered by
 McGill, current schedule information from the official
-[visual schedule builder](https://vsb.mcgill.ca), and courses offered in previous
-terms going back as far the 2009-2010 term.
+[visual schedule builder](https://vsb.mcgill.ca), and courses offered in
+previous terms going back as far the 2009-2010 term.
 
 For full usage information, see the output below:
 
