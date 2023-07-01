@@ -34,11 +34,11 @@ export const CourseGraph = ({ course }: { course: Course }) => {
   const graph: GraphData = {
     nodes: graphNodes,
     edges: [
-      ...prerequisites.map((c) => {
-        return { from: c.id, to: 1 };
+      ...prerequisites.map((prerequisite) => {
+        return { from: prerequisite.id, to: 1 };
       }),
-      ...leading.map((l) => {
-        return { from: 1, to: l.id };
+      ...leading.map((leading) => {
+        return { from: 1, to: leading.id };
       }),
     ],
   };
