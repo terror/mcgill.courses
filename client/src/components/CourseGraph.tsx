@@ -9,7 +9,7 @@ export const CourseGraph = ({ course }: { course: Course }) => {
 
   const [darkMode] = useDarkMode();
 
-  const connected = course?.prerequisites?.map((prereq, i) => {
+  const prerequisites = course?.prerequisites?.map((prereq, i) => {
     return {
       id: i + 2,
       label: prereq.split(' ').join(''),
@@ -18,13 +18,13 @@ export const CourseGraph = ({ course }: { course: Course }) => {
 
   const graphNodes = [
     { id: 1, label: course?._id, title: course?.description },
-    ...(connected || []),
+    ...(prerequisites || []),
   ];
 
   const graph: GraphData = {
     nodes: graphNodes,
     edges: [
-      ...(connected || []).map((c) => {
+      ...(prerequisites || []).map((c) => {
         return { from: c.id, to: 1 };
       }),
     ],

@@ -307,14 +307,17 @@ impl Db {
                 "credits": course.credits,
                 "description": course.description,
                 "facultyUrl": course.faculty_url,
+                "idNgrams": course.id.ngrams(),
                 "instructors": course.instructors.combine(found.instructors),
+                "leadingTo": course.leading_to,
                 "level": course.level,
                 "prerequisites": course.prerequisites,
                 "restrictions": course.restrictions,
                 "schedule": course.schedule.combine_opt(found.schedule),
                 "terms": course.terms.combine(found.terms),
-                "title": course.title,
-                "url": course.url
+                "title": course.title.clone(),
+                "titleNgrams": course.title.filter_stopwords().ngrams(),
+                "url": course.url,
               }
             },
           )
@@ -478,7 +481,7 @@ impl Db {
 mod tests {
   use {super::*, pretty_assertions::assert_eq};
 
-  static SEED_DIR: Dir<'_> = include_dir!("crates/db/seeds");
+  static SEED_DIR: Dir<'_> = include_dir!("crates/db/test-seeds");
 
   fn get_content(name: &str) -> String {
     SEED_DIR

@@ -105,7 +105,7 @@ impl Loader {
 
       fs::write(
         &path,
-        serde_json::to_string_pretty(&self.post_process(courses)?)?,
+        serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
       )
       .map_err(|err| Error(anyhow::Error::from(err)))?;
     }
@@ -113,18 +113,24 @@ impl Loader {
     Ok(())
   }
 
-  fn post_process(&self, courses: Vec<Course>) -> Result<Vec<Course>> {
+  fn post_process(
+    &self,
+    courses: &mut Vec<Course>,
+  ) -> Result<Vec<Course>, Error> {
     info!("Post processing courses...");
 
-    for mut curr in courses.clone() {
+    for curr_index in 0..courses.len() {
       let mut leading_to = Vec::new();
 
-      for other in &courses {
-        if curr.id == other.id {
+      for other_index in 0..courses.len() {
+        if curr_index == other_index {
           continue;
         }
 
-        let prerequisites = curr
+        let curr = &courses[curr_index];
+        let other = &courses[other_index];
+
+        let prerequisites = other
           .prerequisites
           .iter()
           .map(|prerequisite| {
@@ -141,7 +147,7 @@ impl Loader {
         }
       }
 
-      curr.leading_to = leading_to;
+      courses[curr_index].leading_to = leading_to;
     }
 
     Ok(courses.to_vec())

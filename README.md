@@ -41,9 +41,10 @@ $ RUST_LOG=info cargo run -- --source=courses.json \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 ```
 
-This takes around ~2 minutes to run on an M2 macbook pro. It includes scraping
-all current 10,000+ courses offered by McGill alongside schedule information
-from the [visual schedule builder](https://vsb.mcgill.ca).
+The current defaults include scraping all current 10,000+ courses offered by
+McGill, current schedule information from the official
+[visual schedule builder](https://vsb.mcgill.ca), and courses offered in previous
+terms going back as far the 2009-2010 term.
 
 For full usage information, see the output below:
 
@@ -51,15 +52,15 @@ For full usage information, see the output below:
 Usage: server load [OPTIONS] --user-agent <USER_AGENT>
 
 Options:
-      --user-agent <USER_AGENT>      A user agent
-      --course-delay <COURSE_DELAY>  Time delay between course requests in milliseconds [default: 0]
-      --page-delay <PAGE_DELAY>      Time delay between page requests in milliseconds [default: 0]
-      --retries <RETRIES>            Number of retries [default: 10]
-      --batch-size <BATCH_SIZE>      Number of pages to scrape per concurrent batch [default: 20]
-      --mcgill-term <MCGILL_TERM>    The mcgill term to scrape [default: 2023-2024]
-      --vsb-terms <VSB_TERMS>        The schedule builder terms to scrape [default: 202305 202309 202401]
-      --scrape-vsb                   Scrape visual schedule builder information
-  -h, --help                         Print help
+  --user-agent <USER_AGENT>      A user agent
+  --course-delay <COURSE_DELAY>  Time delay between course requests in milliseconds [default: 0]
+  --page-delay <PAGE_DELAY>      Time delay between page requests in milliseconds [default: 0]
+  --retries <RETRIES>            Number of retries [default: 10]
+  --batch-size <BATCH_SIZE>      Number of pages to scrape per concurrent batch [default: 20]
+  --mcgill-terms <MCGILL_TERMS>  The mcgill terms to scrape [default: 2009-2010 2010-2011 2011-2012 2012-2013 2013-2014 2014-2015 2015-2016 2016-2017 2017-2018 2018-2019 2019-2020 2020-2021 2021-2022 2022-2023 2023-2024]
+  --vsb-terms <VSB_TERMS>        The schedule builder terms to scrape [default: 202305 202309 202401]
+  --scrape-vsb                   Scrape visual schedule builder information
+  -h, --help                     Print help
 ```
 
 Alternatively, if you have [just](https://github.com/casey/just) installed, you
