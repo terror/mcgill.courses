@@ -44,6 +44,7 @@ export const CourseGraph = ({ course }: { course: Course }) => {
         edges: { color: darkMode ? '#FFFFFF' : '#000000' },
         height: '500px',
         layout: { hierarchical: false },
+        nodes: { color: darkMode ? 'rgb(212 212 212)' : 'rgb(226 232 240)' },
       }}
       events={{
         select: ({ nodes }: { nodes: number[] }) => {
