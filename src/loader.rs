@@ -136,12 +136,12 @@ impl Loader {
     (start..=end)
       .map(|index| Page {
         number: index,
-        url: dbg!(format!(
+        url: format!(
           "{}/study/{}/courses/search?page={}",
           Loader::BASE_URL,
           term,
           index
-        )),
+        ),
       })
       .collect()
   }
