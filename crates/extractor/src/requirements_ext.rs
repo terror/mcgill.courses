@@ -32,7 +32,13 @@ impl RequirementsExt for Requirements {
                   par
                     .select_many("a")?
                     .iter()
-                    .map(|link| link.inner_html())
+                    .map(|link| {
+                      link
+                        .inner_html()
+                        .split(' ')
+                        .collect::<Vec<&str>>()
+                        .join("")
+                    })
                     .collect(),
                 );
 
@@ -43,7 +49,13 @@ impl RequirementsExt for Requirements {
                   par
                     .select_many("a")?
                     .iter()
-                    .map(|link| link.inner_html())
+                    .map(|link| {
+                      link
+                        .inner_html()
+                        .split(' ')
+                        .collect::<Vec<&str>>()
+                        .join("")
+                    })
                     .collect(),
                 );
 

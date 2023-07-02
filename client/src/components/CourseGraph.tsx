@@ -11,10 +11,10 @@ export const CourseGraph = ({ course }: { course: Course }) => {
 
   let id = 2;
 
-  const prerequisites = course.prerequisites.map((prereq) => {
+  const prerequisites = course.prerequisites.map((prerequisite) => {
     return {
       id: id++,
-      label: prereq.split(' ').join(''),
+      label: prerequisite,
     };
   });
 

@@ -28,15 +28,15 @@ export const CoursePage = () => {
   const user = useAuth();
   const currentTerms = getCurrentTerms();
 
-  const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
-  const [course, setCourse] = useState<Course>();
-  const [showAllReviews, setShowAllReviews] = useState(false);
-  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
+  const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
+  const [course, setCourse] = useState<Course>();
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     fetchClient

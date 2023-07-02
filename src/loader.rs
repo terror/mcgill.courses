@@ -97,10 +97,9 @@ impl Loader {
       courses.sort();
 
       fs::write(
-        &if source.is_file() {
-          source.clone()
-        } else {
-          source.join(format!("courses-{term}.json"))
+        &match source.is_file() {
+          true => source.clone(),
+          _ => source.join(format!("courses-{term}.json")),
         },
         serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
       )
@@ -122,19 +121,7 @@ impl Loader {
       for j in (0..courses.len()).filter(|&j| j != i) {
         let (curr, other) = (&courses[i], &courses[j]);
 
-        let prerequisites = other
-          .prerequisites
-          .iter()
-          .map(|prerequisite| {
-            prerequisite
-              .split(' ')
-              .map(|s| s.to_string())
-              .collect::<Vec<String>>()
-              .join("")
-          })
-          .collect::<Vec<String>>();
-
-        if prerequisites.contains(&curr.id) {
+        if other.prerequisites.contains(&curr.id) {
           leading_to.push(other.id.clone());
         }
       }
@@ -149,12 +136,12 @@ impl Loader {
     (start..=end)
       .map(|index| Page {
         number: index,
-        url: format!(
+        url: dbg!(format!(
           "{}/study/{}/courses/search?page={}",
           Loader::BASE_URL,
           term,
           index
-        ),
+        )),
       })
       .collect()
   }
