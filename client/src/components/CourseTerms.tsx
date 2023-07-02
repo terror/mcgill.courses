@@ -48,6 +48,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
 
   const container = classNames('flex flex-wrap mr-auto');
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
+
   const currentlyOfferedTerms = course.terms.filter((c) =>
     getCurrentTerms().includes(c)
   );

@@ -303,18 +303,24 @@ impl Db {
             doc! { "_id": &course.id },
             doc! {
               "$set": {
+                "code": course.code,
                 "corequisites": course.corequisites,
                 "credits": course.credits,
+                "department": course.department,
                 "description": course.description,
+                "faculty": course.faculty,
                 "facultyUrl": course.faculty_url,
                 "instructors": course.instructors.combine(found.instructors),
+                "leadingTo": course.leading_to,
                 "level": course.level,
                 "prerequisites": course.prerequisites,
                 "restrictions": course.restrictions,
                 "schedule": course.schedule.combine_opt(found.schedule),
+                "subject": course.subject,
                 "terms": course.terms.combine(found.terms),
-                "title": course.title,
-                "url": course.url
+                "title": course.title.clone(),
+                "titleNgrams": course.title.filter_stopwords().ngrams(),
+                "url": course.url,
               }
             },
           )
@@ -478,7 +484,7 @@ impl Db {
 mod tests {
   use {super::*, pretty_assertions::assert_eq};
 
-  static SEED_DIR: Dir<'_> = include_dir!("crates/db/seeds");
+  static SEED_DIR: Dir<'_> = include_dir!("crates/db/test-seeds");
 
   fn get_content(name: &str) -> String {
     SEED_DIR

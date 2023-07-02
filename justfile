@@ -64,7 +64,7 @@ lint:
   npm run lint
 
 load:
-  cargo run -- --source=courses.json \
+  cargo run -- --source=seed \
     load \
     --batch-size=200 \
     --scrape-vsb \

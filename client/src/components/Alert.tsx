@@ -8,7 +8,7 @@ import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 
-type AlertStatus = 'error' | 'success' | 'info' | 'warning';
+export type AlertStatus = 'error' | 'success' | 'info' | 'warning';
 
 interface AlertProp {
   status: AlertStatus;

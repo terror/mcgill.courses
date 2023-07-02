@@ -17,6 +17,7 @@ export type Course = {
   instructors: Instructor[];
   prerequisites: string[];
   corequisites: string[];
+  leadingTo: string[];
   restrictions: string;
   schedule: Schedule[];
 };

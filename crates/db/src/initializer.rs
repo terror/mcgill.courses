@@ -153,6 +153,8 @@ impl Initializer {
       }
     }
 
+    info!("Seeding complete.");
+
     Ok(())
   }
 }

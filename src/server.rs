@@ -161,7 +161,7 @@ mod tests {
   }
 
   fn seed() -> PathBuf {
-    PathBuf::from("crates/db/seeds/mini.json")
+    PathBuf::from("crates/db/test-seeds/mini.json")
   }
 
   async fn mock_login(
