@@ -34,7 +34,7 @@ all courses from various McGill course information websites and building a JSON
 data source, for example:
 
 ```
-$ RUST_LOG=info cargo run -- --source=courses.json \
+$ RUST_LOG=info cargo run -- --source=seed \
     load \
     --batch-size=200 \
     --scrape-vsb \
