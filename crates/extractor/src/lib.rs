@@ -615,7 +615,7 @@ mod tests {
           }
         ],
         requirements: Requirements {
-          corequisites: vec!["MATH 133".into()],
+          corequisites: vec!["MATH133".into()],
           prerequisites: vec![],
           restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into())
         }
