@@ -85,10 +85,10 @@ export const MultiSelect = ({
                   value={val}
                   className={({ active }) =>
                     twMerge(
-                      'cursor-pointer p-2',
+                      'cursor-pointer p-2 text-gray-900 dark:text-gray-200',
                       active
                         ? 'bg-gray-100 dark:bg-neutral-500'
-                        : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
+                        : 'bg-white dark:bg-neutral-600'
                     )
                   }
                   onMouseDown={handleOptionMouseDown}
