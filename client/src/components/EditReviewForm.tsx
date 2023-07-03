@@ -33,6 +33,8 @@ export const EditReviewForm = ({
     difficulty: review.difficulty,
   };
 
+  console.log('rendering 1');
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
@@ -63,7 +65,7 @@ export const EditReviewForm = ({
               leaveFrom='opacity-100 scale-100'
               leaveTo='opacity-0 scale-95'
             >
-              <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-800'>
+              <Dialog.Panel className='w-[448px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-800'>
                 <Dialog.Title
                   as='h3'
                   className='mb-4 text-lg font-medium leading-6 text-gray-900 dark:text-gray-200'
