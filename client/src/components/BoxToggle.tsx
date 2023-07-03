@@ -9,7 +9,6 @@ type BoxToggleProps = {
   setOpen: (isOpen: boolean) => void;
 };
 
-// TODO: Make this transition nicer (height transform)
 export const BoxToggle = ({ title, child, open, setOpen }: BoxToggleProps) => {
   return (
     <div className='w-full'>
