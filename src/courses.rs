@@ -32,12 +32,27 @@ pub(crate) async fn get_courses(
   ))
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub(crate) struct GetCoursePayload {
+  pub(crate) course: Course,
+  pub(crate) reviews: Vec<Review>,
+}
+
 pub(crate) async fn get_course_by_id(
   Path(id): Path<String>,
   AppState(state): AppState<State>,
 ) -> Result<impl IntoResponse> {
   Ok(match state.db.find_course_by_id(&id).await? {
-    Some(course) => (StatusCode::OK, Json(Some(course))),
+    Some(course) => {
+      let mut reviews = state.db.find_reviews_by_course_id(&id).await?;
+
+      reviews.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
+
+      (
+        StatusCode::OK,
+        Json(Some(GetCoursePayload { course, reviews })),
+      )
+    }
     None => (StatusCode::NOT_FOUND, Json(None)),
   })
 }

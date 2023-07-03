@@ -19,6 +19,7 @@ import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
+import { GetCoursePaylod } from '../model/GetCoursePayload';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 
@@ -40,19 +41,11 @@ export const CoursePage = () => {
 
   useEffect(() => {
     fetchClient
-      .getData<Course>(`/courses/${params.id?.toUpperCase()}`)
-      .then((data) => setCourse(data))
-      .catch((err) => console.log(err));
-    fetchClient
-      .getData<Review[]>(`/reviews?course_id=${params.id}`)
-      .then((data) => {
-        data = data.sort(
-          (a, b) =>
-            parseInt(b.timestamp.$date.$numberLong, 10) -
-            parseInt(a.timestamp.$date.$numberLong, 10)
-        );
-        setShowingReviews(data);
-        setAllReviews(data);
+      .getData<GetCoursePaylod>(`/courses/${params.id?.toUpperCase()}`)
+      .then((payload) => {
+        setCourse(payload.course);
+        setShowingReviews(payload.reviews);
+        setAllReviews(payload.reviews);
       })
       .catch((err) => console.log(err));
   }, [params.id, addReviewOpen, editReviewOpen]);

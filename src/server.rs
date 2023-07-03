@@ -103,7 +103,7 @@ impl Server {
 mod tests {
   use {
     super::*,
-    crate::instructors::GetInstructorPayload,
+    crate::{courses::GetCoursePayload, instructors::GetInstructorPayload},
     axum::body::Body,
     http::{Method, Request},
     interactions::GetInteractionsPayload,
@@ -321,7 +321,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<Course>().await,
+      response.convert::<GetCoursePayload>().await.course,
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
   }
