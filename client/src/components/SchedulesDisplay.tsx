@@ -100,10 +100,10 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
         <div key={blockIndex} className='flex flex-col'>
           <div
             className={twMerge(
-              'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-10 dark:border-neutral-600'
+              'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left lg:flex-row'>
+            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left md:flex-row'>
               <div className='w-20'>
                 <span className='font-semibold'>{block.display}</span>
               </div>
@@ -113,7 +113,6 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               </div>
               <div className='w-80'>
                 <span className='font-semibold'>Classroom(s): </span>
-
                 {block.location ? block.location.replace(';', ',') : 'N/A'}
               </div>
             </div>
