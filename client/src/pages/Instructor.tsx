@@ -11,39 +11,29 @@ import { Instructor as InstructorType } from '../model/Instructor';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
+import { GetInstructorPayload } from '../model/GetInstructorPayload';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
 
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
   const [instructor, setInstructor] = useState<
     InstructorType | undefined | null
   >(undefined);
-  const [showAllReviews, setShowAllReviews] = useState(false);
 
   const user = useAuth();
 
   useEffect(() => {
     if (params.name) {
       fetchClient
-        .getData<Review[]>(
-          `/reviews?instructor_name=${decodeURIComponent(params.name)}`
-        )
-        .then((data) => {
-          setReviews(
-            data.sort(
-              (a, b) =>
-                parseInt(b.timestamp.$date.$numberLong, 10) -
-                parseInt(a.timestamp.$date.$numberLong, 10)
-            )
-          );
-        });
-      fetchClient
-        .getData<InstructorType>(
+        .getData<GetInstructorPayload>(
           `/instructors/${decodeURIComponent(params.name)}`
         )
-        .then((data) => {
-          setInstructor(data);
+        .then((payload) => {
+          setInstructor(payload.instructor);
+          setReviews(payload.reviews);
         });
     }
   }, [params.name]);
@@ -52,6 +42,7 @@ export const Instructor = () => {
   if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id);
+
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
   const averageDifficulty =
@@ -69,20 +60,12 @@ export const Instructor = () => {
                 </h1>
               </div>
               <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                {uniqueReviews.length && (
-                  <RatingInfo
-                    title='Rating'
-                    rating={averageRating}
-                    numReviews={reviews.length}
-                  />
-                )}
-                {uniqueReviews.length && (
-                  <RatingInfo
-                    title='Difficulty'
-                    rating={averageDifficulty}
-                    numReviews={reviews.length}
-                  />
-                )}
+                {uniqueReviews.length ? (
+                  <>
+                    <RatingInfo title='Rating' rating={averageRating} />
+                    <RatingInfo title='Difficulty' rating={averageDifficulty} />
+                  </>
+                ) : null}
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -102,22 +85,13 @@ export const Instructor = () => {
                 )}
               </p>
             </div>
-
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-              {uniqueReviews.length && (
-                <RatingInfo
-                  title='Rating'
-                  rating={averageRating}
-                  numReviews={reviews.length}
-                />
-              )}
-              {uniqueReviews.length && (
-                <RatingInfo
-                  title='Difficulty'
-                  rating={averageDifficulty}
-                  numReviews={reviews.length}
-                />
-              )}
+              {uniqueReviews.length ? (
+                <>
+                  <RatingInfo title='Rating' rating={averageRating} />
+                  <RatingInfo title='Difficulty' rating={averageDifficulty} />
+                </>
+              ) : null}
             </div>
           </div>
         </div>

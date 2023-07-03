@@ -26,10 +26,26 @@ pub(crate) struct Loader {
   batch_size: usize,
   #[clap(
     long,
-    default_value = "2023-2024",
-    help = "The mcgill term to scrape"
+    default_values = [
+      "2009-2010",
+      "2010-2011",
+      "2011-2012",
+      "2012-2013",
+      "2013-2014",
+      "2014-2015",
+      "2015-2016",
+      "2016-2017",
+      "2017-2018",
+      "2018-2019",
+      "2019-2020",
+      "2020-2021",
+      "2021-2022",
+      "2022-2023",
+      "2023-2024"
+    ],
+    help = "The mcgill terms to scrape"
   )]
-  mcgill_term: String,
+  mcgill_terms: Vec<String>,
   #[clap(
     long,
     default_values = ["202305", "202309", "202401"],
@@ -50,43 +66,80 @@ impl Loader {
   pub(crate) fn run(&self, source: PathBuf) -> Result {
     info!("Running extractor...");
 
-    let mut courses = Vec::new();
+    for (index, term) in self.mcgill_terms.iter().enumerate() {
+      let mut courses = Vec::new();
 
-    let mut page = 0;
+      let mut page = 0;
 
-    while let Some(listings) = self.parse_course_listing_pages(
-      self.aggregate_urls(page, page + self.batch_size),
-    )? {
-      courses.extend(
-        listings
-          .par_iter()
-          .map(|listing| self.parse_course(listing.clone()))
-          .collect::<Result<Vec<Course>, _>>()?,
-      );
-      page += self.batch_size;
+      while let Some(listings) = self.parse_course_listing_pages(
+        self.aggregate_urls(term, page, page + self.batch_size),
+      )? {
+        let scrape_vsb =
+          self.scrape_vsb && index == self.mcgill_terms.len() - 1;
+
+        courses.extend(
+          listings
+            .par_iter()
+            .map(|listing| self.parse_course(listing.clone(), scrape_vsb))
+            .collect::<Result<Vec<Course>, _>>()?,
+        );
+
+        page += self.batch_size;
+      }
+
+      let mut courses = courses
+        .into_iter()
+        .collect::<HashSet<Course>>()
+        .into_iter()
+        .filter(|course| !course.title.is_empty())
+        .collect::<Vec<Course>>();
+
+      courses.sort();
+
+      fs::write(
+        &match source.is_file() {
+          true => source.clone(),
+          _ => source.join(format!("courses-{term}.json")),
+        },
+        serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
+      )
+      .map_err(|err| Error(anyhow::Error::from(err)))?;
     }
 
-    let mut courses = courses
-      .into_iter()
-      .collect::<HashSet<Course>>()
-      .into_iter()
-      .filter(|course| !course.title.is_empty())
-      .collect::<Vec<Course>>();
-
-    courses.sort();
-
-    fs::write(source, serde_json::to_string_pretty(&courses)?)
-      .map_err(|err| Error(anyhow::Error::from(err)))
+    Ok(())
   }
 
-  fn aggregate_urls(&self, start: usize, end: usize) -> Vec<Page> {
+  fn post_process(
+    &self,
+    courses: &mut Vec<Course>,
+  ) -> Result<Vec<Course>, Error> {
+    info!("Post processing courses...");
+
+    for i in 0..courses.len() {
+      let mut leading_to = Vec::new();
+
+      for j in (0..courses.len()).filter(|&j| j != i) {
+        let (curr, other) = (&courses[i], &courses[j]);
+
+        if other.prerequisites.contains(&curr.id) {
+          leading_to.push(other.id.clone());
+        }
+      }
+
+      courses[i].leading_to = leading_to;
+    }
+
+    Ok(courses.to_vec())
+  }
+
+  fn aggregate_urls(&self, term: &str, start: usize, end: usize) -> Vec<Page> {
     (start..=end)
       .map(|index| Page {
         number: index,
         url: format!(
           "{}/study/{}/courses/search?page={}",
           Loader::BASE_URL,
-          self.mcgill_term,
+          term,
           index
         ),
       })
@@ -143,7 +196,11 @@ impl Loader {
     Ok(None)
   }
 
-  fn parse_course(&self, listing: CourseListing) -> Result<Course> {
+  fn parse_course(
+    &self,
+    listing: CourseListing,
+    scrape_vsb: bool,
+  ) -> Result<Course> {
     info!("{:?}", listing);
 
     let client = reqwest::blocking::Client::builder()
@@ -179,8 +236,9 @@ impl Loader {
       instructors: course_page.instructors,
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
+      leading_to: Vec::new(),
       restrictions: course_page.requirements.restrictions,
-      schedule: self.scrape_vsb.then_some(
+      schedule: scrape_vsb.then_some(
         VsbClient::new(&client, self.retries)?.schedule(
           &format!("{}-{}", course_page.subject, course_page.code),
           self.vsb_terms.clone(),

@@ -52,12 +52,15 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
 
   const [currrentlyDisplayingCourse, setCurrentlyDisplayingCourse] =
     useState<string>(course._id);
+
   const [currentlyDisplayingTerm, setCurrentlyDisplayingTerm] =
     useState<string>(offeredTerms[0]);
+
   const [currentlyDisplayingSchedules, setCurrentlyDisplayingSchedules] =
     useState<Schedule[]>(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
+
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
   const [showAll, setShowAll] = useState(false);
 
@@ -100,7 +103,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-10 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
+            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left lg:flex-row'>
               <div className='w-20'>
                 <span className='font-semibold'>{block.display}</span>
               </div>
@@ -108,7 +111,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                 <span className='font-semibold'>Campus: </span>
                 {block.campus}
               </div>
-              <div className='w-60'>
+              <div className='w-80'>
                 <span className='font-semibold'>Classroom(s): </span>
 
                 {block.location ? block.location.replace(';', ',') : 'N/A'}
@@ -143,10 +146,10 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                   block.timeblocks?.map((timeblock: TimeBlock, i) => (
                     <div
                       key={i}
-                      className='flex flex-row justify-between px-3 py-2 pl-10 font-medium text-gray-600 dark:text-neutral-300'
+                      className='flex flex-row justify-between px-3 py-2 pl-5 font-medium text-gray-600 dark:text-neutral-300'
                     >
                       <p>{dayToWeekday(timeblock.day)}</p>
-                      <p>
+                      <p className='pr-2'>
                         {VSBtimeToDisplay(timeblock.t1)} -{' '}
                         {VSBtimeToDisplay(timeblock.t2)}
                       </p>

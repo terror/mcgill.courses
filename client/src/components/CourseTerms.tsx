@@ -22,9 +22,9 @@ const termToIcon = (term: string, variant: 'small' | 'large') => {
   const size = variantToSize(variant);
 
   const icons: IconMap = {
-    fall: <FaLeaf size={size} color='Brown' />,
-    winter: <FaRegSnowflake size={size} color='SkyBlue' />,
-    summer: <BsSun size={size} color='Orange' />,
+    fall: <FaLeaf size={size} color='brown' />,
+    winter: <FaRegSnowflake size={size} color='skyblue' />,
+    summer: <BsSun size={size} color='orange' />,
   };
 
   return icons[term.split(' ')[0].toLowerCase()];
@@ -40,6 +40,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
 
   const container = twMerge('flex flex-wrap mr-auto');
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
+
   const currentlyOfferedTerms = course.terms.filter((c) =>
     getCurrentTerms().includes(c)
   );

@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
-import { Alert } from '../components/Alert';
+import { Alert, AlertStatus } from '../components/Alert';
+import { CourseGraph } from '../components/CourseGraph';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -22,23 +23,20 @@ import { Review } from '../model/Review';
 import { Loading } from './Loading';
 
 export const CoursePage = () => {
-  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const params = useParams<{ id: string }>();
-  const [course, setCourse] = useState<Course>();
-  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
-  const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const user = useAuth();
   const currentTerms = getCurrentTerms();
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
+  const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
+  const [course, setCourse] = useState<Course>();
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
-
-  const [alertStatus, setAlertStatus] = useState<'success' | 'error' | null>(
-    null
-  );
-  const [alertMessage, setAlertMessage] = useState('');
-
-  const user = useAuth();
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     fetchClient
@@ -112,20 +110,30 @@ export const CoursePage = () => {
       { course_id: review.courseId },
       { headers: { 'Content-Type': 'application/json' } }
     );
+
     if (res.ok) {
       setShowingReviews(
         showingReviews.filter((r) => r.userId !== review.userId)
       );
+      setAllReviews(
+        allReviews?.filter(
+          (r) => r.userId !== review.userId && r.courseId === review.courseId
+        )
+      );
     }
+
     handleSubmit('Review deleted successfully.')(res);
+
     localStorage.removeItem(course._id);
   };
 
-  const userReview = allReviews.find((r) => r.userId === user?.id);
+  const userReview = allReviews?.find((r) => r.userId === user?.id);
+
   const averageRating =
-    _.sumBy(allReviews, (r) => r.rating) / allReviews.length;
+    _.sumBy(allReviews, (r) => r.rating) / (allReviews ?? []).length;
+
   const averageDifficulty =
-    _.sumBy(allReviews, (r) => r.difficulty) / allReviews.length;
+    _.sumBy(allReviews, (r) => r.difficulty) / (allReviews ?? []).length;
 
   return (
     <Layout>
@@ -133,12 +141,15 @@ export const CoursePage = () => {
         course={course}
         rating={averageRating}
         difficulty={averageDifficulty}
-        numReviews={allReviews.length}
+        numReviews={allReviews?.length}
       />
       <SchedulesDisplay course={course} />
       <div className='flex flex-col lg:flex-row'>
         <div className='mt-4 flex lg:hidden'>
           <CourseRequirements requirements={requirements} />
+        </div>
+        <div className='mb-1 mt-4 rounded-lg bg-slate-50 dark:bg-neutral-800 lg:hidden'>
+          <CourseGraph course={course} />
         </div>
         <div className='flex w-full flex-row justify-between'>
           <div className='my-4 w-full lg:mr-4 lg:mt-4'>
@@ -150,7 +161,7 @@ export const CoursePage = () => {
             <div className='mb-4 lg:hidden'>
               <ReviewFilter
                 course={course}
-                allReviews={allReviews}
+                allReviews={allReviews ?? []}
                 setReviews={setShowingReviews}
                 setShowAllReviews={setShowAllReviews}
               />
@@ -194,10 +205,13 @@ export const CoursePage = () => {
         </div>
         <div className='hidden h-fit lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
-          <div className='mt-3'>
+          <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
+            <CourseGraph course={course} />
+          </div>
+          <div className='mb-10 mt-3'>
             <ReviewFilter
               course={course}
-              allReviews={allReviews}
+              allReviews={allReviews ?? []}
               setReviews={setShowingReviews}
               setShowAllReviews={setShowAllReviews}
             />

@@ -30,7 +30,7 @@ const statusIcon = {
   warning: <IoWarningOutline className='text-yellow-700' size={20} />,
 };
 
-type AlertStatus = 'error' | 'success' | 'info' | 'warning';
+export type AlertStatus = 'error' | 'success' | 'info' | 'warning';
 
 interface AlertProps {
   status: AlertStatus;

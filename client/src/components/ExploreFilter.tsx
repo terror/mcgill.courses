@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { RefreshCw } from 'react-feather';
+import { BsSun } from 'react-icons/bs';
+import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
 import { MultiSelect } from './MultiSelect';
+import { ResetButton } from './ResetButton';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'];
+type CourseTerm = (typeof termsOptions)[number];
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
 
 type ExploreFilterProp = {
@@ -19,15 +22,17 @@ type ExploreFilterProp = {
 };
 
 type FilterButtonProp = {
-  name: string;
+  icon?: JSX.Element;
   isSelected: boolean;
+  name: string;
   selections: string[];
   setSelections: (selected: string[]) => void;
 };
 
 const FilterButton = ({
-  name,
+  icon,
   isSelected,
+  name,
   selections,
   setSelections,
 }: FilterButtonProp) => {
@@ -36,6 +41,7 @@ const FilterButton = ({
   if (isSelected !== selected) setSelected(isSelected);
 
   const selectedColor = 'bg-red-600 text-gray-100';
+
   const unselectedColor =
     'bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-gray-100';
 
@@ -54,32 +60,11 @@ const FilterButton = ({
         }
       }}
     >
-      {name}
+      <div className='flex items-center gap-x-2'>
+        {icon && icon}
+        {name}
+      </div>
     </button>
-  );
-};
-
-const ClearButton = ({
-  setSelectedSubjects,
-  setSelectedLevels,
-  setSelectedTerms,
-}: {
-  setSelectedSubjects: (selected: string[]) => void;
-  setSelectedLevels: (selected: string[]) => void;
-  setSelectedTerms: (selected: string[]) => void;
-}) => {
-  return (
-    <div className='ml-auto flex h-8 w-8 items-center justify-center rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-neutral-700'>
-      <button
-        onClick={() => {
-          setSelectedSubjects([]);
-          setSelectedLevels([]);
-          setSelectedTerms([]);
-        }}
-      >
-        <RefreshCw className={'h-5 w-5 text-gray-700 dark:text-neutral-200'} />
-      </button>
-    </div>
   );
 };
 
@@ -92,6 +77,17 @@ export const ExploreFilter = ({
   setSelectedTerms,
   variant,
 }: ExploreFilterProp) => {
+  const termToIcon = (term: CourseTerm) => {
+    switch (term) {
+      case 'Fall':
+        return <FaLeaf color='brown' />;
+      case 'Winter':
+        return <FaRegSnowflake color='skyblue' />;
+      case 'Summer':
+        return <BsSun color='orange' />;
+    }
+  };
+
   return (
     <div
       className={twMerge(
@@ -100,12 +96,14 @@ export const ExploreFilter = ({
       )}
     >
       <div className='flex flex-row'>
-        <h1 className='text-2xl font-semibold'>Filter</h1>
-        <div className='py-1' />
-        <ClearButton
-          setSelectedSubjects={setSelectedSubjects}
-          setSelectedLevels={setSelectedLevels}
-          setSelectedTerms={setSelectedTerms}
+        <h1 className='m-10 mb-2 text-2xl font-semibold'>Filter</h1>
+        <ResetButton
+          className='ml-auto mr-10 mt-10'
+          onClear={() => {
+            setSelectedSubjects([]);
+            setSelectedLevels([]);
+            setSelectedTerms([]);
+          }}
         />
       </div>
       <div className='py-2.5' />
@@ -135,6 +133,7 @@ export const ExploreFilter = ({
         {termsOptions.map((term, i) => (
           <FilterButton
             key={i}
+            icon={termToIcon(term as CourseTerm)}
             name={term}
             isSelected={selectedTerms.includes(term)}
             selections={selectedTerms}
