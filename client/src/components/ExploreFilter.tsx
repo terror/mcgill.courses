@@ -48,7 +48,7 @@ const FilterButton = ({
   return (
     <button
       className={twMerge(
-        'mx-2 ml-0 rounded-full px-4 py-2 font-semibold tracking-wider transition duration-150 ease-in-out',
+        'rounded-full px-4 py-2 font-semibold tracking-wider transition duration-150 ease-in-out',
         selected ? selectedColor : unselectedColor
       )}
       onClick={() => {
@@ -96,9 +96,9 @@ export const ExploreFilter = ({
       )}
     >
       <div className='flex flex-row'>
-        <h1 className='m-10 mb-2 text-2xl font-semibold'>Filter</h1>
+        <h1 className='mb-2 text-2xl font-semibold'>Filter</h1>
         <ResetButton
-          className='ml-auto mr-10 mt-10'
+          className='ml-auto'
           onClear={() => {
             setSelectedSubjects([]);
             setSelectedLevels([]);
@@ -117,29 +117,32 @@ export const ExploreFilter = ({
       />
       <div>
         <h1 className='mt-3 text-xl font-semibold'>Level</h1>
-        <div className='py-1' />
-        {levelsOptions.map((level, i) => (
-          <FilterButton
-            key={i}
-            name={level}
-            isSelected={selectedLevels.includes(level)}
-            selections={selectedLevels}
-            setSelections={setSelectedLevels}
-          />
-        ))}
+        <div className='flex flex-wrap gap-2 py-1'>
+          {levelsOptions.map((level, i) => (
+            <FilterButton
+              key={i}
+              name={level}
+              isSelected={selectedLevels.includes(level)}
+              selections={selectedLevels}
+              setSelections={setSelectedLevels}
+            />
+          ))}
+        </div>
       </div>
       <div className='space-y-2'>
         <h1 className='mt-3 text-xl font-semibold'>Term</h1>
-        {termsOptions.map((term, i) => (
-          <FilterButton
-            key={i}
-            icon={termToIcon(term as CourseTerm)}
-            name={term}
-            isSelected={selectedTerms.includes(term)}
-            selections={selectedTerms}
-            setSelections={setSelectedTerms}
-          />
-        ))}
+        <div className='flex flex-wrap gap-2'>
+          {termsOptions.map((term, i) => (
+            <FilterButton
+              key={i}
+              icon={termToIcon(term as CourseTerm)}
+              name={term}
+              isSelected={selectedTerms.includes(term)}
+              selections={selectedTerms}
+              setSelections={setSelectedTerms}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
