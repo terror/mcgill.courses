@@ -192,21 +192,6 @@ export const CoursePage = () => {
             </div>
           </div>
         </div>
-        <AddReviewForm
-          course={course}
-          open={addReviewOpen}
-          onClose={() => setAddReviewOpen(false)}
-          handleSubmit={handleSubmit('Review added successfully.')}
-        />
-        {userReview && (
-          <EditReviewForm
-            course={course}
-            open={editReviewOpen}
-            onClose={() => setEditReviewOpen(false)}
-            review={userReview}
-            handleSubmit={handleSubmit('Review edited successfully.')}
-          />
-        )}
         <div className='hidden h-fit lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
           <div className='mt-3'>
