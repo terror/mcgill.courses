@@ -203,7 +203,7 @@ export const CoursePage = () => {
             </div>
           </div>
         </div>
-        <div className='hidden h-fit lg:mt-4 lg:block'>
+        <div className='hidden h-fit w-1/2 lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
           <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
             <CourseGraph course={course} />
