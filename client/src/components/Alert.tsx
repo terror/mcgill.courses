@@ -32,10 +32,10 @@ const statusIcon = {
 
 export type AlertStatus = 'error' | 'success' | 'info' | 'warning';
 
-interface AlertProps {
+type AlertProps = {
   status: AlertStatus;
   message?: string;
-}
+};
 
 export const Alert = ({ status, message }: AlertProps) => {
   const [show, setShow] = useState(false);
