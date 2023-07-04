@@ -6,7 +6,7 @@ export const JumpToTopButton = () => {
   const [visible, setVisible] = useState(false);
 
   const toggleVisible = () =>
-    window.scrollY > 300 ? setVisible(true) : setVisible(false);
+    setVisible(window.scrollY > 300);
 
   const scrollToTop = () => {
     window.scrollTo({
