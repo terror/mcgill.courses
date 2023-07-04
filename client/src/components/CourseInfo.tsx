@@ -4,15 +4,13 @@ import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
 
-const Charts = ({
-  numReviews,
-  rating,
-  difficulty,
-}: {
+type ChartsProps = {
   numReviews?: number;
   rating: number;
   difficulty: number;
-}) => {
+};
+
+const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
   if (numReviews === undefined) return null;
 
   return numReviews ? (

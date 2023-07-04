@@ -2,10 +2,6 @@ import { Link } from 'react-router-dom';
 
 import { Requirements } from '../model/Requirements';
 
-type RequirementsProps = {
-  requirements: Requirements;
-};
-
 type ReqsBlockProps = {
   title: string;
   reqs: string[];
@@ -34,6 +30,10 @@ const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
       )}
     </div>
   );
+};
+
+type RequirementsProps = {
+  requirements: Requirements;
 };
 
 export const CourseRequirements = ({ requirements }: RequirementsProps) => {

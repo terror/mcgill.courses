@@ -41,7 +41,11 @@ const VSBtimeToDisplay = (time: string) => {
   `;
 };
 
-export const SchedulesDisplay = ({ course }: { course: Course }) => {
+type SchedulesDisplayProps = {
+  course: Course;
+};
+
+export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
   const schedules = course.schedule;
 
   if (!schedules) return null;

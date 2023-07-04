@@ -8,14 +8,14 @@ import { SearchResults } from '../model/SearchResults';
 
 type SearchResultType = 'course' | 'instructor';
 
-interface SearchResultProps {
+type SearchResultProps = {
   index: number;
   query?: string;
   selectedIndex: number;
   text: string;
   type: SearchResultType;
   url: string;
-}
+};
 
 const SearchResult = ({
   index,

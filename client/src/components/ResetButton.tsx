@@ -1,13 +1,12 @@
 import { RefreshCw } from 'react-feather';
 import { twMerge } from 'tailwind-merge';
 
-export const ResetButton = ({
-  className,
-  onClear,
-}: {
+type ResetButtonProps = {
   className?: string;
   onClear: () => void;
-}) => {
+};
+
+export const ResetButton = ({ className, onClear }: ResetButtonProps) => {
   return (
     <div
       className={twMerge(

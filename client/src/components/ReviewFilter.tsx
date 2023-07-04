@@ -19,20 +19,12 @@ const sortTypes = [
 
 export type ReviewSortType = (typeof sortTypes)[number];
 
-type ReviewFilterProps = {
-  course: Course;
-  allReviews: Review[];
-  setReviews: Dispatch<SetStateAction<Review[]>>;
-  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
-};
-
-const StarToggle = ({
-  onToggle,
-  toggled,
-}: {
+type StarToggleProps = {
   onToggle: () => void;
   toggled: boolean;
-}) => {
+};
+
+const StarToggle = ({ onToggle, toggled }: StarToggleProps) => {
   return (
     <button className='relative w-fit' onClick={onToggle}>
       <Star
@@ -83,6 +75,13 @@ type FieldLabelProps = {
 const FieldLabel = ({ children }: FieldLabelProps) => (
   <h2 className='mb-2 text-sm font-semibold'>{children}</h2>
 );
+
+type ReviewFilterProps = {
+  course: Course;
+  allReviews: Review[];
+  setReviews: Dispatch<SetStateAction<Review[]>>;
+  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
+};
 
 export const ReviewFilter = ({
   course,
