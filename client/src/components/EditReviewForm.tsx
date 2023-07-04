@@ -33,7 +33,6 @@ export const EditReviewForm = ({
     difficulty: review.difficulty,
   };
 
-  console.log('rendering 1');
 
   return (
     <Transition appear show={open} as={Fragment}>
