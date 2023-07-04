@@ -109,7 +109,6 @@ export const ExploreFilter = ({
       <div className='py-2.5' />
       <h1 className='text-xl font-semibold'>Course Code</h1>
       <div className='py-1.5' />
-      {/* TODO: Clicking on an option with a query in the field is kinda broken*/}
       <MultiSelect
         options={courseCodes}
         values={selectedSubjects}
