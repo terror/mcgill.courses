@@ -5,8 +5,7 @@ import { twMerge } from 'tailwind-merge';
 export const JumpToTopButton = () => {
   const [visible, setVisible] = useState(false);
 
-  const toggleVisible = () =>
-    setVisible(window.scrollY > 300);
+  const toggleVisible = () => setVisible(window.scrollY > 300);
 
   const scrollToTop = () => {
     window.scrollTo({

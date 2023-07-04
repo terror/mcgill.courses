@@ -33,7 +33,6 @@ export const EditReviewForm = ({
     difficulty: review.difficulty,
   };
 
-
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
