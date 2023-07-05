@@ -18,7 +18,7 @@ export const Tooltip = ({ show, text, children }: TooltipProps) => {
         leaveFrom='opacity-100'
         leaveTo='opacity-0'
       >
-        <div className='absolute -top-1 left-0 z-10 w-28 -translate-x-0 -translate-y-full transform rounded-lg bg-white p-2 text-center text-xs font-bold text-gray-700 dark:bg-neutral-500 dark:text-gray-100'>
+        <div className='absolute -top-1 left-0 z-10 w-28 -translate-x-0 -translate-y-full rounded-lg bg-white p-2 text-center text-xs font-bold text-gray-700 dark:bg-neutral-500 dark:text-gray-100'>
           {text}
         </div>
       </Transition>

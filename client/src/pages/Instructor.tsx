@@ -97,7 +97,7 @@ export const Instructor = () => {
         </div>
       </div>
       <div className='flex w-full flex-row justify-between'>
-        <div className='my-4 ml-8 mr-8 w-full md:mr-8 md:mt-4'>
+        <div className='mx-8 my-4 w-full md:mr-8 md:mt-4'>
           <div className='w-full'>
             {userReview && (
               <CourseReview

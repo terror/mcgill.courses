@@ -17,7 +17,7 @@ import { StarRating } from './StarRating';
 
 const LoginPrompt = () => {
   return (
-    <div className='min-w-2xl absolute bottom-20 end-4 h-fit rounded-md border bg-gray-100 px-2 py-1 text-neutral-800 dark:border-0 dark:bg-neutral-700 dark:text-gray-200 sm:bottom-16'>
+    <div className='absolute bottom-20 end-4 h-fit rounded-md border bg-gray-100 px-2 py-1 text-neutral-800 dark:border-0 dark:bg-neutral-700 dark:text-gray-200 sm:bottom-16'>
       You must be logged in
     </div>
   );
@@ -178,25 +178,25 @@ export const CourseReview = ({
           <div className='flex flex-col'>
             <div className='mb-2 flex flex-col sm:flex-row sm:gap-4'>
               <div className='flex items-center'>
-                <div className='text-md mr-1 font-bold text-gray-700 dark:text-gray-200'>
+                <div className='mr-1 font-bold text-gray-700 dark:text-gray-200'>
                   Rating:
                 </div>
                 <StarRating rating={review.rating} />
               </div>
               <div className='flex items-center'>
-                <div className='text-md mr-1 font-bold text-gray-700 dark:text-gray-200'>
+                <div className='mr-1 font-bold text-gray-700 dark:text-gray-200'>
                   Difficulty:
                 </div>
                 <StarRating rating={review.difficulty} />
               </div>
             </div>
             {review.content.length < 300 || readMore ? (
-              <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+              <div className='ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
                 {review.content}
               </div>
             ) : (
               <>
-                <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+                <div className='ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
                   {review.content.substring(0, 300) + '...'}
                 </div>
                 <button

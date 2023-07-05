@@ -24,7 +24,7 @@ export const Autocomplete = ({
       : options;
 
   return (
-    <div className='max-w-72'>
+    <div>
       <Combobox value={value} onChange={(val) => setValue(val)}>
         <div className='w-full'>
           <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>

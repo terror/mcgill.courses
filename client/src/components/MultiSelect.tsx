@@ -15,7 +15,8 @@ export const MultiSelect = ({
   setValues,
 }: MultiSelectProps) => {
   const [query, setQuery] = useState('');
-  // Need to prevent the onBlur (resetting query) from firing when just clicking an option
+
+  // Needed to prevent the onBlur (resetting query) from firing when just clicking an option
   const [optionClicked, setOptionClicked] = useState(false);
 
   const filtered =
@@ -30,11 +31,8 @@ export const MultiSelect = ({
   };
 
   const handleInputBlur = () => {
-    // A hack to fix a flickering issue when closing the dropdown
     setTimeout(() => {
-      if (!optionClicked) {
-        setQuery('');
-      }
+      if (!optionClicked) setQuery('');
       setOptionClicked(false);
     }, 200);
   };
@@ -56,7 +54,7 @@ export const MultiSelect = ({
         }}
         multiple
       >
-        <div className='max-w-72'>
+        <div>
           <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
             <Combobox.Input
               className='bg-gray-100 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
