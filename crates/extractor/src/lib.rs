@@ -16,6 +16,7 @@ use model::{Block, TimeBlock};
 
 mod course_listing_ext;
 mod course_page_ext;
+mod req_parser;
 mod requirements_ext;
 mod schedule_ext;
 mod select;
