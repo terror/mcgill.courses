@@ -1,15 +1,16 @@
 import _ from 'lodash';
-import { CourseReview } from '../components/CourseReview';
 import { Fragment, useEffect, useState } from 'react';
-import { Instructor as InstructorType } from '../model/Instructor';
-import { Layout } from '../components/Layout';
 import { Link, useParams } from 'react-router-dom';
-import { NotFound } from './NotFound';
+
+import { CourseReview } from '../components/CourseReview';
+import { Layout } from '../components/Layout';
 import { RatingInfo } from '../components/RatingInfo';
-import { Review } from '../model/Review';
-import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
-import { Spinner } from '../components/Spinner';
+import { fetchClient } from '../lib/fetchClient';
+import { Instructor as InstructorType } from '../model/Instructor';
+import { Review } from '../model/Review';
+import { Loading } from './Loading';
+import { NotFound } from './NotFound';
 import { GetInstructorPayload } from '../model/GetInstructorPayload';
 
 export const Instructor = () => {
@@ -37,17 +38,7 @@ export const Instructor = () => {
     }
   }, [params.name]);
 
-  if (instructor === undefined)
-    return (
-      <Layout>
-        <div className='flex min-h-screen items-center justify-center'>
-          <div className='text-center'>
-            <Spinner />
-          </div>
-        </div>
-      </Layout>
-    );
-
+  if (instructor === undefined) return <Loading />;
   if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id);
@@ -106,7 +97,7 @@ export const Instructor = () => {
         </div>
       </div>
       <div className='flex w-full flex-row justify-between'>
-        <div className='my-4 ml-8 mr-8 w-full md:mr-8 md:mt-4'>
+        <div className='mx-8 my-4 w-full md:mr-8 md:mt-4'>
           <div className='w-full'>
             {userReview && (
               <CourseReview

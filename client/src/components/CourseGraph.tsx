@@ -1,10 +1,15 @@
-import VisGraph, { GraphData } from 'react-vis-graph-wrapper';
-import { Course } from '../model/Course';
-import { useDarkMode } from '../hooks/useDarkMode';
 import { useNavigate } from 'react-router-dom';
+import VisGraph, { GraphData } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
-export const CourseGraph = ({ course }: { course: Course }) => {
+import { useDarkMode } from '../hooks/useDarkMode';
+import { Course } from '../model/Course';
+
+type CourseGraphProps = {
+  course: Course;
+};
+
+export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();

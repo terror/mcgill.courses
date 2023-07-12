@@ -88,7 +88,7 @@ export const ReviewForm = ({
         <div className='italic text-red-400'>
           <ErrorMessage name='rating' />
         </div>
-        <label htmlFor='difficulty' className='mb-2 mt-2 dark:text-gray-200'>
+        <label htmlFor='difficulty' className='my-2 dark:text-gray-200'>
           Difficulty
         </label>
         <StarRatingInput

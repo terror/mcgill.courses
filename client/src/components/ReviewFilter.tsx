@@ -19,20 +19,12 @@ const sortTypes = [
 
 export type ReviewSortType = (typeof sortTypes)[number];
 
-type ReviewFilterProps = {
-  course: Course;
-  allReviews: Review[];
-  setReviews: Dispatch<SetStateAction<Review[]>>;
-  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
-};
-
-const StarToggle = ({
-  onToggle,
-  toggled,
-}: {
+type StarToggleProps = {
   onToggle: () => void;
   toggled: boolean;
-}) => {
+};
+
+const StarToggle = ({ onToggle, toggled }: StarToggleProps) => {
   return (
     <button className='relative w-fit' onClick={onToggle}>
       <Star
@@ -74,6 +66,21 @@ const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
       ))}
     </div>
   );
+};
+
+type FieldLabelProps = {
+  children: string;
+};
+
+const FieldLabel = ({ children }: FieldLabelProps) => (
+  <h2 className='mb-2 text-sm font-semibold'>{children}</h2>
+);
+
+type ReviewFilterProps = {
+  course: Course;
+  allReviews: Review[];
+  setReviews: Dispatch<SetStateAction<Review[]>>;
+  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
 };
 
 export const ReviewFilter = ({
@@ -160,7 +167,7 @@ export const ReviewFilter = ({
         />
       </div>
       <div>
-        <h2 className='mb-2 text-sm font-semibold'>Sort by</h2>
+        <FieldLabel>Sort by</FieldLabel>
         <div className='relative z-20'>
           <Autocomplete
             options={sorts}
@@ -170,7 +177,7 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className='mb-2 text-sm font-semibold'>Instructor(s)</h2>
+        <FieldLabel>Instructor(s)</FieldLabel>
         <div className='relative z-10'>
           <MultiSelect
             options={uniqueInstructors}
@@ -179,19 +186,21 @@ export const ReviewFilter = ({
           />
         </div>
       </div>
-      <div>
-        <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
-        <RatingFilter
-          ratings={selectedRatings}
-          setRatings={setSelectedRatings}
-        />
-      </div>
-      <div>
-        <h2 className='mb-2 text-sm font-semibold'>Difficulty</h2>
-        <RatingFilter
-          ratings={selectedDifficulties}
-          setRatings={setSelectedDifficulties}
-        />
+      <div className='flex flex-wrap gap-x-8 gap-y-4'>
+        <div>
+          <FieldLabel>Rating</FieldLabel>
+          <RatingFilter
+            ratings={selectedRatings}
+            setRatings={setSelectedRatings}
+          />
+        </div>
+        <div>
+          <FieldLabel>Difficulty</FieldLabel>
+          <RatingFilter
+            ratings={selectedDifficulties}
+            setRatings={setSelectedDifficulties}
+          />
+        </div>
       </div>
     </div>
   );

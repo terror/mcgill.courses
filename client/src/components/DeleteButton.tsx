@@ -1,24 +1,23 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { Trash2 } from 'react-feather';
+import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames } from '../lib/utils';
 
 type DeleteButtonProps = {
   title: string;
   text: string;
   onConfirm: () => void;
-  size?: number;
+  size: number;
 };
 
 export const DeleteButton = ({
   title,
   text,
   onConfirm,
-  size,
+  size = 20,
 }: DeleteButtonProps) => {
-  size = size ?? 20;
   const [open, setOpen] = useState(false);
 
   const [darkMode] = useDarkMode();
@@ -39,7 +38,7 @@ export const DeleteButton = ({
       <Transition appear show={open} as={Fragment}>
         <Dialog
           as='div'
-          className={classNames('relative z-50', darkMode ? 'dark' : '')}
+          className={twMerge('relative z-50', darkMode ? 'dark' : '')}
           onClose={() => setOpen(false)}
         >
           <Transition.Child
@@ -51,7 +50,7 @@ export const DeleteButton = ({
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <div className='fixed inset-0 bg-black bg-opacity-25' />
+            <div className='fixed inset-0 bg-black/25' />
           </Transition.Child>
 
           <div className='fixed inset-y-0 left-0 w-screen overflow-y-auto'>
@@ -65,7 +64,7 @@ export const DeleteButton = ({
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-800'>
+                <Dialog.Panel className='w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-800'>
                   <Dialog.Title
                     as='h3'
                     className='text-lg font-medium leading-6 text-gray-900 dark:text-gray-200'
