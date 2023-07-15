@@ -1,10 +1,8 @@
-## mcgill.courses
-
-<div>
-  <img width='100px' src='https://user-images.githubusercontent.com/31192478/235252457-6364a167-29d7-4b24-96f5-db73c38209e8.png'>
-</div>
+## mcgill.courses <a><img src="https://user-images.githubusercontent.com/31192478/235252457-6364a167-29d7-4b24-96f5-db73c38209e8.png" height="40" valign="top" /></a>
 
 A course search and review platform for McGill university.
+
+![](https://github.com/terror/mcgill.courses/assets/31192478/6f6d5331-b06f-4a52-8681-a98485f9d0de)
 
 ### Development
 
