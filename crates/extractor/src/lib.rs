@@ -4,8 +4,8 @@ use {
   course_page_ext::CoursePageExt,
   lazy_static::lazy_static,
   model::{
-    CourseListing, CoursePage, Instructor, Operator, ReqNode, Requirement,
-    Requirements, Schedule,
+    CourseListing, CoursePage, Instructor, ReqNode, Requirement, Requirements,
+    Schedule,
   },
   req_parser::ReqParser,
   requirements_ext::RequirementsExt,
@@ -16,7 +16,7 @@ use {
 };
 
 #[cfg(test)]
-use model::{Block, TimeBlock};
+use model::{Block, Operator, TimeBlock};
 
 mod course_listing_ext;
 mod course_page_ext;
