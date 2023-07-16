@@ -5,12 +5,12 @@ import { Link, useLocation } from 'react-router-dom';
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
+import { getUrl } from '../lib/utils';
 import { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
+import { DarkModeToggle } from './DarkModeToggle';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
-import { DarkModeToggle } from './DarkModeToggle';
-import { getUrl } from '../lib/utils';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,6 +53,14 @@ export const Navbar = () => {
             <img className='h-12 w-auto' src={birdImageUrl} alt='bird' />
           </Link>
         </div>
+        {pathName !== '/' ? (
+          <div className='mx-8 my-auto hidden flex-1 justify-center align-middle sm:mx-12 sm:block md:mx-32'>
+            <CourseSearchBar
+              results={results}
+              handleInputChange={handleInputChange}
+            />
+          </div>
+        ) : null}
         <div className='flex lg:hidden'>
           <button
             type='button'
@@ -63,14 +71,6 @@ export const Navbar = () => {
             <Bars3Icon className='h-6 w-6' aria-hidden='true' />
           </button>
         </div>
-        {pathName !== '/' ? (
-          <div className='mx-3 my-auto hidden flex-1 justify-center align-middle lg:flex'>
-            <CourseSearchBar
-              results={results}
-              handleInputChange={handleInputChange}
-            />
-          </div>
-        ) : null}
         <div className='flex min-w-fit flex-row lg:flex-1'>
           <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
             <DarkModeToggle />

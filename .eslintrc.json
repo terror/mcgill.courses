@@ -1,5 +1,9 @@
 {
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
   "ignorePatterns": [
     "client/dist/*",
     "cypress.config.js",

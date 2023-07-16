@@ -1,12 +1,11 @@
 import { RatingPieChart } from './RatingPieChart';
 
-export const RatingInfo = ({
-  title,
-  rating,
-}: {
+type RatingInfoProps = {
   title: string;
   rating: number;
-}) => {
+};
+
+export const RatingInfo = ({ title, rating }: RatingInfoProps) => {
   return (
     <div className='w-full lg:w-3/4'>
       <h1 className='text-center text-xl font-semibold text-gray-800 dark:text-gray-200'>

@@ -3,11 +3,12 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames, getUrl } from '../lib/utils';
+import { getUrl } from '../lib/utils';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
@@ -37,7 +38,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
     <Transition appear show={open}>
       <Overlay>
         <div
-          className={classNames(
+          className={twMerge(
             'fixed inset-0 z-50 flex items-end justify-end',
             darkMode ? 'dark' : ''
           )}
@@ -52,7 +53,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveTo='opacity-0'
           >
             <div className='fixed inset-0' onClick={() => onClose(false)}>
-              <div className='absolute inset-0 bg-gray-900 opacity-70'></div>
+              <div className='absolute inset-0 bg-black opacity-60'></div>
             </div>
           </Transition.Child>
           <Transition.Child
@@ -64,7 +65,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveFrom='translate-x-0'
             leaveTo='translate-x-full'
           >
-            <div className='h-screen w-full overflow-y-auto bg-white px-6 py-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+            <div className='h-screen w-full overflow-y-auto bg-white p-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
                   <Link to='/' className=''>

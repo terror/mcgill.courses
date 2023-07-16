@@ -14,7 +14,6 @@ import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { getCurrentTerms } from '../lib/utils';
@@ -22,6 +21,7 @@ import { Course } from '../model/Course';
 import { GetCoursePaylod } from '../model/GetCoursePayload';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
+import { Loading } from './Loading';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -59,15 +59,7 @@ export const CoursePage = () => {
   }
 
   if (course === undefined || showingReviews === undefined) {
-    return (
-      <Layout>
-        <div className='flex min-h-screen items-center justify-center'>
-          <div className='text-center'>
-            <Spinner />
-          </div>
-        </div>
-      </Layout>
-    );
+    return <Loading />;
   }
 
   if (course.terms.some((term) => !currentTerms.includes(term))) {
@@ -204,7 +196,7 @@ export const CoursePage = () => {
             </div>
           </div>
         </div>
-        <div className='hidden h-fit w-[50%] lg:mt-4 lg:block'>
+        <div className='hidden h-fit w-1/2 lg:mt-4 lg:block'>
           <CourseRequirements requirements={requirements} />
           <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
             <CourseGraph course={course} />

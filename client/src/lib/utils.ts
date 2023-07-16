@@ -2,10 +2,6 @@ import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import { Schedule } from '../model/Schedule';
 
-export const classNames = (...classes: string[]) => {
-  return classes.filter(Boolean).join(' ');
-};
-
 export const uniqueTermInstructors = (course: Course) => {
   const termInstructors = course.instructors.filter((i) =>
     course.terms.includes(i.term)
@@ -48,24 +44,6 @@ export const getCurrentTerms = (): [string, string, string] => {
 export const filterCurrentInstructors = (instructors: Instructor[]) => {
   const currentTerm = getCurrentTerms();
   return instructors.filter((i) => currentTerm.includes(i.term));
-};
-
-export const dedupe = (arr: any[]) => {
-  return [...new Set(arr)];
-};
-
-export const dedupeSchedulesByBlocks = (schedules: Schedule[]) => {
-  const deduped = [];
-  const filled = new Set();
-
-  for (const schedule of schedules) {
-    const block = schedule.blocks[0];
-    if (!filled.has(block.display)) {
-      deduped.push(schedule);
-      filled.add(block.display);
-    }
-  }
-  return deduped;
 };
 
 export const sortTerms = (terms: string[]) => {

@@ -1,12 +1,13 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import { CourseReview } from '../components/CourseReview';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
-import { Link } from 'react-router-dom';
-import { Review } from '../model/Review';
 import { Spinner } from '../components/Spinner';
-import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
+import { fetchClient } from '../lib/fetchClient';
+import { Review } from '../model/Review';
 
 export const Profile = () => {
   const user = useAuth();
@@ -29,7 +30,7 @@ export const Profile = () => {
               Your Reviews
             </h1>
           </div>
-          <div className='py- mx-5 mb-4 flex h-fit max-w-xl flex-col flex-wrap rounded-lg p-4'>
+          <div className='mx-5 mb-4 flex h-fit max-w-xl flex-col flex-wrap rounded-lg p-4'>
             {userReviews === undefined ? (
               <div className='mx-auto'>
                 <Spinner />
