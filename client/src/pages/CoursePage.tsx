@@ -18,7 +18,7 @@ import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
 import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
-import { GetCoursePaylod } from '../model/GetCoursePayload';
+import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
@@ -41,7 +41,9 @@ export const CoursePage = () => {
 
   useEffect(() => {
     fetchClient
-      .getData<GetCoursePaylod>(`/courses/${params.id?.toUpperCase()}`)
+      .getData<GetCourseWithReviewsPayload>(
+        `/courses/${params.id?.toUpperCase()}?with_reviews=true`
+      )
       .then((payload) => {
         setCourse(payload.course);
         setShowingReviews(payload.reviews);

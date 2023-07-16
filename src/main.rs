@@ -46,6 +46,7 @@ use {
   rayon::prelude::*,
   reqwest::blocking::RequestBuilder,
   serde::{Deserialize, Serialize},
+  serde_json::json,
   std::{
     collections::HashSet,
     env,

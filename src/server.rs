@@ -103,7 +103,7 @@ impl Server {
 mod tests {
   use {
     super::*,
-    crate::{courses::GetCoursePayload, instructors::GetInstructorPayload},
+    crate::instructors::GetInstructorPayload,
     axum::body::Body,
     http::{Method, Request},
     interactions::GetInteractionsPayload,
@@ -193,6 +193,12 @@ mod tests {
       )
       .unwrap()
     }
+  }
+
+  #[derive(Debug, Deserialize, Serialize)]
+  pub(crate) struct GetCourseWithReviewsPayload {
+    pub(crate) course: Course,
+    pub(crate) reviews: Vec<Review>,
   }
 
   #[tokio::test]
@@ -321,9 +327,74 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetCoursePayload>().await.course,
+      response.convert::<Course>().await,
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
+  }
+
+  #[tokio::test]
+  async fn can_get_course_with_reviews() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
+
+    let response = app
+      .call(
+        Request::builder()
+          .uri("/api/courses/MATH240?with_reviews=true")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response.convert::<GetCourseWithReviewsPayload>().await;
+
+    assert_eq!(
+      payload.course,
+      db.find_course_by_id("MATH240").await.unwrap().unwrap()
+    );
+
+    assert_eq!(payload.reviews.len(), 1);
   }
 
   #[tokio::test]
