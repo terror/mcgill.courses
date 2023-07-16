@@ -2,10 +2,12 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
+import { Transition } from '@headlessui/react';
 
 import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Block, Schedule, TimeBlock } from '../model/Schedule';
+import * as buildingCodes from '../assets/buildingCodes.json';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -43,6 +45,38 @@ const VSBtimeToDisplay = (time: string) => {
 
 type SchedulesDisplayProps = {
   course: Course;
+};
+
+const BlockLocation = ({ location }: { location: string }) => {
+  const [showFullName, setShowFullName] = useState(false);
+  const room = location.split(' ')[0];
+
+  return (
+    <span
+      className='relative whitespace-nowrap'
+      onMouseEnter={() => setShowFullName(true)}
+      onMouseLeave={() => setShowFullName(false)}
+    >
+      <p className='inline-block'> {location}</p>
+      <Transition
+        show={showFullName}
+        className='absolute -left-5 top-[-40px] z-10 inline min-w-fit whitespace-nowrap rounded border border-gray-200 bg-gray-100 p-2 text-sm transition ease-in-out dark:border-neutral-700 dark:bg-neutral-600'
+        enter='transition-opacity duration-75'
+        enterFrom='opacity-0'
+        enterTo='opacity-100'
+        leave='transition-opacity duration-150'
+        leaveFrom='opacity-100'
+        leaveTo='opacity-0'
+      >
+        <span
+          onMouseEnter={() => setShowFullName(true)}
+          onMouseLeave={() => setShowFullName(false)}
+        >
+          {buildingCodes[room as keyof typeof buildingCodes]}
+        </span>
+      </Transition>
+    </span>
+  );
 };
 
 export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
@@ -115,10 +149,17 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
                 <span className='font-semibold'>Campus: </span>
                 {block.campus}
               </div>
-              <div className='w-80'>
-                <span className='font-semibold'>Classroom(s): </span>
-                {block.location ? block.location.replace(';', ',') : 'N/A'}
-              </div>
+              <span className='font-semibold'>Classroom(s):</span>
+              <span className='inline-block w-80'>
+                {block.location.split(';').map((location: string, index) => (
+                  <span>
+                    <BlockLocation location={location.trim()} />
+                    {index !== block.location.split(';').length - 1 && (
+                      <span className='inline-block'>,</span>
+                    )}
+                  </span>
+                ))}
+              </span>
             </div>
             <button
               onClick={() =>
