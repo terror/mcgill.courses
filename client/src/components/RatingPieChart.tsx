@@ -25,7 +25,7 @@ export const RatingPieChart = ({
         display: false,
       },
     },
-    cutout: '65%', // The size of the inner circle
+    cutout: '67%', // The size of the inner circle
     maintainAspectRatio: false,
     responsive: true,
   };
