@@ -52,7 +52,7 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      {<Alert status='error' message={alerts.get(err)} />}
+      {err && <Alert status='error' message={alerts.get(err)} />}
     </Layout>
   );
 };
