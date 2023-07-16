@@ -49,7 +49,7 @@ export const Alert = ({ status, message }: AlertProps) => {
   return (
     <div
       className={twMerge(
-        'bottom-e fixed right-0 z-50 w-screen cursor-pointer bg-opacity-50 p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md',
+        'fixed bottom-0 right-0 z-50 w-screen cursor-pointer bg-opacity-50 p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md',
         show
           ? 'translate-y-0 md:translate-y-0'
           : 'translate-y-full md:translate-y-[150%]',
@@ -57,7 +57,7 @@ export const Alert = ({ status, message }: AlertProps) => {
       )}
       role='alert'
     >
-      <div className='flex '>
+      <div className='flex'>
         <div className='my-auto ml-3 mr-2 md:ml-1'>{statusIcon[status]}</div>
         {message ? (
           <p className='m-3 my-auto md:m-1'>{message}</p>
