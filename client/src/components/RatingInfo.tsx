@@ -17,7 +17,6 @@ export const RatingInfo = ({
 }) => {
   const averageRating =
     _.sum(ratings.map((value, index) => value * (index + 1))) / numReviews;
-
   const pieChart = (
     <div className='mx-1 pt-1'>
       <RatingPieChart averageRating={averageRating} />

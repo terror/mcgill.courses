@@ -89,7 +89,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
             </p>
           </div>
           <div className='mx-auto my-auto flex w-1/2 flex-col'>
-            <div className='m-4 mx-auto hidden w-full flex-col items-center justify-center space-y-5 pr-8 md:m-4 md:flex lg:flex-row lg:space-x-5 lg:space-y-0'>
+            <div className='m-4 mx-auto hidden h-full w-full flex-col items-center justify-center space-y-5 md:flex'>
               <RatingInfo
                 title={'Rating'}
                 chartType={chartType}
@@ -103,7 +103,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
                 numReviews={numReviews}
               />
             </div>
-            <div className='mx-auto mt-6 hidden md:flex'>
+            <div className='mx-auto mt-auto hidden md:flex'>
               <HiChartPie
                 className={classNames(
                   'm-2 mr-2 cursor-pointer ',
