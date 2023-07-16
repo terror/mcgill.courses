@@ -12,10 +12,13 @@ const defaultMessages = {
 };
 
 const statusColor = {
-  error: 'bg-neutral-700 border-gray-500 text-neutral-200',
-  success: 'bg-neutral-700 border-green-500 text-neutral-200',
-  info: 'bg-neutral-700 border-blue-500 text-neutral-200',
-  warning: 'bg-neutral-700 border-yellow-500 text-neutral-200',
+  error:
+    'bg-gray-200 dark:bg-neutral-700 border-gray-500 dark:text-neutral-200 text-gray-500',
+  success:
+    'bg-gray-200 dark:bg-neutral-700 border-green-500 dark:text-neutral-200 text-gray-500',
+  info: 'bg-gray-200 dark:bg-neutral-700 border-blue-500 dark:text-neutral-200 text-gray-500',
+  warning:
+    'bg-gray-200 dark:bg-neutral-700 border-yellow-500 dark:text-neutral-200 text-gray-500',
 };
 
 const statusIcon = {
@@ -49,7 +52,7 @@ export const Alert = ({ status, message }: AlertProps) => {
   return (
     <div
       className={twMerge(
-        'fixed bottom-0 right-0 z-50 w-screen cursor-pointer p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md md:bg-opacity-50',
+        'fixed bottom-0 right-0 z-50 w-screen cursor-pointer p-4 shadow-sm transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md md:bg-opacity-50',
         show
           ? 'translate-y-0 md:translate-y-0'
           : 'translate-y-full md:translate-y-[150%]',
