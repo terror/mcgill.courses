@@ -9,7 +9,6 @@ packages = [{ include = "mcgill" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 llama-index = "^0.7.6"
-langchain = "^0.0.231"
 python-dotenv = "^1.0.0"
 black = "^23.7.0"
 
