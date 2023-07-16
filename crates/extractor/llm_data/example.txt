@@ -2,7 +2,7 @@ This is an document containing examples for correctly parsed course requirements
 
 The format is a JSON object, with a field 'prerequisites' and 'corequisites'.
 The values for these have a tree-like structure, where each node is either a course code or a grouping of nodes.
-A course code is simply a 4 letter string (e.g. 'COMP') followed by a 3 digit number (e.g. '202').
+A course code is simply a 4 character string (e.g. 'COMP') followed by a 3 digit number (e.g. '202').
 Examples of valid course codes are 'COMP 250', 'MATH 240', and 'PHYS 230'.
 
 Requirements that are not course codes or courses that are not strictly required should not be included in the output
