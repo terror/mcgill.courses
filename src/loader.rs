@@ -229,6 +229,15 @@ impl Loader {
 
     thread::sleep(Duration::from_millis(self.course_delay));
 
+    let schedule = if scrape_vsb {
+      Some(VsbClient::new(&client, self.retries)?.schedule(
+        &format!("{}-{}", course_page.subject, course_page.code),
+        self.vsb_terms.clone(),
+      )?)
+    } else {
+      None
+    };
+
     Ok(Course {
       id: format!("{}{}", course_page.subject, course_page.code),
       id_ngrams: None,
@@ -249,12 +258,7 @@ impl Loader {
       corequisites: course_page.requirements.corequisites,
       leading_to: Vec::new(),
       restrictions: course_page.requirements.restrictions,
-      schedule: scrape_vsb.then_some(
-        VsbClient::new(&client, self.retries)?.schedule(
-          &format!("{}-{}", course_page.subject, course_page.code),
-          self.vsb_terms.clone(),
-        )?,
-      ),
+      schedule,
     })
   }
 }
