@@ -1,6 +1,7 @@
 use {
   crate::{
     arguments::Arguments,
+    assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
     loader::Loader,
@@ -24,9 +25,7 @@ use {
     },
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
-    routing::get,
-    routing::post,
-    routing::Router,
+    routing::{get, post, Router},
     Json, RequestPartsExt,
   },
   base64::{engine::general_purpose::STANDARD, Engine},
@@ -37,13 +36,12 @@ use {
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   log::{debug, error, info, trace},
   model::{
-    Course, CourseListing, InitializeOptions, Interaction, InteractionKind,
-    Review, Schedule,
+    Course, CourseListing, InitializeOptions, Instructor, Interaction,
+    InteractionKind, Review, Schedule,
   },
   oauth2::{
-    basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
-    AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
-    TokenResponse, TokenUrl,
+    basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
+    RedirectUrl, Scope, TokenUrl,
   },
   rayon::prelude::*,
   reqwest::blocking::RequestBuilder,
@@ -61,11 +59,15 @@ use {
     thread,
     time::Duration,
   },
-  tower_http::cors::CorsLayer,
+  tower_http::{
+    cors::CorsLayer,
+    services::{ServeDir, ServeFile},
+  },
   url::Url,
 };
 
 mod arguments;
+mod assets;
 mod auth;
 mod courses;
 mod error;

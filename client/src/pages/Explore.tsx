@@ -17,32 +17,30 @@ export const Explore = () => {
   const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[]>([]);
+  const [error, setError] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
-  const [error, setError] = useState(false);
-  const [filterIsToggled, setFilterIsToggled] = useState(false);
 
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
-  const reqBody = {
-    subjects: selectedSubjects.length === 0 ? null : selectedSubjects,
-    levels:
-      selectedLevels.length === 0
-        ? null
-        : selectedLevels.map((l) => l.charAt(0)),
-    terms:
-      selectedTerms.length === 0
-        ? null
-        : selectedTerms.map(
-            (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
-          ),
+  const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
+
+  const body = {
+    subjects: nullable(selectedSubjects),
+    levels: nullable(selectedLevels.map((l) => l.charAt(0))),
+    terms: nullable(
+      selectedTerms.map(
+        (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
+      )
+    ),
   };
 
   useEffect(() => {
     fetchClient
-      .postData<Course[]>(`/courses?limit=${limit}`, reqBody, {
+      .postData<Course[]>(`/courses?limit=${limit}`, body, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -56,7 +54,7 @@ export const Explore = () => {
   const fetchMore = async () => {
     const batch = await fetchClient.postData<Course[]>(
       `/courses?limit=${limit}&offset=${offset}`,
-      reqBody,
+      body,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -73,15 +71,13 @@ export const Explore = () => {
 
   return (
     <Layout>
-      <div className='flex flex-row p-4'>
+      <div className='p-4'>
         {error ? <Alert status='error' /> : null}
         <div className='flex w-full flex-col items-center py-8'>
-          {' '}
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
-            {' '}
             Explore all courses
           </h1>
-          <div className='w-xl flex flex-col lg:flex-row'>
+          <div className='flex flex-col lg:flex-row'>
             <div className='mx-2 flex max-w-xl items-center justify-center lg:hidden'>
               <BoxToggle
                 child={ExploreFilter({
@@ -93,8 +89,8 @@ export const Explore = () => {
                   setSelectedTerms,
                   variant: 'mobile',
                 })}
-                isOpen={filterIsToggled}
-                setIsOpen={setFilterIsToggled}
+                open={filterOpen}
+                setOpen={setFilterOpen}
               />
             </div>
             <InfiniteScroll
@@ -112,7 +108,7 @@ export const Explore = () => {
             >
               <div className='mx-auto flex flex-col'>
                 {courses.map((course, i) => (
-                  <CourseCard key={i} course={course} />
+                  <CourseCard key={i} course={course} className='m-2' />
                 ))}
                 {!hasMore || courses.length === 0 ? (
                   <div className='mx-[200px] mt-4 text-center'>
@@ -123,7 +119,7 @@ export const Explore = () => {
                 ) : null}
               </div>
             </InfiniteScroll>
-            <div className='hidden lg:flex'>
+            <div className='m-2 hidden lg:flex'>
               <ExploreFilter
                 selectedSubjects={selectedSubjects}
                 setSelectedSubjects={setSelectedSubjects}
@@ -135,7 +131,7 @@ export const Explore = () => {
               />
             </div>
           </div>
-        </div>{' '}
+        </div>
       </div>
       <JumpToTopButton />
     </Layout>

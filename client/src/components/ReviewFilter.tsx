@@ -6,6 +6,7 @@ import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
 import { MultiSelect } from './MultiSelect';
+import { ResetButton } from './ResetButton';
 
 const sortTypes = [
   'Most Recent',
@@ -18,20 +19,12 @@ const sortTypes = [
 
 export type ReviewSortType = (typeof sortTypes)[number];
 
-type ReviewFilterProps = {
-  course: Course;
-  allReviews: Review[];
-  setReviews: Dispatch<SetStateAction<Review[]>>;
-  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
-};
-
-const StarToggle = ({
-  onToggle,
-  toggled,
-}: {
+type StarToggleProps = {
   onToggle: () => void;
   toggled: boolean;
-}) => {
+};
+
+const StarToggle = ({ onToggle, toggled }: StarToggleProps) => {
   return (
     <button className='relative w-fit' onClick={onToggle}>
       <Star
@@ -61,18 +54,33 @@ const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
 
   return (
     <div className='flex'>
-      {[1, 2, 3, 4, 5].map((x) => (
-        <div className='flex flex-col'>
+      {[1, 2, 3, 4, 5].map((x, i) => (
+        <div key={i} className='flex flex-col'>
           <StarToggle
             key={`star-rating-${x}`}
             onToggle={toggleRating(x)}
             toggled={ratings.includes(x)}
           />
-          <div className='-mt-1 text-center text-xs font-bold'>{x}</div>
+          <div className='text-center text-xs font-bold'>{x}</div>
         </div>
       ))}
     </div>
   );
+};
+
+type FieldLabelProps = {
+  children: string;
+};
+
+const FieldLabel = ({ children }: FieldLabelProps) => (
+  <h2 className='mb-2 text-sm font-semibold'>{children}</h2>
+);
+
+type ReviewFilterProps = {
+  course: Course;
+  allReviews: Review[];
+  setReviews: Dispatch<SetStateAction<Review[]>>;
+  setShowAllReviews: Dispatch<SetStateAction<boolean>>;
 };
 
 export const ReviewFilter = ({
@@ -146,9 +154,20 @@ export const ReviewFilter = ({
 
   return (
     <div className='flex flex-col space-y-4 rounded-lg bg-slate-50 p-8 dark:bg-neutral-800 dark:text-gray-200'>
-      <h1 className='text-xl font-bold'>Filter</h1>
+      <div className='flex flex-row'>
+        <h1 className='mb-2 text-2xl font-semibold'>Filter</h1>
+        <ResetButton
+          className='ml-auto'
+          onClear={() => {
+            setSortBy('Most Recent');
+            setSelectedInstructors([]);
+            setSelectedRatings([]);
+            setSelectedDifficulties([]);
+          }}
+        />
+      </div>
       <div>
-        <h2 className='mb-2 text-sm font-semibold'>Sort by</h2>
+        <FieldLabel>Sort by</FieldLabel>
         <div className='relative z-20'>
           <Autocomplete
             options={sorts}
@@ -158,7 +177,7 @@ export const ReviewFilter = ({
         </div>
       </div>
       <div>
-        <h2 className='mb-2 text-sm font-semibold'>Instructor(s)</h2>
+        <FieldLabel>Instructor(s)</FieldLabel>
         <div className='relative z-10'>
           <MultiSelect
             options={uniqueInstructors}
@@ -169,14 +188,14 @@ export const ReviewFilter = ({
       </div>
       <div className='flex flex-wrap gap-x-8 gap-y-4'>
         <div>
-          <h2 className='mb-2 text-sm font-semibold'>Rating</h2>
+          <FieldLabel>Rating</FieldLabel>
           <RatingFilter
             ratings={selectedRatings}
             setRatings={setSelectedRatings}
           />
         </div>
         <div>
-          <h2 className='mb-2 text-sm font-semibold'>Difficulty</h2>
+          <FieldLabel>Difficulty</FieldLabel>
           <RatingFilter
             ratings={selectedDifficulties}
             setRatings={setSelectedDifficulties}

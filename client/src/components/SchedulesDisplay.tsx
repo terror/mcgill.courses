@@ -1,13 +1,9 @@
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
+import { twMerge } from 'tailwind-merge';
 
-import {
-  classNames,
-  dedupe,
-  dedupeSchedulesByBlocks,
-  sortSchedulesByBlocks,
-  sortTerms,
-} from '../lib/utils';
+import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Block, Schedule, TimeBlock } from '../model/Schedule';
 
@@ -45,23 +41,30 @@ const VSBtimeToDisplay = (time: string) => {
   `;
 };
 
-export const SchedulesDisplay = ({ course }: { course: Course }) => {
+type SchedulesDisplayProps = {
+  course: Course;
+};
+
+export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
   const schedules = course.schedule;
 
   if (!schedules) return null;
 
   const offeredTerms = sortTerms(
-    dedupe(schedules.map((schedule) => schedule.term))
+    _.uniq(schedules.map((schedule) => schedule.term))
   );
 
   const [currrentlyDisplayingCourse, setCurrentlyDisplayingCourse] =
     useState<string>(course._id);
+
   const [currentlyDisplayingTerm, setCurrentlyDisplayingTerm] =
     useState<string>(offeredTerms[0]);
+
   const [currentlyDisplayingSchedules, setCurrentlyDisplayingSchedules] =
     useState<Schedule[]>(
       schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
     );
+
   const [openBlock, setOpenBlock] = useState<Block | null>(null);
   const [showAll, setShowAll] = useState(false);
 
@@ -86,9 +89,12 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       }
     }
 
-    setCurrentlyDisplayingSchedules(
-      sortSchedulesByBlocks(dedupeSchedulesByBlocks(uniqueTimeSlots))
+    const uniqueByBlocks = _.uniqBy(
+      uniqueTimeSlots,
+      (t) => t.blocks[0].display
     );
+
+    setCurrentlyDisplayingSchedules(sortSchedulesByBlocks(uniqueByBlocks));
     setOpenBlock(null);
   }, [currentlyDisplayingTerm]);
 
@@ -97,11 +103,11 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
       {schedule.blocks?.map((block: Block, blockIndex) => (
         <div key={blockIndex} className='flex flex-col'>
           <div
-            className={classNames(
-              'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-10 dark:border-neutral-600'
+            className={twMerge(
+              'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-wrap gap-x-3 whitespace-pre-wrap text-left'>
+            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left md:flex-row'>
               <div className='w-20'>
                 <span className='font-semibold'>{block.display}</span>
               </div>
@@ -109,9 +115,8 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                 <span className='font-semibold'>Campus: </span>
                 {block.campus}
               </div>
-              <div className='w-60'>
+              <div className='w-80'>
                 <span className='font-semibold'>Classroom(s): </span>
-
                 {block.location ? block.location.replace(';', ',') : 'N/A'}
               </div>
             </div>
@@ -121,14 +126,15 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               }
             >
               <IoIosArrowDown
-                className={`${
-                  openBlock === block ? 'rotate-180 transform' : ''
-                } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
+                className={twMerge(
+                  openBlock === block ? 'rotate-180 transform' : '',
+                  'mx-2 h-5 w-5 text-gray-900 dark:text-gray-300'
+                )}
               />
             </button>
           </div>
           <div
-            className={'transition-all duration-300 ease-in-out'}
+            className='overflow-y-hidden transition-all duration-300 ease-in-out'
             style={{
               height:
                 openBlock === block
@@ -143,10 +149,10 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
                   block.timeblocks?.map((timeblock: TimeBlock, i) => (
                     <div
                       key={i}
-                      className='flex flex-row justify-between px-3 py-2 pl-10 font-medium text-gray-600 dark:text-neutral-300'
+                      className='flex flex-row justify-between px-3 py-2 pl-5 font-medium text-gray-600 dark:text-neutral-300'
                     >
                       <p>{dayToWeekday(timeblock.day)}</p>
-                      <p>
+                      <p className='pr-2'>
                         {VSBtimeToDisplay(timeblock.t1)} -{' '}
                         {VSBtimeToDisplay(timeblock.t2)}
                       </p>
@@ -169,11 +175,11 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
 
   return offeredTerms.length !== 0 ? (
     <div className='flex flex-col text-gray-800'>
-      <div className='mt-4 flex '>
+      <div className='mt-4 flex'>
         {offeredTerms.map((term, i) => (
           <button
             key={i}
-            className={classNames(
+            className={twMerge(
               `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
                 ? 'bg-slate-100 dark:bg-neutral-700'
@@ -203,7 +209,7 @@ export const SchedulesDisplay = ({ course }: { course: Course }) => {
               {showAll ? 'Show less' : 'Show all'}
               <IoIosArrowDown
                 className={`${
-                  showAll ? 'rotate-180 transform' : ''
+                  showAll ? 'rotate-180' : ''
                 } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
               />
             </button>

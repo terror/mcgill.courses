@@ -1,5 +1,4 @@
 use {
-  anyhow::anyhow,
   bson::Bson,
   futures::Future,
   futures::{future::join_all, TryStreamExt},
@@ -13,11 +12,11 @@ use {
     bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
-    results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
+    results::{CreateIndexResult, DeleteResult, UpdateResult},
     Client, Cursor, Database, IndexModel,
   },
   serde::{de::DeserializeOwned, Serialize},
-  std::{collections::HashSet, fs, hash::Hash, path::PathBuf},
+  std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
   {
     crate::combine::Combine, initializer::Initializer, seed::Seed,
     str_ext::StrExt,

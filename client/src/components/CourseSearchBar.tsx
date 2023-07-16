@@ -2,23 +2,20 @@ import _ from 'lodash';
 import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
-import { classNames } from '../lib/utils';
 import { SearchResults } from '../model/SearchResults';
 
-enum SearchResultType {
-  Course,
-  Instructor,
-}
+type SearchResultType = 'course' | 'instructor';
 
-interface SearchResultProps {
+type SearchResultProps = {
   index: number;
   query?: string;
   selectedIndex: number;
   text: string;
   type: SearchResultType;
   url: string;
-}
+};
 
 const SearchResult = ({
   index,
@@ -28,10 +25,32 @@ const SearchResult = ({
   type,
   url,
 }: SearchResultProps) => {
+  const icon =
+    type === 'course' ? (
+      <Layers className='mr-2 dark:text-white' />
+    ) : (
+      <User className='mr-2 dark:text-white' />
+    );
+
+  const textWithMatchHighlight = text
+    .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
+    .map((part, i) => (
+      <span
+        key={i}
+        className={
+          part.toLowerCase().trim() === query?.toLowerCase().trim()
+            ? 'underline'
+            : ''
+        }
+      >
+        {part}
+      </span>
+    ));
+
   return (
     <Link to={url}>
       <div
-        className={classNames(
+        className={twMerge(
           'flex cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
           selectedIndex === index
             ? 'bg-gray-100 dark:bg-neutral-700'
@@ -39,27 +58,8 @@ const SearchResult = ({
         )}
         key={index}
       >
-        {type === SearchResultType.Course ? (
-          <Layers className='mr-2 dark:text-white' />
-        ) : (
-          <User className='mr-2 dark:text-white' />
-        )}
-        <span className='dark:text-gray-200'>
-          {text
-            .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
-            .map((part, i) => (
-              <span
-                key={i}
-                className={
-                  part.toLowerCase().trim() === query?.toLowerCase().trim()
-                    ? 'underline'
-                    : ''
-                }
-              >
-                {part}
-              </span>
-            ))}
-        </span>
+        {icon}
+        <span className='dark:text-gray-200'>{textWithMatchHighlight}</span>
       </div>
     </Link>
   );
@@ -110,7 +110,7 @@ export const CourseSearchBar = ({
         <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
           <Search
             size={20}
-            className={classNames(
+            className={twMerge(
               'transition duration-200',
               searchSelected ? 'stroke-red-600' : 'stroke-gray-400'
             )}
@@ -119,7 +119,10 @@ export const CourseSearchBar = ({
         </div>
         <input
           type='text'
-          className='block w-full rounded-lg border border-none border-neutral-50 bg-neutral-50 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder-neutral-500 lg:min-w-[570px]'
+          className={twMerge(
+            'block w-full rounded-t-lg border border-none border-neutral-50 bg-neutral-50 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px]',
+            searchSelected ? '' : 'rounded-b-lg'
+          )}
           placeholder='Search for courses, subjects or professors'
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
@@ -135,7 +138,7 @@ export const CourseSearchBar = ({
               query={results.query}
               selectedIndex={selectedIndex}
               text={`${result._id} - ${result.title}`}
-              type={SearchResultType.Course}
+              type='course'
               url={`/course/${result._id}`}
               key={result._id}
             />
@@ -146,7 +149,7 @@ export const CourseSearchBar = ({
               query={results.query}
               selectedIndex={selectedIndex}
               text={result.name}
-              type={SearchResultType.Instructor}
+              type='instructor'
               url={`/instructor/${encodeURIComponent(result.name)}`}
               key={result.name + index}
             />

@@ -1,52 +1,48 @@
 import _ from 'lodash';
-import { CourseReview } from '../components/CourseReview';
 import { Fragment, useEffect, useState } from 'react';
-import { Instructor as InstructorType } from '../model/Instructor';
-import { Layout } from '../components/Layout';
 import { Link, useParams } from 'react-router-dom';
-import { NotFound } from './NotFound';
+
+import { CourseReview } from '../components/CourseReview';
+import { Layout } from '../components/Layout';
 import { RatingInfo } from '../components/RatingInfo';
-import { Review } from '../model/Review';
-import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../lib/fetchClient';
+import { Instructor as InstructorType } from '../model/Instructor';
+import { Review } from '../model/Review';
+import { Loading } from './Loading';
+import { NotFound } from './NotFound';
+import { GetInstructorPayload } from '../model/GetInstructorPayload';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
 
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [instructor, setInstructor] = useState<InstructorType | null>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const [instructor, setInstructor] = useState<
+    InstructorType | undefined | null
+  >(undefined);
 
   const user = useAuth();
 
   useEffect(() => {
     if (params.name) {
       fetchClient
-        .getData<Review[]>(
-          `/reviews?instructor_name=${decodeURIComponent(params.name)}`
-        )
-        .then((data) => {
-          setReviews(
-            data.sort(
-              (a, b) =>
-                parseInt(b.timestamp.$date.$numberLong, 10) -
-                parseInt(a.timestamp.$date.$numberLong, 10)
-            )
-          );
-        });
-      fetchClient
-        .getData<InstructorType>(
+        .getData<GetInstructorPayload>(
           `/instructors/${decodeURIComponent(params.name)}`
         )
-        .then((data) => {
-          setInstructor(data);
+        .then((payload) => {
+          setInstructor(payload.instructor);
+          setReviews(payload.reviews);
         });
     }
   }, [params.name]);
 
+  if (instructor === undefined) return <Loading />;
   if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id);
+
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
   const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
   const averageDifficulty =
@@ -64,20 +60,12 @@ export const Instructor = () => {
                 </h1>
               </div>
               <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                {uniqueReviews.length && (
-                  <RatingInfo
-                    title='Rating'
-                    rating={averageRating}
-                    numReviews={reviews.length}
-                  />
-                )}
-                {uniqueReviews.length && (
-                  <RatingInfo
-                    title='Difficulty'
-                    rating={averageDifficulty}
-                    numReviews={reviews.length}
-                  />
-                )}
+                {uniqueReviews.length ? (
+                  <>
+                    <RatingInfo title='Rating' rating={averageRating} />
+                    <RatingInfo title='Difficulty' rating={averageDifficulty} />
+                  </>
+                ) : null}
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -97,28 +85,19 @@ export const Instructor = () => {
                 )}
               </p>
             </div>
-
             <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-              {uniqueReviews.length && (
-                <RatingInfo
-                  title='Rating'
-                  rating={averageRating}
-                  numReviews={reviews.length}
-                />
-              )}
-              {uniqueReviews.length && (
-                <RatingInfo
-                  title='Difficulty'
-                  rating={averageDifficulty}
-                  numReviews={reviews.length}
-                />
-              )}
+              {uniqueReviews.length ? (
+                <>
+                  <RatingInfo title='Rating' rating={averageRating} />
+                  <RatingInfo title='Difficulty' rating={averageDifficulty} />
+                </>
+              ) : null}
             </div>
           </div>
         </div>
       </div>
       <div className='flex w-full flex-row justify-between'>
-        <div className='my-4 ml-8 mr-8 w-full md:mr-8 md:mt-4'>
+        <div className='mx-8 my-4 w-full md:mr-8 md:mt-4'>
           <div className='w-full'>
             {userReview && (
               <CourseReview

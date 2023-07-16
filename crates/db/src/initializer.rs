@@ -15,8 +15,8 @@ impl Initializer {
   }
 
   pub(crate) async fn run(&self) -> Result {
-    self.seed().await?;
     self.index().await?;
+    self.seed().await?;
     Ok(())
   }
 
@@ -152,6 +152,8 @@ impl Initializer {
         _ => continue,
       }
     }
+
+    info!("Seeding complete.");
 
     Ok(())
   }

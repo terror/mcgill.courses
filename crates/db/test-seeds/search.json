@@ -1,0 +1,3225 @@
+[
+  {
+    "_id": "COMP202",
+    "title": "Foundations of Programming",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "202",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-202",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Introduction to computer programming in a high level language  variables, expressions, primitive types, methods, conditionals, loops. Introduction to algorithms, data structures (arrays, strings), modular software design, libraries, file input/output, debugging, exception handling. Selected topics.",
+    "instructors": [
+      {
+        "name": "Jonathan Campbell",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Faten M'hiri",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Faten M'hiri",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "COMP 202 and COMP 208 cannot both be taken for credit. COMP 202 is intended as a general introductory course, while COMP 208 is intended for students interested in scientific computation. COMP 202 cannot be taken for credit with or after COMP 250",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Lec 001",
+            "location": "ENGTR 0100; STBIO S1/3",
+            "timeblocks": [
+              {
+                "day": "2",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "4",
+                "t1": "635",
+                "t2": "715"
+              },
+              {
+                "day": "6",
+                "t1": "635",
+                "t2": "775"
+              }
+            ]
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP204",
+    "title": "Computer Programming for Life Sciences",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "204",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-204",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Computer Science (Sci)  Computer programming in a high level language  variables, expressions, types, functions, conditionals, loops, objects and classes. Introduction to algorithms, modular software design, libraries, file input/output, debugging. Emphasis on applications in the life sciences.",
+    "instructors": [
+      {
+        "name": "David Becerra",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "David Becerra",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 202, COMP 208, or GEOG 333; not open to students who have taken or are taking COMP 206 or COMP 250.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP206",
+    "title": "Introduction to Software Systems",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "206",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-206",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Comprehensive overview of programming in C, use of system calls and libraries, debugging and testing of code; use of developmental tools like make, version control systems.",
+    "instructors": [
+      {
+        "name": "Joseph D'silva",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Joseph P Vybihal",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 202", "COMP 250"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP208",
+    "title": "Computer Programming for Physical Sciences and\n Engineering\n",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "208",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-208",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Programming and problem solving in a high level computer language  variables, expressions, types, functions, conditionals, loops, objects and classes. Introduction to algorithms such as searching and sorting. Modular software design, libraries, file input and output, debugging. Emphasis on applications in Physical Sciences\nand Engineering, such as root finding, numerical integration, diffusion, Monte Carlo methods.",
+    "instructors": [
+      {
+        "name": "Faten M'hiri",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Deven Parekh",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": ["MATH 133", "MATH 141"],
+    "restrictions": "Not open to students who have taken or are taking COMP 202, COMP 204, orGEOG 333; not open to students who have taken or are taking COMP 206 or COMP 250.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP230",
+    "title": "Logic and Computability",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "230",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-230",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Propositional Logic, predicate calculus, proof systems, computability Turing machines, Church-Turing thesis, unsolvable problems, completeness, incompleteness, Tarski semantics, uses and misuses of Gödel's theorem.",
+    "instructors": [
+      {
+        "name": "Dirk Schlimm",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP250",
+    "title": "Introduction to Computer Science",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "250",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-250",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Mathematical tools (binary numbers, induction, recurrence relations, asymptotic complexity, establishing correctness of programs), Data structures (arrays, stacks, queues, linked lists, trees, binary trees, binary search trees, heaps, hash tables), Recursive and non-recursive algorithms (searching and sorting, tree and graph traversal). Abstract data types, inheritance. Selected topics.",
+    "instructors": [
+      {
+        "name": "Giulia Alberini",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Giulia Alberini",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP251",
+    "title": "Algorithms and Data Structures",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "251",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-251",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Introduction to algorithm design and analysis. Graph algorithms, greedy algorithms, data structures, dynamic programming, maximum flows.",
+    "instructors": [
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Giulia Alberini",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "David Becerra",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 250", "MATH 235", "MATH 240"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 252.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP252",
+    "title": "Honours Algorithms and Data Structures",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "252",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-252",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "The design and analysis of data structures and algorithms. The description of various computational problems and the algorithms that can be used to solve them, along with their associated data structures. Proving the correctness of algorithms and determining their computational complexity.",
+    "instructors": [
+      {
+        "name": "Luc P Devroye",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 250", "MATH 235", "MATH 240"],
+    "corequisites": [],
+    "restrictions": "(1) Open only to students in Honours programs. (2) Students cannot receive credit for both COMP 251 and COMP 252.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP273",
+    "title": "Introduction to Computer Systems",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "273",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-273",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Number representations, combinational and sequential digital circuits, MIPS instructions and architecture datapath and control, caches, virtual memory, interrupts and exceptions, pipelining.",
+    "instructors": [
+      {
+        "name": "Joseph P Vybihal",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Paul Kry",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Mona Elsaadawy",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": ["COMP 206"],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP280",
+    "title": "History and Philosophy of Computing",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "280",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-280",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "A history of early mathematical computation. Symbolic logic and computation. Modern computer systems and networks. The rise of the internet.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP302",
+    "title": "Programming Languages and Paradigms",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "302",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-302",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Programming language design issues and programming paradigms. Binding and scoping, parameter passing, lambda abstraction, data abstraction, type checking. Functional and logic programming.",
+    "instructors": [
+      {
+        "name": "Jacob Errington",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [
+      "COMP 250",
+      "MATH 240",
+      "MATH 235",
+      "MATH 318",
+      "COMP 230",
+      "PHIL 210"
+    ],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP303",
+    "title": "Software Design",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "303",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-303",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Principles, mechanisms, techniques, and tools for object-oriented software design and its implementation, including encapsulation, design patterns, and unit testing.",
+    "instructors": [
+      {
+        "name": "Martin Robillard",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jin Guo",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 206", "COMP 250"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP307",
+    "title": "Principles of Web Development",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "307",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-307",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "The course discusses the major principles, algorithms, languages and technologies that underlie web development. Students receive practical hands-on experience through a project.",
+    "instructors": [
+      {
+        "name": "Joseph P Vybihal",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 206"],
+    "corequisites": ["COMP 303"],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP308",
+    "title": "Computer Systems Lab",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "308",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-308",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Digital circuitry and programming interface of peripheral circuit boards (cards), e.g., graphics cards; introduction to tools and libraries that interact with the card; performance issues.",
+    "instructors": [
+      {
+        "name": "Joseph P Vybihal",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 273"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP310",
+    "title": "Operating Systems",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "310",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-310",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Control and scheduling of large information processing systems. Operating system software - resource allocation, dispatching, processors, access methods, job control languages, main storage management. Batch processing, multiprogramming, multiprocessing, time sharing.",
+    "instructors": [
+      {
+        "name": "Muthucumaru Maheswaran",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Oana Balmau",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 273"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP321",
+    "title": "Programming Challenges",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "321",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-321",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Development of programming skills on tricky challenges, games and puzzles by means of programming competitions.",
+    "instructors": [
+      {
+        "name": "David Becerra",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 206"],
+    "corequisites": ["COMP 251", "COMP 252"],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP322",
+    "title": "Introduction to C++",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "322",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-322",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Basics and advanced features of the C++ language. Syntax, memory management, class structure, method and operator overloading, multiple inheritance, access control, stream I/O, templates, exception handling.",
+    "instructors": [
+      {
+        "name": "Chad Zammar",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 250", "COMP 206", "COMP 208"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP330",
+    "title": "Theory of Computation",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "330",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-330",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Finite automata, regular languages, context-free languages, push-down automata, models of computation, computability theory, undecidability, reduction techniques.",
+    "instructors": [
+      {
+        "name": "Prakash Panangaden",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Claude Crepeau",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 251"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP345",
+    "title": "From Natural Language to Data Science",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "345",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-345",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "ntroduction to language data science, including theoretical approaches and practical skills. Processing, searching, and querying text data; making sense of large corpora; modelling and interpreting psycholinguistic and historical language data; building models of sequences of words; computing similarity between languages; information retrieval and extraction; question answering; and ethics.",
+    "instructors": [
+      {
+        "name": "Tim O'Donnell",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Siva Reddy",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 250", "MATH 240"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking LING 345.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP350",
+    "title": "Numerical Computing",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "350",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-350",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Computer representation of numbers, IEEE Standard for Floating Point Representation, computer arithmetic and rounding errors. Numerical stability. Matrix computations and software systems. Polynomial interpolation. Least-squares approximation. Iterative methods for solving a nonlinear equation. Discretization methods for integration and differential equations.",
+    "instructors": [
+      {
+        "name": "Xiao-Wen Chang",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [
+      "MATH 222",
+      "MATH 223",
+      "COMP 202",
+      "COMP 208",
+      "COMP 250"
+    ],
+    "corequisites": [],
+    "restrictions": "Students cannot receive credit for both COMP 350 and MATH 317.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP360",
+    "title": "Algorithm Design",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "360",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-360",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Advanced algorithm design and analysis. Linear programming, complexity and NP-completeness, advanced algorithmic techniques.",
+    "instructors": [
+      {
+        "name": "Robert Robere",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Hamed Hatami",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [
+      "COMP 251",
+      "COMP 252",
+      "MATH 240",
+      "MATH 235",
+      "MATH 363"
+    ],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 362.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP361D1",
+    "title": "Software Engineering Project",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "361D1",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-361d1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Software development process in practice  requirement elicitation and analysis, software design, implementation, integration, test planning, and maintenance. Application of the core concepts and techniques through the realization of a large software system.",
+    "instructors": [
+      {
+        "name": "Maximilian Schiedermeier",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 206", "COMP 250"],
+    "corequisites": ["COMP 303"],
+    "restrictions": "Not open to students who have taken the 3 credit version of COMP 361.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP361D2",
+    "title": "Software Engineering Project",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "361D2",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-361d2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "See COMP 361D1 for course description.",
+    "instructors": [
+      {
+        "name": "Maximilian Schiedermeier",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 361D1"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP362",
+    "title": "Honours Algorithm Design",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "362",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-362",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Basic algorithmic techniques, their applications and limitations. Problem complexity, how to deal with problems for which no efficient solutions are known.",
+    "instructors": [
+      {
+        "name": "Adrian Roshan Vetta",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 252"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 360.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP364",
+    "title": "Computer Tools for Life Sciences",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "364",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-364",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Concepts and tools for programmatic storage, retrieval, searching, numerical analysis, and visualization of large biological data sets.",
+    "instructors": [],
+    "prerequisites": ["BIOL 200"],
+    "corequisites": [],
+    "restrictions": "Not available to students in Computer Science or Joint Computer Science programs.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP370",
+    "title": "Introduction to Data\n Science",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "370",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-370",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Comprehensive introduction to the data science process. Orientation to the use and configuration of core data science toolkits, data collection and annotation fundamentals, principles of responsible data science, the use of quantitative tools in data science, and presentation of data science findings.",
+    "instructors": [],
+    "prerequisites": ["COMP 206", "COMP 250"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 598 when the topic was \"Introduction to Data Science\" or \"Data Science\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP396",
+    "title": "Undergraduate Research Project",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "396",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-396",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Independent research project with a final written report.",
+    "instructors": [
+      {
+        "name": "Faten M'hiri",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "This course cannot be taken under the S/U option. Departmental permission required. Students cannot be supervised by the same instructor for two 396 Science courses. Open to students in programs offered by the Faculty of Science only.",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Project 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP400",
+    "title": "Project in Computer Science",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "400",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-400",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "A research project in any area of computer science, involving a programming effort and/or a theoretical investigation, and supervised by a faculty member in the School of Computer Science. Final written report required.",
+    "instructors": [
+      {
+        "name": "Faten M'hiri",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "For Honours students, or non-Honours students with permission of the department.",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Project 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP401",
+    "title": "Project in Biology and Computer Science",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "401",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-401",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "A research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology. A program advisor from each department has to approve the project.",
+    "instructors": [
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Mathieu Blanchette",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Mathieu Blanchette",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": ["COMP 251", "BIOL 301"],
+    "corequisites": [],
+    "restrictions": "Registration in the Biology and Computer Science joint major.",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Indep St 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP402",
+    "title": "Honours Project in Computer Science and Biology",
+    "credits": "6",
+    "subject": "COMP",
+    "code": "402",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-402",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Summer 2023", "Fall 2022", "Winter 2023"],
+    "description": "One-semester research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology or related fields.",
+    "instructors": [
+      {
+        "name": "Mathieu Blanchette",
+        "term": "Summer 2023"
+      },
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Only for students in the Joint Honours in Computer Science and Biology.",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Res Crse 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP402D1",
+    "title": "Honours Project in Computer Science and Biology",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "402D1",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-402d1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "A two-semester research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology or related fields.",
+    "instructors": [
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Only for students in the Joint Honours in Computer Science and Biology.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP402D2",
+    "title": "Honours Project in Computer Science and Biology",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "402D2",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-402d2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "A two-semester research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology or related fields.",
+    "instructors": [
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 402D1"],
+    "corequisites": [],
+    "restrictions": "Only for students in the Joint Honours in Computer Science and Biology.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP409",
+    "title": "Concurrent Programming",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "409",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-409",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Characteristics and utility of concurrent programs; formal methods for specification, verification and development of concurrent programs; communications, synchronization, resource allocation and management, coherency and integrity.",
+    "instructors": [],
+    "prerequisites": ["COMP 251", "COMP 302", "COMP 310", "ECSE 427"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP417",
+    "title": "Introduction Robotics and Intelligent Systems",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "417",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-417",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "This course considers issues relevant to the design of robotic and of intelligent systems. How can robots move and interact. Robotic hardware systems. Kinematics and inverse kinematics. Sensors, sensor data interpretation and sensor fusion. Path planning. Configuration spaces. Position estimation. Intelligent systems. Spatial mapping. Multi-agent systems. Applications.",
+    "instructors": [
+      {
+        "name": "Gregory L Dudek",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Faraz Lotfi",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 251", "MATH 223", "ECSE 321", "COMP 206"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP421",
+    "title": "Database Systems",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "421",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-421",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Database Design  conceptual design of databases (e.g., entity-relationship model), relational data model, functional dependencies. Database Manipulation  relational algebra, SQL, database application programming, triggers, access control. Database Implementation  transactions, concurrency control, recovery, query execution and query optimization.",
+    "instructors": [
+      {
+        "name": "Bettina Kemme",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Mona Elsaadawy",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 206", "COMP 251", "COMP 302"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP424",
+    "title": "Artificial Intelligence",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "424",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-424",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Introduction to search methods. Knowledge representation using logic and probability. Planning and decision making under uncertainty. Introduction to machine learning.",
+    "instructors": [
+      {
+        "name": "David Meger",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 206", "ECSE 321", "MATH 323", "COMP 251"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking ECSE 526.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP445",
+    "title": "Computational Linguistics",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "445",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-445",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Introduction to foundational ideas in computational linguistics and natural language processing. Topics include formal language theory, probability theory,\nestimation and inference, and recursively defined models of language structure. Emphasis on both the mathematical foundations of the field as well as how to\nuse these tools to understand human language.",
+    "instructors": [
+      {
+        "name": "Jacob Hoover",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 250", "MATH 240"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking LING 445.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP451",
+    "title": "Fundamentals of Machine Learning",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "451",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-451",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Introduction to the computational, statistical and mathematical foundations of machine learning. Algorithms for both supervised learning and unsupervised learning. Maximum likelihood estimation, neural networks, and regularization.",
+    "instructors": [
+      {
+        "name": "Siamak Ravanbakhsh",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 251", "MATH 222", "MATH 223", "MATH 323"],
+    "corequisites": [],
+    "restrictions": "Not open to students who are taking or have taken COMP 551.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP462",
+    "title": "Computational Biology Methods",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "462",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-462",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Application of computer science techniques to problems arising in biology and medicine, techniques for modeling evolution, aligning molecular sequences, predicting structure of a molecule and other problems from computational biology.",
+    "instructors": [
+      {
+        "name": "Mathieu Blanchette",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 251", "MATH 323", "MATH 203", "BIOL 309"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 561.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP480",
+    "title": "Independent Studies in Computer Science",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "480",
+    "level": "Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-480",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Reading course permitting independent study under the supervision of a faculty member who specializes in a subject where no course is available.",
+    "instructors": [
+      {
+        "name": "Faten M'hiri",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Jacob Errington",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Approval must be obtained from the Course Coordinator before registration.",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Indep St 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP512",
+    "title": "Distributed Systems",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "512",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-512",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Models and Architectures. Application-oriented communication paradigms (e.g. remote method invocation, group communication). Naming services. Synchronization (e.g. mutual exclusion, concurrency control). Fault-tolerance (e.g. process and replication, agreement protocols). Distributed file systems. Security. Examples of distributed systems (e.g. Web, CORBA). Advanced Topics.",
+    "instructors": [
+      {
+        "name": "Bettina Kemme",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Joseph D'silva",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 310", "COMP 251"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP514",
+    "title": "Applied Robotics",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "514",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-514",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "The approach and the challenges in the key components of manipulators and locomotors  representations, kinematics, dynamics, rigid-body chains, redundant systems, under-actuated systems, control, planning, and perception. Practical aspects of robotics  collisions, integrating sensory feedback, and real-time software\ndevelopment.",
+    "instructors": [
+      {
+        "name": "Hsiu-Chin Lin",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["MATH 223", "MATH 323", "COMP 206", "COMP 250"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 597 when the topic was \"Applied Robotics\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP520",
+    "title": "Compiler Design",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "520",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-520",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "The structure of a compiler. Lexical analysis. Parsing techniques. Syntax directed translation. Run-time implementation of various programming language constructs. Introduction to code generation for an idealized machine. Students will implement parts of a compiler.",
+    "instructors": [
+      {
+        "name": "Christophe Dubach",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 273", "COMP 302"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP521",
+    "title": "Modern Computer Games",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "521",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-521",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Genre and history of games, basic game design, storytelling and narrative analysis, game engines, design of virtual worlds, real-time 2D graphics, game physics and physical simulation, pathfinding and game AI, content generation, 3D game concerns, multiplayer and distributed games, social issues.",
+    "instructors": [],
+    "prerequisites": ["COMP 251", "MATH 223", "COMP 303", "COMP 361"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP523",
+    "title": "Language-based Security",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "523",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-523",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "State-of-the-art language-based techniques for enforcing security policies in distributed computing environments. Static techniques (such as type- and proof-checking technology), verification of security policies and applications such as proof-carrying code, certifying compilers, and proof-carrying authentication.",
+    "instructors": [],
+    "prerequisites": ["COMP 302", "COMP 330"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP525",
+    "title": "Formal Verification",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "525",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-525",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Propositional logic - syntax and semantics, temporal logic, other modal logics, model checking, symbolic model checking, binary decision diagrams, other approaches to formal verification.",
+    "instructors": [
+      {
+        "name": "Prakash Panangaden",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 251", "COMP 330"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP527",
+    "title": "Logic and Computation",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "527",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-527",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Introduction to modern constructive logic, its mathematical properties, and its numerous applications in computer science.",
+    "instructors": [
+      {
+        "name": "Brigitte Pientka",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 302"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 426",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP529",
+    "title": "Software Architecture",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "529",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-529",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Development, analysis, and maintenance of software architectures, with special focus on modular decomposition and reverse engineering.",
+    "instructors": [],
+    "prerequisites": ["COMP 303"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP531",
+    "title": "Advanced Theory of Computation",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "531",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-531",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Models for sequential and parallel computations  Turing machines, boolean circuits. The equivalence of various models and the Church-Turing thesis. Unsolvable problems. Model dependent measures of computational complexity. Abstract complexity theory. Exponentially and super-exponentially difficult problems. Complete problems.",
+    "instructors": [
+      {
+        "name": "Hamed Hatami",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 330"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP533",
+    "title": "Model-Driven Software Development",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "533",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-533",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Model-driven software development; requirements engineering based on use cases and scenarios; object-oriented modelling using UML and OCL to establish complete and precise analysis and design documents; mapping to Java. Introduction to meta-modelling and model transformations, use of modelling tools.",
+    "instructors": [],
+    "prerequisites": ["ECSE 321", "COMP 303", "COMP 361"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP535",
+    "title": "Computer Networks 1",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "535",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-535",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Fundamental design principles, elements, and protocols of computer networks, focusing on the current Internet. Topics include  layered architecture, direct link networks, switching and forwarding, bridge routing, congestion control, end-to-end protocols application of DNS, HTTP, P2P, fair queuing, performance modeling and analysis.",
+    "instructors": [
+      {
+        "name": "Xue Liu",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 310", "ECSE 427"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP540",
+    "title": "Matrix Computations",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "540",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-540",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Designing and programming reliable numerical algorithms. Stability of algorithms and condition of problems. Reliable and efficient algorithms for solution of equations, linear least squares problems, the singular value decomposition, the eigenproblem and related problems. Perturbation analysis of problems. Algorithms for structured matrices.",
+    "instructors": [
+      {
+        "name": "Xiao-Wen Chang",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["MATH 327", "COMP 350"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP546",
+    "title": "Computational Perception",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "546",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-546",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Computational models of visual perception and audition. Vision problems include stereopsis, motion, focus, perspective, color. Audition problems include source localization and recognition. Emphasis on physics of image formation, sensory signal processing, neural pathways and computation, psychophysical methods.",
+    "instructors": [
+      {
+        "name": "Michael Langer",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 646.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP547",
+    "title": "Cryptography and Data Security",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "547",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-547",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "This course presents an in-depth study of modern cryptography and data security. The basic information theoretic and computational properties of classical and modern cryptographic systems are presented, followed by a cryptanalytic examination of several important systems. We will study the applications of cryptography to the security of systems.",
+    "instructors": [
+      {
+        "name": "Claude Crepeau",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 360", "COMP 362", "MATH 323"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP549",
+    "title": "Brain-Inspired Artificial Intelligence",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "549",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-549",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Overview of the influence of neuroscience and psychology on Artificial Intelligence (AI). Historical topics  perceptrons, the PDP framework, Hopfield nets, Boltzmann and Helmholtz machines, and the behaviourist origins of reinforcement learning. Modern topics  deep learning, attention, memory and consciousness. Emphasis on understanding the interdisciplinary foundations of modern AI.",
+    "instructors": [],
+    "prerequisites": ["MATH 222", "MATH 223", "MATH 323"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 596 when the topic was \"Brain-Inspired Artificial Intelligence\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP550",
+    "title": "Natural Language Processing",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "550",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-550",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "An introduction to the computational modelling of natural language, including algorithms, formalisms, and applications. Computational morphology, language modelling, syntactic parsing, lexical and compositional semantics, and discourse analysis. Selected applications such as automatic summarization, machine translation, and speech processing. Machine learning techniques for natural language processing.",
+    "instructors": [],
+    "prerequisites": ["MATH 323", "ECSE 305", "COMP 251", "COMP 252"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 599 in 201509 or 201609.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP551",
+    "title": "Applied Machine Learning",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "551",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-551",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Selected topics in machine learning and data mining, including clustering, neural networks, support vector machines, decision trees. Methods include feature selection and dimensionality reduction, error estimation and empirical validation, algorithm design and parallelization, and handling of large data sets. Emphasis on good methods and practices for deployment of real systems.",
+    "instructors": [
+      {
+        "name": "Yue Li",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Reihaneh Rabbany",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["MATH 323", "ECSE 205", "ECSE 305"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 451. Not open to students who have taken or are taking ECSE 551.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP552",
+    "title": "Combinatorial Optimization",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "552",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-552",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Algorithmic and structural approaches in combinatorial optimization with a focus upon theory and applications. Topics include  polyhedral methods, network optimization, the ellipsoid method, graph algorithms, matroid theory and submodular functions.",
+    "instructors": [],
+    "prerequisites": ["COMP 362"],
+    "corequisites": [],
+    "restrictions": "This course is reserved for undergraduate honours students and graduate students. Not open to students who have taken or are taking MATH 552.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP553",
+    "title": "Algorithmic Game Theory",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "553",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-553",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Foundations of game theory. Computation aspects of equilibria. Theory of auctions and modern auction design. General equilibrium theory and welfare economics. Algorithmic mechanism design. Dynamic games.",
+    "instructors": [
+      {
+        "name": "Adrian Roshan Vetta",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 362", "MATH 350", "MATH 454", "MATH 487"],
+    "corequisites": [],
+    "restrictions": "Not open to students who are taking or have taken MATH 553",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP554",
+    "title": "Approximation Algorithms",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "554",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-554",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "The theory and application of approximation algorithms. Topics include  randomized algorithms, network optimization, linear programming and semi definite programming techniques, the game theoretic method, the primal-dual method, and metric embeddings.",
+    "instructors": [],
+    "prerequisites": ["COMP 362", "MATH 350"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 692",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP555",
+    "title": "Software Privacy",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "555",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-555",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Conceptual foundations of information privacy  security and cryptography, privacy by design, privacy threats. Technical controls for supporting privacy  authorization, authentication, access control, malware and intrusion detection. Application-specific privacy concerns of databases, web and mobile applications, cloud storage.",
+    "instructors": [
+      {
+        "name": "Martin Robillard",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 303"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 599 when the topic was \"Topics in Mobile Application Development\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP557",
+    "title": "Fundamentals of Computer Graphics",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "557",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-557",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Fundamental mathematical, algorithmic and representational issues in computer graphics  overview of graphics pipeline, homogeneous coordinates, projective transformations, line-drawing and rasterization, hidden surface removal, surface modelling (quadrics, bicubics, meshes), rendering (lighting, reflectance models, ray tracing, texture mapping), compositing colour perception, and other selected topics.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["MATH 222", "MATH 223", "COMP 250", "COMP 206"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP558",
+    "title": "Fundamentals of Computer Vision",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "558",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-558",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Image filtering, edge detection, image features and histograms, image segmentation, image motion and tracking, projective geometry, camera calibration, homographies, epipolar geometry and stereo, point clouds and 3D registration. Applications in computer graphics and robotics.",
+    "instructors": [
+      {
+        "name": "Kaleem Siddiqi",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 251", "MATH 222", "MATH 223"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP559",
+    "title": "Fundamentals of Computer Animation",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "559",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-559",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Fundamental mathematical and computational issues in computer animation with a focus on physics based simulation  overview of numerical integration methods, accuracy and absolute stability, stiff systems and constraints, rigid body motion, collision detection and response, friction, deformation, stable fluid simulation, use of motion capture, and other selected topics.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["MATH 222", "MATH 223", "COMP 206", "COMP 250"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP561",
+    "title": "Computational Biology Methods and Research",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "561",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-561",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Application of computer science techniques to problems arising in biology and medicine, techniques for modeling evolution, aligning molecular sequences, predicting structure of a molecule and other problems from computational biology. An in-depth exploration of key research areas.",
+    "instructors": [
+      {
+        "name": "Mathieu Blanchette",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 251", "MATH 323", "MATH 203", "BIOL 309"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking COMP 462.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP562",
+    "title": "Theory of Machine Learning",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "562",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-562",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Concentration inequalities, PAC model, VC dimension, Rademacher complexity, convex optimization, gradient descent, boosting, kernels, support vector machines, regression and learning bounds. Further topics selected from  Gaussian processes, online learning, regret bounds, basic neural network theory.",
+    "instructors": [
+      {
+        "name": "Adam Oberman",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [
+      "MATH 462",
+      "COMP 451",
+      "COMP 551",
+      "MATH 222",
+      "MATH 223",
+      "MATH 324",
+      "ECSE 551"
+    ],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken or are taking MATH 562. Not open to students who have taken COMP 599 when the topic was \"Statistical Learning Theory\" or \"Mathematical Topics for Machine Learning\". Not open to students who have taken COMP 598 when the topic was \"Mathematical Foundations of Machine Learning\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP564",
+    "title": "Advanced Computational Biology Methods and Research",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "564",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-564",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Fundamental concepts and techniques in computational structural biology, system\nbiology. Techniques include dynamic programming algorithms for RNA structure\nanalysis, molecular dynamics and machine learning techniques for protein structure\nprediction, and graphical models for gene regulatory and protein-protein interaction\nnetworks analysis. Practical sessions with state-of-the-art software.",
+    "instructors": [],
+    "prerequisites": ["COMP 462"],
+    "corequisites": ["COMP 462", "COMP 561"],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP565",
+    "title": "Machine Learning in Genomics and Healthcare",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "565",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-565",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Linear models in statistical genetics, causal inference, single-cell genomics, multi-omic learning, electronic health record mining. Applications of machine learning techniques  linear regression, latent factor models, variational Bayesian inference, neural networks, model interpretation.",
+    "instructors": [
+      {
+        "name": "Yue Li",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [
+      "BIOL 202",
+      "BIOL 302",
+      "MATH 324",
+      "COMP 451",
+      "COMP 551"
+    ],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 597 or COMP 598 when the topic was \"Machine Learning in Genomics and Healthcare\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP566",
+    "title": "Discrete Optimization 1",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "566",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-566",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Use of computer in solving problems in discrete optimization. Linear programming and extensions. Network simplex method. Applications of linear programming. Vertex enumeration. Geometry of linear programming. Implementation issues and robustness. Students will do a project on an application of their choice.",
+    "instructors": [],
+    "prerequisites": ["COMP 360", "MATH 223"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP567",
+    "title": "Discrete Optimization 2",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "567",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-567",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Formulation, solution and applications of integer programs. Branch and bound, cutting plane, and column generation algorithms. Combinatorial optimization. Polyhedral methods. A large emphasis will be placed on modelling. Students will select and present a case study of an application of integer programming in an area of their choice.",
+    "instructors": [],
+    "prerequisites": ["COMP 566", "MATH 417"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP579",
+    "title": "Reinforcement Learning",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "579",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-579",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Bandit algorithms, finite Markov decision processes, dynamic programming, Monte-Carlo Methods, temporal-difference learning, bootstrapping, planning, approximation methods, on versus off policy learning, policy gradient methods temporal\nabstraction and inverse reinforcement learning.",
+    "instructors": [
+      {
+        "name": "Doina Precup",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [
+      "COMP 451",
+      "COMP 551",
+      "MATH 222",
+      "MATH 223",
+      "MATH 323"
+    ],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP585",
+    "title": "Intelligent Software\n Systems\n",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "585",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-585",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Practical aspects of building software systems with machine learning components  requirements, design, delivery, quality assessment, and collaboration. Consideration of a user-centered mindset in development; integration of design and development considerations relevant to artificial intelligence, such as security, privacy, and fairness.",
+    "instructors": [
+      {
+        "name": "Jin Guo",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": ["COMP 303", "COMP 424", "COMP 551"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 598 or COMP 599 when the topic was \"Software Engineering for Building Intelligent Systems\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP588",
+    "title": "Probabilistic Graphical Models",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "588",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-588",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Representation, inference and learning with graphical models; directed and undirected graphical models; exact inference; approximate inference using deterministic optimization based methods, stochastic sampling based methods; learning with complete and partial observations.",
+    "instructors": [
+      {
+        "name": "Siamak Ravanbakhsh",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": ["COMP 251", "MATH 323", "MATH 324"],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 766 or COMP 767 when the topic was \"Probabilistic Graphical Models\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP596",
+    "title": "Topics in Computer Science 3",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "596",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-596",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Topics in computer science.",
+    "instructors": [
+      {
+        "name": "Robert Robere",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Jérôme Waldispuhl",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP597",
+    "title": "Topics in Computer Science 4",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "597",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-597",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Topics in computer science.",
+    "instructors": [
+      {
+        "name": "Xujie Si",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP598",
+    "title": "Topics in Computer Science 1",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "598",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-598",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Topics in computer science.",
+    "instructors": [
+      {
+        "name": "Tim O'Donnell",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Danilo Bzdok",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Muthucumaru Maheswaran",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP599",
+    "title": "Topics in Computer Science 2",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "599",
+    "level": "Graduate, Undergraduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-599",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Topics in computer science.",
+    "instructors": [
+      {
+        "name": "Siva Reddy",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Reihaneh Rabbany",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP601",
+    "title": "Thesis Literature Review",
+    "credits": "2",
+    "subject": "COMP",
+    "code": "601",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Review of relevant literature in preparation for the M.Sc. research. This includes regular attendance of the Colloquium organized by the School of Computer Science.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP601D1",
+    "title": "Thesis Literature Review",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "601D1",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601d1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Special topics in computer science.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP601D2",
+    "title": "Thesis Literature Review",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "601D2",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601d2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "See COMP 601D1 for course description.",
+    "instructors": [],
+    "prerequisites": ["COMP 601D1"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP601N1",
+    "title": "Thesis Literature Review",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "601N1",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601n1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Special topics in computer science.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP601N2",
+    "title": "Thesis Literature Review",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "601N2",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601n2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "See COMP 601N1 for course description.",
+    "instructors": [],
+    "prerequisites": ["COMP 601N1"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP602",
+    "title": "Computer Science Seminar 1",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "602",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-602",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Exposure to ongoing research directions in computer science through regular attendance of the research colloquium organized by the School of Computer\nScience.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Fall 2022"
+      },
+      {
+        "name": "Xujie Si",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP603",
+    "title": "Computer Science Seminar 2",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "603",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-603",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Exposure to ongoing research directions in computer science through regular attendance of the research colloquium organized by the School of Computer\nScience.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "David Meger",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP604",
+    "title": "Graduate School Fundamentals\n",
+    "credits": "1",
+    "subject": "COMP",
+    "code": "604",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-604",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Introduction to fundamental skills in computer science. Research and communication skills; teamwork in a research group; integrity, diversity and ethics; career paths.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "David Rolnick",
+        "term": "Winter 2023"
+      },
+      {
+        "name": "Oana Balmau",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP610",
+    "title": "Information Structures 1",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "610",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-610",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Study of elementary data structures  lists, stacks, queues, trees, hash tables, binary search trees, red-black trees, heaps. Augmenting data structures. Sorting and selection, Recursive algorithms. Advanced data structures including binomial heaps, Fibonacci heaps, disjoint set structures, and splay trees. Amortizing. String algorithms. Huffman trees and suffix trees. Graph algorithms.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP611",
+    "title": "Mathematical Tools for Computer Science",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "611",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-611",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Introduction to mathematical concepts important across computer science, how to think mathematically, and how to write proofs. Proof techniques such as induction,  contradiction, and monovariants; topics in combinatorics, graph theory, algebra, analysis, and probability; mathematical analysis of algorithms, data structures, and computational complexity. Emphasis on the mathematical explanations for useful concepts.",
+    "instructors": [
+      {
+        "name": "David Rolnick",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Not open to students who have majored in Mathematics or an equivalent subject, or have taken a proof-based math or computer science course within the previous two years.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP614",
+    "title": "Distributed Data Management",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "614",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-614",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Architecture and examples of distributed information systems (e.g., federated databases, component systems, web databases). Data consistency (consistency models, advanced transaction models, advanced concurrency control, distributed recovery). Data replication and caching. Distribution queries, Schema Integration. Advanced Topics.",
+    "instructors": [],
+    "prerequisites": ["COMP 421", "COMP 435", "COMP 535", "COMP 512"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP616D1",
+    "title": "Bioinformatics Seminar",
+    "credits": "1.5",
+    "subject": "COMP",
+    "code": "616D1",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616d1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Introduction to current trends in Bioinformatics and closely related fields such as genomics and proteomics.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "This seminar is restricted to graduate students in the Bioinformatics Option. Enrolment is limited to 30 students.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP616D2",
+    "title": "Bioinformatics Seminar",
+    "credits": "1.5",
+    "subject": "COMP",
+    "code": "616D2",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616d2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "See COMP 616D1 for description.",
+    "instructors": [],
+    "prerequisites": ["COMP 616D1"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP616N1",
+    "title": "Bioinformatics Seminar",
+    "credits": "1.5",
+    "subject": "COMP",
+    "code": "616N1",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616n1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Introduction to current trends in Bioinformatics and closely related fields such as genomics and proteomics.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP616N2",
+    "title": "Bioinformatics Seminar",
+    "credits": "1.5",
+    "subject": "COMP",
+    "code": "616N2",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616n2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "See COMP 616N1 for course description.",
+    "instructors": [],
+    "prerequisites": ["COMP 616N1"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP618",
+    "title": "Bioinformatics: Functional Genomics",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "618",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-618",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Techniques related to microarrays (normalization, differential expression, class prediction, class discovery), the analysis of non-coding sequence data (identification of transcription factor binding sites), single nucleotide polymorphisms, the inference of biological networks, and integrative Bioinformatics approaches.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Enrolment by students in the Bioinformatics Option Program or by permission of course coordinators only. Computer Science graduate students not in the Bioinformatics Option Program need additional permission of the M.Sc. or Ph.D. Committee respectively.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP621",
+    "title": "Program Analysis and Transformations",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "621",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-621",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Program analysis and transformations are used in optimizing compilers and other automatic tools such as bug-finders, verification tools and software engineering applications. Course topics include the design of intermediate representations, control flow analysis, data flow analysis at both the intra- and inter-procedural level and program transformations for performance improvement.",
+    "instructors": [],
+    "prerequisites": ["COMP 251", "COMP 302", "COMP 520"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP642",
+    "title": "Numerical Estimation Methods",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "642",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-642",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Efficient and reliable numerical algorithms in estimation and their applications.  Linear models and least squares estimation.  Maximum-likelihood estimation.  Kalman filtering.  Adaptive estimation, GPS measurements and mathematical models for positioning.  Position estimation. Fault detection and exclusion.",
+    "instructors": [],
+    "prerequisites": ["MATH 323", "MATH 324", "COMP 350"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP647",
+    "title": "Advanced Cryptography",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "647",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-647",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Information theoretic definitions of security, zero-knowledge protocols, secure function evaluation protocols, cryptographic primitives, privacy amplification, error correction, quantum cryptography, quantum cryptanalysis.",
+    "instructors": [],
+    "prerequisites": ["COMP 547"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP649",
+    "title": "Quantum Cryptography",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "649",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-649",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Review of the basic notions of cryptography and quantum information theory. Quantum key distribution and its proof of security. Quantum encryption, error-correcting codes and authentication. Quantum bit commitment, zero-knowledge and oblivious transfer. Multiparty quantum computations.",
+    "instructors": [],
+    "prerequisites": ["COMP 547"],
+    "corequisites": [],
+    "restrictions": "An introduction to notions of Information Theory is required.",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP652",
+    "title": "Machine Learning",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "652",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-652",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "An overview of state-of-the-art algorithms used in machine learning, including theoretical properties and practical applications of these algorithms.",
+    "instructors": [],
+    "prerequisites": [
+      "COMP 424",
+      "COMP 526",
+      "ECSE 526",
+      "COMP 360",
+      "MATH 323",
+      "ECSE 305"
+    ],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP654",
+    "title": "Graph Representation Learning",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "654",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-654",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Machine learning with graph-structured data. Introductions to spectral graph theory, graph signal processing, graph convolutions, graph neural networks, and the logic of graphs.",
+    "instructors": [],
+    "prerequisites": [
+      "MATH 222",
+      "MATH 223",
+      "COMP 360",
+      "COMP 451",
+      "COMP551"
+    ],
+    "corequisites": [],
+    "restrictions": "Not open to students who have taken COMP 766 when the topic was \"Graph Representation Learning\".",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP655",
+    "title": "Distributed Simulation",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "655",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-655",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Conservative and optimistic synchronization involved in executing a discrete event simulation on a distributed platform (e.g. cluster of workstations, shared memory multiprocessor). Focus is on efficiency, strengths and limitations of the different approaches. Applications to large simulations (networks, VLSI, virtual environments).",
+    "instructors": [],
+    "prerequisites": ["COMP 310"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP667",
+    "title": "Software Fault Tolerance",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "667",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-667",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Software fault tolerance, concepts and implementation. Failure classification; information and time redundancy; forward and backward error recovery; error confinement; idealized fault-tolerant component; sequential and concurrent systems; exception handling; transactions and atomic actions; voting; design diversity. Case studies.",
+    "instructors": [],
+    "prerequisites": ["COMP 409"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP680",
+    "title": "Mining Biological Sequences",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "680",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-680",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Advanced algorithms for the annotation of biological sequences.  Algorithms and heuristics for pair-wise and multiple sequence alignment.  Gene-finding with hidden Markov models and variants. Motifs discovery techniques  over representation and phylogenetic footprinting approaches. RNA  secondary structure prediction. Detection of repetitive elements. Representation and annotation of protein domains.",
+    "instructors": [],
+    "prerequisites": ["COMP 462"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP690",
+    "title": "Probabilistic Analysis of Algorithms",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "690",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-690",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Probabilistic analysis of algorithms and data structures under random input. Expected behaviour of search trees, tries, heaps, bucket structures and multidimensional data structures. Random sampling, divide-and-conquer, grid methods. Applications in computational geometry and in game tree searching. Combinatorial search problems. Algorithms on random graphs.",
+    "instructors": [
+      {
+        "name": "Luc P Devroye",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP691",
+    "title": "Thesis Research 1",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "691",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-691",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Ongoing research pertaining to thesis.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "ThesCrse 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP693",
+    "title": "Research Project 1",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "693",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-693",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Ongoing research pertaining to project.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP694",
+    "title": "Research Project 2",
+    "credits": "6",
+    "subject": "COMP",
+    "code": "694",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-694",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Ongoing research pertaining to project.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP695",
+    "title": "Research Project 3",
+    "credits": "6",
+    "subject": "COMP",
+    "code": "695",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-695",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "Ongoing research pertaining to project.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP696",
+    "title": "Thesis Research 2",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "696",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-696",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Ongoing research pertaining to thesis.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "ThesCrse 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP697",
+    "title": "Thesis Research 3",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "697",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-697",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Ongoing research pertaining to thesis.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "ThesCrse 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP698",
+    "title": "Thesis Research 4",
+    "credits": "10",
+    "subject": "COMP",
+    "code": "698",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-698",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Ongoing research pertaining to thesis.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "ThesCrse 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP699",
+    "title": "Thesis Research 5",
+    "credits": "12",
+    "subject": "COMP",
+    "code": "699",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-699",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Ongoing research pertaining to thesis.",
+    "instructors": [
+      {
+        "name": "Paul Kry",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": "Computer Science students",
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "ThesCrse 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP700",
+    "title": "Ph.D. Comprehensive Examination",
+    "credits": "",
+    "subject": "COMP",
+    "code": "700",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-700",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023"],
+    "description": "An examination that must be passed by all doctoral candidates in order to continue in the doctoral program.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP700D1",
+    "title": "Ph.D. Comprehensive Examination",
+    "credits": "",
+    "subject": "COMP",
+    "code": "700D1",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-700d1",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "An examination that must be passed by all doctoral candidates in order to continue in the doctoral program.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP700D2",
+    "title": "Ph.D. Comprehensive Examination",
+    "credits": "",
+    "subject": "COMP",
+    "code": "700D2",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-700d2",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "See COMP 700D1 for course description.",
+    "instructors": [],
+    "prerequisites": ["COMP 700D1"],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP701",
+    "title": "Thesis Proposal and Area Examination",
+    "credits": "3",
+    "subject": "COMP",
+    "code": "701",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-701",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
+    "description": "Submission of doctorate thesis proposal and examination that assesses the student's breadth of knowledge in the research area.",
+    "instructors": [
+      {
+        "name": "Luc P Devroye",
+        "term": "Summer 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [
+      {
+        "blocks": [
+          {
+            "campus": "Downtown",
+            "display": "Proposal 001",
+            "location": "",
+            "timeblocks": []
+          }
+        ],
+        "term": "Summer 2023"
+      }
+    ],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP760",
+    "title": "Advanced Topics Theory 1",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "760",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-760",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Advanced topics in theory related to computer science.",
+    "instructors": [
+      {
+        "name": "Prakash Panangaden",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP761",
+    "title": "Advanced Topics Theory 2",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "761",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-761",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Advanced topics in theory related to computer science.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP762",
+    "title": "Advanced Topics Programming 1",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "762",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-762",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Fall 2022"],
+    "description": "Advanced topics in programming.",
+    "instructors": [
+      {
+        "name": "Brigitte Pientka",
+        "term": "Fall 2022"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP763",
+    "title": "Advanced Topics Programming 2",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "763",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-763",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": [],
+    "description": "Advanced topics in programming.",
+    "instructors": [],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP764",
+    "title": "Advanced Topics Systems 1",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "764",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-764",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Advanced topics in computing systems.",
+    "instructors": [
+      {
+        "name": "Christophe Dubach",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP765",
+    "title": "Advanced Topics Systems 2",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "765",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-765",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Advanced topics in computing systems.",
+    "instructors": [
+      {
+        "name": "David Meger",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP766",
+    "title": "Advanced Topics Applications 1",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "766",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-766",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Advanced topics in computing systems.",
+    "instructors": [
+      {
+        "name": "Hsiu-Chin Lin",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  },
+  {
+    "_id": "COMP767",
+    "title": "Advanced Topics: Applications 2",
+    "credits": "4",
+    "subject": "COMP",
+    "code": "767",
+    "level": "Graduate",
+    "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-767",
+    "department": "Computer Science",
+    "faculty": "Faculty of Science",
+    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
+    "terms": ["Winter 2023"],
+    "description": "Advanced topics in computing systems.",
+    "instructors": [
+      {
+        "name": "David Rolnick",
+        "term": "Winter 2023"
+      }
+    ],
+    "prerequisites": [],
+    "corequisites": [],
+    "restrictions": null,
+    "schedule": [],
+    "leadingTo": []
+  }
+]

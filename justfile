@@ -1,15 +1,23 @@
+set dotenv-load
+
 export RUST_LOG := 'info'
 
+alias a := all
 alias d := dev
 alias f := fmt
+alias i := initialize
+alias t := test
 
 default:
   just --list
 
-all: forbid build test clippy lint fmt-check
+all: build clippy e2e fmt-check forbid lint test
 
-build:
-  cargo build && tsc
+build *mode='development':
+  cargo build && npm run build -- --mode {{mode}}
+
+build-container:
+  docker build -t mcgill.courses:latest .
 
 clippy:
   ./bin/clippy
@@ -56,7 +64,7 @@ lint:
   npm run lint
 
 load:
-  cargo run -- --source=courses.json \
+  cargo run -- --source=seed \
     load \
     --batch-size=200 \
     --scrape-vsb \
@@ -71,6 +79,16 @@ restart-services:
 
 run *args:
   cargo run -- {{args}}
+
+run-container: build-container
+  docker run -d \
+    -e MONGODB_URL=$MONGODB_URL \
+    -e MS_CLIENT_ID=$MS_CLIENT_ID \
+    -e MS_CLIENT_SECRET=$MS_CLIENT_SECRET \
+    -e MS_REDIRECT_URI=$MS_REDIRECT_URI \
+    -e RUST_LOG=info \
+    -p 8000:8000 \
+    mcgill.courses:latest
 
 serve:
   cargo run -- serve --db-name=mcgill-courses

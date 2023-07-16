@@ -2,16 +2,12 @@ import { Link } from 'react-router-dom';
 
 import { Requirements } from '../model/Requirements';
 
-type RequirementsProps = {
-  requirements: Requirements;
-};
-
 type ReqsBlockProps = {
   title: string;
   reqs: string[];
 };
 
-export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
+const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
@@ -21,7 +17,7 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
         reqs.map((req, i) => (
           <Link
             key={i}
-            to={`/course/${req.replace(' ', '')}`}
+            to={`/course/${req}`}
             className='block text-gray-500 underline transition duration-100 hover:text-gray-600 dark:text-gray-400 hover:dark:text-gray-200'
           >
             {req}
@@ -36,6 +32,10 @@ export const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
   );
 };
 
+type RequirementsProps = {
+  requirements: Requirements;
+};
+
 export const CourseRequirements = ({ requirements }: RequirementsProps) => {
   return (
     <div className='w-full rounded-md bg-slate-50 p-4 dark:bg-neutral-800'>
@@ -47,15 +47,11 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
             <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
               Restrictions
             </h2>
-            {requirements.restrictions !== null ? (
-              <p className='text-gray-500 dark:text-gray-400'>
-                {requirements.restrictions}
-              </p>
-            ) : (
-              <p className='text-gray-500 dark:text-gray-400'>
-                This course has no restrictions.
-              </p>
-            )}
+            <p className='text-gray-500 dark:text-gray-400'>
+              {requirements.restrictions !== null
+                ? requirements.restrictions
+                : 'This course has no restrictions.'}
+            </p>
           </div>
         </div>
       </div>

@@ -6,37 +6,37 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from '../components/Layout';
 
-type QuestionsAnswersProp = {
-  input: {
-    title: string;
-    content: JSX.Element | string;
-  }[];
+type QuestionAnswer = {
+  title: string;
+  content: JSX.Element | string;
 };
 
-export const QuestionsAnswers = ({ input }: QuestionsAnswersProp) => {
+type QuestionsAnswersProps = {
+  input: QuestionAnswer[];
+};
+
+const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
-    <div className='max-w-l px-4 md:mx-16 lg:mx-28 xl:mx-48'>
-      <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
-        {input.map((item: { title: string; content: JSX.Element | string }) => (
-          <Disclosure as='div' key={item.title} className='w-full'>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className='mx-auto flex w-full justify-between rounded-lg bg-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus-visible:ring-opacity-75 dark:bg-neutral-700 dark:text-gray-300 dark:hover:bg-neutral-600'>
-                  <span>{item.title}</span>
-                  <IoIosArrowDown
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-gray-900 dark:text-gray-300`}
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
-                  {item.content}
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-      </div>
+    <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
+      {input.map((item: QuestionAnswer) => (
+        <Disclosure as='div' key={item.title} className='w-full'>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className='mx-auto flex w-full justify-between rounded-lg bg-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus-visible:ring-black/75 dark:bg-neutral-700 dark:text-gray-300 dark:hover:bg-neutral-600'>
+                <span>{item.title}</span>
+                <IoIosArrowDown
+                  className={`${
+                    open ? 'rotate-180' : ''
+                  } h-5 w-5 text-gray-900 dark:text-gray-300`}
+                />
+              </Disclosure.Button>
+              <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
+                {item.content}
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
+      ))}
     </div>
   );
 };
@@ -76,13 +76,16 @@ const questionsAnswers = [
   },
 ];
 
-const Title = ({ title }: { title: string }) => {
+type TitleProps = {
+  children: string;
+};
+
+const Title = ({ children }: TitleProps) => {
   return (
-    <div className='mt-10'>
+    <div className='mb-5 mt-10'>
       <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
-        {title}
+        {children}
       </h1>
-      <hr className='mx-auto my-5 w-32 border-gray-200 text-4xl' />
     </div>
   );
 };
@@ -90,38 +93,39 @@ const Title = ({ title }: { title: string }) => {
 export const About = () => {
   return (
     <Layout>
-      <div className='mx-4 my-auto flex flex-col justify-center text-center align-middle '>
-        <Title title='About Us' />
+      <div className='mx-4 my-auto mb-10 flex flex-col justify-center text-center align-middle '>
+        <Title>About Us</Title>
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 md:mx-16 lg:mx-40'>
-          {' '}
           mcgill.courses is an open-sourced, student-made review website for
           courses offered and instructors teaching at McGill University. Our
           platform aims to provide transparent and accurate information to help
           with informed decision-making. We encourage contributions from the
           McGill community to ensure the resource remains valuable.
         </p>
-        <Title title='FAQ' />
-        <QuestionsAnswers input={questionsAnswers} />
-        <Title title='Contact Us' />
+        <Title>FAQ</Title>
+        <div className='px-4 md:mx-16 lg:mx-28 xl:mx-48'>
+          <QuestionsAnswers input={questionsAnswers} />
+        </div>
+        <Title>Contact Us</Title>
         <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60 xl:mx-80'>
-          {' '}
-          If you have any questions or concerns, please reach out to us
+          If you have any questions or concerns, please don't hesitate to reach
+          out to us!
         </p>
         <div className='m-2 flex justify-center'>
           <a href='https://www.github.com/terror/mcgill.courses'>
             <AiOutlineGithub
               className='mx-2 text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
-            ></AiOutlineGithub>
+            />
           </a>
           <a href='mailto:'>
             <FiMail
               className='mx-2 text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
-            ></FiMail>
+            />
           </a>
         </div>
-      </div>{' '}
+      </div>
     </Layout>
   );
 };
