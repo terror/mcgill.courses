@@ -13,21 +13,23 @@ const defaultMessages = {
 
 const statusColor = {
   error:
-    'bg-gray-200 dark:bg-neutral-700 border-gray-500 dark:text-neutral-200 text-gray-500',
+    'bg-gray-100 dark:bg-neutral-700 border-gray-500 dark:text-neutral-200 text-gray-500',
   success:
-    'bg-gray-200 dark:bg-neutral-700 border-green-500 dark:text-neutral-200 text-gray-500',
-  info: 'bg-gray-200 dark:bg-neutral-700 border-blue-500 dark:text-neutral-200 text-gray-500',
+    'bg-gray-100 dark:bg-neutral-700 border-green-500 dark:text-neutral-200 text-gray-500',
+  info: 'bg-gray-100 dark:bg-neutral-700 border-blue-500 dark:text-neutral-200 text-gray-500',
   warning:
-    'bg-gray-200 dark:bg-neutral-700 border-yellow-500 dark:text-neutral-200 text-gray-500',
+    'bg-gray-100 dark:bg-neutral-700 border-yellow-500 dark:text-neutral-200 text-gray-500',
 };
 
 const statusIcon = {
-  error: <IoWarning className='text-red-400 opacity-60' size={25} />,
+  error: <IoWarning className='text-red-400 dark:opacity-80' size={25} />,
   success: (
-    <AiFillCheckCircle className='text-green-400 opacity-60' size={23} />
+    <AiFillCheckCircle className='text-green-400 dark:opacity-80' size={23} />
   ),
-  info: <AiFillInfoCircle className='text-blue-300 opacity-70' size={23} />,
-  warning: <IoWarning className='text-yellow-300 opacity-70' size={25} />,
+  info: (
+    <AiFillInfoCircle className='text-blue-300 dark:opacity-80' size={23} />
+  ),
+  warning: <IoWarning className='text-yellow-400 dark:opacity-80' size={25} />,
 };
 
 export type AlertStatus = 'error' | 'success' | 'info' | 'warning';
@@ -52,7 +54,7 @@ export const Alert = ({ status, message }: AlertProps) => {
   return (
     <div
       className={twMerge(
-        'fixed bottom-0 right-0 z-50 w-screen cursor-pointer p-4 shadow-sm transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md md:bg-opacity-50',
+        'fixed bottom-0 right-0 z-50 w-screen cursor-pointer p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md md:bg-opacity-50',
         show
           ? 'translate-y-0 md:translate-y-0'
           : 'translate-y-full md:translate-y-[150%]',
