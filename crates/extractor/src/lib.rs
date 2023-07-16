@@ -2,13 +2,17 @@ use {
   anyhow::anyhow,
   course_listing_ext::CourseListingExt,
   course_page_ext::CoursePageExt,
+  lazy_static::lazy_static,
   model::{
-    CourseListing, CoursePage, Instructor, Requirement, Requirements, Schedule,
+    CourseListing, CoursePage, Instructor, Operator, ReqNode, Requirement,
+    Requirements, Schedule,
   },
+  req_parser::ReqParser,
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,
   scraper::{ElementRef, Html, Selector},
   select::Select,
+  serde::{Deserialize, Serialize},
 };
 
 #[cfg(test)]
@@ -44,8 +48,8 @@ pub fn extract_course_listings(
   }
 }
 
-pub fn extract_course_page(text: &str) -> Result<CoursePage> {
-  CoursePage::from_html(Html::parse_fragment(text))
+pub fn extract_course_page(text: &str, parse_reqs: bool) -> Result<CoursePage> {
+  CoursePage::from_html(Html::parse_fragment(text), parse_reqs)
 }
 
 pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
@@ -130,13 +134,16 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
   Ok(instructors)
 }
 
-fn extract_course_requirements(html: &Html) -> Result<Requirements> {
+fn extract_course_requirements(
+  html: &Html,
+  parse_reqs: bool,
+) -> Result<Requirements> {
   match html
     .root_element()
     .select_optional("ul[class='catalog-notes']")
     .unwrap()
   {
-    Some(notes) => Requirements::from_notes(notes),
+    Some(notes) => Requirements::from_notes(notes, parse_reqs),
     None => Ok(Requirements::default()),
   }
 }
@@ -522,13 +529,15 @@ mod tests {
   fn extract_course_requirements_2022_2023() {
     assert_eq!(
       super::extract_course_requirements(&Html::parse_fragment(
-        &get_content("course_page_2022_2023.html")
-      ))
+        &get_content("course_page_2022_2023.html"),
+      ), false)
       .unwrap(),
       Requirements {
+        corequisites_text: Some("MATH 133.".into()),
         corequisites: vec!["MATH133".into()],
         prerequisites: Vec::new(),
-        restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into())
+        restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()),
+        ..Requirements::default()
       }
     );
   }
@@ -537,7 +546,7 @@ mod tests {
   fn extract_course_page_2009_2010() {
     assert_eq!(
       super::extract_course_page(
-        &get_content("course_page_2009_2010.html")
+        &get_content("course_page_2009_2010.html"), false
       )
       .unwrap(),
       CoursePage {
@@ -574,7 +583,7 @@ mod tests {
             term: "Winter 2010".into(),
           },
         ],
-        requirements: Requirements { corequisites: vec![], prerequisites: vec![], restrictions: None }
+        requirements: Requirements { prerequisites_text: Some("MGCR 211".into()), corequisites: vec![], prerequisites: vec![], restrictions: None, ..Requirements::default() }
       }
     );
   }
@@ -583,7 +592,8 @@ mod tests {
   fn extract_course_page_2022_2023() {
     assert_eq!(
       super::extract_course_page(
-        &get_content("course_page_2022_2023.html")
+        &get_content("course_page_2022_2023.html"),
+        false
       )
       .unwrap(),
       CoursePage {
@@ -616,9 +626,11 @@ mod tests {
           }
         ],
         requirements: Requirements {
+          corequisites_text: Some("MATH 133.".into()),
           corequisites: vec!["MATH133".into()],
           prerequisites: vec![],
-          restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into())
+          restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()),
+          ..Requirements::default()
         }
       }
     );
@@ -657,8 +669,11 @@ mod tests {
   #[test]
   fn extract_course_page_with_amp() {
     assert_eq!(
-      super::extract_course_page(&get_content("course_page_with_amp.html"))
-        .unwrap(),
+      super::extract_course_page(
+        &get_content("course_page_with_amp.html"),
+        false
+      )
+      .unwrap(),
       CoursePage {
         title: "E & M Laboratory".into(),
         credits: "1".into(),
@@ -672,11 +687,15 @@ mod tests {
           term: "Winter 2023".into(),
         }],
         requirements: Requirements {
+          prerequisites_text: Some(
+            "Lecture component of PHYS 142 or equivalent".into()
+          ),
           corequisites: vec![],
           prerequisites: vec!["PHYS142".into()],
           restrictions: Some(
             "Not open to students who have taken or are taking PHYS 142".into()
-          )
+          ),
+          ..Requirements::default()
         }
       }
     );

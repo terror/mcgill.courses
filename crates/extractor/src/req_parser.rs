@@ -1,320 +1,120 @@
-use std::fmt::Display;
-
-use chatgpt::prelude::*;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub(crate) enum Operator {
-  And,
-  Or,
-}
-
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub(crate) enum ReqNode {
-  Course(String),
-  Group {
-    operator: Option<Operator>,
-    groups: Vec<ReqNode>,
-  },
-}
-
-impl Default for ReqNode {
-  fn default() -> Self {
-    ReqNode::Group {
-      operator: None,
-      groups: vec![],
-    }
-  }
-}
+use super::*;
+use pyo3::prelude::*;
 
 #[derive(Debug, PartialEq, Eq, Default, Serialize, Deserialize)]
-pub struct Requirements {
-  prerequisites: Option<ReqNode>,
-  corequisites: Option<ReqNode>,
+pub struct CourseReqs {
+  pub prerequisites: Option<ReqNode>,
+  pub corequisites: Option<ReqNode>,
 }
-
-impl Display for Requirements {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    let s = serde_json::to_string(self).unwrap();
-    write!(f, "{}", s)
-  }
-}
-
-const PARSER_PROMPT: &str = "";
 
 pub(crate) struct ReqParser {
-  client: ChatGPT,
+  parser_module: Py<PyModule>,
 }
 
 impl ReqParser {
-  pub(crate) fn new(key: &str) -> Result<Self> {
-    let client = ChatGPT::new(key)?;
+  pub(crate) fn new() -> Self {
+    let py_source = include_str!(concat!(
+      env!("CARGO_MANIFEST_DIR"),
+      "/python/gpt_parser.py"
+    ));
 
-    Ok(ReqParser { client })
+    let gpt_module = Python::with_gil(|py| -> PyResult<Py<PyModule>> {
+      let module = PyModule::from_code(py, py_source, "", "")?;
+      Ok(module.into())
+    })
+    .expect("Failed to load Python module for course requirements parsing.");
+
+    ReqParser {
+      parser_module: gpt_module,
+    }
   }
 
   pub(crate) fn parse(
     &self,
-    prereq_str: Option<&str>,
-    coreq_str: Option<&str>,
-  ) -> Result<Requirements> {
-    Ok(Requirements::default())
+    prereq_str: Option<String>,
+    coreq_str: Option<String>,
+  ) -> Result<CourseReqs> {
+    let res = Python::with_gil(|py| -> PyResult<String> {
+      self
+        .parser_module
+        .getattr(py, "parse_course_req")?
+        .call1(py, (prereq_str, coreq_str))?
+        .extract(py)
+    })?;
+
+    deserialize_req(&res)
   }
+}
+
+pub(crate) fn deserialize_req(req_str: &str) -> Result<CourseReqs> {
+  serde_json::from_str(req_str).map_err(Into::into)
 }
 
 #[cfg(test)]
 mod tests {
   use super::*;
   use ReqNode::*;
-  const KEY: &str = "foo";
 
   #[test]
-  fn math222() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(Some("Prerequisite: MATH 141. Familiarity with vector geometry or Corequisite: MATH 133"), None).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: None,
-          groups: vec![Course("MATH 141".to_string()),]
-        }),
-        corequisites: Some(Group {
-          operator: None,
-          groups: vec![Course("MATH 133".to_string()),]
-        }),
-      }
-    );
-  }
-
-  #[test]
-  fn comp250() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(Some("Prerequisites: Familiarity with a high level programming language and CEGEP level Math."), None).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: None,
-        corequisites: None,
-      }
-    );
-  }
-
-  #[test]
-  fn comp579() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(Some("Prerequisite: A university level course in machine learning such as COMP 451 or COMP 551. Background in calculus, linear algebra, probability at the level of MATH 222, MATH 223, MATH 323, respectively."), None).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: Some(Operator::Or),
-          groups: vec![
-            Course("COMP 451".to_string()),
-            Course("COMP 551".to_string()),
-            Group {
-              operator: Some(Operator::And),
-              groups: vec![
-                Course("MATH 222".to_string()),
-                Course("MATH 223".to_string()),
-                Course("MATH 323".to_string()),
-              ]
-            }
-          ]
-        }),
-        corequisites: None,
-      }
-    );
-  }
-
-  #[test]
-  fn comp401() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(Some("Prerequisites: COMP 251 and 9 credits of BIOL courses, BIOL 301 recommended."), None).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: None,
-          groups: vec![Course("COMP 251".to_string()),]
-        }),
-        corequisites: None,
-      }
+  fn can_deserialize() {
+    let deserialized = deserialize_req(
+      r#"{"prerequisites": "MATH 141","corequisites":"MATH 133"}"#,
     )
+    .unwrap();
+
+    assert_eq!(
+      deserialized,
+      CourseReqs {
+        prerequisites: Some(Course("MATH 141".to_string())),
+        corequisites: Some(Course("MATH 133".to_string())),
+      }
+    );
   }
 
   #[test]
-  fn math350() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser
-      .parse(
-        Some("Prerequisites: MATH 235 or MATH 240 and MATH 251 or MATH 223."),
-        None,
-      )
-      .unwrap();
+  fn can_deserialize_reqnode() {
+    let deserialized = serde_json::from_str::<ReqNode>(
+      r#"{"operator": "AND", "groups": ["MATH 141", "MATH 133"]}"#,
+    )
+    .unwrap();
 
     assert_eq!(
-      reqs,
-      Requirements {
+      deserialized,
+      Group {
+        operator: Operator::And,
+        groups: vec![
+          Course("MATH 141".to_string()),
+          Course("MATH 133".to_string()),
+        ]
+      }
+    );
+  }
+
+  #[test]
+  fn can_deserialize_group() {
+    let deserialized = deserialize_req(
+      r#"{"prerequisites": {"operator": "AND", "groups": ["MATH 141", {"operator": "OR", "groups": ["MATH 235", "MATH 240"]}]}, "corequisites": null}"#,
+    )
+    .unwrap();
+
+    assert_eq!(
+      deserialized,
+      CourseReqs {
         prerequisites: Some(Group {
-          operator: Some(Operator::And),
+          operator: Operator::And,
           groups: vec![
+            Course("MATH 141".to_string()),
             Group {
-              operator: Some(Operator::Or),
+              operator: Operator::Or,
               groups: vec![
                 Course("MATH 235".to_string()),
                 Course("MATH 240".to_string()),
               ]
-            },
-            Group {
-              operator: Some(Operator::Or),
-              groups: vec![
-                Course("MATH 251".to_string()),
-                Course("MATH 223".to_string()),
-              ]
             }
           ]
         }),
         corequisites: None,
       }
-    )
-  }
-
-  #[test]
-  fn ecse324() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser
-      .parse(
-        Some("Prerequisite(s): ECSE 200, ECSE 222, and COMP 206"),
-        None,
-      )
-      .unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: Some(Operator::And),
-          groups: vec![
-            Course("ECSE 200".to_string()),
-            Course("ECSE 222".to_string()),
-            Course("COMP 206".to_string()),
-          ]
-        }),
-        corequisites: None,
-      }
-    )
-  }
-
-  #[test]
-  fn comp562() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(
-      Some("Prerequisites: MATH 462 or COMP 451 or (COMP 551, MATH 222, MATH 223 and MATH 324) or ECSE 551."),
-      None
-    ).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: Some(Operator::Or),
-          groups: vec![
-            Course("MATH 462".to_string()),
-            Course("COMP 451".to_string()),
-            Group {
-              operator: Some(Operator::And),
-              groups: vec![
-                Course("COMP 551".to_string()),
-                Course("MATH 222".to_string()),
-                Course("MATH 223".to_string()),
-                Course("MATH 324".to_string()),
-              ]
-            },
-            Course("ECSE 551".to_string()),
-          ]
-        }),
-        corequisites: None,
-      }
-    )
-  }
-
-  #[test]
-  fn comp553() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(
-      Some("Prerequisite: COMP 362 or MATH 350 or MATH 454 or MATH 487, or instructor permission"),
-      None
-    ).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: Some(Operator::Or),
-          groups: vec![
-            Course("COMP 362".to_string()),
-            Course("MATH 350".to_string()),
-            Course("MATH 454".to_string()),
-            Course("MATH 487".to_string()),
-          ]
-        }),
-        corequisites: None,
-      }
-    )
-  }
-
-  #[test]
-  fn comp551() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser.parse(
-      Some("Prerequisite(s): MATH 323 or ECSE 205, COMP 202, MATH 133, MATH 222 (or their equivalents)."),
-      None
-    ).unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: Some(Operator::And),
-          groups: vec![
-            Group {
-              operator: Some(Operator::Or),
-              groups: vec![
-                Course("MATH 323".to_string()),
-                Course("ECSE 205".to_string()),
-              ]
-            },
-            Course("COMP 202".to_string()),
-            Course("MATH 133".to_string()),
-            Course("MATH 222".to_string()),
-          ]
-        }),
-        corequisites: None,
-      }
-    )
-  }
-
-  #[test]
-  fn math223() {
-    let parser = ReqParser::new(KEY).unwrap();
-    let reqs = parser
-      .parse(Some("Prerequisite: MATH 133 or equivalent"), None)
-      .unwrap();
-
-    assert_eq!(
-      reqs,
-      Requirements {
-        prerequisites: Some(Group {
-          operator: None,
-          groups: vec![Course("MATH 133".to_string())]
-        }),
-        corequisites: None,
-      }
-    )
+    );
   }
 }

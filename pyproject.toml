@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "mcgill-gg"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{ include = "mcgill" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+llama-index = "^0.7.6"
+langchain = "^0.0.231"
+python-dotenv = "^1.0.0"
+black = "^23.7.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
