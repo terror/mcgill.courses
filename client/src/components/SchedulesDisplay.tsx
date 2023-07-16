@@ -57,10 +57,10 @@ const BlockLocation = ({ location }: { location: string }) => {
       onMouseEnter={() => setShowFullName(true)}
       onMouseLeave={() => setShowFullName(false)}
     >
-      <p className='inline-block'> {location}</p>
       <Tooltip
         show={showFullName}
         text={buildingCodes[room as keyof typeof buildingCodes]}
+        children={<p className='inline-block'> {location}</p>}
       ></Tooltip>
     </span>
   );
