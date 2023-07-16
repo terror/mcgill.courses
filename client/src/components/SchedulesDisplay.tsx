@@ -2,11 +2,11 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
-import { Transition } from '@headlessui/react';
 
 import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Block, Schedule, TimeBlock } from '../model/Schedule';
+import { Tooltip } from './Tooltip';
 import * as buildingCodes from '../assets/buildingCodes.json';
 
 const dayToWeekday = (day: string) => {
@@ -58,23 +58,10 @@ const BlockLocation = ({ location }: { location: string }) => {
       onMouseLeave={() => setShowFullName(false)}
     >
       <p className='inline-block'> {location}</p>
-      <Transition
+      <Tooltip
         show={showFullName}
-        className='absolute -left-5 top-[-40px] z-10 inline min-w-fit whitespace-nowrap rounded border border-gray-200 bg-gray-100 p-2 text-sm transition ease-in-out dark:border-neutral-700 dark:bg-neutral-600'
-        enter='transition-opacity duration-75'
-        enterFrom='opacity-0'
-        enterTo='opacity-100'
-        leave='transition-opacity duration-150'
-        leaveFrom='opacity-100'
-        leaveTo='opacity-0'
-      >
-        <span
-          onMouseEnter={() => setShowFullName(true)}
-          onMouseLeave={() => setShowFullName(false)}
-        >
-          {buildingCodes[room as keyof typeof buildingCodes]}
-        </span>
-      </Transition>
+        text={buildingCodes[room as keyof typeof buildingCodes]}
+      ></Tooltip>
     </span>
   );
 };
