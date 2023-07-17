@@ -107,15 +107,15 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
               'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left md:flex-row'>
-              <div className='w-20'>
+            <div className='flex flex-col flex-wrap gap-x-5 whitespace-pre-wrap text-left md:flex-row'>
+              <div className=''>
                 <span className='font-semibold'>{block.display}</span>
               </div>
-              <div className='w-44'>
+              <div className=''>
                 <span className='font-semibold'>Campus: </span>
                 {block.campus}
               </div>
-              <div className='w-80'>
+              <div>
                 <span className='font-semibold'>Classroom(s): </span>
                 {block.location ? block.location.replace(';', ',') : 'N/A'}
               </div>
@@ -180,7 +180,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
           <button
             key={i}
             className={twMerge(
-              `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
+              `flex-1 p-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
                 ? 'bg-slate-100 dark:bg-neutral-700'
                 : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
