@@ -115,7 +115,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
                 <span className='font-semibold'>Campus: </span>
                 {block.campus}
               </div>
-              <div className=''>
+              <div>
                 <span className='font-semibold'>Classroom(s): </span>
                 {block.location ? block.location.replace(';', ',') : 'N/A'}
               </div>
