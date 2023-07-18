@@ -11,6 +11,7 @@ from llama_index.llms import OpenAI
 from dotenv import load_dotenv
 import openai
 import os
+import re
 
 load_dotenv()
 openai.api_key = os.environ["OPENAI_API_KEY"]
@@ -18,6 +19,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 PROMPT = (
     "Parse the following course requirements into a `CourseReq`. "
     "Do not include `ReqNode` strings that are not course codes. "
+    "The operator of a `ReqNode` cannot be null. "
     "Course codes are indicated by backticks in the input text:\n"
 )
 
@@ -48,9 +50,19 @@ query_engine = index.as_query_engine(similarity_top_k=4)
 
 
 def parse_course_req(prereq: Optional[str], coreq: Optional[str]) -> str:
-    prereq = prereq + "\n" if prereq else ""
-    coreq = coreq if coreq else ""
+    if not prereq and not coreq:
+        return r'{"prerequisites": null, "corequisites": null}'
+
+    prereq = f"Prerequisite(s): {prereq}\n" if prereq else ""
+    coreq = f"Corequisite(s): {coreq}" if coreq else ""
 
     prompt = PROMPT + prereq + coreq
     completion = query_engine.query(prompt)
     return str(completion)
+
+def parse_single_req(req: str) -> str:
+    code = req.strip(".`")
+    return str({"prerequisites": code})
+    
+def is_single_req(s: Optional[str]) -> bool:
+    return s is not None and re.match(single_pattern, s) is not None

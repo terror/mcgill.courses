@@ -18,7 +18,9 @@ impl From<&str> for Requirement {
   }
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(
+  Debug, PartialEq, Eq, Serialize, Deserialize, Clone, Hash, Ord, PartialOrd,
+)]
 pub enum Operator {
   #[serde(rename = "AND")]
   And,
@@ -26,7 +28,9 @@ pub enum Operator {
   Or,
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(
+  Debug, PartialEq, Eq, Serialize, Deserialize, Clone, Hash, Ord, PartialOrd,
+)]
 #[serde(untagged)]
 pub enum ReqNode {
   Course(String),

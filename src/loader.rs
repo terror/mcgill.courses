@@ -254,10 +254,14 @@ impl Loader {
       terms: listing.terms,
       description: course_page.description,
       instructors: course_page.instructors,
+      prerequisites_text: course_page.requirements.prerequisites_text,
+      corequisites_text: course_page.requirements.corequisites_text,
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
       leading_to: Vec::new(),
       restrictions: course_page.requirements.restrictions,
+      logical_prerequisites: course_page.requirements.logical_prerequisites,
+      logical_corequisites: course_page.requirements.logical_corequisites,
       schedule,
     })
   }
