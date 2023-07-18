@@ -49,6 +49,7 @@ type SchedulesDisplayProps = {
 
 const BlockLocation = ({ location }: { location: string }) => {
   const [showFullName, setShowFullName] = useState(false);
+
   const room = location.split(' ')[0];
 
   return (
@@ -128,25 +129,28 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
               'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left md:flex-row'>
-              <div className='w-20'>
+            <div className='flex flex-col flex-wrap gap-x-5 whitespace-pre-wrap text-left md:flex-row'>
+              <div className=''>
                 <span className='font-semibold'>{block.display}</span>
               </div>
-              <div className='w-44'>
+              <div className=''>
                 <span className='font-semibold'>Campus: </span>
                 {block.campus}
               </div>
-              <span className='font-semibold'>Classroom(s):</span>
-              <span className='inline-block w-80'>
-                {block.location.split(';').map((location: string, index) => (
-                  <span>
-                    <BlockLocation location={location.trim()} />
-                    {index !== block.location.split(';').length - 1 && (
-                      <span className='inline-block'>,</span>
-                    )}
-                  </span>
-                ))}
-              </span>
+              <div>
+                <span className='font-semibold'>Classroom(s):</span>
+                <span className='ml-1 inline-block w-80'>
+                  {((split) =>
+                    split.map((location: string, index) => (
+                      <span>
+                        <BlockLocation location={location.trim()} />
+                        {index !== split.length - 1 && (
+                          <span className='inline-block'>, </span>
+                        )}
+                      </span>
+                    )))(block.location.split(';'))}
+                </span>
+              </div>
             </div>
             <button
               onClick={() =>
@@ -208,7 +212,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
           <button
             key={i}
             className={twMerge(
-              `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
+              `flex-1 p-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
               term === currentlyDisplayingTerm
                 ? 'bg-slate-100 dark:bg-neutral-700'
                 : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
