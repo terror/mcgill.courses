@@ -10,9 +10,10 @@ use {
   req_parser::ReqParser,
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,
-  scraper::{ElementRef, Html, Selector},
+  scraper::{ElementRef, Html, Node, Selector},
   select::Select,
   serde::{Deserialize, Serialize},
+  std::collections::HashSet,
 };
 
 #[cfg(test)]

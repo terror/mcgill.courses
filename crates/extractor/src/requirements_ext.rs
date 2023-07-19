@@ -37,14 +37,14 @@ impl RequirementsExt for Requirements {
               Requirement::Prerequisites => {
                 requirements.set_prerequisites_text(Some(get_text(par)));
                 requirements.set_prerequisites(get_course_codes(par)?);
-                prereq_str = Some(wrap_course_codes(par)?);
+                prereq_str = Some(wrap_course_codes(par));
 
                 Ok(())
               }
               Requirement::Corequisites => {
                 requirements.set_corequisites_text(Some(get_text(par)));
                 requirements.set_corequisites(get_course_codes(par)?);
-                coreq_str = Some(wrap_course_codes(par)?);
+                coreq_str = Some(wrap_course_codes(par));
 
                 Ok(())
               }
@@ -72,13 +72,25 @@ impl RequirementsExt for Requirements {
 }
 
 fn get_course_codes(par: &ElementRef) -> Result<Vec<String>> {
-  Ok(
-    par
-      .select_many("a")?
-      .iter()
-      .map(|link| link.inner_html().split(' ').collect::<Vec<&str>>().join(""))
-      .collect(),
-  )
+  let mut codes = par
+    .select_many("a")?
+    .iter()
+    .map(|link| {
+      link
+        .value()
+        .attr("href")
+        .unwrap_or("")
+        .split('/')
+        .last()
+        .unwrap_or("")
+        .to_ascii_uppercase()
+        .replace('-', "")
+    })
+    .filter(|code| !code.is_empty())
+    .collect::<Vec<String>>();
+  dedup(&mut codes);
+
+  Ok(codes)
 }
 
 fn get_text(par: &ElementRef) -> String {
@@ -91,6 +103,29 @@ fn get_text(par: &ElementRef) -> String {
     .join(" ")
 }
 
-fn wrap_course_codes(par: &ElementRef) -> Result<String> {
-  Ok(par.inner_html().replace("<a>", "`").replace("</a>", "`"))
+fn wrap_course_codes(par: &ElementRef) -> String {
+  par
+    .children()
+    .map(|el| {
+      match el.value() {
+        Node::Text(t) => t.to_string(),
+        Node::Element(e) => {
+          // This unwrap will never panic
+          let text = ElementRef::wrap(el).unwrap().text().collect::<String>();
+          if e.name() == "a" {
+            format!("`{}`", text)
+          } else {
+            text
+          }
+        }
+        _ => String::from(""),
+      }
+    })
+    .collect::<String>()
+}
+
+fn dedup(v: &mut Vec<String>) {
+  let mut set = HashSet::new();
+
+  v.retain(|e| set.insert(e.clone()));
 }
