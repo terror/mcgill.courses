@@ -11,7 +11,6 @@ from llama_index.llms import OpenAI
 from dotenv import load_dotenv
 import openai
 import os
-import re
 
 load_dotenv()
 openai.api_key = os.environ["OPENAI_API_KEY"]
