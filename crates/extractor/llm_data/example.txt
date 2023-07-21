@@ -513,3 +513,4 @@ Prerequisite(s): `GERM 200` or `GERM 202`, 202D1/D2, or equivalent, or permissio
   },
   "corequisites": null
 }
+

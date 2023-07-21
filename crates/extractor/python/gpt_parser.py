@@ -59,10 +59,3 @@ def parse_course_req(prereq: Optional[str], coreq: Optional[str]) -> str:
     prompt = PROMPT + prereq + coreq
     completion = query_engine.query(prompt)
     return str(completion)
-
-def parse_single_req(req: str) -> str:
-    code = req.strip(".`")
-    return str({"prerequisites": code})
-    
-def is_single_req(s: Optional[str]) -> bool:
-    return s is not None and re.match(single_pattern, s) is not None

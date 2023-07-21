@@ -7,6 +7,7 @@ use {
     CourseListing, CoursePage, Instructor, ReqNode, Requirement, Requirements,
     Schedule,
   },
+  regex::Regex,
   req_parser::ReqParser,
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,

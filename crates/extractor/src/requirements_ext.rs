@@ -29,11 +29,11 @@ impl RequirementsExt for Requirements {
 
     par.iter().try_for_each(|par| -> Result {
       ["Prerequisite", "Corequisite", "Restriction"]
-        .iter()
+        .into_iter()
         .try_for_each(|title| -> Result {
           match par.inner_html().starts_with(title) {
             false => Ok(()),
-            _ => match Requirement::from(*title) {
+            _ => match Requirement::from(title) {
               Requirement::Prerequisites => {
                 requirements.set_prerequisites_text(Some(get_text(par)));
                 requirements.set_prerequisites(get_course_codes(par)?);
@@ -112,7 +112,7 @@ fn wrap_course_codes(par: &ElementRef) -> String {
         Node::Element(e) => {
           // This unwrap will never panic
           let text = ElementRef::wrap(el).unwrap().text().collect::<String>();
-          if e.name() == "a" {
+          if e.name() == "a" && !text.is_empty() {
             format!("`{}`", text)
           } else {
             text
@@ -128,4 +128,32 @@ fn dedup(v: &mut Vec<String>) {
   let mut set = HashSet::new();
 
   v.retain(|e| set.insert(e.clone()));
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn test_wrap_course_codes() {
+    let html = Html::parse_fragment(
+      r#"<html><p>Prerequisites: <a href="/study/2023-2024/courses/isla-651d1"></a><a href="http://www.mcgill.ca/study/2023-2024/courses/ISLA-651D1">ISLA 651D1</a>/<a href="/study/2023-2024/courses/isla-651d2">D2</a> or <a href="/study/2023-2024/courses/isla-551d1"></a><a href="http://www.mcgill.ca/study/2023-2024/courses/ISLA-551D1" title="" class="tooltip">ISLA 551D1</a>/<a href="/study/2023-2024/courses/isla-551d2" title="" class="tooltip">D2</a> or <a href="/study/2023-2024/courses/isla-251d1"></a><a href="http://www.mcgill.ca/study/2023-2024/courses/ISLA-251D1">ISLA 251D1</a>/<a href="/study/2023-2024/courses/isla-251d2">D2</a> or permission of the Institute.</p></html>"#,
+    );
+    let elem = html.root_element().select_single("p").unwrap();
+
+    assert_eq!(wrap_course_codes(&elem), "Prerequisites: `ISLA 651D1`/`D2` or `ISLA 551D1`/`D2` or `ISLA 251D1`/`D2` or permission of the Institute.");
+  }
+
+  #[test]
+  fn wrap_course_codes_ignores_non_a_tags() {
+    let html = Html::parse_fragment(
+      r#"<html><p>this <span>is a</span> <a href="foo.com">test</a> for ignoring tags</p></html>"#,
+    );
+    let elem = html.root_element().select_single("p").unwrap();
+
+    assert_eq!(
+      wrap_course_codes(&elem),
+      "this is a `test` for ignoring tags"
+    );
+  }
 }
