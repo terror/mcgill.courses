@@ -75,22 +75,24 @@ fn get_course_codes(par: &ElementRef) -> Result<Vec<String>> {
   let mut codes = par
     .select_many("a")?
     .iter()
-    .map(|link| {
-      link
-        .value()
-        .attr("href")
-        .unwrap_or("")
-        .split('/')
-        .last()
-        .unwrap_or("")
-        .to_ascii_uppercase()
-        .replace('-', "")
-    })
+    .map(|link| get_course_code_from_link(link).replace(' ', ""))
     .filter(|code| !code.is_empty())
     .collect::<Vec<String>>();
   dedup(&mut codes);
 
   Ok(codes)
+}
+
+fn get_course_code_from_link(link: &ElementRef) -> String {
+  link
+    .value()
+    .attr("href")
+    .unwrap_or("")
+    .split('/')
+    .last()
+    .unwrap_or("")
+    .to_ascii_uppercase()
+    .replace('-', " ")
 }
 
 fn get_text(par: &ElementRef) -> String {
@@ -111,9 +113,10 @@ fn wrap_course_codes(par: &ElementRef) -> String {
         Node::Text(t) => t.to_string(),
         Node::Element(e) => {
           // This unwrap will never panic
-          let text = ElementRef::wrap(el).unwrap().text().collect::<String>();
+          let elem = ElementRef::wrap(el).unwrap();
+          let text = elem.text().collect::<String>();
           if e.name() == "a" && !text.is_empty() {
-            format!("`{}`", text)
+            format!("`{}`", get_course_code_from_link(&elem))
           } else {
             text
           }
@@ -141,19 +144,19 @@ mod tests {
     );
     let elem = html.root_element().select_single("p").unwrap();
 
-    assert_eq!(wrap_course_codes(&elem), "Prerequisites: `ISLA 651D1`/`D2` or `ISLA 551D1`/`D2` or `ISLA 251D1`/`D2` or permission of the Institute.");
+    assert_eq!(wrap_course_codes(&elem), "Prerequisites: `ISLA 651D1`/`ISLA 651D2` or `ISLA 551D1`/`ISLA 551D2` or `ISLA 251D1`/`ISLA 251D2` or permission of the Institute.");
   }
 
   #[test]
   fn wrap_course_codes_ignores_non_a_tags() {
     let html = Html::parse_fragment(
-      r#"<html><p>this <span>is a</span> <a href="foo.com">test</a> for ignoring tags</p></html>"#,
+      r#"<html><p>this <span>is a</span> <a href="foo.com/test-396">TEST 396</a> for ignoring tags</p></html>"#,
     );
     let elem = html.root_element().select_single("p").unwrap();
 
     assert_eq!(
       wrap_course_codes(&elem),
-      "this is a `test` for ignoring tags"
+      "this is a `TEST 396` for ignoring tags"
     );
   }
 }
