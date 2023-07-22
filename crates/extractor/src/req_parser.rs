@@ -65,17 +65,14 @@ fn postprocess(req: &ReqNode) -> Option<ReqNode> {
     ReqNode::Group { groups, operator } => {
       let flattened: Vec<_> = groups.iter().filter_map(postprocess).collect();
 
-      if flattened.is_empty() {
-        return None;
+      match flattened.len() {
+        0 => None,
+        1 => postprocess(&flattened[0]),
+        _ => Some(ReqNode::Group {
+          operator: operator.clone(),
+          groups: flattened,
+        }),
       }
-      if flattened.len() == 1 {
-        return postprocess(&flattened[0]);
-      }
-
-      Some(ReqNode::Group {
-        operator: operator.clone(),
-        groups: flattened,
-      })
     }
   }
 }
