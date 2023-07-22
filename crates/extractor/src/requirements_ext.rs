@@ -61,7 +61,10 @@ impl RequirementsExt for Requirements {
         })
     })?;
 
-    if parse_reqs {
+    if parse_reqs
+      && !(requirements.prerequisites.is_empty()
+        && requirements.corequisites.is_empty())
+    {
       let reqs = REQ_PARSER.parse(prereq_str, coreq_str)?;
       requirements.set_logical_prerequisites(reqs.prerequisites);
       requirements.set_logical_corequisites(reqs.corequisites);
