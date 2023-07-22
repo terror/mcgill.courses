@@ -15,6 +15,7 @@ use {
   select::Select,
   serde::{Deserialize, Serialize},
   std::collections::HashSet,
+  utils::*,
 };
 
 #[cfg(test)]
@@ -26,6 +27,7 @@ mod req_parser;
 mod requirements_ext;
 mod schedule_ext;
 mod select;
+mod utils;
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
