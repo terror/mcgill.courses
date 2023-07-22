@@ -88,7 +88,6 @@ jobs:
         run: |
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
-          brew update
           brew install mongodb-community@6.0
           brew services start mongodb-community@6.0
 
@@ -130,7 +129,6 @@ jobs:
         run: |
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
-          brew update
           brew install mongodb-community@6.0
           brew services start mongodb-community@6.0
 
