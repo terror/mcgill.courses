@@ -2,7 +2,7 @@ This is an document containing examples for correctly parsed course requirements
 
 The format is a JSON object, with a field 'prerequisites' and 'corequisites'.
 The values for these have a tree-like structure, where each node is either a course code or a grouping of nodes.
-A course code is simply a 4 character string (e.g. 'COMP') followed by a 3 digit number (e.g. '202'), with potentially 'D1', 'D2', 'J1', 'J2', or 'J3' appended to the 3 digit number.
+A course code is simply a 4 character string (e.g. 'COMP') followed by a 3 digit number (e.g. '202'), with potentially 'D1', 'D2', 'N1', 'N2', 'J1', 'J2', or 'J3' appended to the 3 digit number.
 Examples of valid course codes are 'COMP 250', 'MATH 240', 'CMR2 564', 'COMP 361D1', and 'DENT 101J3'.
 
 Requirements that are not course codes or courses that are not strictly required should not be included in the output
@@ -491,26 +491,3 @@ Prerequisite(s): `CANS 200` or permission of instructor
   "prerequisites": "CANS 200",
   "corequisites": null
 }
-
----INPUT---
-Parse the following course requirements into a `CourseReq`. Do not include `ReqNode` strings that are not course codes. The operator of a `ReqNode` cannot be null.Course codes are indicated by backticks in the input text:
-Prerequisite(s): `GERM 200` or `GERM 202`, 202D1/D2, or equivalent, or permission of Department.
----OUTPUT---
-{
-  "prerequisites": {
-    "operator": "OR",
-    "groups": [
-      "GERM 200",
-      "GERM 202",
-      {
-        "operator": "AND",
-        "groups": [
-          "GERM 202D1",
-          "GERM 202D2"
-        ]
-      }
-    ]
-  },
-  "corequisites": null
-}
-
