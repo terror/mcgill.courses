@@ -7,10 +7,9 @@ readme = "README.md"
 packages = [{ include = "mcgill" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 llama-index = "^0.7.6"
 python-dotenv = "^1.0.0"
-black = "^23.7.0"
 
 [build-system]
 requires = ["poetry-core"]
