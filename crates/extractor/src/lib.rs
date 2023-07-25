@@ -2,28 +2,22 @@ use {
   anyhow::anyhow,
   course_listing_ext::CourseListingExt,
   course_page_ext::CoursePageExt,
-  lazy_static::lazy_static,
   model::{
-    CourseListing, CoursePage, Instructor, ReqNode, Requirement, Requirements,
-    Schedule,
+    CourseListing, CoursePage, Instructor, Requirement, Requirements, Schedule,
   },
-  regex::Regex,
-  req_parser::ReqParser,
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,
   scraper::{ElementRef, Html, Node, Selector},
   select::Select,
-  serde::{Deserialize, Serialize},
   std::collections::HashSet,
   utils::*,
 };
 
 #[cfg(test)]
-use model::{Block, Operator, TimeBlock};
+use model::{Block, TimeBlock};
 
 mod course_listing_ext;
 mod course_page_ext;
-mod req_parser;
 mod requirements_ext;
 mod schedule_ext;
 mod select;
@@ -52,8 +46,8 @@ pub fn extract_course_listings(
   }
 }
 
-pub fn extract_course_page(text: &str, parse_reqs: bool) -> Result<CoursePage> {
-  CoursePage::from_html(Html::parse_fragment(text), parse_reqs)
+pub fn extract_course_page(text: &str) -> Result<CoursePage> {
+  CoursePage::from_html(Html::parse_fragment(text))
 }
 
 pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
@@ -138,16 +132,13 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
   Ok(instructors)
 }
 
-fn extract_course_requirements(
-  html: &Html,
-  parse_reqs: bool,
-) -> Result<Requirements> {
+fn extract_course_requirements(html: &Html) -> Result<Requirements> {
   match html
     .root_element()
     .select_optional("ul[class='catalog-notes']")
     .unwrap()
   {
-    Some(notes) => Requirements::from_notes(notes, parse_reqs),
+    Some(notes) => Requirements::from_notes(notes),
     None => Ok(Requirements::default()),
   }
 }
@@ -534,7 +525,7 @@ mod tests {
     assert_eq!(
       super::extract_course_requirements(&Html::parse_fragment(
         &get_content("course_page_2022_2023.html"),
-      ), false)
+      ))
       .unwrap(),
       Requirements {
         corequisites_text: Some("MATH 133.".into()),
@@ -550,7 +541,7 @@ mod tests {
   fn extract_course_page_2009_2010() {
     assert_eq!(
       super::extract_course_page(
-        &get_content("course_page_2009_2010.html"), false
+        &get_content("course_page_2009_2010.html")
       )
       .unwrap(),
       CoursePage {
@@ -597,7 +588,6 @@ mod tests {
     assert_eq!(
       super::extract_course_page(
         &get_content("course_page_2022_2023.html"),
-        false
       )
       .unwrap(),
       CoursePage {
@@ -673,11 +663,8 @@ mod tests {
   #[test]
   fn extract_course_page_with_amp() {
     assert_eq!(
-      super::extract_course_page(
-        &get_content("course_page_with_amp.html"),
-        false
-      )
-      .unwrap(),
+      super::extract_course_page(&get_content("course_page_with_amp.html"),)
+        .unwrap(),
       CoursePage {
         title: "E & M Laboratory".into(),
         credits: "1".into(),

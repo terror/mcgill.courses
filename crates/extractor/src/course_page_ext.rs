@@ -1,13 +1,13 @@
 use super::*;
 
 pub(crate) trait CoursePageExt {
-  fn from_html(html: Html, parse_reqs: bool) -> Result<Self>
+  fn from_html(html: Html) -> Result<Self>
   where
     Self: Sized;
 }
 
 impl CoursePageExt for CoursePage {
-  fn from_html(html: Html, parse_reqs: bool) -> Result<Self> {
+  fn from_html(html: Html) -> Result<Self> {
     let content = html.root_element().try_select_single(vec![
       "div[class='node node-catalog clearfix']",
       "div[class='node node-catalog node-promoted clearfix']",
@@ -75,7 +75,7 @@ impl CoursePageExt for CoursePage {
         .to_owned()
         .replace("&amp;", "&"),
       instructors: extract_course_instructors(&html)?,
-      requirements: extract_course_requirements(&html, parse_reqs)?,
+      requirements: extract_course_requirements(&html)?,
     })
   }
 }

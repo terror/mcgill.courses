@@ -10,6 +10,7 @@ packages = [{ include = "mcgill" }]
 python = "^3.11"
 llama-index = "^0.7.6"
 python-dotenv = "^1.0.0"
+beautifulsoup4 = "^4.12.2"
 
 [build-system]
 requires = ["poetry-core"]

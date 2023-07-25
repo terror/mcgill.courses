@@ -58,12 +58,6 @@ pub(crate) struct Loader {
     help = "Scrape visual schedule builder information"
   )]
   scrape_vsb: bool,
-  #[clap(
-    long,
-    default_value = "false",
-    help = "Parse logical relationship between course requirements using GPT-3.5"
-  )]
-  parse_reqs: bool,
 }
 
 impl Loader {
@@ -82,14 +76,11 @@ impl Loader {
       )? {
         let latest_term = index == self.mcgill_terms.len() - 1;
         let scrape_vsb = self.scrape_vsb && latest_term;
-        let parse_reqs = self.parse_reqs && latest_term;
 
         courses.extend(
           listings
             .par_iter()
-            .map(|listing| {
-              self.parse_course(listing.clone(), scrape_vsb, parse_reqs)
-            })
+            .map(|listing| self.parse_course(listing.clone(), scrape_vsb))
             .collect::<Result<Vec<Course>, _>>()?,
         );
 
@@ -209,7 +200,6 @@ impl Loader {
     &self,
     listing: CourseListing,
     scrape_vsb: bool,
-    parse_reqs: bool,
   ) -> Result<Course> {
     info!("{:?}", listing);
 
@@ -219,7 +209,6 @@ impl Loader {
 
     let course_page = extractor::extract_course_page(
       &client.get(&listing.url).retry(self.retries)?.text()?,
-      parse_reqs,
     )?;
 
     info!(

@@ -1,33 +1,36 @@
-from typing import Optional, Any
+import json
+import os
+import re
+import time
+from argparse import ArgumentParser
+from typing import Any, Optional
+
+import openai
+from bs4 import BeautifulSoup, Tag
+from dotenv import load_dotenv
 from llama_index import (
+    ServiceContext,
+    SimpleDirectoryReader,
     StorageContext,
     VectorStoreIndex,
-    SimpleDirectoryReader,
-    ServiceContext,
     load_index_from_storage,
     set_global_service_context,
 )
 from llama_index.indices.query.base import BaseQueryEngine
 from llama_index.llms import OpenAI
-from dotenv import load_dotenv
-from argparse import ArgumentParser
-import openai
-import os
-import re
-import json
 
-PROMPT = ("Parse the following course requirements into a `CourseReq`. "
-          "Do not include `ReqNode` strings that are not course codes. "
-          "The operator of a `ReqNode` cannot be null. "
-          "Course codes are indicated by backticks in the input text:\n")
-COURSE_CODE_PATTERN = re.compile(
-    "([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?")
+PROMPT = (
+    "Parse the following course requirements into a `CourseReq`. "
+    "Do not include `ReqNode` strings that are not course codes. "
+    "The operator of a `ReqNode` cannot be null. "
+    "Course codes are indicated by backticks in the input text:\n"
+)
+COURSE_CODE_PATTERN = re.compile("([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?")
 
 
 def create_index(dir: str, service_context: ServiceContext):
     documents = SimpleDirectoryReader(dir).load_data()
-    index = VectorStoreIndex.from_documents(documents,
-                                            service_context=service_context)
+    index = VectorStoreIndex.from_documents(documents, service_context=service_context)
     return index
 
 
@@ -40,21 +43,41 @@ def get_index(service_context: ServiceContext):
 
     print("Loaded index from storage...")
     storage_context = StorageContext.from_defaults(persist_dir="./storage")
-    return load_index_from_storage(storage_context,
-                                   service_context=service_context)
+    return load_index_from_storage(storage_context, service_context=service_context)
 
 
-def parse_course_req(query_engine: BaseQueryEngine, prereq: Optional[str],
-                     coreq: Optional[str]) -> str:
+def parse_course_req(
+    query_engine: BaseQueryEngine, prereq: Optional[str], coreq: Optional[str]
+) -> str:
     if not prereq and not coreq:
         return r'{"prerequisites": null, "corequisites": null}'
 
-    prereq = f"Prerequisite(s): {prereq}\n" if prereq else ""
-    coreq = f"Corequisite(s): {coreq}" if coreq else ""
+    prereq = prereq + "\n" if prereq else ""
+    coreq = coreq if coreq else ""
 
     prompt = PROMPT + prereq + coreq
     completion = query_engine.query(prompt)
     return str(completion)
+
+
+def preprocess_html(html: str) -> str:
+    parsed = BeautifulSoup(f"<div>{html}</div>", "html.parser")
+    root = parsed.find("div")
+    assert isinstance(root, Tag)
+
+    result = ""
+
+    for child in root.children:
+        match child:
+            case Tag(name="a"):
+                course_code = (
+                    child.attrs["href"].split("/")[-1].upper().replace("-", " ")
+                )
+                result += f"`{course_code}`"
+            case _:
+                result += child.text
+
+    return result
 
 
 def postprocess(req: str | dict[str, Any]) -> Optional[str | dict[str, Any]]:
@@ -78,11 +101,10 @@ def postprocess(req: str | dict[str, Any]) -> Optional[str | dict[str, Any]]:
 
 def init_argparse() -> ArgumentParser:
     parser = ArgumentParser(
-        description="Parse logical course requirements from existing data.", )
+        description="Parse logical course requirements from existing data.",
+    )
 
-    parser.add_argument("file",
-                        type=str,
-                        help="The path to the course JSON file.")
+    parser.add_argument("file", type=str, help="The path to the course JSON file.")
     parser.add_argument(
         "-d",
         "--delay",
@@ -94,8 +116,7 @@ def init_argparse() -> ArgumentParser:
         "-o",
         "--overwrite",
         action="store_true",
-        help=
-        "Reparse all courses, even if they already have parsed requirements.",
+        help="Reparse all courses, even if they already have parsed requirements.",
     )
 
     return parser
@@ -122,47 +143,56 @@ def main():
 
     failed = []
 
-    for i, course in enumerate(courses):
-        already_parsed = (course["logical_prerequisites"]
-                          or course["logical_corequisites"])
-
-        if not args.overwrite and already_parsed:
-            continue
-
-        progress = f"({i + 1}/{num_courses})"
-
-        prereq = course["prerequisites"]
-        coreq = course["corequisites"]
-        course_code = course["_id"]
-
-        if not prereq and not coreq:
-            print(
-                f"{progress} {course_code} does not have any requirements, skipping..."
+    try:
+        for i, course in enumerate(courses):
+            already_parsed = (
+                course["logicalPrerequisites"] or course["logicalCorequisites"]
             )
-            continue
 
-        print(f"{progress} Parsing requirements {course_code}...")
+            if not args.overwrite and already_parsed:
+                continue
 
-        prereq_str = course["prerequisites_text"]
-        coreq_str = course["corequisites_text"]
-        completion = parse_course_req(query_engine, prereq_str, coreq_str)
+            progress = f"({i + 1}/{num_courses})"
 
-        print("Got completion:", completion)
-        course_req = json.loads(completion)
+            prereq = course["prerequisites"]
+            coreq = course["corequisites"]
+            course_code = course["_id"]
 
-        prereqs = course_req["prerequisites"]
-        coreqs = course_req["corequisites"]
+            if not prereq and not coreq:
+                print(
+                    f"{progress} {course_code} does not have any requirements, skipping..."
+                )
+                continue
 
-        try:
-            prereqs = postprocess(prereqs) if prereqs else None
-            coreqs = postprocess(coreqs) if coreqs else None
-        except AssertionError:
-            print("Failed to parse requirements, skipping...")
-            failed.append(course_code)
-            continue
+            print(f"{progress} Parsing requirements {course_code}...")
 
-        course["logical_prerequisites"] = prereqs
-        course["logical_corequisites"] = coreqs
+            prereq_str = preprocess_html(course["prerequisitesText"])
+            coreq_str = preprocess_html(course["corequisitesText"])
+            completion = parse_course_req(query_engine, prereq_str, coreq_str)
+
+            print("Got completion:", completion)
+            course_req = json.loads(completion)
+
+            prereqs = course_req["prerequisites"]
+            coreqs = course_req["corequisites"]
+
+            try:
+                prereqs = postprocess(prereqs) if prereqs else None
+                coreqs = postprocess(coreqs) if coreqs else None
+            except AssertionError:
+                print("Failed to postprocessing requirements, skipping...")
+                failed.append(course_code)
+                continue
+
+            course["logicalPrerequisites"] = prereqs
+            course["logicalCorequisites"] = coreqs
+            time.sleep(args.delay / 1000)
+    except Exception as e:
+        print(f"An error occured when trying to parse: {e}")
+        print("Saving progress...")
+
+    with open(args.file, "w") as f:
+        json.dump(courses, f, indent=2)
 
 
 if __name__ == "__main__":
