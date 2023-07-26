@@ -87,6 +87,7 @@ jobs:
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
+          brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
           brew services start mongodb-community@6.0
 
@@ -127,6 +128,7 @@ jobs:
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
+          brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
           brew services start mongodb-community@6.0
 
