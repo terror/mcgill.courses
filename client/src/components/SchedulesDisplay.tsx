@@ -6,6 +6,8 @@ import { twMerge } from 'tailwind-merge';
 import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Block, Schedule, TimeBlock } from '../model/Schedule';
+import { Tooltip } from './Tooltip';
+import * as buildingCodes from '../assets/buildingCodes.json';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -43,6 +45,26 @@ const VSBtimeToDisplay = (time: string) => {
 
 type SchedulesDisplayProps = {
   course: Course;
+};
+
+const BlockLocation = ({ location }: { location: string }) => {
+  const [showFullName, setShowFullName] = useState(false);
+
+  const room = location.split(' ')[0];
+
+  return (
+    <span
+      className='relative whitespace-nowrap'
+      onMouseEnter={() => setShowFullName(true)}
+      onMouseLeave={() => setShowFullName(false)}
+    >
+      <Tooltip
+        show={showFullName}
+        text={buildingCodes[room as keyof typeof buildingCodes]}
+        children={<p className='inline-block'> {location}</p>}
+      ></Tooltip>
+    </span>
+  );
 };
 
 export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
@@ -116,8 +138,18 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
                 {block.campus}
               </div>
               <div>
-                <span className='font-semibold'>Classroom(s): </span>
-                {block.location ? block.location.replace(';', ',') : 'N/A'}
+                <span className='font-semibold'>Classroom(s):</span>
+                <span className='ml-1 inline-block w-80'>
+                  {((split) =>
+                    split.map((location: string, index) => (
+                      <span>
+                        <BlockLocation location={location.trim()} />
+                        {index !== split.length - 1 && (
+                          <span className='inline-block'>, </span>
+                        )}
+                      </span>
+                    )))(block.location.split(';'))}
+                </span>
               </div>
             </div>
             <button
