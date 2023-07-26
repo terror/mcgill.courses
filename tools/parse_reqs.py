@@ -83,7 +83,7 @@ def preprocess_html(html: str) -> str:
 def postprocess(req: str | dict[str, Any]) -> Optional[str | dict[str, Any]]:
     match req:
         case str():
-            COURSE_CODE_PATTERN.fullmatch(req)
+            return req if COURSE_CODE_PATTERN.fullmatch(req) else None
         case dict():
             assert len(req.keys()) == 2
             assert "operator" in req and "groups" in req
@@ -183,11 +183,15 @@ def main():
                 print("Failed to postprocessing requirements, skipping...")
                 failed.append(course_code)
                 continue
+            print("---Postprocessed---")
+            print("Prerequisites:", prereqs)
+            print("Corequisites:", coreqs)
+            print()
 
             course["logicalPrerequisites"] = prereqs
             course["logicalCorequisites"] = coreqs
             time.sleep(args.delay / 1000)
-    except Exception as e:
+    except (KeyboardInterrupt, Exception) as e:
         print(f"An error occured when trying to parse: {e}")
         print("Saving progress...")
 
