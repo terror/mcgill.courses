@@ -1,8 +1,1 @@
-{
-  "index_store/data": {
-    "afd4f769-03a6-4e45-bfa8-517b9f39dd1c": {
-      "__type__": "vector_store",
-      "__data__": "{\"index_id\": \"afd4f769-03a6-4e45-bfa8-517b9f39dd1c\", \"summary\": null, \"nodes_dict\": {\"7160aeb4-de9c-49c4-b1df-a4ec1f259aed\": \"7160aeb4-de9c-49c4-b1df-a4ec1f259aed\", \"c554c689-1f74-4c17-ab62-600180c4d499\": \"c554c689-1f74-4c17-ab62-600180c4d499\", \"ca578fd2-2cc3-4d42-831d-244332ed64b7\": \"ca578fd2-2cc3-4d42-831d-244332ed64b7\", \"795b9e3f-941c-4653-a8f9-85fcf9629971\": \"795b9e3f-941c-4653-a8f9-85fcf9629971\", \"e500abe8-7ffa-405f-8bd9-62ad9b860166\": \"e500abe8-7ffa-405f-8bd9-62ad9b860166\"}, \"doc_id_dict\": {}, \"embeddings_dict\": {}}"
-    }
-  }
-}
+{"index_store/data": {"fe524735-bf0d-4e91-bdc8-49b8c2b87468": {"__type__": "vector_store", "__data__": "{\"index_id\": \"fe524735-bf0d-4e91-bdc8-49b8c2b87468\", \"summary\": null, \"nodes_dict\": {\"4c45f1c8-c688-4a5f-9b55-5767ebf5bea7\": \"4c45f1c8-c688-4a5f-9b55-5767ebf5bea7\", \"89d80da5-e842-4429-b112-7fda58fa8cd0\": \"89d80da5-e842-4429-b112-7fda58fa8cd0\", \"83a88f0c-aa62-4354-8d87-7d043486a079\": \"83a88f0c-aa62-4354-8d87-7d043486a079\", \"3b0a887d-dd03-41bb-951d-5137d2140403\": \"3b0a887d-dd03-41bb-951d-5137d2140403\", \"3d01a804-964b-42df-8e18-9654fcdd50b1\": \"3d01a804-964b-42df-8e18-9654fcdd50b1\"}, \"doc_id_dict\": {}, \"embeddings_dict\": {}}"}}}

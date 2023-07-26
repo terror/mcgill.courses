@@ -491,3 +491,19 @@ Prerequisite(s): `CANS 200` or permission of instructor
   "prerequisites": "CANS 200",
   "corequisites": null
 }
+
+---INPUT---
+Prerequisites: `ANTH 202` and one other 200-level anthropology course, U2 standing or above, or permission of instructor.
+---OUTPUT---
+{
+  "prerequisites": "ANTH 202",
+  "corequisites": null
+}
+
+---INPUT---
+Prerequisites: `ANTH 201` and one other course in archaeology
+---OUTPUT---
+{
+  "prerequisites": "ANTH 201",
+  "corequisites": null
+}
