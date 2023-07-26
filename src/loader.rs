@@ -97,9 +97,9 @@ impl Loader {
       courses.sort();
 
       fs::write(
-        &match source.is_file() {
-          true => source.clone(),
-          _ => source.join(format!("courses-{term}.json")),
+        &match source.is_dir() {
+          true => source.join(format!("courses-{term}.json")),
+          _ => source.clone(),
         },
         serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
       )

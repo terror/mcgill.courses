@@ -1,0 +1,7 @@
+set dotenv-load
+
+fmt:
+  yapf --in-place --recursive . && isort .
+
+run *args:
+  python3 main.py {{args}}

@@ -7,7 +7,7 @@ use {
   },
   requirements_ext::RequirementsExt,
   schedule_ext::ScheduleExt,
-  scraper::{ElementRef, Html, Node, Selector},
+  scraper::{ElementRef, Html, Selector},
   select::Select,
   std::collections::HashSet,
   utils::*,
