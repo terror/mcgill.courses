@@ -74,8 +74,8 @@ impl Loader {
       while let Some(listings) = self.parse_course_listing_pages(
         self.aggregate_urls(term, page, page + self.batch_size),
       )? {
-        let latest_term = index == self.mcgill_terms.len() - 1;
-        let scrape_vsb = self.scrape_vsb && latest_term;
+        let scrape_vsb =
+          self.scrape_vsb && index == self.mcgill_terms.len() - 1;
 
         courses.extend(
           listings

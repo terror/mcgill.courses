@@ -528,7 +528,7 @@ mod tests {
       ))
       .unwrap(),
       Requirements {
-        corequisites_text: Some("MATH 133.".into()),
+          corequisites_text: Some("Corequisite: <a href=\"/study/2022-2023/courses/math-133\">MATH 133</a>.".into()),
         corequisites: vec!["MATH133".into()],
         prerequisites: Vec::new(),
         restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()),
@@ -578,7 +578,7 @@ mod tests {
             term: "Winter 2010".into(),
           },
         ],
-        requirements: Requirements { prerequisites_text: Some("MGCR 211".into()), corequisites: vec![], prerequisites: vec![], restrictions: None, ..Requirements::default() }
+        requirements: Requirements { prerequisites_text: Some("Prerequisite: MGCR 211".into()), corequisites: vec![], prerequisites: vec![], restrictions: None, ..Requirements::default() }
       }
     );
   }
@@ -620,7 +620,7 @@ mod tests {
           }
         ],
         requirements: Requirements {
-          corequisites_text: Some("MATH 133.".into()),
+          corequisites_text: Some("Corequisite: <a href=\"/study/2022-2023/courses/math-133\">MATH 133</a>.".into()),
           corequisites: vec!["MATH133".into()],
           prerequisites: vec![],
           restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()),
@@ -678,9 +678,7 @@ mod tests {
           term: "Winter 2023".into(),
         }],
         requirements: Requirements {
-          prerequisites_text: Some(
-            "Lecture component of PHYS 142 or equivalent".into()
-          ),
+          prerequisites_text: Some("Prerequisite: Lecture component of <a href=\"/study/2022-2023/courses/phys-142\">PHYS 142</a> or equivalent".into()),
           corequisites: vec![],
           prerequisites: vec!["PHYS142".into()],
           restrictions: Some(
