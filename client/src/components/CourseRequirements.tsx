@@ -1,28 +1,58 @@
-import { Link } from 'react-router-dom';
-
 import { Requirements } from '../model/Requirements';
 
 type ReqsBlockProps = {
   title: string;
-  reqs: string[];
+  text?: string;
 };
 
-const ReqsBlock = ({ title, reqs }: ReqsBlockProps) => {
+const transform = (html: string): string => {
+  const parser = new DOMParser();
+
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const links = doc.querySelectorAll('a');
+
+  links.forEach((link) => {
+    const href = link.getAttribute('href');
+
+    if (href) {
+      const courseMatch = href.match(/courses\/(.+)-(.+)/);
+
+      if (courseMatch)
+        link.setAttribute(
+          'href',
+          '/course/' + (courseMatch[1] + courseMatch[2]).toUpperCase()
+        );
+    }
+  });
+
+  const capitalize = (s: string): string => {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  const punctuate = (s: string): string => {
+    return s.charAt(s.length - 1) === '.' ? s : s + '.';
+  };
+
+  const replaced = doc.body.innerHTML;
+
+  return ((split: string[]) =>
+    split.length <= 1
+      ? capitalize(punctuate(replaced.trim()))
+      : capitalize(punctuate(split[1].trim())))(replaced.split(':'));
+};
+
+const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
         {title}
       </h2>
-      {reqs.length > 0 ? (
-        reqs.map((req, i) => (
-          <Link
-            key={i}
-            to={`/course/${req}`}
-            className='block text-gray-500 underline transition duration-100 hover:text-gray-600 dark:text-gray-400 hover:dark:text-gray-200'
-          >
-            {req}
-          </Link>
-        ))
+      {text ? (
+        <p
+          className='text-gray-500 dark:text-gray-400'
+          dangerouslySetInnerHTML={{ __html: transform(text) }}
+        />
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
           This course has no {title.toLowerCase()}.
@@ -41,8 +71,14 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
     <div className='w-full rounded-md bg-slate-50 p-4 dark:bg-neutral-800'>
       <div className='flex-col space-y-3'>
         <div className='m-4 space-y-7'>
-          <ReqsBlock title='Prerequisites' reqs={requirements.prereqs} />
-          <ReqsBlock title='Corequisites' reqs={requirements.coreqs} />
+          <ReqsBlock
+            title='Prerequisites'
+            text={requirements.prerequisitesText}
+          />
+          <ReqsBlock
+            title='Corequisites'
+            text={requirements.corequisitesText}
+          />
           <div>
             <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
               Restrictions

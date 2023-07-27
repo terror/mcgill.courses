@@ -1,4 +1,5 @@
 import { Instructor } from './Instructor';
+import { ReqNode } from './Requirements';
 import { Schedule } from './Schedule';
 
 export type Course = {
@@ -15,8 +16,12 @@ export type Course = {
   terms: string[];
   description: string;
   instructors: Instructor[];
+  prerequisitesText?: string;
+  corequisitesText?: string;
   prerequisites: string[];
   corequisites: string[];
+  logicalPrerequisites?: ReqNode;
+  logicalCorequisites?: ReqNode;
   leadingTo: string[];
   restrictions: string;
   schedule: Schedule[];

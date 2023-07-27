@@ -71,10 +71,14 @@ export const CoursePage = () => {
     });
   }
 
+  console.log(course);
+
   const requirements: Requirements = {
     prereqs: course.prerequisites,
     coreqs: course.corequisites,
     restrictions: course.restrictions,
+    prerequisitesText: course.prerequisitesText,
+    corequisitesText: course.corequisitesText,
   };
 
   const canReview = Boolean(

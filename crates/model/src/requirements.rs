@@ -28,6 +28,15 @@ pub enum Operator {
   Or,
 }
 
+impl Into<Bson> for Operator {
+  fn into(self) -> Bson {
+    match self {
+      Self::And => Bson::String("AND".to_string()),
+      Self::Or => Bson::String("OR".to_string()),
+    }
+  }
+}
+
 #[derive(
   Debug, PartialEq, Eq, Serialize, Deserialize, Clone, Hash, Ord, PartialOrd,
 )]
@@ -38,6 +47,18 @@ pub enum ReqNode {
     operator: Operator,
     groups: Vec<ReqNode>,
   },
+}
+
+impl Into<Bson> for ReqNode {
+  fn into(self) -> Bson {
+    match self {
+      Self::Course(course) => Bson::String(course),
+      Self::Group { operator, groups } => Bson::Document(doc! {
+        "operator": <Operator as Into<Bson>>::into(operator),
+        "groups": groups.into_iter().map(|group| group.into()).collect::<Vec<Bson>>()
+      }),
+    }
+  }
 }
 
 impl Default for ReqNode {
