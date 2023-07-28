@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Requirements } from '../model/Requirements';
 
 type ReqsBlockProps = {
@@ -5,41 +6,59 @@ type ReqsBlockProps = {
   text?: string;
 };
 
-const transform = (html: string): string => {
+const capitalize = (s: string): string => {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+const punctuate = (s: string): string => {
+  return s.charAt(s.length - 1) === '.' ? s : s + '.';
+};
+
+const transform = (html: string): React.ReactNode[] => {
   const parser = new DOMParser();
 
-  const doc = parser.parseFromString(html, 'text/html');
+  const split = html.split(':');
+  const text = capitalize(
+    punctuate(split.length <= 1 ? html.trim() : split[1].trim())
+  );
 
-  const links = doc.querySelectorAll('a');
+  const doc = parser.parseFromString(text, 'text/html');
 
-  links.forEach((link) => {
-    const href = link.getAttribute('href');
+  const elems: React.ReactNode[] = Array.from(doc.body.childNodes).map(
+    (node) => {
+      switch (node.nodeType) {
+        case Node.ELEMENT_NODE: {
+          const elem = node as HTMLElement;
+          if (node.nodeName === 'A') {
+            const href = elem.getAttribute('href');
+            if (!href) return elem.innerText;
 
-    if (href) {
-      const courseMatch = href.match(/courses\/(.+)-(.+)/);
+            const courseMatch = href.match(/courses\/(.+)-(.+)/);
+            if (!courseMatch) {
+              return <a href={href}>{elem.innerText}</a>;
+            }
+            const courseCode = (courseMatch[1] + courseMatch[2]).toUpperCase();
 
-      if (courseMatch)
-        link.setAttribute(
-          'href',
-          '/course/' + (courseMatch[1] + courseMatch[2]).toUpperCase()
-        );
+            return (
+              <Link
+                to={`/course/${courseCode}`}
+                className='text-gray-800 hover:underline dark:text-gray-200'
+              >
+                {elem.innerText}
+              </Link>
+            );
+          }
+          return (node as HTMLElement).innerText;
+        }
+        case Node.TEXT_NODE:
+          return (node as Text).textContent;
+        case Node.COMMENT_NODE:
+          return null;
+      }
     }
-  });
+  );
 
-  const capitalize = (s: string): string => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  const punctuate = (s: string): string => {
-    return s.charAt(s.length - 1) === '.' ? s : s + '.';
-  };
-
-  const replaced = doc.body.innerHTML;
-
-  return ((split: string[]) =>
-    split.length <= 1
-      ? capitalize(punctuate(replaced.trim()))
-      : capitalize(punctuate(split[1].trim())))(replaced.split(':'));
+  return elems;
 };
 
 const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
@@ -49,10 +68,9 @@ const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
         {title}
       </h2>
       {text ? (
-        <p
-          className='text-gray-500 dark:text-gray-400'
-          dangerouslySetInnerHTML={{ __html: transform(text) }}
-        />
+        <div className='text-gray-500 dark:text-gray-400'>
+          {transform(text)}
+        </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
           This course has no {title.toLowerCase()}.
