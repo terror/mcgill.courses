@@ -137,13 +137,12 @@ def main():
 
   num_courses = len(courses)
 
-  skip = set()
-
-  with open('failed.txt', 'r') as ff:
-    for code in ff.read().splitlines():
-      skip.add(code.strip())
-
   failed = []
+
+  if os.path.exists('failed.txt'):
+    with open('failed.txt', 'r') as ff:
+        failed = [s.strip() for s in ff.readlines()]
+
 
   for i, course in enumerate(courses):
     course_code = ''
@@ -157,13 +156,12 @@ def main():
         continue
 
       progress = f"({i + 1}/{num_courses})"
-
       prereq = course["prerequisites"]
       coreq = course["corequisites"]
       course_code = course["_id"]
 
-      if course_code in skip:
-        print('Course found in skip list')
+      if course_code in failed:
+        print(f'{progress} {course_code} failed previously, skipping...')
         continue
 
       if not prereq and not coreq:
@@ -211,6 +209,8 @@ def main():
     json.dump(courses, f, indent=2)
 
   print(f'Failed to parse the following course(s): {", ".join(failed)}')
+  with open('failed.txt', 'w') as f:
+    f.write('\n'.join(failed))
 
 if __name__ == "__main__":
   main()
