@@ -12,6 +12,7 @@ import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
 import { GetInstructorPayload } from '../model/GetInstructorPayload';
+import { courseIdToUrlParam } from '../lib/utils';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -73,7 +74,9 @@ export const Instructor = () => {
                     Teaches or has taught the following course(s):{' '}
                     {uniqueReviews.map((review, index) => (
                       <Fragment key={index}>
-                        <Link to={`/course/${review.courseId}`}>
+                        <Link
+                          to={`/course/${courseIdToUrlParam(review.courseId)}`}
+                        >
                           {review.courseId}
                         </Link>
                         {index !== uniqueReviews.length - 1 ? ', ' : '.'}

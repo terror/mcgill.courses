@@ -3,6 +3,7 @@ import VisGraph, { GraphData } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
+import { courseIdToUrlParam } from '../lib/utils';
 import { Course } from '../model/Course';
 
 type CourseGraphProps = {
@@ -51,7 +52,7 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigateToCourse = (nodes: number[]) => {
     if (nodes.length === 0) return;
     const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (node) navigate(`/course/${node.label}`);
+    if (node) navigate(`/course/${courseIdToUrlParam(node.label)}`);
   };
 
   return (

@@ -43,7 +43,7 @@ export const CourseInfo = ({
       <div className='m-4 space-y-3 md:m-4 md:w-1/2'>
         <div className='flex flex-row space-x-2 align-middle'>
           <h1 className='text-4xl font-semibold text-gray-800 dark:text-gray-200'>
-            {course._id}
+            {course.subject} {course.code}
           </h1>
           {course.url ? (
             <a

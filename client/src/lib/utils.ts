@@ -72,3 +72,7 @@ export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
 export const getUrl = (): string => {
   return import.meta.env.VITE_API_URL ?? '';
 };
+
+export const courseIdToUrlParam = (courseId: string) => {
+  return `${courseId.slice(0, 4)}-${courseId.slice(4)}`.toLowerCase();
+};

@@ -40,10 +40,9 @@ export const CoursePage = () => {
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    const id = params.id?.replace('-', '').toUpperCase();
     fetchClient
-      .getData<GetCourseWithReviewsPayload>(
-        `/courses/${params.id?.toUpperCase()}?with_reviews=true`
-      )
+      .getData<GetCourseWithReviewsPayload>(`/courses/${id}?with_reviews=true`)
       .then((payload) => {
         setCourse(payload.course);
         setShowingReviews(payload.reviews);

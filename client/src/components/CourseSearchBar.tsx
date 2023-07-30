@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import { courseIdToUrlParam } from '../lib/utils';
 
 import { SearchResults } from '../model/SearchResults';
 
@@ -25,6 +26,7 @@ const SearchResult = ({
   type,
   url,
 }: SearchResultProps) => {
+  console.log(url);
   const icon =
     type === 'course' ? (
       <Layers className='mr-2 dark:text-white' />
@@ -97,7 +99,7 @@ export const CourseSearchBar = ({
     if (selectedIndex > -1 && event.key === 'Enter')
       navigate(
         selectedIndex < results.courses.length
-          ? `/course/${results.courses[selectedIndex]._id}`
+          ? `/course/${courseIdToUrlParam(results.courses[selectedIndex]._id)}`
           : `/instructor/${encodeURIComponent(
               results.instructors[selectedIndex - results.courses.length].name
             )}`
@@ -139,7 +141,7 @@ export const CourseSearchBar = ({
               selectedIndex={selectedIndex}
               text={`${result._id} - ${result.title}`}
               type='course'
-              url={`/course/${result._id}`}
+              url={`/course/${courseIdToUrlParam(result._id)}`}
               key={result._id}
             />
           ))}

@@ -37,7 +37,7 @@ const transform = (html: string): React.ReactNode[] => {
             if (!courseMatch) {
               return <a href={href}>{elem.innerText}</a>;
             }
-            const courseCode = (courseMatch[1] + courseMatch[2]).toUpperCase();
+            const courseCode = `${courseMatch[1]}-${courseMatch[2]}`;
 
             return (
               <Link

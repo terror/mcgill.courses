@@ -8,6 +8,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
+import { courseIdToUrlParam } from '../lib/utils';
 import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
@@ -258,7 +259,9 @@ export const CourseReview = ({
           ) : (
             <Fragment>
               Written for{' '}
-              <Link to={`/course/${review.courseId}`}>{review.courseId}</Link>
+              <Link to={`/course/${courseIdToUrlParam(review.courseId)}`}>
+                {review.courseId}
+              </Link>
             </Fragment>
           )}
         </p>
