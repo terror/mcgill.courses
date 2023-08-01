@@ -10,6 +10,9 @@ type CourseGraphProps = {
   course: Course;
 };
 
+const addSpace = (courseCode: string) =>
+  courseCode.slice(0, 4) + ' ' + courseCode.slice(4);
+
 export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
@@ -20,19 +23,19 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
   const prerequisites = course.prerequisites.map((prerequisite) => {
     return {
       id: id++,
-      label: prerequisite,
+      label: addSpace(prerequisite),
     };
   });
 
   const leading = course.leadingTo.map((leading) => {
     return {
       id: id++,
-      label: leading,
+      label: addSpace(leading),
     };
   });
 
   const graphNodes = [
-    { id: 1, label: course._id, title: course.description },
+    { id: 1, label: addSpace(course._id), title: course.description },
     ...prerequisites,
     ...leading,
   ];
@@ -60,7 +63,7 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
       key={uuidv4()}
       graph={graph}
       options={{
-        edges: { color: darkMode ? '#FFFFFF' : '#000000' },
+        edges: { color: darkMode ? '#919191' : '#b1b1b1' },
         height: '500px',
         layout: {
           randomSeed: undefined,
@@ -79,7 +82,14 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
             shakeTowards: 'leaves',
           },
         },
-        nodes: { color: darkMode ? 'rgb(212 212 212)' : 'rgb(226 232 240)' },
+        nodes: {
+          color: darkMode ? 'rgb(212 212 212)' : 'rgb(226 232 240)',
+          shape: 'dot',
+          size: 14,
+          font: {
+            color: darkMode ? '#FFFFFF' : '#000000',
+          },
+        },
       }}
       events={{
         select: ({ nodes }: { nodes: number[] }) => {
