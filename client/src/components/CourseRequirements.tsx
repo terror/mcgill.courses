@@ -1,6 +1,5 @@
-import { capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
-import { punctuate } from '../lib/utils';
+import { capitalize, punctuate } from '../lib/utils';
 import { Requirements } from '../model/Requirements';
 
 type ReqsBlockProps = {
