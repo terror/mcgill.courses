@@ -84,3 +84,7 @@ export const capitalize = (s: string): string => {
 export const punctuate = (s: string): string => {
   return s.charAt(s.length - 1) === '.' ? s : s + '.';
 };
+
+export const isValidCourseCode = (s: string) => {
+  return /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/.test(s);
+};

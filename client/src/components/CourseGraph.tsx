@@ -3,7 +3,7 @@ import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { courseIdToUrlParam } from '../lib/utils';
+import { courseIdToUrlParam, isValidCourseCode } from '../lib/utils';
 import { Course } from '../model/Course';
 import { ReqNode } from '../model/Requirements';
 
@@ -76,8 +76,8 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
 
   const leading = course.leadingTo.map((leading) => {
     return {
-      id: leading,
-      label: leading,
+      id: addSpace(leading),
+      label: addSpace(leading),
     };
   });
 
@@ -108,11 +108,16 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
     const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (node && node.id) {
-      navigate(
-        `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
-      );
+    if (!node || !node.id) {
+      return;
     }
+
+    if (!isValidCourseCode(node.id as string)) {
+      return;
+    }
+    navigate(
+      `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
+    );
   };
 
   return (
