@@ -70,8 +70,6 @@ export const CoursePage = () => {
     });
   }
 
-  console.log(course);
-
   const requirements: Requirements = {
     prereqs: course.prerequisites,
     coreqs: course.corequisites,

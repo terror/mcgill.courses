@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import VisGraph, { GraphData } from 'react-vis-graph-wrapper';
+import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
@@ -10,6 +10,40 @@ type CourseGraphProps = {
   course: Course;
 };
 
+import { ReqNode } from '../model/Requirements';
+
+const makeGraph = (reqs?: ReqNode) => {
+  if (!reqs) return { nodes: [], edges: [], root: undefined };
+
+  const nodes: Node[] = [];
+  const edges: Edge[] = [];
+
+  const traverse = (node: ReqNode): string => {
+    if (typeof node === 'string') {
+      nodes.push({
+        id: node,
+        label: addSpace(node),
+      });
+      return node;
+    }
+    const codes = node.groups.map((group) => traverse(group));
+    const id = codes.join(node.operator);
+
+    nodes.push({
+      id,
+      label: node.operator,
+    });
+    for (const code of codes) {
+      edges.push({ from: code, to: id });
+    }
+    return id;
+  };
+
+  const root = traverse(reqs);
+
+  return { nodes, edges, root };
+};
+
 const addSpace = (courseCode: string) =>
   courseCode.slice(0, 4) + ' ' + courseCode.slice(4);
 
@@ -18,44 +52,49 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
 
   const [darkMode] = useDarkMode();
 
-  let id = 2;
-
-  const prerequisites = course.prerequisites.map((prerequisite) => {
-    return {
-      id: id++,
-      label: addSpace(prerequisite),
-    };
-  });
+  const {
+    nodes: prereqNodes,
+    edges: prereqEdges,
+    root: prereqRoot,
+  } = makeGraph(course.logicalPrerequisites);
+  const {
+    nodes: coreqNodes,
+    edges: coreqEdges,
+    root: coreqRoot,
+  } = makeGraph(course.logicalCorequisites);
 
   const leading = course.leadingTo.map((leading) => {
     return {
-      id: id++,
+      id: leading,
       label: addSpace(leading),
     };
   });
 
   const graphNodes = [
-    { id: 1, label: addSpace(course._id), title: course.description },
-    ...prerequisites,
+    { id: course._id, label: addSpace(course._id), title: course.description },
+    ...prereqNodes,
+    ...coreqNodes,
     ...leading,
   ];
 
   const graph: GraphData = {
     nodes: graphNodes,
     edges: [
-      ...prerequisites.map((prerequisite) => {
-        return { from: prerequisite.id, to: 1 };
-      }),
+      ...prereqEdges,
+      ...coreqEdges,
+      { from: prereqRoot, to: course._id },
+      { from: coreqRoot, to: course._id },
       ...leading.map((leading) => {
-        return { from: 1, to: leading.id };
+        return { from: course._id, to: leading.id };
       }),
     ],
   };
 
-  const navigateToCourse = (nodes: number[]) => {
+  const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
     const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (node) navigate(`/course/${courseIdToUrlParam(node.label)}`);
+    if (node && node.label)
+      navigate(`/course/${courseIdToUrlParam(node.label)}`);
   };
 
   return (
@@ -92,10 +131,10 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
         },
       }}
       events={{
-        select: ({ nodes }: { nodes: number[] }) => {
+        select: ({ nodes }: { nodes: string[] }) => {
           navigateToCourse(nodes);
         },
-        doubleClick: ({ nodes }: { nodes: number[] }) => {
+        doubleClick: ({ nodes }: { nodes: string[] }) => {
           navigateToCourse(nodes);
         },
       }}

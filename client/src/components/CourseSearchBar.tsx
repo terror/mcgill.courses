@@ -26,7 +26,6 @@ const SearchResult = ({
   type,
   url,
 }: SearchResultProps) => {
-  console.log(url);
   const icon =
     type === 'course' ? (
       <Layers className='mr-2 dark:text-white' />
