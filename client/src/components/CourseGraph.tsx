@@ -15,10 +15,9 @@ const groupColors = {
   prerequisite: 'rgb(252 165 165)',
   corequisite: 'rgb(134 239 172)',
   operator: '#ffffff',
-  leading: '#ffffff',
 };
 
-type NodeType = 'operator' | 'prerequisite' | 'corequisite' | 'leading';
+type NodeType = 'operator' | 'prerequisite' | 'corequisite';
 
 const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   if (!reqs) return { nodes: [], edges: [], root: undefined };
@@ -61,6 +60,7 @@ const addSpace = (courseCode: string) =>
 
 export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
+  console.log('bruh');
 
   const [darkMode] = useDarkMode();
 
@@ -79,12 +79,15 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
     return {
       id: leading,
       label: leading,
-      color: groupColors['leading'],
     };
   });
 
-  const graphNodes = [
-    { id: course._id, label: addSpace(course._id), title: course.description },
+  const graphNodes: Node[] = [
+    {
+      id: course._id,
+      label: addSpace(course._id),
+      title: course.description,
+    },
     ...prereqNodes,
     ...coreqNodes,
     ...leading,
@@ -106,7 +109,6 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
     const node = graphNodes.find((node) => node.id === nodes[0]);
-    console.log(node);
     if (node && node.id) {
       navigate(
         `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
