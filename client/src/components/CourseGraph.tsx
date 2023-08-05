@@ -5,14 +5,22 @@ import { v4 as uuidv4 } from 'uuid';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { courseIdToUrlParam } from '../lib/utils';
 import { Course } from '../model/Course';
+import { ReqNode } from '../model/Requirements';
 
 type CourseGraphProps = {
   course: Course;
 };
 
-import { ReqNode } from '../model/Requirements';
+const groupColors = {
+  prerequisite: 'rgb(252 165 165)',
+  corequisite: 'rgb(134 239 172)',
+  operator: '#ffffff',
+  leading: '#ffffff',
+};
 
-const makeGraph = (reqs?: ReqNode) => {
+type NodeType = 'operator' | 'prerequisite' | 'corequisite' | 'leading';
+
+const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   if (!reqs) return { nodes: [], edges: [], root: undefined };
 
   const nodes: Node[] = [];
@@ -22,7 +30,8 @@ const makeGraph = (reqs?: ReqNode) => {
     if (typeof node === 'string') {
       nodes.push({
         id: node,
-        label: addSpace(node),
+        label: node,
+        color: groupColors[nodeGroup],
       });
       return node;
     }
@@ -32,9 +41,12 @@ const makeGraph = (reqs?: ReqNode) => {
     nodes.push({
       id,
       label: node.operator,
+      size: 6,
+      color: groupColors['operator'],
+      shape: 'hexagon',
     });
     for (const code of codes) {
-      edges.push({ from: code, to: id });
+      edges.push({ from: code, to: id, dashes: node.operator === 'OR' });
     }
     return id;
   };
@@ -56,17 +68,18 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
     nodes: prereqNodes,
     edges: prereqEdges,
     root: prereqRoot,
-  } = makeGraph(course.logicalPrerequisites);
+  } = makeGraph('prerequisite', course.logicalPrerequisites);
   const {
     nodes: coreqNodes,
     edges: coreqEdges,
     root: coreqRoot,
-  } = makeGraph(course.logicalCorequisites);
+  } = makeGraph('corequisite', course.logicalCorequisites);
 
   const leading = course.leadingTo.map((leading) => {
     return {
       id: leading,
-      label: addSpace(leading),
+      label: leading,
+      color: groupColors['leading'],
     };
   });
 
@@ -93,8 +106,12 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
     const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (node && node.label)
-      navigate(`/course/${courseIdToUrlParam(node.label)}`);
+    console.log(node);
+    if (node && node.id) {
+      navigate(
+        `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
+      );
+    }
   };
 
   return (
