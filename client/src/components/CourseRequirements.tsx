@@ -8,7 +8,7 @@ type ReqsBlockProps = {
 };
 
 const transform = (html: string): React.ReactNode[] => {
-  const split = html.split(':');
+  const split = html.split(':', 1);
 
   const doc = new DOMParser().parseFromString(
     capitalize(punctuate(split.length <= 1 ? html.trim() : split[1].trim())),
