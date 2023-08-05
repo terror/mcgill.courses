@@ -15,50 +15,48 @@ const punctuate = (s: string): string => {
 };
 
 const transform = (html: string): React.ReactNode[] => {
-  const parser = new DOMParser();
-
   const split = html.split(':');
-  const text = capitalize(
-    punctuate(split.length <= 1 ? html.trim() : split[1].trim())
+
+  const doc = new DOMParser().parseFromString(
+    capitalize(punctuate(split.length <= 1 ? html.trim() : split[1].trim())),
+    'text/html'
   );
 
-  const doc = parser.parseFromString(text, 'text/html');
+  return Array.from(doc.body.childNodes).map((node, index) => {
+    switch (node.nodeType) {
+      case Node.ELEMENT_NODE: {
+        const elem = node as HTMLElement;
 
-  const elems: React.ReactNode[] = Array.from(doc.body.childNodes).map(
-    (node) => {
-      switch (node.nodeType) {
-        case Node.ELEMENT_NODE: {
-          const elem = node as HTMLElement;
-          if (node.nodeName === 'A') {
-            const href = elem.getAttribute('href');
-            if (!href) return elem.innerText;
+        if (node.nodeName === 'A') {
+          const href = elem.getAttribute('href');
 
-            const courseMatch = href.match(/courses\/(.+)-(.+)/);
-            if (!courseMatch) {
-              return <a href={href}>{elem.innerText}</a>;
-            }
-            const courseCode = `${courseMatch[1]}-${courseMatch[2]}`;
+          if (!href) return elem.innerText;
 
-            return (
-              <Link
-                to={`/course/${courseCode}`}
-                className='text-gray-800 hover:underline dark:text-gray-200'
-              >
-                {elem.innerText}
-              </Link>
-            );
-          }
-          return (node as HTMLElement).innerText;
+          const courseMatch = href.match(/courses\/(.+)-(.+)/);
+
+          if (!courseMatch) return <a href={href}>{elem.innerText}</a>;
+
+          const courseCode = `${courseMatch[1]}-${courseMatch[2]}`;
+
+          return (
+            <Link
+              key={index}
+              to={`/course/${courseCode}`}
+              className='text-gray-800 hover:underline dark:text-gray-200'
+            >
+              {elem.innerText}
+            </Link>
+          );
         }
-        case Node.TEXT_NODE:
-          return (node as Text).textContent;
-        case Node.COMMENT_NODE:
-          return null;
-      }
-    }
-  );
 
-  return elems;
+        return <span key={index}>{(node as HTMLElement).innerText}</span>;
+      }
+      case Node.TEXT_NODE:
+        return <span key={index}>{(node as Text).textContent}</span>;
+      case Node.COMMENT_NODE:
+        return null;
+    }
+  });
 };
 
 const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
