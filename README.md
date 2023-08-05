@@ -89,8 +89,10 @@ can run:
 just load
 ```
 
-We parse prerequisites and corequisites using [llama-index](https://www.llamaindex.ai/) with custom
-examples, all the code lives in [`/tools/req-parser`](https://github.com/terror/mcgill.courses/tree/master/tools/req-parser).
+We parse prerequisites and corequisites using
+[llama-index](https://www.llamaindex.ai/) with custom examples, all the code
+lives in
+[`/tools/req-parser`](https://github.com/terror/mcgill.courses/tree/master/tools/req-parser).
 
 If you need to run the requirement parser on a file, simply:
 
@@ -101,7 +103,8 @@ poetry shell
 python3 main.py <file>
 ```
 
-_n.b._ This will require an [OpenAI](https://openai.com/) API key to be set in the environment.
+_n.b._ This will require an [OpenAI](https://openai.com/) API key to be set in
+the environment.
 
 ### Prior Art
 
