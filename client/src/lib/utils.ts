@@ -76,3 +76,7 @@ export const getUrl = (): string => {
 export const courseIdToUrlParam = (courseId: string) => {
   return `${courseId.slice(0, 4)}-${courseId.slice(4)}`.toLowerCase();
 };
+
+export const punctuate = (s: string): string => {
+  return s.charAt(s.length - 1) === '.' ? s : s + '.';
+};

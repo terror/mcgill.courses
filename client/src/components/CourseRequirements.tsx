@@ -1,17 +1,11 @@
+import { capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
+import { punctuate } from '../lib/utils';
 import { Requirements } from '../model/Requirements';
 
 type ReqsBlockProps = {
   title: string;
   text?: string;
-};
-
-const capitalize = (s: string): string => {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
-
-const punctuate = (s: string): string => {
-  return s.charAt(s.length - 1) === '.' ? s : s + '.';
 };
 
 const transform = (html: string): React.ReactNode[] => {
