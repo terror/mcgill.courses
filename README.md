@@ -14,21 +14,21 @@ run locally.
 First, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
 
 ```bash
-$ docker compose up -d
+docker compose up -d
 ```
 
 Spawn the server with a data source (in this case the `/seed` directory) and
 initialize the database:
 
 ```bash
-$ cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
+cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
 ```
 
 Finally, spawn the react frontend:
 
 ```bash
-$ npm install
-$ npm run dev
+npm install
+npm run dev
 ```
 
 Refer to `.env.dev.example` and `client/.env.dev.example` for what environment
@@ -53,11 +53,11 @@ courses from various McGill course information websites and building a JSON data
 source, for example:
 
 ```
-$ RUST_LOG=info cargo run -- --source=seed \
-    load \
-    --batch-size=200 \
-    --scrape-vsb \
-    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+RUST_LOG=info cargo run -- --source=seed \
+  load \
+  --batch-size=200 \
+  --scrape-vsb \
+  --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 ```
 
 The current defaults include scraping all current 10,000+ courses offered by
@@ -86,7 +86,7 @@ Alternatively, if you have [just](https://github.com/casey/just) installed, you
 can run:
 
 ```
-$ just load
+just load
 ```
 
 We parse prerequisites and corequisites using [llama-index](https://www.llamaindex.ai/) with custom
