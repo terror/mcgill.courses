@@ -39,3 +39,61 @@ pub(crate) fn dedup(v: &mut Vec<String>) {
   let mut set = HashSet::new();
   v.retain(|e| set.insert(e.clone()));
 }
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  const HTML: &str = r#"<html>
+  <p>Prerequisites: <a href="/study/2022-2023/courses/comp-250"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/COMP-250" title="" class="tooltip">COMP 250</a>; <a href="/study/2022-2023/courses/math-235"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/MATH-235" title="" class="tooltip">MATH 235</a> or <a href="http://www.mcgill.ca/study/2022-2023/courses/MATH-240" title="" class="tooltip">MATH 240</a><a href="/study/2022-2023/courses/math-240
+  </htm>"#;
+
+  #[test]
+  fn get_course_codes_works() {
+    assert_eq!(
+      get_course_codes(
+        &Html::parse_fragment(HTML)
+          .root_element()
+          .select_single("p")
+          .unwrap()
+      )
+      .unwrap(),
+      vec!["COMP250", "MATH235", "MATH240"]
+    );
+  }
+
+  #[test]
+  fn get_course_code_from_link_works() {
+    assert_eq!(
+      get_course_code_from_link(
+        &Html::parse_fragment(
+          "<html><a href=\"/study/2022-2023/courses/comp-250\"></a></html>"
+        )
+        .root_element()
+        .select_single("a")
+        .unwrap()
+      ),
+      "COMP 250"
+    );
+  }
+
+  #[test]
+  fn get_text_works() {
+    assert_eq!(
+      get_text(
+        &Html::parse_fragment(HTML)
+          .root_element()
+          .select_single("p")
+          .unwrap()
+      ),
+      "COMP 250; MATH 235 or MATH 240"
+    );
+  }
+
+  #[test]
+  fn dedup_works() {
+    let mut v = vec!["a".to_string(), "b".to_string(), "a".to_string()];
+    dedup(&mut v);
+    assert_eq!(v, vec!["a".to_string(), "b".to_string()]);
+  }
+}
