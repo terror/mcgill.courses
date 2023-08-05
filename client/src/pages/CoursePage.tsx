@@ -33,7 +33,7 @@ export const CoursePage = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
-  const [course, setCourse] = useState<Course>();
+  const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
   const [showAllReviews, setShowAllReviews] = useState(false);
@@ -42,8 +42,15 @@ export const CoursePage = () => {
   useEffect(() => {
     const id = params.id?.replace('-', '').toUpperCase();
     fetchClient
-      .getData<GetCourseWithReviewsPayload>(`/courses/${id}?with_reviews=true`)
+      .getData<GetCourseWithReviewsPayload | null>(
+        `/courses/${id}?with_reviews=true`
+      )
       .then((payload) => {
+        if (payload === null) {
+          setCourse(null);
+          return;
+        }
+
         setCourse(payload.course);
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
