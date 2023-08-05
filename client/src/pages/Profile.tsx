@@ -7,6 +7,7 @@ import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
+import { courseIdToUrlParam } from '../lib/utils';
 import { Review } from '../model/Review';
 
 export const Profile = () => {
@@ -56,7 +57,7 @@ export const Profile = () => {
                           {review.courseId}
                         </h2>
                         <Link
-                          to={`/course/${review.courseId}`}
+                          to={`/course/${courseIdToUrlParam(review.courseId)}`}
                           className='flex-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
                         >
                           View Course

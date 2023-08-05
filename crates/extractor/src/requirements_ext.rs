@@ -10,77 +10,38 @@ impl RequirementsExt for Requirements {
   fn from_notes(notes: ElementRef) -> Result<Self> {
     let mut requirements = Self::default();
 
-    let mut par = Vec::new();
+    let mut paragraphs = Vec::new();
 
     for note in notes.select_many("li")? {
-      if let Some(p) = note.select_optional("p")? {
-        par.push(p);
+      if let Some(paragraph) = note.select_optional("p")? {
+        paragraphs.push(paragraph);
       } else {
-        par.push(note);
+        paragraphs.push(note);
       }
     }
 
-    par.iter().try_for_each(|par| -> Result {
-      ["Prerequisite", "Corequisite", "Restriction"]
-        .iter()
-        .try_for_each(|title| -> Result {
-          match par.inner_html().starts_with(title) {
-            false => Ok(()),
-            _ => match Requirement::from(*title) {
-              Requirement::Prerequisites => {
-                requirements.set_prerequisites(
-                  par
-                    .select_many("a")?
-                    .iter()
-                    .map(|link| {
-                      link
-                        .inner_html()
-                        .split(' ')
-                        .collect::<Vec<&str>>()
-                        .join("")
-                    })
-                    .collect(),
-                );
-
-                Ok(())
-              }
-              Requirement::Corequisites => {
-                requirements.set_corequisites(
-                  par
-                    .select_many("a")?
-                    .iter()
-                    .map(|link| {
-                      link
-                        .inner_html()
-                        .split(' ')
-                        .collect::<Vec<&str>>()
-                        .join("")
-                    })
-                    .collect(),
-                );
-
-                Ok(())
-              }
-              Requirement::Restrictions => {
-                requirements.set_restrictions(
-                  par
-                    .text()
-                    .collect::<String>()
-                    .split(' ')
-                    .skip(1)
-                    .collect::<Vec<&str>>()
-                    .join(" "),
-                );
-
-                Ok(())
-              }
-              Requirement::Unknown => {
-                Err(anyhow!("Unknown course requirement"))
-              }
-            },
+    for paragraph in paragraphs {
+      for title in ["Prerequisite", "Corequisite", "Restriction"].iter() {
+        if paragraph.inner_html().starts_with(title) {
+          match Requirement::from(*title) {
+            Requirement::Prerequisites => {
+              requirements.set_prerequisites_text(Some(paragraph.inner_html()));
+              requirements.set_prerequisites(get_course_codes(&paragraph)?);
+            }
+            Requirement::Corequisites => {
+              requirements.set_corequisites_text(Some(paragraph.inner_html()));
+              requirements.set_corequisites(get_course_codes(&paragraph)?);
+            }
+            Requirement::Restrictions => {
+              requirements.set_restrictions(get_text(&paragraph));
+            }
+            Requirement::Unknown => {
+              return Err(anyhow!("Unknown requirement type"));
+            }
           }
-        })
-    })?;
+        }
+      }
+    }
 
     Ok(requirements)
   }

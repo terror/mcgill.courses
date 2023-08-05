@@ -9,6 +9,8 @@ use {
   schedule_ext::ScheduleExt,
   scraper::{ElementRef, Html, Selector},
   select::Select,
+  std::collections::HashSet,
+  utils::*,
 };
 
 #[cfg(test)]
@@ -19,6 +21,7 @@ mod course_page_ext;
 mod requirements_ext;
 mod schedule_ext;
 mod select;
+mod utils;
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
@@ -521,13 +524,15 @@ mod tests {
   fn extract_course_requirements_2022_2023() {
     assert_eq!(
       super::extract_course_requirements(&Html::parse_fragment(
-        &get_content("course_page_2022_2023.html")
+        &get_content("course_page_2022_2023.html"),
       ))
       .unwrap(),
       Requirements {
+          corequisites_text: Some("Corequisite: <a href=\"/study/2022-2023/courses/math-133\">MATH 133</a>.".into()),
         corequisites: vec!["MATH133".into()],
         prerequisites: Vec::new(),
-        restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into())
+        restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()),
+        ..Requirements::default()
       }
     );
   }
@@ -573,7 +578,7 @@ mod tests {
             term: "Winter 2010".into(),
           },
         ],
-        requirements: Requirements { corequisites: vec![], prerequisites: vec![], restrictions: None }
+        requirements: Requirements { prerequisites_text: Some("Prerequisite: MGCR 211".into()), corequisites: vec![], prerequisites: vec![], restrictions: None, ..Requirements::default() }
       }
     );
   }
@@ -582,7 +587,7 @@ mod tests {
   fn extract_course_page_2022_2023() {
     assert_eq!(
       super::extract_course_page(
-        &get_content("course_page_2022_2023.html")
+        &get_content("course_page_2022_2023.html"),
       )
       .unwrap(),
       CoursePage {
@@ -615,9 +620,11 @@ mod tests {
           }
         ],
         requirements: Requirements {
+          corequisites_text: Some("Corequisite: <a href=\"/study/2022-2023/courses/math-133\">MATH 133</a>.".into()),
           corequisites: vec!["MATH133".into()],
           prerequisites: vec![],
-          restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into())
+          restrictions: Some("For students in any Computer Science, Computer Engineering, or Software Engineering programs. Others only with the instructor's permission. Not open to students who have taken or are taking MATH 235.".into()),
+          ..Requirements::default()
         }
       }
     );
@@ -656,7 +663,7 @@ mod tests {
   #[test]
   fn extract_course_page_with_amp() {
     assert_eq!(
-      super::extract_course_page(&get_content("course_page_with_amp.html"))
+      super::extract_course_page(&get_content("course_page_with_amp.html"),)
         .unwrap(),
       CoursePage {
         title: "E & M Laboratory".into(),
@@ -671,11 +678,13 @@ mod tests {
           term: "Winter 2023".into(),
         }],
         requirements: Requirements {
+          prerequisites_text: Some("Prerequisite: Lecture component of <a href=\"/study/2022-2023/courses/phys-142\">PHYS 142</a> or equivalent".into()),
           corequisites: vec![],
           prerequisites: vec!["PHYS142".into()],
           restrictions: Some(
             "Not open to students who have taken or are taking PHYS 142".into()
-          )
+          ),
+          ..Requirements::default()
         }
       }
     );

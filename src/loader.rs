@@ -97,9 +97,9 @@ impl Loader {
       courses.sort();
 
       fs::write(
-        &match source.is_file() {
-          true => source.clone(),
-          _ => source.join(format!("courses-{term}.json")),
+        &match source.is_dir() {
+          true => source.join(format!("courses-{term}.json")),
+          _ => source.clone(),
         },
         serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
       )
@@ -218,6 +218,15 @@ impl Loader {
 
     thread::sleep(Duration::from_millis(self.course_delay));
 
+    let schedule = if scrape_vsb {
+      Some(VsbClient::new(&client, self.retries)?.schedule(
+        &format!("{}-{}", course_page.subject, course_page.code),
+        self.vsb_terms.clone(),
+      )?)
+    } else {
+      None
+    };
+
     Ok(Course {
       id: format!("{}{}", course_page.subject, course_page.code),
       id_ngrams: None,
@@ -234,16 +243,15 @@ impl Loader {
       terms: listing.terms,
       description: course_page.description,
       instructors: course_page.instructors,
+      prerequisites_text: course_page.requirements.prerequisites_text,
+      corequisites_text: course_page.requirements.corequisites_text,
       prerequisites: course_page.requirements.prerequisites,
       corequisites: course_page.requirements.corequisites,
       leading_to: Vec::new(),
       restrictions: course_page.requirements.restrictions,
-      schedule: scrape_vsb.then_some(
-        VsbClient::new(&client, self.retries)?.schedule(
-          &format!("{}-{}", course_page.subject, course_page.code),
-          self.vsb_terms.clone(),
-        )?,
-      ),
+      logical_prerequisites: course_page.requirements.logical_prerequisites,
+      logical_corequisites: course_page.requirements.logical_corequisites,
+      schedule,
     })
   }
 }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import { addSpaceToCourseCode, courseIdToUrlParam } from '../lib/utils';
 
 import { SearchResults } from '../model/SearchResults';
 
@@ -97,7 +98,7 @@ export const CourseSearchBar = ({
     if (selectedIndex > -1 && event.key === 'Enter')
       navigate(
         selectedIndex < results.courses.length
-          ? `/course/${results.courses[selectedIndex]._id}`
+          ? `/course/${courseIdToUrlParam(results.courses[selectedIndex]._id)}`
           : `/instructor/${encodeURIComponent(
               results.instructors[selectedIndex - results.courses.length].name
             )}`
@@ -137,9 +138,9 @@ export const CourseSearchBar = ({
               index={index}
               query={results.query}
               selectedIndex={selectedIndex}
-              text={`${result._id} - ${result.title}`}
+              text={`${addSpaceToCourseCode(result._id)} - ${result.title}`}
               type='course'
-              url={`/course/${result._id}`}
+              url={`/course/${courseIdToUrlParam(result._id)}`}
               key={result._id}
             />
           ))}

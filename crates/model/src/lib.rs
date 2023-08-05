@@ -29,7 +29,7 @@ pub use crate::{
   initialize_options::InitializeOptions,
   instructor::Instructor,
   interaction::{Interaction, InteractionKind},
-  requirements::{Requirement, Requirements},
+  requirements::{Operator, ReqNode, Requirement, Requirements},
   review::Review,
   schedule::*,
   search_results::SearchResults,

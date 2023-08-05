@@ -33,18 +33,24 @@ export const CoursePage = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
-  const [course, setCourse] = useState<Course>();
+  const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    const id = params.id?.replace('-', '').toUpperCase();
     fetchClient
-      .getData<GetCourseWithReviewsPayload>(
-        `/courses/${params.id?.toUpperCase()}?with_reviews=true`
+      .getData<GetCourseWithReviewsPayload | null>(
+        `/courses/${id}?with_reviews=true`
       )
       .then((payload) => {
+        if (payload === null) {
+          setCourse(null);
+          return;
+        }
+
         setCourse(payload.course);
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
@@ -75,6 +81,8 @@ export const CoursePage = () => {
     prereqs: course.prerequisites,
     coreqs: course.corequisites,
     restrictions: course.restrictions,
+    prerequisitesText: course.prerequisitesText,
+    corequisitesText: course.corequisitesText,
   };
 
   const canReview = Boolean(

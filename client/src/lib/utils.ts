@@ -72,3 +72,22 @@ export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
 export const getUrl = (): string => {
   return import.meta.env.VITE_API_URL ?? '';
 };
+
+export const courseIdToUrlParam = (courseId: string) => {
+  return `${courseId.slice(0, 4)}-${courseId.slice(4)}`.toLowerCase();
+};
+
+export const capitalize = (s: string): string => {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export const punctuate = (s: string): string => {
+  return s.charAt(s.length - 1) === '.' ? s : s + '.';
+};
+
+export const isValidCourseCode = (s: string) => {
+  return /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/.test(s);
+};
+
+export const addSpaceToCourseCode = (courseCode: string) =>
+  courseCode.slice(0, 4) + ' ' + courseCode.slice(4);

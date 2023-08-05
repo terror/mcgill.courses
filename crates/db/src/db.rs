@@ -305,6 +305,7 @@ impl Db {
               "$set": {
                 "code": course.code,
                 "corequisites": course.corequisites,
+                "corequisitesText": course.corequisites_text,
                 "credits": course.credits,
                 "department": course.department,
                 "description": course.description,
@@ -313,7 +314,10 @@ impl Db {
                 "instructors": course.instructors.combine(found.instructors),
                 "leadingTo": course.leading_to,
                 "level": course.level,
+                "logicalCorequisites": course.logical_corequisites,
+                "logicalPrerequisites": course.logical_prerequisites,
                 "prerequisites": course.prerequisites,
+                "prerequisitesText": course.prerequisites_text,
                 "restrictions": course.restrictions,
                 "schedule": course.schedule.combine_opt(found.schedule),
                 "subject": course.subject,

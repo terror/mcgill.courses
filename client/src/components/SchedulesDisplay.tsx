@@ -142,7 +142,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
                 <span className='ml-1 inline-block w-80'>
                   {((split) =>
                     split.map((location: string, index) => (
-                      <span>
+                      <span key={index}>
                         <BlockLocation location={location.trim()} />
                         {index !== split.length - 1 && (
                           <span className='inline-block'>, </span>
