@@ -60,7 +60,6 @@ const addSpace = (courseCode: string) =>
 
 export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
-  console.log('bruh');
 
   const [darkMode] = useDarkMode();
 
