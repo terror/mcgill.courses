@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import { courseIdToUrlParam } from '../lib/utils';
+import { addSpaceToCourseCode, courseIdToUrlParam } from '../lib/utils';
 
 import { SearchResults } from '../model/SearchResults';
 
@@ -138,7 +138,7 @@ export const CourseSearchBar = ({
               index={index}
               query={results.query}
               selectedIndex={selectedIndex}
-              text={`${result._id} - ${result.title}`}
+              text={`${addSpaceToCourseCode(result._id)} - ${result.title}`}
               type='course'
               url={`/course/${courseIdToUrlParam(result._id)}`}
               key={result._id}

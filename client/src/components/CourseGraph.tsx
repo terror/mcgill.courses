@@ -3,7 +3,11 @@ import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { courseIdToUrlParam, isValidCourseCode } from '../lib/utils';
+import {
+  addSpaceToCourseCode,
+  courseIdToUrlParam,
+  isValidCourseCode,
+} from '../lib/utils';
 import { Course } from '../model/Course';
 import { ReqNode } from '../model/Requirements';
 
@@ -55,9 +59,6 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   return { nodes, edges, root };
 };
 
-const addSpace = (courseCode: string) =>
-  courseCode.slice(0, 4) + ' ' + courseCode.slice(4);
-
 export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
@@ -76,15 +77,15 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
 
   const leading = course.leadingTo.map((leading) => {
     return {
-      id: addSpace(leading),
-      label: addSpace(leading),
+      id: addSpaceToCourseCode(leading),
+      label: addSpaceToCourseCode(leading),
     };
   });
 
   const graphNodes: Node[] = [
     {
       id: course._id,
-      label: addSpace(course._id),
+      label: addSpaceToCourseCode(course._id),
       title: course.description,
     },
     ...prereqNodes,
