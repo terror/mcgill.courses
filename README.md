@@ -11,7 +11,7 @@ You'll need [docker](https://www.docker.com/),
 installed on your machine to spawn the various components the project needs to
 run locally.
 
-First, mount a local mongodb instance with docker:
+First, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
 
 ```bash
 $ docker compose up -d
@@ -24,12 +24,33 @@ initialize the database:
 $ cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
 ```
 
+Finally, spawn the react frontend:
+
+```bash
+$ npm install
+$ npm run dev
+```
+
 Refer to `.env.dev.example` and `client/.env.dev.example` for what environment
 variables need to be set.
 
-_n.b._ The server command-line interface provides a load subcommand for scraping
-all courses from various McGill course information websites and building a JSON
-data source, for example:
+_n.b._ If you have [just](https://github.com/casey/just) installed, we provide a
+`dev` recipe for doing all of the above in addition to running a watch on the
+server:
+
+```bash
+just dev
+```
+
+See the
+[justfile](https://github.com/terror/mcgill.courses/blob/master/justfile) for
+more recipes.
+
+### Gathering seed data
+
+The server command-line interface provides a load subcommand for scraping all
+courses from various McGill course information websites and building a JSON data
+source, for example:
 
 ```
 $ RUST_LOG=info cargo run -- --source=seed \
@@ -68,12 +89,19 @@ can run:
 $ just load
 ```
 
-Finally, spawn the react frontend:
+We parse prerequisites and corequisites using [llama-index](https://www.llamaindex.ai/) with custom
+examples, all the code lives in [`/tools/req-parser`](https://github.com/terror/mcgill.courses/tree/master/tools/req-parser).
+
+If you need to run the requirement parser on a file, simply:
 
 ```bash
-$ npm install
-$ npm run dev
+cd tools/req-parser
+poetry install
+poetry shell
+python3 main.py <file>
 ```
+
+_n.b._ This will require an [OpenAI](https://openai.com/) API key to be set in the environment.
 
 ### Prior Art
 
