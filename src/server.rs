@@ -26,7 +26,7 @@ impl Server {
 
     let source_hash = source.hash()?;
 
-    let prev_hash_path = PathBuf::from("hash.bin");
+    let prev_hash_path = PathBuf::from(".source-hash");
 
     let prev_hash = match prev_hash_path.is_file() {
       true => Some(fs::read(&prev_hash_path)?),
