@@ -24,15 +24,26 @@ impl Server {
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
-    if self.initialize {
+    let source_hash = source.hash()?;
+
+    let prev_hash_path = PathBuf::from("hash.txt");
+
+    let prev_hash = match prev_hash_path.is_file() {
+      true => Some(fs::read(&prev_hash_path)?),
+      _ => None,
+    };
+
+    if self.initialize && Some(&source_hash) != prev_hash.as_ref() {
       let clone = db.clone();
+
+      fs::write(&prev_hash_path, source_hash)?;
 
       tokio::spawn(async move {
         if let Err(error) = clone
           .initialize(InitializeOptions {
             multithreaded: self.multithreaded,
             skip_courses: self.skip_courses,
-            source: source.clone(),
+            source,
           })
           .await
         {

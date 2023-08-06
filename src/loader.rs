@@ -218,13 +218,12 @@ impl Loader {
 
     thread::sleep(Duration::from_millis(self.course_delay));
 
-    let schedule = if scrape_vsb {
-      Some(VsbClient::new(&client, self.retries)?.schedule(
+    let schedule = match scrape_vsb {
+      true => Some(VsbClient::new(&client, self.retries)?.schedule(
         &format!("{}-{}", course_page.subject, course_page.code),
         self.vsb_terms.clone(),
-      )?)
-    } else {
-      None
+      )?),
+      _ => None,
     };
 
     Ok(Course {
