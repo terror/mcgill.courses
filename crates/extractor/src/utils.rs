@@ -45,9 +45,9 @@ mod tests {
   use super::*;
 
   const HTML: &str = r#"
-    <html>
-      <p>Prerequisites: <a href="/study/2022-2023/courses/comp-250"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/COMP-250" title="" class="tooltip">COMP 250</a>; <a href="/study/2022-2023/courses/math-235"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/MATH-235" title="" class="tooltip">MATH 235</a> or <a href="/study/2022-2023/courses/math-240"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/MATH-240" title="" class="tooltip">MATH 240</a></p>
-    </html>
+  <html>
+    <p>Prerequisites: <a href="/study/2022-2023/courses/comp-250"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/COMP-250" title="" class="tooltip">COMP 250</a>; <a href="/study/2022-2023/courses/math-235"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/MATH-235" title="" class="tooltip">MATH 235</a> or <a href="/study/2022-2023/courses/math-240"></a><a href="http://www.mcgill.ca/study/2022-2023/courses/MATH-240" title="" class="tooltip">MATH 240</a></p>
+  </html>
   "#;
 
   #[test]
