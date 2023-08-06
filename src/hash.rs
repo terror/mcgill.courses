@@ -63,6 +63,13 @@ mod tests {
 
     assert_eq!(hash_a, hash_b);
 
+    writeln!(file, "yeet").unwrap();
+
+    let hash_c = path.hash().unwrap();
+
+    assert!(!hash_c.is_empty());
+    assert_ne!(hash_c, hash_a);
+
     directory.close().unwrap();
   }
 
@@ -71,7 +78,8 @@ mod tests {
     let directory = tempdir().unwrap();
 
     let path = directory.path().join("test.txt");
-    let mut file = File::create(&path).unwrap();
+
+    let mut file = File::create(path).unwrap();
     writeln!(file, "Hello, world!").unwrap();
 
     let hash_a = directory.path().to_path_buf().hash().unwrap();
@@ -81,6 +89,13 @@ mod tests {
     assert!(!hash_b.is_empty());
 
     assert_eq!(hash_a, hash_b);
+
+    writeln!(file, "yeet").unwrap();
+
+    let hash_c = directory.path().to_path_buf().hash().unwrap();
+
+    assert!(!hash_c.is_empty());
+    assert_ne!(hash_c, hash_a);
 
     directory.close().unwrap();
   }
