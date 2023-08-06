@@ -1,25 +1,17 @@
 use {
   anyhow::anyhow,
-  course_listing_ext::CourseListingExt,
-  course_page_ext::CoursePageExt,
+  element::Element,
   model::{
-    CourseListing, CoursePage, Instructor, Requirement, Requirements, Schedule,
+    Block, CourseListing, CoursePage, Instructor, Requirement, Requirements,
+    Schedule, TimeBlock,
   },
-  requirements_ext::RequirementsExt,
-  schedule_ext::ScheduleExt,
   scraper::{ElementRef, Html, Selector},
   select::Select,
   std::collections::HashSet,
   utils::*,
 };
 
-#[cfg(test)]
-use model::{Block, TimeBlock};
-
-mod course_listing_ext;
-mod course_page_ext;
-mod requirements_ext;
-mod schedule_ext;
+mod element;
 mod select;
 mod utils;
 
@@ -35,8 +27,8 @@ pub fn extract_course_listings(
     Some(content) => Ok(Some(
       content
         .select_many("div[class~='views-row']")?
-        .iter()
-        .map(CourseListing::from_listing)
+        .into_iter()
+        .map(CourseListing::from_element)
         .collect::<Result<Vec<CourseListing>, _>>()?
         .into_iter()
         .map(|listing| listing.filter_terms())
@@ -47,7 +39,7 @@ pub fn extract_course_listings(
 }
 
 pub fn extract_course_page(text: &str) -> Result<CoursePage> {
-  CoursePage::from_html(Html::parse_fragment(text))
+  CoursePage::from_element(Html::parse_fragment(text).root_element())
 }
 
 pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
@@ -64,17 +56,17 @@ pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
       _ => html
         .root_element()
         .select_many("uselection")?
-        .iter()
-        .map(Schedule::from_selection)
+        .into_iter()
+        .map(Schedule::from_element)
         .collect::<Result<Vec<Schedule>>>()?,
     },
   )
 }
 
-fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
+fn extract_course_instructors(element: &ElementRef) -> Result<Vec<Instructor>> {
   let mut instructors = Vec::new();
 
-  let catalog = html.root_element().try_select_single(vec![
+  let catalog = element.try_select_single(vec![
     "div[class='node node-catalog clearfix']",
     "div[class='node node-catalog node-promoted clearfix']",
   ])?;
@@ -132,13 +124,9 @@ fn extract_course_instructors(html: &Html) -> Result<Vec<Instructor>> {
   Ok(instructors)
 }
 
-fn extract_course_requirements(html: &Html) -> Result<Requirements> {
-  match html
-    .root_element()
-    .select_optional("ul[class='catalog-notes']")
-    .unwrap()
-  {
-    Some(notes) => Requirements::from_notes(notes),
+fn extract_course_requirements(element: &ElementRef) -> Result<Requirements> {
+  match element.select_optional("ul[class='catalog-notes']")? {
+    Some(notes) => Requirements::from_element(notes),
     None => Ok(Requirements::default()),
   }
 }
@@ -491,9 +479,10 @@ mod tests {
   #[test]
   fn extract_course_instructors_2022_2023() {
     assert_eq!(
-      super::extract_course_instructors(&Html::parse_fragment(&get_content(
-        "course_page_2022_2023.html"
-      )))
+      super::extract_course_instructors(
+        &Html::parse_fragment(&get_content("course_page_2022_2023.html"))
+          .root_element()
+      )
       .unwrap(),
       vec![
         Instructor {
@@ -525,7 +514,7 @@ mod tests {
     assert_eq!(
       super::extract_course_requirements(&Html::parse_fragment(
         &get_content("course_page_2022_2023.html"),
-      ))
+      ).root_element())
       .unwrap(),
       Requirements {
           corequisites_text: Some("Corequisite: <a href=\"/study/2022-2023/courses/math-133\">MATH 133</a>.".into()),
