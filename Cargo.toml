@@ -35,6 +35,6 @@ url = "2.4.0"
 walkdir = "2.3.3"
 
 [dev-dependencies]
+hyper = { version = "0.14", features = ["server"] }
 pretty_assertions = "1.3.0"
 tower = "0.4.13"
-hyper = { version = "0.14", features = ["server"] }

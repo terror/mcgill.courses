@@ -8,7 +8,7 @@ impl Hash for PathBuf {
   fn hash(&self) -> Result<Vec<u8>> {
     let mut hasher = Sha256::new();
 
-    let action = |path: &PathBuf| -> Result<Vec<u8>> {
+    let read = |path: &PathBuf| -> Result<Vec<u8>> {
       let mut file = File::open(path)?;
       let mut buffer = Vec::new();
       file.read_to_end(&mut buffer)?;
@@ -22,11 +22,11 @@ impl Hash for PathBuf {
           .filter_map(|e| e.ok())
           .filter(|e| e.file_type().is_file())
         {
-          hasher.update(action(&entry.path().to_path_buf())?);
+          hasher.update(read(&entry.path().to_path_buf())?);
         }
       }
       (false, true) => {
-        hasher.update(action(self)?);
+        hasher.update(read(self)?);
       }
       _ => {
         return Err(Error(anyhow!(
