@@ -4,6 +4,7 @@ use {
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
+    hash::Hash,
     loader::Loader,
     options::Options,
     page::Page,
@@ -47,11 +48,14 @@ use {
   reqwest::blocking::RequestBuilder,
   serde::{Deserialize, Serialize},
   serde_json::json,
+  sha2::{Digest, Sha256},
   std::{
     collections::HashSet,
     env,
     fmt::{self, Display, Formatter},
     fs,
+    fs::File,
+    io::Read,
     marker::Sized,
     net::SocketAddr,
     path::PathBuf,
@@ -65,6 +69,7 @@ use {
     services::{ServeDir, ServeFile},
   },
   url::Url,
+  walkdir::WalkDir,
 };
 
 mod arguments;
@@ -72,6 +77,7 @@ mod assets;
 mod auth;
 mod courses;
 mod error;
+mod hash;
 mod instructors;
 mod interactions;
 mod loader;
