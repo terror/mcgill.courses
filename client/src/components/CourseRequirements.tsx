@@ -8,10 +8,10 @@ type ReqsBlockProps = {
 };
 
 const transform = (html: string): React.ReactNode[] => {
-  const split = html.split(':', 1);
+  const text = html.substring(html.indexOf(':') + 1);
 
   const doc = new DOMParser().parseFromString(
-    capitalize(punctuate(split.length <= 1 ? html.trim() : split[1].trim())),
+    capitalize(punctuate(text.trim())),
     'text/html'
   );
 
