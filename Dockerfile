@@ -14,7 +14,7 @@ RUN cargo build --release
 
 FROM debian:buster-slim
 
-RUN apt-get update && apt-get install -y libssl1.1
+RUN apt-get update && apt-get install -y libssl1.1 ca-certificates
 
 COPY --from=client /app/client/dist assets
 COPY --from=server /usr/src/app/seed seed
