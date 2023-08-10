@@ -14,21 +14,20 @@ pub(crate) trait Object {
 #[async_trait]
 impl Object for S3Client {
   async fn get(&self, bucket: &str, key: &str) -> Result<Option<Vec<u8>>> {
-    let request = GetObjectRequest {
-      bucket: bucket.into(),
-      key: key.into(),
-      ..Default::default()
-    };
+    let response = self
+      .get_object(GetObjectRequest {
+        bucket: bucket.into(),
+        key: key.into(),
+        ..Default::default()
+      })
+      .await;
 
-    let response = self.get_object(request).await;
-
-    if let Err(_) = response {
-      return Ok(None);
-    }
-
-    Ok(match response.unwrap().body {
-      Some(stream) => Some(stream.map_ok(|b| b.to_vec()).try_concat().await?),
-      None => None,
+    Ok(match response {
+      Ok(response) => match response.body {
+        Some(stream) => Some(stream.map_ok(|b| b.to_vec()).try_concat().await?),
+        None => None,
+      },
+      Err(_) => None,
     })
   }
 
