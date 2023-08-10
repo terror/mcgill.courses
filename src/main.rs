@@ -35,6 +35,7 @@ use {
   clap::Parser,
   db::Db,
   dotenv::dotenv,
+  env_logger::Env,
   futures::TryStreamExt,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   log::{debug, error, info, trace},
@@ -103,7 +104,8 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {
-  env_logger::init();
+  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+    .init();
 
   dotenv().ok();
 
