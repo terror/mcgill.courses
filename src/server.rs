@@ -26,17 +26,24 @@ impl Server {
 
     let source_hash = source.hash()?;
 
-    let prev_hash_path = PathBuf::from(".source-hash");
-
-    let prev_hash = match prev_hash_path.is_file() {
-      true => Some(fs::read(&prev_hash_path)?),
+    let client = match env::var("ENV") {
+      Ok(env) if env == "production" => Some(S3Client::new(Region::UsEast1)),
       _ => None,
+    };
+
+    let prev_hash = match client {
+      Some(ref client) => client.get("mcgill.courses", "source-hash").await?,
+      None => None,
     };
 
     if self.initialize && Some(&source_hash) != prev_hash.as_ref() {
       let clone = db.clone();
 
-      fs::write(&prev_hash_path, source_hash)?;
+      if let Some(client) = client {
+        client
+          .put("mcgill.courses", "source-hash", source_hash)
+          .await?;
+      }
 
       tokio::spawn(async move {
         if let Err(error) = clone
