@@ -24,19 +24,19 @@ impl Server {
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
-    let source_hash = source.hash()?;
+    let client = S3Client::new(Region::UsEast1);
 
-    let prev_hash_path = PathBuf::from(".source-hash");
-
-    let prev_hash = match prev_hash_path.is_file() {
-      true => Some(fs::read(&prev_hash_path)?),
-      _ => None,
-    };
+    let (prev_hash, source_hash) = (
+      client.get("mcgill.courses", "source-hash").await?,
+      source.hash()?,
+    );
 
     if self.initialize && Some(&source_hash) != prev_hash.as_ref() {
       let clone = db.clone();
 
-      fs::write(&prev_hash_path, source_hash)?;
+      client
+        .put("mcgill.courses", "source-hash", source_hash.clone().into())
+        .await?;
 
       tokio::spawn(async move {
         if let Err(error) = clone

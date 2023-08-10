@@ -6,6 +6,7 @@ use {
     error::Error,
     hash::Hash,
     loader::Loader,
+    object::Object,
     options::Options,
     page::Page,
     retry::Retry,
@@ -34,6 +35,7 @@ use {
   clap::Parser,
   db::Db,
   dotenv::dotenv,
+  futures::TryStreamExt,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   log::{debug, error, info, trace},
   model::{
@@ -46,6 +48,9 @@ use {
   },
   rayon::prelude::*,
   reqwest::blocking::RequestBuilder,
+  rusoto_core::Region,
+  rusoto_s3::S3Client,
+  rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
   serde::{Deserialize, Serialize},
   serde_json::json,
   sha2::{Digest, Sha256},
@@ -81,6 +86,7 @@ mod hash;
 mod instructors;
 mod interactions;
 mod loader;
+mod object;
 mod options;
 mod page;
 mod retry;
