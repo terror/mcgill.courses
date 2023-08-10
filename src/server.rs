@@ -41,7 +41,7 @@ impl Server {
 
       if let Some(client) = client {
         client
-          .put("mcgill.courses", "source-hash", source_hash.clone().into())
+          .put("mcgill.courses", "source-hash", source_hash)
           .await?;
       }
 
