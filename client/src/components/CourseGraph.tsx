@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import {
-  addSpaceToCourseCode,
+  spliceCourseCode,
   courseIdToUrlParam,
   isValidCourseCode,
 } from '../lib/utils';
@@ -38,6 +38,7 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
       });
       return node;
     }
+
     const codes = node.groups.map((group) => traverse(group));
     const id = codes.join(node.operator);
 
@@ -48,9 +49,10 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
       color: groupColors['operator'],
       shape: 'hexagon',
     });
-    for (const code of codes) {
+
+    for (const code of codes)
       edges.push({ from: code, to: id, dashes: node.operator === 'OR' });
-    }
+
     return id;
   };
 
@@ -69,6 +71,7 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
     edges: prereqEdges,
     root: prereqRoot,
   } = makeGraph('prerequisite', course.logicalPrerequisites);
+
   const {
     nodes: coreqNodes,
     edges: coreqEdges,
@@ -77,15 +80,15 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
 
   const leading = course.leadingTo.map((leading) => {
     return {
-      id: addSpaceToCourseCode(leading),
-      label: addSpaceToCourseCode(leading),
+      id: spliceCourseCode(leading, ' '),
+      label: spliceCourseCode(leading, ' '),
     };
   });
 
   const graphNodes: Node[] = [
     {
       id: course._id,
-      label: addSpaceToCourseCode(course._id),
+      label: spliceCourseCode(course._id, ' '),
       title: course.description,
     },
     ...prereqNodes,
@@ -108,14 +111,13 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
 
   const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
-    const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (!node || !node.id) {
-      return;
-    }
 
-    if (!isValidCourseCode(node.id as string)) {
-      return;
-    }
+    const node = graphNodes.find((node) => node.id === nodes[0]);
+
+    if (!node || !node.id) return;
+
+    if (!isValidCourseCode(node.id as string)) return;
+
     navigate(
       `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
     );

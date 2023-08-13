@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { CourseReview } from '../components/CourseReview';
 import { JumpToTopButton } from '../components/JumpToTopButton';
@@ -7,11 +6,15 @@ import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
-import { courseIdToUrlParam } from '../lib/utils';
 import { Review } from '../model/Review';
+import { User } from 'react-feather';
+import { useDarkMode } from '../hooks/useDarkMode';
+import { twMerge } from 'tailwind-merge';
 
 export const Profile = () => {
   const user = useAuth();
+
+  const [darkMode] = useDarkMode();
   const [userReviews, setUserReviews] = useState<Review[]>();
 
   useEffect(() => {
@@ -24,25 +27,33 @@ export const Profile = () => {
   return (
     <Layout>
       <JumpToTopButton />
-      <div className='flex flex-col justify-center'>
-        <div className='mx-auto'>
-          <div className='mt-10'>
-            <h1 className='mb-5 text-center text-4xl font-bold text-gray-700 dark:text-gray-200'>
-              Your Reviews
+      <div className='flex justify-center'>
+        <div className='mx-4 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
+          <div className='m-4 flex w-fit flex-col space-y-3'>
+            <User
+              size={100}
+              className={twMerge(
+                '-ml-3',
+                darkMode ? 'text-white' : 'text-gray-700'
+              )}
+            />
+            <h1 className='text-md font-semibold text-gray-800 dark:text-gray-200 md:text-2xl'>
+              {user?.mail}
             </h1>
+            <p className='font-semibold text-gray-800 dark:text-gray-200'>
+              {userReviews?.length} review(s)
+            </p>
           </div>
-          <div className='mx-5 mb-4 flex h-fit max-w-xl flex-col flex-wrap rounded-lg p-4'>
+        </div>
+      </div>
+      <div className='flex w-full flex-row justify-between'>
+        <div className='mx-4 my-4 w-full md:mt-4'>
+          <div className='w-full'>
             {userReviews === undefined ? (
-              <div className='mx-auto'>
+              <div className='mt-2 text-center'>
                 <Spinner />
               </div>
-            ) : userReviews.length === 0 ? (
-              <div className='mx-auto'>
-                <h2 className='text-2xl font-medium text-gray-400 dark:text-neutral-500'>
-                  You have not reviewed any courses yet.
-                </h2>
-              </div>
-            ) : userReviews ? (
+            ) : userReviews.length ? (
               userReviews
                 .sort(
                   (a, b) =>
@@ -51,27 +62,14 @@ export const Profile = () => {
                 )
                 .map((review, i) => {
                   return (
-                    <div key={i} className='mx-5'>
-                      <div className='flex'>
-                        <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
-                          {review.courseId}
-                        </h2>
-                        <Link
-                          to={`/course/${courseIdToUrlParam(review.courseId)}`}
-                          className='flex-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
-                        >
-                          View Course
-                        </Link>
-                      </div>
-                      <div className='my-4 rounded-lg border-gray-800 duration-300 ease-in-out'>
-                        <CourseReview
-                          canModify={false}
-                          handleDelete={() => null}
-                          isLast={i === userReviews.length - 1}
-                          openEditReview={() => null}
-                          review={review}
-                        />
-                      </div>
+                    <div key={i}>
+                      <CourseReview
+                        canModify={false}
+                        handleDelete={() => null}
+                        isLast={i === userReviews.length - 1}
+                        openEditReview={() => null}
+                        review={review}
+                      />
                     </div>
                   );
                 })

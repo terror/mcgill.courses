@@ -9,6 +9,7 @@ export const RatingPieChart = ({ rating }: RatingPieChartProps) => {
     <div className='flex flex-col'>
       <div className='relative z-10 mx-auto my-5 flex h-1/2 w-3/5 rounded-full '>
         <PieChart
+          animate={true}
           data={[
             {
               value: rating,
