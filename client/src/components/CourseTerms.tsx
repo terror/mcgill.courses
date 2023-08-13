@@ -52,16 +52,13 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
 
   if (currentlyOfferedTerms.length === 0)
     return (
-      <div className='mr-auto flex flex-wrap'>
-        <div
-          className={twMerge(
-            'rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'px-2 py-1' : 'p-2'
-          )}
-        >
-          <div className='flex items-center space-x-2'>
-            <GoX size={variantToSize(variant)} color='DarkGray' />
-            <div className='pr-1 dark:text-gray-200'>Not Offered</div>
+      <div className='w-fit text-sm'>
+        <div className='rounded-xl bg-gray-200 p-1 dark:bg-neutral-700'>
+          <div className='flex items-center space-x-1'>
+            <GoX size={variantToSize(variant)} className='fill-gray-700' />
+            <div className='pr-1 font-medium text-gray-800 dark:text-gray-200'>
+              Not Offered
+            </div>
           </div>
         </div>
       </div>
