@@ -107,9 +107,12 @@ export const Explore = () => {
               style={{ overflowY: 'hidden' }}
             >
               <div className='mx-auto flex flex-col'>
-                {courses.map((course, i) => (
-                  <CourseCard key={i} course={course} className='m-2' />
-                ))}
+                {courses.map(
+                  (course, i) =>
+                    course.description && (
+                      <CourseCard key={i} course={course} className='m-2' />
+                    )
+                )}
                 {!hasMore || courses.length === 0 ? (
                   <div className='mx-[200px] mt-4 text-center'>
                     <p className='text-gray-500 dark:text-gray-400'>

@@ -50,8 +50,8 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
       <div className={container}>
         <div
           className={twMerge(
-            'rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'px-2 py-1' : 'p-2'
+            'relative my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
+            variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 max-w-fit p-2'
           )}
         >
           <div className='flex items-center space-x-2'>

@@ -21,7 +21,7 @@ export const CourseCard = ({ course, className }: CourseCardProps) => {
           {course._id} - {course.title}
         </div>
         <CourseTerms course={course} variant='small' />
-        <div className='mt-4 text-gray-600 dark:text-gray-400'>
+        <div className='mt-2 text-gray-600 dark:text-gray-400'>
           {course.description}
         </div>
       </div>
