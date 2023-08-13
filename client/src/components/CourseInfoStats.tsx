@@ -55,6 +55,8 @@ export const CourseInfoStats = ({
   rating,
   difficulty,
 }: CourseInfoStatsProps) => {
+  if (isNaN(rating) || isNaN(difficulty)) return null;
+
   return (
     <div className='flex gap-x-4'>
       <div className='flex gap-x-1'>
