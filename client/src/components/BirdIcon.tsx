@@ -10,7 +10,6 @@ export const BirdIcon = ({ className, ...props }: IconBaseProps) => {
       y='0px'
       width='20px'
       viewBox='0 0 1200 1200'
-      enable-background='new 0 0 1200 1200'
       className={className}
     >
       <path
