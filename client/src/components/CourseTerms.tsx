@@ -52,7 +52,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
 
   if (currentlyOfferedTerms.length === 0)
     return (
-      <div className='w-fit text-sm'>
+      <div className='my-1.5 w-fit text-sm'>
         <div className='rounded-xl bg-gray-200 p-1 dark:bg-neutral-700'>
           <div className='flex items-center space-x-1'>
             <GoX size={variantToSize(variant)} className='fill-gray-700' />
