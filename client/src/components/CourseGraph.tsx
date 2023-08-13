@@ -23,6 +23,7 @@ const groupColors = {
 
 type NodeType = 'operator' | 'prerequisite' | 'corequisite';
 
+// FIXME: Issue with ECSE 424 (Duplicate course)
 const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   if (!reqs) return { nodes: [], edges: [], root: undefined };
 
@@ -154,6 +155,19 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
             color: darkMode ? '#FFFFFF' : '#000000',
           },
         },
+      }}
+      getNetwork={(network) => {
+        network.focus(course._id, {
+          scale: 0.7,
+          offset: {
+            x: 60,
+            y: 0,
+          },
+          animation: {
+            duration: 2500,
+            easingFunction: 'easeOutCubic',
+          },
+        });
       }}
       events={{
         select: ({ nodes }: { nodes: string[] }) => {
