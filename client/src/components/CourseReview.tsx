@@ -2,7 +2,6 @@ import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { Edit } from 'react-feather';
-import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -14,7 +13,7 @@ import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
 import { Alert } from './Alert';
 import { DeleteButton } from './DeleteButton';
-import { LuFlame } from 'react-icons/lu';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
 
@@ -118,11 +117,11 @@ const ReviewInteractions = ({
       {error ? <Alert status='error' message={error} /> : null}
       <div className='mb-0.5 flex items-center'>
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-          <AiFillLike
+          <LuThumbsUp
             onClick={handleLike}
             className={twMerge(
-              'h-4 w-4 cursor-pointer',
-              kind === 'like' ? 'fill-red-600' : ''
+              'h-4 w-4 cursor-pointer stroke-gray-500',
+              kind === 'like' ? 'stroke-red-600' : ''
             )}
           />
         </div>
@@ -130,11 +129,11 @@ const ReviewInteractions = ({
           {likes}
         </span>
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-          <AiFillDislike
+          <LuThumbsDown
             onClick={handleDislike}
             className={twMerge(
-              'h-4 w-4 cursor-pointer',
-              kind === 'dislike' ? 'fill-red-600' : ''
+              'h-4 w-4 cursor-pointer stroke-gray-500',
+              kind === 'dislike' ? 'stroke-red-600' : ''
             )}
           />
         </div>
