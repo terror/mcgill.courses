@@ -10,6 +10,8 @@ import { Review } from '../model/Review';
 import { User } from 'react-feather';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { twMerge } from 'tailwind-merge';
+import { Link } from 'react-router-dom';
+import { courseIdToUrlParam } from '../lib/utils';
 
 export const Profile = () => {
   const user = useAuth();
@@ -61,13 +63,26 @@ export const Profile = () => {
             .map((review, i) => {
               return (
                 <div key={i}>
-                  <CourseReview
-                    canModify={false}
-                    handleDelete={() => null}
-                    isLast={i === userReviews.length - 1}
-                    openEditReview={() => null}
-                    review={review}
-                  />
+                  <div className='flex'>
+                    <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
+                      {review.courseId}
+                    </h2>
+                    <Link
+                      to={`/course/${courseIdToUrlParam(review.courseId)}`}
+                      className='flex-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
+                    >
+                      View Course
+                    </Link>
+                  </div>
+                  <div className='my-4 rounded-lg border-gray-800 duration-300 ease-in-out'>
+                    <CourseReview
+                      canModify={false}
+                      handleDelete={() => null}
+                      isLast={i === userReviews.length - 1}
+                      openEditReview={() => null}
+                      review={review}
+                    />
+                  </div>
                 </div>
               );
             })
