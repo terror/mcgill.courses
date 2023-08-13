@@ -27,9 +27,9 @@ export const Profile = () => {
   return (
     <Layout>
       <JumpToTopButton />
-      <div className='flex justify-center'>
-        <div className='mx-4 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
-          <div className='m-4 flex w-fit flex-col space-y-3'>
+      <div className='flex w-full justify-center'>
+        <div className='mx-4 flex w-full flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
+          <div className='flex w-fit flex-col space-y-3 md:m-4'>
             <User
               size={100}
               className={twMerge(
@@ -46,36 +46,32 @@ export const Profile = () => {
           </div>
         </div>
       </div>
-      <div className='flex w-full flex-row justify-between'>
-        <div className='mx-4 my-4 w-full md:mt-4'>
-          <div className='w-full'>
-            {userReviews === undefined ? (
-              <div className='mt-2 text-center'>
-                <Spinner />
-              </div>
-            ) : userReviews.length ? (
-              userReviews
-                .sort(
-                  (a, b) =>
-                    parseInt(a.timestamp.$date.$numberLong, 10) -
-                    parseInt(b.timestamp.$date.$numberLong, 10)
-                )
-                .map((review, i) => {
-                  return (
-                    <div key={i}>
-                      <CourseReview
-                        canModify={false}
-                        handleDelete={() => null}
-                        isLast={i === userReviews.length - 1}
-                        openEditReview={() => null}
-                        review={review}
-                      />
-                    </div>
-                  );
-                })
-            ) : null}
+      <div className='m-4'>
+        {userReviews === undefined ? (
+          <div className='mt-2 text-center'>
+            <Spinner />
           </div>
-        </div>
+        ) : userReviews.length ? (
+          userReviews
+            .sort(
+              (a, b) =>
+                parseInt(a.timestamp.$date.$numberLong, 10) -
+                parseInt(b.timestamp.$date.$numberLong, 10)
+            )
+            .map((review, i) => {
+              return (
+                <div key={i}>
+                  <CourseReview
+                    canModify={false}
+                    handleDelete={() => null}
+                    isLast={i === userReviews.length - 1}
+                    openEditReview={() => null}
+                    review={review}
+                  />
+                </div>
+              );
+            })
+        ) : null}
       </div>
     </Layout>
   );

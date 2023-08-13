@@ -52,7 +52,7 @@ export const Instructor = () => {
   return (
     <Layout>
       <div className='flex justify-center'>
-        <div className='mx-8 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
+        <div className='mx-4 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
           <div className='flex flex-1 flex-col md:flex-row'>
             <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
               <div className='flex flex-row space-x-2 align-middle'>
@@ -99,46 +99,42 @@ export const Instructor = () => {
           </div>
         </div>
       </div>
-      <div className='flex w-full flex-row justify-between'>
-        <div className='mx-8 my-4 w-full md:mr-8 md:mt-4'>
-          <div className='w-full'>
-            {userReview && (
+      <div className='m-4'>
+        {userReview && (
+          <CourseReview
+            canModify={false}
+            handleDelete={() => undefined}
+            includeTaughtBy={false}
+            isLast={reviews.length === 1}
+            openEditReview={() => undefined}
+            review={userReview}
+          />
+        )}
+        {reviews &&
+          reviews
+            .filter((review) => (user ? review.userId !== user.id : true))
+            .slice(0, showAllReviews ? reviews.length : 8)
+            .map((review, i) => (
               <CourseReview
                 canModify={false}
                 handleDelete={() => undefined}
                 includeTaughtBy={false}
-                isLast={reviews.length === 1}
+                isLast={i === reviews.length - 1}
+                key={i}
                 openEditReview={() => undefined}
-                review={userReview}
+                review={review}
               />
-            )}
-            {reviews &&
-              reviews
-                .filter((review) => (user ? review.userId !== user.id : true))
-                .slice(0, showAllReviews ? reviews.length : 8)
-                .map((review, i) => (
-                  <CourseReview
-                    canModify={false}
-                    handleDelete={() => undefined}
-                    includeTaughtBy={false}
-                    isLast={i === reviews.length - 1}
-                    key={i}
-                    openEditReview={() => undefined}
-                    review={review}
-                  />
-                ))}
-            {!showAllReviews && reviews.length > 8 && (
-              <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
-                <button
-                  className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
-                  onClick={() => setShowAllReviews(true)}
-                >
-                  Show all {reviews.length} reviews
-                </button>
-              </div>
-            )}
+            ))}
+        {!showAllReviews && reviews.length > 8 && (
+          <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
+            <button
+              className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+              onClick={() => setShowAllReviews(true)}
+            >
+              Show all {reviews.length} reviews
+            </button>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
