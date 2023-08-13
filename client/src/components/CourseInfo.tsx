@@ -3,28 +3,6 @@ import { ExternalLink } from 'react-feather';
 import { Course } from '../model/Course';
 import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
-import { RatingInfo } from './RatingInfo';
-
-type ChartsProps = {
-  numReviews?: number;
-  rating: number;
-  difficulty: number;
-};
-
-const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
-  if (numReviews === undefined) return null;
-
-  return numReviews ? (
-    <>
-      <RatingInfo title={'Rating'} rating={rating} />
-      <RatingInfo title={'Difficulty'} rating={difficulty} />
-    </>
-  ) : (
-    <div className='w-[50%] text-left text-gray-700 dark:text-gray-200 md:text-center'>
-      No reviews have been left for this course yet. Be the first!
-    </div>
-  );
-};
 
 type CourseInfoProps = {
   course: Course;
@@ -74,13 +52,6 @@ export const CourseInfo = ({
         <p className='text-sm text-gray-500 dark:text-gray-400'>
           {numReviews} reviews
         </p>
-      </div>
-      <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-        <Charts
-          numReviews={numReviews}
-          rating={rating}
-          difficulty={difficulty}
-        />
       </div>
     </div>
   );
