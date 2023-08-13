@@ -14,7 +14,9 @@ import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
 import { Alert } from './Alert';
 import { DeleteButton } from './DeleteButton';
-import { StarRating } from './StarRating';
+import { LuFlame } from 'react-icons/lu';
+import { IconRating } from './IconRating';
+import { BirdIcon } from './BirdIcon';
 
 const LoginPrompt = () => {
   return (
@@ -144,7 +146,6 @@ const ReviewInteractions = ({
 type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
-  isLast: boolean;
   openEditReview: () => void;
   review: Review;
   showCourse?: boolean;
@@ -154,7 +155,6 @@ type CourseReviewProps = {
 export const CourseReview = ({
   review,
   canModify,
-  isLast,
   openEditReview,
   handleDelete,
   includeTaughtBy = true,
@@ -164,40 +164,45 @@ export const CourseReview = ({
 
   const dateStr = format(
     new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'PPP'
+    'P'
   );
 
   return (
     <div
-      className={twMerge(
-        isLast ? 'mb-8' : 'mb-4',
-        'relative flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
-      )}
+      className={
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 last:border-b-0 dark:bg-neutral-800'
+      }
     >
-      <div className='flex flex-col '>
-        <div className='flex justify-between'>
-          <div className='flex flex-col'>
-            <div className='mb-2 flex flex-col sm:flex-row sm:gap-4'>
-              <div className='flex items-center'>
-                <div className='mr-1 font-bold text-gray-700 dark:text-gray-200'>
-                  Rating:
+      <div className='flex flex-col'>
+        <div className='flex w-full'>
+          <div className='relative flex w-full flex-col'>
+            <div className='flex w-full'>
+              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-200'>
+                {dateStr}
+              </p>
+              <div className='grow' />
+              <div className='flex w-64 flex-col items-end rounded-lg p-2'>
+                <div className='flex items-center gap-x-2'>
+                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500'>
+                    Rating
+                  </div>
+                  <IconRating rating={review.rating} icon={BirdIcon} />
                 </div>
-                <StarRating rating={review.rating} />
-              </div>
-              <div className='flex items-center'>
-                <div className='mr-1 font-bold text-gray-700 dark:text-gray-200'>
-                  Difficulty:
+                <div className='flex items-center gap-x-2'>
+                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500'>
+                    Difficulty
+                  </div>
+                  <IconRating rating={review.difficulty} icon={LuFlame} />
                 </div>
-                <StarRating rating={review.difficulty} />
               </div>
             </div>
             {review.content.length < 300 || readMore ? (
-              <div className='ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+              <div className='ml-1 mr-4 mt-2 hyphens-auto text-left text-gray-800 dark:text-gray-300'>
                 {review.content}
               </div>
             ) : (
               <>
-                <div className='ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+                <div className='ml-1 mr-4 mt-2 hyphens-auto text-left text-gray-800 dark:text-gray-300'>
                   {review.content.substring(0, 300) + '...'}
                 </div>
                 <button
@@ -231,7 +236,7 @@ export const CourseReview = ({
           </div>
         </div>
       </div>
-      <div className='flex flex-row justify-between gap-3 align-bottom'>
+      <div className='flex items-center'>
         <p className='mb-2 mt-auto flex-1 text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
           {includeTaughtBy ? (
             <Fragment>
@@ -247,7 +252,7 @@ export const CourseReview = ({
                   <Fragment key={instructor + review.userId}>
                     <Link
                       to={`/instructor/${encodeURIComponent(instructor)}`}
-                      className='transition hover:text-red-600'
+                      className='font-medium transition hover:text-red-600'
                     >
                       {instructor}
                     </Link>
@@ -265,21 +270,18 @@ export const CourseReview = ({
             </Fragment>
           )}
         </p>
-        <div className='flex items-center justify-end'>
-          <p className='mr-4 text-sm font-bold text-gray-700 dark:text-gray-200'>
-            {dateStr}
-          </p>
-          <Transition
-            show={promptLogin}
-            enter='transition-opacity duration-150'
-            enterFrom='opacity-0'
-            enterTo='opacity-100'
-            leave='transition-opacity duration-150'
-            leaveFrom='opacity-100'
-            leaveTo='opacity-0'
-          >
-            <LoginPrompt />
-          </Transition>
+        <Transition
+          show={promptLogin}
+          enter='transition-opacity duration-150'
+          enterFrom='opacity-0'
+          enterTo='opacity-100'
+          leave='transition-opacity duration-150'
+          leaveFrom='opacity-100'
+          leaveTo='opacity-0'
+        >
+          <LoginPrompt />
+        </Transition>
+        <div>
           <ReviewInteractions
             courseId={review.courseId}
             userId={review.userId}

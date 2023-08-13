@@ -1,17 +1,15 @@
-import { Star } from 'react-feather';
-
 type StarRatingProps = {
   rating: number;
+  icon: any;
 };
 
-export const StarRating = ({ rating }: StarRatingProps) => {
+export const IconRating = ({ rating, icon: Icon }: StarRatingProps) => {
   const stars = [];
   for (let i = 0; i < 5; i++) {
     stars.push(
-      <Star
+      <Icon
         key={i}
-        strokeWidth={0}
-        className={i < rating ? 'fill-red-600' : 'fill-gray-200'}
+        className={i < rating ? 'fill-red-600 stroke-none' : 'stroke-gray-300'}
         size={20}
       />
     );

@@ -120,8 +120,12 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
     setOpenBlock(null);
   }, [currentlyDisplayingTerm]);
 
+  if (offeredTerms.length === 0) {
+    return null;
+  }
+
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
-    <div key={scheduleIndex}>
+    <div key={scheduleIndex} className='last:border-b-2'>
       {schedule.blocks?.map((block: Block, blockIndex) => (
         <div key={blockIndex} className='flex flex-col'>
           <div
@@ -129,17 +133,13 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
               'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-col flex-wrap gap-x-5 whitespace-pre-wrap text-left md:flex-row'>
-              <div className=''>
-                <span className='font-semibold'>{block.display}</span>
-              </div>
-              <div className=''>
-                <span className='font-semibold'>Campus: </span>
+            <div className='flex flex-row flex-wrap whitespace-pre-wrap text-left md:flex-row'>
+              <div className='w-20 font-medium'>{block.display}</div>
+              <div className='w-24 font-normal text-gray-700'>
                 {block.campus}
               </div>
               <div>
-                <span className='font-semibold'>Classroom(s):</span>
-                <span className='ml-1 inline-block w-80'>
+                <span className='inline-block font-medium'>
                   {((split) =>
                     split.map((location: string, index) => (
                       <span key={index}>
@@ -205,16 +205,16 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
     </div>
   );
 
-  return offeredTerms.length !== 0 ? (
-    <div className='flex flex-col text-gray-800'>
-      <div className='mt-4 flex'>
+  return (
+    <div className='flex flex-col border-t-[1px] text-gray-800'>
+      <div className='flex'>
         {offeredTerms.map((term, i) => (
           <button
             key={i}
             className={twMerge(
-              `flex-1 p-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
+              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200`,
               term === currentlyDisplayingTerm
-                ? 'bg-slate-100 dark:bg-neutral-700'
+                ? 'bg-slate-200 dark:bg-neutral-700'
                 : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
@@ -249,5 +249,5 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
         )}
       </div>
     </div>
-  ) : null;
+  );
 };

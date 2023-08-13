@@ -91,3 +91,7 @@ export const isValidCourseCode = (s: string) => {
 
 export const addSpaceToCourseCode = (courseCode: string) =>
   courseCode.slice(0, 4) + ' ' + courseCode.slice(4);
+
+export const round2Decimals = (n: number) => {
+  return Math.round(n * 100) / 100;
+};

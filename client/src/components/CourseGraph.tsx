@@ -61,6 +61,7 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
 
 export const CourseGraph = ({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
+  // const [network, setNetwork] = useState<any>(undefined);
 
   const [darkMode] = useDarkMode();
 
@@ -127,7 +128,7 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
       graph={graph}
       options={{
         edges: { color: darkMode ? '#919191' : '#b1b1b1' },
-        height: '500px',
+        height: '288px',
         layout: {
           randomSeed: undefined,
           improvedLayout: true,

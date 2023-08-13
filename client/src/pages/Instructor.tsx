@@ -107,7 +107,6 @@ export const Instructor = () => {
                 canModify={false}
                 handleDelete={() => undefined}
                 includeTaughtBy={false}
-                isLast={reviews.length === 1}
                 openEditReview={() => undefined}
                 review={userReview}
               />
@@ -121,7 +120,6 @@ export const Instructor = () => {
                     canModify={false}
                     handleDelete={() => undefined}
                     includeTaughtBy={false}
-                    isLast={i === reviews.length - 1}
                     key={i}
                     openEditReview={() => undefined}
                     review={review}
