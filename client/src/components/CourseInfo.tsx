@@ -14,10 +14,10 @@ const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
   if (numReviews === undefined) return null;
 
   return numReviews ? (
-    <>
+    <div className='flex-row md:flex'>
       <RatingInfo title={'Rating'} rating={rating} />
       <RatingInfo title={'Difficulty'} rating={difficulty} />
-    </>
+    </div>
   ) : (
     <div className='w-[50%] text-left text-gray-700 dark:text-gray-200 md:text-center'>
       No reviews have been left for this course yet. Be the first!
@@ -73,7 +73,7 @@ export const CourseInfo = ({
           {course.description}
         </p>
         <p className='text-sm text-gray-500 dark:text-gray-400'>
-          {numReviews} reviews
+          {numReviews} review(s)
         </p>
       </div>
       <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
