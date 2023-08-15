@@ -17,10 +17,12 @@ mod course_page;
 mod initialize_options;
 mod instructor;
 mod interaction;
+mod notification;
 mod requirements;
 mod review;
 mod schedule;
 mod search_results;
+mod subscription;
 
 pub use crate::{
   course::Course,
@@ -29,8 +31,10 @@ pub use crate::{
   initialize_options::InitializeOptions,
   instructor::Instructor,
   interaction::{Interaction, InteractionKind},
+  notification::Notification,
   requirements::{Operator, ReqNode, Requirement, Requirements},
   review::Review,
   schedule::*,
   search_results::SearchResults,
+  subscription::Subscription,
 };

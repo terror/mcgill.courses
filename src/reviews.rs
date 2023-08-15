@@ -64,7 +64,7 @@ pub(crate) async fn add_review(
 
   db.add_review(Review {
     content,
-    course_id,
+    course_id: course_id.clone(),
     instructors,
     rating,
     difficulty,
@@ -72,6 +72,10 @@ pub(crate) async fn add_review(
     user_id: user.id(),
   })
   .await?;
+
+  info!("Adding notifications for course {}...", &course_id);
+
+  db.add_notifications(&course_id).await?;
 
   Ok(())
 }
@@ -123,6 +127,8 @@ pub(crate) async fn delete_review(
 
   db.delete_review(&body.course_id, &user_id).await?;
   db.remove_interactions(&body.course_id, &user_id).await?;
+
+  // TODO: delete notifications
 
   Ok(())
 }

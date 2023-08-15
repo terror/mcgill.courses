@@ -1,4 +1,6 @@
 import { ExternalLink } from 'react-feather';
+import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../lib/fetchClient';
 
 import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
@@ -38,6 +40,24 @@ export const CourseInfo = ({
   difficulty,
   numReviews,
 }: CourseInfoProps) => {
+  const user = useAuth();
+
+  const handleSubscription = async () => {
+    if (!user) return;
+
+    // TODO: add alerts?
+
+    try {
+      await fetchClient.post(
+        '/subscriptions',
+        { user_id: user.id, course_id: course._id },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className='flex w-full flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
       <div className='m-4 space-y-3 md:m-4 md:w-1/2'>
@@ -58,6 +78,15 @@ export const CourseInfo = ({
             </a>
           ) : null}
         </div>
+        {user && (
+          <div>
+            <button onClick={handleSubscription}>
+              <p className='text-sm text-gray-500 dark:text-gray-400'>
+                Add subscription
+              </p>
+            </button>
+          </div>
+        )}
         <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
           {course.title}
         </h2>

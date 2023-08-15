@@ -1,19 +1,74 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import birdImageUrl from '../assets/bird.png';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { getUrl } from '../lib/utils';
-import { SearchResults } from '../model/SearchResults';
+import { BellIcon } from '@heroicons/react/20/solid';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
+import { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
 import { ProfileDropdown } from './ProfileDropdown';
+import { SearchResults } from '../model/SearchResults';
 import { SideNav } from './SideNav';
+import { fetchClient } from '../lib/fetchClient';
+import { getUrl } from '../lib/utils';
+import { useAuth } from '../hooks/useAuth';
+import { Notification } from '../model/Notification';
+
+const NotificationDropdown = ({
+  notifications,
+}: {
+  notifications: Notification[];
+}) => {
+  return (
+    <div className='text-right'>
+      <Menu as='div' className='relative inline-block text-left'>
+        <div>
+          <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
+            <BellIcon
+              className='-mr-1 ml-2 h-5 w-5 text-violet-200 hover:text-violet-100'
+              aria-hidden='true'
+            />
+          </Menu.Button>
+        </div>
+        {notifications.length !== 0 && (
+          <Transition
+            as={Fragment}
+            enter='transition ease-out duration-100'
+            enterFrom='transform opacity-0 scale-95'
+            enterTo='transform opacity-100 scale-100'
+            leave='transition ease-in duration-75'
+            leaveFrom='transform opacity-100 scale-100'
+            leaveTo='transform opacity-0 scale-95'
+          >
+            <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+              <div className='px-1 py-1 '>
+                {notifications.map((notification, i) => (
+                  <Menu.Item key={i}>
+                    {({ active }) => (
+                      <button
+                        className={`${
+                          active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        {notification.courseId}
+                      </button>
+                    )}
+                  </Menu.Item>
+                ))}
+              </div>
+            </Menu.Items>
+          </Transition>
+        )}
+      </Menu>
+    </div>
+  );
+};
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const [arrowColor, setArrowColor] = useState(
     'text-gray-900 dark:text-gray-200'
   );
@@ -26,6 +81,19 @@ export const Navbar = () => {
 
   const location = useLocation();
   const pathName = location.pathname;
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    // TODO: alerts?
+    // we really need a global/easy to use alert system.
+    // aka this thing https://github.com/emilkowalski/sonner
+    fetchClient
+      .getData<Notification[]>('/notifications')
+      .then((data) => setNotifications(data))
+      .catch((err) => console.error(err));
+    console.log(notifications);
+  }, []);
 
   const handleInputChange = async (query: string) => {
     try {
@@ -41,6 +109,12 @@ export const Navbar = () => {
   };
 
   const user = useAuth();
+
+  // notifications.push({
+  //   courseId: 'MATH240',
+  //   seen: false,
+  //   userId: user?.id || 'foo'
+  // });
 
   return (
     <header className='z-40'>
@@ -75,6 +149,7 @@ export const Navbar = () => {
           <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
             <DarkModeToggle />
           </div>
+          <NotificationDropdown notifications={notifications} />
           <div className='hidden lg:ml-5 lg:flex lg:justify-end'>
             {user ? (
               <ProfileDropdown />

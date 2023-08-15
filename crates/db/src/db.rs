@@ -1,3 +1,6 @@
+use model::{Notification, Subscription};
+use mongodb::results::{InsertManyResult, InsertOneResult};
+
 use super::*;
 
 #[derive(Debug, Clone)]
@@ -9,7 +12,9 @@ impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
   const INTERACTION_COLLECTION: &str = "interactions";
+  const NOTIFICATION_COLLECTION: &str = "notifications";
   const REVIEW_COLLECTION: &str = "reviews";
+  const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options = ClientOptions::parse(format!(
@@ -269,6 +274,65 @@ impl Db {
         .find(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?
         .try_collect::<Vec<Interaction>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<InsertOneResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .insert_one(subscription, None)
+        .await?,
+    )
+  }
+
+  pub async fn get_notifications(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Notification>> {
+    Ok(dbg!(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(doc! { "userId": user_id }, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    ))
+  }
+
+  pub async fn add_notifications(
+    &self,
+    course_id: &str,
+  ) -> Result<InsertManyResult> {
+    let subscriptions = self
+      .database
+      .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+      .find(doc! { "courseId": course_id }, None)
+      .await?
+      .try_collect::<Vec<Subscription>>()
+      .await?;
+
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .insert_many(
+          subscriptions
+            .into_iter()
+            .map(|subscription| Notification {
+              user_id: subscription.user_id,
+              course_id: subscription.course_id,
+              seen: false,
+            })
+            .collect::<Vec<Notification>>(),
+          None,
+        )
         .await?,
     )
   }
