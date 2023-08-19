@@ -32,12 +32,19 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
 
   const traverse = (node: ReqNode): string => {
     if (typeof node === 'string') {
+      // Need to check for duplicates because prereqs sometimes have
+      // the same course listed multiple times for whatever reason
+      const numDuplicates = nodes.filter((n) =>
+        (n.id as string).startsWith(node)
+      ).length;
+
+      const id = numDuplicates === 0 ? node : `${node}_${numDuplicates}`;
       nodes.push({
-        id: node,
+        id,
         label: node,
         color: groupColors[nodeGroup],
       });
-      return node;
+      return id;
     }
 
     const codes = node.groups.map((group) => traverse(group));
@@ -117,10 +124,13 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
 
     if (!node || !node.id) return;
 
-    if (!isValidCourseCode(node.id as string)) return;
+    const [courseCode, rest] = (node.id as string).split('_', 2);
+    const isOperator = rest !== undefined && isNaN(+rest);
+
+    if (!isValidCourseCode(courseCode) || isOperator) return;
 
     navigate(
-      `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
+      `/course/${courseIdToUrlParam(courseCode.toString().replace(' ', ''))}`
     );
   };
 
