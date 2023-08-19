@@ -32,23 +32,23 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
 
   const traverse = (node: ReqNode): string => {
     if (typeof node === 'string') {
-      // Need to check for duplicates because prereqs sometimes have
-      // the same course listed multiple times for whatever reason
-      const numDuplicates = nodes.filter((n) =>
+      const duplicates = nodes.filter((n) =>
         (n.id as string).startsWith(node)
       ).length;
 
-      const id = numDuplicates === 0 ? node : `${node}_${numDuplicates}`;
+      const id = duplicates === 0 ? node : `${node}_${duplicates}`;
+
       nodes.push({
         id,
         label: node,
         color: groupColors[nodeGroup],
       });
+
       return id;
     }
 
-    const codes = node.groups.map((group) => traverse(group));
-    const id = codes.join(node.operator);
+    const codes = node.groups.map((group) => traverse(group)),
+      id = codes.join(node.operator);
 
     nodes.push({
       id,
