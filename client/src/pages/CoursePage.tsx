@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
 import { Alert, AlertStatus } from '../components/Alert';
-import { CourseGraph } from '../components/CourseGraph';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -153,7 +152,7 @@ export const CoursePage = () => {
         <div className='flex lg:hidden'>
           <CourseRequirements course={course} requirements={requirements} />
         </div>
-        <hr className='mx-auto w-full' />
+        <hr className='mx-auto w-full lg:hidden' />
         {/* <div className='mb-1 mt-4 rounded-lg bg-slate-50 dark:bg-neutral-800 lg:hidden'> */}
         {/*   <CourseGraph course={course} /> */}
         {/* </div> */}
@@ -164,14 +163,14 @@ export const CoursePage = () => {
                 openAddReview={() => setAddReviewOpen(true)}
               />
             )}
-            {/* <div className='mb-4 lg:hidden'> */}
-            {/*   <ReviewFilter */}
-            {/*     course={course} */}
-            {/*     allReviews={allReviews ?? []} */}
-            {/*     setReviews={setShowingReviews} */}
-            {/*     setShowAllReviews={setShowAllReviews} */}
-            {/*   /> */}
-            {/* </div> */}
+            <div className='mb-2 lg:hidden'>
+              <ReviewFilter
+                course={course}
+                allReviews={allReviews ?? []}
+                setReviews={setShowingReviews}
+                setShowAllReviews={setShowAllReviews}
+              />
+            </div>
             <div className='w-full'>
               {userReview && (
                 <CourseReview
@@ -209,10 +208,10 @@ export const CoursePage = () => {
         </div>
         <div className='hidden h-fit w-1/2 lg:mt-4 lg:block'>
           <CourseRequirements course={course} requirements={requirements} />
-          <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'>
-            <CourseGraph course={course} />
-          </div>
-          <div className='mb-10 mt-3'>
+          {/* <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'> */}
+          {/*   <CourseGraph course={course} /> */}
+          {/* </div> */}
+          <div className='my-3'>
             <ReviewFilter
               course={course}
               allReviews={allReviews ?? []}

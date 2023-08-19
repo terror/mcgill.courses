@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
@@ -60,7 +61,7 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   return { nodes, edges, root };
 };
 
-export const CourseGraph = ({ course }: CourseGraphProps) => {
+export const CourseGraph = memo(({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();
@@ -178,4 +179,4 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
       }}
     />
   );
-};
+});
