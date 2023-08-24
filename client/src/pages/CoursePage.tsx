@@ -146,7 +146,50 @@ export const CoursePage = () => {
         numReviews={allReviews?.length}
       />
       <div className='py-2' />
-      <SchedulesDisplay course={course} />
+      <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
+        <div className='col-span-3'>
+          <div className='pl-4'>
+            <SchedulesDisplay course={course} />
+          </div>
+          <div className='py-2' />
+          <div className='w-full'>
+            {userReview && (
+              <CourseReview
+                canModify={Boolean(user && userReview.userId === user.id)}
+                handleDelete={() => handleDelete(userReview)}
+                openEditReview={() => setEditReviewOpen(true)}
+                review={userReview}
+              />
+            )}
+            {showingReviews &&
+              showingReviews
+                .filter((review) => (user ? review.userId !== user.id : true))
+                .slice(0, showAllReviews ? showingReviews.length : 8)
+                .map((review, i) => (
+                  <CourseReview
+                    canModify={Boolean(user && review.userId === user.id)}
+                    handleDelete={() => handleDelete(review)}
+                    key={i}
+                    openEditReview={() => setEditReviewOpen(true)}
+                    review={review}
+                  />
+                ))}
+          </div>
+          {!showAllReviews && showingReviews.length > 8 && (
+            <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
+              <button
+                className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+                onClick={() => setShowAllReviews(true)}
+              >
+                Show all {showingReviews.length} reviews
+              </button>
+            </div>
+          )}
+        </div>
+        <div className='col-span-2'>
+          <CourseRequirements course={course} requirements={requirements} />
+        </div>
+      </div>
       <div className='py-1' />
       <div className='flex flex-col lg:flex-row'>
         <div className='flex lg:hidden'>
@@ -206,20 +249,20 @@ export const CoursePage = () => {
             )}
           </div>
         </div>
-        <div className='hidden h-fit w-1/2 lg:mt-4 lg:block'>
-          <CourseRequirements course={course} requirements={requirements} />
-          {/* <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'> */}
-          {/*   <CourseGraph course={course} /> */}
-          {/* </div> */}
-          <div className='my-3'>
-            <ReviewFilter
-              course={course}
-              allReviews={allReviews ?? []}
-              setReviews={setShowingReviews}
-              setShowAllReviews={setShowAllReviews}
-            />
-          </div>
-        </div>
+        {/* <div className='hidden h-fit w-1/2 lg:mt-4 lg:block'> */}
+        {/*   <CourseRequirements course={course} requirements={requirements} /> */}
+        {/* <div className='mb-2 mt-3 rounded-lg bg-slate-50 dark:bg-neutral-800'> */}
+        {/*   <CourseGraph course={course} /> */}
+        {/* </div> */}
+        {/* <div className='my-3'> */}
+        {/*   <ReviewFilter */}
+        {/*     course={course} */}
+        {/*     allReviews={allReviews ?? []} */}
+        {/*     setReviews={setShowingReviews} */}
+        {/*     setShowAllReviews={setShowAllReviews} */}
+        {/*   /> */}
+        {/* </div> */}
+        {/* </div> */}
       </div>
       <AddReviewForm
         course={course}

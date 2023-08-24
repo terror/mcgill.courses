@@ -6,6 +6,7 @@ import { PiGraphFill } from 'react-icons/pi';
 import { FiList } from 'react-icons/fi';
 import { CourseGraph } from './CourseGraph';
 import { Course } from '../model/Course';
+import { twMerge } from 'tailwind-merge';
 
 type ReqsBlockProps = {
   title: string;
@@ -79,11 +80,13 @@ const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
 type RequirementsProps = {
   course: Course;
   requirements: Requirements;
+  className?: string;
 };
 
 export const CourseRequirements = ({
   course,
   requirements,
+  className,
 }: RequirementsProps) => {
   const [showGraph, setShowGraph] = useState(false);
 
@@ -95,7 +98,12 @@ export const CourseRequirements = ({
   const ToggleButtonIcon = showGraph ? FiList : PiGraphFill;
 
   return (
-    <div className='relative w-full rounded-md bg-slate-50 dark:bg-neutral-800'>
+    <div
+      className={twMerge(
+        'relative w-full rounded-md bg-slate-50 dark:bg-neutral-800',
+        className
+      )}
+    >
       <button
         className='absolute right-6 top-3 z-10 cursor-pointer rounded-full p-1 transition duration-150 hover:bg-gray-200'
         onClick={handleGraphToggle}

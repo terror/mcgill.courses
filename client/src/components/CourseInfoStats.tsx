@@ -59,17 +59,13 @@ export const CourseInfoStats = ({
 
   return (
     <div className='flex gap-x-4'>
-      <div className='flex gap-x-1'>
-        <Stat title='Rating' value={round2Decimals(rating)} icon={BirdIcon} />
-      </div>
+      <Stat title='Rating' value={round2Decimals(rating)} icon={BirdIcon} />
       <div className='py-1.5' />
-      <div className='flex gap-x-1'>
-        <Stat
-          title='Difficulty'
-          value={round2Decimals(difficulty)}
-          icon={LuFlame}
-        />
-      </div>
+      <Stat
+        title='Difficulty'
+        value={round2Decimals(difficulty)}
+        icon={LuFlame}
+      />
     </div>
   );
 };

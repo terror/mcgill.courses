@@ -19,7 +19,7 @@ export const CourseInfo = ({
 }: CourseInfoProps) => {
   return (
     <div className='flex w-full flex-row rounded-md bg-slate-50 px-6 py-2 dark:bg-neutral-800 md:mt-10'>
-      <div className='md:w-1/2'>
+      <div className='md:w-full'>
         <div className='flex flex-row space-x-2 align-middle'>
           <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
             {course.subject} {course.code}
