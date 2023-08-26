@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import {
-  addSpaceToCourseCode,
+  spliceCourseCode,
   courseIdToUrlParam,
   isValidCourseCode,
 } from '../lib/utils';
@@ -33,15 +33,23 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
 
   const traverse = (node: ReqNode): string => {
     if (typeof node === 'string') {
+      const duplicates = nodes.filter((n) =>
+        (n.id as string).startsWith(node)
+      ).length;
+
+      const id = duplicates === 0 ? node : `${node}_${duplicates}`;
+
       nodes.push({
-        id: node,
+        id,
         label: node,
         color: groupColors[nodeGroup],
       });
-      return node;
+
+      return id;
     }
-    const codes = node.groups.map((group) => traverse(group));
-    const id = codes.join(node.operator);
+
+    const codes = node.groups.map((group) => traverse(group)),
+      id = codes.join(node.operator);
 
     nodes.push({
       id,
@@ -50,9 +58,10 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
       color: groupColors['operator'],
       shape: 'hexagon',
     });
-    for (const code of codes) {
+
+    for (const code of codes)
       edges.push({ from: code, to: id, dashes: node.operator === 'OR' });
-    }
+
     return id;
   };
 
@@ -71,6 +80,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
     edges: prereqEdges,
     root: prereqRoot,
   } = makeGraph('prerequisite', course.logicalPrerequisites);
+
   const {
     nodes: coreqNodes,
     edges: coreqEdges,
@@ -79,15 +89,15 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
 
   const leading = course.leadingTo.map((leading) => {
     return {
-      id: addSpaceToCourseCode(leading),
-      label: addSpaceToCourseCode(leading),
+      id: spliceCourseCode(leading, ' '),
+      label: spliceCourseCode(leading, ' '),
     };
   });
 
   const graphNodes: Node[] = [
     {
       id: course._id,
-      label: addSpaceToCourseCode(course._id),
+      label: spliceCourseCode(course._id, ' '),
       title: course.description,
     },
     ...prereqNodes,
@@ -110,16 +120,18 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
 
   const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
-    const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (!node || !node.id) {
-      return;
-    }
 
-    if (!isValidCourseCode(node.id as string)) {
-      return;
-    }
+    const node = graphNodes.find((node) => node.id === nodes[0]);
+
+    if (!node || !node.id) return;
+
+    const [courseCode, rest] = (node.id as string).split('_', 2);
+    const isOperator = rest !== undefined && isNaN(+rest);
+
+    if (!isValidCourseCode(courseCode) || isOperator) return;
+
     navigate(
-      `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
+      `/course/${courseIdToUrlParam(courseCode.toString().replace(' ', ''))}`
     );
   };
 

@@ -89,8 +89,9 @@ export const isValidCourseCode = (s: string) => {
   return /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/.test(s);
 };
 
-export const addSpaceToCourseCode = (courseCode: string) =>
-  courseCode.slice(0, 4) + ' ' + courseCode.slice(4);
+export const spliceCourseCode = (courseCode: string, delimiter: string) => {
+  return courseCode.slice(0, 4) + delimiter + courseCode.slice(4);
+};
 
 export const round2Decimals = (n: number) => {
   return Math.round(n * 100) / 100;

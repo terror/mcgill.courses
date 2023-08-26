@@ -54,7 +54,7 @@ export const CourseInfo = ({
         />
         <div className='py-1' />
         <p className='text-sm text-gray-500 dark:text-gray-400'>
-          {numReviews} reviews
+          {numReviews} review(s)
         </p>
       </div>
       <div className='absolute -top-0 right-8 hidden h-fit justify-center rounded-md bg-neutral-50 p-4 shadow-md md:flex'>

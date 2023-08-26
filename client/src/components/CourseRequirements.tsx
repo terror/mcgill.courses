@@ -126,7 +126,7 @@ export const CourseRequirements = ({
             </h2>
             <p className='text-gray-500 dark:text-gray-400'>
               {requirements.restrictions !== null
-                ? requirements.restrictions
+                ? capitalize(punctuate(requirements.restrictions))
                 : 'This course has no restrictions.'}
             </p>
           </div>
