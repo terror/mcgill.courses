@@ -214,7 +214,7 @@ export const CoursePage = () => {
                 setShowAllReviews={setShowAllReviews}
               />
             </div>
-            <div className='w-full'>
+            <div className='w-full lg:hidden'>
               {userReview && (
                 <CourseReview
                   canModify={Boolean(user && userReview.userId === user.id)}
@@ -238,7 +238,7 @@ export const CoursePage = () => {
                   ))}
             </div>
             {!showAllReviews && showingReviews.length > 8 && (
-              <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
+              <div className='flex justify-center text-gray-400 dark:text-neutral-500 lg:hidden'>
                 <button
                   className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                   onClick={() => setShowAllReviews(true)}
