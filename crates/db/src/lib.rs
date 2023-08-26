@@ -6,13 +6,17 @@ use {
   lazy_static::lazy_static,
   log::{info, warn},
   model::{
-    Course, InitializeOptions, Instructor, Interaction, Review, SearchResults,
+    Course, InitializeOptions, Instructor, Interaction, Notification, Review,
+    SearchResults, Subscription,
   },
   mongodb::{
     bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
-    results::{CreateIndexResult, DeleteResult, UpdateResult},
+    results::{
+      CreateIndexResult, DeleteResult, InsertManyResult, InsertOneResult,
+      UpdateResult,
+    },
     Client, Cursor, Database, IndexModel,
   },
   serde::{de::DeserializeOwned, Serialize},

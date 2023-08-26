@@ -5,6 +5,9 @@ import { fetchClient } from '../lib/fetchClient';
 import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { RatingInfo } from './RatingInfo';
+import { FiBell, FiBellOff } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import { Subscription } from '../model/Subscription';
 
 type ChartsProps = {
   numReviews?: number;
@@ -42,17 +45,54 @@ export const CourseInfo = ({
 }: CourseInfoProps) => {
   const user = useAuth();
 
-  const handleSubscription = async () => {
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
     if (!user) return;
 
-    // TODO: add alerts?
+    const checkSubscription = async () => {
+      try {
+        const subscription = await fetchClient.getData<Subscription | null>(
+          `/subscriptions?course_id=${course._id}`,
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+        console.log(subscription);
+        setIsSubscribed(subscription !== null);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    checkSubscription();
+  }, []);
+
+  const subscribe = async () => {
+    if (!user) return;
 
     try {
       await fetchClient.post(
         '/subscriptions',
-        { user_id: user.id, course_id: course._id },
+        { course_id: course._id },
         { headers: { 'Content-Type': 'application/json' } }
       );
+      setIsSubscribed(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const unsubscribe = async () => {
+    if (!user) return;
+
+    try {
+      await fetchClient.delete(
+        '/subscriptions',
+        { course_id: course._id },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      setIsSubscribed(false);
     } catch (err) {
       console.error(err);
     }
@@ -65,28 +105,35 @@ export const CourseInfo = ({
           <h1 className='text-4xl font-semibold text-gray-800 dark:text-gray-200'>
             {course.subject} {course.code}
           </h1>
-          {course.url ? (
-            <a
-              href={course.url}
-              className='my-auto dark:text-gray-200'
-              target='_blank'
-            >
-              <ExternalLink
-                size={20}
-                className='ml-1 transition-colors duration-300 hover:stroke-red-600'
-              />
-            </a>
-          ) : null}
-        </div>
-        {user && (
-          <div>
-            <button onClick={handleSubscription}>
-              <p className='text-sm text-gray-500 dark:text-gray-400'>
-                Add subscription
-              </p>
-            </button>
+          <div className='flex items-center gap-2'>
+            {user &&
+              (isSubscribed ? (
+                <FiBellOff
+                  size={20}
+                  onClick={unsubscribe}
+                  className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
+                />
+              ) : (
+                <FiBell
+                  size={20}
+                  onClick={subscribe}
+                  className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
+                />
+              ))}
+            {course.url ? (
+              <a
+                href={course.url}
+                className='my-auto dark:text-gray-200'
+                target='_blank'
+              >
+                <ExternalLink
+                  size={20}
+                  className='ml-1 transition-colors duration-300 hover:stroke-red-600'
+                />
+              </a>
+            ) : null}
           </div>
-        )}
+        </div>
         <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
           {course.title}
         </h2>

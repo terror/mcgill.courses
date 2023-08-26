@@ -102,7 +102,12 @@ impl Server {
       )
       .route("/api/reviews/:id", get(reviews::get_review))
       .route("/api/search", get(search::search))
-      .route("/api/subscriptions", post(subscriptions::add_subscription))
+      .route(
+        "/api/subscriptions",
+        get(subscriptions::get_subscription)
+          .post(subscriptions::add_subscription)
+          .delete(subscriptions::remove_subscription),
+      )
       .route("/api/user", get(user::get_user));
 
     if let Some(assets) = assets {

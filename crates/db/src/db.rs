@@ -1,6 +1,3 @@
-use model::{Notification, Subscription};
-use mongodb::results::{InsertManyResult, InsertOneResult};
-
 use super::*;
 
 #[derive(Debug, Clone)]
@@ -278,6 +275,26 @@ impl Db {
     )
   }
 
+  pub async fn get_subscription(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<Option<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find_one(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn add_subscription(
     &self,
     subscription: Subscription,
@@ -291,11 +308,30 @@ impl Db {
     )
   }
 
+  pub async fn remove_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": subscription.course_id,
+            "userId": subscription.user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn get_notifications(
     &self,
     user_id: &str,
   ) -> Result<Vec<Notification>> {
-    Ok(dbg!(
+    Ok(
       self
         .database
         .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
@@ -303,7 +339,7 @@ impl Db {
         .await?
         .try_collect::<Vec<Notification>>()
         .await?,
-    ))
+    )
   }
 
   pub async fn add_notifications(
