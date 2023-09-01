@@ -1,22 +1,17 @@
 import { ExternalLink } from 'react-feather';
 
 import { Course } from '../model/Course';
+import { Review } from '../model/Review';
 import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
 
 type CourseInfoProps = {
   course: Course;
-  rating: number;
-  difficulty: number;
+  allReviews: Review[];
   numReviews?: number;
 };
 
-export const CourseInfo = ({
-  course,
-  rating,
-  difficulty,
-  numReviews,
-}: CourseInfoProps) => {
+export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   return (
     <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 py-2 dark:bg-neutral-800 md:mt-10'>
       <div className='md:w-7/12'>
@@ -47,22 +42,14 @@ export const CourseInfo = ({
           {course.description}
         </p>
         <div className='py-3' />
-        <CourseInfoStats
-          className='md:hidden'
-          rating={rating}
-          difficulty={difficulty}
-        />
+        <CourseInfoStats className='md:hidden' allReviews={allReviews} />
         <div className='py-1' />
         <p className='text-sm text-gray-500 dark:text-gray-400'>
-          {numReviews} review(s)
+          {allReviews.length} review(s)
         </p>
       </div>
-      <div className='absolute -top-0 right-8 hidden h-fit justify-center rounded-md bg-neutral-50 p-4 shadow-md md:flex'>
-        <CourseInfoStats
-          variant='large'
-          rating={rating}
-          difficulty={difficulty}
-        />
+      <div className='absolute -top-0 right-8 hidden h-fit justify-center rounded-md bg-neutral-50 p-4 md:flex'>
+        <CourseInfoStats variant='large' allReviews={allReviews} />
       </div>
     </div>
   );

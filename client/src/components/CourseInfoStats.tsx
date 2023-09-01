@@ -1,12 +1,15 @@
+import _ from 'lodash';
+import { useEffect, useState } from 'react';
 import { IconType } from 'react-icons';
 import { LuFlame } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 import { round2Decimals } from '../lib/utils';
+import { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
+import { Histogram } from './Histogram';
 
 type CourseInfoStatsProps = {
-  rating: number;
-  difficulty: number;
+  allReviews: Review[];
   className?: string;
   variant?: 'small' | 'large';
 };
@@ -19,6 +22,12 @@ type FillBarProps = {
 };
 
 const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+
   return (
     <div
       className={twMerge(
@@ -29,10 +38,10 @@ const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
     >
       <div
         className={twMerge(
-          'rounded-l-md bg-red-500',
+          'rounded-l-md bg-red-500 transition-all duration-1000 ease-in-out',
           variant === 'large' ? 'h-5' : 'h-4'
         )}
-        style={{ width: (percentage / 100) * width }}
+        style={{ width: !loaded ? 0 : (percentage / 100) * width }}
       />
       <div className='absolute inset-y-0 flex w-full justify-center text-sm font-bold leading-4 text-white'>
         {text}
@@ -64,7 +73,7 @@ const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
       <div className='py-0.5' />
       <div className='flex items-center gap-x-2'>
         <FillBar
-          width={variant === 'large' ? 200 : 144}
+          width={variant === 'large' ? 180 : 144}
           percentage={value * 20}
           text={`${value}/5`}
           variant={variant}
@@ -75,12 +84,18 @@ const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
 };
 
 export const CourseInfoStats = ({
-  rating,
-  difficulty,
+  allReviews,
   className,
   variant = 'small',
 }: CourseInfoStatsProps) => {
-  if (isNaN(rating) || isNaN(difficulty)) return null;
+  if (allReviews.length === 0) {
+    return null;
+  }
+
+  const ratings = allReviews.map((r) => r.rating);
+  const averageRating = _.sum(ratings) / allReviews.length;
+  const difficulties = allReviews.map((r) => r.difficulty);
+  const averageDifficulty = _.sum(difficulties) / allReviews.length;
 
   return (
     <div
@@ -90,19 +105,41 @@ export const CourseInfoStats = ({
         className
       )}
     >
-      <Stat
-        title='Rating'
-        value={round2Decimals(rating)}
-        icon={BirdIcon}
-        variant={variant}
-      />
+      <div className='md:rounded-xl md:p-2 md:shadow-sm'>
+        <Stat
+          title='Rating'
+          value={round2Decimals(averageRating)}
+          icon={BirdIcon}
+          variant={variant}
+        />
+        <div className='py-2' />
+        <Histogram
+          width={180}
+          height={80}
+          data={ratings}
+          max={5}
+          gap={10}
+          className='mx-auto hidden md:block'
+        />
+      </div>
       <div className='py-1.5' />
-      <Stat
-        title='Difficulty'
-        value={round2Decimals(difficulty)}
-        icon={LuFlame}
-        variant={variant}
-      />
+      <div className='md:rounded-xl md:p-2 md:shadow-sm'>
+        <Stat
+          title='Difficulty'
+          value={round2Decimals(averageDifficulty)}
+          icon={LuFlame}
+          variant={variant}
+        />
+        <div className='py-2' />
+        <Histogram
+          width={180}
+          height={80}
+          data={difficulties}
+          max={5}
+          gap={10}
+          className='mx-auto hidden md:block'
+        />
+      </div>
     </div>
   );
 };

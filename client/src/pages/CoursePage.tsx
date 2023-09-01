@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -131,18 +130,11 @@ export const CoursePage = () => {
 
   const userReview = allReviews?.find((r) => r.userId === user?.id);
 
-  const averageRating =
-    _.sumBy(allReviews, (r) => r.rating) / (allReviews ?? []).length;
-
-  const averageDifficulty =
-    _.sumBy(allReviews, (r) => r.difficulty) / (allReviews ?? []).length;
-
   return (
     <Layout>
       <CourseInfo
         course={course}
-        rating={averageRating}
-        difficulty={averageDifficulty}
+        allReviews={allReviews ?? []}
         numReviews={allReviews?.length}
       />
       <div className='py-2' />
