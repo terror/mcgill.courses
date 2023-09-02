@@ -169,26 +169,26 @@ export const CourseReview = ({
   return (
     <div
       className={
-        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 last:border-b-0 dark:bg-neutral-800'
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800'
       }
     >
       <div className='flex flex-col'>
         <div className='flex w-full'>
           <div className='relative flex w-full flex-col'>
             <div className='flex w-full'>
-              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-200'>
+              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
                 {dateStr}
               </p>
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
                 <div className='flex items-center gap-x-2'>
-                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500'>
+                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
                     Rating
                   </div>
                   <IconRating rating={review.rating} icon={BirdIcon} />
                 </div>
                 <div className='flex items-center gap-x-2'>
-                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500'>
+                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
                     Difficulty
                   </div>
                   <IconRating rating={review.difficulty} icon={LuFlame} />

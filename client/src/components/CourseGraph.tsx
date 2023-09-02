@@ -4,6 +4,7 @@ import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import {
   spliceCourseCode,
   courseIdToUrlParam,
@@ -24,7 +25,6 @@ const groupColors = {
 
 type NodeType = 'operator' | 'prerequisite' | 'corequisite';
 
-// FIXME: Issue with ECSE 424 (Duplicate course)
 const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   if (!reqs) return { nodes: [], edges: [], root: undefined };
 
@@ -74,6 +74,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();
+  const mobile = useMediaQuery('(max-width: 480px)');
 
   const {
     nodes: prereqNodes,
@@ -176,7 +177,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
             y: 0,
           },
           animation: {
-            duration: 2500,
+            duration: mobile ? 2500 : 1000,
             easingFunction: 'easeOutCubic',
           },
         });

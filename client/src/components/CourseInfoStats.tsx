@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IconType } from 'react-icons';
 import { LuFlame } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { round2Decimals } from '../lib/utils';
 import { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
@@ -31,7 +32,7 @@ const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
   return (
     <div
       className={twMerge(
-        'relative rounded-md bg-gray-300',
+        'relative rounded-md bg-gray-300 dark:bg-gray-700',
         variant === 'large' ? 'h-5' : 'h-4'
       )}
       style={{ width }}
@@ -64,7 +65,7 @@ const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
         <Icon className='-mt-0.5 stroke-red-600' size={18} />
         <div
           className={twMerge(
-            'mb-0.5 text-xs font-medium uppercase tracking-wider text-gray-600'
+            'mb-0.5 text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400'
           )}
         >
           {title}
@@ -92,6 +93,8 @@ export const CourseInfoStats = ({
     return null;
   }
 
+  const lg = useMediaQuery('(min-width: 1024px)');
+
   const ratings = allReviews.map((r) => r.rating);
   const averageRating = _.sum(ratings) / allReviews.length;
   const difficulties = allReviews.map((r) => r.difficulty);
@@ -100,12 +103,14 @@ export const CourseInfoStats = ({
   return (
     <div
       className={twMerge(
-        'flex gap-x-4',
-        variant === 'large' ? 'flex-col gap-y-1' : 'flex-row',
+        'flex gap-x-4 bg-slate-50 dark:bg-neutral-800',
+        variant === 'large'
+          ? 'flex-col gap-y-1 lg:flex-row lg:gap-x-2'
+          : 'flex-row',
         className
       )}
     >
-      <div className='md:rounded-xl md:p-2 md:shadow-sm'>
+      <div className='md:rounded-xl md:p-2'>
         <Stat
           title='Rating'
           value={round2Decimals(averageRating)}
@@ -115,7 +120,7 @@ export const CourseInfoStats = ({
         <div className='py-2' />
         <Histogram
           width={180}
-          height={80}
+          height={lg ? 132 : 80}
           data={ratings}
           max={5}
           gap={10}
@@ -123,7 +128,7 @@ export const CourseInfoStats = ({
         />
       </div>
       <div className='py-1.5' />
-      <div className='md:rounded-xl md:p-2 md:shadow-sm'>
+      <div className='md:rounded-xl md:p-2'>
         <Stat
           title='Difficulty'
           value={round2Decimals(averageDifficulty)}
@@ -133,7 +138,7 @@ export const CourseInfoStats = ({
         <div className='py-2' />
         <Histogram
           width={180}
-          height={80}
+          height={lg ? 132 : 80}
           data={difficulties}
           max={5}
           gap={10}

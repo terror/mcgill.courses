@@ -13,8 +13,8 @@ type CourseInfoProps = {
 
 export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   return (
-    <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 py-2 dark:bg-neutral-800 md:mt-10'>
-      <div className='md:w-7/12'>
+    <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 dark:bg-neutral-800 md:mt-10'>
+      <div className='flex flex-col md:w-7/12'>
         <div className='flex flex-row space-x-2 align-middle'>
           <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
             {course.subject} {course.code}
@@ -41,14 +41,13 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
         <p className='break-words text-gray-500 dark:text-gray-400'>
           {course.description}
         </p>
-        <div className='py-3' />
+        <div className='grow py-3' />
         <CourseInfoStats className='md:hidden' allReviews={allReviews} />
-        <div className='py-1' />
-        <p className='text-sm text-gray-500 dark:text-gray-400'>
+        <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
           {allReviews.length} review(s)
         </p>
       </div>
-      <div className='absolute -top-0 right-8 hidden h-fit justify-center rounded-md bg-neutral-50 p-4 md:flex'>
+      <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
         <CourseInfoStats variant='large' allReviews={allReviews} />
       </div>
     </div>

@@ -9,7 +9,11 @@ export const IconRating = ({ rating, icon: Icon }: StarRatingProps) => {
     stars.push(
       <Icon
         key={i}
-        className={i < rating ? 'fill-red-600 stroke-none' : 'stroke-gray-300'}
+        className={
+          i < rating
+            ? 'fill-red-600 stroke-none'
+            : 'stroke-gray-300 dark:stroke-gray-600'
+        }
         size={20}
       />
     );
