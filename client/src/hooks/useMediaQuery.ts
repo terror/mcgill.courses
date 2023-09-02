@@ -5,7 +5,7 @@ export const useMediaQuery = (query: string) => {
 
   useEffect(() => {
     window
-      .matchMedia('(min-width: 768px)')
+      .matchMedia(query)
       .addEventListener('change', (e) => setMatches(e.matches));
   }, []);
 
