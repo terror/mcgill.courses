@@ -32,7 +32,7 @@ const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
   return (
     <div
       className={twMerge(
-        'relative rounded-md bg-gray-300 dark:bg-gray-700',
+        'relative rounded-md bg-gray-300 dark:bg-gray-600',
         variant === 'large' ? 'h-5' : 'h-4'
       )}
       style={{ width }}
@@ -103,7 +103,7 @@ export const CourseInfoStats = ({
   return (
     <div
       className={twMerge(
-        'flex gap-x-4 bg-slate-50 dark:bg-neutral-800',
+        'flex gap-x-4 bg-transparent',
         variant === 'large'
           ? 'flex-col gap-y-1 lg:flex-row lg:gap-x-2'
           : 'flex-row',

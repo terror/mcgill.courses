@@ -141,10 +141,16 @@ export const CoursePage = () => {
         <div className='py-2' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
           <div className='col-span-3'>
-            <div className='pl-4'>
+            <div className='pl-0'>
               <SchedulesDisplay course={course} />
             </div>
             <div className='py-2' />
+            {canReview && (
+              <CourseReviewPrompt
+                openAddReview={() => setAddReviewOpen(true)}
+              />
+            )}
+            <div className='py-0.5' />
             <div className='mb-2'>
               <ReviewFilter
                 course={course}
@@ -192,19 +198,18 @@ export const CoursePage = () => {
           </div>
         </div>
         <div className='py-1' />
-        <div className='flex flex-col lg:flex-row'>
-          <div className='flex lg:hidden'>
+        <div className='flex flex-col lg:hidden'>
+          <div className='flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
-          <hr className='mx-auto w-full lg:hidden' />
-          <div className='flex w-full flex-row justify-between'>
-            <div className='w-full lg:mr-4 lg:mt-4'>
+          <div className='mt-4 flex w-full flex-row justify-between'>
+            <div className='w-full'>
               {canReview && (
                 <CourseReviewPrompt
                   openAddReview={() => setAddReviewOpen(true)}
                 />
               )}
-              <div className='mb-2 mt-4 lg:hidden'>
+              <div className='my-2'>
                 <ReviewFilter
                   course={course}
                   allReviews={allReviews ?? []}
@@ -212,7 +217,7 @@ export const CoursePage = () => {
                   setShowAllReviews={setShowAllReviews}
                 />
               </div>
-              <div className='w-full lg:hidden'>
+              <div className='w-full'>
                 {userReview && (
                   <CourseReview
                     canModify={Boolean(user && userReview.userId === user.id)}
@@ -238,7 +243,7 @@ export const CoursePage = () => {
                     ))}
               </div>
               {!showAllReviews && showingReviews.length > 8 && (
-                <div className='flex justify-center text-gray-400 dark:text-neutral-500 lg:hidden'>
+                <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                   <button
                     className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                     onClick={() => setShowAllReviews(true)}

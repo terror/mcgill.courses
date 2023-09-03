@@ -34,7 +34,7 @@ export const Histogram = ({
   );
 
   return (
-    <div className={twMerge('w-fit', className)}>
+    <div className={twMerge('relative w-fit', className)}>
       <div className='flex items-end' style={{ width, height }}>
         {distribution.map((count, index) => (
           <div key={index} className='flex flex-col items-center text-xs'>
@@ -44,7 +44,7 @@ export const Histogram = ({
               }
               style={{
                 width: width / distribution.length - gap,
-                height: !loaded ? 0 : (count / data.length) * height,
+                height: !loaded ? 0 : (count / data.length) * (height - 12),
                 marginLeft: gap / 2,
                 marginRight: gap / 2,
               }}
@@ -55,6 +55,7 @@ export const Histogram = ({
           </div>
         ))}
       </div>
+      <div className='absolute bottom-4 h-[1px] w-full bg-gray-300 dark:bg-gray-600' />
     </div>
   );
 };

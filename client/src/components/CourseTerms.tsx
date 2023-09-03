@@ -55,7 +55,10 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
       <div className='my-1.5 w-fit text-sm'>
         <div className='rounded-xl bg-gray-200 p-1 dark:bg-neutral-700'>
           <div className='flex items-center space-x-1'>
-            <GoX size={variantToSize(variant)} className='fill-gray-700' />
+            <GoX
+              size={variantToSize(variant)}
+              className='fill-gray-700 dark:fill-gray-200'
+            />
             <div className='pr-1 font-medium text-gray-800 dark:text-gray-200'>
               Not Offered
             </div>
@@ -65,7 +68,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
     );
 
   return (
-    <div className='mr-auto flex gap-x-2'>
+    <div className='mr-auto flex flex-wrap gap-x-2'>
       {instructors.map((instructor, i) => {
         const term = instructor.term.split(' ')[0].toLowerCase();
         return (

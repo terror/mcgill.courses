@@ -14,7 +14,7 @@ type CourseInfoProps = {
 export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   return (
     <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 dark:bg-neutral-800 md:mt-10'>
-      <div className='flex flex-col md:w-7/12'>
+      <div className='flex w-full flex-col md:w-7/12'>
         <div className='flex flex-row space-x-2 align-middle'>
           <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
             {course.subject} {course.code}
@@ -48,7 +48,11 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
         </p>
       </div>
       <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
-        <CourseInfoStats variant='large' allReviews={allReviews} />
+        <CourseInfoStats
+          variant='large'
+          allReviews={allReviews}
+          className='lg:mr-8'
+        />
       </div>
     </div>
   );
