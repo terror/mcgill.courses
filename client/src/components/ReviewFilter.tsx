@@ -139,10 +139,7 @@ export const ReviewFilter = ({
               </div>
               <ResetButton
                 className='absolute right-2 top-2 ml-auto'
-                onClear={() => {
-                  setSortBy('Most Recent');
-                  setSelectedInstructor('');
-                }}
+                onClear={reset}
               />
             </Disclosure.Panel>
           </>
