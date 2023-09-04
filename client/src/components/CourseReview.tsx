@@ -261,16 +261,6 @@ export const CourseReview = ({
           <LoginPrompt />
         </Transition>
         <div className='flex items-center'>
-          {/* {canModify && ( */}
-          {/*   <div className='mb-1 mr-2 flex gap-x-2'> */}
-          {/*     <button className='text-sm underline dark:text-gray-400'> */}
-          {/*       Edit */}
-          {/*     </button> */}
-          {/*     <button className='text-sm underline dark:text-gray-400'> */}
-          {/*       Delete */}
-          {/*     </button> */}
-          {/*   </div> */}
-          {/* )} */}
           <div className='mb-1 flex'>
             {canModify && (
               <div className='ml-2 mr-1 flex h-fit space-x-2'>
