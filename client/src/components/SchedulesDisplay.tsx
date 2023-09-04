@@ -49,21 +49,13 @@ type SchedulesDisplayProps = {
 };
 
 const BlockLocation = ({ location }: { location: string }) => {
-  const [showFullName, setShowFullName] = useState(false);
-
   const room = location.split(' ')[0];
 
   return (
-    <span
-      className='relative whitespace-nowrap'
-      onMouseEnter={() => setShowFullName(true)}
-      onMouseLeave={() => setShowFullName(false)}
-    >
-      <Tooltip
-        show={showFullName}
-        text={buildingCodes[room as keyof typeof buildingCodes]}
-        children={<p className='inline-block'> {location}</p>}
-      ></Tooltip>
+    <span className='relative whitespace-nowrap'>
+      <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
+        <p className='inline-block'> {location}</p>
+      </Tooltip>
     </span>
   );
 };
