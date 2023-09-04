@@ -45,6 +45,7 @@ const VSBtimeToDisplay = (time: string) => {
 
 type SchedulesDisplayProps = {
   course: Course;
+  className?: string;
 };
 
 const BlockLocation = ({ location }: { location: string }) => {
@@ -67,7 +68,10 @@ const BlockLocation = ({ location }: { location: string }) => {
   );
 };
 
-export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
+export const SchedulesDisplay = ({
+  course,
+  className,
+}: SchedulesDisplayProps) => {
   const schedules = course.schedule;
 
   if (!schedules) return null;
@@ -206,7 +210,12 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
   );
 
   return (
-    <div className='flex flex-col text-gray-800 lg:border-t-0'>
+    <div
+      className={twMerge(
+        'flex flex-col text-gray-800 lg:border-t-0',
+        className
+      )}
+    >
       <div className='flex'>
         {offeredTerms.map((term, i) => (
           <button

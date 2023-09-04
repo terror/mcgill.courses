@@ -140,24 +140,28 @@ export const CoursePage = () => {
         <div className='py-2' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
           <div className='col-span-3'>
-            <SchedulesDisplay course={course} />
+            <SchedulesDisplay
+              course={course}
+              className={canReview ? 'mb-4' : ''}
+            />
             {canReview && (
               <>
-                <div className='py-2' />
                 <CourseReviewPrompt
                   openAddReview={() => setAddReviewOpen(true)}
                 />
               </>
             )}
             <div className='py-2' />
-            <div className='mb-2'>
-              <ReviewFilter
-                course={course}
-                allReviews={allReviews ?? []}
-                setReviews={setShowingReviews}
-                setShowAllReviews={setShowAllReviews}
-              />
-            </div>
+            {allReviews && allReviews.length > 0 && (
+              <div className='mb-2'>
+                <ReviewFilter
+                  course={course}
+                  allReviews={allReviews ?? []}
+                  setReviews={setShowingReviews}
+                  setShowAllReviews={setShowAllReviews}
+                />
+              </div>
+            )}
             <div className='w-full'>
               {userReview && (
                 <CourseReview
