@@ -45,7 +45,7 @@ export const Navbar = () => {
   return (
     <header className='z-40'>
       <nav
-        className='z-40 flex items-center justify-between p-6 lg:px-8'
+        className='z-40 flex items-center justify-between p-3 lg:px-8'
         aria-label='Global'
       >
         <div className='z-40 my-auto mr-auto flex lg:flex-1'>

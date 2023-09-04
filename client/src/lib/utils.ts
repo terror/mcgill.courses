@@ -92,3 +92,7 @@ export const isValidCourseCode = (s: string) => {
 export const spliceCourseCode = (courseCode: string, delimiter: string) => {
   return courseCode.slice(0, 4) + delimiter + courseCode.slice(4);
 };
+
+export const round2Decimals = (n: number) => {
+  return Math.round(n * 100) / 100;
+};

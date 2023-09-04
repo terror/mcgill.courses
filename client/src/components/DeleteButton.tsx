@@ -31,7 +31,7 @@ export const DeleteButton = ({
     <>
       <button type='button' className='h-fit' onClick={() => setOpen(true)}>
         <Trash2
-          className='transition duration-200 hover:stroke-red-600 dark:stroke-gray-200 dark:hover:stroke-red-600'
+          className='stroke-gray-500 transition duration-200 hover:stroke-red-600 dark:stroke-gray-400 dark:hover:stroke-red-600'
           size={size}
         />
       </button>

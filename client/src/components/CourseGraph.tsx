@@ -4,6 +4,7 @@ import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import {
   spliceCourseCode,
   courseIdToUrlParam,
@@ -73,6 +74,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();
+  const mobile = useMediaQuery('(max-width: 480px)');
 
   const {
     nodes: prereqNodes,
@@ -140,7 +142,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
       graph={graph}
       options={{
         edges: { color: darkMode ? '#919191' : '#b1b1b1' },
-        height: '500px',
+        height: '288px',
         layout: {
           randomSeed: undefined,
           improvedLayout: true,
@@ -166,6 +168,19 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
             color: darkMode ? '#FFFFFF' : '#000000',
           },
         },
+      }}
+      getNetwork={(network) => {
+        network.focus(course._id, {
+          scale: 0.7,
+          offset: {
+            x: 60,
+            y: 0,
+          },
+          animation: {
+            duration: mobile ? 2500 : 1000,
+            easingFunction: 'easeOutCubic',
+          },
+        });
       }}
       events={{
         select: ({ nodes }: { nodes: string[] }) => {

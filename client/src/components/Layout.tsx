@@ -18,9 +18,9 @@ export const Layout = ({ children, preventScroll }: LayoutProps) => {
 
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <div className='min-h-screen overflow-auto pb-5 transition duration-300 ease-in-out dark:bg-neutral-900'>
+      <div className='min-h-screen overflow-auto bg-slate-50 pb-5 transition duration-300 ease-in-out dark:bg-neutral-900'>
         <Navbar />
-        <main className='mx-8 md:mx-16 lg:mx-24 xl:mx-40'>{children}</main>
+        <main className='mx-2 md:mx-16 lg:mx-24 xl:mx-40'>{children}</main>
       </div>
       <Footer />
     </div>
