@@ -83,8 +83,9 @@ export const CoursePage = () => {
     corequisitesText: course.corequisitesText,
   };
 
+  const userReview = showingReviews?.find((r) => r.userId === user?.id);
   const canReview = Boolean(
-    user && showingReviews.filter((r) => r.userId === user.id).length === 0
+    user && !allReviews?.find((r) => r.userId === user?.id)
   );
 
   const remountAlert = () => {
@@ -127,8 +128,6 @@ export const CoursePage = () => {
 
     localStorage.removeItem(course._id);
   };
-
-  const userReview = allReviews?.find((r) => r.userId === user?.id);
 
   return (
     <Layout>
