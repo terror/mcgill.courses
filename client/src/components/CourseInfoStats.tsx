@@ -32,14 +32,14 @@ const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
   return (
     <div
       className={twMerge(
-        'relative rounded-md bg-gray-300 dark:bg-gray-600',
+        'relative overflow-hidden rounded-md bg-gray-300 dark:bg-gray-600',
         variant === 'large' ? 'h-5' : 'h-4'
       )}
       style={{ width }}
     >
       <div
         className={twMerge(
-          'rounded-l-md bg-red-500 transition-all duration-1000 ease-in-out',
+          'bg-red-500 transition-all duration-1000 ease-in-out',
           variant === 'large' ? 'h-5' : 'h-4'
         )}
         style={{ width: !loaded ? 0 : (percentage / 100) * width }}
