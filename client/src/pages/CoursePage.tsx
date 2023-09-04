@@ -132,7 +132,7 @@ export const CoursePage = () => {
 
   return (
     <Layout>
-      <div>
+      <div className='mx-auto max-w-6xl'>
         <CourseInfo
           course={course}
           allReviews={allReviews ?? []}
@@ -141,16 +141,16 @@ export const CoursePage = () => {
         <div className='py-2' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
           <div className='col-span-3'>
-            <div className='pl-0'>
-              <SchedulesDisplay course={course} />
-            </div>
-            <div className='py-2' />
+            <SchedulesDisplay course={course} />
             {canReview && (
-              <CourseReviewPrompt
-                openAddReview={() => setAddReviewOpen(true)}
-              />
+              <>
+                <div className='py-2' />
+                <CourseReviewPrompt
+                  openAddReview={() => setAddReviewOpen(true)}
+                />
+              </>
             )}
-            <div className='py-0.5' />
+            <div className='py-2' />
             <div className='mb-2'>
               <ReviewFilter
                 course={course}
@@ -202,6 +202,8 @@ export const CoursePage = () => {
           <div className='flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
+          <div className='py-2.5' />
+          <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
               {canReview && (

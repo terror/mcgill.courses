@@ -213,26 +213,6 @@ export const CourseReview = ({
               </>
             )}
           </div>
-          <div className='text-sm'>
-            <div className='ml-auto flex'>
-              {canModify && (
-                <div className='ml-auto mr-1 flex h-fit space-x-2'>
-                  <div onClick={openEditReview}>
-                    <Edit
-                      className='cursor-pointer transition duration-200 hover:stroke-gray-500 dark:stroke-gray-200 dark:hover:stroke-gray-400'
-                      size={24}
-                    />
-                  </div>
-                  <DeleteButton
-                    title='Delete Review'
-                    text={`Are you sure you want to delete your review of ${review.courseId}? `}
-                    onConfirm={handleDelete}
-                    size={24}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
       <div className='flex items-center'>
@@ -280,7 +260,35 @@ export const CourseReview = ({
         >
           <LoginPrompt />
         </Transition>
-        <div>
+        <div className='flex items-center'>
+          {/* {canModify && ( */}
+          {/*   <div className='mb-1 mr-2 flex gap-x-2'> */}
+          {/*     <button className='text-sm underline dark:text-gray-400'> */}
+          {/*       Edit */}
+          {/*     </button> */}
+          {/*     <button className='text-sm underline dark:text-gray-400'> */}
+          {/*       Delete */}
+          {/*     </button> */}
+          {/*   </div> */}
+          {/* )} */}
+          <div className='mb-1 flex'>
+            {canModify && (
+              <div className='ml-2 mr-1 flex h-fit space-x-2'>
+                <div onClick={openEditReview}>
+                  <Edit
+                    className='cursor-pointer stroke-gray-500 transition duration-200 hover:stroke-gray-800 dark:stroke-gray-400 dark:hover:stroke-gray-200'
+                    size={20}
+                  />
+                </div>
+                <DeleteButton
+                  title='Delete Review'
+                  text={`Are you sure you want to delete your review of ${review.courseId}? `}
+                  onConfirm={handleDelete}
+                  size={20}
+                />
+              </div>
+            )}
+          </div>
           <ReviewInteractions
             courseId={review.courseId}
             userId={review.userId}

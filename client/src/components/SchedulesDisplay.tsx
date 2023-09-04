@@ -125,7 +125,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
   }
 
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
-    <div key={scheduleIndex} className='last:border-b-2 lg:last:border-b-0'>
+    <div key={scheduleIndex}>
       {schedule.blocks?.map((block: Block, blockIndex) => (
         <div key={blockIndex} className='flex flex-col'>
           <div
@@ -206,7 +206,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
   );
 
   return (
-    <div className='flex flex-col border-t-[1px] text-gray-800 lg:border-t-0'>
+    <div className='flex flex-col text-gray-800 lg:border-t-0'>
       <div className='flex'>
         {offeredTerms.map((term, i) => (
           <button
