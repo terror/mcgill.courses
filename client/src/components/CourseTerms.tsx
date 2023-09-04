@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { GoX } from 'react-icons/go';
@@ -42,8 +41,6 @@ type CourseTermsProps = {
 };
 
 export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
-  const [hoveringOn, setHoveringOn] = useState('');
-
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
 
   const currentlyOfferedTerms = course.terms.filter((c) =>
@@ -91,17 +88,9 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
             >
               <div className='flex items-center space-x-1.5 whitespace-nowrap'>
                 {variant === 'large' ? (
-                  <div
-                    onMouseEnter={() => setHoveringOn(instructor.term)}
-                    onMouseLeave={() => setHoveringOn('')}
-                  >
-                    <Tooltip
-                      show={hoveringOn === instructor.term}
-                      text={instructor.term}
-                    >
-                      <div>{termToIcon(instructor.term, variant)}</div>
-                    </Tooltip>
-                  </div>
+                  <Tooltip text={instructor.term}>
+                    <div>{termToIcon(instructor.term, variant)}</div>
+                  </Tooltip>
                 ) : (
                   <div>{termToIcon(instructor.term, variant)}</div>
                 )}
