@@ -42,7 +42,7 @@ export const CoursePage = () => {
     firstFetch.current = true;
   }, [params.id]);
 
-  useEffect(() => {
+  const refetch = () => {
     const id = params.id?.replace('-', '').toUpperCase();
     fetchClient
       .getData<GetCourseWithReviewsPayload | null>(
@@ -62,7 +62,9 @@ export const CoursePage = () => {
         firstFetch.current = false;
       })
       .catch((err) => console.log(err));
-  }, [params.id, addReviewOpen, editReviewOpen]);
+  };
+
+  useEffect(refetch, [params.id]);
 
   if (course === null) {
     return (
@@ -107,6 +109,7 @@ export const CoursePage = () => {
         setAlertStatus('success');
         setAlertMessage(successMessage);
         setAddReviewOpen(false);
+        refetch();
       } else {
         setAlertMessage('An error occurred.');
         setAlertStatus('error');
