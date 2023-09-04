@@ -145,8 +145,8 @@ export const CoursePage = () => {
       <div className='mx-auto max-w-6xl'>
         <CourseInfo
           course={course}
-          allReviews={allReviews ?? []}
-          numReviews={allReviews?.length}
+          allReviews={showingReviews}
+          numReviews={showingReviews.length}
         />
         <div className='py-2' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
