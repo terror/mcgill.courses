@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
@@ -27,6 +27,7 @@ export const CoursePage = () => {
   const user = useAuth();
   const currentTerms = getCurrentTerms();
 
+  const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
@@ -36,6 +37,10 @@ export const CoursePage = () => {
   const [key, setKey] = useState(0);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    firstFetch.current = true;
+  }, [params.id]);
 
   useEffect(() => {
     const id = params.id?.replace('-', '').toUpperCase();
@@ -49,9 +54,12 @@ export const CoursePage = () => {
           return;
         }
 
-        setCourse(payload.course);
+        if (firstFetch.current) {
+          setCourse(payload.course);
+        }
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
+        firstFetch.current = false;
       })
       .catch((err) => console.log(err));
   }, [params.id, addReviewOpen, editReviewOpen]);
