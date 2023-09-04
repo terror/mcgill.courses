@@ -88,12 +88,12 @@ export const ReviewFilter = ({
   const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
 
   return (
-    <div className='flex flex-col rounded-lg bg-slate-50 dark:bg-neutral-900 dark:text-gray-200'>
+    <div className='flex flex-col rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
       <Disclosure>
         {({ open }) => (
           <>
             <Disclosure.Button>
-              <div className='flex w-full justify-between rounded-lg bg-gray-100 px-4 py-2 text-red-500 dark:bg-neutral-700'>
+              <div className='flex w-full justify-between rounded-lg bg-gray-200 px-4 py-2 text-red-500 dark:bg-neutral-700'>
                 <h1 className='text-sm font-medium text-gray-600 dark:text-gray-400'>
                   Filter...
                 </h1>

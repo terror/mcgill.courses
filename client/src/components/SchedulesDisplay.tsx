@@ -204,7 +204,7 @@ export const SchedulesDisplay = ({
   return (
     <div
       className={twMerge(
-        'flex flex-col text-gray-800 lg:border-t-0',
+        'flex flex-col text-gray-800 shadow-sm lg:border-t-0',
         className
       )}
     >
@@ -215,8 +215,8 @@ export const SchedulesDisplay = ({
             className={twMerge(
               `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200`,
               term === currentlyDisplayingTerm
-                ? 'bg-slate-200 dark:bg-neutral-600'
-                : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
+                ? 'bg-slate-300 dark:bg-neutral-600'
+                : 'bg-slate-200 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
             )}
@@ -229,7 +229,7 @@ export const SchedulesDisplay = ({
           </button>
         ))}
       </div>
-      <div className='flex flex-col rounded-b-lg bg-slate-100 dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-700 dark:text-gray-200'>
         {currentlyDisplayingSchedules.length <= 5 || showAll
           ? currentlyDisplayingSchedules.map(singleScheduleRow)
           : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}
