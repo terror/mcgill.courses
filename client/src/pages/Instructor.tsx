@@ -1,18 +1,17 @@
 import _ from 'lodash';
-import { Fragment, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-
+import { CourseInfoStats } from '../components/CourseInfoStats';
 import { CourseReview } from '../components/CourseReview';
-import { Layout } from '../components/Layout';
-import { RatingInfo } from '../components/RatingInfo';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
+import { Fragment, useEffect, useState } from 'react';
+import { GetInstructorPayload } from '../model/GetInstructorPayload';
 import { Instructor as InstructorType } from '../model/Instructor';
-import { Review } from '../model/Review';
+import { Layout } from '../components/Layout';
+import { Link, useParams } from 'react-router-dom';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
-import { GetInstructorPayload } from '../model/GetInstructorPayload';
+import { Review } from '../model/Review';
 import { courseIdToUrlParam } from '../lib/utils';
+import { fetchClient } from '../lib/fetchClient';
+import { useAuth } from '../hooks/useAuth';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -43,30 +42,18 @@ export const Instructor = () => {
   if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id);
-
   const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
-  const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
-  const averageDifficulty =
-    _.sumBy(reviews, (r) => r.difficulty) / reviews.length;
 
   return (
     <Layout>
-      <div className='flex justify-center'>
-        <div className='mx-4 flex w-screen flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
+      <div className='mx-auto flex max-w-6xl'>
+        <div className='mx-4 flex w-screen flex-row rounded-md bg-slate-50 p-2 dark:bg-neutral-800 md:mt-10'>
           <div className='flex flex-1 flex-col md:flex-row'>
             <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
               <div className='flex flex-row space-x-2 align-middle'>
                 <h1 className='break-words text-4xl font-semibold text-gray-800 dark:text-gray-200'>
                   {params.name && decodeURIComponent(params.name)}
                 </h1>
-              </div>
-              <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-                {uniqueReviews.length ? (
-                  <div className='flex-row md:flex'>
-                    <RatingInfo title='Rating' rating={averageRating} />
-                    <RatingInfo title='Difficulty' rating={averageDifficulty} />
-                  </div>
-                ) : null}
               </div>
               <p className='text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
@@ -76,6 +63,7 @@ export const Instructor = () => {
                       <Fragment key={index}>
                         <Link
                           to={`/course/${courseIdToUrlParam(review.courseId)}`}
+                          className='font-medium transition hover:text-red-600'
                         >
                           {review.courseId}
                         </Link>
@@ -87,19 +75,27 @@ export const Instructor = () => {
                   "This professor hasn't taught any courses that have been reviewed yet."
                 )}
               </p>
+              {uniqueReviews.length && (
+                <CourseInfoStats
+                  className='md:hidden'
+                  allReviews={uniqueReviews}
+                />
+              )}
+              <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
+                {uniqueReviews.length} review(s)
+              </p>
             </div>
-            <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-              {uniqueReviews.length ? (
-                <div className='flex-row md:flex'>
-                  <RatingInfo title='Rating' rating={averageRating} />
-                  <RatingInfo title='Difficulty' rating={averageDifficulty} />
-                </div>
-              ) : null}
+            <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
+              <CourseInfoStats
+                variant='large'
+                allReviews={uniqueReviews}
+                className='lg:mr-8'
+              />
             </div>
           </div>
         </div>
       </div>
-      <div className='m-4'>
+      <div className='m-4 mx-auto max-w-6xl'>
         {userReview && (
           <CourseReview
             canModify={false}
