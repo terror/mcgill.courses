@@ -243,7 +243,10 @@ export const CourseReview = ({
           ) : (
             <Fragment>
               Written for{' '}
-              <Link to={`/course/${courseIdToUrlParam(review.courseId)}`}>
+              <Link
+                to={`/course/${courseIdToUrlParam(review.courseId)}`}
+                className='font-medium transition hover:text-red-600'
+              >
                 {review.courseId}
               </Link>
             </Fragment>
