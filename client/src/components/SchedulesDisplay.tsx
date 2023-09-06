@@ -215,8 +215,8 @@ export const SchedulesDisplay = ({
             className={twMerge(
               `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200`,
               term === currentlyDisplayingTerm
-                ? 'bg-slate-300 dark:bg-neutral-600'
-                : 'bg-slate-200 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
+                ? 'bg-slate-200 dark:bg-neutral-600'
+                : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
             )}
