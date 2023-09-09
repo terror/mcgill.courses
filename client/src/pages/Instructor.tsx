@@ -29,7 +29,8 @@ export const Instructor = () => {
   useEffect(() => {
     if (params.name) {
       fetchClient
-        .getData<GetInstructorPayload>(
+        .deserialize<GetInstructorPayload>(
+          'GET',
           `/instructors/${decodeURIComponent(params.name)}`
         )
         .then((payload) => {

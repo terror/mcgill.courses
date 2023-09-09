@@ -42,20 +42,20 @@ export const CoursePage = () => {
   useEffect(() => {
     const id = params.id?.replace('-', '').toUpperCase();
     fetchClient
-      .getData<GetCourseWithReviewsPayload | null>(
+      .deserialize<GetCourseWithReviewsPayload | null>(
+        'GET',
         `/courses/${id}?with_reviews=true`
       )
       .then((payload) => {
         if (payload === null) {
           setCourse(null);
-          return;
+        } else {
+          setCourse(payload.course);
+          setShowingReviews(payload.reviews);
+          setAllReviews(payload.reviews);
         }
-
-        setCourse(payload.course);
-        setShowingReviews(payload.reviews);
-        setAllReviews(payload.reviews);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [params.id, addReviewOpen, editReviewOpen]);
 
   if (course === null) {
@@ -108,11 +108,10 @@ export const CoursePage = () => {
   };
 
   const handleDelete = async (review: Review) => {
-    const res = await fetchClient.delete(
-      '/reviews',
-      { course_id: review.courseId },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+    const res = await fetchClient.delete('/reviews', {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ course_id: review.courseId }),
+    });
 
     if (res.ok) {
       setShowingReviews(

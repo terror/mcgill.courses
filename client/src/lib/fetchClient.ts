@@ -1,34 +1,51 @@
+const prefix = '/api';
+
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
 export const fetchClient = {
   async get(endpoint: string, init?: RequestInit) {
-    return fetch('/api' + endpoint, init);
+    return fetch(prefix + endpoint, init);
   },
-  async getData<T>(endpoint: string, init?: RequestInit) {
-    return (await (await this.get(endpoint, init)).json()) as T;
-  },
-  async postData<T>(endpoint: string, data: any, init?: RequestInit) {
-    return (await (
-      await this.reqWithBody(endpoint, 'POST', data, init)
-    ).json()) as T;
-  },
-  async reqWithBody(
-    endpoint: string,
-    method: string,
-    data: any,
-    init?: RequestInit
-  ) {
-    return fetch('/api' + endpoint, {
-      method,
-      body: JSON.stringify(data),
+
+  async post(endpoint: string, init?: RequestInit) {
+    return fetch(prefix + endpoint, {
+      method: 'POST',
       ...init,
     });
   },
-  async post(endpoint: string, data: any, init?: RequestInit) {
-    return this.reqWithBody(endpoint, 'POST', data, init);
+
+  async put(endpoint: string, init?: RequestInit) {
+    return fetch(prefix + endpoint, {
+      method: 'PUT',
+      ...init,
+    });
   },
-  async put(endpoint: string, data: any, init?: RequestInit) {
-    return this.reqWithBody(endpoint, 'PUT', data, init);
+
+  async delete(endpoint: string, init?: RequestInit) {
+    return fetch(prefix + endpoint, {
+      method: 'DELETE',
+      ...init,
+    });
   },
-  async delete(endpoint: string, data: any, init?: RequestInit) {
-    return this.reqWithBody(endpoint, 'DELETE', data, init);
+
+  async deserialize<T>(
+    method: Method,
+    endpoint: string,
+    init?: RequestInit
+  ): Promise<T> {
+    const run = async (
+      fn: (endpoint: string, init?: RequestInit) => Promise<Response>
+    ): Promise<T> => (await (await fn(endpoint, init)).json()) as T;
+
+    switch (method) {
+      case 'GET':
+        return run(this.get);
+      case 'POST':
+        return run(this.post);
+      case 'PUT':
+        return run(this.put);
+      case 'DELETE':
+        return run(this.delete);
+    }
   },
 };

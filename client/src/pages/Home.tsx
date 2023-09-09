@@ -24,7 +24,8 @@ export const Home = () => {
     try {
       setResults({
         query,
-        ...(await fetchClient.getData<SearchResults>(
+        ...(await fetchClient.deserialize<SearchResults>(
+          'GET',
           `/search?query=${encodeURIComponent(query)}`
         )),
       });

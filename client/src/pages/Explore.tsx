@@ -16,7 +16,7 @@ export const Explore = () => {
   const limit = 20;
   const currentTerms = getCurrentTerms();
 
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[] | undefined>(undefined);
   const [error, setError] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -28,7 +28,7 @@ export const Explore = () => {
 
   const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
 
-  const body = {
+  const filters = {
     subjects: nullable(selectedSubjects),
     levels: nullable(selectedLevels.map((l) => l.charAt(0))),
     terms: nullable(
@@ -40,10 +40,9 @@ export const Explore = () => {
 
   useEffect(() => {
     fetchClient
-      .postData<Course[]>(`/courses?limit=${limit}`, body, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      .deserialize<Course[]>('POST', `/courses?limit=${limit}`, {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(filters),
       })
       .then((data) => setCourses(data))
       .catch(() => setError(true));
@@ -52,19 +51,20 @@ export const Explore = () => {
   }, [selectedSubjects, selectedLevels, selectedTerms]);
 
   const fetchMore = async () => {
-    const batch = await fetchClient.postData<Course[]>(
+    const batch = await fetchClient.deserialize<Course[]>(
+      'POST',
       `/courses?limit=${limit}&offset=${offset}`,
-      body,
       {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(filters),
       }
     );
 
     if (batch.length === 0) setHasMore(false);
     else {
-      setCourses(courses.concat(batch));
+      setCourses(courses?.concat(batch));
       setOffset(offset + limit);
     }
   };
@@ -94,31 +94,35 @@ export const Explore = () => {
               />
             </div>
             <InfiniteScroll
-              dataLength={courses.length}
+              dataLength={courses?.length || 0}
               hasMore={hasMore}
               loader={
-                courses.length >= 20 && hasMore ? (
+                (courses?.length || 0) >= 20 &&
+                hasMore && (
                   <div className='mt-4 text-center'>
                     <Spinner />
                   </div>
-                ) : null
+                )
               }
               next={fetchMore}
               style={{ overflowY: 'hidden' }}
             >
               <div className='mx-auto flex flex-col'>
-                {courses.map(
-                  (course, i) =>
-                    course.description && (
-                      <CourseCard key={i} course={course} className='m-2' />
-                    )
-                )}
-                {!hasMore || courses.length === 0 ? (
-                  <div className='mx-[200px] mt-4 text-center'>
-                    <p className='text-gray-500 dark:text-gray-400'>
-                      No more courses to show
-                    </p>
-                  </div>
+                {courses?.map((course, i) => (
+                  <CourseCard key={i} course={course} className='m-2' />
+                ))}
+                {!hasMore ? (
+                  courses?.length ? (
+                    <div className='mx-[200px] mt-4 text-center'>
+                      <p className='text-gray-500 dark:text-gray-400'>
+                        No more courses to show
+                      </p>
+                    </div>
+                  ) : (
+                    <div className='mt-4 text-center'>
+                      <Spinner />
+                    </div>
+                  )
                 ) : null}
               </div>
             </InfiniteScroll>

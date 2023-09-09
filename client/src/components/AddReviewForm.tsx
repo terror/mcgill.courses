@@ -75,14 +75,13 @@ export const AddReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await fetchClient.post(
-                      `/reviews`,
-                      {
+                    const res = await fetchClient.post(`/reviews`, {
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
                         course_id: course._id,
                         ...values,
-                      },
-                      { headers: { 'Content-Type': 'application/json' } }
-                    );
+                      }),
+                    });
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);

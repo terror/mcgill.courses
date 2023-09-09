@@ -21,9 +21,9 @@ export const Profile = () => {
 
   useEffect(() => {
     fetchClient
-      .getData<Review[]>(`/reviews?user_id=${user?.id}`)
+      .deserialize<Review[]>('GET', `/reviews?user_id=${user?.id}`)
       .then((data) => setUserReviews(data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [user?.id]);
 
   return (

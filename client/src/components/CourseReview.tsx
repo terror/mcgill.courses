@@ -47,7 +47,8 @@ const ReviewInteractions = ({
 
   const refreshInteractions = () => {
     fetchClient
-      .getData<GetInteractionsPayload>(
+      .deserialize<GetInteractionsPayload>(
+        'GET',
         `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
       )
       .then((payload: GetInteractionsPayload) => {
@@ -59,32 +60,36 @@ const ReviewInteractions = ({
 
   const addInteraction = (interactionKind: InteractionKind) => {
     if (!user) return;
+
     fetchClient
-      .post(
-        '/interactions',
-        {
+      .post('/interactions', {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           kind: interactionKind,
           course_id: courseId,
           user_id: userId,
           referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
+        }),
+      })
       .then(() => refreshInteractions())
       .catch((err) => setError(err.toString()));
   };
 
   const removeInteraction = () => {
     if (!user) return;
+
     fetchClient
       .delete(
         '/interactions',
+
         {
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            course_id: courseId,
+            user_id: userId,
+            referrer: user.id,
+          }),
+        }
       )
       .then(() => refreshInteractions())
       .catch((err) => setError(err.toString()));

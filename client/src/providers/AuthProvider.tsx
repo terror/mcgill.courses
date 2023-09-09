@@ -12,7 +12,7 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   useEffect(() => {
     setLoading(true);
     fetchClient
-      .getData<UserResponse>('/user', { credentials: 'include' })
+      .deserialize<UserResponse>('GET', '/user', { credentials: 'include' })
       .then((data) => {
         setUser(data.user);
         setLoading(false);
