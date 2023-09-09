@@ -107,7 +107,7 @@ export const Instructor = () => {
           </div>
         </div>
       </div>
-      <div className='mt-4'>
+      <div className='mx-auto mt-4 max-w-6xl'>
         <div>
           {userReview && (
             <CourseReview
