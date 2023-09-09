@@ -148,7 +148,7 @@ export const CoursePage = () => {
           allReviews={showingReviews}
           numReviews={showingReviews.length}
         />
-        <div className='py-2' />
+        <div className='py-2.5' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
           <div className='col-span-3'>
             <SchedulesDisplay
@@ -211,7 +211,6 @@ export const CoursePage = () => {
             <CourseRequirements course={course} requirements={requirements} />
           </div>
         </div>
-        <div className='py-1' />
         <div className='flex flex-col lg:hidden'>
           <div className='flex'>
             <CourseRequirements course={course} requirements={requirements} />

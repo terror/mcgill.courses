@@ -12,6 +12,7 @@ import { Review } from '../model/Review';
 import { courseIdToUrlParam } from '../lib/utils';
 import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
+import { ExternalLink } from 'react-feather';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -41,21 +42,31 @@ export const Instructor = () => {
   if (instructor === undefined) return <Loading />;
   if (instructor === null) return <NotFound />;
 
-  const userReview = reviews.find((r) => r.userId === user?.id);
-  const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
+  const userReview = reviews.find((r) => r.userId === user?.id),
+    uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
 
   return (
     <Layout>
       <div className='mx-auto flex max-w-6xl'>
-        <div className='mx-4 flex w-screen flex-row rounded-md bg-slate-50 p-2 dark:bg-neutral-800 md:mt-10'>
+        <div className='flex w-screen flex-row rounded-md bg-slate-50 p-2 dark:bg-neutral-800 md:mt-10'>
           <div className='flex flex-1 flex-col md:flex-row'>
-            <div className='m-4 flex w-fit flex-col space-y-3 md:m-4 md:w-1/2'>
-              <div className='flex flex-row space-x-2 align-middle'>
+            <div className='m-4 flex w-fit flex-col md:m-4 md:w-1/2'>
+              <div className='flex flex-row items-center space-x-2 align-middle'>
                 <h1 className='break-words text-4xl font-semibold text-gray-800 dark:text-gray-200'>
                   {params.name && decodeURIComponent(params.name)}
                 </h1>
+                <a
+                  href={`https://www.mcgill.ca/search/${params.name}`}
+                  className='my-auto dark:text-gray-200'
+                  target='_blank'
+                >
+                  <ExternalLink
+                    size={20}
+                    className='ml-1 transition-colors duration-300 hover:stroke-red-600'
+                  />
+                </a>
               </div>
-              <p className='text-gray-500 dark:text-gray-400'>
+              <p className='mt-2 text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
                   <Fragment>
                     Teaches or has taught the following course(s):{' '}
@@ -75,13 +86,14 @@ export const Instructor = () => {
                   "This professor hasn't taught any courses that have been reviewed yet."
                 )}
               </p>
+              <div className='grow py-3' />
               {uniqueReviews.length && (
                 <CourseInfoStats
                   className='md:hidden'
                   allReviews={uniqueReviews}
                 />
               )}
-              <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
+              <p className='text-sm text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length} review(s)
               </p>
             </div>
@@ -95,30 +107,32 @@ export const Instructor = () => {
           </div>
         </div>
       </div>
-      <div className='m-4 mx-auto max-w-6xl'>
-        {userReview && (
-          <CourseReview
-            canModify={false}
-            handleDelete={() => undefined}
-            includeTaughtBy={false}
-            openEditReview={() => undefined}
-            review={userReview}
-          />
-        )}
-        {reviews &&
-          reviews
-            .filter((review) => (user ? review.userId !== user.id : true))
-            .slice(0, showAllReviews ? reviews.length : 8)
-            .map((review, i) => (
-              <CourseReview
-                canModify={false}
-                handleDelete={() => undefined}
-                includeTaughtBy={false}
-                key={i}
-                openEditReview={() => undefined}
-                review={review}
-              />
-            ))}
+      <div className='mt-4'>
+        <div>
+          {userReview && (
+            <CourseReview
+              canModify={false}
+              handleDelete={() => undefined}
+              includeTaughtBy={false}
+              openEditReview={() => undefined}
+              review={userReview}
+            />
+          )}
+          {reviews &&
+            reviews
+              .filter((review) => (user ? review.userId !== user.id : true))
+              .slice(0, showAllReviews ? reviews.length : 8)
+              .map((review, i) => (
+                <CourseReview
+                  canModify={false}
+                  handleDelete={() => undefined}
+                  includeTaughtBy={false}
+                  key={i}
+                  openEditReview={() => undefined}
+                  review={review}
+                />
+              ))}
+        </div>
         {!showAllReviews && reviews.length > 8 && (
           <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
             <button
