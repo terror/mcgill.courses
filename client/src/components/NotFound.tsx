@@ -10,7 +10,7 @@ export const NotFound = () => {
           404
         </h1>
         <p className='font-medium text-gray-800 dark:text-gray-300'>
-          Uh oh, it looks like you are are lost.
+          Uh oh, it looks like you are lost.
         </p>
         <button
           onClick={() => nav('/')}
