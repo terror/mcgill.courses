@@ -173,7 +173,7 @@ export const CoursePage = () => {
                 />
               </div>
             )}
-            <div className='w-full'>
+            <div className='w-full shadow-sm'>
               {userReview && (
                 <CourseReview
                   canModify={Boolean(user && userReview.userId === user.id)}
@@ -232,7 +232,7 @@ export const CoursePage = () => {
                   setShowAllReviews={setShowAllReviews}
                 />
               </div>
-              <div className='w-full'>
+              <div className='w-full shadow-sm'>
                 {userReview && (
                   <CourseReview
                     canModify={Boolean(user && userReview.userId === user.id)}

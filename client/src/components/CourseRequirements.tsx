@@ -100,7 +100,7 @@ export const CourseRequirements = ({
   return (
     <div
       className={twMerge(
-        'relative w-full rounded-md bg-slate-50 dark:bg-neutral-800',
+        'relative w-full rounded-md bg-slate-50 shadow-sm dark:bg-neutral-800',
         className
       )}
     >

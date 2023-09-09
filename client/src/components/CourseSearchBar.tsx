@@ -121,7 +121,7 @@ export const CourseSearchBar = ({
         <input
           type='text'
           className={twMerge(
-            'block w-full rounded-t-lg bg-slate-100 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px]',
+            'block w-full rounded-t-lg bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px]',
             searchSelected ? '' : 'rounded-b-lg'
           )}
           placeholder='Search for courses, subjects or professors'

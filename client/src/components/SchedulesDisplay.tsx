@@ -204,7 +204,7 @@ export const SchedulesDisplay = ({
   return (
     <div
       className={twMerge(
-        'flex flex-col text-gray-800 lg:border-t-0',
+        'flex flex-col text-gray-800 shadow-sm lg:border-t-0',
         className
       )}
     >
@@ -229,7 +229,7 @@ export const SchedulesDisplay = ({
           </button>
         ))}
       </div>
-      <div className='flex flex-col rounded-b-lg bg-slate-100 dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-700 dark:text-gray-200'>
         {currentlyDisplayingSchedules.length <= 5 || showAll
           ? currentlyDisplayingSchedules.map(singleScheduleRow)
           : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}

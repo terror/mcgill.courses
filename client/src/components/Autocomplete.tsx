@@ -29,9 +29,9 @@ export const Autocomplete = ({
     <div className={className}>
       <Combobox value={value} onChange={(val) => setValue(val)}>
         <div className='w-full'>
-          <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
+          <div className='relative rounded-md bg-gray-200 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='w-[87.5%] bg-gray-100 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='w-[87.5%] bg-gray-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
