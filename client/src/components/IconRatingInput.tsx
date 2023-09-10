@@ -1,31 +1,34 @@
-import { Star } from 'react-feather';
-
-type StarRatingInputProps = {
+type IconRatingInputProps = {
   name: string;
   rating: number;
+  icon: React.ElementType;
   setFieldValue: (name: string, value: any) => void;
 };
 
-export const StarRatingInput = ({
+export const IconRatingInput = ({
   name,
   rating,
+  icon: Icon,
   setFieldValue,
-}: StarRatingInputProps) => {
-  const stars = [];
+}: IconRatingInputProps) => {
+  const icons = [];
+
   for (let i = 0; i < 5; i++) {
-    stars.push(
+    icons.push(
       <div
         className='cursor-pointer'
         onClick={() => setFieldValue(name, i + 1)}
       >
-        <Star
-          key={i}
-          strokeWidth={0}
+        <Icon
           className={i < rating ? 'fill-red-500' : 'fill-gray-200'}
           id={`${name}-star-${i}`}
+          key={i}
+          size={20}
+          strokeWidth={0}
         />
       </div>
     );
   }
-  return <div className='flex'>{...stars}</div>;
+
+  return <div className='flex'>{...icons}</div>;
 };

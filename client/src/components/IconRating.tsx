@@ -1,12 +1,13 @@
-type StarRatingProps = {
+type IconRatingProps = {
   rating: number;
   icon: any;
 };
 
-export const IconRating = ({ rating, icon: Icon }: StarRatingProps) => {
-  const stars = [];
+export const IconRating = ({ rating, icon: Icon }: IconRatingProps) => {
+  const icons = [];
+
   for (let i = 0; i < 5; i++) {
-    stars.push(
+    icons.push(
       <Icon
         key={i}
         className={
@@ -18,5 +19,6 @@ export const IconRating = ({ rating, icon: Icon }: StarRatingProps) => {
       />
     );
   }
-  return <div className='flex'>{...stars}</div>;
+
+  return <div className='flex'>{...icons}</div>;
 };
