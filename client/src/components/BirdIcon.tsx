@@ -8,7 +8,7 @@ export const BirdIcon = ({ className, ...props }: IconBaseProps) => {
       xmlns='http://www.w3.org/2000/svg'
       x='0px'
       y='0px'
-      width='20px'
+      width={props.size || '20'}
       viewBox='0 0 1200 1200'
       className={className}
     >
