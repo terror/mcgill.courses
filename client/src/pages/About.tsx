@@ -17,7 +17,7 @@ type QuestionsAnswersProps = {
 
 const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
-    <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
+    <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 p-2 dark:bg-neutral-900'>
       {input.map((item: QuestionAnswer) => (
         <Disclosure as='div' key={item.title} className='w-full'>
           {({ open }) => (
@@ -60,7 +60,7 @@ const questionsAnswers = [
         Yes! There are great student-made tools for McGillians. Some great ones
         are{' '}
         <Link to='https://cloudberry.fyi' className='underline'>
-          Cloudberry.fyi
+          cloudberry.fyi
         </Link>{' '}
         and{' '}
         <Link
