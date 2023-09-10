@@ -16,6 +16,7 @@ import { DeleteButton } from './DeleteButton';
 import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
+import { BsPinFill } from 'react-icons/bs';
 
 const LoginPrompt = () => {
   return (
@@ -179,6 +180,7 @@ export const CourseReview = ({
               <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
                 {dateStr}
               </p>
+              {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
                 <div className='flex items-center gap-x-2'>
