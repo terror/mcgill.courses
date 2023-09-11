@@ -49,7 +49,7 @@ jobs:
           bun --version
 
       - name: Install dependencies
-        run: bun install
+        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress bun install
 
       - name: Build
         run: bun run build
@@ -61,7 +61,7 @@ jobs:
         run: bun run lint
 
       - name: Test
-        run: bun run cy:e2e
+        run: CYPRESS_CACHE_FOLDER=./tmp/Cypress bun run cy:e2e
 
   coverage:
     name: Coverage
