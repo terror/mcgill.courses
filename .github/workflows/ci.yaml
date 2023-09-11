@@ -35,11 +35,11 @@ jobs:
 
     runs-on: macos-latest
 
+    env:
+      CYPRESS_CACHE_FOLDER: /Users/runner/Library/Caches/Cypress
+
     steps:
       - uses: actions/checkout@v2
-
-      env:
-        CYPRESS_CACHE_FOLDER: /Users/runner/Library/Caches/Cypress
 
       - name: Install bun
         run: |
