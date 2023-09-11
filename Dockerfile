@@ -1,10 +1,10 @@
-FROM node:19-alpine AS client
+FROM oven/bun AS client
 
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json bun.lockb ./
+RUN bun install --production
 COPY . .
-RUN npm run build -- --mode production
+RUN bun run build -- --mode production
 
 FROM rust:1.68-buster as server
 

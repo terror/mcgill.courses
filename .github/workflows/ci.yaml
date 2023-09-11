@@ -41,22 +41,22 @@ jobs:
       - name: Info
         run: |
           node --version
-          npm --version
+          bun --version
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --production
 
       - name: Build
-        run: npm run build
+        run: bun run build
 
       - name: Format
-        run: npm run format-check
+        run: bun run format-check
 
       - name: Lint
-        run: npm run lint
+        run: bun run lint
 
       - name: Test
-        run: npm run cy:e2e
+        run: bun run cy:e2e
 
   coverage:
     name: Coverage
