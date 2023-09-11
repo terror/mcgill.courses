@@ -10,7 +10,7 @@
     "cy:open-unit": "cypress open --component --browser chrome",
     "cy:run-e2e": "cypress run --e2e",
     "cy:run-unit": "cypress run --component",
-    "dev": "vite",
+    "dev": "bunx --bun vite",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
     "lint": "eslint .",
