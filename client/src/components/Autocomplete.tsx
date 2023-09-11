@@ -1,39 +1,37 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { ChevronDown } from 'react-feather';
+import { twMerge } from 'tailwind-merge';
 
 type AutocompleteProps = {
   options: string[];
   value: string;
   setValue: (value: string) => void;
+  className?: string;
 };
 
 export const Autocomplete = ({
   options,
   value,
   setValue,
+  className,
 }: AutocompleteProps) => {
   const [query, setQuery] = useState('');
 
   const filtered =
-    query === ''
-      ? options
-      : options.filter((x) => {
+    query !== ''
+      ? options.filter((x) => {
           return x.toLowerCase().includes(query.toLowerCase());
-        });
+        })
+      : options;
 
   return (
-    <div className='w-72'>
-      <Combobox
-        value={value}
-        onChange={(val) => {
-          setValue(val);
-        }}
-      >
-        <div className='relative w-full'>
-          <div className='relative rounded-md bg-gray-50 p-2 dark:bg-neutral-700'>
+    <div className={className}>
+      <Combobox value={value} onChange={(val) => setValue(val)}>
+        <div className='w-full'>
+          <div className='relative rounded-md bg-gray-200 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='bg-gray-50 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='w-[87.5%] bg-gray-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
@@ -51,17 +49,19 @@ export const Autocomplete = ({
             leaveFrom='transform scale-100 opacity-100'
             leaveTo='transform scale-95 opacity-0'
           >
-            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md shadow-md'>
+            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-md text-sm shadow-md'>
               {filtered.map((val, i) => (
                 <Combobox.Option
                   key={i}
                   value={val}
-                  className={({ active }) => `p-2
-                    ${
+                  className={({ active }) =>
+                    twMerge(
+                      'cursor-pointer p-2 text-gray-900 dark:text-gray-200',
                       active
-                        ? 'bg-red-500 text-white'
-                        : 'bg-white text-gray-900 dark:bg-neutral-600 dark:text-gray-200'
-                    }`}
+                        ? 'bg-gray-100 dark:bg-neutral-500'
+                        : 'bg-white dark:bg-neutral-600'
+                    )
+                  }
                 >
                   {val}
                 </Combobox.Option>

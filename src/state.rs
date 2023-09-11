@@ -2,6 +2,7 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub(crate) struct State {
+  pub(crate) client_secret: String,
   pub(crate) db: Arc<Db>,
   pub(crate) oauth_client: BasicClient,
   pub(crate) request_client: reqwest::Client,
@@ -37,17 +38,18 @@ impl State {
     db: Arc<Db>,
     session_store: Option<MongodbSessionStore>,
   ) -> Result<Self> {
+    let client_secret = env::var("MS_CLIENT_SECRET")
+      .expect("Missing the MS_CLIENT_SECRET environment variable.");
+
     Ok(Self {
+      client_secret: client_secret.clone(),
       db: db.clone(),
       oauth_client: BasicClient::new(
         ClientId::new(
           env::var("MS_CLIENT_ID")
             .expect("Missing the MS_CLIENT_ID environment variable"),
         ),
-        Some(ClientSecret::new(
-          env::var("MS_CLIENT_SECRET")
-            .expect("Missing the MS_CLIENT_SECRET environment variable."),
-        )),
+        Some(ClientSecret::new(client_secret)),
         AuthUrl::new(
           "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
             .to_string(),

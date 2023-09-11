@@ -3,10 +3,12 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
+import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { classNames } from '../lib/utils';
+import { getUrl } from '../lib/utils';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
@@ -29,13 +31,14 @@ type SideNavProps = {
 
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
-  const [darkMode, _] = useDarkMode();
+
+  const [darkMode] = useDarkMode();
 
   return (
     <Transition appear show={open}>
       <Overlay>
         <div
-          className={classNames(
+          className={twMerge(
             'fixed inset-0 z-50 flex items-end justify-end',
             darkMode ? 'dark' : ''
           )}
@@ -50,7 +53,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveTo='opacity-0'
           >
             <div className='fixed inset-0' onClick={() => onClose(false)}>
-              <div className='absolute inset-0 bg-gray-900 opacity-70'></div>
+              <div className='absolute inset-0 bg-black opacity-60'></div>
             </div>
           </Transition.Child>
           <Transition.Child
@@ -62,11 +65,11 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveFrom='translate-x-0'
             leaveTo='translate-x-full'
           >
-            <div className='h-screen w-full overflow-y-auto bg-white px-6 py-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+            <div className='h-screen w-full overflow-y-auto bg-white p-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
                   <Link to='/' className=''>
-                    <img className='h-8 w-auto' src='/bird.png' alt='' />
+                    <img className='h-8 w-auto' src={birdImageUrl} alt='bird' />
                   </Link>
                   <div className='ml-6'>
                     <DarkModeToggle />
@@ -104,9 +107,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                           Profile
                         </Link>
                         <a
-                          href={`${
-                            import.meta.env.VITE_API_URL
-                          }/auth/logout?redirect=${window.location.origin}`}
+                          href={`${getUrl()}/api/auth/logout?redirect=${
+                            window.location.origin
+                          }`}
                           className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                         >
                           Log out
@@ -114,9 +117,9 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                       </>
                     ) : (
                       <a
-                        href={`${
-                          import.meta.env.VITE_API_URL
-                        }/auth/login?redirect=${window.location.href}`}
+                        href={`${getUrl()}/api/auth/login?redirect=${
+                          window.location.href
+                        }`}
                         className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
                       >
                         Log in

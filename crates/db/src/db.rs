@@ -12,9 +12,13 @@ impl Db {
   const REVIEW_COLLECTION: &str = "reviews";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
-    let mut client_options =
-      ClientOptions::parse(format!("mongodb://localhost:27017/{}", db_name))
-        .await?;
+    let mut client_options = ClientOptions::parse(format!(
+      "{}/{}",
+      env::var("MONGODB_URL")
+        .unwrap_or_else(|_| "mongodb://localhost:27017".into()),
+      db_name
+    ))
+    .await?;
 
     client_options.app_name = Some(db_name.to_string());
 
@@ -104,25 +108,7 @@ impl Db {
     self.find_course(doc! { "_id": id }).await
   }
 
-  pub async fn add_review(&self, review: Review) -> Result<InsertOneResult> {
-    if self
-      .find_review(&review.course_id, &review.user_id)
-      .await?
-      .is_some()
-    {
-      Err(anyhow!("Cannot review this course twice"))
-    } else {
-      Ok(
-        self
-          .database
-          .collection::<Review>(Self::REVIEW_COLLECTION)
-          .insert_one(review, None)
-          .await?,
-      )
-    }
-  }
-
-  pub async fn update_review(&self, review: Review) -> Result<UpdateResult> {
+  pub async fn add_review(&self, review: Review) -> Result<UpdateResult> {
     Ok(
       self
         .database
@@ -135,12 +121,13 @@ impl Db {
           UpdateModifications::Document(doc! {
             "$set": {
               "content": &review.content,
+              "difficulty": review.difficulty,
               "instructors": &review.instructors,
               "rating": review.rating,
               "timestamp": review.timestamp
             },
           }),
-          None,
+          UpdateOptions::builder().upsert(true).build(),
         )
         .await?,
     )
@@ -250,6 +237,26 @@ impl Db {
     )
   }
 
+  pub async fn remove_interactions(
+    &self,
+    course_id: &str,
+    user_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .delete_many(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn interactions_for_review(
     &self,
     course_id: &str,
@@ -296,18 +303,28 @@ impl Db {
             doc! { "_id": &course.id },
             doc! {
               "$set": {
+                "code": course.code,
                 "corequisites": course.corequisites,
+                "corequisitesText": course.corequisites_text,
                 "credits": course.credits,
+                "department": course.department,
                 "description": course.description,
+                "faculty": course.faculty,
                 "facultyUrl": course.faculty_url,
                 "instructors": course.instructors.combine(found.instructors),
+                "leadingTo": course.leading_to,
                 "level": course.level,
+                "logicalCorequisites": course.logical_corequisites,
+                "logicalPrerequisites": course.logical_prerequisites,
                 "prerequisites": course.prerequisites,
+                "prerequisitesText": course.prerequisites_text,
                 "restrictions": course.restrictions,
                 "schedule": course.schedule.combine_opt(found.schedule),
+                "subject": course.subject,
                 "terms": course.terms.combine(found.terms),
-                "title": course.title,
-                "url": course.url
+                "title": course.title.clone(),
+                "titleNgrams": course.title.filter_stopwords().ngrams(),
+                "url": course.url,
               }
             },
           )
@@ -471,7 +488,7 @@ impl Db {
 mod tests {
   use {super::*, pretty_assertions::assert_eq};
 
-  static SEED_DIR: Dir<'_> = include_dir!("crates/db/seeds");
+  static SEED_DIR: Dir<'_> = include_dir!("crates/db/test-seeds");
 
   fn get_content(name: &str) -> String {
     SEED_DIR
@@ -1058,9 +1075,11 @@ mod tests {
       ..Default::default()
     };
 
-    db.add_review(review.clone()).await.unwrap();
+    for _ in 0..10 {
+      db.add_review(review.clone()).await.unwrap();
+    }
 
-    assert!(db.add_review(review).await.is_err());
+    assert_eq!(db.reviews().await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -1082,7 +1101,7 @@ mod tests {
     let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
 
     assert_eq!(
-      db.update_review(Review {
+      db.add_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
         instructors: vec![String::from("foo")],
@@ -1098,7 +1117,7 @@ mod tests {
     );
 
     assert_eq!(
-      db.update_review(Review {
+      db.add_review(Review {
         content: "bar".into(),
         course_id: "MATH240".into(),
         instructors: vec![String::from("foo")],

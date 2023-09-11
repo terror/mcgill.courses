@@ -93,7 +93,7 @@ pub(crate) async fn update_review(
 
   trace!("Updating review...");
 
-  db.update_review(Review {
+  db.add_review(Review {
     content,
     course_id,
     instructors,
@@ -119,7 +119,10 @@ pub(crate) async fn delete_review(
 ) -> Result<impl IntoResponse> {
   trace!("Deleting review from the database...");
 
-  db.delete_review(&body.course_id, &user.id()).await?;
+  let user_id = user.id();
+
+  db.delete_review(&body.course_id, &user_id).await?;
+  db.remove_interactions(&body.course_id, &user_id).await?;
 
   Ok(())
 }

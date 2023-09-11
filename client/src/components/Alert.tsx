@@ -7,13 +7,7 @@ import {
 import { IoWarningOutline } from 'react-icons/io5';
 import { VscError } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
-
-type AlertStatus = 'error' | 'success' | 'info' | 'warning';
-
-interface AlertProp {
-  status: AlertStatus;
-  message?: string;
-}
+import { twMerge } from 'tailwind-merge';
 
 const defaultMessages = {
   error: 'There was an error processing your request, please try again later.',
@@ -36,7 +30,14 @@ const statusIcon = {
   warning: <IoWarningOutline className='text-yellow-700' size={20} />,
 };
 
-export const Alert = ({ status, message }: AlertProp) => {
+export type AlertStatus = 'error' | 'success' | 'info' | 'warning';
+
+type AlertProps = {
+  status: AlertStatus;
+  message?: string;
+};
+
+export const Alert = ({ status, message }: AlertProps) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -44,20 +45,19 @@ export const Alert = ({ status, message }: AlertProp) => {
     const timer = setTimeout(() => {
       setShow(false);
     }, 5000);
+
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div
-      className={`
-    ${
-      show
-        ? 'translate-y-0 md:translate-y-0'
-        : 'translate-y-full md:translate-y-[150%]'
-    }
-    ${statusColor[status]}
-    fixed bottom-0 right-0 z-50 w-screen p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md
-  `}
+      className={twMerge(
+        'fixed bottom-0 right-0 z-50 w-screen p-4 shadow-md transition-all duration-300 md:m-5 md:w-full md:max-w-md md:rounded-md',
+        show
+          ? 'translate-y-0 md:translate-y-0'
+          : 'translate-y-full md:translate-y-[150%]',
+        statusColor[status]
+      )}
       role='alert'
     >
       <div className='flex'>
@@ -67,23 +67,22 @@ export const Alert = ({ status, message }: AlertProp) => {
         ) : (
           <p className='m-1'>
             {defaultMessages[status]}
-            {status === 'error' ? (
+            {status === 'error' && (
               <p>
                 If the problem persists, please{' '}
                 <Link to='/about' className='underline'>
                   contact us
                 </Link>
               </p>
-            ) : null}
+            )}
           </p>
         )}
         <AiOutlineClose
-          className='mb-auto ml-auto'
+          className='mb-auto ml-auto cursor-pointer'
           size={20}
           opacity={0.25}
           onClick={() => setShow(false)}
-          cursor={'pointer'}
-        ></AiOutlineClose>
+        />
       </div>
     </div>
   );

@@ -5,26 +5,21 @@ import { FaBars } from 'react-icons/fa';
 type BoxToggleProps = {
   title?: string;
   child: ReactComponentElement<any>;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  open: boolean;
+  setOpen: (isOpen: boolean) => void;
 };
 
-export const BoxToggle = ({
-  title,
-  child,
-  isOpen,
-  setIsOpen,
-}: BoxToggleProps) => {
+export const BoxToggle = ({ title, child, open, setOpen }: BoxToggleProps) => {
   return (
-    <div className='mx-auto flex w-full max-w-xl flex-col px-2 sm:px-0'>
-      <div className='space-around flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'>
-        <button className='mr-auto' onClick={() => setIsOpen(!isOpen)}>
+    <div className='w-full'>
+      <div className='mb-1 flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'>
+        <button className='mr-auto' onClick={() => setOpen(!open)}>
           <FaBars className='text-gray-700 dark:text-neutral-400' />
         </button>
         {title ? <h1 className='text-2xl'>{title}</h1> : null}
       </div>
       <Transition
-        show={isOpen}
+        show={open}
         enter='transition ease-out duration-100 transform'
         enterFrom='opacity-0 scale-95'
         enterTo='opacity-100 scale-100'

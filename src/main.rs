@@ -1,9 +1,12 @@
 use {
   crate::{
     arguments::Arguments,
+    assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
+    hash::Hash,
     loader::Loader,
+    object::Object,
     options::Options,
     page::Page,
     retry::Retry,
@@ -24,9 +27,7 @@ use {
     },
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
-    routing::get,
-    routing::post,
-    routing::Router,
+    routing::{get, post, Router},
     Json, RequestPartsExt,
   },
   base64::{engine::general_purpose::STANDARD, Engine},
@@ -34,25 +35,33 @@ use {
   clap::Parser,
   db::Db,
   dotenv::dotenv,
+  env_logger::Env,
+  futures::TryStreamExt,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
   log::{debug, error, info, trace},
   model::{
-    Course, CourseListing, InitializeOptions, Interaction, InteractionKind,
-    Review, Schedule,
+    Course, CourseListing, InitializeOptions, Instructor, Interaction,
+    InteractionKind, Review, Schedule,
   },
   oauth2::{
-    basic::BasicClient, reqwest::async_http_client, AuthType, AuthUrl,
-    AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
-    TokenResponse, TokenUrl,
+    basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
+    RedirectUrl, Scope, TokenUrl,
   },
   rayon::prelude::*,
   reqwest::blocking::RequestBuilder,
+  rusoto_core::Region,
+  rusoto_s3::S3Client,
+  rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
   serde::{Deserialize, Serialize},
+  serde_json::json,
+  sha2::{Digest, Sha256},
   std::{
     collections::HashSet,
     env,
     fmt::{self, Display, Formatter},
     fs,
+    fs::File,
+    io::Read,
     marker::Sized,
     net::SocketAddr,
     path::PathBuf,
@@ -61,17 +70,24 @@ use {
     thread,
     time::Duration,
   },
-  tower_http::cors::CorsLayer,
+  tower_http::{
+    cors::CorsLayer,
+    services::{ServeDir, ServeFile},
+  },
   url::Url,
+  walkdir::WalkDir,
 };
 
 mod arguments;
+mod assets;
 mod auth;
 mod courses;
 mod error;
+mod hash;
 mod instructors;
 mod interactions;
 mod loader;
+mod object;
 mod options;
 mod page;
 mod retry;
@@ -88,7 +104,8 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {
-  env_logger::init();
+  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+    .init();
 
   dotenv().ok();
 

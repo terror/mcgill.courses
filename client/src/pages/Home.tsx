@@ -12,7 +12,7 @@ const alerts: Map<string, string> = new Map([
 ]);
 
 export const Home = () => {
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [results, setResults] = useState<SearchResults>({
     query: '',
@@ -41,7 +41,7 @@ export const Home = () => {
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='mb-6 text-left text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+            <h1 className='mb-6 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>

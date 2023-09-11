@@ -30,8 +30,13 @@ pub struct Course {
   pub terms: Vec<String>,
   pub description: String,
   pub instructors: Vec<Instructor>,
+  pub prerequisites_text: Option<String>,
+  pub corequisites_text: Option<String>,
   pub prerequisites: Vec<String>,
   pub corequisites: Vec<String>,
+  pub leading_to: Vec<String>,
+  pub logical_prerequisites: Option<ReqNode>,
+  pub logical_corequisites: Option<ReqNode>,
   pub restrictions: Option<String>,
   pub schedule: Option<Vec<Schedule>>,
 }

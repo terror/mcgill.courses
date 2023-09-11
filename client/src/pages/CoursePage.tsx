@@ -1,60 +1,71 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
-import { Alert } from '../components/Alert';
+import { Alert, AlertStatus } from '../components/Alert';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
 import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
+import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
-import { Spinner } from '../components/Spinner';
+import { ReviewFilter } from '../components/ReviewFilter';
+import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
 import { fetchClient } from '../lib/fetchClient';
+import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
+import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
-import { getCurrentTerms } from '../lib/utils';
-import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import _ from 'lodash';
-import { JumpToTopButton } from '../components/JumpToTopButton';
+import { Loading } from './Loading';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
-  const [course, setCourse] = useState<Course>();
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [showAllReviews, setShowAllReviews] = useState(false);
+
   const user = useAuth();
   const currentTerms = getCurrentTerms();
 
+  const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
+  const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
+  const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [key, setKey] = useState(0);
-
-  const [alertStatus, setAlertStatus] = useState<'success' | 'error' | null>(
-    null
-  );
-  const [alertMessage, setAlertMessage] = useState('');
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
   useEffect(() => {
+    firstFetch.current = true;
+  }, [params.id]);
+
+  const refetch = () => {
+    const id = params.id?.replace('-', '').toUpperCase();
     fetchClient
-      .getData<Course>(`/courses/${params.id?.toUpperCase()}`)
-      .then((data) => setCourse(data))
+      .getData<GetCourseWithReviewsPayload | null>(
+        `/courses/${id}?with_reviews=true`
+      )
+      .then((payload) => {
+        if (payload === null) {
+          setCourse(null);
+          return;
+        }
+
+        if (firstFetch.current) {
+          setCourse(payload.course);
+        }
+        setShowingReviews(payload.reviews);
+        setAllReviews(payload.reviews);
+        firstFetch.current = false;
+      })
       .catch((err) => console.log(err));
-    fetchClient
-      .getData<Review[]>(`/reviews?course_id=${params.id}`)
-      .then((data) => {
-        setReviews(
-          data.sort(
-            (a, b) =>
-              parseInt(b.timestamp.$date.$numberLong, 10) -
-              parseInt(a.timestamp.$date.$numberLong, 10)
-          )
-        );
-      });
-  }, [params.id, addReviewOpen, editReviewOpen]);
+  };
+
+  useEffect(refetch, [params.id]);
 
   if (course === null) {
     return (
@@ -64,14 +75,8 @@ export const CoursePage = () => {
     );
   }
 
-  if (course === undefined || reviews === undefined) {
-    return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <Spinner />
-        </div>
-      </div>
-    );
+  if (course === undefined || showingReviews === undefined) {
+    return <Loading />;
   }
 
   if (course.terms.some((term) => !currentTerms.includes(term))) {
@@ -85,10 +90,13 @@ export const CoursePage = () => {
     prereqs: course.prerequisites,
     coreqs: course.corequisites,
     restrictions: course.restrictions,
+    prerequisitesText: course.prerequisitesText,
+    corequisitesText: course.corequisitesText,
   };
 
+  const userReview = showingReviews?.find((r) => r.userId === user?.id);
   const canReview = Boolean(
-    user && reviews.filter((r) => r.userId === user.id).length === 0
+    user && !allReviews?.find((r) => r.userId === user?.id)
   );
 
   const remountAlert = () => {
@@ -102,6 +110,7 @@ export const CoursePage = () => {
         setAlertStatus('success');
         setAlertMessage(successMessage);
         setAddReviewOpen(false);
+        refetch();
       } else {
         setAlertMessage('An error occurred.');
         setAlertStatus('error');
@@ -115,69 +124,147 @@ export const CoursePage = () => {
       { course_id: review.courseId },
       { headers: { 'Content-Type': 'application/json' } }
     );
+
     if (res.ok) {
-      setReviews(reviews.filter((r) => r.userId !== review.userId));
+      setShowingReviews(
+        showingReviews.filter((r) => r.userId !== review.userId)
+      );
+      setAllReviews(
+        allReviews?.filter(
+          (r) => r.userId !== review.userId && r.courseId === review.courseId
+        )
+      );
     }
+
     handleSubmit('Review deleted successfully.')(res);
+
     localStorage.removeItem(course._id);
   };
 
-  const userReview = reviews.find((r) => r.userId === user?.id);
-  const averageRating = _.sumBy(reviews, (r) => r.rating) / reviews.length;
-  const averageDifficulty =
-    _.sumBy(reviews, (r) => r.difficulty) / reviews.length;
-
   return (
     <Layout>
-      <CourseInfo
-        course={course}
-        rating={averageRating}
-        difficulty={averageDifficulty}
-        numReviews={reviews.length}
-      />
-      <SchedulesDisplay course={course} />
-      <div className='flex flex-col md:flex-row'>
-        <div className='mx-8 mt-4 flex md:hidden'>
-          <CourseRequirements requirements={requirements} />
-        </div>
-        <div className='flex w-full flex-row justify-between'>
-          <div className='my-4 ml-8 mr-8 w-full md:mr-4 md:mt-4'>
+      <div className='mx-auto max-w-6xl'>
+        <CourseInfo
+          course={course}
+          allReviews={showingReviews}
+          numReviews={showingReviews.length}
+        />
+        <div className='py-2.5' />
+        <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
+          <div className='col-span-3'>
+            <SchedulesDisplay
+              course={course}
+              className={canReview ? 'mb-4' : ''}
+            />
             {canReview && (
-              <CourseReviewPrompt
-                openAddReview={() => setAddReviewOpen(true)}
-              />
+              <>
+                <CourseReviewPrompt
+                  openAddReview={() => setAddReviewOpen(true)}
+                />
+              </>
             )}
-            <div className='w-full'>
+            <div className='py-2' />
+            {allReviews && allReviews.length > 0 && (
+              <div className='mb-2'>
+                <ReviewFilter
+                  course={course}
+                  allReviews={allReviews ?? []}
+                  setReviews={setShowingReviews}
+                  setShowAllReviews={setShowAllReviews}
+                />
+              </div>
+            )}
+            <div className='w-full shadow-sm'>
               {userReview && (
                 <CourseReview
                   canModify={Boolean(user && userReview.userId === user.id)}
                   handleDelete={() => handleDelete(userReview)}
-                  isLast={reviews.length === 1}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
                 />
               )}
-              {reviews &&
-                reviews
+              {showingReviews &&
+                showingReviews
                   .filter((review) => (user ? review.userId !== user.id : true))
-                  .slice(0, showAllReviews ? reviews.length : 8)
+                  .slice(0, showAllReviews ? showingReviews.length : 8)
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
                       handleDelete={() => handleDelete(review)}
-                      isLast={i === reviews.length - 1}
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
                       review={review}
                     />
                   ))}
-              {!showAllReviews && reviews.length > 8 && (
+            </div>
+            {!showAllReviews && showingReviews.length > 8 && (
+              <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
+                <button
+                  className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+                  onClick={() => setShowAllReviews(true)}
+                >
+                  Show all {showingReviews.length} reviews
+                </button>
+              </div>
+            )}
+          </div>
+          <div className='col-span-2'>
+            <CourseRequirements course={course} requirements={requirements} />
+          </div>
+        </div>
+        <div className='flex flex-col lg:hidden'>
+          <div className='flex'>
+            <CourseRequirements course={course} requirements={requirements} />
+          </div>
+          <div className='py-2.5' />
+          <SchedulesDisplay course={course} />
+          <div className='mt-4 flex w-full flex-row justify-between'>
+            <div className='w-full'>
+              {canReview && (
+                <CourseReviewPrompt
+                  openAddReview={() => setAddReviewOpen(true)}
+                />
+              )}
+              <div className='my-2'>
+                <ReviewFilter
+                  course={course}
+                  allReviews={allReviews ?? []}
+                  setReviews={setShowingReviews}
+                  setShowAllReviews={setShowAllReviews}
+                />
+              </div>
+              <div className='w-full shadow-sm'>
+                {userReview && (
+                  <CourseReview
+                    canModify={Boolean(user && userReview.userId === user.id)}
+                    handleDelete={() => handleDelete(userReview)}
+                    openEditReview={() => setEditReviewOpen(true)}
+                    review={userReview}
+                  />
+                )}
+                {showingReviews &&
+                  showingReviews
+                    .filter((review) =>
+                      user ? review.userId !== user.id : true
+                    )
+                    .slice(0, showAllReviews ? showingReviews.length : 8)
+                    .map((review, i) => (
+                      <CourseReview
+                        canModify={Boolean(user && review.userId === user.id)}
+                        handleDelete={() => handleDelete(review)}
+                        key={i}
+                        openEditReview={() => setEditReviewOpen(true)}
+                        review={review}
+                      />
+                    ))}
+              </div>
+              {!showAllReviews && showingReviews.length > 8 && (
                 <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                   <button
                     className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                     onClick={() => setShowAllReviews(true)}
                   >
-                    Show all {reviews.length} reviews
+                    Show all {showingReviews.length} reviews
                   </button>
                 </div>
               )}
@@ -199,13 +286,10 @@ export const CoursePage = () => {
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
         )}
-        <div className='hidden h-fit w-5/12 md:flex md:flex-none'>
-          <CourseRequirements requirements={requirements} />
-        </div>
+        {alertStatus && (
+          <Alert status={alertStatus} key={key} message={alertMessage} />
+        )}
       </div>
-      {alertStatus && (
-        <Alert status={alertStatus} key={key} message={alertMessage} />
-      )}
       <JumpToTopButton />
     </Layout>
   );

@@ -1,22 +1,26 @@
-import { AiFillDislike, AiFillLike } from 'react-icons/ai';
-import { Alert } from './Alert';
-import { DeleteButton } from './DeleteButton';
-import { Edit } from 'react-feather';
+import { Transition } from '@headlessui/react';
+import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
+import { Edit } from 'react-feather';
+import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+
+import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../lib/fetchClient';
+import { courseIdToUrlParam } from '../lib/utils';
 import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
-import { Link } from 'react-router-dom';
 import { Review } from '../model/Review';
-import { StarRating } from './StarRating';
-import { classNames } from '../lib/utils';
-import { fetchClient } from '../lib/fetchClient';
-import { format } from 'date-fns';
-import { useAuth } from '../hooks/useAuth';
-import { Transition } from '@headlessui/react';
+import { Alert } from './Alert';
+import { DeleteButton } from './DeleteButton';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
+import { IconRating } from './IconRating';
+import { BirdIcon } from './BirdIcon';
+import { BsPinFill } from 'react-icons/bs';
 
 const LoginPrompt = () => {
   return (
-    <div className='min-w-2xl absolute bottom-20 end-4 h-fit rounded-md border bg-gray-100 px-2 py-1 text-neutral-800 dark:border-0 dark:bg-neutral-700 dark:text-gray-200 sm:bottom-16'>
+    <div className='absolute bottom-20 end-4 h-fit rounded-md border bg-gray-100 px-2 py-1 text-neutral-800 dark:border-0 dark:bg-neutral-700 dark:text-gray-200 sm:bottom-16'>
       You must be logged in
     </div>
   );
@@ -114,11 +118,11 @@ const ReviewInteractions = ({
       {error ? <Alert status='error' message={error} /> : null}
       <div className='mb-0.5 flex items-center'>
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-          <AiFillLike
+          <LuThumbsUp
             onClick={handleLike}
-            className={classNames(
-              'h-4 w-4 cursor-pointer',
-              kind === 'like' ? 'fill-red-600' : ''
+            className={twMerge(
+              'h-4 w-4 cursor-pointer stroke-gray-500',
+              kind === 'like' ? 'stroke-red-600' : ''
             )}
           />
         </div>
@@ -126,11 +130,11 @@ const ReviewInteractions = ({
           {likes}
         </span>
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-          <AiFillDislike
+          <LuThumbsDown
             onClick={handleDislike}
-            className={classNames(
-              'h-4 w-4 cursor-pointer',
-              kind === 'dislike' ? 'fill-red-600' : ''
+            className={twMerge(
+              'h-4 w-4 cursor-pointer stroke-gray-500',
+              kind === 'dislike' ? 'stroke-red-600' : ''
             )}
           />
         </div>
@@ -142,7 +146,6 @@ const ReviewInteractions = ({
 type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
-  isLast: boolean;
   openEditReview: () => void;
   review: Review;
   showCourse?: boolean;
@@ -152,7 +155,6 @@ type CourseReviewProps = {
 export const CourseReview = ({
   review,
   canModify,
-  isLast,
   openEditReview,
   handleDelete,
   includeTaughtBy = true,
@@ -162,40 +164,46 @@ export const CourseReview = ({
 
   const dateStr = format(
     new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'PPP'
+    'P'
   );
 
   return (
     <div
-      className={classNames(
-        isLast ? 'mb-8' : 'mb-4',
-        'relative flex w-full flex-col gap-4 rounded-md bg-slate-50 p-7 px-9 dark:bg-neutral-800'
-      )}
+      className={
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800'
+      }
     >
-      <div className='flex flex-col '>
-        <div className='flex justify-between'>
-          <div className='flex flex-col'>
-            <div className='mb-2 flex flex-col sm:flex-row sm:gap-4'>
-              <div className='flex items-center'>
-                <div className='text-md mr-1 font-bold text-gray-700 dark:text-gray-200'>
-                  Rating:
+      <div className='flex flex-col'>
+        <div className='flex w-full'>
+          <div className='relative flex w-full flex-col'>
+            <div className='flex w-full'>
+              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
+                {dateStr}
+              </p>
+              {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
+              <div className='grow' />
+              <div className='flex w-64 flex-col items-end rounded-lg p-2'>
+                <div className='flex items-center gap-x-2'>
+                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
+                    Rating
+                  </div>
+                  <IconRating rating={review.rating} icon={BirdIcon} />
                 </div>
-                <StarRating rating={review.rating} />
-              </div>
-              <div className='flex items-center'>
-                <div className='text-md mr-1 font-bold text-gray-700 dark:text-gray-200'>
-                  Difficulty:
+                <div className='flex items-center gap-x-2'>
+                  <div className='text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
+                    Difficulty
+                  </div>
+                  <IconRating rating={review.difficulty} icon={LuFlame} />
                 </div>
-                <StarRating rating={review.difficulty} />
               </div>
             </div>
             {review.content.length < 300 || readMore ? (
-              <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+              <div className='ml-1 mr-4 mt-2 hyphens-auto text-left text-gray-800 dark:text-gray-300'>
                 {review.content}
               </div>
             ) : (
               <>
-                <div className='text-md ml-1 mr-4 mt-2 hyphens-auto text-left dark:text-gray-300'>
+                <div className='ml-1 mr-4 mt-2 hyphens-auto text-left text-gray-800 dark:text-gray-300'>
                   {review.content.substring(0, 300) + '...'}
                 </div>
                 <button
@@ -207,29 +215,9 @@ export const CourseReview = ({
               </>
             )}
           </div>
-          <div className='text-sm'>
-            <div className='ml-auto flex'>
-              {canModify && (
-                <div className='ml-auto mr-1 flex h-fit space-x-2'>
-                  <div onClick={openEditReview}>
-                    <Edit
-                      className='cursor-pointer transition duration-200 hover:stroke-gray-500 dark:stroke-gray-200 dark:hover:stroke-gray-400'
-                      size={24}
-                    />
-                  </div>
-                  <DeleteButton
-                    title='Delete Review'
-                    text={`Are you sure you want to delete your review of ${review.courseId}? `}
-                    onConfirm={handleDelete}
-                    size={24}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
-      <div className='flex flex-row justify-between gap-3 align-bottom'>
+      <div className='flex items-center'>
         <p className='mb-2 mt-auto flex-1 text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
           {includeTaughtBy ? (
             <Fragment>
@@ -245,7 +233,7 @@ export const CourseReview = ({
                   <Fragment key={instructor + review.userId}>
                     <Link
                       to={`/instructor/${encodeURIComponent(instructor)}`}
-                      className='transition hover:text-red-600'
+                      className='font-medium transition hover:text-red-600'
                     >
                       {instructor}
                     </Link>
@@ -257,25 +245,45 @@ export const CourseReview = ({
           ) : (
             <Fragment>
               Written for{' '}
-              <Link to={`/course/${review.courseId}`}>{review.courseId}</Link>
+              <Link
+                to={`/course/${courseIdToUrlParam(review.courseId)}`}
+                className='font-medium transition hover:text-red-600'
+              >
+                {review.courseId}
+              </Link>
             </Fragment>
           )}
         </p>
-        <div className='flex items-center justify-end'>
-          <p className='mr-4 text-sm font-bold text-gray-700 dark:text-gray-200'>
-            {dateStr}
-          </p>
-          <Transition
-            show={promptLogin}
-            enter='transition-opacity duration-150'
-            enterFrom='opacity-0'
-            enterTo='opacity-100'
-            leave='transition-opacity duration-150'
-            leaveFrom='opacity-100'
-            leaveTo='opacity-0'
-          >
-            <LoginPrompt />
-          </Transition>
+        <Transition
+          show={promptLogin}
+          enter='transition-opacity duration-150'
+          enterFrom='opacity-0'
+          enterTo='opacity-100'
+          leave='transition-opacity duration-150'
+          leaveFrom='opacity-100'
+          leaveTo='opacity-0'
+        >
+          <LoginPrompt />
+        </Transition>
+        <div className='flex items-center'>
+          <div className='mb-1 flex'>
+            {canModify && (
+              <div className='ml-2 mr-1 flex h-fit space-x-2'>
+                <div onClick={openEditReview}>
+                  <Edit
+                    className='cursor-pointer stroke-gray-500 transition duration-200 hover:stroke-gray-800 dark:stroke-gray-400 dark:hover:stroke-gray-200'
+                    size={20}
+                  />
+                </div>
+                <DeleteButton
+                  title='Delete Review'
+                  text={`Are you sure you want to delete your review of ${review.courseId}? `}
+                  onConfirm={handleDelete}
+                  size={20}
+                />
+              </div>
+            )}
+          </div>
           <ReviewInteractions
             courseId={review.courseId}
             userId={review.userId}
