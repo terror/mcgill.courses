@@ -38,6 +38,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install bun
+        run: |
+          brew tap oven-sh/bun
+          brew install bun
+
       - name: Info
         run: |
           node --version
