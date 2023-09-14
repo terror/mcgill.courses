@@ -87,15 +87,12 @@ export const Instructor = () => {
                   "This professor hasn't taught any courses that have been reviewed yet."
                 )}
               </p>
-              {uniqueReviews.length !== 0 && (
+              {reviews.length !== 0 && (
                 <Fragment>
                   <div className='grow py-3' />
-                  <CourseInfoStats
-                    className='md:hidden'
-                    allReviews={uniqueReviews}
-                  />
+                  <CourseInfoStats className='md:hidden' allReviews={reviews} />
                   <p className='text-sm text-gray-500 dark:text-gray-400'>
-                    {uniqueReviews.length} review(s)
+                    {reviews.length} review(s)
                   </p>
                 </Fragment>
               )}
@@ -103,7 +100,7 @@ export const Instructor = () => {
             <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
               <CourseInfoStats
                 variant='large'
-                allReviews={uniqueReviews}
+                allReviews={reviews}
                 className='lg:mr-8'
               />
             </div>
