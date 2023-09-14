@@ -188,7 +188,7 @@ export const SchedulesDisplay = ({
                   ))
                 ) : (
                   <div className='flex flex-col'>
-                    <div className='flex flex-row justify-center rounded-b-md bg-neutral-700 px-3 py-2 dark:text-neutral-400'>
+                    <div className='flex flex-row justify-center rounded-b-md px-3 py-2 dark:bg-neutral-700 dark:text-neutral-400'>
                       <p>No scheduled time block.</p>
                     </div>
                   </div>

@@ -13,6 +13,7 @@ import { courseIdToUrlParam } from '../lib/utils';
 import { fetchClient } from '../lib/fetchClient';
 import { useAuth } from '../hooks/useAuth';
 import { ExternalLink } from 'react-feather';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -144,6 +145,9 @@ export const Instructor = () => {
               Show all {reviews.length} reviews
             </button>
           </div>
+        )}
+        {reviews.length === 0 && (
+          <ReviewEmptyPrompt className='my-8' variant='instructor' />
         )}
       </div>
     </Layout>
