@@ -20,6 +20,7 @@ import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayloa
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -156,14 +157,12 @@ export const CoursePage = () => {
               className={canReview ? 'mb-4' : ''}
             />
             {canReview && (
-              <>
-                <CourseReviewPrompt
-                  openAddReview={() => setAddReviewOpen(true)}
-                />
-              </>
+              <CourseReviewPrompt
+                openAddReview={() => setAddReviewOpen(true)}
+              />
             )}
             <div className='py-2' />
-            {allReviews && allReviews.length > 0 && (
+            {allReviews && allReviews.length > 0 ? (
               <div className='mb-2'>
                 <ReviewFilter
                   course={course}
@@ -172,6 +171,8 @@ export const CoursePage = () => {
                   setShowAllReviews={setShowAllReviews}
                 />
               </div>
+            ) : (
+              <ReviewEmptyPrompt className='my-8' variant='course' />
             )}
             <div className='w-full shadow-sm'>
               {userReview && (
@@ -224,14 +225,18 @@ export const CoursePage = () => {
                   openAddReview={() => setAddReviewOpen(true)}
                 />
               )}
-              <div className='my-2'>
-                <ReviewFilter
-                  course={course}
-                  allReviews={allReviews ?? []}
-                  setReviews={setShowingReviews}
-                  setShowAllReviews={setShowAllReviews}
-                />
-              </div>
+              {allReviews && allReviews.length > 0 ? (
+                <div className='my-2'>
+                  <ReviewFilter
+                    course={course}
+                    allReviews={allReviews ?? []}
+                    setReviews={setShowingReviews}
+                    setShowAllReviews={setShowAllReviews}
+                  />
+                </div>
+              ) : (
+                <ReviewEmptyPrompt className='my-8' variant='course' />
+              )}
               <div className='w-full shadow-sm'>
                 {userReview && (
                   <CourseReview
