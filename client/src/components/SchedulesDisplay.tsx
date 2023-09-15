@@ -120,6 +120,10 @@ export const SchedulesDisplay = ({
     return null;
   }
 
+  const maxDisplayLength =
+    _.max(schedules.flatMap((s) => s.blocks.map((b) => b.display.length))) ?? 0;
+  const displayWidth = maxDisplayLength * 9;
+
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
     <div key={scheduleIndex}>
       {schedule.blocks?.map((block: Block, blockIndex) => (
@@ -130,8 +134,10 @@ export const SchedulesDisplay = ({
             )}
           >
             <div className='flex flex-row flex-wrap whitespace-pre-wrap text-left md:flex-row'>
-              <div className='w-20 font-medium'>{block.display}</div>
-              <div className='w-24 font-normal text-gray-700 dark:text-gray-300'>
+              <div className='font-medium' style={{ width: displayWidth }}>
+                {block.display}
+              </div>
+              <div className='mx-4 font-normal text-gray-700 dark:text-gray-300'>
                 {block.campus}
               </div>
               <div>
