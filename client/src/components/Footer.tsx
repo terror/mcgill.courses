@@ -8,7 +8,7 @@ export const navigationItems = [
 
 export const Footer = () => {
   return (
-    <nav className='flex h-16 w-full flex-row items-center justify-between bg-neutral-100 dark:bg-neutral-800'>
+    <nav className='flex h-16 w-full flex-row items-center justify-between bg-slate-100 dark:bg-neutral-900'>
       <div className='ml-10 flex flex-row'>
         {navigationItems.map((item, i) => (
           <div key={i} className='mx-3'>
