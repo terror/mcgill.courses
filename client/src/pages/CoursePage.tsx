@@ -59,7 +59,11 @@ export const CoursePage = () => {
         setAllReviews(payload.reviews);
         firstFetch.current = false;
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        toast.error(
+          'An error occurred while trying to fetch course information.'
+        );
+      });
   };
 
   useEffect(refetch, [params.id]);

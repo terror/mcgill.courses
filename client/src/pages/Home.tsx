@@ -35,7 +35,9 @@ export const Home = () => {
         )),
       });
     } catch (err) {
-      console.error(err);
+      toast.error(
+        'An error occurred while searching for courses, please try again later.'
+      );
     }
   };
 
