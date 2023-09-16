@@ -11,12 +11,12 @@ import { courseIdToUrlParam } from '../lib/utils';
 import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
-import { Alert } from './Alert';
 import { DeleteButton } from './DeleteButton';
 import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
 import { BsPinFill } from 'react-icons/bs';
+import { toast } from 'sonner';
 
 const LoginPrompt = () => {
   return (
@@ -39,7 +39,6 @@ const ReviewInteractions = ({
 }: ReviewInteractionsProps) => {
   const user = useAuth();
 
-  const [error, setError] = useState('');
   const [kind, setKind] = useState<InteractionKind | undefined>();
   const [likes, setLikes] = useState(0);
 
@@ -47,22 +46,23 @@ const ReviewInteractions = ({
     refreshInteractions();
   }, []);
 
-  const refreshInteractions = () => {
-    fetchClient
-      .getData<GetInteractionsPayload>(
+  const refreshInteractions = async () => {
+    try {
+      const payload = await fetchClient.getData<GetInteractionsPayload>(
         `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
-      )
-      .then((payload: GetInteractionsPayload) => {
-        setKind(payload.kind);
-        setLikes(payload.likes);
-      })
-      .catch((err) => setError(err.toString()));
+      );
+      setKind(payload.kind);
+      setLikes(payload.likes);
+    } catch (err: any) {
+      toast.error(err.toString());
+    }
   };
 
-  const addInteraction = (interactionKind: InteractionKind) => {
+  const addInteraction = async (interactionKind: InteractionKind) => {
     if (!user) return;
-    fetchClient
-      .post(
+
+    try {
+      await fetchClient.post(
         '/interactions',
         {
           kind: interactionKind,
@@ -71,15 +71,18 @@ const ReviewInteractions = ({
           referrer: user.id,
         },
         { headers: { 'Content-Type': 'application/json' } }
-      )
-      .then(() => refreshInteractions())
-      .catch((err) => setError(err.toString()));
+      );
+      await refreshInteractions();
+    } catch (err: any) {
+      toast.error(err.toString());
+    }
   };
 
-  const removeInteraction = () => {
+  const removeInteraction = async () => {
     if (!user) return;
-    fetchClient
-      .delete(
+
+    try {
+      await fetchClient.delete(
         '/interactions',
         {
           course_id: courseId,
@@ -87,9 +90,11 @@ const ReviewInteractions = ({
           referrer: user.id,
         },
         { headers: { 'Content-Type': 'application/json' } }
-      )
-      .then(() => refreshInteractions())
-      .catch((err) => setError(err.toString()));
+      );
+      await refreshInteractions();
+    } catch (err: any) {
+      toast.error(err.toString());
+    }
   };
 
   const displayLoginPrompt = () => {
@@ -115,7 +120,6 @@ const ReviewInteractions = ({
 
   return (
     <Fragment>
-      {error ? <Alert status='error' message={error} /> : null}
       <div className='mb-0.5 flex items-center'>
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <LuThumbsUp

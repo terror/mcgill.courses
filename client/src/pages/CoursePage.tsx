@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AddReviewForm } from '../components/AddReviewForm';
-import { Alert, AlertStatus } from '../components/Alert';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -21,6 +20,7 @@ import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
+import { toast } from 'sonner';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -30,12 +30,9 @@ export const CoursePage = () => {
 
   const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
   const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
-  const [key, setKey] = useState(0);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
@@ -99,21 +96,14 @@ export const CoursePage = () => {
     user && !allReviews?.find((r) => r.userId === user?.id)
   );
 
-  const remountAlert = () => {
-    setKey(key + 1);
-  };
-
   const handleSubmit = (successMessage: string) => {
     return (res: Response) => {
-      remountAlert();
       if (res.ok) {
-        setAlertStatus('success');
-        setAlertMessage(successMessage);
+        toast.success(successMessage);
         setAddReviewOpen(false);
         refetch();
       } else {
-        setAlertMessage('An error occurred.');
-        setAlertStatus('error');
+        toast.error('An error occured.');
       }
     };
   };
@@ -289,9 +279,6 @@ export const CoursePage = () => {
             review={userReview}
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
-        )}
-        {alertStatus && (
-          <Alert status={alertStatus} key={key} message={alertMessage} />
         )}
       </div>
     </Layout>

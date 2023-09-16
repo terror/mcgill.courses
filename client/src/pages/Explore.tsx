@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { toast } from 'sonner';
 
-import { Alert } from '../components/Alert';
 import { BoxToggle } from '../components/BoxToggle';
 import { CourseCard } from '../components/CourseCard';
 import { ExploreFilter } from '../components/ExploreFilter';
@@ -17,7 +17,6 @@ export const Explore = () => {
   const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[]>([]);
-  const [error, setError] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
@@ -46,7 +45,9 @@ export const Explore = () => {
         },
       })
       .then((data) => setCourses(data))
-      .catch(() => setError(true));
+      .catch(() =>
+        toast.error('Failed to fetch courses. Please try again later.')
+      );
     setHasMore(true);
     setOffset(limit);
   }, [selectedSubjects, selectedLevels, selectedTerms]);
@@ -72,7 +73,6 @@ export const Explore = () => {
   return (
     <Layout>
       <div className='p-4'>
-        {error ? <Alert status='error' /> : null}
         <div className='flex w-full flex-col items-center py-8'>
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             Explore all courses
