@@ -116,7 +116,7 @@ export const ReviewForm = ({
             Submit
           </button>
         </div>
-        <PersistFormikValues name={course._id} />
+        <PersistFormikValues name={course._id} persistInvalid={true} />
       </div>
     </>
   );

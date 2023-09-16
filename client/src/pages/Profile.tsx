@@ -12,6 +12,7 @@ import { useDarkMode } from '../hooks/useDarkMode';
 import { twMerge } from 'tailwind-merge';
 import { Link } from 'react-router-dom';
 import { courseIdToUrlParam } from '../lib/utils';
+import { toast } from 'sonner';
 
 export const Profile = () => {
   const user = useAuth();
@@ -23,7 +24,11 @@ export const Profile = () => {
     fetchClient
       .getData<Review[]>(`/reviews?user_id=${user?.id}`)
       .then((data) => setUserReviews(data))
-      .catch((err) => console.log(err));
+      .catch(() =>
+        toast.error(
+          'An error occurred while fetching your reviews, please try again later.'
+        )
+      );
   }, [user?.id]);
 
   return (
