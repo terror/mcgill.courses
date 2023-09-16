@@ -103,7 +103,7 @@ export const CoursePage = () => {
         setAddReviewOpen(false);
         refetch();
       } else {
-        toast.error('An error occured.');
+        toast.error('An error occurred.');
       }
     };
   };
