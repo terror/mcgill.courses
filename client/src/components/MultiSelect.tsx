@@ -57,7 +57,7 @@ export const MultiSelect = ({
         <div className='relative max-w-[240px]'>
           <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='w-full bg-gray-100 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='w-full bg-gray-100 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
               onBlur={handleInputBlur}
             />
@@ -76,7 +76,7 @@ export const MultiSelect = ({
             leaveFrom='transform scale-100 opacity-100'
             leaveTo='transform scale-95 opacity-0'
           >
-            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md shadow-md'>
+            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md text-sm shadow-md'>
               {filtered.map((val, i) => (
                 <Combobox.Option
                   key={i}
@@ -92,10 +92,10 @@ export const MultiSelect = ({
                   onMouseDown={handleOptionMouseDown}
                   onMouseUp={handleOptionMouseUp}
                 >
-                  <div className='flex justify-between'>
+                  <div className='flex items-center justify-between'>
                     <div>{val}</div>
                     {values.includes(val) && (
-                      <Check className='stroke-red-600' />
+                      <Check className='stroke-red-600' size={18} />
                     )}
                   </div>
                 </Combobox.Option>
@@ -106,7 +106,7 @@ export const MultiSelect = ({
       </Combobox>
       <div className='mt-2 flex w-full flex-wrap gap-1'>
         {values.map((val) => (
-          <div className='flex space-x-1 rounded-3xl bg-gray-100 px-2.5 py-1 dark:bg-neutral-700 dark:text-gray-200'>
+          <div className='flex space-x-1 rounded-3xl bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-800 dark:bg-neutral-700 dark:text-gray-200'>
             <div>{val}</div>
             <button type='button' onClick={() => removeVal(val)}>
               <X
