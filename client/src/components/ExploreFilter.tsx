@@ -98,65 +98,58 @@ export const ExploreFilter = ({
     <div
       className={twMerge(
         variant === 'mobile' ? 'w-full' : 'w-[340px]',
-        'flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 px-8 py-6 dark:bg-neutral-800 dark:text-gray-200'
+        'relative flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 px-8 py-6 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
-      <div className='flex flex-row'>
-        <h1 className='text-lg font-semibold text-gray-600 dark:text-gray-400'>
-          Filter...
-        </h1>
-        <ResetButton
-          className='ml-auto'
-          onClear={() => {
-            setSelectedSubjects([]);
-            setSelectedLevels([]);
-            setSelectedTerms([]);
-          }}
-        />
-      </div>
-      <div className='py-2.5' />
+      {/* <h1 className='text-lg font-semibold text-gray-600 dark:text-gray-400'> */}
+      {/*   Filter... */}
+      {/* </h1> */}
+      <ResetButton
+        className='absolute right-6'
+        onClear={() => {
+          setSelectedSubjects([]);
+          setSelectedLevels([]);
+          setSelectedTerms([]);
+        }}
+      />
       <h1 className='font-semibold text-gray-800 dark:text-gray-200'>
         Course Code
       </h1>
-      <div className='py-1.5' />
+      <div className='py-1' />
       <MultiSelect
         options={courseCodes}
         values={selectedSubjects}
         setValues={setSelectedSubjects}
       />
-      <div>
-        <h1 className='mt-3 font-semibold text-gray-800 dark:text-gray-200'>
-          Level
-        </h1>
-        <div className='flex flex-wrap gap-2 py-1'>
-          {levelsOptions.map((level, i) => (
-            <FilterButton
-              key={i}
-              name={level}
-              isSelected={selectedLevels.includes(level)}
-              selections={selectedLevels}
-              setSelections={setSelectedLevels}
-            />
-          ))}
-        </div>
+      <div className='py-2.5' />
+      <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Level</h1>
+      <div className='py-1' />
+      <div className='flex flex-wrap gap-2 py-1'>
+        {levelsOptions.map((level, i) => (
+          <FilterButton
+            key={i}
+            name={level}
+            isSelected={selectedLevels.includes(level)}
+            selections={selectedLevels}
+            setSelections={setSelectedLevels}
+          />
+        ))}
       </div>
-      <div className='space-y-2'>
-        <h1 className='mt-3 font-semibold text-gray-800 dark:text-gray-200'>
-          Term
-        </h1>
-        <div className='flex flex-wrap gap-2'>
-          {termsOptions.map((term, i) => (
-            <FilterButton
-              key={i}
-              icon={termToIcon(term as CourseTerm)}
-              selectedClass={termColorMap[term.toLowerCase()]}
-              name={term}
-              isSelected={selectedTerms.includes(term)}
-              selections={selectedTerms}
-              setSelections={setSelectedTerms}
-            />
-          ))}
-        </div>
+      <div className='py-2.5' />
+      <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Term</h1>
+      <div className='py-1' />
+      <div className='flex flex-wrap gap-2'>
+        {termsOptions.map((term, i) => (
+          <FilterButton
+            key={i}
+            icon={termToIcon(term as CourseTerm)}
+            selectedClass={termColorMap[term.toLowerCase()]}
+            name={term}
+            isSelected={selectedTerms.includes(term)}
+            selections={selectedTerms}
+            setSelections={setSelectedTerms}
+          />
+        ))}
       </div>
     </div>
   );
