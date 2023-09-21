@@ -52,26 +52,45 @@ impl Db {
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
-    if let Some(course_subjects) = filter.clone().map(|f| f.subjects).flatten()
-    {
-      document.insert(
-        "subject",
-        doc! { "$regex": format!("^({})", course_subjects.join("|")) },
-      );
-    }
+    if let Some(filter) = filter {
+      let CourseFilter {
+        subjects,
+        levels,
+        terms,
+        query,
+        ..
+      } = filter;
 
-    if let Some(course_levels) = filter.clone().map(|f| f.levels).flatten() {
-      document.insert(
-        "code",
-        doc! { "$regex": format!("^({})", course_levels.join("|")) },
-      );
-    }
+      if let Some(subjects) = subjects {
+        document.insert(
+            "subject",
+            doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
+        );
+      }
 
-    if let Some(course_terms) = filter.map(|f| f.terms).flatten() {
-      document.insert(
-        "terms",
-        doc! { "$regex": format!("^({})", course_terms.join("|")) },
-      );
+      if let Some(levels) = levels {
+        document.insert(
+            "code",
+            doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
+        );
+      }
+
+      if let Some(terms) = terms {
+        document.insert(
+          "terms",
+          doc! { "$regex": format!("^({})", terms.join("|")), "$options": "i" },
+        );
+      }
+
+      if let Some(query) = query {
+        document.insert(
+            "$or",
+            vec![
+                doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
+                doc! { "description": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } }
+            ]
+        );
+      }
     }
 
     Ok(

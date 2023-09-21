@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
 
 import { CourseCard } from '../components/CourseCard';
 import { ExploreFilter } from '../components/ExploreFilter';
@@ -20,8 +21,9 @@ export const Explore = () => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
 
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [query, setQuery] = useState<string>('');
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
   const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
@@ -34,6 +36,7 @@ export const Explore = () => {
         (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
       )
     ),
+    query,
   };
 
   useEffect(() => {
@@ -49,7 +52,7 @@ export const Explore = () => {
       );
     setHasMore(true);
     setOffset(limit);
-  }, [selectedSubjects, selectedLevels, selectedTerms]);
+  }, [selectedSubjects, selectedLevels, selectedTerms, query]);
 
   const fetchMore = async () => {
     const batch = await fetchClient.postData<Course[]>(
@@ -69,6 +72,10 @@ export const Explore = () => {
     }
   };
 
+  const handleInputChange = (query: string) => {
+    setQuery(query);
+  };
+
   return (
     <Layout>
       <div className='p-4'>
@@ -76,6 +83,7 @@ export const Explore = () => {
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             Explore all courses
           </h1>
+
           <div className='relative flex flex-col lg:flex-row'>
             <div className='m-2 lg:hidden'>
               <FilterToggle>
@@ -103,6 +111,14 @@ export const Explore = () => {
               next={fetchMore}
               style={{ overflowY: 'hidden' }}
             >
+              <input
+                type='text'
+                className={twMerge(
+                  'block w-full rounded-lg bg-slate-200 p-3 pl-4 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
+                )}
+                placeholder='Search through course title and description...'
+                onChange={(event) => handleInputChange(event.target.value)}
+              />
               <div className='mx-auto flex flex-col'>
                 {courses.map(
                   (course, i) =>
