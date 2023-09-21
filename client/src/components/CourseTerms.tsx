@@ -29,7 +29,7 @@ const termToIcon = (term: string, variant: 'small' | 'large') => {
   return icons[term.split(' ')[0].toLowerCase()];
 };
 
-const colorMap: Record<string, string> = {
+export const termColorMap: Record<string, string> = {
   fall: 'bg-red-100 text-red-900',
   winter: 'bg-sky-100 text-sky-900',
   summer: 'bg-yellow-100 text-yellow-900',
@@ -83,7 +83,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
               className={twMerge(
                 'relative my-1.5 rounded-full text-sm dark:bg-neutral-700',
                 variant === 'small' ? 'px-2 py-1' : 'max-w-fit p-1',
-                colorMap[term]
+                termColorMap[term]
               )}
             >
               <div className='flex items-center space-x-1.5 whitespace-nowrap'>

@@ -77,8 +77,8 @@ export const Explore = () => {
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             Explore all courses
           </h1>
-          <div className='flex flex-col lg:flex-row'>
-            <div className='mx-2 flex max-w-xl items-center justify-center lg:hidden'>
+          <div className='relative flex flex-col lg:flex-row'>
+            <div className='z-10 mx-2 flex max-w-xl items-center justify-center lg:hidden'>
               <BoxToggle
                 child={ExploreFilter({
                   selectedSubjects,
