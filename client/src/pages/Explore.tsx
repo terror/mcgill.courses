@@ -77,9 +77,6 @@ export const Explore = () => {
             Explore all courses
           </h1>
           <div className='relative flex flex-col lg:flex-row'>
-            {/* <div className='z-10 mx-2 flex items-center justify-center lg:hidden'> */}
-            {/*   <div></div> */}
-            {/* </div> */}
             <div className='m-2 lg:hidden'>
               <FilterToggle>
                 <ExploreFilter

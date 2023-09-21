@@ -101,9 +101,6 @@ export const ExploreFilter = ({
         'relative flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 px-8 py-6 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
-      {/* <h1 className='text-lg font-semibold text-gray-600 dark:text-gray-400'> */}
-      {/*   Filter... */}
-      {/* </h1> */}
       <ResetButton
         className='absolute right-6'
         onClear={() => {
