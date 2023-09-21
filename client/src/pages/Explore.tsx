@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { toast } from 'sonner';
 
-import { BoxToggle } from '../components/BoxToggle';
 import { CourseCard } from '../components/CourseCard';
 import { ExploreFilter } from '../components/ExploreFilter';
+import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
@@ -17,7 +17,6 @@ export const Explore = () => {
   const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[]>([]);
-  const [filterOpen, setFilterOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
 
@@ -77,21 +76,19 @@ export const Explore = () => {
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             Explore all courses
           </h1>
-          <div className='flex flex-col lg:flex-row'>
-            <div className='mx-2 flex max-w-xl items-center justify-center lg:hidden'>
-              <BoxToggle
-                child={ExploreFilter({
-                  selectedSubjects,
-                  setSelectedSubjects,
-                  selectedLevels,
-                  setSelectedLevels,
-                  selectedTerms,
-                  setSelectedTerms,
-                  variant: 'mobile',
-                })}
-                open={filterOpen}
-                setOpen={setFilterOpen}
-              />
+          <div className='relative flex flex-col lg:flex-row'>
+            <div className='m-2 lg:hidden'>
+              <FilterToggle>
+                <ExploreFilter
+                  selectedSubjects={selectedSubjects}
+                  setSelectedSubjects={setSelectedSubjects}
+                  selectedLevels={selectedLevels}
+                  setSelectedLevels={setSelectedLevels}
+                  selectedTerms={selectedTerms}
+                  setSelectedTerms={setSelectedTerms}
+                  variant='mobile'
+                />
+              </FilterToggle>
             </div>
             <InfiniteScroll
               dataLength={courses.length}
