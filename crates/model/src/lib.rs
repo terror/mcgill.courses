@@ -12,6 +12,7 @@ use {
 };
 
 mod course;
+mod course_filter;
 mod course_listing;
 mod course_page;
 mod initialize_options;
@@ -24,6 +25,7 @@ mod search_results;
 
 pub use crate::{
   course::Course,
+  course_filter::CourseFilter,
   course_listing::CourseListing,
   course_page::CoursePage,
   initialize_options::InitializeOptions,

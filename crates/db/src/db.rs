@@ -48,27 +48,26 @@ impl Db {
     &self,
     limit: Option<i64>,
     offset: Option<u64>,
-    course_subjects: Option<Vec<String>>,
-    course_levels: Option<Vec<String>>,
-    course_terms: Option<Vec<String>>,
+    filter: Option<CourseFilter>,
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
-    if let Some(course_subjects) = course_subjects {
+    if let Some(course_subjects) = filter.clone().map(|f| f.subjects).flatten()
+    {
       document.insert(
         "subject",
         doc! { "$regex": format!("^({})", course_subjects.join("|")) },
       );
     }
 
-    if let Some(course_levels) = course_levels {
+    if let Some(course_levels) = filter.clone().map(|f| f.levels).flatten() {
       document.insert(
         "code",
         doc! { "$regex": format!("^({})", course_levels.join("|")) },
       );
     }
 
-    if let Some(course_terms) = course_terms {
+    if let Some(course_terms) = filter.map(|f| f.terms).flatten() {
       document.insert(
         "terms",
         doc! { "$regex": format!("^({})", course_terms.join("|")) },
@@ -530,35 +529,17 @@ mod tests {
   async fn on_disk_database_is_persistent() {
     let TestContext { db, db_name } = TestContext::new().await;
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      0
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 0);
 
     db.add_course(Course::default()).await.unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
 
     drop(db);
 
     let db = Db::connect(&db_name).await.unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -578,13 +559,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      2
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 2);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -611,13 +586,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -637,13 +606,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      2
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 2);
 
     fs::write(&source, get_content("update.json")).unwrap();
 
@@ -654,7 +617,7 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 3);
 
@@ -689,13 +652,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("COMP 202").await.unwrap();
 
@@ -724,7 +681,7 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 123);
 
@@ -753,13 +710,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("COMP202").await.unwrap();
 
@@ -788,13 +739,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("foundations of").await.unwrap();
 
@@ -823,13 +768,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(Some(10), None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      10
-    );
+    assert_eq!(db.courses(Some(10), None, None).await.unwrap().len(), 10);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -849,13 +788,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, Some(20), None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      103
-    );
+    assert_eq!(db.courses(None, Some(20), None).await.unwrap().len(), 103);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -1222,12 +1155,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, Some(vec!["MATH".into()]), None, None)
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          subjects: Some(vec!["MATH".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1256,12 +1196,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, Some(vec!["100".into()]), None)
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          levels: Some(vec!["100".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1290,12 +1237,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, None, Some(vec!["Winter".into()]))
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          terms: Some(vec!["Winter".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1355,13 +1309,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("Giulia Alberini").await.unwrap();
 

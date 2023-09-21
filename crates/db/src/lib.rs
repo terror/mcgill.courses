@@ -6,7 +6,8 @@ use {
   lazy_static::lazy_static,
   log::{info, warn},
   model::{
-    Course, InitializeOptions, Instructor, Interaction, Review, SearchResults,
+    Course, CourseFilter, InitializeOptions, Instructor, Interaction, Review,
+    SearchResults,
   },
   mongodb::{
     bson::{doc, Document},
