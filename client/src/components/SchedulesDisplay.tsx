@@ -54,7 +54,7 @@ const BlockLocation = ({ location }: { location: string }) => {
   return (
     <span className='relative whitespace-nowrap'>
       <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
-        <p className='inline-block'> {location}</p>
+        <p className='inline-block cursor-default'> {location}</p>
       </Tooltip>
     </span>
   );
