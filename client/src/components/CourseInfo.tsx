@@ -42,9 +42,9 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
           {course.description}
         </p>
         <div className='grow py-3' />
-        <CourseInfoStats className='sm:hidden' allReviews={allReviews} />
+        <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />
         <CourseInfoStats
-          className='hidden gap-x-6 sm:mb-4 sm:flex md:mb-0 md:hidden'
+          className='hidden gap-x-6 sm:mb-6 sm:flex md:mb-0 md:hidden'
           variant='medium'
           allReviews={allReviews}
         />
