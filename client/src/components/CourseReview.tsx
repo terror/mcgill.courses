@@ -17,6 +17,7 @@ import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
 import { BsPinFill } from 'react-icons/bs';
 import { toast } from 'sonner';
+import { Tooltip } from './Tooltip';
 
 const LoginPrompt = () => {
   return (
@@ -166,10 +167,10 @@ export const CourseReview = ({
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
 
-  const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'P'
-  );
+  const date = new Date(parseInt(review.timestamp.$date.$numberLong, 10));
+
+  const shortDate = format(date, 'P'),
+    longDate = format(date, 'EEEE, MMMM d, yyyy');
 
   return (
     <div
@@ -181,9 +182,11 @@ export const CourseReview = ({
         <div className='flex w-full'>
           <div className='relative flex w-full flex-col'>
             <div className='flex w-full'>
-              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
-                {dateStr}
-              </p>
+              <Tooltip text={longDate}>
+                <p className='cursor-default py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
+                  {shortDate}
+                </p>
+              </Tooltip>
               {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
