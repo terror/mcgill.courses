@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-import { Star } from 'react-feather';
 
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
-import { MultiSelect } from './MultiSelect';
 import { ResetButton } from './ResetButton';
+import { FilterToggle } from './FilterToggle';
 
 const sortTypes = [
   'Most Recent',
@@ -18,63 +17,6 @@ const sortTypes = [
 ] as const;
 
 export type ReviewSortType = (typeof sortTypes)[number];
-
-type StarToggleProps = {
-  onToggle: () => void;
-  toggled: boolean;
-};
-
-const StarToggle = ({ onToggle, toggled }: StarToggleProps) => {
-  return (
-    <button className='relative w-fit' onClick={onToggle}>
-      <Star
-        size={28}
-        stroke='none'
-        className={toggled ? 'fill-red-600' : 'fill-gray-200'}
-      />
-    </button>
-  );
-};
-
-type RatingFilterProps = {
-  ratings: number[];
-  setRatings: Dispatch<SetStateAction<number[]>>;
-};
-
-const RatingFilter = ({ ratings, setRatings }: RatingFilterProps) => {
-  const toggleRating = (rating: number) => {
-    return () => {
-      if (ratings.includes(rating)) {
-        setRatings(ratings.filter((r: number) => r !== rating));
-      } else {
-        setRatings([...ratings, rating]);
-      }
-    };
-  };
-
-  return (
-    <div className='flex'>
-      {[1, 2, 3, 4, 5].map((x, i) => (
-        <div key={i} className='flex flex-col'>
-          <StarToggle
-            key={`star-rating-${x}`}
-            onToggle={toggleRating(x)}
-            toggled={ratings.includes(x)}
-          />
-          <div className='text-center text-xs font-bold'>{x}</div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-type FieldLabelProps = {
-  children: string;
-};
-
-const FieldLabel = ({ children }: FieldLabelProps) => (
-  <h2 className='mb-2 text-sm font-semibold'>{children}</h2>
-);
 
 type ReviewFilterProps = {
   course: Course;
@@ -90,33 +32,17 @@ export const ReviewFilter = ({
   setShowAllReviews,
 }: ReviewFilterProps) => {
   const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
-  const [selectedInstructors, setSelectedInstructors] = useState<string[]>([]);
-  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-  const [selectedDifficulties, setSelectedDifficulties] = useState<number[]>(
-    []
-  );
+  const [selectedInstructor, setSelectedInstructor] = useState<string>('');
 
   useEffect(() => {
     setReviews(
       allReviews
         .filter(
           (review: Review) =>
-            selectedInstructors.length === 0 ||
-            selectedInstructors.filter((instructor: string) =>
-              review.instructors
-                .map((ins) => ins.toLowerCase())
-                .includes(instructor.toLowerCase())
-            ).length !== 0
-        )
-        .filter(
-          (review: Review) =>
-            selectedRatings.length === 0 ||
-            selectedRatings.includes(review.rating)
-        )
-        .filter(
-          (review: Review) =>
-            selectedDifficulties.length === 0 ||
-            selectedDifficulties.includes(review.difficulty)
+            selectedInstructor === '' ||
+            review.instructors
+              .map((ins) => ins.toLowerCase())
+              .includes(selectedInstructor.toLowerCase())
         )
         .sort((a: Review, b: Review) => {
           switch (sortBy) {
@@ -147,61 +73,55 @@ export const ReviewFilter = ({
         })
     );
     setShowAllReviews(false);
-  }, [sortBy, selectedDifficulties, selectedInstructors, selectedRatings]);
+  }, [sortBy, selectedInstructor]);
+
+  const reset = () => {
+    setSortBy('Most Recent');
+    setSelectedInstructor('');
+  };
+
+  useEffect(reset, [course]);
 
   const sorts = useMemo(() => sortTypes.slice(), []);
   const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
 
   return (
-    <div className='flex flex-col space-y-4 rounded-lg bg-slate-50 p-8 dark:bg-neutral-800 dark:text-gray-200'>
-      <div className='flex flex-row'>
-        <h1 className='mb-2 text-2xl font-semibold'>Filter</h1>
+    <div className='flex flex-col rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
+      <FilterToggle>
+        <div className='py-2' />
+        <div className='p-1'>
+          <div className='flex gap-x-2'>
+            <div className='w-2/5'>
+              <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                Sort By
+              </h2>
+              <div className='relative z-10'>
+                <Autocomplete
+                  options={sorts}
+                  value={sortBy}
+                  setValue={(val: string) => setSortBy(val as ReviewSortType)}
+                />
+              </div>
+            </div>
+            <div className='w-3/5'>
+              <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                Instructor
+              </h2>
+              <div className='relative z-10'>
+                <Autocomplete
+                  options={uniqueInstructors}
+                  value={selectedInstructor}
+                  setValue={setSelectedInstructor}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <ResetButton
-          className='ml-auto'
-          onClear={() => {
-            setSortBy('Most Recent');
-            setSelectedInstructors([]);
-            setSelectedRatings([]);
-            setSelectedDifficulties([]);
-          }}
+          className='absolute right-2 top-2 ml-auto'
+          onClear={reset}
         />
-      </div>
-      <div>
-        <FieldLabel>Sort by</FieldLabel>
-        <div className='relative z-20'>
-          <Autocomplete
-            options={sorts}
-            value={sortBy}
-            setValue={(val: string) => setSortBy(val as ReviewSortType)}
-          />
-        </div>
-      </div>
-      <div>
-        <FieldLabel>Instructor(s)</FieldLabel>
-        <div className='relative z-10'>
-          <MultiSelect
-            options={uniqueInstructors}
-            values={selectedInstructors}
-            setValues={setSelectedInstructors}
-          />
-        </div>
-      </div>
-      <div className='flex flex-wrap gap-x-8 gap-y-4'>
-        <div>
-          <FieldLabel>Rating</FieldLabel>
-          <RatingFilter
-            ratings={selectedRatings}
-            setRatings={setSelectedRatings}
-          />
-        </div>
-        <div>
-          <FieldLabel>Difficulty</FieldLabel>
-          <RatingFilter
-            ratings={selectedDifficulties}
-            setRatings={setSelectedDifficulties}
-          />
-        </div>
-      </div>
+      </FilterToggle>
     </div>
   );
 };

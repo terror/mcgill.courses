@@ -1,6 +1,7 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import birdImageUrl from '../assets/bird.png';
 import { CourseSearchBar } from './CourseSearchBar';
@@ -34,7 +35,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     fetchClient
-      .getData<Notification[]>('/notifications')
+      .deserialize<Notification[]>('GET', '/notifications')
       .then((data) => setNotifications(data))
       .catch((err) => console.error(err));
   }, []);
@@ -49,7 +50,9 @@ export const Navbar = () => {
         )),
       });
     } catch (err) {
-      console.error(err);
+      toast.error(
+        'An error occurred while searching for courses, please try again later.'
+      );
     }
   };
 
@@ -58,7 +61,7 @@ export const Navbar = () => {
   return (
     <header className='z-40'>
       <nav
-        className='z-40 flex items-center justify-between p-6 lg:px-8'
+        className='z-40 flex items-center justify-between p-3 lg:px-8'
         aria-label='Global'
       >
         <div className='z-40 my-auto mr-auto flex lg:flex-1'>

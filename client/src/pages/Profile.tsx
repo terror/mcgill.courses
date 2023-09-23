@@ -12,6 +12,7 @@ import { useDarkMode } from '../hooks/useDarkMode';
 import { twMerge } from 'tailwind-merge';
 import { Link } from 'react-router-dom';
 import { courseIdToUrlParam } from '../lib/utils';
+import { toast } from 'sonner';
 
 export const Profile = () => {
   const user = useAuth();
@@ -23,7 +24,11 @@ export const Profile = () => {
     fetchClient
       .deserialize<Review[]>('GET', `/reviews?user_id=${user?.id}`)
       .then((data) => setUserReviews(data))
-      .catch((err) => console.error(err));
+      .catch(() =>
+        toast.error(
+          'An error occurred while fetching your reviews, please try again later.'
+        )
+      );
   }, [user?.id]);
 
   return (
@@ -39,7 +44,7 @@ export const Profile = () => {
                 darkMode ? 'text-white' : 'text-gray-700'
               )}
             />
-            <h1 className='text-md font-semibold text-gray-800 dark:text-gray-200 md:text-2xl'>
+            <h1 className='font-semibold text-gray-800 dark:text-gray-200 md:text-2xl'>
               {user?.mail}
             </h1>
             <p className='font-semibold text-gray-800 dark:text-gray-200'>
@@ -78,7 +83,6 @@ export const Profile = () => {
                     <CourseReview
                       canModify={false}
                       handleDelete={() => null}
-                      isLast={i === userReviews.length - 1}
                       openEditReview={() => null}
                       review={review}
                     />

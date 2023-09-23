@@ -7,12 +7,14 @@ type AutocompleteProps = {
   options: string[];
   value: string;
   setValue: (value: string) => void;
+  className?: string;
 };
 
 export const Autocomplete = ({
   options,
   value,
   setValue,
+  className,
 }: AutocompleteProps) => {
   const [query, setQuery] = useState('');
 
@@ -24,12 +26,12 @@ export const Autocomplete = ({
       : options;
 
   return (
-    <div>
+    <div className={className}>
       <Combobox value={value} onChange={(val) => setValue(val)}>
         <div className='w-full'>
-          <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
+          <div className='relative rounded-md bg-slate-200 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='bg-gray-100 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='w-[87.5%] bg-slate-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
@@ -47,7 +49,7 @@ export const Autocomplete = ({
             leaveFrom='transform scale-100 opacity-100'
             leaveTo='transform scale-95 opacity-0'
           >
-            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-b-md shadow-md'>
+            <Combobox.Options className='autocomplete absolute max-h-80 w-full overflow-scroll rounded-md text-sm shadow-md'>
               {filtered.map((val, i) => (
                 <Combobox.Option
                   key={i}

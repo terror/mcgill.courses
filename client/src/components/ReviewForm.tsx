@@ -1,10 +1,11 @@
-import { ErrorMessage, Field, FormikState } from 'formik';
-import { PersistFormikValues } from 'formik-persist-values';
 import * as Yup from 'yup';
-
+import { BirdIcon } from './BirdIcon';
 import { Course } from '../model/Course';
+import { ErrorMessage, Field, FormikState } from 'formik';
+import { IconRatingInput } from './IconRatingInput';
+import { LuFlame } from 'react-icons/lu';
 import { MultiSelect } from './MultiSelect';
-import { StarRatingInput } from './StarRatingInput';
+import { PersistFormikValues } from 'formik-persist-values';
 
 export const ReviewSchema = Yup.object().shape({
   content: Yup.string()
@@ -81,9 +82,10 @@ export const ReviewForm = ({
         <label htmlFor='rating' className='mb-2 mt-4 dark:text-gray-200'>
           Rating
         </label>
-        <StarRatingInput
+        <IconRatingInput
           name='rating'
           rating={values.rating}
+          icon={BirdIcon}
           setFieldValue={setFieldValue}
         />
         <div className='italic text-red-400'>
@@ -92,9 +94,10 @@ export const ReviewForm = ({
         <label htmlFor='difficulty' className='my-2 dark:text-gray-200'>
           Difficulty
         </label>
-        <StarRatingInput
+        <IconRatingInput
           name='difficulty'
           rating={values.difficulty}
+          icon={LuFlame}
           setFieldValue={setFieldValue}
         />
         <div className='italic text-red-400'>
@@ -114,7 +117,7 @@ export const ReviewForm = ({
             Submit
           </button>
         </div>
-        <PersistFormikValues name={course._id} />
+        <PersistFormikValues name={course._id} persistInvalid={true} />
       </div>
     </>
   );

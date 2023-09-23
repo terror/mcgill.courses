@@ -4,6 +4,7 @@ import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import {
   spliceCourseCode,
   courseIdToUrlParam,
@@ -32,16 +33,23 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
 
   const traverse = (node: ReqNode): string => {
     if (typeof node === 'string') {
+      const duplicates = nodes.filter((n) =>
+        (n.id as string).startsWith(node)
+      ).length;
+
+      const id = duplicates === 0 ? node : `${node}_${duplicates}`;
+
       nodes.push({
-        id: node,
+        id,
         label: node,
         color: groupColors[nodeGroup],
       });
-      return node;
+
+      return id;
     }
 
-    const codes = node.groups.map((group) => traverse(group));
-    const id = codes.join(node.operator);
+    const codes = node.groups.map((group) => traverse(group)),
+      id = codes.join(node.operator);
 
     nodes.push({
       id,
@@ -66,6 +74,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();
+  const mobile = useMediaQuery('(max-width: 480px)');
 
   const {
     nodes: prereqNodes,
@@ -117,10 +126,13 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
 
     if (!node || !node.id) return;
 
-    if (!isValidCourseCode(node.id as string)) return;
+    const [courseCode, rest] = (node.id as string).split('_', 2);
+    const isOperator = rest !== undefined && isNaN(+rest);
+
+    if (!isValidCourseCode(courseCode) || isOperator) return;
 
     navigate(
-      `/course/${courseIdToUrlParam(node.id.toString().replace(' ', ''))}`
+      `/course/${courseIdToUrlParam(courseCode.toString().replace(' ', ''))}`
     );
   };
 
@@ -130,7 +142,7 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
       graph={graph}
       options={{
         edges: { color: darkMode ? '#919191' : '#b1b1b1' },
-        height: '500px',
+        height: '288px',
         layout: {
           randomSeed: undefined,
           improvedLayout: true,
@@ -156,6 +168,19 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
             color: darkMode ? '#FFFFFF' : '#000000',
           },
         },
+      }}
+      getNetwork={(network) => {
+        network.focus(course._id, {
+          scale: 0.7,
+          offset: {
+            x: 60,
+            y: 0,
+          },
+          animation: {
+            duration: mobile ? 2500 : 1000,
+            easingFunction: 'easeOutCubic',
+          },
+        });
       }}
       events={{
         select: ({ nodes }: { nodes: string[] }) => {

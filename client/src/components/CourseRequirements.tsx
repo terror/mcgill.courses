@@ -1,6 +1,12 @@
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { capitalize, punctuate } from '../lib/utils';
 import { Requirements } from '../model/Requirements';
+import { PiGraphFill } from 'react-icons/pi';
+import { FiList } from 'react-icons/fi';
+import { CourseGraph } from './CourseGraph';
+import { Course } from '../model/Course';
+import { twMerge } from 'tailwind-merge';
 
 type ReqsBlockProps = {
   title: string;
@@ -72,14 +78,43 @@ const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
 };
 
 type RequirementsProps = {
+  course: Course;
   requirements: Requirements;
+  className?: string;
 };
 
-export const CourseRequirements = ({ requirements }: RequirementsProps) => {
+export const CourseRequirements = ({
+  course,
+  requirements,
+  className,
+}: RequirementsProps) => {
+  const [showGraph, setShowGraph] = useState(false);
+
+  const handleGraphToggle = useCallback(
+    () => setShowGraph((prev) => !prev),
+    [setShowGraph]
+  );
+
+  const ToggleButtonIcon = showGraph ? FiList : PiGraphFill;
+
   return (
-    <div className='w-full rounded-md bg-slate-50 p-4 dark:bg-neutral-800'>
-      <div className='flex-col space-y-3'>
-        <div className='m-4 space-y-7'>
+    <div
+      className={twMerge(
+        'relative w-full rounded-md bg-slate-50 shadow-sm dark:bg-neutral-800',
+        className
+      )}
+    >
+      <button
+        className='absolute right-4 top-4 z-10 cursor-pointer rounded-full p-1 transition duration-150 hover:bg-gray-200 dark:hover:bg-gray-700'
+        onClick={handleGraphToggle}
+      >
+        <ToggleButtonIcon
+          size={28}
+          className='fill-gray-700 stroke-gray-700 dark:fill-gray-400 dark:stroke-gray-400'
+        />
+      </button>
+      {!showGraph ? (
+        <div className='space-y-7 p-6'>
           <ReqsBlock
             title='Prerequisites'
             text={requirements.prerequisitesText}
@@ -99,7 +134,9 @@ export const CourseRequirements = ({ requirements }: RequirementsProps) => {
             </p>
           </div>
         </div>
-      </div>
+      ) : (
+        <CourseGraph course={course} />
+      )}
     </div>
   );
 };

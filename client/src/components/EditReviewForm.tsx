@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
@@ -33,12 +34,17 @@ export const EditReviewForm = ({
     difficulty: review.difficulty,
   };
 
+  const handleClose = () => {
+    onClose();
+    toast.success('Review draft saved.');
+  };
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
         as='div'
         className={twMerge('relative z-50', darkMode ? 'dark' : '')}
-        onClose={onClose}
+        onClose={handleClose}
       >
         <Transition.Child
           as={Fragment}

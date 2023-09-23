@@ -1,48 +1,21 @@
-import { ExternalLink } from 'react-feather';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-
 import { Course } from '../model/Course';
+import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
-import { RatingInfo } from './RatingInfo';
+import { ExternalLink } from 'react-feather';
 import { FiBell, FiBellOff } from 'react-icons/fi';
-import { useEffect, useState } from 'react';
+import { Review } from '../model/Review';
 import { Subscription } from '../model/Subscription';
-
-type ChartsProps = {
-  numReviews?: number;
-  rating: number;
-  difficulty: number;
-};
-
-const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
-  if (numReviews === undefined) return null;
-
-  return numReviews ? (
-    <div className='flex-row md:flex'>
-      <RatingInfo title={'Rating'} rating={rating} />
-      <RatingInfo title={'Difficulty'} rating={difficulty} />
-    </div>
-  ) : (
-    <div className='w-[50%] text-left text-gray-700 dark:text-gray-200 md:text-center'>
-      No reviews have been left for this course yet. Be the first!
-    </div>
-  );
-};
+import { fetchClient } from '../lib/fetchClient';
+import { useAuth } from '../hooks/useAuth';
+import { useEffect, useState } from 'react';
 
 type CourseInfoProps = {
   course: Course;
-  rating: number;
-  difficulty: number;
+  allReviews: Review[];
   numReviews?: number;
 };
 
-export const CourseInfo = ({
-  course,
-  rating,
-  difficulty,
-  numReviews,
-}: CourseInfoProps) => {
+export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   const user = useAuth();
 
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -52,7 +25,8 @@ export const CourseInfo = ({
 
     const checkSubscription = async () => {
       try {
-        const subscription = await fetchClient.getData<Subscription | null>(
+        const subscription = await fetchClient.deserialize<Subscription | null>(
+          'GET',
           `/subscriptions?course_id=${course._id}`,
           {
             headers: { 'Content-Type': 'application/json' },
@@ -72,11 +46,10 @@ export const CourseInfo = ({
     if (!user) return;
 
     try {
-      await fetchClient.post(
-        '/subscriptions',
-        { course_id: course._id },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await fetchClient.post('/subscriptions', {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_id: course._id }),
+      });
       setIsSubscribed(true);
     } catch (err) {
       console.error(err);
@@ -87,11 +60,10 @@ export const CourseInfo = ({
     if (!user) return;
 
     try {
-      await fetchClient.delete(
-        '/subscriptions',
-        { course_id: course._id },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await fetchClient.delete('/subscriptions', {
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_id: course._id }),
+      });
       setIsSubscribed(false);
     } catch (err) {
       console.error(err);
@@ -99,10 +71,10 @@ export const CourseInfo = ({
   };
 
   return (
-    <div className='flex w-full flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
-      <div className='m-4 space-y-3 md:m-4 md:w-1/2'>
+    <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 shadow-sm dark:bg-neutral-800 md:mt-10'>
+      <div className='flex w-full flex-col md:w-7/12'>
         <div className='flex flex-row space-x-2 align-middle'>
-          <h1 className='text-4xl font-semibold text-gray-800 dark:text-gray-200'>
+          <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
             {course.subject} {course.code}
           </h1>
           <div className='flex items-center gap-2'>
@@ -134,29 +106,31 @@ export const CourseInfo = ({
             ) : null}
           </div>
         </div>
-        <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
+        <div className='py-1' />
+        <h2 className='text-2xl text-gray-800 dark:text-gray-200'>
           {course.title}
         </h2>
-        <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-          <Charts
-            numReviews={numReviews}
-            rating={rating}
-            difficulty={difficulty}
-          />
-        </div>
         <CourseTerms course={course} variant='large' />
+        <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
           {course.description}
         </p>
-        <p className='text-sm text-gray-500 dark:text-gray-400'>
-          {numReviews} review(s)
+        <div className='grow py-3' />
+        <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />
+        <CourseInfoStats
+          className='hidden gap-x-6 sm:mb-6 sm:flex md:mb-0 md:hidden'
+          variant='medium'
+          allReviews={allReviews}
+        />
+        <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
+          {allReviews.length} review(s)
         </p>
       </div>
-      <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-        <Charts
-          numReviews={numReviews}
-          rating={rating}
-          difficulty={difficulty}
+      <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
+        <CourseInfoStats
+          variant='large'
+          allReviews={allReviews}
+          className='lg:mr-8'
         />
       </div>
     </div>
