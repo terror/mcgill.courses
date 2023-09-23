@@ -102,14 +102,14 @@ export const ExploreFilter = ({
       )}
     >
       <ResetButton
-        className='absolute right-6'
+        className='absolute right-4 top-4'
         onClear={() => {
           setSelectedSubjects([]);
           setSelectedLevels([]);
           setSelectedTerms([]);
         }}
       />
-      <h1 className='font-semibold text-gray-800 dark:text-gray-200'>
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
         Course Code
       </h1>
       <div className='py-1' />
@@ -119,7 +119,9 @@ export const ExploreFilter = ({
         setValues={setSelectedSubjects}
       />
       <div className='py-2.5' />
-      <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Level</h1>
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Level
+      </h1>
       <div className='py-1' />
       <div className='flex flex-wrap gap-2 py-1'>
         {levelsOptions.map((level, i) => (
@@ -133,7 +135,9 @@ export const ExploreFilter = ({
         ))}
       </div>
       <div className='py-2.5' />
-      <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Term</h1>
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Term
+      </h1>
       <div className='py-1' />
       <div className='flex flex-wrap gap-2'>
         {termsOptions.map((term, i) => (
