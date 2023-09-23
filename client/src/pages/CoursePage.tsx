@@ -1,26 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-
 import { AddReviewForm } from '../components/AddReviewForm';
+import { Course } from '../model/Course';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
 import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
+import { Loading } from './Loading';
 import { NotFound } from '../components/NotFound';
-import { ReviewFilter } from '../components/ReviewFilter';
-import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { getCurrentTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
-import { Loading } from './Loading';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
+import { ReviewFilter } from '../components/ReviewFilter';
+import { SchedulesDisplay } from '../components/SchedulesDisplay';
+import { getCurrentTerms } from '../lib/utils';
+import { repo } from '../lib/repo';
 import { toast } from 'sonner';
+import { useAuth } from '../hooks/useAuth';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -42,12 +40,11 @@ export const CoursePage = () => {
 
   const refetch = () => {
     const id = params.id?.replace('-', '').toUpperCase();
-    fetchClient
-      .deserialize<GetCourseWithReviewsPayload | null>(
-        'GET',
-        `/courses/${id}?with_reviews=true`
-      )
-      .then((payload) => {
+
+    const inner = async () => {
+      try {
+        const payload = await repo.getCourseWithReviews(id);
+
         if (payload === null) {
           setCourse(null);
           return;
@@ -59,12 +56,14 @@ export const CoursePage = () => {
         setAllReviews(payload.reviews);
 
         firstFetch.current = false;
-      })
-      .catch(() => {
+      } catch (err) {
         toast.error(
           'An error occurred while trying to fetch course information.'
         );
-      });
+      }
+    };
+
+    inner();
   };
 
   useEffect(refetch, [params.id]);
@@ -114,10 +113,7 @@ export const CoursePage = () => {
   };
 
   const handleDelete = async (review: Review) => {
-    const res = await fetchClient.delete('/reviews', {
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ course_id: review.courseId }),
-    });
+    const res = await repo.deleteReview(review.courseId);
 
     if (res.ok) {
       setShowingReviews(

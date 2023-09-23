@@ -4,7 +4,7 @@ import { CourseTerms } from './CourseTerms';
 import { ExternalLink } from 'react-feather';
 import { Review } from '../model/Review';
 import { VscBell, VscBellSlash } from 'react-icons/vsc';
-import { repo } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -41,10 +41,10 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
     try {
       await repo.addSubcription(course._id);
       setIsSubscribed(true);
-      toast.success(`Subscribed to course ${course.subject} ${course.code}`);
+      toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
     } catch (err) {
       toast.error(
-        `Failed to subscribe to course ${course.subject} ${course.code}`
+        `Failed to subscribe to course ${course.subject} ${course.code}.`
       );
     }
   };

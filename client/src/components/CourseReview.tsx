@@ -1,23 +1,21 @@
-import { Transition } from '@headlessui/react';
-import { format } from 'date-fns';
-import { Fragment, useEffect, useState } from 'react';
-import { Edit } from 'react-feather';
-import { Link } from 'react-router-dom';
-import { twMerge } from 'tailwind-merge';
-
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { courseIdToUrlParam } from '../lib/utils';
-import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
-import { InteractionKind } from '../model/Interaction';
-import { Review } from '../model/Review';
-import { DeleteButton } from './DeleteButton';
-import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
-import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
 import { BsPinFill } from 'react-icons/bs';
-import { toast } from 'sonner';
+import { DeleteButton } from './DeleteButton';
+import { Edit } from 'react-feather';
+import { Fragment, useEffect, useState } from 'react';
+import { IconRating } from './IconRating';
+import { InteractionKind } from '../model/Interaction';
+import { Link } from 'react-router-dom';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
+import { Review } from '../model/Review';
 import { Tooltip } from './Tooltip';
+import { Transition } from '@headlessui/react';
+import { courseIdToUrlParam } from '../lib/utils';
+import { format } from 'date-fns';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
+import { useAuth } from '../hooks/useAuth';
 
 const LoginPrompt = () => {
   return (
@@ -49,10 +47,7 @@ const ReviewInteractions = ({
 
   const refreshInteractions = async () => {
     try {
-      const payload = await fetchClient.deserialize<GetInteractionsPayload>(
-        'GET',
-        `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
-      );
+      const payload = await repo.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
       setLikes(payload.likes);
     } catch (err: any) {
@@ -61,18 +56,8 @@ const ReviewInteractions = ({
   };
 
   const addInteraction = async (interactionKind: InteractionKind) => {
-    if (!user) return;
-
     try {
-      await fetchClient.post('/interactions', {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          kind: interactionKind,
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        }),
-      });
+      await repo.addInteraction(interactionKind, courseId, userId, user?.id);
       await refreshInteractions();
     } catch (err: any) {
       toast.error(err.toString());
@@ -80,17 +65,8 @@ const ReviewInteractions = ({
   };
 
   const removeInteraction = async () => {
-    if (!user) return;
-
     try {
-      await fetchClient.delete('/interactions', {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        }),
-      });
+      await repo.removeInteraction(courseId, userId, user?.id);
       await refreshInteractions();
     } catch (err: any) {
       toast.error(err.toString());

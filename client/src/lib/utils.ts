@@ -20,9 +20,8 @@ export const uniqueTermInstructors = (course: Course) => {
   const order = ['Fall', 'Winter', 'Summer'];
 
   for (const term of course.terms) {
-    if (!filledTerms.has(term)) {
+    if (!filledTerms.has(term))
       unique.push({ term, name: 'No Instructor Assigned' });
-    }
   }
 
   unique.sort((a, b) => order.indexOf(a.term) - order.indexOf(b.term));
@@ -48,6 +47,7 @@ export const filterCurrentInstructors = (instructors: Instructor[]) => {
 
 export const sortTerms = (terms: string[]) => {
   const order = ['Summer', 'Fall', 'Winter'];
+
   return terms.sort((a, b) => {
     return a.split(' ')[1] === b.split(' ')[1]
       ? order.indexOf(a.split(' ')[0]) - order.indexOf(b.split(' ')[0])
@@ -57,6 +57,7 @@ export const sortTerms = (terms: string[]) => {
 
 export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
   const order = ['Lec', 'Lab', 'Seminar', 'Tut', 'Conf'];
+
   return schedules.sort((a, b) => {
     const aNum = parseInt(a.blocks[0].display.split(' ')[1], 10);
     const bNum = parseInt(b.blocks[0].display.split(' ')[1], 10);
@@ -69,30 +70,21 @@ export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
   });
 };
 
-export const getUrl = (): string => {
-  return import.meta.env.VITE_API_URL ?? '';
-};
+export const getUrl = (): string => import.meta.env.VITE_API_URL ?? '';
 
-export const courseIdToUrlParam = (courseId: string) => {
-  return `${courseId.slice(0, 4)}-${courseId.slice(4)}`.toLowerCase();
-};
+export const courseIdToUrlParam = (courseId: string) =>
+  `${courseId.slice(0, 4)}-${courseId.slice(4)}`.toLowerCase();
 
-export const capitalize = (s: string): string => {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+export const capitalize = (s: string): string =>
+  s.charAt(0).toUpperCase() + s.slice(1);
 
-export const punctuate = (s: string): string => {
-  return s.charAt(s.length - 1) === '.' ? s : s + '.';
-};
+export const punctuate = (s: string): string =>
+  s.charAt(s.length - 1) === '.' ? s : s + '.';
 
-export const isValidCourseCode = (s: string) => {
-  return /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/.test(s);
-};
+export const isValidCourseCode = (s: string) =>
+  /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/.test(s);
 
-export const spliceCourseCode = (courseCode: string, delimiter: string) => {
-  return courseCode.slice(0, 4) + delimiter + courseCode.slice(4);
-};
+export const spliceCourseCode = (courseCode: string, delimiter: string) =>
+  courseCode.slice(0, 4) + delimiter + courseCode.slice(4);
 
-export const round2Decimals = (n: number) => {
-  return Math.round(n * 100) / 100;
-};
+export const round2Decimals = (n: number) => Math.round(n * 100) / 100;

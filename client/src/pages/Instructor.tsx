@@ -1,19 +1,19 @@
 import _ from 'lodash';
 import { CourseInfoStats } from '../components/CourseInfoStats';
 import { CourseReview } from '../components/CourseReview';
+import { ExternalLink } from 'react-feather';
 import { Fragment, useEffect, useState } from 'react';
-import { GetInstructorPayload } from '../model/GetInstructorPayload';
 import { Instructor as InstructorType } from '../model/Instructor';
 import { Layout } from '../components/Layout';
 import { Link, useParams } from 'react-router-dom';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
 import { Review } from '../model/Review';
-import { courseIdToUrlParam } from '../lib/utils';
-import { fetchClient } from '../lib/fetchClient';
-import { useAuth } from '../hooks/useAuth';
-import { ExternalLink } from 'react-feather';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
+import { courseIdToUrlParam } from '../lib/utils';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
+import { useAuth } from '../hooks/useAuth';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -28,17 +28,19 @@ export const Instructor = () => {
   const user = useAuth();
 
   useEffect(() => {
-    if (params.name) {
-      fetchClient
-        .deserialize<GetInstructorPayload>(
-          'GET',
-          `/instructors/${decodeURIComponent(params.name)}`
-        )
-        .then((payload) => {
-          setInstructor(payload.instructor);
-          setReviews(payload.reviews);
-        });
-    }
+    if (!params.name) return;
+
+    const getInstructor = async () => {
+      try {
+        const payload = await repo.getInstructor(params.name!);
+        setInstructor(payload.instructor);
+        setReviews(payload.reviews);
+      } catch (err) {
+        toast.error('Failed to fetch instructor.');
+      }
+    };
+
+    getInstructor();
   }, [params.name]);
 
   if (instructor === undefined) return <Loading />;

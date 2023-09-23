@@ -1,17 +1,16 @@
+import { Course } from '../model/Course';
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
-import { toast } from 'sonner';
-import { twMerge } from 'tailwind-merge';
-
-import { useDarkMode } from '../hooks/useDarkMode';
-import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
 import {
   ReviewForm,
   ReviewFormInitialValues,
   ReviewSchema,
 } from './ReviewForm';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 type ReviewFormProps = {
   course: Course;
@@ -81,13 +80,7 @@ export const AddReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await fetchClient.post(`/reviews`, {
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        course_id: course._id,
-                        ...values,
-                      }),
-                    });
+                    const res = await repo.addReview(course._id, values);
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);

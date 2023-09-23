@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react';
-
 import { CourseReview } from '../components/CourseReview';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
-import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { Review } from '../model/Review';
-import { User } from 'react-feather';
-import { useDarkMode } from '../hooks/useDarkMode';
-import { twMerge } from 'tailwind-merge';
 import { Link } from 'react-router-dom';
+import { Review } from '../model/Review';
+import { Spinner } from '../components/Spinner';
+import { User } from 'react-feather';
 import { courseIdToUrlParam } from '../lib/utils';
+import { repo } from '../lib/repo';
 import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
+import { useAuth } from '../hooks/useAuth';
+import { useDarkMode } from '../hooks/useDarkMode';
+import { useEffect, useState } from 'react';
 
 export const Profile = () => {
   const user = useAuth();
@@ -21,15 +20,20 @@ export const Profile = () => {
   const [userReviews, setUserReviews] = useState<Review[]>();
 
   useEffect(() => {
-    fetchClient
-      .deserialize<Review[]>('GET', `/reviews?user_id=${user?.id}`)
-      .then((data) => setUserReviews(data))
-      .catch(() =>
+    if (!user) return;
+
+    const getReviews = async () => {
+      try {
+        setUserReviews(await repo.getReviews(user.id));
+      } catch (err) {
         toast.error(
           'An error occurred while fetching your reviews, please try again later.'
-        )
-      );
-  }, [user?.id]);
+        );
+      }
+    };
+
+    getReviews();
+  }, []);
 
   return (
     <Layout>

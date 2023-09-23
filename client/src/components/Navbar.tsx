@@ -1,19 +1,18 @@
-import { Bars3Icon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { toast } from 'sonner';
-
 import birdImageUrl from '../assets/bird.png';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
+import { Link, useLocation } from 'react-router-dom';
+import { Notification } from '../model/Notification';
+import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SearchResults } from '../model/SearchResults';
 import { SideNav } from './SideNav';
-import { fetchClient } from '../lib/fetchClient';
 import { getUrl } from '../lib/utils';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth';
-import { Notification } from '../model/Notification';
-import { NotificationDropdown } from './NotificationDropdown';
+import { useEffect, useState } from 'react';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -28,26 +27,31 @@ export const Navbar = () => {
     instructors: [],
   });
 
+  const user = useAuth();
   const location = useLocation();
   const pathName = location.pathname;
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    fetchClient
-      .deserialize<Notification[]>('GET', '/notifications')
-      .then((data) => setNotifications(data))
-      .catch((err) => console.error(err));
+    if (!user) return;
+
+    const getNotifications = async () => {
+      try {
+        setNotifications(await repo.getNotifications());
+      } catch (err) {
+        toast.error('Failed to get notifications.');
+      }
+    };
+
+    getNotifications();
   }, []);
 
   const handleInputChange = async (query: string) => {
     try {
       setResults({
         query,
-        ...(await fetchClient.deserialize<SearchResults>(
-          'GET',
-          `/search?query=${encodeURIComponent(query)}`
-        )),
+        ...(await repo.search(query)),
       });
     } catch (err) {
       toast.error(
@@ -55,8 +59,6 @@ export const Navbar = () => {
       );
     }
   };
-
-  const user = useAuth();
 
   return (
     <header className='z-40'>

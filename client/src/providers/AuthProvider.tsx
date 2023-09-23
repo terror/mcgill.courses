@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
-
-import { fetchClient } from '../lib/fetchClient';
-import { User, UserResponse } from '../model/User';
+import { User } from '../model/User';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
 
 export const AuthContext = createContext<User | undefined>(undefined);
 
@@ -11,12 +11,18 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
 
   useEffect(() => {
     setLoading(true);
-    fetchClient
-      .deserialize<UserResponse>('GET', '/user', { credentials: 'include' })
-      .then((data) => {
+
+    const getUser = async () => {
+      try {
+        const data = await repo.getUser();
         setUser(data.user);
         setLoading(false);
-      });
+      } catch (err) {
+        toast.error('Failed to fetch user.');
+      }
+    };
+
+    getUser();
   }, []);
 
   return (

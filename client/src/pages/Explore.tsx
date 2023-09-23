@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { toast } from 'sonner';
-
+import { Course } from '../model/Course';
 import { CourseCard } from '../components/CourseCard';
 import { ExploreFilter } from '../components/ExploreFilter';
 import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
-import { fetchClient } from '../lib/fetchClient';
 import { getCurrentTerms } from '../lib/utils';
-import { Course } from '../model/Course';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 
 export const Explore = () => {
   const limit = 20;
@@ -37,30 +36,18 @@ export const Explore = () => {
   };
 
   useEffect(() => {
-    fetchClient
-      .deserialize<Course[]>('POST', `/courses?limit=${limit}`, {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(filters),
-      })
+    repo
+      .getCourses(limit, offset, filters)
       .then((data) => setCourses(data))
-      .catch(() =>
-        toast.error('Failed to fetch courses. Please try again later.')
-      );
+      .catch(() => {
+        toast.error('Failed to fetch courses. Please try again later.');
+      });
     setHasMore(true);
     setOffset(limit);
   }, [selectedSubjects, selectedLevels, selectedTerms]);
 
   const fetchMore = async () => {
-    const batch = await fetchClient.deserialize<Course[]>(
-      'POST',
-      `/courses?limit=${limit}&offset=${offset}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(filters),
-      }
-    );
+    const batch = await repo.getCourses(limit, offset, filters);
 
     if (batch.length === 0) setHasMore(false);
     else {
