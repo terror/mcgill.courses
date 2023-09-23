@@ -1,4 +1,4 @@
-import { BellIcon, BellAlertIcon } from '@heroicons/react/20/solid';
+import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Notification } from '../model/Notification';
@@ -14,13 +14,13 @@ export const NotificationDropdown = ({
         <div>
           <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
             {notifications.length !== 0 ? (
-              <BellAlertIcon
-                className='hover:text-white-100 -mr-1 ml-2 h-5 w-5 text-neutral-700 dark:text-white'
+              <VscBellDot
+                className='hover:text-white-100 -mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
                 aria-hidden='true'
               />
             ) : (
-              <BellIcon
-                className='hover:text-white-100 -mr-1 ml-2 h-5 w-5 text-neutral-700 dark:text-white'
+              <VscBell
+                className='hover:text-white-100 -mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
                 aria-hidden='true'
               />
             )}

@@ -1,3 +1,5 @@
+import { Subscription } from '../model/Subscription';
+
 const prefix = '/api';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -47,5 +49,31 @@ export const fetchClient = {
       case 'DELETE':
         return run(this.delete);
     }
+  },
+};
+
+export const repo = {
+  async getSubscription(courseId: string): Promise<Subscription | null> {
+    return await fetchClient.deserialize<Subscription | null>(
+      'GET',
+      `/subscriptions?course_id=${courseId}`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  },
+
+  async addSubcription(courseId: string): Promise<void> {
+    await fetchClient.post('/subscriptions', {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ course_id: courseId }),
+    });
+  },
+
+  async removeSubscription(courseId: string): Promise<void> {
+    await fetchClient.delete('/subscriptions', {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ course_id: courseId }),
+    });
   },
 };

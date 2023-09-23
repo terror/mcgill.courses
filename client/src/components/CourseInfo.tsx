@@ -2,10 +2,10 @@ import { Course } from '../model/Course';
 import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
 import { ExternalLink } from 'react-feather';
-import { FiBell, FiBellOff } from 'react-icons/fi';
 import { Review } from '../model/Review';
-import { Subscription } from '../model/Subscription';
-import { fetchClient } from '../lib/fetchClient';
+import { VscBell, VscBellSlash } from 'react-icons/vsc';
+import { repo } from '../lib/fetchClient';
+import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth';
 import { useEffect, useState } from 'react';
 
@@ -25,17 +25,12 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
 
     const checkSubscription = async () => {
       try {
-        const subscription = await fetchClient.deserialize<Subscription | null>(
-          'GET',
-          `/subscriptions?course_id=${course._id}`,
-          {
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
-        console.log(subscription);
+        const subscription = await repo.getSubscription(course._id);
         setIsSubscribed(subscription !== null);
       } catch (err) {
-        console.error(err);
+        toast.error(
+          `Failed to check subscription for course ${course.subject} ${course.code}`
+        );
       }
     };
 
@@ -43,30 +38,28 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   }, []);
 
   const subscribe = async () => {
-    if (!user) return;
-
     try {
-      await fetchClient.post('/subscriptions', {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ course_id: course._id }),
-      });
+      await repo.addSubcription(course._id);
       setIsSubscribed(true);
+      toast.success(`Subscribed to course ${course.subject} ${course.code}`);
     } catch (err) {
-      console.error(err);
+      toast.error(
+        `Failed to subscribe to course ${course.subject} ${course.code}`
+      );
     }
   };
 
   const unsubscribe = async () => {
-    if (!user) return;
-
     try {
-      await fetchClient.delete('/subscriptions', {
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ course_id: course._id }),
-      });
+      await repo.removeSubscription(course._id);
       setIsSubscribed(false);
+      toast.success(
+        `Unsubscribed from course ${course.subject} ${course.code}`
+      );
     } catch (err) {
-      console.error(err);
+      toast.error(
+        `Failed to unsubscribe from course ${course.subject} ${course.code}`
+      );
     }
   };
 
@@ -80,16 +73,16 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
           <div className='flex items-center gap-2'>
             {user &&
               (isSubscribed ? (
-                <FiBellOff
+                <VscBellSlash
                   size={20}
                   onClick={unsubscribe}
-                  className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
+                  className='my-auto ml-1 cursor-pointer stroke-[0.5] transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ) : (
-                <FiBell
+                <VscBell
                   size={20}
                   onClick={subscribe}
-                  className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
+                  className='my-auto ml-1 cursor-pointer stroke-[0.5] transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ))}
             {course.url ? (
