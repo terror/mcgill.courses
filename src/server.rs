@@ -1292,7 +1292,7 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(db.get_subscriptions("a").await.unwrap().len(), 1);
+    assert!(db.get_subscription("a", "MATH240").await.unwrap().is_some());
 
     let review = json!({
       "content": "test",
