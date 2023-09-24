@@ -34,17 +34,10 @@ export const Navbar = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    if (!user) return;
-
-    const getNotifications = async () => {
-      try {
-        setNotifications(await repo.getNotifications());
-      } catch (err) {
-        toast.error('Failed to get notifications.');
-      }
-    };
-
-    getNotifications();
+    repo
+      .getNotifications()
+      .then((data) => setNotifications(data))
+      .catch(() => toast.error('Failed to get notifications.'));
   }, []);
 
   const handleInputChange = async (query: string) => {

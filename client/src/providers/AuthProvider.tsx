@@ -12,17 +12,13 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   useEffect(() => {
     setLoading(true);
 
-    const getUser = async () => {
-      try {
-        const data = await repo.getUser();
+    repo
+      .getUser()
+      .then((data) => {
         setUser(data.user);
         setLoading(false);
-      } catch (err) {
-        toast.error('Failed to fetch user.');
-      }
-    };
-
-    getUser();
+      })
+      .catch(() => toast.error('Failed to fetch user.'));
   }, []);
 
   return (

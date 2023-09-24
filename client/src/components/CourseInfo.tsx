@@ -23,18 +23,16 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   useEffect(() => {
     if (!user) return;
 
-    const checkSubscription = async () => {
-      try {
-        const subscription = await repo.getSubscription(course._id);
-        setIsSubscribed(subscription !== null);
-      } catch (err) {
+    repo
+      .getSubscription(course._id)
+      .then((data) => {
+        setIsSubscribed(data !== null);
+      })
+      .catch(() =>
         toast.error(
           `Failed to check subscription for course ${course.subject} ${course.code}`
-        );
-      }
-    };
-
-    checkSubscription();
+        )
+      );
   }, []);
 
   const subscribe = async () => {

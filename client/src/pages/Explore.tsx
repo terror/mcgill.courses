@@ -37,7 +37,7 @@ export const Explore = () => {
 
   useEffect(() => {
     repo
-      .getCourses(limit, offset, filters)
+      .getCourses(limit, 0, filters)
       .then((data) => setCourses(data))
       .catch(() => {
         toast.error('Failed to fetch courses. Please try again later.');

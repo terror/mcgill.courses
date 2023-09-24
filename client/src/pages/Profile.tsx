@@ -22,17 +22,14 @@ export const Profile = () => {
   useEffect(() => {
     if (!user) return;
 
-    const getReviews = async () => {
-      try {
-        setUserReviews(await repo.getReviews(user.id));
-      } catch (err) {
+    repo
+      .getReviews(user.id)
+      .then((data) => setUserReviews(data))
+      .catch(() =>
         toast.error(
           'An error occurred while fetching your reviews, please try again later.'
-        );
-      }
-    };
-
-    getReviews();
+        )
+      );
   }, []);
 
   return (
