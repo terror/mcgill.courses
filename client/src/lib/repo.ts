@@ -3,6 +3,7 @@ import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayloa
 import { GetInstructorPayload } from '../model/GetInstructorPayload';
 import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
+import { Notification } from '../model/Notification';
 import { Review } from '../model/Review';
 import { SearchResults } from '../model/SearchResults';
 import { Subscription } from '../model/Subscription';
