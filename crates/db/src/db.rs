@@ -362,11 +362,11 @@ impl Db {
     )
   }
 
-  pub async fn add_notifications(&self, course_id: &str) -> Result {
+  pub async fn add_notifications(&self, review: Review) -> Result {
     let subscriptions = self
       .database
       .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
-      .find(doc! { "courseId": course_id }, None)
+      .find(doc! { "courseId": review.course_id }, None)
       .await?
       .try_collect::<Vec<Subscription>>()
       .await?;
@@ -375,6 +375,8 @@ impl Db {
       return Ok(());
     }
 
+    let content = review.content;
+
     self
       .database
       .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
@@ -382,9 +384,10 @@ impl Db {
         subscriptions
           .into_iter()
           .map(|subscription| Notification {
-            user_id: subscription.user_id,
+            content: content.clone(),
             course_id: subscription.course_id,
             seen: false,
+            user_id: subscription.user_id,
           })
           .collect::<Vec<Notification>>(),
         None,
@@ -1606,6 +1609,16 @@ mod tests {
   async fn notify_many_subscribers() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
     let subscription = Subscription {
       course_id: "MATH240".into(),
       user_id: "1".into(),
@@ -1622,7 +1635,7 @@ mod tests {
 
     assert_eq!(db.subscriptions().await.unwrap().len(), 2);
 
-    db.add_notifications("MATH240").await.unwrap();
+    db.add_notifications(review).await.unwrap();
 
     assert_eq!(db.notifications().await.unwrap().len(), 2);
   }
@@ -1631,7 +1644,17 @@ mod tests {
   async fn notify_empty_subscribers() {
     let TestContext { db, .. } = TestContext::new().await;
 
-    db.add_notifications("MATH240").await.unwrap();
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    db.add_notifications(review).await.unwrap();
 
     assert_eq!(db.notifications().await.unwrap().len(), 0);
   }

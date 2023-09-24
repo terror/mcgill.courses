@@ -62,7 +62,7 @@ pub(crate) async fn add_review(
 
   validate_instructors(db.clone(), &course_id, &instructors).await?;
 
-  db.add_review(Review {
+  let review = Review {
     content,
     course_id: course_id.clone(),
     instructors,
@@ -70,12 +70,13 @@ pub(crate) async fn add_review(
     difficulty,
     timestamp: Utc::now().into(),
     user_id: user.id(),
-  })
-  .await?;
+  };
+
+  db.add_review(review.clone()).await?;
 
   info!("Adding notifications for course {}...", &course_id);
 
-  db.add_notifications(&course_id).await?;
+  db.add_notifications(review).await?;
 
   Ok(())
 }
