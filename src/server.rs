@@ -134,6 +134,7 @@ mod tests {
     axum::body::Body,
     http::{Method, Request},
     interactions::GetInteractionsPayload,
+    model::Notification,
     pretty_assertions::assert_eq,
     serde::de::DeserializeOwned,
     serde_json::json,
