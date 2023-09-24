@@ -12,12 +12,17 @@ import { twMerge } from 'tailwind-merge';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useEffect, useState } from 'react';
+import { Subscription } from '../model/Subscription';
+import { LuFileText } from 'react-icons/lu';
+import { VscBell } from 'react-icons/vsc';
 
 export const Profile = () => {
   const user = useAuth();
 
   const [darkMode] = useDarkMode();
+
   const [userReviews, setUserReviews] = useState<Review[]>();
+  const [userSubscriptions, setUserSubscriptions] = useState<Subscription[]>();
 
   useEffect(() => {
     if (!user) return;
@@ -28,6 +33,15 @@ export const Profile = () => {
       .catch(() =>
         toast.error(
           'An error occurred while fetching your reviews, please try again later.'
+        )
+      );
+
+    repo
+      .getSubscriptions()
+      .then((data) => setUserSubscriptions(data))
+      .catch(() =>
+        toast.error(
+          'An error occurred while fetching your subscriptions, please try again later.'
         )
       );
   }, []);
@@ -48,9 +62,26 @@ export const Profile = () => {
             <h1 className='font-semibold text-gray-800 dark:text-gray-200 md:text-2xl'>
               {user?.mail}
             </h1>
-            <p className='font-semibold text-gray-800 dark:text-gray-200'>
-              {userReviews?.length} review(s)
-            </p>
+            <div className='flex items-center gap-x-2'>
+              <LuFileText
+                className='text-neutral-700 dark:text-white'
+                aria-hidden='true'
+                size={30}
+              />
+              <p className='font-semibold text-gray-800 dark:text-gray-200'>
+                {userReviews?.length} review(s)
+              </p>
+            </div>
+            <div className='flex items-center gap-x-2'>
+              <VscBell
+                className='stroke-[0.5] text-neutral-700 dark:text-white'
+                aria-hidden='true'
+                size={30}
+              />
+              <p className='font-semibold text-gray-800 dark:text-gray-200'>
+                {userSubscriptions?.length} subscriptions(s)
+              </p>
+            </div>
           </div>
         </div>
       </div>

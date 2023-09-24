@@ -72,6 +72,12 @@ export const repo = {
     );
   },
 
+  async getSubscriptions(): Promise<Subscription[]> {
+    return client.deserialize<Subscription[]>('GET', '/subscriptions', {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  },
+
   async addSubcription(courseId: string): Promise<Response> {
     return client.post('/subscriptions', {
       headers: { 'Content-Type': 'application/json' },

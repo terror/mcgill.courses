@@ -295,6 +295,26 @@ impl Db {
     )
   }
 
+  pub async fn get_subscriptions(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(
+          doc! {
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
   pub async fn add_subscription(
     &self,
     subscription: Subscription,
@@ -342,10 +362,7 @@ impl Db {
     )
   }
 
-  pub async fn add_notifications(
-    &self,
-    course_id: &str,
-  ) -> Result<InsertManyResult> {
+  pub async fn add_notifications(&self, course_id: &str) -> Result {
     let subscriptions = self
       .database
       .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
@@ -354,23 +371,27 @@ impl Db {
       .try_collect::<Vec<Subscription>>()
       .await?;
 
-    Ok(
-      self
-        .database
-        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
-        .insert_many(
-          subscriptions
-            .into_iter()
-            .map(|subscription| Notification {
-              user_id: subscription.user_id,
-              course_id: subscription.course_id,
-              seen: false,
-            })
-            .collect::<Vec<Notification>>(),
-          None,
-        )
-        .await?,
-    )
+    if subscriptions.is_empty() {
+      return Ok(());
+    }
+
+    self
+      .database
+      .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+      .insert_many(
+        subscriptions
+          .into_iter()
+          .map(|subscription| Notification {
+            user_id: subscription.user_id,
+            course_id: subscription.course_id,
+            seen: false,
+          })
+          .collect::<Vec<Notification>>(),
+        None,
+      )
+      .await?;
+
+    Ok(())
   }
 
   async fn find_reviews(&self, query: Document) -> Result<Vec<Review>> {
@@ -579,6 +600,32 @@ impl Db {
         .find(None, None)
         .await?
         .try_collect::<Vec<Instructor>>()
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn subscriptions(&self) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn notifications(&self) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
         .await?,
     )
   }
@@ -1530,5 +1577,62 @@ mod tests {
         .len(),
       0
     );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn subscription_flow() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.remove_subscription(Subscription {
+      course_id: subscription.course_id,
+      user_id: subscription.user_id,
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_many_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications("MATH240").await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_empty_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_notifications("MATH240").await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 0);
   }
 }

@@ -94,7 +94,7 @@ export const Instructor = () => {
                 <Fragment>
                   <div className='grow py-3' />
                   <CourseInfoStats className='md:hidden' allReviews={reviews} />
-                  <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  <p className='mt-6 text-sm text-gray-500 dark:text-gray-400'>
                     {reviews.length} review(s)
                   </p>
                 </Fragment>

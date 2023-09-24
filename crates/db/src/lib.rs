@@ -13,10 +13,7 @@ use {
     bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
-    results::{
-      CreateIndexResult, DeleteResult, InsertManyResult, InsertOneResult,
-      UpdateResult,
-    },
+    results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Cursor, Database, IndexModel,
   },
   serde::{de::DeserializeOwned, Serialize},

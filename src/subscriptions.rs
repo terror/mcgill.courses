@@ -2,7 +2,7 @@ use super::*;
 
 #[derive(Deserialize)]
 pub(crate) struct GetSubscriptionParams {
-  course_id: String,
+  course_id: Option<String>,
 }
 
 pub(crate) async fn get_subscription(
@@ -10,9 +10,12 @@ pub(crate) async fn get_subscription(
   AppState(db): AppState<Arc<Db>>,
   params: Query<GetSubscriptionParams>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(
-    db.get_subscription(&user.id(), &params.course_id).await?,
-  ))
+  Ok(Json(match &params.course_id {
+    Some(course_id) => {
+      json!(db.get_subscription(&user.id(), course_id).await?)
+    }
+    None => json!(db.get_subscriptions(&user.id()).await?),
+  }))
 }
 
 #[derive(Deserialize)]
