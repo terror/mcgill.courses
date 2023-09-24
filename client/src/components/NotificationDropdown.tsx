@@ -2,6 +2,9 @@ import { VscBell, VscBellDot } from 'react-icons/vsc';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Notification } from '../model/Notification';
+import { CourseReview } from './CourseReview';
+import { Link } from 'react-router-dom';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 
 export const NotificationDropdown = ({
   notifications,
@@ -9,7 +12,7 @@ export const NotificationDropdown = ({
   notifications: Notification[];
 }) => {
   return (
-    <div className='text-right'>
+    <div className='z-20 text-right'>
       <Menu as='div' className='relative inline-block text-left'>
         <div>
           <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
@@ -36,18 +39,35 @@ export const NotificationDropdown = ({
             leaveFrom='transform opacity-100 scale-100'
             leaveTo='transform opacity-0 scale-95'
           >
-            <Menu.Items className='z-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-              <div className='px-1 py-1 '>
+            <Menu.Items className='w-100 absolute right-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-slate-100 shadow-lg dark:bg-neutral-900'>
+              <div className='p-2'>
                 {notifications.map((notification, i) => (
                   <Menu.Item key={i}>
-                    {({ active }) => (
-                      <button
-                        className={`${
-                          active ? 'bg-gray-500 text-white' : 'text-gray-900'
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      >
-                        {notification.courseId}
-                      </button>
+                    {() => (
+                      <div className='m-2'>
+                        <div className='mb-2 flex items-center'>
+                          <p className='font-semibold text-gray-800 dark:text-gray-200'>
+                            {spliceCourseCode(
+                              notification.review.courseId,
+                              ' '
+                            )}
+                          </p>
+                          <Link
+                            to={`/course/${courseIdToUrlParam(
+                              notification.review.courseId
+                            )}`}
+                            className='flex-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
+                          >
+                            View Course
+                          </Link>
+                        </div>
+                        <CourseReview
+                          review={notification.review}
+                          canModify={false}
+                          handleDelete={() => undefined}
+                          openEditReview={() => undefined}
+                        />
+                      </div>
                     )}
                   </Menu.Item>
                 ))}

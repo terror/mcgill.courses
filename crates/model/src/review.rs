@@ -8,12 +8,47 @@ pub struct Review {
   pub instructors: Vec<String>,
   pub rating: u32,
   pub difficulty: u32,
-  #[serde(deserialize_with = "deserialize_timestamp")]
+  #[serde(deserialize_with = "TimestampVisitor::deserialize_timestamp")]
   pub timestamp: DateTime,
   pub user_id: String,
 }
 
+impl Default for Review {
+  fn default() -> Self {
+    Self {
+      content: String::new(),
+      course_id: String::new(),
+      instructors: vec![],
+      rating: 0,
+      difficulty: 0,
+      timestamp: DateTime::from_chrono::<Utc>(
+        Utc.from_utc_datetime(&NaiveDateTime::default()),
+      ),
+      user_id: String::new(),
+    }
+  }
+}
+
+impl Into<Bson> for Review {
+  fn into(self) -> Bson {
+    Bson::Document(doc! {
+      "content": self.content
+    })
+  }
+}
+
 struct TimestampVisitor;
+
+impl TimestampVisitor {
+  fn deserialize_timestamp<'de, D>(
+    deserializer: D,
+  ) -> Result<DateTime, D::Error>
+  where
+    D: Deserializer<'de>,
+  {
+    deserializer.deserialize_any(TimestampVisitor)
+  }
+}
 
 impl<'de> Visitor<'de> for TimestampVisitor {
   type Value = DateTime;
@@ -66,28 +101,5 @@ impl<'de> Visitor<'de> for TimestampVisitor {
           de::Error::custom("Failed to get unique conversion result")
         })?,
     ))
-  }
-}
-
-fn deserialize_timestamp<'de, D>(deserializer: D) -> Result<DateTime, D::Error>
-where
-  D: Deserializer<'de>,
-{
-  deserializer.deserialize_any(TimestampVisitor)
-}
-
-impl Default for Review {
-  fn default() -> Self {
-    Self {
-      content: String::new(),
-      course_id: String::new(),
-      instructors: vec![],
-      rating: 0,
-      difficulty: 0,
-      timestamp: DateTime::from_chrono::<Utc>(
-        Utc.from_utc_datetime(&NaiveDateTime::default()),
-      ),
-      user_id: String::new(),
-    }
   }
 }

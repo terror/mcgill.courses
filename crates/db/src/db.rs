@@ -363,10 +363,12 @@ impl Db {
   }
 
   pub async fn add_notifications(&self, review: Review) -> Result {
+    let course_id = review.course_id.clone();
+
     let subscriptions = self
       .database
       .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
-      .find(doc! { "courseId": review.course_id }, None)
+      .find(doc! { "courseId": course_id }, None)
       .await?
       .try_collect::<Vec<Subscription>>()
       .await?;
@@ -375,8 +377,6 @@ impl Db {
       return Ok(());
     }
 
-    let content = review.content;
-
     self
       .database
       .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
@@ -384,8 +384,7 @@ impl Db {
         subscriptions
           .into_iter()
           .map(|subscription| Notification {
-            content: content.clone(),
-            course_id: subscription.course_id,
+            review: review.clone(),
             seen: false,
             user_id: subscription.user_id,
           })

@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { Subscription } from '../model/Subscription';
 import { LuFileText } from 'react-icons/lu';
 import { VscBell } from 'react-icons/vsc';
+import { spliceCourseCode } from '../lib/utils';
 
 export const Profile = () => {
   const user = useAuth();
@@ -102,7 +103,7 @@ export const Profile = () => {
                 <div key={i}>
                   <div className='flex'>
                     <h2 className='flex-auto text-2xl font-bold text-gray-700 dark:text-gray-200'>
-                      {review.courseId}
+                      {spliceCourseCode(review.courseId, ' ')}
                     </h2>
                     <Link
                       to={`/course/${courseIdToUrlParam(review.courseId)}`}

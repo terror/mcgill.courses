@@ -1,6 +1,7 @@
+import { Review } from './Review';
+
 export type Notification = {
-  content: string;
-  courseId: string;
+  review: Review;
   seen: boolean;
   userId: string;
 };
