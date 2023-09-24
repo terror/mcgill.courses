@@ -41,7 +41,7 @@ use {
   log::{debug, error, info, trace},
   model::{
     Course, CourseListing, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Review, Schedule, Subscription,
+    InteractionKind, Notification, Review, Schedule, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,

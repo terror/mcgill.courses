@@ -1256,4 +1256,83 @@ mod tests {
       }
     );
   }
+
+  #[tokio::test]
+  async fn notify_subscriber() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let (a, b) = (
+      mock_login(session_store.clone(), "a", "a@mail.mcgill.ca").await,
+      mock_login(session_store, "b", "b@mail.mcgill.ca").await,
+    );
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", a.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions")
+          .body(Body::from(json!({ "course_id": "MATH240" }).to_string()))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(db.get_subscriptions("a").await.unwrap().len(), 1);
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", b)
+          .header("Content-Type", "application/json")
+          .uri("/api/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(db.find_reviews_by_user_id("b").await.unwrap().len(), 1);
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", a)
+          .header("Content-Type", "application/json")
+          .uri("/api/notifications")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(response.convert::<Vec<Notification>>().await.len(), 1);
+  }
 }
