@@ -56,6 +56,8 @@ pub(crate) async fn delete_subscription(
     &user_id, body.course_id
   );
 
+  db.delete_notifications(&user_id, &body.course_id).await?;
+
   Ok(Json(
     db.delete_subscription(Subscription {
       user_id,
