@@ -373,6 +373,11 @@ impl Db {
       .try_collect::<Vec<Subscription>>()
       .await?;
 
+    let subscriptions = subscriptions
+      .into_iter()
+      .filter(|subscription| subscription.user_id != review.user_id)
+      .collect::<Vec<Subscription>>();
+
     if subscriptions.is_empty() {
       return Ok(());
     }
@@ -383,7 +388,6 @@ impl Db {
       .insert_many(
         subscriptions
           .into_iter()
-          .filter(|subscription| subscription.user_id != review.user_id)
           .map(|subscription| Notification {
             review: review.clone(),
             seen: false,
