@@ -2,7 +2,10 @@ import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { Edit } from 'react-feather';
+import { BsPinFill } from 'react-icons/bs';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
@@ -11,12 +14,9 @@ import { courseIdToUrlParam } from '../lib/utils';
 import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
-import { DeleteButton } from './DeleteButton';
-import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
-import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
-import { BsPinFill } from 'react-icons/bs';
-import { toast } from 'sonner';
+import { DeleteButton } from './DeleteButton';
+import { IconRating } from './IconRating';
 import { Tooltip } from './Tooltip';
 
 const LoginPrompt = () => {

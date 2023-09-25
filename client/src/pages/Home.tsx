@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { SearchResults } from '../model/SearchResults';
 import { fetchClient } from '../lib/fetchClient';
-import { useSearchParams } from 'react-router-dom';
-import { toast } from 'sonner';
+import { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],

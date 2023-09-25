@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import { spliceCourseCode, courseIdToUrlParam } from '../lib/utils';
 
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { SearchResults } from '../model/SearchResults';
 
 type SearchResultType = 'course' | 'instructor';
