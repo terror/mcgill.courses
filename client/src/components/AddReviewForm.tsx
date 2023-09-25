@@ -1,16 +1,17 @@
-import { Course } from '../model/Course';
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
+import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
+
+import { useDarkMode } from '../hooks/useDarkMode';
+import { repo } from '../lib/repo';
+import { Course } from '../model/Course';
 import {
   ReviewForm,
   ReviewFormInitialValues,
   ReviewSchema,
 } from './ReviewForm';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
-import { twMerge } from 'tailwind-merge';
-import { useDarkMode } from '../hooks/useDarkMode';
 
 type ReviewFormProps = {
   course: Course;

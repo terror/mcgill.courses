@@ -1,24 +1,25 @@
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+
 import { AddReviewForm } from '../components/AddReviewForm';
-import { Course } from '../model/Course';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
 import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
-import { Loading } from './Loading';
 import { NotFound } from '../components/NotFound';
-import { Requirements } from '../model/Requirements';
-import { Review } from '../model/Review';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import { getCurrentTerms } from '../lib/utils';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth';
-import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { repo } from '../lib/repo';
+import { getCurrentTerms } from '../lib/utils';
+import { Course } from '../model/Course';
+import { Requirements } from '../model/Requirements';
+import { Review } from '../model/Review';
+import { Loading } from './Loading';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();

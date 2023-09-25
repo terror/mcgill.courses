@@ -1,14 +1,15 @@
-import { VscBell, VscBellDot } from 'react-icons/vsc';
-import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { FaTrash } from 'react-icons/fa';
+import { GoDotFill } from 'react-icons/go';
+import { VscBell, VscBellDot } from 'react-icons/vsc';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { Notification } from '../model/Notification';
 import { CourseReview } from './CourseReview';
-import { Link } from 'react-router-dom';
-import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import { GoDotFill } from 'react-icons/go';
-import { FaTrash } from 'react-icons/fa';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
 
 export const NotificationDropdown = ({
   notifications,

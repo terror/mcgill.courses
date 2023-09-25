@@ -1,13 +1,14 @@
+import { useEffect, useState } from 'react';
+import { ExternalLink } from 'react-feather';
+import { VscBell, VscBellSlash } from 'react-icons/vsc';
+import { toast } from 'sonner';
+
+import { useAuth } from '../hooks/useAuth';
+import { repo } from '../lib/repo';
 import { Course } from '../model/Course';
+import { Review } from '../model/Review';
 import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
-import { ExternalLink } from 'react-feather';
-import { Review } from '../model/Review';
-import { VscBell, VscBellSlash } from 'react-icons/vsc';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
-import { useAuth } from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
 
 type CourseInfoProps = {
   course: Course;

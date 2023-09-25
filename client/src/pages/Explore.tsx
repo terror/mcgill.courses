@@ -1,15 +1,16 @@
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Course } from '../model/Course';
+import { toast } from 'sonner';
+
 import { CourseCard } from '../components/CourseCard';
 import { ExploreFilter } from '../components/ExploreFilter';
 import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
-import { getCurrentTerms } from '../lib/utils';
 import { repo } from '../lib/repo';
-import { toast } from 'sonner';
-import { useEffect, useState } from 'react';
+import { getCurrentTerms } from '../lib/utils';
+import { Course } from '../model/Course';
 
 export const Explore = () => {
   const limit = 20;

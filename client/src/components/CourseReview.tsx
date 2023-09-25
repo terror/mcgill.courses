@@ -1,22 +1,22 @@
-import { BirdIcon } from './BirdIcon';
-import { BsPinFill } from 'react-icons/bs';
-import { DeleteButton } from './DeleteButton';
-import { Edit } from 'react-feather';
-import { Fragment, useEffect, useState } from 'react';
-import { IconRating } from './IconRating';
-import { InteractionKind } from '../model/Interaction';
-import { Link } from 'react-router-dom';
-import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
-import { Review } from '../model/Review';
-import { Tooltip } from './Tooltip';
 import { Transition } from '@headlessui/react';
-import { courseIdToUrlParam } from '../lib/utils';
 import { format } from 'date-fns';
-import { spliceCourseCode } from '../lib/utils';
-import { repo } from '../lib/repo';
+import { Fragment, useEffect, useState } from 'react';
+import { Edit } from 'react-feather';
+import { BsPinFill } from 'react-icons/bs';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
+
 import { useAuth } from '../hooks/useAuth';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
+import { InteractionKind } from '../model/Interaction';
+import { Review } from '../model/Review';
+import { BirdIcon } from './BirdIcon';
+import { DeleteButton } from './DeleteButton';
+import { IconRating } from './IconRating';
+import { Tooltip } from './Tooltip';
 
 const LoginPrompt = () => {
   return (

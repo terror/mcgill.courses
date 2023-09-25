@@ -1,18 +1,19 @@
-import birdImageUrl from '../assets/bird.png';
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { toast } from 'sonner';
+
+import birdImageUrl from '../assets/bird.png';
+import { useAuth } from '../hooks/useAuth';
+import { repo } from '../lib/repo';
+import { getUrl } from '../lib/utils';
+import { Notification } from '../model/Notification';
+import { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
-import { Link, useLocation } from 'react-router-dom';
-import { Notification } from '../model/Notification';
 import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
-import { SearchResults } from '../model/SearchResults';
 import { SideNav } from './SideNav';
-import { getUrl } from '../lib/utils';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
-import { useAuth } from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { courseIdToUrlParam } from '../lib/utils';
 
+import { courseIdToUrlParam } from '../lib/utils';
 import { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 

@@ -1,23 +1,24 @@
+import { Tab } from '@headlessui/react';
+import { useEffect, useState } from 'react';
+import { User } from 'react-feather';
+import { FaTrash } from 'react-icons/fa';
+import { LuFileText } from 'react-icons/lu';
+import { VscBell } from 'react-icons/vsc';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
+
 import { CourseReview } from '../components/CourseReview';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
-import { Link } from 'react-router-dom';
-import { Review } from '../model/Review';
 import { Spinner } from '../components/Spinner';
-import { User } from 'react-feather';
-import { courseIdToUrlParam } from '../lib/utils';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
-import { twMerge } from 'tailwind-merge';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { useEffect, useState } from 'react';
-import { Subscription } from '../model/Subscription';
-import { LuFileText } from 'react-icons/lu';
-import { VscBell } from 'react-icons/vsc';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
-import { Tab } from '@headlessui/react';
-import { FaTrash } from 'react-icons/fa';
+import { Review } from '../model/Review';
+import { Subscription } from '../model/Subscription';
 
 export const Profile = () => {
   const user = useAuth();

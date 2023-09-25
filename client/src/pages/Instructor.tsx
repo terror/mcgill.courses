@@ -1,19 +1,20 @@
 import _ from 'lodash';
+import { Fragment, useEffect, useState } from 'react';
+import { ExternalLink } from 'react-feather';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+
 import { CourseInfoStats } from '../components/CourseInfoStats';
 import { CourseReview } from '../components/CourseReview';
-import { ExternalLink } from 'react-feather';
-import { Fragment, useEffect, useState } from 'react';
-import { Instructor as InstructorType } from '../model/Instructor';
 import { Layout } from '../components/Layout';
-import { Link, useParams } from 'react-router-dom';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
+import { useAuth } from '../hooks/useAuth';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam } from '../lib/utils';
+import { Instructor as InstructorType } from '../model/Instructor';
+import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
-import { Review } from '../model/Review';
-import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
-import { courseIdToUrlParam } from '../lib/utils';
-import { repo } from '../lib/repo';
-import { toast } from 'sonner';
-import { useAuth } from '../hooks/useAuth';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
