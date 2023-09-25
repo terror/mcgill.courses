@@ -112,17 +112,17 @@ export const Profile = () => {
         </div>
       </div>
       <Tab.Group>
-        <Tab.List className='m-4 flex space-x-1 rounded-xl bg-neutral-700/20 p-1'>
+        <Tab.List className='m-4 flex space-x-1 rounded-xl bg-slate-200 p-1 dark:bg-neutral-700/20'>
           {tabs.map((tab) => (
             <Tab
               key={tab}
               className={({ selected }) =>
                 twMerge(
-                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-700',
-                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-gray-400 focus:outline-none focus:ring-2',
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-800',
+                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-gray-400 focus:outline-none',
                   selected
                     ? 'bg-white shadow'
-                    : 'text-gray-100 hover:bg-white/[0.12] hover:text-white'
+                    : 'text-gray-700 hover:bg-white/[0.12] hover:text-gray-400 dark:text-gray-200'
                 )
               }
             >
