@@ -441,6 +441,26 @@ impl Db {
     )
   }
 
+  pub async fn purge_notifications(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
   pub async fn update_notifications(
     &self,
     creator_id: &str,
@@ -761,7 +781,7 @@ mod tests {
         TEST_DATABASE_NUMBER.fetch_add(1, Ordering::Relaxed);
 
       let db_name = format!(
-        "mcgill-gg-test-{}-{}",
+        "mcgill-courses-test-{}-{}",
         std::time::SystemTime::now()
           .duration_since(std::time::SystemTime::UNIX_EPOCH)
           .unwrap()

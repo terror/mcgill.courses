@@ -1559,6 +1559,6 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(response.convert::<Vec<Notification>>().await.len(), 1);
+    assert_eq!(response.convert::<Vec<Notification>>().await.len(), 0);
   }
 }
