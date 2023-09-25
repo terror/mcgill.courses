@@ -51,7 +51,7 @@ export const NotificationDropdown = ({
   }, [notifications, refs, isMenuOpen]);
 
   useEffect(() => {
-    if (seen.entries.length === 0) return;
+    if (seen.size === 0) return;
 
     setNotifications(
       notifications.map((n) => {
