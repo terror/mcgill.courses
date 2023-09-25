@@ -7,9 +7,9 @@ A course search and review platform for McGill university.
 ### Development
 
 You'll need [docker](https://www.docker.com/),
-[cargo](https://doc.rust-lang.org/cargo/) and [pnpm](https://pnpm.io/)
-installed on your machine to spawn the various components the project needs to
-run locally.
+[cargo](https://doc.rust-lang.org/cargo/) and [pnpm](https://pnpm.io/) installed
+on your machine to spawn the various components the project needs to run
+locally.
 
 First, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
 
