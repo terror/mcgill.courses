@@ -12,6 +12,7 @@ import { Tooltip } from './Tooltip';
 import { Transition } from '@headlessui/react';
 import { courseIdToUrlParam } from '../lib/utils';
 import { format } from 'date-fns';
+import { spliceCourseCode } from '../lib/utils';
 import { repo } from '../lib/repo';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
@@ -59,6 +60,12 @@ const ReviewInteractions = ({
     try {
       await repo.addInteraction(interactionKind, courseId, userId, user?.id);
       await refreshInteractions();
+      toast.success(
+        `Successfully ${interactionKind}d review for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     } catch (err: any) {
       toast.error(err.toString());
     }
@@ -68,6 +75,12 @@ const ReviewInteractions = ({
     try {
       await repo.removeInteraction(courseId, userId, user?.id);
       await refreshInteractions();
+      toast.success(
+        `Successfully removed interaction for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     } catch (err: any) {
       toast.error(err.toString());
     }
@@ -130,6 +143,7 @@ type CourseReviewProps = {
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
+  className?: string;
 };
 
 export const CourseReview = ({
@@ -137,6 +151,7 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
+  className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
@@ -149,9 +164,10 @@ export const CourseReview = ({
 
   return (
     <div
-      className={
-        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800'
-      }
+      className={twMerge(
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800',
+        className
+      )}
     >
       <div className='flex flex-col'>
         <div className='flex w-full'>

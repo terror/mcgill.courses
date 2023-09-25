@@ -33,7 +33,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
           `Failed to check subscription for course ${course.subject} ${course.code}`
         )
       );
-  }, []);
+  }, [course]);
 
   const subscribe = async () => {
     try {

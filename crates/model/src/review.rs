@@ -32,7 +32,13 @@ impl Default for Review {
 impl Into<Bson> for Review {
   fn into(self) -> Bson {
     Bson::Document(doc! {
-      "content": self.content
+      "content": self.content,
+      "courseId": self.course_id,
+      "difficulty": self.difficulty,
+      "instructors": self.instructors,
+      "rating": self.rating,
+      "timestamp": self.timestamp,
+      "userId": self.user_id,
     })
   }
 }

@@ -396,6 +396,73 @@ impl Db {
     Ok(())
   }
 
+  pub async fn delete_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn delete_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+    review: Review,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "review": Into::<Bson>::into(review),
+              "seen": false
+            }
+          }),
+          None,
+        )
+        .await?,
+    )
+  }
+
   async fn find_reviews(&self, query: Document) -> Result<Vec<Review>> {
     Ok(
       self

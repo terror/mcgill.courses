@@ -98,16 +98,22 @@ pub(crate) async fn update_review(
 
   trace!("Updating review...");
 
-  db.add_review(Review {
+  let user_id = user.id();
+
+  let review = Review {
     content,
-    course_id,
+    course_id: course_id.clone(),
     instructors,
     rating,
     difficulty,
     timestamp: Utc::now().into(),
-    user_id: user.id(),
-  })
-  .await?;
+    user_id: user_id.clone(),
+  };
+
+  db.add_review(review.clone()).await?;
+
+  db.update_notifications(&user_id, &course_id, review)
+    .await?;
 
   Ok(())
 }
@@ -128,8 +134,7 @@ pub(crate) async fn delete_review(
 
   db.delete_review(&body.course_id, &user_id).await?;
   db.remove_interactions(&body.course_id, &user_id).await?;
-
-  // TODO: delete notifications
+  db.delete_notifications(&user_id, &body.course_id).await?;
 
   Ok(())
 }

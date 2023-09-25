@@ -92,7 +92,11 @@ impl Server {
           .post(interactions::add_interaction)
           .delete(interactions::remove_interaction),
       )
-      .route("/api/notifications", get(notifications::get_notifications))
+      .route(
+        "/api/notifications",
+        get(notifications::get_notifications)
+          .delete(notifications::delete_notification),
+      )
       .route(
         "/api/reviews",
         get(reviews::get_reviews)

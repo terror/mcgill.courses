@@ -86,7 +86,10 @@ export const Navbar = () => {
           <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
             <DarkModeToggle />
           </div>
-          <NotificationDropdown notifications={notifications} />
+          <NotificationDropdown
+            notifications={notifications}
+            setNotifications={setNotifications}
+          />
           <div className='hidden lg:ml-4 lg:flex lg:justify-end'>
             {user ? (
               <ProfileDropdown />

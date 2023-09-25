@@ -30,17 +30,15 @@ export const Instructor = () => {
   useEffect(() => {
     if (!params.name) return;
 
-    const getInstructor = async () => {
-      try {
-        const payload = await repo.getInstructor(params.name!);
-        setInstructor(payload.instructor);
-        setReviews(payload.reviews);
-      } catch (err) {
+    repo
+      .getInstructor(params.name!)
+      .then((data) => {
+        setInstructor(data.instructor);
+        setReviews(data.reviews);
+      })
+      .catch(() => {
         toast.error('Failed to fetch instructor.');
-      }
-    };
-
-    getInstructor();
+      });
   }, [params.name]);
 
   if (instructor === undefined) return <Loading />;

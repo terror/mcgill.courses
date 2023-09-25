@@ -5,12 +5,32 @@ import { Notification } from '../model/Notification';
 import { CourseReview } from './CourseReview';
 import { Link } from 'react-router-dom';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
+import { GoDotFill } from 'react-icons/go';
+import { FaTrash } from 'react-icons/fa';
+import { repo } from '../lib/repo';
+import { toast } from 'sonner';
 
 export const NotificationDropdown = ({
   notifications,
+  setNotifications,
 }: {
   notifications: Notification[];
+  setNotifications: (notifications: Notification[]) => void;
 }) => {
+  const deleteNotification = async (courseId: string) => {
+    try {
+      await repo.deleteNotification(courseId);
+      toast.success('Successfully deleted notification.');
+      setNotifications(
+        notifications.filter(
+          (notification) => notification.review.courseId !== courseId
+        )
+      );
+    } catch (err) {
+      toast.error('Failed to delete notification.');
+    }
+  };
+
   return (
     <div className='z-20 text-right'>
       <Menu as='div' className='relative inline-block text-left'>
@@ -39,29 +59,41 @@ export const NotificationDropdown = ({
             leaveFrom='transform opacity-100 scale-100'
             leaveTo='transform opacity-0 scale-95'
           >
-            <Menu.Items className='w-100 absolute right-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-slate-100 shadow-lg dark:bg-neutral-900'>
+            <Menu.Items className='autocomplete absolute right-0 mt-2 max-h-[800px] max-w-[500px] origin-top-right divide-y divide-gray-100 overflow-auto rounded-md bg-slate-100 shadow-lg dark:bg-neutral-900'>
               <div className='p-2'>
                 {notifications.map((notification, i) => (
                   <Menu.Item key={i}>
                     {() => (
                       <div className='m-2'>
                         <div className='mb-2 flex items-center'>
-                          <p className='font-semibold text-gray-800 dark:text-gray-200'>
-                            {spliceCourseCode(
-                              notification.review.courseId,
-                              ' '
+                          <div className='flex items-center gap-x-1'>
+                            <p className='font-semibold text-gray-800 dark:text-gray-200'>
+                              <Link
+                                to={`/course/${courseIdToUrlParam(
+                                  notification.review.courseId
+                                )}`}
+                              >
+                                {spliceCourseCode(
+                                  notification.review.courseId,
+                                  ' '
+                                )}
+                              </Link>
+                            </p>
+                            {!notification.seen && (
+                              <GoDotFill className='text-red-400' />
                             )}
-                          </p>
-                          <Link
-                            to={`/course/${courseIdToUrlParam(
-                              notification.review.courseId
-                            )}`}
-                            className='flex-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
-                          >
-                            View Course
-                          </Link>
+                          </div>
+                          <FaTrash
+                            onClick={async () =>
+                              await deleteNotification(
+                                notification.review.courseId
+                              )
+                            }
+                            className='ml-auto text-right text-gray-700 underline hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50'
+                          />
                         </div>
                         <CourseReview
+                          className='rounded-md'
                           review={notification.review}
                           canModify={false}
                           handleDelete={() => undefined}
