@@ -217,7 +217,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_interaction(
+  pub async fn delete_interaction(
     &self,
     course_id: &str,
     user_id: &str,
@@ -239,7 +239,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_interactions(
+  pub async fn delete_interactions(
     &self,
     course_id: &str,
     user_id: &str,
@@ -328,7 +328,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_subscription(
+  pub async fn delete_subscription(
     &self,
     subscription: Subscription,
   ) -> Result<DeleteResult> {
@@ -1668,7 +1668,7 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
 
-    db.remove_interaction(&review.course_id, &review.user_id, "10")
+    db.delete_interaction(&review.course_id, &review.user_id, "10")
       .await
       .unwrap();
 
@@ -1694,7 +1694,7 @@ mod tests {
 
     assert_eq!(db.subscriptions().await.unwrap().len(), 1);
 
-    db.remove_subscription(Subscription {
+    db.delete_subscription(Subscription {
       course_id: subscription.course_id,
       user_id: subscription.user_id,
     })
@@ -1790,6 +1790,66 @@ mod tests {
 
     db.add_notifications(review).await.unwrap();
 
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_subscription() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_notification() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review.clone()).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+
+    db.delete_notification("1", &review.course_id)
+      .await
+      .unwrap();
+
+    assert_eq!(db.get_notifications("1").await.unwrap().len(), 0);
     assert_eq!(db.notifications().await.unwrap().len(), 1);
   }
 }

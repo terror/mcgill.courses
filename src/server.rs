@@ -90,7 +90,7 @@ impl Server {
         "/api/interactions",
         get(interactions::get_interactions)
           .post(interactions::add_interaction)
-          .delete(interactions::remove_interaction),
+          .delete(interactions::delete_interaction),
       )
       .route(
         "/api/notifications",
@@ -111,7 +111,7 @@ impl Server {
         "/api/subscriptions",
         get(subscriptions::get_subscription)
           .post(subscriptions::add_subscription)
-          .delete(subscriptions::remove_subscription),
+          .delete(subscriptions::delete_subscription),
       )
       .route("/api/user", get(user::get_user));
 

@@ -44,7 +44,7 @@ pub(crate) async fn add_subscription(
   ))
 }
 
-pub(crate) async fn remove_subscription(
+pub(crate) async fn delete_subscription(
   user: User,
   AppState(db): AppState<Arc<Db>>,
   body: Json<AddOrDeleteSubscriptionBody>,
@@ -57,7 +57,7 @@ pub(crate) async fn remove_subscription(
   );
 
   Ok(Json(
-    db.remove_subscription(Subscription {
+    db.delete_subscription(Subscription {
       user_id,
       course_id: body.course_id.clone(),
     })

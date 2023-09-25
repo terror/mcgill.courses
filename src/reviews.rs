@@ -133,7 +133,7 @@ pub(crate) async fn delete_review(
   let user_id = user.id();
 
   db.delete_review(&body.course_id, &user_id).await?;
-  db.remove_interactions(&body.course_id, &user_id).await?;
+  db.delete_interactions(&body.course_id, &user_id).await?;
   db.delete_notifications(&user_id, &body.course_id).await?;
 
   Ok(())
