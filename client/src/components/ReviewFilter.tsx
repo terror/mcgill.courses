@@ -4,8 +4,8 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Course } from '../model/Course';
 import { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
-import { ResetButton } from './ResetButton';
 import { FilterToggle } from './FilterToggle';
+import { ResetButton } from './ResetButton';
 
 const sortTypes = [
   'Most Recent',

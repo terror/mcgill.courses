@@ -1,19 +1,20 @@
 import _ from 'lodash';
+import { Fragment, useEffect, useState } from 'react';
+import { ExternalLink } from 'react-feather';
+import { Link, useParams } from 'react-router-dom';
+
 import { CourseInfoStats } from '../components/CourseInfoStats';
 import { CourseReview } from '../components/CourseReview';
-import { Fragment, useEffect, useState } from 'react';
+import { Layout } from '../components/Layout';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
+import { useAuth } from '../hooks/useAuth';
+import { fetchClient } from '../lib/fetchClient';
+import { courseIdToUrlParam } from '../lib/utils';
 import { GetInstructorPayload } from '../model/GetInstructorPayload';
 import { Instructor as InstructorType } from '../model/Instructor';
-import { Layout } from '../components/Layout';
-import { Link, useParams } from 'react-router-dom';
+import { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
-import { Review } from '../model/Review';
-import { courseIdToUrlParam } from '../lib/utils';
-import { fetchClient } from '../lib/fetchClient';
-import { useAuth } from '../hooks/useAuth';
-import { ExternalLink } from 'react-feather';
-import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
