@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { AddReviewForm } from '../components/AddReviewForm';
 import { CourseInfo } from '../components/CourseInfo';
@@ -9,6 +10,7 @@ import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
@@ -19,8 +21,6 @@ import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayloa
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
-import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
-import { toast } from 'sonner';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();

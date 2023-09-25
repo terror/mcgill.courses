@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
+import { User } from 'react-feather';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { twMerge } from 'tailwind-merge';
 
 import { CourseReview } from '../components/CourseReview';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { Review } from '../model/Review';
-import { User } from 'react-feather';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { twMerge } from 'tailwind-merge';
-import { Link } from 'react-router-dom';
+import { fetchClient } from '../lib/fetchClient';
 import { courseIdToUrlParam } from '../lib/utils';
-import { toast } from 'sonner';
+import { Review } from '../model/Review';
 
 export const Profile = () => {
   const user = useAuth();

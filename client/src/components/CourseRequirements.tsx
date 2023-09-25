@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { capitalize, punctuate } from '../lib/utils';
-import { Requirements } from '../model/Requirements';
-import { PiGraphFill } from 'react-icons/pi';
 import { FiList } from 'react-icons/fi';
-import { CourseGraph } from './CourseGraph';
-import { Course } from '../model/Course';
+import { PiGraphFill } from 'react-icons/pi';
+import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+
+import { capitalize, punctuate } from '../lib/utils';
+import { Course } from '../model/Course';
+import { Requirements } from '../model/Requirements';
+import { CourseGraph } from './CourseGraph';
 
 type ReqsBlockProps = {
   title: string;
