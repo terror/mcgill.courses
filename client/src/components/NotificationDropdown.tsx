@@ -53,11 +53,14 @@ export const NotificationDropdown = ({
   }, [notifications, refs, isMenuOpen]);
 
   useEffect(() => {
+    if (seen.entries.length === 0) return;
+
     setNotifications(
       notifications.map((n) => {
         return seen.has(n.review.courseId) ? { ...n, seen: true } : n;
       })
     );
+
     setSeen(new Set());
   }, [isMenuOpen]);
 
