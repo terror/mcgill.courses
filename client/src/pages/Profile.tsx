@@ -171,25 +171,50 @@ export const Profile = () => {
                       </div>
                     );
                   })
-              ) : null}
+              ) : (
+                <div className='flex w-full items-center justify-center gap-x-2 text-gray-600'>
+                  <LuFileText
+                    className='stroke-gray-400 stroke-[1px]'
+                    size={40}
+                  />
+                  <div>
+                    No reviews found, if you've taken a course in the past,
+                    don't be shy to leave a review!
+                  </div>
+                </div>
+              )}
             </div>
           </Tab.Panel>
           <Tab.Panel>
             <div>
-              {userSubscriptions?.map((subscription, i) => (
-                <div
-                  key={i}
-                  className='m-4 flex items-center rounded-lg border-gray-800 bg-white p-4 duration-300 ease-in-out dark:bg-neutral-800'
-                >
-                  <p className='font-semibold text-gray-800 dark:text-gray-200'>
-                    {subscription.courseId}
-                  </p>
-                  <FaTrash
-                    onClick={() => removeSubscription(subscription.courseId)}
-                    className='ml-auto dark:text-white'
+              {userSubscriptions?.length !== 0 ? (
+                userSubscriptions?.map((subscription, i) => (
+                  <div
+                    key={i}
+                    className='m-4 flex items-center rounded-lg border-gray-800 bg-white p-4 duration-300 ease-in-out dark:bg-neutral-800'
+                  >
+                    <p className='font-semibold text-gray-800 dark:text-gray-200'>
+                      {subscription.courseId}
+                    </p>
+                    <FaTrash
+                      onClick={() => removeSubscription(subscription.courseId)}
+                      className='ml-auto dark:text-white'
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className='flex w-full items-center justify-center gap-x-2 text-gray-600'>
+                  <VscBell
+                    className='stroke-gray-400 stroke-[0.5px] text-neutral-700 dark:text-white'
+                    aria-hidden='true'
+                    size={30}
                   />
+                  <div>
+                    No subscriptions found, click the bell icon on a course to
+                    add one!
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </Tab.Panel>
         </Tab.Panels>
