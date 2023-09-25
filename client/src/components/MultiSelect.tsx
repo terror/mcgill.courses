@@ -105,8 +105,11 @@ export const MultiSelect = ({
         </div>
       </Combobox>
       <div className='mt-2 flex w-full flex-wrap gap-1'>
-        {values.map((val) => (
-          <div className='flex space-x-1 rounded-3xl bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-800 dark:bg-neutral-700 dark:text-gray-200'>
+        {values.map((val, i) => (
+          <div
+            key={i}
+            className='flex space-x-1 rounded-3xl bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-800 dark:bg-neutral-700 dark:text-gray-200'
+          >
             <div>{val}</div>
             <button type='button' onClick={() => removeVal(val)}>
               <X

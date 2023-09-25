@@ -95,6 +95,7 @@ impl Server {
       .route(
         "/api/notifications",
         get(notifications::get_notifications)
+          .put(notifications::update_notification)
           .delete(notifications::delete_notification),
       )
       .route(

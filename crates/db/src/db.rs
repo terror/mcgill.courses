@@ -463,6 +463,34 @@ impl Db {
     )
   }
 
+  pub async fn update_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+    creator_id: &str,
+    seen: bool,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+            "review.userId": creator_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "seen": seen
+            }
+          }),
+          None,
+        )
+        .await?,
+    )
+  }
+
   async fn find_reviews(&self, query: Document) -> Result<Vec<Review>> {
     Ok(
       self

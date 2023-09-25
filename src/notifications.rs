@@ -10,6 +10,28 @@ pub(crate) async fn get_notifications(
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub(crate) struct UpdateNotificationbody {
+  course_id: String,
+  creator_id: String,
+  seen: bool,
+}
+
+pub(crate) async fn update_notification(
+  user: User,
+  AppState(db): AppState<Arc<Db>>,
+  body: Json<UpdateNotificationbody>,
+) -> Result<impl IntoResponse> {
+  db.update_notification(
+    &user.id(),
+    &body.course_id,
+    &body.creator_id,
+    body.seen,
+  )
+  .await?;
+  Ok(())
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub(crate) struct DeleteNotificationbody {
   course_id: String,
 }

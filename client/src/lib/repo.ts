@@ -170,6 +170,21 @@ export const repo = {
     return client.deserialize<Notification[]>('GET', '/notifications');
   },
 
+  async updateNotification(
+    courseId: string,
+    creatorId: string,
+    seen: boolean
+  ): Promise<Response> {
+    return client.put('/notifications', {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        course_id: courseId,
+        creator_id: creatorId,
+        seen: seen,
+      }),
+    });
+  },
+
   async deleteNotification(courseId: string): Promise<Response> {
     return client.delete('/notifications', {
       headers: { 'Content-Type': 'application/json' },
