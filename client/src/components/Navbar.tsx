@@ -34,6 +34,8 @@ export const Navbar = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
+    if (!user) return;
+
     repo
       .getNotifications()
       .then((data) => setNotifications(data))
@@ -72,6 +74,14 @@ export const Navbar = () => {
             />
           </div>
         ) : null}
+        {user && (
+          <div className='lg:hidden'>
+            <NotificationDropdown
+              notifications={notifications}
+              setNotifications={setNotifications}
+            />
+          </div>
+        )}
         <div className='flex lg:hidden'>
           <button
             type='button'
@@ -83,13 +93,15 @@ export const Navbar = () => {
           </button>
         </div>
         <div className='flex min-w-fit flex-row lg:flex-1'>
-          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
+          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center'>
             <DarkModeToggle />
+            {user && (
+              <NotificationDropdown
+                notifications={notifications}
+                setNotifications={setNotifications}
+              />
+            )}
           </div>
-          <NotificationDropdown
-            notifications={notifications}
-            setNotifications={setNotifications}
-          />
           <div className='hidden lg:ml-4 lg:flex lg:justify-end'>
             {user ? (
               <ProfileDropdown />
