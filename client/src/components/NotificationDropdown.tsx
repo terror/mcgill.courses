@@ -72,25 +72,23 @@ export const NotificationDropdown = ({
         notification.review.userId,
         true
       );
+      seen.add(notification.review.courseId);
     } catch (err) {
       toast.error('Failed to update notification.');
-    } finally {
-      seen.add(notification.review.courseId);
     }
   };
 
   const deleteNotification = async (courseId: string) => {
     try {
       await repo.deleteNotification(courseId);
-      toast.success('Successfully deleted notification.');
-    } catch (err) {
-      toast.error('Failed to delete notification.');
-    } finally {
       setNotifications(
         notifications.filter(
           (notification) => notification.review.courseId !== courseId
         )
       );
+      toast.success('Successfully deleted notification.');
+    } catch (err) {
+      toast.error('Failed to delete notification.');
     }
   };
 
