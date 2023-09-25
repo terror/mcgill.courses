@@ -383,6 +383,7 @@ impl Db {
       .insert_many(
         subscriptions
           .into_iter()
+          .filter(|subscription| subscription.user_id != review.user_id)
           .map(|subscription| Notification {
             review: review.clone(),
             seen: false,
@@ -1709,7 +1710,7 @@ mod tests {
       instructors: vec![String::from("bar")],
       rating: 5,
       difficulty: 5,
-      user_id: "1".into(),
+      user_id: "3".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
     };
 
@@ -1751,5 +1752,40 @@ mod tests {
     db.add_notifications(review).await.unwrap();
 
     assert_eq!(db.notifications().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn dont_notify_review_creator() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
   }
 }

@@ -34,7 +34,7 @@ export const NotificationDropdown = ({
       if (ref && ref.current) {
         const handleIntersection = (entries: IntersectionObserverEntry[]) => {
           entries.forEach((entry: IntersectionObserverEntry) => {
-            if (entry.isIntersecting) handler(notification);
+            if (entry.isIntersecting) updateNotification(notification);
           });
         };
 
@@ -62,7 +62,7 @@ export const NotificationDropdown = ({
     setSeen(new Set());
   }, [isMenuOpen]);
 
-  const handler = async (notification: Notification) => {
+  const updateNotification = async (notification: Notification) => {
     if (notification.seen) return;
 
     try {
