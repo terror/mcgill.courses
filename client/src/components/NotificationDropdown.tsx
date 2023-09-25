@@ -39,16 +39,14 @@ export const NotificationDropdown = ({
         };
 
         const observer = new IntersectionObserver(handleIntersection);
-
         observer.observe(ref.current as Element);
+
         observers.push(observer);
       }
     });
 
     return () => {
-      observers.forEach((observer) => {
-        observer.disconnect();
-      });
+      observers.forEach((observer) => observer.disconnect());
     };
   }, [notifications, refs, isMenuOpen]);
 
@@ -73,9 +71,10 @@ export const NotificationDropdown = ({
         notification.review.userId,
         true
       );
-      seen.add(notification.review.courseId);
     } catch (err) {
       toast.error('Failed to update notification.');
+    } finally {
+      seen.add(notification.review.courseId);
     }
   };
 
@@ -83,13 +82,14 @@ export const NotificationDropdown = ({
     try {
       await repo.deleteNotification(courseId);
       toast.success('Successfully deleted notification.');
+    } catch (err) {
+      toast.error('Failed to delete notification.');
+    } finally {
       setNotifications(
         notifications.filter(
           (notification) => notification.review.courseId !== courseId
         )
       );
-    } catch (err) {
-      toast.error('Failed to delete notification.');
     }
   };
 
