@@ -134,7 +134,11 @@ export const NotificationDropdown = ({
                       notifications.map((notification, i) => (
                         <Menu.Item key={i}>
                           {() => (
-                            <div className='m-2' ref={refs[i]}>
+                            <div
+                              className='m-2'
+                              ref={refs[i]}
+                              onClick={(e) => e.preventDefault()}
+                            >
                               <div className='mb-2 flex items-center'>
                                 <div className='flex items-center gap-x-1'>
                                   <p className='font-semibold text-gray-800 dark:text-gray-200'>
