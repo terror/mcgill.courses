@@ -41,7 +41,7 @@ use {
   log::{debug, error, info, trace},
   model::{
     Course, CourseListing, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Review, Schedule,
+    InteractionKind, Review, Schedule, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
@@ -87,6 +87,7 @@ mod hash;
 mod instructors;
 mod interactions;
 mod loader;
+mod notifications;
 mod object;
 mod options;
 mod page;
@@ -96,6 +97,7 @@ mod search;
 mod server;
 mod state;
 mod subcommand;
+mod subscriptions;
 mod user;
 mod vec_ext;
 mod vsb_client;

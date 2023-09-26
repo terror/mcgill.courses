@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { fetchClient } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
@@ -30,9 +30,7 @@ export const Home = () => {
     try {
       setResults({
         query,
-        ...(await fetchClient.getData<SearchResults>(
-          `/search?query=${encodeURIComponent(query)}`
-        )),
+        ...(await repo.search(query)),
       });
     } catch (err) {
       toast.error(

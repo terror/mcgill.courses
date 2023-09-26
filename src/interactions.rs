@@ -75,23 +75,23 @@ pub(crate) async fn add_interaction(
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RemoveInteractionBody {
+pub(crate) struct DeleteInteractionBody {
   course_id: String,
   user_id: String,
   referrer: String,
 }
 
-pub(crate) async fn remove_interaction(
+pub(crate) async fn delete_interaction(
   AppState(db): AppState<Arc<Db>>,
   _user: User,
-  body: Json<RemoveInteractionBody>,
+  body: Json<DeleteInteractionBody>,
 ) -> Result<impl IntoResponse> {
   info!(
     "Removing interaction for review {}/{}...",
     body.course_id, body.user_id
   );
 
-  db.remove_interaction(&body.course_id, &body.user_id, &body.referrer)
+  db.delete_interaction(&body.course_id, &body.user_id, &body.referrer)
     .await?;
 
   Ok(())

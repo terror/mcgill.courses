@@ -9,9 +9,8 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { courseIdToUrlParam } from '../lib/utils';
-import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
@@ -49,9 +48,7 @@ const ReviewInteractions = ({
 
   const refreshInteractions = async () => {
     try {
-      const payload = await fetchClient.getData<GetInteractionsPayload>(
-        `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
-      );
+      const payload = await repo.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
       setLikes(payload.likes);
     } catch (err: any) {
@@ -60,39 +57,30 @@ const ReviewInteractions = ({
   };
 
   const addInteraction = async (interactionKind: InteractionKind) => {
-    if (!user) return;
-
     try {
-      await fetchClient.post(
-        '/interactions',
-        {
-          kind: interactionKind,
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await repo.addInteraction(interactionKind, courseId, userId, user?.id);
       await refreshInteractions();
+      toast.success(
+        `Successfully ${interactionKind}d review for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     } catch (err: any) {
       toast.error(err.toString());
     }
   };
 
   const removeInteraction = async () => {
-    if (!user) return;
-
     try {
-      await fetchClient.delete(
-        '/interactions',
-        {
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await repo.removeInteraction(courseId, userId, user?.id);
       await refreshInteractions();
+      toast.success(
+        `Successfully removed interaction for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     } catch (err: any) {
       toast.error(err.toString());
     }
@@ -155,6 +143,7 @@ type CourseReviewProps = {
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
+  className?: string;
 };
 
 export const CourseReview = ({
@@ -162,6 +151,7 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
+  className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
@@ -174,9 +164,10 @@ export const CourseReview = ({
 
   return (
     <div
-      className={
-        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800'
-      }
+      className={twMerge(
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800',
+        className
+      )}
     >
       <div className='flex flex-col'>
         <div className='flex w-full'>

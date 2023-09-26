@@ -1,7 +1,8 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import { fetchClient } from '../lib/fetchClient';
-import { User, UserResponse } from '../model/User';
+import { repo } from '../lib/repo';
+import { User } from '../model/User';
 
 export const AuthContext = createContext<User | undefined>(undefined);
 
@@ -11,12 +12,14 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
 
   useEffect(() => {
     setLoading(true);
-    fetchClient
-      .getData<UserResponse>('/user', { credentials: 'include' })
+
+    repo
+      .getUser()
       .then((data) => {
         setUser(data.user);
         setLoading(false);
-      });
+      })
+      .catch(() => toast.error('Failed to fetch user.'));
   }, []);
 
   return (

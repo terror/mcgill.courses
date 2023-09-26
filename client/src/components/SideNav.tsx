@@ -65,7 +65,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveFrom='translate-x-0'
             leaveTo='translate-x-full'
           >
-            <div className='h-screen w-full overflow-y-auto bg-white p-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+            <div className='h-screen w-full overflow-y-auto bg-white px-6 py-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
                   <Link to='/' className=''>

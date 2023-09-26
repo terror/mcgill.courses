@@ -9,7 +9,9 @@ impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
   const INTERACTION_COLLECTION: &str = "interactions";
+  const NOTIFICATION_COLLECTION: &str = "notifications";
   const REVIEW_COLLECTION: &str = "reviews";
+  const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options = ClientOptions::parse(format!(
@@ -215,7 +217,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_interaction(
+  pub async fn delete_interaction(
     &self,
     course_id: &str,
     user_id: &str,
@@ -237,7 +239,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_interactions(
+  pub async fn delete_interactions(
     &self,
     course_id: &str,
     user_id: &str,
@@ -269,6 +271,247 @@ impl Db {
         .find(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?
         .try_collect::<Vec<Interaction>>()
+        .await?,
+    )
+  }
+
+  pub async fn get_subscription(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<Option<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find_one(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn get_subscriptions(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(
+          doc! {
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<InsertOneResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .insert_one(subscription, None)
+        .await?,
+    )
+  }
+
+  pub async fn delete_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": subscription.course_id,
+            "userId": subscription.user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn get_notifications(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(doc! { "userId": user_id }, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_notifications(&self, review: Review) -> Result {
+    let course_id = review.course_id.clone();
+
+    let subscriptions = self
+      .database
+      .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+      .find(doc! { "courseId": course_id }, None)
+      .await?
+      .try_collect::<Vec<Subscription>>()
+      .await?;
+
+    let subscriptions = subscriptions
+      .into_iter()
+      .filter(|subscription| subscription.user_id != review.user_id)
+      .collect::<Vec<Subscription>>();
+
+    if subscriptions.is_empty() {
+      return Ok(());
+    }
+
+    self
+      .database
+      .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+      .insert_many(
+        subscriptions
+          .into_iter()
+          .map(|subscription| Notification {
+            review: review.clone(),
+            seen: false,
+            user_id: subscription.user_id,
+          })
+          .collect::<Vec<Notification>>(),
+        None,
+      )
+      .await?;
+
+    Ok(())
+  }
+
+  pub async fn delete_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn delete_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn purge_notifications(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+    review: Review,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "review": Into::<Bson>::into(review),
+              "seen": false
+            }
+          }),
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+    creator_id: &str,
+    seen: bool,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+            "review.userId": creator_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "seen": seen
+            }
+          }),
+          None,
+        )
         .await?,
     )
   }
@@ -482,6 +725,32 @@ impl Db {
         .await?,
     )
   }
+
+  #[cfg(test)]
+  async fn subscriptions(&self) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn notifications(&self) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    )
+  }
 }
 
 #[cfg(test)]
@@ -512,7 +781,7 @@ mod tests {
         TEST_DATABASE_NUMBER.fetch_add(1, Ordering::Relaxed);
 
       let db_name = format!(
-        "mcgill-gg-test-{}-{}",
+        "mcgill-courses-test-{}-{}",
         std::time::SystemTime::now()
           .duration_since(std::time::SystemTime::UNIX_EPOCH)
           .unwrap()
@@ -1419,7 +1688,7 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
 
-    db.remove_interaction(&review.course_id, &review.user_id, "10")
+    db.delete_interaction(&review.course_id, &review.user_id, "10")
       .await
       .unwrap();
 
@@ -1430,5 +1699,177 @@ mod tests {
         .len(),
       0
     );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn subscription_flow() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(Subscription {
+      course_id: subscription.course_id,
+      user_id: subscription.user_id,
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_many_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_empty_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn dont_notify_review_creator() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_subscription() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_notification() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review.clone()).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+
+    db.delete_notification("1", &review.course_id)
+      .await
+      .unwrap();
+
+    assert_eq!(db.get_notifications("1").await.unwrap().len(), 0);
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
   }
 }
