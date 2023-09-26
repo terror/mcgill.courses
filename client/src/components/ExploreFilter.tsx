@@ -110,7 +110,7 @@ export const ExploreFilter = ({
         }}
       />
       <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
-        Course Code
+        Subject
       </h1>
       <div className='py-1' />
       <MultiSelect
