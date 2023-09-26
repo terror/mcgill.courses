@@ -103,16 +103,16 @@ export const NotificationDropdown = ({
           return (
             <>
               <div>
-                <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
+                <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white'>
                   {notifications.filter((notification) => !notification.seen)
                     .length !== 0 ? (
                     <VscBellDot
-                      className='hover:text-white-100 -mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
+                      className='-mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
                       aria-hidden='true'
                     />
                   ) : (
                     <VscBell
-                      className='hover:text-white-100 -mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
+                      className='-mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
                       aria-hidden='true'
                     />
                   )}
@@ -127,7 +127,7 @@ export const NotificationDropdown = ({
                 leaveFrom='transform opacity-100 scale-100'
                 leaveTo='transform opacity-0 scale-95'
               >
-                <Menu.Items className='autocomplete absolute right-0 z-20 mt-2 max-h-[800px] max-w-[325px] origin-top-right divide-y divide-gray-100 overflow-auto rounded-md bg-slate-100 shadow-lg dark:bg-neutral-900 md:max-w-[800px]'>
+                <Menu.Items className='autocomplete absolute right-0 z-20 mt-2 max-h-[800px] max-w-[325px] origin-top-right divide-y divide-gray-100 overflow-auto rounded-md bg-slate-100 shadow-lg dark:bg-neutral-800 md:max-w-[800px]'>
                   <div className='p-2'>
                     {notifications.length !== 0 ? (
                       notifications.map((notification, i) => (
@@ -177,7 +177,7 @@ export const NotificationDropdown = ({
                         </Menu.Item>
                       ))
                     ) : (
-                      <p className='w-[325px] font-semibold text-gray-800 dark:text-gray-200'>
+                      <p className='w-[325px] font-medium text-gray-700 dark:text-gray-300'>
                         All caught up! Subscribe to courses to get notified when
                         a user leaves a review.
                       </p>
