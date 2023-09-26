@@ -52,6 +52,7 @@ export const ReviewForm = ({
   const instructorNames = Array.from(
     new Set(course.instructors.map((instructor) => instructor.name))
   );
+
   instructorNames.push('Other');
 
   return (

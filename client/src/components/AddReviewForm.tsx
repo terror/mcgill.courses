@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { fetchClient } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { Course } from '../model/Course';
 import {
   ReviewForm,
@@ -81,14 +81,7 @@ export const AddReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await fetchClient.post(
-                      `/reviews`,
-                      {
-                        course_id: course._id,
-                        ...values,
-                      },
-                      { headers: { 'Content-Type': 'application/json' } }
-                    );
+                    const res = await repo.addReview(course._id, values);
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);

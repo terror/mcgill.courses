@@ -2,15 +2,15 @@ import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
 import { ExternalLink } from 'react-feather';
 import { Link, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { CourseInfoStats } from '../components/CourseInfoStats';
 import { CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { courseIdToUrlParam } from '../lib/utils';
-import { GetInstructorPayload } from '../model/GetInstructorPayload';
 import { Instructor as InstructorType } from '../model/Instructor';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
@@ -29,16 +29,17 @@ export const Instructor = () => {
   const user = useAuth();
 
   useEffect(() => {
-    if (params.name) {
-      fetchClient
-        .getData<GetInstructorPayload>(
-          `/instructors/${decodeURIComponent(params.name)}`
-        )
-        .then((payload) => {
-          setInstructor(payload.instructor);
-          setReviews(payload.reviews);
-        });
-    }
+    if (!params.name) return;
+
+    repo
+      .getInstructor(params.name!)
+      .then((data) => {
+        setInstructor(data.instructor);
+        setReviews(data.reviews);
+      })
+      .catch(() => {
+        toast.error('Failed to fetch instructor.');
+      });
   }, [params.name]);
 
   if (instructor === undefined) return <Loading />;
@@ -92,7 +93,7 @@ export const Instructor = () => {
                 <Fragment>
                   <div className='grow py-3' />
                   <CourseInfoStats className='md:hidden' allReviews={reviews} />
-                  <p className='text-sm text-gray-500 dark:text-gray-400'>
+                  <p className='mt-6 text-sm text-gray-500 dark:text-gray-400'>
                     {reviews.length} review(s)
                   </p>
                 </Fragment>
