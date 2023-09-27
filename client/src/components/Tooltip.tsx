@@ -1,9 +1,9 @@
 import { Transition } from '@headlessui/react';
 import {
   Children,
+  PropsWithChildren,
   cloneElement,
   isValidElement,
-  PropsWithChildren,
   useState,
 } from 'react';
 

@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
+import * as buildingCodes from '../assets/buildingCodes.json';
 import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Block, Schedule, TimeBlock } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
-import * as buildingCodes from '../assets/buildingCodes.json';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -54,7 +54,7 @@ const BlockLocation = ({ location }: { location: string }) => {
   return (
     <span className='relative whitespace-nowrap'>
       <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
-        <p className='inline-block'> {location}</p>
+        <p className='inline-block cursor-default'> {location}</p>
       </Tooltip>
     </span>
   );

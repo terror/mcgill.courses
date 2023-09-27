@@ -1,11 +1,12 @@
-import * as Yup from 'yup';
-import { BirdIcon } from './BirdIcon';
-import { Course } from '../model/Course';
 import { ErrorMessage, Field, FormikState } from 'formik';
-import { IconRatingInput } from './IconRatingInput';
-import { LuFlame } from 'react-icons/lu';
-import { MultiSelect } from './MultiSelect';
 import { PersistFormikValues } from 'formik-persist-values';
+import { LuFlame } from 'react-icons/lu';
+import * as Yup from 'yup';
+
+import { Course } from '../model/Course';
+import { BirdIcon } from './BirdIcon';
+import { IconRatingInput } from './IconRatingInput';
+import { MultiSelect } from './MultiSelect';
 
 export const ReviewSchema = Yup.object().shape({
   content: Yup.string()
@@ -51,6 +52,7 @@ export const ReviewForm = ({
   const instructorNames = Array.from(
     new Set(course.instructors.map((instructor) => instructor.name))
   );
+
   instructorNames.push('Other');
 
   return (

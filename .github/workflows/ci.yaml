@@ -37,26 +37,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Info
         run: |
           node --version
-          npm --version
+          pnpm --version
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm i --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
 
       - name: Format
-        run: npm run format-check
+        run: pnpm run format-check
 
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Test
-        run: npm run cy:e2e
+        run: pnpm run cy:e2e
 
   coverage:
     name: Coverage

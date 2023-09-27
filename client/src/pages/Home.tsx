@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
+import { repo } from '../lib/repo';
 import { SearchResults } from '../model/SearchResults';
-import { fetchClient } from '../lib/fetchClient';
-import { useSearchParams } from 'react-router-dom';
-import { toast } from 'sonner';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],
@@ -30,9 +30,7 @@ export const Home = () => {
     try {
       setResults({
         query,
-        ...(await fetchClient.getData<SearchResults>(
-          `/search?query=${encodeURIComponent(query)}`
-        )),
+        ...(await repo.search(query)),
       });
     } catch (err) {
       toast.error(

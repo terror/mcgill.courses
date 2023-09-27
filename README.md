@@ -7,9 +7,9 @@ A course search and review platform for McGill university.
 ### Development
 
 You'll need [docker](https://www.docker.com/),
-[cargo](https://doc.rust-lang.org/cargo/) and [npm](https://www.npmjs.com/)
-installed on your machine to spawn the various components the project needs to
-run locally.
+[cargo](https://doc.rust-lang.org/cargo/) and [pnpm](https://pnpm.io/) installed
+on your machine to spawn the various components the project needs to run
+locally.
 
 First, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
 
@@ -27,8 +27,8 @@ cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
 Finally, spawn the react frontend:
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 Refer to `.env.dev.example` and `client/.env.dev.example` for what environment

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { AddReviewForm } from '../components/AddReviewForm';
 import { CourseInfo } from '../components/CourseInfo';
@@ -9,18 +10,16 @@ import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
 import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
-import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import { Requirements } from '../model/Requirements';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
-import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
-import { toast } from 'sonner';
 
 export const CoursePage = () => {
   const params = useParams<{ id: string }>();
@@ -42,28 +41,30 @@ export const CoursePage = () => {
 
   const refetch = () => {
     const id = params.id?.replace('-', '').toUpperCase();
-    fetchClient
-      .getData<GetCourseWithReviewsPayload | null>(
-        `/courses/${id}?with_reviews=true`
-      )
-      .then((payload) => {
+
+    const inner = async () => {
+      try {
+        const payload = await repo.getCourseWithReviews(id);
+
         if (payload === null) {
           setCourse(null);
           return;
         }
 
-        if (firstFetch.current) {
-          setCourse(payload.course);
-        }
+        if (firstFetch.current) setCourse(payload.course);
+
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
+
         firstFetch.current = false;
-      })
-      .catch(() => {
+      } catch (err) {
         toast.error(
           'An error occurred while trying to fetch course information.'
         );
-      });
+      }
+    };
+
+    inner();
   };
 
   useEffect(refetch, [params.id]);
@@ -113,11 +114,7 @@ export const CoursePage = () => {
   };
 
   const handleDelete = async (review: Review) => {
-    const res = await fetchClient.delete(
-      '/reviews',
-      { course_id: review.courseId },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+    const res = await repo.deleteReview(review.courseId);
 
     if (res.ok) {
       setShowingReviews(

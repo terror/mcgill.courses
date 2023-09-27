@@ -1,20 +1,23 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { getUrl } from '../lib/utils';
+import { Notification } from '../model/Notification';
 import { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
+import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const [arrowColor, setArrowColor] = useState(
     'text-gray-900 dark:text-gray-200'
   );
@@ -25,16 +28,26 @@ export const Navbar = () => {
     instructors: [],
   });
 
+  const user = useAuth();
   const location = useLocation();
   const pathName = location.pathname;
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    repo
+      .getNotifications()
+      .then((data) => setNotifications(data))
+      .catch(() => toast.error('Failed to get notifications.'));
+  }, []);
 
   const handleInputChange = async (query: string) => {
     try {
       setResults({
         query,
-        ...(await fetchClient.getData<SearchResults>(
-          `/search?query=${encodeURIComponent(query)}`
-        )),
+        ...(await repo.search(query)),
       });
     } catch (err) {
       toast.error(
@@ -43,15 +56,13 @@ export const Navbar = () => {
     }
   };
 
-  const user = useAuth();
-
   return (
     <header className='z-40'>
       <nav
         className='z-40 flex items-center justify-between p-3 lg:px-8'
         aria-label='Global'
       >
-        <div className='z-40 my-auto mr-auto flex lg:flex-1'>
+        <div className='z-40 my-auto mr-auto flex min-w-[48px] lg:flex-1'>
           <Link to='/' className='-m-1.5 p-1.5'>
             <img className='h-12 w-auto' src={birdImageUrl} alt='bird' />
           </Link>
@@ -64,6 +75,14 @@ export const Navbar = () => {
             />
           </div>
         ) : null}
+        {user && (
+          <div className='lg:hidden'>
+            <NotificationDropdown
+              notifications={notifications}
+              setNotifications={setNotifications}
+            />
+          </div>
+        )}
         <div className='flex lg:hidden'>
           <button
             type='button'
@@ -75,10 +94,16 @@ export const Navbar = () => {
           </button>
         </div>
         <div className='flex min-w-fit flex-row lg:flex-1'>
-          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center lg:gap-x-8'>
+          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center'>
             <DarkModeToggle />
+            {user && (
+              <NotificationDropdown
+                notifications={notifications}
+                setNotifications={setNotifications}
+              />
+            )}
           </div>
-          <div className='hidden lg:ml-5 lg:flex lg:justify-end'>
+          <div className='hidden lg:ml-4 lg:flex lg:justify-end'>
             {user ? (
               <ProfileDropdown />
             ) : (

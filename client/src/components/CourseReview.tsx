@@ -2,21 +2,21 @@ import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { Edit } from 'react-feather';
+import { BsPinFill } from 'react-icons/bs';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { courseIdToUrlParam } from '../lib/utils';
-import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { InteractionKind } from '../model/Interaction';
 import { Review } from '../model/Review';
-import { DeleteButton } from './DeleteButton';
-import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
-import { IconRating } from './IconRating';
 import { BirdIcon } from './BirdIcon';
-import { BsPinFill } from 'react-icons/bs';
-import { toast } from 'sonner';
+import { DeleteButton } from './DeleteButton';
+import { IconRating } from './IconRating';
+import { Tooltip } from './Tooltip';
 
 const LoginPrompt = () => {
   return (
@@ -48,9 +48,7 @@ const ReviewInteractions = ({
 
   const refreshInteractions = async () => {
     try {
-      const payload = await fetchClient.getData<GetInteractionsPayload>(
-        `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
-      );
+      const payload = await repo.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
       setLikes(payload.likes);
     } catch (err: any) {
@@ -59,39 +57,30 @@ const ReviewInteractions = ({
   };
 
   const addInteraction = async (interactionKind: InteractionKind) => {
-    if (!user) return;
-
     try {
-      await fetchClient.post(
-        '/interactions',
-        {
-          kind: interactionKind,
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await repo.addInteraction(interactionKind, courseId, userId, user?.id);
       await refreshInteractions();
+      toast.success(
+        `Successfully ${interactionKind}d review for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     } catch (err: any) {
       toast.error(err.toString());
     }
   };
 
   const removeInteraction = async () => {
-    if (!user) return;
-
     try {
-      await fetchClient.delete(
-        '/interactions',
-        {
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      await repo.removeInteraction(courseId, userId, user?.id);
       await refreshInteractions();
+      toast.success(
+        `Successfully removed interaction for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     } catch (err: any) {
       toast.error(err.toString());
     }
@@ -154,6 +143,7 @@ type CourseReviewProps = {
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
+  className?: string;
 };
 
 export const CourseReview = ({
@@ -161,29 +151,33 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
+  className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
 
-  const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'P'
-  );
+  const date = new Date(parseInt(review.timestamp.$date.$numberLong, 10));
+
+  const shortDate = format(date, 'P'),
+    longDate = format(date, 'EEEE, MMMM d, yyyy');
 
   return (
     <div
-      className={
-        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800'
-      }
+      className={twMerge(
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800',
+        className
+      )}
     >
       <div className='flex flex-col'>
         <div className='flex w-full'>
           <div className='relative flex w-full flex-col'>
             <div className='flex w-full'>
-              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
-                {dateStr}
-              </p>
+              <Tooltip text={longDate}>
+                <p className='cursor-default py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
+                  {shortDate}
+                </p>
+              </Tooltip>
               {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
