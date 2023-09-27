@@ -10,7 +10,7 @@ import { MultiSelect } from './MultiSelect';
 
 export const ReviewSchema = Yup.object().shape({
   content: Yup.string()
-    .required('Review body is required')
+    .required('Review content is required')
     .max(3000, 'Must be less than 3000 characters'),
   instructors: Yup.array().min(1, 'At least 1 instructor is required'),
   rating: Yup.number()
@@ -57,10 +57,11 @@ export const ReviewForm = ({
 
   return (
     <>
-      <label htmlFor='instructors' className='mb-2 dark:text-gray-200'>
+      <label htmlFor='instructors' className='dark:text-gray-200'>
         Instructor(s)
       </label>
       <MultiSelect
+        className='mt-2'
         options={instructorNames}
         setValues={(instructors) => setFieldValue('instructors', instructors)}
         values={values.instructors}
@@ -69,13 +70,16 @@ export const ReviewForm = ({
         <ErrorMessage name='instructors' />
       </div>
       <div className='flex flex-col'>
+        <label htmlFor='content' className='mb-2 mt-4 dark:text-gray-200'>
+          Content
+        </label>
         <Field
           component='textarea'
           rows='8'
           id='content'
           name='content'
           placeholder='Write your thoughts on this course...'
-          className='mt-6 resize-none rounded-md bg-gray-50 p-3 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+          className='resize-none rounded-md bg-gray-50 p-3 outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
         />
         <div className='italic text-red-400'>
           <ErrorMessage name='content' />
@@ -92,7 +96,7 @@ export const ReviewForm = ({
         <div className='italic text-red-400'>
           <ErrorMessage name='rating' />
         </div>
-        <label htmlFor='difficulty' className='my-2 dark:text-gray-200'>
+        <label htmlFor='difficulty' className='my-2 mt-4 dark:text-gray-200'>
           Difficulty
         </label>
         <IconRatingInput
