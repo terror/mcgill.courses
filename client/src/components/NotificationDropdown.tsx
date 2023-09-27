@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
-import { VscBell, VscBellDot } from 'react-icons/vsc';
+import { VscBell } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -104,18 +104,16 @@ export const NotificationDropdown = ({
             <>
               <div>
                 <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white'>
-                  {notifications.filter((notification) => !notification.seen)
-                    .length !== 0 ? (
-                    <VscBellDot
-                      className='-mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
-                      aria-hidden='true'
-                    />
-                  ) : (
+                  <div className='relative'>
                     <VscBell
                       className='-mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
                       aria-hidden='true'
                     />
-                  )}
+                    {notifications.filter((notification) => !notification.seen)
+                      .length !== 0 && (
+                      <div className='absolute right-[-3px] top-[1px] h-2 w-2 rounded-full bg-red-600' />
+                    )}
+                  </div>
                 </Menu.Button>
               </div>
               <Transition
