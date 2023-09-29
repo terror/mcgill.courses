@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Layers, Search, User } from 'react-feather';
+import { Layers, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { SearchResults } from '../model/SearchResults';
 import { Highlight } from './Highlight';
+import { SearchBar } from './SearchBar';
 
 type SearchResultType = 'course' | 'instructor';
 
@@ -92,30 +93,17 @@ export const CourseSearchBar = ({
 
   return (
     <div className='relative'>
-      <div className='relative w-full'>
-        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-          <Search
-            size={20}
-            className={twMerge(
-              'transition duration-200',
-              searchSelected ? 'stroke-red-600' : 'stroke-gray-400'
-            )}
-            aria-hidden='true'
-          />
-        </div>
-        <input
-          type='text'
-          className={twMerge(
-            'block w-full rounded-t-lg bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px]',
-            searchSelected ? '' : 'rounded-b-lg'
-          )}
-          placeholder='Search for courses, subjects or professors'
-          onChange={(event) => handleInputChange(event.target.value)}
-          onFocus={() => setSearchSelected(true)}
-          onBlur={() => setTimeout(() => setSearchSelected(false), 100)}
-          onKeyDown={handleKeyDown}
-        />
-      </div>
+      <SearchBar
+        handleInputChange={handleInputChange}
+        inputStyle={twMerge(
+          'block w-full rounded-t-lg bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px]',
+          searchSelected ? '' : 'rounded-b-lg'
+        )}
+        onKeyDown={handleKeyDown}
+        placeholder='Search for courses, subjects or professors'
+        searchSelected={searchSelected}
+        setSearchSelected={setSearchSelected}
+      />
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
           {results.courses.map((result, index) => (

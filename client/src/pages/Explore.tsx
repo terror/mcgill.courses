@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Search } from 'react-feather';
+import { Fragment, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
-import { twMerge } from 'tailwind-merge';
 
 import { CourseCard } from '../components/CourseCard';
 import { ExploreFilter } from '../components/ExploreFilter';
 import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
+import { SearchBar } from '../components/SearchBar';
 import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
@@ -25,7 +24,7 @@ export const Explore = () => {
   const [offset, setOffset] = useState(limit);
 
   const [query, setQuery] = useState<string>('');
-  const [searchSelected, setSearchSelected] = useState(false);
+  const [searchSelected, setSearchSelected] = useState<boolean>(false);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
@@ -108,35 +107,17 @@ export const Explore = () => {
               >
                 <div className='ml-auto flex w-full max-w-xl flex-col'>
                   {courses ? (
-                    <>
-                      <div className='relative w-full'>
-                        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5'>
-                          <Search
-                            size={20}
-                            className={twMerge(
-                              'transition duration-200 mt-2 lg:mt-0',
-                              searchSelected
-                                ? 'stroke-red-600'
-                                : 'stroke-gray-400'
-                            )}
-                            aria-hidden='true'
-                          />
-                        </div>
-                        <div className='m-2 mt-4 lg:mt-2'>
-                          <input
-                            type='text'
-                            className='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
-                            placeholder='Search by identifier, title or description'
-                            onChange={(event) =>
-                              handleInputChange(event.target.value)
-                            }
-                            onFocus={() => setSearchSelected(true)}
-                            onBlur={() =>
-                              setTimeout(() => setSearchSelected(false), 100)
-                            }
-                          />
-                        </div>
-                      </div>
+                    <Fragment>
+                      <SearchBar
+                        handleInputChange={handleInputChange}
+                        iconStyle='mt-2 lg:mt-0'
+                        inputStyle='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
+                        outerIconStyle='pl-5'
+                        outerInputStyle='m-2 mt-4 lg:mt-2'
+                        placeholder='Search by identifier, title or description'
+                        searchSelected={searchSelected}
+                        setSearchSelected={setSearchSelected}
+                      />
                       {courses.map((course, i) => (
                         <CourseCard
                           className='m-2'
@@ -145,7 +126,7 @@ export const Explore = () => {
                           query={query}
                         />
                       ))}
-                    </>
+                    </Fragment>
                   ) : (
                     <div className='mx-2'>
                       <Skeleton
