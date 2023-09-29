@@ -88,7 +88,7 @@ impl Db {
         document.insert(
             "$or",
             vec![
-                doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(" ", "")), "$options": "i" } },
+                doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(' ', "")), "$options": "i" } },
                 doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "code": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "subject": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
