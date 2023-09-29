@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
 
 import { CourseCard } from '../components/CourseCard';
@@ -8,6 +9,7 @@ import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
+import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
@@ -16,13 +18,15 @@ export const Explore = () => {
   const limit = 20;
   const currentTerms = getCurrentTerms();
 
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[] | undefined>(undefined);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
 
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
+
+  const [darkMode] = useDarkMode();
 
   const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
 
@@ -60,12 +64,12 @@ export const Explore = () => {
   return (
     <Layout>
       <div className='p-4'>
-        <div className='flex w-full flex-col items-center py-8'>
+        <div className='flex flex-col items-center py-8'>
           <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             Explore all courses
           </h1>
-          <div className='relative flex flex-col lg:flex-row'>
-            <div className='m-2 lg:hidden'>
+          <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
+            <div className='mx-2 lg:hidden'>
               <FilterToggle>
                 <ExploreFilter
                   selectedSubjects={selectedSubjects}
@@ -78,39 +82,58 @@ export const Explore = () => {
                 />
               </FilterToggle>
             </div>
-            <InfiniteScroll
-              dataLength={courses?.length || 0}
-              hasMore={hasMore}
-              loader={
-                (courses?.length || 0) >= 20 &&
-                hasMore && (
-                  <div className='mt-4 text-center'>
-                    <Spinner />
-                  </div>
-                )
-              }
-              next={fetchMore}
-              style={{ overflowY: 'hidden' }}
-            >
-              <div className='mx-auto flex flex-col'>
-                {courses?.map((course, i) => (
-                  <CourseCard key={i} course={course} className='m-2' />
-                ))}
-                {!hasMore ? (
-                  courses?.length ? (
-                    <div className='mx-[200px] mt-4 text-center'>
-                      <p className='text-gray-500 dark:text-gray-400'>
-                        No more courses to show
-                      </p>
-                    </div>
-                  ) : (
+            <div className='lg:flex-1'>
+              <InfiniteScroll
+                dataLength={courses?.length || 0}
+                hasMore={hasMore}
+                loader={
+                  (courses?.length || 0) >= 20 &&
+                  hasMore && (
                     <div className='mt-4 text-center'>
                       <Spinner />
                     </div>
                   )
-                ) : null}
-              </div>
-            </InfiniteScroll>
+                }
+                next={fetchMore}
+                style={{ overflowY: 'hidden' }}
+              >
+                <div className='ml-auto flex w-full max-w-xl flex-col'>
+                  {courses ? (
+                    courses.map((course, i) => (
+                      <CourseCard key={i} course={course} className='m-2' />
+                    ))
+                  ) : (
+                    <div className='mx-2'>
+                      <Skeleton
+                        baseColor={
+                          darkMode ? 'rgb(38 38 38)' : 'rgb(248 250 252)'
+                        }
+                        className='first:mt-2 mb-2 rounded-lg'
+                        count={10}
+                        duration={2}
+                        height={256}
+                        highlightColor={
+                          darkMode ? 'rgb(64 64 64)' : 'rgb(226 232 240)'
+                        }
+                      />
+                    </div>
+                  )}
+                  {!hasMore ? (
+                    courses?.length ? (
+                      <div className='mx-[200px] mt-4 text-center'>
+                        <p className='text-gray-500 dark:text-gray-400'>
+                          No more courses to show
+                        </p>
+                      </div>
+                    ) : (
+                      <div className='mt-4 text-center'>
+                        <Spinner />
+                      </div>
+                    )
+                  ) : null}
+                </div>
+              </InfiniteScroll>
+            </div>
             <div className='m-2 hidden lg:flex'>
               <ExploreFilter
                 selectedSubjects={selectedSubjects}
