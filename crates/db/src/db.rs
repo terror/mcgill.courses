@@ -1875,7 +1875,7 @@ mod tests {
       .await
       .unwrap();
 
-    assert!(results.len() > 0);
+    assert!(!results.is_empty());
 
     for result in results {
       let (a, b) = (
