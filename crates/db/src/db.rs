@@ -1875,6 +1875,8 @@ mod tests {
       .await
       .unwrap();
 
+    assert!(results.len() > 0);
+
     for result in results {
       let (a, b) = (
         Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
