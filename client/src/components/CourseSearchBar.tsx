@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { useState } from 'react';
 import { Layers, Search, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { SearchResults } from '../model/SearchResults';
+import { Highlight } from './Highlight';
 
 type SearchResultType = 'course' | 'instructor';
 
@@ -33,21 +33,6 @@ const SearchResult = ({
       <User className='mr-2 dark:text-white' />
     );
 
-  const textWithMatchHighlight = text
-    .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
-    .map((part, i) => (
-      <span
-        key={i}
-        className={
-          part.toLowerCase().trim() === query?.toLowerCase().trim()
-            ? 'underline'
-            : ''
-        }
-      >
-        {part}
-      </span>
-    ));
-
   return (
     <Link to={url}>
       <div
@@ -60,7 +45,7 @@ const SearchResult = ({
         key={index}
       >
         {icon}
-        <span className='dark:text-gray-200'>{textWithMatchHighlight}</span>
+        <Highlight className='dark:text-gray-200' query={query} text={text} />
       </div>
     </Link>
   );

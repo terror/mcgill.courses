@@ -7,12 +7,14 @@ type MultiSelectProps = {
   options: string[];
   values: string[];
   setValues: (values: string[]) => void;
+  className?: string;
 };
 
 export const MultiSelect = ({
   options,
   values,
   setValues,
+  className,
 }: MultiSelectProps) => {
   const [query, setQuery] = useState('');
 
@@ -46,7 +48,7 @@ export const MultiSelect = ({
   };
 
   return (
-    <div className='w-full'>
+    <div className={twMerge('w-full', className)}>
       <Combobox
         value={values}
         onChange={(val) => {

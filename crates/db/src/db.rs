@@ -89,6 +89,8 @@ impl Db {
             "$or",
             vec![
                 doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
+                doc! { "subject": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
+                doc! { "code": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "description": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } }
             ]
         );
