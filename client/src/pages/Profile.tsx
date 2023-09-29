@@ -194,9 +194,14 @@ export const Profile = () => {
                     key={i}
                     className='m-4 flex items-center rounded-lg border-gray-800 bg-white p-4 duration-300 ease-in-out dark:bg-neutral-800'
                   >
-                    <p className='font-semibold text-gray-800 dark:text-gray-200'>
+                    <Link
+                      className='font-semibold text-gray-800 dark:text-gray-200'
+                      to={`/course/${courseIdToUrlParam(
+                        subscription.courseId
+                      )}`}
+                    >
                       {subscription.courseId}
-                    </p>
+                    </Link>
                     <FaTrash
                       onClick={() => removeSubscription(subscription.courseId)}
                       className='ml-auto dark:text-white'
