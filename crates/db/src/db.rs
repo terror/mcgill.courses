@@ -776,7 +776,7 @@ impl Db {
 
 #[cfg(test)]
 mod tests {
-  use {super::*, pretty_assertions::assert_eq};
+  use {super::*, pretty_assertions::assert_eq, regex::Regex};
 
   static SEED_DIR: Dir<'_> = include_dir!("crates/db/test-seeds");
 
@@ -1841,5 +1841,53 @@ mod tests {
 
     assert_eq!(db.get_notifications("1").await.unwrap().len(), 0);
     assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_query() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.initialize(InitializeOptions {
+      source,
+
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let query = "discrete math";
+
+    let results = db
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          query: Some(query.into()),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    for result in results {
+      let (a, b) = (
+        Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
+        Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+      );
+
+      assert!(
+        a.is_match(&result.id)
+          || b.is_match(&result.title)
+          || b.is_match(&result.code)
+          || b.is_match(&result.subject)
+          || b.is_match(&result.description)
+      );
+    }
   }
 }
