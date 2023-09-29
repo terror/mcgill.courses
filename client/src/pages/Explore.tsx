@@ -126,7 +126,7 @@ export const Explore = () => {
                           <input
                             type='text'
                             className='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
-                            placeholder='Search by id, title or description...'
+                            placeholder='Search by identifier, title or description'
                             onChange={(event) =>
                               handleInputChange(event.target.value)
                             }
