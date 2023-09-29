@@ -9,6 +9,7 @@ import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
+import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import { Course } from '../model/Course';
@@ -24,6 +25,8 @@ export const Explore = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
+
+  const [darkMode] = useDarkMode();
 
   const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
 
@@ -100,7 +103,20 @@ export const Explore = () => {
                       <CourseCard key={i} course={course} className='m-2' />
                     ))
                   ) : (
-                    <Skeleton count={10} height={256} className='mb-4' />
+                    <div className='mx-2'>
+                      <Skeleton
+                        baseColor={
+                          darkMode ? 'rgb(38 38 38)' : 'rgb(248 250 252)'
+                        }
+                        className='first:mt-2 mb-2 rounded-lg'
+                        count={10}
+                        duration={2}
+                        height={256}
+                        highlightColor={
+                          darkMode ? 'rgb(64 64 64)' : 'rgb(226 232 240)'
+                        }
+                      />
+                    </div>
                   )}
                   {!hasMore ? (
                     courses?.length ? (
