@@ -65,10 +65,6 @@ export const Explore = () => {
     }
   };
 
-  const handleInputChange = (query: string) => {
-    setQuery(query);
-  };
-
   return (
     <Layout>
       <div className='p-4'>
@@ -109,7 +105,7 @@ export const Explore = () => {
                   {courses ? (
                     <Fragment>
                       <SearchBar
-                        handleInputChange={handleInputChange}
+                        handleInputChange={(value) => setQuery(value)}
                         iconStyle='mt-2 lg:mt-0'
                         inputStyle='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
                         outerIconStyle='pl-5'
