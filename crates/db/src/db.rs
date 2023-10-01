@@ -89,10 +89,10 @@ impl Db {
             "$or",
             vec![
                 doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(' ', "")), "$options": "i" } },
-                doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "code": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
+                doc! { "description": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "subject": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
-                doc! { "description": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } }
+                doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
             ]
         );
       }
@@ -1861,35 +1861,44 @@ mod tests {
     .await
     .unwrap();
 
-    let query = "discrete math";
+    let queries = vec![
+      "computer",
+      "discrete math",
+      "math240",
+      "complex analysis",
+      "How computer technologies shape social notions such as ownership, safety, and privacy"
+    ];
 
-    let results = db
-      .courses(
-        None,
-        None,
-        Some(CourseFilter {
-          query: Some(query.into()),
-          ..Default::default()
-        }),
-      )
-      .await
-      .unwrap();
+    for query in queries {
+      let results = db
+        .courses(
+          None,
+          None,
+          Some(CourseFilter {
+            query: Some(query.into()),
+            ..Default::default()
+          }),
+        )
+        .await
+        .unwrap();
 
-    assert!(!results.is_empty());
+      assert!(!results.is_empty());
 
-    for result in results {
-      let (a, b) = (
-        Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
-        Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
-      );
+      for result in results {
+        let (a, b) = (
+          Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
+          Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+        );
 
-      assert!(
-        a.is_match(&result.id)
-          || b.is_match(&result.title)
-          || b.is_match(&result.code)
-          || b.is_match(&result.subject)
-          || b.is_match(&result.description)
-      );
+        assert!(
+          a.is_match(&result.id)
+            || a.is_match(&result.id)
+            || b.is_match(&result.code)
+            || b.is_match(&result.description)
+            || b.is_match(&result.subject)
+            || b.is_match(&result.title)
+        );
+      }
     }
   }
 }
