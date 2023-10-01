@@ -1892,7 +1892,6 @@ mod tests {
 
         assert!(
           a.is_match(&result.id)
-            || a.is_match(&result.id)
             || b.is_match(&result.code)
             || b.is_match(&result.description)
             || b.is_match(&result.subject)
