@@ -267,7 +267,7 @@ mod tests {
 
     assert_eq!(
       response.convert::<Vec<Course>>().await,
-      db.courses(None, None, None, None, None).await.unwrap()
+      db.courses(None, None, None).await.unwrap()
     );
   }
 
@@ -304,9 +304,7 @@ mod tests {
 
     assert_eq!(
       response.convert::<Vec<Course>>().await,
-      db.courses(Some(10), Some(40), None, None, None)
-        .await
-        .unwrap()
+      db.courses(Some(10), Some(40), None).await.unwrap()
     );
   }
 

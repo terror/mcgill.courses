@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
@@ -8,6 +8,7 @@ import { ExploreFilter } from '../components/ExploreFilter';
 import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
+import { SearchBar } from '../components/SearchBar';
 import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
@@ -22,8 +23,10 @@ export const Explore = () => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
 
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [query, setQuery] = useState<string>('');
+  const [searchSelected, setSearchSelected] = useState<boolean>(false);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
 
   const [darkMode] = useDarkMode();
@@ -38,6 +41,7 @@ export const Explore = () => {
         (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
       )
     ),
+    query,
   };
 
   useEffect(() => {
@@ -49,7 +53,7 @@ export const Explore = () => {
       });
     setHasMore(true);
     setOffset(limit);
-  }, [selectedSubjects, selectedLevels, selectedTerms]);
+  }, [selectedSubjects, selectedLevels, selectedTerms, query]);
 
   const fetchMore = async () => {
     const batch = await repo.getCourses(limit, offset, filters);
@@ -99,9 +103,26 @@ export const Explore = () => {
               >
                 <div className='ml-auto flex w-full max-w-xl flex-col'>
                   {courses ? (
-                    courses.map((course, i) => (
-                      <CourseCard key={i} course={course} className='m-2' />
-                    ))
+                    <Fragment>
+                      <SearchBar
+                        handleInputChange={(value) => setQuery(value)}
+                        iconStyle='mt-2 lg:mt-0'
+                        inputStyle='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
+                        outerIconStyle='pl-5'
+                        outerInputStyle='m-2 mt-4 lg:mt-2'
+                        placeholder='Search by identifier, title or description'
+                        searchSelected={searchSelected}
+                        setSearchSelected={setSearchSelected}
+                      />
+                      {courses.map((course, i) => (
+                        <CourseCard
+                          className='m-2'
+                          course={course}
+                          key={i}
+                          query={query}
+                        />
+                      ))}
+                    </Fragment>
                   ) : (
                     <div className='mx-2'>
                       <Skeleton
