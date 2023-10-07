@@ -54,6 +54,26 @@ impl Db {
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
+    let current_terms = || -> Vec<String> {
+      let now = Utc::now().date_naive();
+
+      let (month, year) = (now.month(), now.year());
+
+      if month >= 8 {
+        return vec![
+          format!("Fall {}", year),
+          format!("Winter {}", year + 1),
+          format!("Summer {}", year + 1),
+        ];
+      }
+
+      vec![
+        format!("Fall {}", year - 1),
+        format!("Winter {}", year),
+        format!("Summer {}", year),
+      ]
+    };
+
     if let Some(filter) = filter {
       let CourseFilter {
         subjects,
@@ -85,12 +105,20 @@ impl Db {
       }
 
       if let Some(query) = query {
+        let current_terms = current_terms();
+
         document.insert(
             "$or",
             vec![
                 doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(' ', "")), "$options": "i" } },
                 doc! { "code": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "description": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
+                doc! { "instructors": doc! {
+                  "$elemMatch": doc! {
+                    "name": doc! { "$regex": format!(".*{}.*", query), "$options": "i" },
+                    "term": doc! { "$regex": format!(".*({}).*", current_terms.join("|")), "$options": "i" }
+                  } }
+                },
                 doc! { "subject": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
                 doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
             ]

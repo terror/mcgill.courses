@@ -29,7 +29,7 @@ export const CourseCard = ({ course, className, query }: CourseCardProps) => {
             `${spliceCourseCode(course._id, ' ')} - ${course.title}`
           )}
         </div>
-        <CourseTerms course={course} variant='small' />
+        <CourseTerms course={course} variant='small' query={query} />
         <div className='mt-2 text-gray-600 dark:text-gray-400'>
           {query ? (
             <Highlight text={course.description} query={query} />

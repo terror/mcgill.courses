@@ -1,5 +1,6 @@
 use {
   bson::Bson,
+  chrono::{Datelike, Utc},
   futures::Future,
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
@@ -27,7 +28,6 @@ use {
 #[cfg(test)]
 use {
   bson::DateTime,
-  chrono::prelude::*,
   include_dir::{include_dir, Dir},
   model::InteractionKind,
   std::sync::atomic::{AtomicUsize, Ordering},

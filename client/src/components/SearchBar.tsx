@@ -42,13 +42,14 @@ export const SearchBar = ({
       </div>
       <div className={outerInputStyle}>
         <input
-          type='text'
+          autoComplete='off'
           className={inputStyle}
-          placeholder={placeholder}
+          onBlur={() => setTimeout(() => setSearchSelected(false), 100)}
           onChange={(event) => handleInputChange(event.target.value)}
           onFocus={() => setSearchSelected(true)}
-          onBlur={() => setTimeout(() => setSearchSelected(false), 100)}
           onKeyDown={onKeyDown}
+          placeholder={placeholder}
+          type='text'
         />
       </div>
     </div>
