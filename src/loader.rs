@@ -157,7 +157,7 @@ impl Loader {
           self
             .parse_course_listing_page(page)
             .unwrap_or(Some(Vec::new()))
-            .unwrap_or(Vec::new())
+            .unwrap_or_default()
         })
         .collect::<Vec<CourseListing>>()
         .into_option(),
