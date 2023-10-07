@@ -97,7 +97,10 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                   <div>{termToIcon(instructor.term, variant)}</div>
                 )}
                 <div className={twMerge('pr-1 font-medium dark:text-gray-200')}>
-                  <Highlight text={instructor.name} query={query} />
+                  <Highlight
+                    text={instructor.name}
+                    query={query || undefined}
+                  />
                 </div>
               </div>
             </div>
