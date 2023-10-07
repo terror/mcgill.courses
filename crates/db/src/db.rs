@@ -107,21 +107,23 @@ impl Db {
       if let Some(query) = query {
         let current_terms = current_terms();
 
+        let id = doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(' ', "")), "$options": "i" } };
+
+        let instructor = doc! { "instructors": doc! {
+          "$elemMatch": doc! {
+            "name": doc! { "$regex": format!(".*{}.*", query), "$options": "i" },
+            "term": doc! { "$regex": format!(".*({}).*", current_terms.join("|")), "$options": "i" }
+          } }
+        };
+
+        let fields = vec!["code", "description", "subject", "title"];
+
         document.insert(
-            "$or",
-            vec![
-                doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(' ', "")), "$options": "i" } },
-                doc! { "code": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
-                doc! { "description": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
-                doc! { "instructors": doc! {
-                  "$elemMatch": doc! {
-                    "name": doc! { "$regex": format!(".*{}.*", query), "$options": "i" },
-                    "term": doc! { "$regex": format!(".*({}).*", current_terms.join("|")), "$options": "i" }
-                  } }
-                },
-                doc! { "subject": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
-                doc! { "title": doc! { "$regex": format!(".*{}.*", query), "$options": "i" } },
-            ]
+          "$or",
+          vec![
+            vec![id, instructor],
+            fields.into_iter().map(|field| doc! { field: doc! { "$regex": format!(".*{}.*", query), "$options": "i" } }).collect()
+          ].concat()
         );
       }
     }
