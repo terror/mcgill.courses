@@ -11,7 +11,7 @@ impl<T: Eq + Hash + Clone> Combine<T> for Vec<T> {
   }
 
   fn combine_opt(self, other: Option<Vec<T>>) -> Vec<T> {
-    [self, other.unwrap_or(Vec::new())]
+    [self, other.unwrap_or_default()]
       .concat()
       .iter()
       .unique()
@@ -22,7 +22,7 @@ impl<T: Eq + Hash + Clone> Combine<T> for Vec<T> {
 
 impl<T: Eq + Hash + Clone> Combine<T> for Option<Vec<T>> {
   fn combine(self, other: Vec<T>) -> Vec<T> {
-    [self.unwrap_or(Vec::new()), other]
+    [self.unwrap_or_default(), other]
       .concat()
       .iter()
       .unique()
@@ -31,7 +31,7 @@ impl<T: Eq + Hash + Clone> Combine<T> for Option<Vec<T>> {
   }
 
   fn combine_opt(self, other: Option<Vec<T>>) -> Vec<T> {
-    [self.unwrap_or(Vec::new()), other.unwrap_or(Vec::new())]
+    [self.unwrap_or_default(), other.unwrap_or_default()]
       .concat()
       .iter()
       .unique()
