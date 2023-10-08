@@ -6,6 +6,7 @@ use {
     error::Error,
     hash::Hash,
     loader::Loader,
+    merge::merge,
     object::Object,
     options::Options,
     page::Page,
@@ -53,7 +54,7 @@ use {
   rusoto_s3::S3Client,
   rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
   serde::{Deserialize, Serialize},
-  serde_json::json,
+  serde_json::{json, Value},
   sha2::{Digest, Sha256},
   std::{
     collections::HashSet,
@@ -87,6 +88,7 @@ mod hash;
 mod instructors;
 mod interactions;
 mod loader;
+mod merge;
 mod notifications;
 mod object;
 mod options;

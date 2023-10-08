@@ -96,14 +96,25 @@ impl Loader {
 
       courses.sort();
 
-      fs::write(
-        &match source.is_dir() {
-          true => source.join(format!("courses-{term}.json")),
-          _ => source.clone(),
-        },
-        serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
-      )
-      .map_err(|err| Error(anyhow::Error::from(err)))?;
+      let source = match source.is_dir() {
+        true => source.join(format!("courses-{term}.json")),
+        _ => source.clone(),
+      };
+
+      if source.exists() {
+        fs::write(
+          &source,
+          serde_json::to_string_pretty(&merge(
+            &serde_json::from_str(&fs::read_to_string(&source)?)?,
+            &serde_json::to_value(&self.post_process(&mut courses)?)?,
+          ))?,
+        )?;
+      } else {
+        fs::write(
+          &source,
+          serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
+        )?;
+      }
     }
 
     Ok(())
