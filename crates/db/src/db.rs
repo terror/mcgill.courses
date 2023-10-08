@@ -54,26 +54,6 @@ impl Db {
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
-    let current_terms = || -> Vec<String> {
-      let now = Utc::now().date_naive();
-
-      let (month, year) = (now.month(), now.year());
-
-      if month >= 8 {
-        return vec![
-          format!("Fall {}", year),
-          format!("Winter {}", year + 1),
-          format!("Summer {}", year + 1),
-        ];
-      }
-
-      vec![
-        format!("Fall {}", year - 1),
-        format!("Winter {}", year),
-        format!("Summer {}", year),
-      ]
-    };
-
     if let Some(filter) = filter {
       let CourseFilter {
         subjects,
@@ -107,24 +87,34 @@ impl Db {
       if let Some(query) = query {
         let current_terms = current_terms();
 
-        let id = doc! { "_id": doc! { "$regex": format!(".*{}.*", query.replace(' ', "")), "$options": "i" } };
-
-        let instructor = doc! { "instructors": doc! {
-          "$elemMatch": doc! {
-            "name": doc! { "$regex": format!(".*{}.*", query), "$options": "i" },
-            "term": doc! { "$regex": format!(".*({}).*", current_terms.join("|")), "$options": "i" }
-          } }
+        let id = doc! {
+          "_id": doc! {
+            "$regex": format!(".*{}.*", query.replace(' ', "")),
+            "$options": "i"
+          }
         };
 
-        let fields = vec!["code", "description", "subject", "title"];
+        let instructor = doc! {
+          "instructors": doc! {
+            "$elemMatch": doc! {
+              "name": doc! {
+                "$regex": format!(".*{}.*", query),
+                "$options": "i"
+              },
+              "term": doc! {
+                "$regex": format!(".*({}).*", current_terms.join("|")),
+                "$options": "i"
+              }
+            }
+          }
+        };
 
-        document.insert(
-          "$or",
-          vec![
-            vec![id, instructor],
-            fields.into_iter().map(|field| doc! { field: doc! { "$regex": format!(".*{}.*", query), "$options": "i" } }).collect()
-          ].concat()
-        );
+        let rest = ["code", "description", "subject", "title"]
+          .into_iter()
+          .map(|field| doc! { field: doc! { "$regex": format!(".*{}.*", query), "$options": "i" } })
+          .collect::<Vec<Document>>();
+
+        document.insert("$or", vec![vec![id, instructor], rest].concat());
       }
     }
 
@@ -1896,7 +1886,7 @@ mod tests {
       "discrete math",
       "math240",
       "complex analysis",
-      "How computer technologies shape social notions such as ownership, safety, and privacy"
+      "How computer technologies shape social notions such as ownership, safety, and privacy",
     ];
 
     for query in queries {

@@ -21,7 +21,7 @@ use {
   std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
   {
     crate::combine::Combine, initializer::Initializer, seed::Seed,
-    str_ext::StrExt,
+    str_ext::StrExt, utils::*,
   },
 };
 
@@ -41,5 +41,6 @@ mod db;
 mod initializer;
 mod seed;
 mod str_ext;
+mod utils;
 
 pub use crate::db::Db;
