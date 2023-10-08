@@ -221,7 +221,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
               <span key={index}>
                 <BlockLocation location={location.trim()} />
                 {index !== split.length - 1 && (
-                  <span className='inline-block'>, </span>
+                  <span className='inline-block'>,&nbsp;</span>
                 )}
               </span>
             )))(block.location.split(';'))}
