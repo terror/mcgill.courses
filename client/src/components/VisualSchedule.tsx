@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import * as buildingCodes from '../assets/buildingCodes.json';
 import { mod, sortTerms } from '../lib/utils';
 import { Course } from '../model/Course';
-import { Block, Schedule, TimeBlock } from '../model/Schedule';
+import { Block, TimeBlock } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
 
 const TIMESLOT_HEIGHT = 20;
@@ -60,35 +60,65 @@ type TimeblockCardProps = {
 const TimeblockCard = ({ hour, timeblock, block }: TimeblockCardProps) => {
   const t1 = convertVsbTime(timeblock.t1);
   const t2 = convertVsbTime(timeblock.t2);
+  const height = (t2 - t1) * HEIGHT_FACTOR;
+
+  if (height > 40) {
+    return (
+      <div
+        className='absolute left-1/2 top-0 z-10 w-[95%] -translate-x-1/2 rounded-md bg-red-100 p-1'
+        style={{
+          marginTop: (t1 - hour * 60) * HEIGHT_FACTOR,
+          height,
+        }}
+      >
+        <div>
+          <div className='text-sm font-semibold text-red-800'>
+            {block.display}
+          </div>
+          <div className='text-sm text-red-800'>
+            {vsbTimeToDisplay(timeblock.t1)} - {vsbTimeToDisplay(timeblock.t2)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className='absolute left-1/2 top-0 z-10 w-[95%] -translate-x-1/2 rounded-md bg-red-100 p-1'
       style={{
         marginTop: (t1 - hour * 60) * HEIGHT_FACTOR,
-        height: (t2 - t1) * HEIGHT_FACTOR,
+        height,
       }}
     >
-      <div>
-        <div className='text-sm font-semibold text-red-800'>
-          {block.display}
+      <Tooltip
+        text={`${vsbTimeToDisplay(timeblock.t1)} - ${vsbTimeToDisplay(
+          timeblock.t2
+        )}`}
+        className='whitespace-nowrap'
+      >
+        <div>
+          <div className='text-sm font-semibold text-red-800'>
+            {block.display}
+          </div>
         </div>
-        <div className='text-sm text-red-800'>
-          {vsbTimeToDisplay(timeblock.t1)} - {vsbTimeToDisplay(timeblock.t2)}
-        </div>
-      </div>
+      </Tooltip>
     </div>
   );
 };
 
 type ScheduleDayProps = {
   day: string;
-  block: Block;
+  blocks: Block[];
 };
 
 const timeRange = _.range(8, 18);
 
-const ScheduleDay = ({ day, block }: ScheduleDayProps) => {
-  const timeblocks = block.timeblocks.filter((b) => b.day === day);
+const ScheduleDay = ({ day, blocks }: ScheduleDayProps) => {
+  const dayBlocks = blocks.map((block) => ({
+    ...block,
+    timeblocks: block.timeblocks.filter((b) => b.day === day),
+  }));
 
   return (
     <div className='col-span-1'>
@@ -100,14 +130,19 @@ const ScheduleDay = ({ day, block }: ScheduleDayProps) => {
       </div>
       {timeRange.map((t) => {
         let tb: TimeBlock | undefined = undefined;
-        const blockIndex = timeblocks.findIndex((b) => {
-          const time = convertVsbTime(b.t1);
-          return time >= t * 60 && time <= (t + 1) * 60;
-        });
+        let block: Block | undefined = undefined;
 
-        if (blockIndex !== -1) {
-          tb = timeblocks[blockIndex];
-          timeblocks.splice(blockIndex);
+        for (const b of dayBlocks) {
+          const blockIndex = b.timeblocks.findIndex((b) => {
+            const time = convertVsbTime(b.t1);
+            return time >= t * 60 && time <= (t + 1) * 60;
+          });
+
+          if (blockIndex !== -1) {
+            tb = b.timeblocks[blockIndex];
+            block = b;
+            b.timeblocks.splice(blockIndex);
+          }
         }
 
         return (
@@ -117,7 +152,9 @@ const ScheduleDay = ({ day, block }: ScheduleDayProps) => {
               className='border-x border-b'
               style={{ height: TIMESLOT_HEIGHT }}
             />
-            {tb && <TimeblockCard hour={t} timeblock={tb} block={block} />}
+            {tb && block && (
+              <TimeblockCard hour={t} timeblock={tb} block={block} />
+            )}
           </div>
         );
       })}
@@ -129,30 +166,30 @@ type VisualScheduleProps = {
   course: Course;
 };
 
-const getTermBlocks = (schedules: Schedule[]) => {
-  const terms: Record<string, Block[]> = {};
-  for (const schedule of schedules) {
-    if (terms[schedule.term] === undefined) {
-      terms[schedule.term] = [];
-    }
-    // TODO: Fix issue with courses like CHEM 120 that group together a lec and lab for blocks (don't flatten)
-    terms[schedule.term]?.push(...schedule.blocks);
-  }
-
-  for (const term of Object.keys(terms)) {
-    terms[term] = _.sortBy(
-      _.uniqBy(terms[term], (b) => b.display),
-      (b) => b.display
-    );
-  }
-
-  return terms;
-};
+// const getTermBlocks = (schedules: Schedule[]) => {
+//   const terms: Record<string, Block[]> = {};
+//   for (const schedule of schedules) {
+//     if (terms[schedule.term] === undefined) {
+//       terms[schedule.term] = [];
+//     }
+//     // TODO: Fix issue with courses like CHEM 120 that group together a lec and lab for blocks (don't flatten)
+//     terms[schedule.term]?.push(...schedule.blocks);
+//   }
+//
+//   for (const term of Object.keys(terms)) {
+//     terms[term] = _.sortBy(
+//       _.uniqBy(terms[term], (b) => b.display),
+//       (b) => b.display
+//     );
+//   }
+//
+//   return terms;
+// };
 
 export const VisualSchedule = ({ course }: VisualScheduleProps) => {
   if (!course.schedule) return null;
 
-  const terms = getTermBlocks(course.schedule);
+  const terms = _.groupBy(course.schedule, (s) => s.term);
   const offeredTerms = sortTerms(Object.keys(terms));
 
   const [term, setTerm] = useState(offeredTerms[0]);
@@ -178,11 +215,14 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
     };
   };
 
-  const block = terms[term][blockIndex];
+  const schedule = terms[term][blockIndex];
+  const firstBlock = schedule.blocks[0];
 
-  if (!block) {
+  if (!schedule) {
     return null;
   }
+
+  const arrowsDisabled = terms[term].length === 1;
 
   return (
     <div className='mt-4 w-full overflow-hidden rounded-lg bg-slate-50 shadow-sm'>
@@ -202,19 +242,31 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
       </div>
       <div className='flex gap-x-6 px-6 py-3'>
         <div className='flex items-center gap-x-2'>
-          <LuArrowLeft
-            size={20}
-            className='cursor-pointer'
-            onClick={updateIndex(-1)}
-          />
-          <div className='font-medium'>{block.display}</div>
-          <LuArrowRight
-            size={20}
-            className='cursor-pointer'
-            onClick={updateIndex(1)}
-          />
+          <button onClick={updateIndex(-1)} disabled={arrowsDisabled}>
+            <LuArrowLeft
+              size={20}
+              className={twMerge(
+                arrowsDisabled
+                  ? 'text-gray-500 cursor-not-allowed'
+                  : 'cursor-pointer'
+              )}
+            />
+          </button>
+          <div className='font-medium'>
+            {schedule.blocks.map((b) => b.display).join(' + ')}
+          </div>
+          <button onClick={updateIndex(1)} disabled={arrowsDisabled}>
+            <LuArrowRight
+              size={20}
+              className={twMerge(
+                arrowsDisabled
+                  ? 'text-gray-500 cursor-not-allowed'
+                  : 'cursor-pointer'
+              )}
+            />
+          </button>
         </div>
-        <div>{block.campus}</div>
+        <div>{firstBlock.campus}</div>
         <span className='inline-block font-medium'>
           {((split) =>
             split.map((location: string, index) => (
@@ -224,8 +276,11 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
                   <span className='inline-block'>,&nbsp;</span>
                 )}
               </span>
-            )))(block.location.split(';'))}
+            )))(firstBlock.location.split(';'))}
         </span>
+        <div className='ml-auto'>
+          ({blockIndex + 1}/{terms[term].length})
+        </div>
       </div>
       <div className='grid grid-cols-[40px_repeat(5,minmax(0,1fr))] p-6'>
         <div className='col-span-1'>
@@ -241,7 +296,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
           ))}
         </div>
         {['2', '3', '4', '5', '6'].map((day) => (
-          <ScheduleDay day={day} block={block} key={`day-${day}`} />
+          <ScheduleDay day={day} blocks={schedule.blocks} key={`day-${day}`} />
         ))}
       </div>
     </div>
