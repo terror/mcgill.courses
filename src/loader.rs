@@ -181,14 +181,25 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     info!("Parsing html on page: {}...", page.number);
 
-    let listings = extractor::extract_course_listings(
-      &reqwest::blocking::Client::builder()
-        .user_agent(&self.user_agent)
-        .build()?
-        .get(&page.url)
-        .retry(self.retries)?
-        .text()?,
-    )?;
+    let client = reqwest::blocking::Client::builder()
+      .user_agent(&self.user_agent)
+      .build()?;
+
+    let listings = {
+      let mut listings = extractor::extract_course_listings(
+        &client.get(&page.url).retry(self.retries)?.text()?,
+      );
+
+      while let Err(_) = listings {
+        warn!("Retrying course listings: {}", page.url);
+        thread::sleep(Duration::from_millis(500));
+        listings = extractor::extract_course_listings(
+          &client.get(&page.url).retry(self.retries)?.text()?,
+        );
+      }
+
+      listings?
+    };
 
     thread::sleep(Duration::from_millis(self.page_delay));
 
@@ -218,9 +229,21 @@ impl Loader {
       .user_agent(&self.user_agent)
       .build()?;
 
-    let course_page = extractor::extract_course_page(
-      &client.get(&listing.url).retry(self.retries)?.text()?,
-    )?;
+    let course_page = {
+      let mut course_page = extractor::extract_course_page(
+        &client.get(&listing.url).retry(self.retries)?.text()?,
+      );
+
+      while let Err(_) = course_page {
+        warn!("Retrying course page: {}", listing.url);
+        thread::sleep(Duration::from_millis(500));
+        course_page = extractor::extract_course_page(
+          &client.get(&listing.url).retry(self.retries)?.text()?,
+        );
+      }
+
+      course_page?
+    };
 
     info!(
       "Parsed course {}{}",
