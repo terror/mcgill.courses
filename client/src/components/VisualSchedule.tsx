@@ -166,26 +166,6 @@ type VisualScheduleProps = {
   course: Course;
 };
 
-// const getTermBlocks = (schedules: Schedule[]) => {
-//   const terms: Record<string, Block[]> = {};
-//   for (const schedule of schedules) {
-//     if (terms[schedule.term] === undefined) {
-//       terms[schedule.term] = [];
-//     }
-//     // TODO: Fix issue with courses like CHEM 120 that group together a lec and lab for blocks (don't flatten)
-//     terms[schedule.term]?.push(...schedule.blocks);
-//   }
-//
-//   for (const term of Object.keys(terms)) {
-//     terms[term] = _.sortBy(
-//       _.uniqBy(terms[term], (b) => b.display),
-//       (b) => b.display
-//     );
-//   }
-//
-//   return terms;
-// };
-
 export const VisualSchedule = ({ course }: VisualScheduleProps) => {
   if (!course.schedule) return null;
 
