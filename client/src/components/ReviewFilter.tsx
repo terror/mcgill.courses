@@ -89,38 +89,40 @@ export const ReviewFilter = ({
     <div className='flex flex-col rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
       <FilterToggle>
         <div className='py-2' />
-        <div className='p-1'>
-          <div className='flex gap-x-2'>
-            <div className='w-2/5'>
-              <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
-                Sort By
-              </h2>
-              <div className='relative z-10'>
-                <Autocomplete
-                  options={sorts}
-                  value={sortBy}
-                  setValue={(val: string) => setSortBy(val as ReviewSortType)}
-                />
+        <div className='relative'>
+          <div className='p-1'>
+            <div className='flex gap-x-2'>
+              <div className='w-2/5'>
+                <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                  Sort By
+                </h2>
+                <div className='relative z-10'>
+                  <Autocomplete
+                    options={sorts}
+                    value={sortBy}
+                    setValue={(val: string) => setSortBy(val as ReviewSortType)}
+                  />
+                </div>
               </div>
-            </div>
-            <div className='w-3/5'>
-              <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
-                Instructor
-              </h2>
-              <div className='relative z-10'>
-                <Autocomplete
-                  options={uniqueInstructors}
-                  value={selectedInstructor}
-                  setValue={setSelectedInstructor}
-                />
+              <div className='w-3/5'>
+                <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                  Instructor
+                </h2>
+                <div className='relative z-10'>
+                  <Autocomplete
+                    options={uniqueInstructors}
+                    value={selectedInstructor}
+                    setValue={setSelectedInstructor}
+                  />
+                </div>
               </div>
             </div>
           </div>
+          <ResetButton
+            className='absolute -top-4 right-2 ml-auto'
+            onClear={reset}
+          />
         </div>
-        <ResetButton
-          className='absolute right-2 top-2 ml-auto'
-          onClear={reset}
-        />
       </FilterToggle>
     </div>
   );
