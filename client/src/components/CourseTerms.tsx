@@ -9,7 +9,7 @@ import {
   getCurrentTerms,
   uniqueTermInstructors,
 } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
 import { Tooltip } from './Tooltip';
 
 const variantToSize = (variant: 'small' | 'large') => {

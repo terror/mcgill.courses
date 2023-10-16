@@ -5,8 +5,8 @@ import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
 import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Block, Schedule, TimeBlock } from '../model/Schedule';
+import type { Course } from '../model/Course';
+import type { Block, Schedule, TimeBlock } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
 
 const dayToWeekday = (day: string) => {

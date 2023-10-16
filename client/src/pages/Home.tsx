@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
 import { repo } from '../lib/repo';
-import { SearchResults } from '../model/SearchResults';
+import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],

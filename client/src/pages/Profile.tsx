@@ -17,8 +17,8 @@ import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
 import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
-import { Review } from '../model/Review';
-import { Subscription } from '../model/Subscription';
+import type { Review } from '../model/Review';
+import type { Subscription } from '../model/Subscription';
 
 export const Profile = () => {
   const user = useAuth();

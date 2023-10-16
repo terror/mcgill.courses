@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { round2Decimals } from '../lib/utils';
-import { Review } from '../model/Review';
+import type { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
 import { Histogram } from './Histogram';
 

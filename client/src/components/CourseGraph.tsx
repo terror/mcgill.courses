@@ -10,8 +10,8 @@ import {
   isValidCourseCode,
   spliceCourseCode,
 } from '../lib/utils';
-import { Course } from '../model/Course';
-import { ReqNode } from '../model/Requirements';
+import type { Course } from '../model/Course';
+import type { ReqNode } from '../model/Requirements';
 
 type CourseGraphProps = {
   course: Course;
