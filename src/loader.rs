@@ -205,7 +205,7 @@ impl Loader {
         &client.get(&page.url).retry(self.retries)?.text()?,
       );
 
-      while let Err(_) = listings {
+      while listings.is_err() {
         warn!("Retrying course listings: {}", page.url);
         thread::sleep(Duration::from_millis(500));
         listings = extractor::extract_course_listings(
@@ -249,7 +249,7 @@ impl Loader {
         &client.get(&listing.url).retry(self.retries)?.text()?,
       );
 
-      while let Err(_) = course_page {
+      while course_page.is_err() {
         warn!("Retrying course page: {}", listing.url);
         thread::sleep(Duration::from_millis(500));
         course_page = extractor::extract_course_page(
