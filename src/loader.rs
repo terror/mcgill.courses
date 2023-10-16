@@ -120,9 +120,7 @@ impl Loader {
 
         fs::write(
           &source,
-          serde_json::to_string_pretty(&serde_json::to_value(
-            &self.post_process(&mut merged)?,
-          )?)?,
+          serde_json::to_string_pretty(&self.post_process(&mut merged)?)?,
         )?;
       } else {
         fs::write(
