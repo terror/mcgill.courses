@@ -30,7 +30,7 @@ export const ErrorPage = ({ error, resetErrorBoundary }: FallbackProps) => {
           </button>
           <div className='py-3' />
           <div className='text-sm dark:text-gray-200'>
-            Help us fix it reporting this error with a screenshot on{' '}
+            Help us fix it by reporting this error with a screenshot on{' '}
             <a
               className='text-red-700 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300'
               href='https://github.com/terror/mcgill.courses'
