@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import { capitalize, punctuate } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Requirements } from '../model/Requirements';
+import type { Course } from '../model/Course';
+import type { Requirements } from '../model/Requirements';
 import { CourseGraph } from './CourseGraph';
 
 type ReqsBlockProps = {

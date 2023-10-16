@@ -13,7 +13,7 @@ import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
 
 export const Explore = () => {
   const limit = 20;
@@ -129,7 +129,7 @@ export const Explore = () => {
                         baseColor={
                           darkMode ? 'rgb(38 38 38)' : 'rgb(248 250 252)'
                         }
-                        className='first:mt-2 mb-2 rounded-lg'
+                        className='mb-2 rounded-lg first:mt-2'
                         count={10}
                         duration={2}
                         height={256}

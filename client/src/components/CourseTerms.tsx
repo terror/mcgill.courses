@@ -9,7 +9,7 @@ import {
   getCurrentTerms,
   uniqueTermInstructors,
 } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
 import { Highlight } from './Highlight';
 import { Tooltip } from './Tooltip';
 
