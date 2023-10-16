@@ -102,12 +102,27 @@ impl Loader {
       };
 
       if source.exists() {
+        info!("Merging with existing courses...");
+
+        let sourced =
+          serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?;
+
+        let mut merged = courses
+          .iter()
+          .map(|course| {
+            sourced
+              .iter()
+              .find(|sourced| sourced.id == course.id)
+              .map(|sourced| sourced.clone().merge(course.clone()))
+              .unwrap_or_else(|| course.clone())
+          })
+          .collect::<Vec<Course>>();
+
         fs::write(
           &source,
-          serde_json::to_string_pretty(&merge(
-            &serde_json::from_str(&fs::read_to_string(&source)?)?,
-            &serde_json::to_value(&self.post_process(&mut courses)?)?,
-          ))?,
+          serde_json::to_string_pretty(&serde_json::to_value(
+            &self.post_process(&mut merged)?,
+          )?)?,
         )?;
       } else {
         fs::write(
