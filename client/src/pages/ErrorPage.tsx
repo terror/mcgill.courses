@@ -1,7 +1,7 @@
 import { FallbackProps } from 'react-error-boundary';
 import { LuXCircle } from 'react-icons/lu';
 
-import { Layout } from './Layout';
+import { Layout } from '../components/Layout';
 
 export const ErrorPage = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
