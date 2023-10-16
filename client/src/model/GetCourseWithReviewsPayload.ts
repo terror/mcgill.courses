@@ -1,5 +1,5 @@
-import { Course } from './Course';
-import { Review } from './Review';
+import type { Course } from './Course';
+import type { Review } from './Review';
 
 export type GetCourseWithReviewsPayload = {
   course: Course;

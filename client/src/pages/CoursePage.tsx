@@ -16,9 +16,9 @@ import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Requirements } from '../model/Requirements';
-import { Review } from '../model/Review';
+import type { Course } from '../model/Course';
+import type { Requirements } from '../model/Requirements';
+import type { Review } from '../model/Review';
 import { Loading } from './Loading';
 
 export const CoursePage = () => {

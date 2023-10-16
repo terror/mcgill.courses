@@ -6,8 +6,8 @@ import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
-import { Course } from '../model/Course';
-import { Review } from '../model/Review';
+import type { Course } from '../model/Course';
+import type { Review } from '../model/Review';
 import { ReviewForm, ReviewSchema } from './ReviewForm';
 
 type EditReviewFormProps = {

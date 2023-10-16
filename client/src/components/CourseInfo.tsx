@@ -5,8 +5,8 @@ import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
-import { Course } from '../model/Course';
-import { Review } from '../model/Review';
+import type { Course } from '../model/Course';
+import type { Review } from '../model/Review';
 import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
 

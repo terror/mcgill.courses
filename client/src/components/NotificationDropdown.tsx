@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 import { repo } from '../lib/repo';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import { Notification } from '../model/Notification';
+import type { Notification } from '../model/Notification';
 import { CourseReview } from './CourseReview';
 
 export const NotificationDropdown = ({
