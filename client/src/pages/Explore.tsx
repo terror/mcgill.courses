@@ -110,7 +110,7 @@ export const Explore = () => {
                         inputStyle='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
                         outerIconStyle='pl-5'
                         outerInputStyle='m-2 mt-4 lg:mt-2'
-                        placeholder='Search by identifier, title or description'
+                        placeholder='Search by course identifier, title, description or instructor name'
                         searchSelected={searchSelected}
                         setSearchSelected={setSearchSelected}
                       />

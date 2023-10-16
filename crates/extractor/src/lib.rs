@@ -142,7 +142,7 @@ mod tests {
     pretty_assertions::assert_eq,
   };
 
-  static MOCK_DIR: Dir<'_> = include_dir!("crates/extractor/mocks");
+  static MOCK_DIR: Dir<'_> = include_dir!("crates/extractor/test-samples");
 
   fn get_content(name: &str) -> String {
     MOCK_DIR

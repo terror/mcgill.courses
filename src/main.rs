@@ -38,7 +38,7 @@ use {
   env_logger::Env,
   futures::TryStreamExt,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
-  log::{debug, error, info, trace},
+  log::{debug, error, info, trace, warn},
   model::{
     Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
     Interaction, InteractionKind, Review, Schedule, Subscription,

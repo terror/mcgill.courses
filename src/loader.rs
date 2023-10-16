@@ -96,14 +96,40 @@ impl Loader {
 
       courses.sort();
 
-      fs::write(
-        &match source.is_dir() {
-          true => source.join(format!("courses-{term}.json")),
-          _ => source.clone(),
-        },
-        serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
-      )
-      .map_err(|err| Error(anyhow::Error::from(err)))?;
+      let source = match source.is_dir() {
+        true => source.join(format!("courses-{term}.json")),
+        _ => source.clone(),
+      };
+
+      if source.exists() {
+        info!("Merging with existing courses...");
+
+        let sourced =
+          serde_json::from_str::<Vec<Course>>(&fs::read_to_string(&source)?)?;
+
+        let mut merged = courses
+          .iter()
+          .map(|course| {
+            sourced
+              .iter()
+              .find(|sourced| sourced.id == course.id)
+              .map(|sourced| sourced.clone().merge(course.clone()))
+              .unwrap_or_else(|| course.clone())
+          })
+          .collect::<Vec<Course>>();
+
+        fs::write(
+          &source,
+          serde_json::to_string_pretty(&serde_json::to_value(
+            &self.post_process(&mut merged)?,
+          )?)?,
+        )?;
+      } else {
+        fs::write(
+          &source,
+          serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
+        )?;
+      }
     }
 
     Ok(())
@@ -170,14 +196,25 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     info!("Parsing html on page: {}...", page.number);
 
-    let listings = extractor::extract_course_listings(
-      &reqwest::blocking::Client::builder()
-        .user_agent(&self.user_agent)
-        .build()?
-        .get(&page.url)
-        .retry(self.retries)?
-        .text()?,
-    )?;
+    let client = reqwest::blocking::Client::builder()
+      .user_agent(&self.user_agent)
+      .build()?;
+
+    let listings = {
+      let mut listings = extractor::extract_course_listings(
+        &client.get(&page.url).retry(self.retries)?.text()?,
+      );
+
+      while listings.is_err() {
+        warn!("Retrying course listings: {}", page.url);
+        thread::sleep(Duration::from_millis(500));
+        listings = extractor::extract_course_listings(
+          &client.get(&page.url).retry(self.retries)?.text()?,
+        );
+      }
+
+      listings?
+    };
 
     thread::sleep(Duration::from_millis(self.page_delay));
 
@@ -207,9 +244,21 @@ impl Loader {
       .user_agent(&self.user_agent)
       .build()?;
 
-    let course_page = extractor::extract_course_page(
-      &client.get(&listing.url).retry(self.retries)?.text()?,
-    )?;
+    let course_page = {
+      let mut course_page = extractor::extract_course_page(
+        &client.get(&listing.url).retry(self.retries)?.text()?,
+      );
+
+      while course_page.is_err() {
+        warn!("Retrying course page: {}", listing.url);
+        thread::sleep(Duration::from_millis(500));
+        course_page = extractor::extract_course_page(
+          &client.get(&listing.url).retry(self.retries)?.text()?,
+        );
+      }
+
+      course_page?
+    };
 
     info!(
       "Parsed course {}{}",

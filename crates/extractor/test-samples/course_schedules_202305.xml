@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addcourse>
+   <errors />
+   <classdata date="1678939290929">
+      <campus n="Downtown" v="Downtown" />
+      <course key="ACCT-695" code="ACCT" number="695" title="Integrative Analysis" cores="" desc="Integration of the enabling competencies and the six technical competency areas required of a CPA. Developing strategic leadership capabilities and the ability to bring an integrative perspective to decision-making including: professional and ethical behaviour, problem-solving and decision-making, communication (both written and oral), self-management, teamwork and leadership." enr="" waiting="0" cart="" dsel="" faculty="Graduate Studies">
+         <uselection key="--202305_683--" courseKey="ACCT-695" d1="5595" d2="5679" de="70128" ss="" mp="false" bs="316872135,366679515,316872135,366679599">
+            <selection key="--202305_683--" cmkey="ACCT-695" thc="" ot="c" co="" inst="" ac="" ssid="202305" credits="4.0">
+               <block type="Lec" key="683" cartid="683" secNo="045" status="A" u="false" os="56" me="-1" ws="0" wc="0" c="false" n="Desautels GCPA Prog students only. Intensive course. Add/drop May 17, w/withdrawal Jun 21." fd="" disp="Lec 045" usn="" credits="4.0" rg="" ac="" pn="" im="" attrs="{}" teacher="Cote, Matthew" location="BRONF 422" campus="Downtown" psl="null" timeblockids="1,2" loos="" />
+            </selection>
+            <timeblock id="1" day="4" t1="515" t2="1255" d1="5595" d2="5595" />
+            <timeblock id="2" day="4" t1="515" t2="1255" d1="5595" d2="5679" />
+         </uselection>
+         <offering key="ACCT-695" cid="" ac="null" ag="" ao="" rg="" ti="" eq="" clcn="" />
+         <core n="null" v="[]" />
+      </course>
+   </classdata>
+</addcourse>
