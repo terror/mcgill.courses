@@ -111,10 +111,14 @@ impl Db {
 
         let rest = ["code", "description", "subject", "title"]
           .into_iter()
-          .map(|field| doc! { field: doc! { "$regex": format!(".*{}.*", query), "$options": "i" } })
+          .map(|field| {
+            doc! { field: doc! {
+              "$regex": format!(".*{}.*", query), "$options": "i" }
+            }
+          })
           .collect::<Vec<Document>>();
 
-        document.insert("$or", vec![vec![id, instructor], rest].concat());
+        document.insert("$or", [vec![id, instructor], rest].concat());
       }
     }
 
