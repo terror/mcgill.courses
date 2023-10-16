@@ -8,8 +8,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
 import App from './App';
-import { ErrorPage } from './components/ErrorPage';
 import './index.css';
+import { ErrorPage } from './pages/ErrorPage';
 import AuthProvider from './providers/AuthProvider';
 import { DarkModeProvider } from './providers/DarkModeProvider';
 
