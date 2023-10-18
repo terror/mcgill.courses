@@ -1,7 +1,11 @@
+use futures::FutureExt;
+use mongodb::{ClientSession, Collection};
+
 use super::*;
 
 #[derive(Debug, Clone)]
 pub struct Db {
+  client: Client,
   database: Database,
 }
 
@@ -17,7 +21,7 @@ impl Db {
     let mut client_options = ClientOptions::parse(format!(
       "{}/{}",
       env::var("MONGODB_URL")
-        .unwrap_or_else(|_| "mongodb://localhost:27017".into()),
+        .unwrap_or_else(|_| "mongodb://localhost:27017/?replicaSet=rs0".into()),
       db_name
     ))
     .await?;
@@ -35,6 +39,7 @@ impl Db {
 
     Ok(Self {
       database: client.database(db_name),
+      client,
     })
   }
 
@@ -171,7 +176,8 @@ impl Db {
               "difficulty": review.difficulty,
               "instructors": &review.instructors,
               "rating": review.rating,
-              "timestamp": review.timestamp
+              "timestamp": review.timestamp,
+              "likes": 0
             },
           }),
           UpdateOptions::builder().upsert(true).build(),
@@ -237,29 +243,67 @@ impl Db {
     )
   }
 
-  pub async fn add_interaction(
-    &self,
-    interaction: Interaction,
-  ) -> Result<UpdateResult> {
-    Ok(
-      self
-        .database
-        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-        .update_one(
+  pub async fn add_interaction(&self, interaction: Interaction) -> Result<()> {
+    let mut session = self.client.start_session(None).await?;
+    let interaction_coll = self
+      .database
+      .collection::<Interaction>(Self::INTERACTION_COLLECTION);
+    let review_coll =
+      self.database.collection::<Review>(Self::REVIEW_COLLECTION);
+
+    async fn callback(
+      session: &mut ClientSession,
+      interaction_coll: Collection<Interaction>,
+      review_coll: Collection<Review>,
+      interaction: Interaction,
+    ) -> mongodb::error::Result<()> {
+      interaction_coll
+        .update_one_with_session(
           doc! {
-            "courseId": interaction.course_id,
-            "userId": interaction.user_id,
-            "referrer": interaction.referrer,
+            "courseId": &interaction.course_id,
+            "userId": &interaction.user_id,
+            "referrer": &interaction.referrer,
           },
           UpdateModifications::Document(doc! {
             "$set": {
-              "kind": Into::<Bson>::into(interaction.kind)
+              "kind": Into::<Bson>::into(&interaction.kind)
             },
           }),
           UpdateOptions::builder().upsert(true).build(),
+          session,
         )
-        .await?,
-    )
+        .await?;
+      review_coll.update_one_with_session(
+          doc! {
+            "courseId": interaction.course_id,
+            "userId": interaction.user_id,
+          },
+          doc! {
+            "$inc": {
+              "likes": match interaction.kind { InteractionKind::Like => 1, InteractionKind::Dislike => -1, _ => 0}
+          }
+        }, None, session).await?;
+
+      Ok(())
+    }
+
+    session
+      .with_transaction(
+        (),
+        move |session, _| {
+          callback(
+            session,
+            interaction_coll.clone(),
+            review_coll.clone(),
+            interaction.clone(),
+          )
+          .boxed()
+        },
+        None,
+      )
+      .await?;
+
+    Ok(())
   }
 
   pub async fn delete_interaction(
@@ -267,21 +311,70 @@ impl Db {
     course_id: &str,
     user_id: &str,
     referrer: &str,
-  ) -> Result<DeleteResult> {
-    Ok(
-      self
-        .database
-        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-        .delete_one(
+  ) -> Result<()> {
+    let mut session = self.client.start_session(None).await?;
+    let interaction_coll = self
+      .database
+      .collection::<Interaction>(Self::INTERACTION_COLLECTION);
+    let review_coll =
+      self.database.collection::<Review>(Self::REVIEW_COLLECTION);
+
+    async fn callback(
+      session: &mut ClientSession,
+      interaction_coll: Collection<Interaction>,
+      review_coll: Collection<Review>,
+      course_id: String,
+      user_id: String,
+      referrer: String,
+    ) -> mongodb::error::Result<()> {
+      let interaction = interaction_coll
+        .find_one_and_delete(
           doc! {
-            "courseId": course_id,
-            "userId": user_id,
-            "referrer": referrer,
+              "courseId": &course_id,
+              "userId": &user_id,
+              "referrer": &referrer,
           },
           None,
         )
-        .await?,
-    )
+        .await?;
+
+      match interaction {
+        Some(i) => {
+          review_coll.update_one_with_session(
+          doc! {
+            "courseId": &course_id,
+            "userId": &user_id,
+          },
+          doc! {
+            "$inc": {
+              "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1, _ => 0}
+          }
+        }, None, session).await?;
+          Ok(())
+        }
+        None => Ok(()),
+      }
+    }
+
+    session
+      .with_transaction(
+        (),
+        move |session, _| {
+          callback(
+            session,
+            interaction_coll.clone(),
+            review_coll.clone(),
+            course_id.to_string(),
+            user_id.to_string(),
+            referrer.to_string(),
+          )
+          .boxed()
+        },
+        None,
+      )
+      .await?;
+
+    Ok(())
   }
 
   pub async fn delete_interactions(
@@ -317,6 +410,21 @@ impl Db {
         .await?
         .try_collect::<Vec<Interaction>>()
         .await?,
+    )
+  }
+
+  pub async fn user_interaction_for_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+    referrer: &str,
+  ) -> Result<Option<InteractionKind>> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find_one(doc! { "courseId": course_id, "userId": user_id, "referrer": referrer }, None)
+        .await?.map(|i| i.kind)
     )
   }
 
@@ -1342,6 +1450,7 @@ mod tests {
       difficulty: 5,
       user_id: "1".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
     })
     .await
     .unwrap();
@@ -1356,7 +1465,8 @@ mod tests {
         rating: 4,
         difficulty: 4,
         user_id: "1".into(),
-        timestamp
+        timestamp,
+        ..Review::default()
       })
       .await
       .unwrap()
@@ -1665,6 +1775,13 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Like);
 
+    let review = db
+      .find_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap()
+      .unwrap();
+    assert_eq!(review.likes, 1);
+
     db.add_interaction(Interaction {
       kind: InteractionKind::Dislike,
       course_id: review.course_id.clone(),
@@ -1682,6 +1799,13 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
 
+    let review = db
+      .find_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap()
+      .unwrap();
+    assert_eq!(review.likes, -1);
+
     db.delete_interaction(&review.course_id, &review.user_id, "10")
       .await
       .unwrap();
@@ -1693,6 +1817,13 @@ mod tests {
         .len(),
       0
     );
+
+    let review = db
+      .find_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap()
+      .unwrap();
+    assert_eq!(review.likes, 0);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -1730,6 +1861,7 @@ mod tests {
       difficulty: 5,
       user_id: "3".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
     };
 
     let subscription = Subscription {
@@ -1765,6 +1897,7 @@ mod tests {
       difficulty: 5,
       user_id: "1".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
     };
 
     db.add_notifications(review).await.unwrap();
@@ -1784,6 +1917,7 @@ mod tests {
       difficulty: 5,
       user_id: "1".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
     };
 
     let subscription = Subscription {
@@ -1837,6 +1971,7 @@ mod tests {
       difficulty: 5,
       user_id: "3".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
     };
 
     let subscription = Subscription {

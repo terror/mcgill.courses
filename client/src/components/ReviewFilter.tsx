@@ -14,6 +14,8 @@ const sortTypes = [
   'Lowest Rating',
   'Hardest',
   'Easiest',
+  'Most Liked',
+  'Most Disliked',
 ] as const;
 
 export type ReviewSortType = (typeof sortTypes)[number];
@@ -64,6 +66,10 @@ export const ReviewFilter = ({
               return b.difficulty - a.difficulty;
             case 'Easiest':
               return a.difficulty - b.difficulty;
+            case 'Most Liked':
+              return a.likes - b.likes;
+            case 'Most Disliked':
+              return b.likes - a.likes;
             default:
               return (
                 parseInt(b.timestamp.$date.$numberLong, 10) -

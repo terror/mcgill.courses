@@ -1,4 +1,5 @@
 use {
+  anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, Utc},
   futures::Future,
@@ -8,7 +9,7 @@ use {
   log::{info, warn},
   model::{
     Course, CourseFilter, InitializeOptions, Instructor, Interaction,
-    Notification, Review, SearchResults, Subscription,
+    InteractionKind, Notification, Review, SearchResults, Subscription,
   },
   mongodb::{
     bson::{doc, Document},
@@ -29,7 +30,6 @@ use {
 use {
   bson::DateTime,
   include_dir::{include_dir, Dir},
-  model::InteractionKind,
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };

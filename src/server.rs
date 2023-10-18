@@ -88,7 +88,7 @@ impl Server {
       .route("/api/instructors/:name", get(instructors::get_instructor))
       .route(
         "/api/interactions",
-        get(interactions::get_interactions)
+        get(interactions::get_user_interaction)
           .post(interactions::add_interaction)
           .delete(interactions::delete_interaction),
       )
@@ -138,7 +138,7 @@ mod tests {
     crate::instructors::GetInstructorPayload,
     axum::body::Body,
     http::{Method, Request},
-    interactions::GetInteractionsPayload,
+    interactions::GetUserInteractionPayload,
     model::Notification,
     pretty_assertions::assert_eq,
     serde::de::DeserializeOwned,
@@ -917,11 +917,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetInteractionsPayload>().await,
-      GetInteractionsPayload {
-        kind: None,
-        likes: 0
-      }
+      response.convert::<GetUserInteractionPayload>().await,
+      GetUserInteractionPayload { kind: None }
     );
 
     let interaction = json! ({
@@ -971,10 +968,9 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetInteractionsPayload>().await,
-      GetInteractionsPayload {
+      response.convert::<GetUserInteractionPayload>().await,
+      GetUserInteractionPayload {
         kind: Some(InteractionKind::Like),
-        likes: 1,
       }
     );
 
@@ -1024,11 +1020,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetInteractionsPayload>().await,
-      GetInteractionsPayload {
-        kind: None,
-        likes: 0
-      }
+      response.convert::<GetUserInteractionPayload>().await,
+      GetUserInteractionPayload { kind: None }
     );
   }
 
@@ -1253,11 +1246,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetInteractionsPayload>().await,
-      GetInteractionsPayload {
-        kind: None,
-        likes: 0
-      }
+      response.convert::<GetUserInteractionPayload>().await,
+      GetUserInteractionPayload { kind: None }
     );
   }
 

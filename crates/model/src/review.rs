@@ -8,9 +8,9 @@ pub struct Review {
   pub instructors: Vec<String>,
   pub rating: u32,
   pub difficulty: u32,
-  #[serde(deserialize_with = "TimestampVisitor::deserialize_timestamp")]
   pub timestamp: DateTime,
   pub user_id: String,
+  pub likes: i32,
 }
 
 impl Default for Review {
@@ -21,10 +21,9 @@ impl Default for Review {
       instructors: vec![],
       rating: 0,
       difficulty: 0,
-      timestamp: DateTime::from_chrono::<Utc>(
-        Utc.from_utc_datetime(&NaiveDateTime::default()),
-      ),
+      timestamp: DateTime::from_millis(0),
       user_id: String::new(),
+      likes: 0,
     }
   }
 }
@@ -39,6 +38,7 @@ impl Into<Bson> for Review {
       "rating": self.rating,
       "timestamp": self.timestamp,
       "userId": self.user_id,
+      "likes": self.likes
     })
   }
 }

@@ -70,6 +70,7 @@ pub(crate) async fn add_review(
     difficulty,
     timestamp: Utc::now().into(),
     user_id: user.id(),
+    ..Review::default()
   };
 
   db.add_review(review.clone()).await?;
@@ -108,6 +109,7 @@ pub(crate) async fn update_review(
     difficulty,
     timestamp: Utc::now().into(),
     user_id: user_id.clone(),
+    ..Review::default()
   };
 
   db.add_review(review.clone()).await?;
