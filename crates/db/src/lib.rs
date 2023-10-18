@@ -1,5 +1,4 @@
 use {
-  anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, Utc},
   futures::Future,

@@ -280,7 +280,7 @@ impl Db {
           },
           doc! {
             "$inc": {
-              "likes": match interaction.kind { InteractionKind::Like => 1, InteractionKind::Dislike => -1, _ => 0}
+              "likes": match interaction.kind { InteractionKind::Like => 1, InteractionKind::Dislike => -1}
           }
         }, None, session).await?;
 
@@ -347,7 +347,7 @@ impl Db {
           },
           doc! {
             "$inc": {
-              "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1, _ => 0}
+              "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1}
           }
         }, None, session).await?;
           Ok(())
