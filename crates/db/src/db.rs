@@ -1,5 +1,5 @@
 use futures::FutureExt;
-use mongodb::{ClientSession, Collection};
+use mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection};
 
 use super::*;
 
@@ -19,9 +19,9 @@ impl Db {
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options = ClientOptions::parse(format!(
-      "{}/{}",
+      "{}/{}?directConnection=true&replicaSet=rs0",
       env::var("MONGODB_URL")
-        .unwrap_or_else(|_| "mongodb://localhost:27017/?replicaSet=rs0".into()),
+        .unwrap_or_else(|_| { "mongodb://127.0.0.1:27017".into() }),
       db_name
     ))
     .await?;
@@ -257,8 +257,8 @@ impl Db {
       review_coll: Collection<Review>,
       interaction: Interaction,
     ) -> mongodb::error::Result<()> {
-      interaction_coll
-        .update_one_with_session(
+      let old = interaction_coll
+        .find_one_and_update_with_session(
           doc! {
             "courseId": &interaction.course_id,
             "userId": &interaction.user_id,
@@ -269,20 +269,44 @@ impl Db {
               "kind": Into::<Bson>::into(&interaction.kind)
             },
           }),
-          UpdateOptions::builder().upsert(true).build(),
+          FindOneAndUpdateOptions::builder().upsert(true).build(),
           session,
         )
         .await?;
-      review_coll.update_one_with_session(
+
+      if let Some(old) = old.clone() {
+        if old.kind == interaction.kind {
+          return Ok(());
+        }
+      }
+
+      let increment_amount = {
+        let amt = match interaction.kind {
+          InteractionKind::Like => 1,
+          InteractionKind::Dislike => -1,
+        };
+        if old.is_some() {
+          amt * 2
+        } else {
+          amt
+        }
+      };
+
+      review_coll
+        .update_one_with_session(
           doc! {
             "courseId": interaction.course_id,
             "userId": interaction.user_id,
           },
           doc! {
-            "$inc": {
-              "likes": match interaction.kind { InteractionKind::Like => 1, InteractionKind::Dislike => -1}
-          }
-        }, None, session).await?;
+              "$inc": {
+                "likes": increment_amount
+            }
+          },
+          None,
+          session,
+        )
+        .await?;
 
       Ok(())
     }
