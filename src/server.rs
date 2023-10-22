@@ -174,7 +174,7 @@ mod tests {
       let db = Arc::new(Db::connect(&db_name).await.unwrap());
 
       let session_store = MongodbSessionStore::new(
-        "mongodb://localhost:27017",
+        "mongodb://localhost:27017/?directConnection=true&replicaSet=rs0",
         &db.name(),
         "store",
       )
