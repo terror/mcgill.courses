@@ -2,6 +2,7 @@ use {
   bson::Bson,
   chrono::{Datelike, Utc},
   futures::Future,
+  futures::FutureExt,
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
@@ -17,6 +18,7 @@ use {
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Cursor, Database, IndexModel,
   },
+  mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
   {

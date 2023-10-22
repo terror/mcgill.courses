@@ -1,6 +1,3 @@
-use futures::FutureExt;
-use mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection};
-
 use super::*;
 
 #[derive(Debug, Clone)]
@@ -21,7 +18,7 @@ impl Db {
     let mut client_options = ClientOptions::parse(format!(
       "{}/{}?directConnection=true&replicaSet=rs0",
       env::var("MONGODB_URL")
-        .unwrap_or_else(|_| { "mongodb://127.0.0.1:27017".into() }),
+        .unwrap_or_else(|_| { "mongodb://localhost:27017".into() }),
       db_name
     ))
     .await?;
