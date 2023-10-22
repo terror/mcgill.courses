@@ -4,6 +4,7 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
+import { termColorMap } from './CourseTerms';
 import { MultiSelect } from './MultiSelect';
 import { ResetButton } from './ResetButton';
 
@@ -23,6 +24,8 @@ type ExploreFilterProp = {
 
 type FilterButtonProp = {
   icon?: JSX.Element;
+  className?: string;
+  selectedClass?: string;
   isSelected: boolean;
   name: string;
   selections: string[];
@@ -31,6 +34,8 @@ type FilterButtonProp = {
 
 const FilterButton = ({
   icon,
+  className,
+  selectedClass,
   isSelected,
   name,
   selections,
@@ -40,7 +45,7 @@ const FilterButton = ({
 
   if (isSelected !== selected) setSelected(isSelected);
 
-  const selectedColor = 'bg-red-600 text-gray-100';
+  const selectedColor = selectedClass ?? 'bg-red-200 text-red-900';
 
   const unselectedColor =
     'bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-gray-100';
@@ -48,8 +53,9 @@ const FilterButton = ({
   return (
     <button
       className={twMerge(
-        'rounded-full px-4 py-2 font-semibold tracking-wider transition duration-150 ease-in-out',
-        selected ? selectedColor : unselectedColor
+        'rounded-full px-2 py-1 text-sm font-medium tracking-wider transition duration-150 ease-in-out',
+        selected ? selectedColor : unselectedColor,
+        className
       )}
       onClick={() => {
         setSelected(!selected);
@@ -91,57 +97,60 @@ export const ExploreFilter = ({
   return (
     <div
       className={twMerge(
-        variant === 'mobile' ? 'w-full' : 'w-96',
-        'flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 px-10 py-8 dark:bg-neutral-800 dark:text-gray-200'
+        variant === 'mobile' ? 'w-full' : 'w-[340px]',
+        'relative flex h-fit flex-col flex-wrap rounded-lg bg-slate-50 px-8 py-6 dark:bg-neutral-800 dark:text-gray-200'
       )}
     >
-      <div className='flex flex-row'>
-        <h1 className='mb-2 text-2xl font-semibold'>Filter</h1>
-        <ResetButton
-          className='ml-auto'
-          onClear={() => {
-            setSelectedSubjects([]);
-            setSelectedLevels([]);
-            setSelectedTerms([]);
-          }}
-        />
-      </div>
-      <div className='py-2.5' />
-      <h1 className='text-xl font-semibold'>Course Code</h1>
-      <div className='py-1.5' />
+      <ResetButton
+        className='absolute right-4 top-4'
+        onClear={() => {
+          setSelectedSubjects([]);
+          setSelectedLevels([]);
+          setSelectedTerms([]);
+        }}
+      />
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Subject
+      </h1>
+      <div className='py-1' />
       <MultiSelect
         options={courseCodes}
         values={selectedSubjects}
         setValues={setSelectedSubjects}
       />
-      <div>
-        <h1 className='mt-3 text-xl font-semibold'>Level</h1>
-        <div className='flex flex-wrap gap-2 py-1'>
-          {levelsOptions.map((level, i) => (
-            <FilterButton
-              key={i}
-              name={level}
-              isSelected={selectedLevels.includes(level)}
-              selections={selectedLevels}
-              setSelections={setSelectedLevels}
-            />
-          ))}
-        </div>
+      <div className='py-2.5' />
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Level
+      </h1>
+      <div className='py-1' />
+      <div className='flex flex-wrap gap-2 py-1'>
+        {levelsOptions.map((level, i) => (
+          <FilterButton
+            key={i}
+            name={level}
+            isSelected={selectedLevels.includes(level)}
+            selections={selectedLevels}
+            setSelections={setSelectedLevels}
+          />
+        ))}
       </div>
-      <div className='space-y-2'>
-        <h1 className='mt-3 text-xl font-semibold'>Term</h1>
-        <div className='flex flex-wrap gap-2'>
-          {termsOptions.map((term, i) => (
-            <FilterButton
-              key={i}
-              icon={termToIcon(term as CourseTerm)}
-              name={term}
-              isSelected={selectedTerms.includes(term)}
-              selections={selectedTerms}
-              setSelections={setSelectedTerms}
-            />
-          ))}
-        </div>
+      <div className='py-2.5' />
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Term
+      </h1>
+      <div className='py-1' />
+      <div className='flex flex-wrap gap-2'>
+        {termsOptions.map((term, i) => (
+          <FilterButton
+            key={i}
+            icon={termToIcon(term as CourseTerm)}
+            selectedClass={termColorMap[term.toLowerCase()]}
+            name={term}
+            isSelected={selectedTerms.includes(term)}
+            selections={selectedTerms}
+            setSelections={setSelectedTerms}
+          />
+        ))}
       </div>
     </div>
   );

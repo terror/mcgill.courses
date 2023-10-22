@@ -3,12 +3,13 @@ import { AiOutlineGithub } from 'react-icons/ai';
 import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
 import { Layout } from '../components/Layout';
 
 type QuestionAnswer = {
   title: string;
-  content: JSX.Element | string;
+  content: React.ReactNode;
 };
 
 type QuestionsAnswersProps = {
@@ -17,7 +18,7 @@ type QuestionsAnswersProps = {
 
 const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
-    <div className='flex min-w-full max-w-md flex-col items-center justify-center space-y-3 bg-white p-2 dark:bg-neutral-900'>
+    <div className='flex min-w-full max-w-md flex-col items-center space-y-3 dark:bg-neutral-900'>
       {input.map((item: QuestionAnswer) => (
         <Disclosure as='div' key={item.title} className='w-full'>
           {({ open }) => (
@@ -41,7 +42,72 @@ const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   );
 };
 
-const questionsAnswers = [
+type TitleProps = {
+  children: React.ReactNode;
+};
+
+const Title = ({ children }: TitleProps) => {
+  return (
+    <div className='mb-5 mt-10'>
+      <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
+        {children}
+      </h1>
+    </div>
+  );
+};
+
+type PersonLink = {
+  title: string;
+  url: string;
+};
+
+const Person = ({
+  name,
+  imageUrl,
+  links,
+}: {
+  name: string;
+  imageUrl: string;
+  links?: PersonLink[];
+}) => {
+  return (
+    <li className='flex items-center gap-x-4 mt-6'>
+      <img className='w-[100px] rounded-full' src={imageUrl} />
+      <div className='flex-row'>
+        <Paragraph>{name}</Paragraph>
+        <div className='flex gap-x-2'>
+          {links?.map((link: PersonLink, i) => (
+            <>
+              <a key={i} target='_blank' href={link.url}>
+                <Paragraph className='underline'>{link.title}</Paragraph>
+              </a>
+              {i !== links.length - 1 && <Paragraph>•</Paragraph>}
+            </>
+          ))}
+        </div>
+      </div>
+    </li>
+  );
+};
+
+const Paragraph = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <p
+    className={twMerge(
+      'text-xl leading-loose text-gray-700 dark:text-gray-200',
+      className
+    )}
+  >
+    {children}
+  </p>
+);
+
+const questions = [
   {
     title: 'How do we know that the reviews are legitimate?',
     content:
@@ -60,7 +126,7 @@ const questionsAnswers = [
         Yes! There are great student-made tools for McGillians. Some great ones
         are{' '}
         <Link to='https://cloudberry.fyi' className='underline'>
-          Cloudberry.fyi
+          cloudberry.fyi
         </Link>{' '}
         and{' '}
         <Link
@@ -76,51 +142,92 @@ const questionsAnswers = [
   },
 ];
 
-type TitleProps = {
-  children: string;
-};
-
-const Title = ({ children }: TitleProps) => {
-  return (
-    <div className='mb-5 mt-10'>
-      <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
-        {children}
-      </h1>
-    </div>
-  );
-};
+const people = [
+  {
+    name: "Liam Scalzulli (CS '2025)",
+    imageUrl: 'https://avatars.githubusercontent.com/u/31192478?v=4',
+    links: [
+      { title: 'Github', url: 'https://github.com/terror' },
+      {
+        title: 'Linkedin',
+        url: 'https://www.linkedin.com/in/liamscalzulli/',
+      },
+    ],
+  },
+  {
+    name: "Jeff Zhang (Hons CS '2025)",
+    imageUrl: 'https://avatars.githubusercontent.com/u/47371088?v=4',
+    links: [{ title: 'Github', url: 'https://github.com/jeffdotpng' }],
+  },
+  {
+    name: "Sam Zhang (CS '2025)",
+    imageUrl: 'https://avatars.githubusercontent.com/u/112342947?v=4',
+    links: [{ title: 'Github', url: 'https://github.com/samzhang02' }],
+  },
+  {
+    name: "Joey Yu (CS '2025)",
+    imageUrl: 'https://avatars.githubusercontent.com/u/25695219?v=4',
+    links: [{ title: 'Github', url: 'https://github.com/itsjoeoui' }],
+  },
+];
 
 export const About = () => {
   return (
     <Layout>
-      <div className='mx-4 my-auto mb-10 flex flex-col justify-center text-center align-middle '>
-        <Title>About Us</Title>
-        <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 md:mx-16 lg:mx-40'>
-          mcgill.courses is an open-sourced, student-made review website for
-          courses offered and instructors teaching at McGill University. Our
-          platform aims to provide transparent and accurate information to help
-          with informed decision-making. We encourage contributions from the
-          McGill community to ensure the resource remains valuable.
-        </p>
+      <div className='mx-auto max-w-[800px] px-2 my-auto mb-10 flex flex-col'>
+        <Title>Welcome to mcgill.courses!</Title>
+        <Paragraph className='text-xl leading-loose text-gray-700 dark:text-gray-200'>
+          <Link className='underline' to='/'>
+            mcgill.courses
+          </Link>{' '}
+          is an open-sourced, student-made review website for courses offered
+          and instructors teaching at McGill University. Our platform aims to
+          provide transparent and accurate information to help with informed
+          decision-making. We encourage contributions from the McGill community
+          to ensure the resource remains valuable.
+        </Paragraph>
+        <Title>History & The Team</Title>
+        <Paragraph>
+          <Link className='underline' to='/'>
+            mcgill.courses
+          </Link>{' '}
+          started off as a side-project back in{' '}
+          <a
+            className='underline'
+            href='https://github.com/terror/mcgill.courses/commit/45268b4e39801a4d9531d7b8ad5654fcca5bb01d'
+            target='_blank'
+          >
+            March 2023
+          </a>{' '}
+          after a few of us realized there was no single dedicated site centered
+          around the McGill course search and discovery experience. Since then
+          it has grown into a full-fledged platform with a team of dedicated
+          developers and designers.
+        </Paragraph>
+        {people.map((person) => (
+          <Person {...person} />
+        ))}
         <Title>FAQ</Title>
-        <div className='px-4 md:mx-16 lg:mx-28 xl:mx-48'>
-          <QuestionsAnswers input={questionsAnswers} />
-        </div>
+        <QuestionsAnswers input={questions} />
         <Title>Contact Us</Title>
-        <p className='text-xl leading-loose text-gray-700 dark:text-gray-200 sm:mx-28 lg:mx-60 xl:mx-80'>
+        <Paragraph>
           If you have any questions or concerns, please don't hesitate to reach
-          out to us!
-        </p>
-        <div className='m-2 flex justify-center'>
-          <a href='https://www.github.com/terror/mcgill.courses'>
+          out to us, either by submitting an issue or pull request on our Github
+          repository, or directly by email.
+        </Paragraph>
+        <div className='flex gap-x-2 mt-6'>
+          <a
+            target='_blank'
+            href='https://www.github.com/terror/mcgill.courses'
+          >
             <AiOutlineGithub
-              className='mx-2 text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
+              className='text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
             />
           </a>
           <a href='mailto:'>
             <FiMail
-              className='mx-2 text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
+              className='text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
             />
           </a>

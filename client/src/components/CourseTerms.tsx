@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { GoX } from 'react-icons/go';
@@ -10,11 +9,12 @@ import {
   getCurrentTerms,
   uniqueTermInstructors,
 } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
+import { Highlight } from './Highlight';
 import { Tooltip } from './Tooltip';
 
 const variantToSize = (variant: 'small' | 'large') => {
-  return variant === 'small' ? 20 : 25;
+  return variant === 'small' ? 20 : 18;
 };
 
 const termToIcon = (term: string, variant: 'small' | 'large') => {
@@ -30,15 +30,19 @@ const termToIcon = (term: string, variant: 'small' | 'large') => {
   return icons[term.split(' ')[0].toLowerCase()];
 };
 
+export const termColorMap: Record<string, string> = {
+  fall: 'bg-red-100 text-red-900',
+  winter: 'bg-sky-100 text-sky-900',
+  summer: 'bg-yellow-100 text-yellow-900',
+};
+
 type CourseTermsProps = {
   course: Course;
   variant: 'large' | 'small';
+  query?: string;
 };
 
-export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
-  const [hoveringOn, setHoveringOn] = useState('');
-
-  const container = twMerge('flex flex-wrap mr-auto');
+export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
 
   const currentlyOfferedTerms = course.terms.filter((c) =>
@@ -47,63 +51,62 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
 
   if (currentlyOfferedTerms.length === 0)
     return (
-      <div className={container}>
-        <div
-          className={twMerge(
-            'rounded-xl bg-gray-100 dark:bg-neutral-700',
-            variant === 'small' ? 'px-2 py-1' : 'p-2'
-          )}
-        >
-          <div className='flex items-center space-x-2'>
-            <GoX size={variantToSize(variant)} color='DarkGray' />
-            <div className='pr-1 dark:text-gray-200'>Not Offered</div>
+      <div className='my-1.5 w-fit text-sm'>
+        <div className='rounded-xl bg-gray-200 p-1 dark:bg-neutral-700'>
+          <div className='flex items-center space-x-1'>
+            <GoX
+              size={variantToSize(variant)}
+              className='fill-gray-700 dark:fill-gray-200'
+            />
+            <div className='pr-1 font-medium text-gray-800 dark:text-gray-200'>
+              Not Offered
+            </div>
           </div>
         </div>
       </div>
     );
 
   return (
-    <div className={container}>
-      {instructors.map((instructor, i) => (
-        <Link
-          key={i}
-          className={twMerge(
-            instructor.name === 'No Instructor Assigned'
-              ? 'pointer-events-none'
-              : ''
-          )}
-          to={`/instructor/${encodeURIComponent(instructor.name)}`}
-        >
-          <div
+    <div className='mr-auto flex flex-wrap gap-x-2'>
+      {instructors.map((instructor, i) => {
+        const term = instructor.term.split(' ')[0].toLowerCase();
+        return (
+          <Link
             key={i}
             className={twMerge(
-              'relative my-2 ml-0 rounded-xl bg-gray-100 dark:bg-neutral-700',
-              variant === 'small' ? 'mr-2 px-2 py-1' : 'mr-4 max-w-fit p-2'
+              instructor.name === 'No Instructor Assigned'
+                ? 'pointer-events-none'
+                : ''
             )}
+            to={`/instructor/${encodeURIComponent(instructor.name)}`}
           >
-            <div className='flex items-center space-x-2'>
-              {variant === 'large' ? (
-                <div
-                  onMouseEnter={() => setHoveringOn(instructor.term)}
-                  onMouseLeave={() => setHoveringOn('')}
-                >
-                  <Tooltip
-                    show={hoveringOn === instructor.term}
-                    text={instructor.term}
-                  >
+            <div
+              key={i}
+              className={twMerge(
+                'relative my-1.5 rounded-full text-sm dark:bg-neutral-700',
+                variant === 'small' ? 'px-2 py-1' : 'max-w-fit p-1',
+                termColorMap[term]
+              )}
+            >
+              <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                {variant === 'large' ? (
+                  <Tooltip text={instructor.term}>
                     <div>{termToIcon(instructor.term, variant)}</div>
                   </Tooltip>
+                ) : (
+                  <div>{termToIcon(instructor.term, variant)}</div>
+                )}
+                <div className={twMerge('pr-1 font-medium dark:text-gray-200')}>
+                  <Highlight
+                    text={instructor.name}
+                    query={query || undefined}
+                  />
                 </div>
-              ) : (
-                <div>{termToIcon(instructor.term, variant)}</div>
-              )}
-              <div className='pr-1 text-gray-700 dark:text-gray-200'>
-                {instructor.name}
               </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        );
+      })}
     </div>
   );
 };

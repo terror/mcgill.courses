@@ -4,7 +4,9 @@ use {
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
+    hash::Hash,
     loader::Loader,
+    object::Object,
     options::Options,
     page::Page,
     retry::Retry,
@@ -33,11 +35,13 @@ use {
   clap::Parser,
   db::Db,
   dotenv::dotenv,
+  env_logger::Env,
+  futures::TryStreamExt,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
-  log::{debug, error, info, trace},
+  log::{debug, error, info, trace, warn},
   model::{
-    Course, CourseListing, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Review, Schedule,
+    Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
+    Interaction, InteractionKind, Review, Schedule, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
@@ -45,13 +49,19 @@ use {
   },
   rayon::prelude::*,
   reqwest::blocking::RequestBuilder,
+  rusoto_core::Region,
+  rusoto_s3::S3Client,
+  rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
   serde::{Deserialize, Serialize},
   serde_json::json,
+  sha2::{Digest, Sha256},
   std::{
     collections::HashSet,
     env,
     fmt::{self, Display, Formatter},
     fs,
+    fs::File,
+    io::Read,
     marker::Sized,
     net::SocketAddr,
     path::PathBuf,
@@ -65,6 +75,7 @@ use {
     services::{ServeDir, ServeFile},
   },
   url::Url,
+  walkdir::WalkDir,
 };
 
 mod arguments;
@@ -72,9 +83,12 @@ mod assets;
 mod auth;
 mod courses;
 mod error;
+mod hash;
 mod instructors;
 mod interactions;
 mod loader;
+mod notifications;
+mod object;
 mod options;
 mod page;
 mod retry;
@@ -83,6 +97,7 @@ mod search;
 mod server;
 mod state;
 mod subcommand;
+mod subscriptions;
 mod user;
 mod vec_ext;
 mod vsb_client;
@@ -91,7 +106,8 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {
-  env_logger::init();
+  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+    .init();
 
   dotenv().ok();
 

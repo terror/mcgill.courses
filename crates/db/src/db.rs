@@ -9,7 +9,9 @@ impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
   const INTERACTION_COLLECTION: &str = "interactions";
+  const NOTIFICATION_COLLECTION: &str = "notifications";
   const REVIEW_COLLECTION: &str = "reviews";
+  const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options = ClientOptions::parse(format!(
@@ -48,31 +50,76 @@ impl Db {
     &self,
     limit: Option<i64>,
     offset: Option<u64>,
-    course_subjects: Option<Vec<String>>,
-    course_levels: Option<Vec<String>>,
-    course_terms: Option<Vec<String>>,
+    filter: Option<CourseFilter>,
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
 
-    if let Some(course_subjects) = course_subjects {
-      document.insert(
-        "subject",
-        doc! { "$regex": format!("^({})", course_subjects.join("|")) },
-      );
-    }
+    if let Some(filter) = filter {
+      let CourseFilter {
+        subjects,
+        levels,
+        terms,
+        query,
+        ..
+      } = filter;
 
-    if let Some(course_levels) = course_levels {
-      document.insert(
-        "code",
-        doc! { "$regex": format!("^({})", course_levels.join("|")) },
-      );
-    }
+      if let Some(subjects) = subjects {
+        document.insert(
+            "subject",
+            doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
+        );
+      }
 
-    if let Some(course_terms) = course_terms {
-      document.insert(
-        "terms",
-        doc! { "$regex": format!("^({})", course_terms.join("|")) },
-      );
+      if let Some(levels) = levels {
+        document.insert(
+            "code",
+            doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
+        );
+      }
+
+      if let Some(terms) = terms {
+        document.insert(
+          "terms",
+          doc! { "$regex": format!("^({})", terms.join("|")), "$options": "i" },
+        );
+      }
+
+      if let Some(query) = query {
+        let current_terms = current_terms();
+
+        let id = doc! {
+          "_id": doc! {
+            "$regex": format!(".*{}.*", query.replace(' ', "")),
+            "$options": "i"
+          }
+        };
+
+        let instructor = doc! {
+          "instructors": doc! {
+            "$elemMatch": doc! {
+              "name": doc! {
+                "$regex": format!(".*{}.*", query),
+                "$options": "i"
+              },
+              "term": doc! {
+                "$regex": format!(".*({}).*", current_terms.join("|")),
+                "$options": "i"
+              }
+            }
+          }
+        };
+
+        let rest = ["code", "description", "subject", "title"]
+          .into_iter()
+          .map(|field| {
+            doc! { field: doc! {
+              "$regex": format!(".*{}.*", query), "$options": "i" }
+            }
+          })
+          .collect::<Vec<Document>>();
+
+        document.insert("$or", [vec![id, instructor], rest].concat());
+      }
     }
 
     Ok(
@@ -215,7 +262,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_interaction(
+  pub async fn delete_interaction(
     &self,
     course_id: &str,
     user_id: &str,
@@ -237,7 +284,7 @@ impl Db {
     )
   }
 
-  pub async fn remove_interactions(
+  pub async fn delete_interactions(
     &self,
     course_id: &str,
     user_id: &str,
@@ -269,6 +316,247 @@ impl Db {
         .find(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?
         .try_collect::<Vec<Interaction>>()
+        .await?,
+    )
+  }
+
+  pub async fn get_subscription(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<Option<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find_one(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn get_subscriptions(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(
+          doc! {
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<InsertOneResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .insert_one(subscription, None)
+        .await?,
+    )
+  }
+
+  pub async fn delete_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": subscription.course_id,
+            "userId": subscription.user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn get_notifications(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(doc! { "userId": user_id }, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_notifications(&self, review: Review) -> Result {
+    let course_id = review.course_id.clone();
+
+    let subscriptions = self
+      .database
+      .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+      .find(doc! { "courseId": course_id }, None)
+      .await?
+      .try_collect::<Vec<Subscription>>()
+      .await?;
+
+    let subscriptions = subscriptions
+      .into_iter()
+      .filter(|subscription| subscription.user_id != review.user_id)
+      .collect::<Vec<Subscription>>();
+
+    if subscriptions.is_empty() {
+      return Ok(());
+    }
+
+    self
+      .database
+      .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+      .insert_many(
+        subscriptions
+          .into_iter()
+          .map(|subscription| Notification {
+            review: review.clone(),
+            seen: false,
+            user_id: subscription.user_id,
+          })
+          .collect::<Vec<Notification>>(),
+        None,
+      )
+      .await?;
+
+    Ok(())
+  }
+
+  pub async fn delete_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn delete_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn purge_notifications(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+    review: Review,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "review": Into::<Bson>::into(review),
+              "seen": false
+            }
+          }),
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+    creator_id: &str,
+    seen: bool,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+            "review.userId": creator_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "seen": seen
+            }
+          }),
+          None,
+        )
         .await?,
     )
   }
@@ -305,6 +593,7 @@ impl Db {
               "$set": {
                 "code": course.code,
                 "corequisites": course.corequisites,
+                "corequisitesText": course.corequisites_text,
                 "credits": course.credits,
                 "department": course.department,
                 "description": course.description,
@@ -313,7 +602,10 @@ impl Db {
                 "instructors": course.instructors.combine(found.instructors),
                 "leadingTo": course.leading_to,
                 "level": course.level,
+                "logicalCorequisites": course.logical_corequisites,
+                "logicalPrerequisites": course.logical_prerequisites,
                 "prerequisites": course.prerequisites,
+                "prerequisitesText": course.prerequisites_text,
                 "restrictions": course.restrictions,
                 "schedule": course.schedule.combine_opt(found.schedule),
                 "subject": course.subject,
@@ -478,11 +770,37 @@ impl Db {
         .await?,
     )
   }
+
+  #[cfg(test)]
+  async fn subscriptions(&self) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn notifications(&self) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    )
+  }
 }
 
 #[cfg(test)]
 mod tests {
-  use {super::*, pretty_assertions::assert_eq};
+  use {super::*, pretty_assertions::assert_eq, regex::Regex};
 
   static SEED_DIR: Dir<'_> = include_dir!("crates/db/test-seeds");
 
@@ -508,7 +826,7 @@ mod tests {
         TEST_DATABASE_NUMBER.fetch_add(1, Ordering::Relaxed);
 
       let db_name = format!(
-        "mcgill-gg-test-{}-{}",
+        "mcgill-courses-test-{}-{}",
         std::time::SystemTime::now()
           .duration_since(std::time::SystemTime::UNIX_EPOCH)
           .unwrap()
@@ -526,35 +844,17 @@ mod tests {
   async fn on_disk_database_is_persistent() {
     let TestContext { db, db_name } = TestContext::new().await;
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      0
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 0);
 
     db.add_course(Course::default()).await.unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
 
     drop(db);
 
     let db = Db::connect(&db_name).await.unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -574,13 +874,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      2
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 2);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -607,13 +901,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -633,13 +921,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      2
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 2);
 
     fs::write(&source, get_content("update.json")).unwrap();
 
@@ -650,7 +932,7 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 3);
 
@@ -685,13 +967,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("COMP 202").await.unwrap();
 
@@ -720,7 +996,7 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 123);
 
@@ -749,13 +1025,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("COMP202").await.unwrap();
 
@@ -784,13 +1054,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("foundations of").await.unwrap();
 
@@ -819,13 +1083,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(Some(10), None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      10
-    );
+    assert_eq!(db.courses(Some(10), None, None).await.unwrap().len(), 10);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -845,13 +1103,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, Some(20), None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      103
-    );
+    assert_eq!(db.courses(None, Some(20), None).await.unwrap().len(), 103);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -1218,12 +1470,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, Some(vec!["MATH".into()]), None, None)
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          subjects: Some(vec!["MATH".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1252,12 +1511,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, Some(vec!["100".into()]), None)
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          levels: Some(vec!["100".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1286,12 +1552,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, None, Some(vec!["Winter".into()]))
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          terms: Some(vec!["Winter".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1351,13 +1624,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("Giulia Alberini").await.unwrap();
 
@@ -1415,7 +1682,7 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
 
-    db.remove_interaction(&review.course_id, &review.user_id, "10")
+    db.delete_interaction(&review.course_id, &review.user_id, "10")
       .await
       .unwrap();
 
@@ -1426,5 +1693,235 @@ mod tests {
         .len(),
       0
     );
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn subscription_flow() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(Subscription {
+      course_id: subscription.course_id,
+      user_id: subscription.user_id,
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_many_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_empty_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn dont_notify_review_creator() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_subscription() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_notification() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review.clone()).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+
+    db.delete_notification("1", &review.course_id)
+      .await
+      .unwrap();
+
+    assert_eq!(db.get_notifications("1").await.unwrap().len(), 0);
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_query() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.initialize(InitializeOptions {
+      source,
+
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let queries = vec![
+      "computer",
+      "discrete math",
+      "math240",
+      "complex analysis",
+      "How computer technologies shape social notions such as ownership, safety, and privacy",
+    ];
+
+    for query in queries {
+      let results = db
+        .courses(
+          None,
+          None,
+          Some(CourseFilter {
+            query: Some(query.into()),
+            ..Default::default()
+          }),
+        )
+        .await
+        .unwrap();
+
+      assert!(!results.is_empty());
+
+      for result in results {
+        let (a, b) = (
+          Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
+          Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+        );
+
+        assert!(
+          a.is_match(&result.id)
+            || b.is_match(&result.code)
+            || b.is_match(&result.description)
+            || b.is_match(&result.subject)
+            || b.is_match(&result.title)
+        );
+      }
+    }
   }
 }

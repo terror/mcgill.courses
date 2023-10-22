@@ -1,86 +1,128 @@
+import { useEffect, useState } from 'react';
 import { ExternalLink } from 'react-feather';
+import { VscBell, VscBellSlash } from 'react-icons/vsc';
+import { toast } from 'sonner';
 
-import { Course } from '../model/Course';
+import { useAuth } from '../hooks/useAuth';
+import { repo } from '../lib/repo';
+import type { Course } from '../model/Course';
+import type { Review } from '../model/Review';
+import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
-import { RatingInfo } from './RatingInfo';
-
-type ChartsProps = {
-  numReviews?: number;
-  rating: number;
-  difficulty: number;
-};
-
-const Charts = ({ numReviews, rating, difficulty }: ChartsProps) => {
-  if (numReviews === undefined) return null;
-
-  return numReviews ? (
-    <>
-      <RatingInfo title={'Rating'} rating={rating} />
-      <RatingInfo title={'Difficulty'} rating={difficulty} />
-    </>
-  ) : (
-    <div className='w-[50%] text-left text-gray-700 dark:text-gray-200 md:text-center'>
-      No reviews have been left for this course yet. Be the first!
-    </div>
-  );
-};
 
 type CourseInfoProps = {
   course: Course;
-  rating: number;
-  difficulty: number;
+  allReviews: Review[];
   numReviews?: number;
 };
 
-export const CourseInfo = ({
-  course,
-  rating,
-  difficulty,
-  numReviews,
-}: CourseInfoProps) => {
+export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
+  const user = useAuth();
+
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+
+    repo
+      .getSubscription(course._id)
+      .then((data) => {
+        setIsSubscribed(data !== null);
+      })
+      .catch(() =>
+        toast.error(
+          `Failed to check subscription for course ${course.subject} ${course.code}`
+        )
+      );
+  }, [course]);
+
+  const subscribe = async () => {
+    try {
+      await repo.addSubcription(course._id);
+      setIsSubscribed(true);
+      toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
+    } catch (err) {
+      toast.error(
+        `Failed to subscribe to course ${course.subject} ${course.code}.`
+      );
+    }
+  };
+
+  const unsubscribe = async () => {
+    try {
+      await repo.removeSubscription(course._id);
+      setIsSubscribed(false);
+      toast.success(
+        `Unsubscribed from course ${course.subject} ${course.code}`
+      );
+    } catch (err) {
+      toast.error(
+        `Failed to unsubscribe from course ${course.subject} ${course.code}`
+      );
+    }
+  };
+
   return (
-    <div className='flex w-full flex-row rounded-md bg-slate-50 p-6 dark:bg-neutral-800 md:mt-10'>
-      <div className='m-4 space-y-3 md:m-4 md:w-1/2'>
+    <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 shadow-sm dark:bg-neutral-800 md:mt-10'>
+      <div className='flex w-full flex-col md:w-7/12'>
         <div className='flex flex-row space-x-2 align-middle'>
-          <h1 className='text-4xl font-semibold text-gray-800 dark:text-gray-200'>
-            {course._id}
+          <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
+            {course.subject} {course.code}
           </h1>
-          {course.url ? (
-            <a
-              href={course.url}
-              className='my-auto dark:text-gray-200'
-              target='_blank'
-            >
-              <ExternalLink
-                size={20}
-                className='ml-1 transition-colors duration-300 hover:stroke-red-600'
-              />
-            </a>
-          ) : null}
+          <div className='flex items-center gap-2'>
+            {user &&
+              (isSubscribed ? (
+                <VscBellSlash
+                  size={20}
+                  onClick={unsubscribe}
+                  className='my-auto ml-1 cursor-pointer stroke-[0.5] transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
+                />
+              ) : (
+                <VscBell
+                  size={20}
+                  onClick={subscribe}
+                  className='my-auto ml-1 cursor-pointer stroke-[0.5] transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
+                />
+              ))}
+            {course.url ? (
+              <a
+                href={course.url}
+                className='my-auto dark:text-gray-200'
+                target='_blank'
+              >
+                <ExternalLink
+                  size={20}
+                  className='ml-1 transition-colors duration-300 hover:stroke-red-600'
+                />
+              </a>
+            ) : null}
+          </div>
         </div>
-        <h2 className='text-3xl text-gray-800 dark:text-gray-200'>
+        <div className='py-1' />
+        <h2 className='text-2xl text-gray-800 dark:text-gray-200'>
           {course.title}
         </h2>
-        <div className='m-4 mx-auto flex w-fit flex-col items-center justify-center space-y-3 md:hidden'>
-          <Charts
-            numReviews={numReviews}
-            rating={rating}
-            difficulty={difficulty}
-          />
-        </div>
         <CourseTerms course={course} variant='large' />
+        <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
           {course.description}
         </p>
-        <p className='text-sm text-gray-500 dark:text-gray-400'>
-          {numReviews} reviews
+        <div className='grow py-3' />
+        <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />
+        <CourseInfoStats
+          className='hidden gap-x-6 sm:mb-6 sm:flex md:mb-0 md:hidden'
+          variant='medium'
+          allReviews={allReviews}
+        />
+        <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
+          {allReviews.length} review(s)
         </p>
       </div>
-      <div className='m-4 mx-auto hidden w-fit flex-col items-center justify-center space-y-3 md:m-4 md:flex md:w-1/2 lg:flex-row'>
-        <Charts
-          numReviews={numReviews}
-          rating={rating}
-          difficulty={difficulty}
+      <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start md:mx-5'>
+        <CourseInfoStats
+          variant='large'
+          allReviews={allReviews}
+          className='lg:mr-8'
         />
       </div>
     </div>

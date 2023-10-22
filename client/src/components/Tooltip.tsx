@@ -1,16 +1,37 @@
 import { Transition } from '@headlessui/react';
+import {
+  Children,
+  PropsWithChildren,
+  cloneElement,
+  isValidElement,
+  useState,
+} from 'react';
 
 type TooltipProps = {
-  show: boolean;
   text: string;
-  children: React.ReactNode;
+  offset?: { x: number; y: number };
 };
 
-export const Tooltip = ({ show, text, children }: TooltipProps) => {
+export const Tooltip = ({
+  text,
+  offset = { x: 0, y: -8 },
+  children,
+}: TooltipProps & PropsWithChildren) => {
+  const [show, setShow] = useState(false);
+  const elem = Children.only(children);
+  if (!isValidElement(elem)) {
+    throw new Error('Tooltip must have a single child that is a React Element');
+  }
+
   return (
-    <div>
+    <span className='relative'>
       <Transition
         show={show}
+        className='absolute z-10 min-w-fit -translate-x-0 -translate-y-full rounded-md bg-white p-2 text-center text-xs font-medium text-gray-700 dark:bg-neutral-500 dark:text-gray-100'
+        style={{
+          left: offset.x,
+          top: offset.y,
+        }}
         enter='transition-opacity duration-200'
         enterFrom='opacity-0'
         enterTo='opacity-100'
@@ -18,11 +39,18 @@ export const Tooltip = ({ show, text, children }: TooltipProps) => {
         leaveFrom='opacity-100'
         leaveTo='opacity-0'
       >
-        <div className='absolute -top-1 left-0 z-10 w-28 -translate-x-0 -translate-y-full rounded-lg bg-white p-2 text-center text-xs font-bold text-gray-700 dark:bg-neutral-500 dark:text-gray-100'>
-          {text}
-        </div>
+        <div>{text}</div>
       </Transition>
-      {children}
-    </div>
+      {cloneElement<any>(elem, {
+        onMouseEnter: () => {
+          elem.props.onMouseEnter?.();
+          setShow(true);
+        },
+        onMouseLeave: () => {
+          elem.props.onMouseLeave?.();
+          setShow(false);
+        },
+      })}
+    </span>
   );
 };

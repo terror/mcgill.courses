@@ -1,3 +1,4 @@
+import 'react-loading-skeleton/dist/skeleton.css';
 import { Route, Routes } from 'react-router-dom';
 
 import { PrivateRoute } from './components/PrivateRoute';

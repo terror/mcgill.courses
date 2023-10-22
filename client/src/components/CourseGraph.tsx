@@ -1,57 +1,139 @@
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import VisGraph, { GraphData } from 'react-vis-graph-wrapper';
+import VisGraph, { Edge, GraphData, Node } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { Course } from '../model/Course';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import {
+  courseIdToUrlParam,
+  isValidCourseCode,
+  spliceCourseCode,
+} from '../lib/utils';
+import type { Course } from '../model/Course';
+import type { ReqNode } from '../model/Requirements';
 
 type CourseGraphProps = {
   course: Course;
 };
 
-export const CourseGraph = ({ course }: CourseGraphProps) => {
+const groupColors = {
+  prerequisite: 'rgb(252 165 165)',
+  corequisite: 'rgb(134 239 172)',
+  operator: '#ffffff',
+};
+
+type NodeType = 'operator' | 'prerequisite' | 'corequisite';
+
+const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
+  if (!reqs) return { nodes: [], edges: [], root: undefined };
+
+  const nodes: Node[] = [];
+  const edges: Edge[] = [];
+
+  const traverse = (node: ReqNode): string => {
+    if (typeof node === 'string') {
+      const duplicates = nodes.filter((n) =>
+        (n.id as string).startsWith(node)
+      ).length;
+
+      const id = duplicates === 0 ? node : `${node}_${duplicates}`;
+
+      nodes.push({
+        id,
+        label: node,
+        color: groupColors[nodeGroup],
+      });
+
+      return id;
+    }
+
+    const codes = node.groups.map((group) => traverse(group)),
+      id = codes.join(node.operator);
+
+    nodes.push({
+      id,
+      label: node.operator,
+      size: 6,
+      color: groupColors['operator'],
+      shape: 'hexagon',
+    });
+
+    for (const code of codes)
+      edges.push({ from: code, to: id, dashes: node.operator === 'OR' });
+
+    return id;
+  };
+
+  const root = traverse(reqs);
+
+  return { nodes, edges, root };
+};
+
+export const CourseGraph = memo(({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();
+  const mobile = useMediaQuery('(max-width: 480px)');
 
-  let id = 2;
+  const {
+    nodes: prereqNodes,
+    edges: prereqEdges,
+    root: prereqRoot,
+  } = makeGraph('prerequisite', course.logicalPrerequisites);
 
-  const prerequisites = course.prerequisites.map((prerequisite) => {
-    return {
-      id: id++,
-      label: prerequisite,
-    };
-  });
+  const {
+    nodes: coreqNodes,
+    edges: coreqEdges,
+    root: coreqRoot,
+  } = makeGraph('corequisite', course.logicalCorequisites);
 
   const leading = course.leadingTo.map((leading) => {
     return {
-      id: id++,
-      label: leading,
+      id: spliceCourseCode(leading, ' '),
+      label: spliceCourseCode(leading, ' '),
     };
   });
 
-  const graphNodes = [
-    { id: 1, label: course._id, title: course.description },
-    ...prerequisites,
+  const graphNodes: Node[] = [
+    {
+      id: course._id,
+      label: spliceCourseCode(course._id, ' '),
+      title: course.description,
+    },
+    ...prereqNodes,
+    ...coreqNodes,
     ...leading,
   ];
 
   const graph: GraphData = {
     nodes: graphNodes,
     edges: [
-      ...prerequisites.map((prerequisite) => {
-        return { from: prerequisite.id, to: 1 };
-      }),
+      ...prereqEdges,
+      ...coreqEdges,
+      { from: prereqRoot, to: course._id },
+      { from: coreqRoot, to: course._id },
       ...leading.map((leading) => {
-        return { from: 1, to: leading.id };
+        return { from: course._id, to: leading.id };
       }),
     ],
   };
 
-  const navigateToCourse = (nodes: number[]) => {
+  const navigateToCourse = (nodes: string[]) => {
     if (nodes.length === 0) return;
+
     const node = graphNodes.find((node) => node.id === nodes[0]);
-    if (node) navigate(`/course/${node.label}`);
+
+    if (!node || !node.id) return;
+
+    const [courseCode, rest] = (node.id as string).split('_', 2);
+    const isOperator = rest !== undefined && isNaN(+rest);
+
+    if (!isValidCourseCode(courseCode) || isOperator) return;
+
+    navigate(
+      `/course/${courseIdToUrlParam(courseCode.toString().replace(' ', ''))}`
+    );
   };
 
   return (
@@ -59,8 +141,8 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
       key={uuidv4()}
       graph={graph}
       options={{
-        edges: { color: darkMode ? '#FFFFFF' : '#000000' },
-        height: '500px',
+        edges: { color: darkMode ? '#919191' : '#b1b1b1' },
+        height: '288px',
         layout: {
           randomSeed: undefined,
           improvedLayout: true,
@@ -78,16 +160,36 @@ export const CourseGraph = ({ course }: CourseGraphProps) => {
             shakeTowards: 'leaves',
           },
         },
-        nodes: { color: darkMode ? 'rgb(212 212 212)' : 'rgb(226 232 240)' },
+        nodes: {
+          color: darkMode ? 'rgb(212 212 212)' : 'rgb(226 232 240)',
+          shape: 'dot',
+          size: 14,
+          font: {
+            color: darkMode ? '#FFFFFF' : '#000000',
+          },
+        },
+      }}
+      getNetwork={(network) => {
+        network.focus(course._id, {
+          scale: 0.7,
+          offset: {
+            x: 60,
+            y: 0,
+          },
+          animation: {
+            duration: mobile ? 2500 : 1000,
+            easingFunction: 'easeOutCubic',
+          },
+        });
       }}
       events={{
-        select: ({ nodes }: { nodes: number[] }) => {
+        select: ({ nodes }: { nodes: string[] }) => {
           navigateToCourse(nodes);
         },
-        doubleClick: ({ nodes }: { nodes: number[] }) => {
+        doubleClick: ({ nodes }: { nodes: string[] }) => {
           navigateToCourse(nodes);
         },
       }}
     />
   );
-};
+});

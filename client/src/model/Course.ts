@@ -1,5 +1,6 @@
-import { Instructor } from './Instructor';
-import { Schedule } from './Schedule';
+import type { Instructor } from './Instructor';
+import type { ReqNode } from './Requirements';
+import type { Schedule } from './Schedule';
 
 export type Course = {
   _id: string;
@@ -15,8 +16,12 @@ export type Course = {
   terms: string[];
   description: string;
   instructors: Instructor[];
+  prerequisitesText?: string;
+  corequisitesText?: string;
   prerequisites: string[];
   corequisites: string[];
+  logicalPrerequisites?: ReqNode;
+  logicalCorequisites?: ReqNode;
   leadingTo: string[];
   restrictions: string;
   schedule: Schedule[];

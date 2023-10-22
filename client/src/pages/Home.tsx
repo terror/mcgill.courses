@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import { Alert } from '../components/Alert';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { SearchResults } from '../model/SearchResults';
-import { fetchClient } from '../lib/fetchClient';
-import { useSearchParams } from 'react-router-dom';
+import { repo } from '../lib/repo';
+import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],
@@ -20,20 +20,24 @@ export const Home = () => {
     instructors: [],
   });
 
+  useEffect(() => {
+    const err = searchParams.get('err');
+    if (err === null) return;
+    toast.error(alerts.get(err));
+  }, []);
+
   const handleInputChange = async (query: string) => {
     try {
       setResults({
         query,
-        ...(await fetchClient.getData<SearchResults>(
-          `/search?query=${encodeURIComponent(query)}`
-        )),
+        ...(await repo.search(query)),
       });
     } catch (err) {
-      console.error(err);
+      toast.error(
+        'An error occurred while searching for courses, please try again later.'
+      );
     }
   };
-
-  const err = searchParams.get('err');
 
   return (
     <Layout>
@@ -52,7 +56,6 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      {err && <Alert status='error' message={alerts.get(err)} />}
     </Layout>
   );
 };

@@ -14,7 +14,7 @@ default:
 all: build clippy e2e fmt-check forbid lint test
 
 build *mode='development':
-  cargo build && npm run build -- --mode {{mode}}
+  cargo build && pnpm run build -- --mode {{mode}}
 
 build-container:
   docker build -t mcgill.courses:latest .
@@ -38,21 +38,21 @@ dev: services
     --color \
     -- \
     'just watch run serve --db-name=mcgill-courses' \
-    'npm run dev'
+    'pnpm run dev'
 
 dev-deps:
   cargo install present
 
 e2e:
-  npm run cy:e2e
+  pnpm run cy:e2e
 
 fmt:
   cargo fmt --all
-  npm run format
+  pnpm run format
 
 fmt-check:
   cargo fmt --all -- --check
-  npm run format-check
+  pnpm run format-check
 
 forbid:
   ./bin/forbid
@@ -61,7 +61,7 @@ initialize *args: restart-services
   cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
 
 lint:
-  npm run lint
+  pnpm run lint
 
 load:
   cargo run -- --source=seed \

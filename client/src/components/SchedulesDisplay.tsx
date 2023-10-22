@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
+import * as buildingCodes from '../assets/buildingCodes.json';
 import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Block, Schedule, TimeBlock } from '../model/Schedule';
+import type { Course } from '../model/Course';
+import type { Block, Schedule, TimeBlock } from '../model/Schedule';
+import { Tooltip } from './Tooltip';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -43,9 +45,25 @@ const VSBtimeToDisplay = (time: string) => {
 
 type SchedulesDisplayProps = {
   course: Course;
+  className?: string;
 };
 
-export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
+const BlockLocation = ({ location }: { location: string }) => {
+  const room = location.split(' ')[0];
+
+  return (
+    <span className='relative whitespace-nowrap'>
+      <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
+        <p className='inline-block cursor-default'> {location}</p>
+      </Tooltip>
+    </span>
+  );
+};
+
+export const SchedulesDisplay = ({
+  course,
+  className,
+}: SchedulesDisplayProps) => {
   const schedules = course.schedule;
 
   if (!schedules) return null;
@@ -98,6 +116,14 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
     setOpenBlock(null);
   }, [currentlyDisplayingTerm]);
 
+  if (offeredTerms.length === 0) {
+    return null;
+  }
+
+  const maxDisplayLength =
+    _.max(schedules.flatMap((s) => s.blocks.map((b) => b.display.length))) ?? 0;
+  const displayWidth = maxDisplayLength * 9;
+
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
     <div key={scheduleIndex}>
       {schedule.blocks?.map((block: Block, blockIndex) => (
@@ -107,17 +133,25 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
               'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
             )}
           >
-            <div className='flex flex-col flex-wrap gap-x-2 whitespace-pre-wrap text-left md:flex-row'>
-              <div className='w-20'>
-                <span className='font-semibold'>{block.display}</span>
+            <div className='flex flex-row flex-wrap whitespace-pre-wrap text-left md:flex-row'>
+              <div className='font-medium' style={{ width: displayWidth }}>
+                {block.display}
               </div>
-              <div className='w-44'>
-                <span className='font-semibold'>Campus: </span>
+              <div className='mx-4 font-normal text-gray-700 dark:text-gray-300'>
                 {block.campus}
               </div>
-              <div className='w-80'>
-                <span className='font-semibold'>Classroom(s): </span>
-                {block.location ? block.location.replace(';', ',') : 'N/A'}
+              <div>
+                <span className='inline-block font-medium'>
+                  {((split) =>
+                    split.map((location: string, index) => (
+                      <span key={index}>
+                        <BlockLocation location={location.trim()} />
+                        {index !== split.length - 1 && (
+                          <span className='inline-block'>, </span>
+                        )}
+                      </span>
+                    )))(block.location.split(';'))}
+                </span>
               </div>
             </div>
             <button
@@ -160,7 +194,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
                   ))
                 ) : (
                   <div className='flex flex-col'>
-                    <div className='flex flex-row justify-center rounded-b-md bg-neutral-700 px-3 py-2 dark:text-neutral-400'>
+                    <div className='flex flex-row justify-center rounded-b-md px-3 py-2 dark:bg-neutral-700 dark:text-neutral-400'>
                       <p>No scheduled time block.</p>
                     </div>
                   </div>
@@ -173,16 +207,21 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
     </div>
   );
 
-  return offeredTerms.length !== 0 ? (
-    <div className='flex flex-col text-gray-800'>
-      <div className='mt-4 flex'>
+  return (
+    <div
+      className={twMerge(
+        'flex flex-col text-gray-800 shadow-sm lg:border-t-0',
+        className
+      )}
+    >
+      <div className='flex'>
         {offeredTerms.map((term, i) => (
           <button
             key={i}
             className={twMerge(
-              `flex-1 py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200`,
+              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200`,
               term === currentlyDisplayingTerm
-                ? 'bg-slate-100 dark:bg-neutral-700'
+                ? 'bg-slate-200 dark:bg-neutral-600'
                 : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
@@ -196,7 +235,7 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
           </button>
         ))}
       </div>
-      <div className='flex flex-col rounded-b-lg bg-slate-100 dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-700 dark:text-gray-200'>
         {currentlyDisplayingSchedules.length <= 5 || showAll
           ? currentlyDisplayingSchedules.map(singleScheduleRow)
           : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}
@@ -217,5 +256,5 @@ export const SchedulesDisplay = ({ course }: SchedulesDisplayProps) => {
         )}
       </div>
     </div>
-  ) : null;
+  );
 };

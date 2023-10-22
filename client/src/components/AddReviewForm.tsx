@@ -1,11 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
+import { repo } from '../lib/repo';
+import type { Course } from '../model/Course';
 import {
   ReviewForm,
   ReviewFormInitialValues,
@@ -34,12 +35,17 @@ export const AddReviewForm = ({
     difficulty: 0,
   };
 
+  const handleClose = () => {
+    onClose();
+    toast.success('Review draft saved.');
+  };
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
         as='div'
         className={twMerge('relative z-50', darkMode ? 'dark' : '')}
-        onClose={onClose}
+        onClose={handleClose}
       >
         <Transition.Child
           as={Fragment}
@@ -75,14 +81,7 @@ export const AddReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await fetchClient.post(
-                      `/reviews`,
-                      {
-                        course_id: course._id,
-                        ...values,
-                      },
-                      { headers: { 'Content-Type': 'application/json' } }
-                    );
+                    const res = await repo.addReview(course._id, values);
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);
