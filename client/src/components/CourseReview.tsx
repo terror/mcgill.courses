@@ -27,30 +27,28 @@ const LoginPrompt = () => {
 };
 
 type ReviewInteractionsProps = {
-  courseId: string;
-  userId: string;
+  review: Review;
   setPromptLogin: (_: boolean) => void;
 };
 
 const ReviewInteractions = ({
-  courseId,
-  userId,
+  review,
   setPromptLogin,
 }: ReviewInteractionsProps) => {
   const user = useAuth();
 
   const [kind, setKind] = useState<InteractionKind | undefined>();
-  const [likes, setLikes] = useState(0);
+
+  const { courseId, userId, likes } = review;
 
   useEffect(() => {
     refreshInteractions();
-  }, []);
+  }, [review]);
 
   const refreshInteractions = async () => {
     try {
       const payload = await repo.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
-      setLikes(payload.likes);
     } catch (err: any) {
       toast.error(err.toString());
     }
@@ -282,11 +280,7 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          <ReviewInteractions
-            courseId={review.courseId}
-            userId={review.userId}
-            setPromptLogin={setPromptLogin}
-          />
+          <ReviewInteractions review={review} setPromptLogin={setPromptLogin} />
         </div>
       </div>
     </div>

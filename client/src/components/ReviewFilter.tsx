@@ -67,9 +67,9 @@ export const ReviewFilter = ({
             case 'Easiest':
               return a.difficulty - b.difficulty;
             case 'Most Liked':
-              return a.likes - b.likes;
-            case 'Most Disliked':
               return b.likes - a.likes;
+            case 'Most Disliked':
+              return a.likes - b.likes;
             default:
               return (
                 parseInt(b.timestamp.$date.$numberLong, 10) -
