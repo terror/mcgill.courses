@@ -1,10 +1,6 @@
 use {
   bson::{doc, Bson, DateTime},
-  chrono::prelude::*,
-  serde::{
-    de::{self, MapAccess, Visitor},
-    Deserialize, Deserializer, Serialize,
-  },
+  serde::{Deserialize, Serialize},
   std::{
     fmt::{self, Display, Formatter},
     path::PathBuf,
