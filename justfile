@@ -95,6 +95,8 @@ serve:
 
 services:
   docker compose up --no-recreate -d
+  sleep 1
+  docker exec -it mongodb mongosh --eval 'rs.initiate()'
 
 test:
   cargo test --all
