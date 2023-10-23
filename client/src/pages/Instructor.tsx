@@ -48,6 +48,25 @@ export const Instructor = () => {
   const userReview = reviews.find((r) => r.userId === user?.id),
     uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
 
+  const updateLikes = (review: Review) => {
+    return (likes: number) => {
+      if (reviews) {
+        const updated = reviews.slice();
+        const r = updated.find(
+          (r) => r.courseId == review.courseId && r.userId == review.userId
+        );
+
+        if (r === undefined) {
+          toast.error("Can't update likes for review that doesn't exist.");
+          return;
+        }
+
+        r.likes = likes;
+        setReviews(updated);
+      }
+    };
+  };
+
   return (
     <Layout>
       <div className='mx-auto flex max-w-6xl'>
@@ -118,6 +137,7 @@ export const Instructor = () => {
               includeTaughtBy={false}
               openEditReview={() => undefined}
               review={userReview}
+              updateLikes={updateLikes(userReview)}
             />
           )}
           {reviews &&
@@ -132,6 +152,7 @@ export const Instructor = () => {
                   key={i}
                   openEditReview={() => undefined}
                   review={review}
+                  updateLikes={updateLikes(review)}
                 />
               ))}
         </div>

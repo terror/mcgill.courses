@@ -163,7 +163,7 @@ type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
   openEditReview: () => void;
-  updateLikes: (likes: number) => void;
+  updateLikes?: (likes: number) => void;
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
@@ -307,11 +307,13 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          <ReviewInteractions
-            review={review}
-            setPromptLogin={setPromptLogin}
-            updateLikes={updateLikes}
-          />
+          {updateLikes && (
+            <ReviewInteractions
+              review={review}
+              setPromptLogin={setPromptLogin}
+              updateLikes={updateLikes}
+            />
+          )}
         </div>
       </div>
     </div>
