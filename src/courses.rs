@@ -36,8 +36,6 @@ pub(crate) async fn get_course_by_id(
         .unwrap_or(false)
         .then_some(state.db.find_reviews_by_course_id(&id).await?);
 
-      info!("{:?}", reviews);
-
       if let Some(ref mut reviews) = reviews {
         reviews.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
