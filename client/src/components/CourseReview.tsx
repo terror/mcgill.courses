@@ -29,15 +29,32 @@ const LoginPrompt = () => {
 type ReviewInteractionsProps = {
   review: Review;
   setPromptLogin: (_: boolean) => void;
+  updateLikes: (likes: number) => void;
+};
+
+const interactionToNum = (kind: InteractionKind) => {
+  return kind === 'like' ? 1 : -1;
+};
+
+const getLikeChange = (
+  before: InteractionKind | undefined | null,
+  after: InteractionKind
+) => {
+  if (!before) return interactionToNum(after);
+  if (before === after) return 0;
+  return interactionToNum(after) * 2;
 };
 
 const ReviewInteractions = ({
   review,
   setPromptLogin,
+  updateLikes,
 }: ReviewInteractionsProps) => {
   const user = useAuth();
 
-  const [kind, setKind] = useState<InteractionKind | undefined>();
+  const [kind, setKind] = useState<InteractionKind | undefined | null>(
+    undefined
+  );
 
   const { courseId, userId, likes } = review;
 
@@ -57,6 +74,9 @@ const ReviewInteractions = ({
   const addInteraction = async (interactionKind: InteractionKind) => {
     try {
       await repo.addInteraction(interactionKind, courseId, userId, user?.id);
+      const change = getLikeChange(kind, interactionKind);
+      updateLikes(review.likes + change);
+
       await refreshInteractions();
       toast.success(
         `Successfully ${interactionKind}d review for ${spliceCourseCode(
@@ -72,6 +92,11 @@ const ReviewInteractions = ({
   const removeInteraction = async () => {
     try {
       await repo.removeInteraction(courseId, userId, user?.id);
+      if (!kind) {
+        throw new Error("Can't remove interaction that doesn't exist.");
+      }
+      updateLikes(review.likes - interactionToNum(kind));
+
       await refreshInteractions();
       toast.success(
         `Successfully removed interaction for ${spliceCourseCode(
@@ -138,6 +163,7 @@ type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
   openEditReview: () => void;
+  updateLikes: (likes: number) => void;
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
@@ -149,6 +175,7 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
+  updateLikes,
   className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
@@ -280,7 +307,11 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          <ReviewInteractions review={review} setPromptLogin={setPromptLogin} />
+          <ReviewInteractions
+            review={review}
+            setPromptLogin={setPromptLogin}
+            updateLikes={updateLikes}
+          />
         </div>
       </div>
     </div>
