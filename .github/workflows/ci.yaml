@@ -139,7 +139,7 @@ jobs:
           sleep 20
           mongosh --eval 'rs.initiate()'
 
-      - name: Inf o
+      - name: Info
         run: |
           rustup --version
           cargo --version
