@@ -95,7 +95,6 @@ jobs:
           echo 'replication:' >> /usr/local/etc/mongod.conf
           echo "  replSetName: rs0" >> /usr/local/etc/mongod.conf
           brew services start mongodb-community@6.0
-          sleep 60
           mongosh --eval 'rs.initiate()'
 
       - name: Install grcov
@@ -140,7 +139,6 @@ jobs:
           echo 'replication:' >> /usr/local/etc/mongod.conf
           echo "  replSetName: rs0" >> /usr/local/etc/mongod.conf
           brew services start mongodb-community@6.0
-          sleep 60
           mongosh --eval 'rs.initiate()'
 
       - name: Info
