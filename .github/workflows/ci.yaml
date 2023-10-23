@@ -92,7 +92,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod ---fork -replSet rs0
+          mongod --fork --logpath /var/log/mongodb/mongod.log --replSet rs0
           mongosh --eval 'rs.initiate()'
 
       - name: Install grcov
@@ -134,10 +134,10 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --fork --replSet rs0
+          mongod --fork --logpath /var/log/mongodb/mongod.log --replSet rs0
           mongosh --eval 'rs.initiate()'
 
-      - name: Info
+      - name: Inf o
         run: |
           rustup --version
           cargo --version
