@@ -134,7 +134,7 @@ jobs:
 
       - name: Install mongodb
         run: |
-          brev tap mongodb/brew
+          brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
           echo 'replication:' >> /usr/local/etc/mongod.conf
