@@ -92,7 +92,9 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --fork --logpath /usr/local/var/log/mongodb/mongod.log --replSet rs0
+          echo 'replication:' >> /usr/local/etc/mongod.conf
+          echo "  replSetName: rs0" >> /usr/local/etc/mongod.conf
+          brew services start mongodb-community@6.0
           sleep 60
           mongosh --eval 'rs.initiate()'
 
@@ -132,10 +134,12 @@ jobs:
 
       - name: Install mongodb
         run: |
-          brew tap mongodb/brew
+          brev tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --fork --logpath /usr/local/var/log/mongodb/mongod.log --replSet rs0
+          echo 'replication:' >> /usr/local/etc/mongod.conf
+          echo "  replSetName: rs0" >> /usr/local/etc/mongod.conf
+          brew services start mongodb-community@6.0
           sleep 60
           mongosh --eval 'rs.initiate()'
 
