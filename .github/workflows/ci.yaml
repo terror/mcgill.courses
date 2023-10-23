@@ -92,7 +92,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --fork --logpath /var/log/mongodb/mongod.log --replSet rs0
+          mongod --replSet rs0 &
           sleep 20
           mongosh --eval 'rs.initiate()'
 
@@ -135,7 +135,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --fork --logpath /var/log/mongodb/mongod.log --replSet rs0
+          mongod --replSet rs0 &
           sleep 20
           mongosh --eval 'rs.initiate()'
 
