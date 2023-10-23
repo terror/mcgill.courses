@@ -92,8 +92,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          echo 'replication:' >> /usr/local/etc/mongod.conf
-          echo "  replSetName: rs0" >> /usr/local/etc/mongod.conf
+          echo -e 'replication:\n  replSetName: rs0' >> /usr/local/etc/mongod.conf
           brew services start mongodb-community@6.0
           mongosh --eval 'rs.initiate()'
 
@@ -136,8 +135,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          echo 'replication:' >> /usr/local/etc/mongod.conf
-          echo "  replSetName: rs0" >> /usr/local/etc/mongod.conf
+          echo -e 'replication:\n  replSetName: rs0' >> /usr/local/etc/mongod.conf
           brew services start mongodb-community@6.0
           mongosh --eval 'rs.initiate()'
 
