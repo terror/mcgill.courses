@@ -92,7 +92,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --replSet rs0
+          mongod ---fork -replSet rs0
           mongosh --eval 'rs.initiate()'
 
       - name: Install grcov
@@ -134,7 +134,7 @@ jobs:
           brew tap mongodb/brew
           brew unlink mongodb-community@5.0
           brew install mongodb-community@6.0
-          mongod --replSet rs0
+          mongod --fork --replSet rs0
           mongosh --eval 'rs.initiate()'
 
       - name: Info
