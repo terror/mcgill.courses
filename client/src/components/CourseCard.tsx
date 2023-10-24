@@ -12,6 +12,10 @@ type CourseCardProps = {
 };
 
 export const CourseCard = ({ course, className, query }: CourseCardProps) => {
+  const courseDescriptionShortened =
+    course.description.length > 400
+      ? course.description.slice(0, 400) + ' ...'
+      : course.description;
   return (
     <Link
       to={`/course/${courseIdToUrlParam(course._id)}`}
@@ -32,9 +36,9 @@ export const CourseCard = ({ course, className, query }: CourseCardProps) => {
         <CourseTerms course={course} variant='small' query={query} />
         <div className='mt-2 text-gray-600 dark:text-gray-400'>
           {query ? (
-            <Highlight text={course.description} query={query} />
+            <Highlight text={courseDescriptionShortened} query={query} />
           ) : (
-            course.description
+            courseDescriptionShortened
           )}
         </div>
       </div>
