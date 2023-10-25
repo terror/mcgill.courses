@@ -36,7 +36,7 @@ export const CourseCard = ({ course, className, query }: CourseCardProps) => {
         <CourseTerms course={course} variant='small' query={query} />
         <div className='mt-2 text-gray-600 dark:text-gray-400'>
           {query ? (
-            <Highlight text={courseDescriptionShortened} query={query} />
+            <Highlight text={course.description} query={query} />
           ) : (
             courseDescriptionShortened
           )}
