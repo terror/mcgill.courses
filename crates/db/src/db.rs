@@ -144,7 +144,7 @@ impl Db {
         .find(
           (!document.is_empty()).then_some(document),
           FindOptions::builder()
-            // .sort((!sort_document.is_empty()).then_some(sort_document))
+            .sort((!sort_document.is_empty()).then_some(sort_document))
             .skip(offset)
             .limit(limit)
             .build(),
