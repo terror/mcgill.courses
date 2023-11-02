@@ -8,8 +8,9 @@ use {
   lazy_static::lazy_static,
   log::{info, warn},
   model::{
-    Course, CourseFilter, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Notification, Review, SearchResults, Subscription,
+    Course, CourseFilter, CourseSort, CourseSortType, InitializeOptions,
+    Instructor, Interaction, InteractionKind, Notification, Review,
+    SearchResults, Subscription,
   },
   mongodb::{
     bson::{doc, Document},

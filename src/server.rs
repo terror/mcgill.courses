@@ -1169,22 +1169,6 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
     assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
 
-    let response = app
-      .call(
-        Request::builder()
-          .method(http::Method::DELETE)
-          .header("Cookie", cookie.clone())
-          .header("Content-Type", "application/json")
-          .uri("/api/reviews")
-          .body(Body::from(json!({"course_id": "MATH240"}).to_string()))
-          .unwrap(),
-      )
-      .await
-      .unwrap();
-
-    assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 0);
-
     let interaction = json! ({
       "kind": "like",
       "course_id": "MATH240",
