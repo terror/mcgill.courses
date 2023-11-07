@@ -1367,7 +1367,7 @@ mod tests {
   }
 
   #[tokio::test(flavor = "multi_thread")]
-  async fn get_courses_with_offset() {
+  async fn get_courses_with_sort_filter() {
     let TestContext { db, db_name } = TestContext::new().await;
 
     let tempdir = TempDir::new(&db_name).unwrap();
@@ -1383,7 +1383,135 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(db.courses(None, Some(20), None).await.unwrap().len(), 103);
+    db.add_review(Review {
+      course_id: "COMP252".into(),
+      user_id: "1".into(),
+      rating: 5,
+      difficulty: 4,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP252".into(),
+      user_id: "2".into(),
+      rating: 4,
+      difficulty: 3,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP362".into(),
+      user_id: "1".into(),
+      rating: 3,
+      difficulty: 5,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP362".into(),
+      user_id: "2".into(),
+      rating: 4,
+      difficulty: 4,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let courses = db
+      .courses(
+        Some(10),
+        None,
+        Some(CourseFilter {
+          sort_by: Some(CourseSort {
+            sort_type: CourseSortType::Rating,
+            reverse: true,
+          }),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    assert!(
+      db.find_course_by_id("COMP252")
+        .await
+        .unwrap()
+        .unwrap()
+        .avg_rating
+        - 4.5
+        < 0.01,
+    );
+
+    assert_eq!(courses[0].id, "COMP252");
+    assert_eq!(courses[1].id, "COMP362");
+
+    let courses = db
+      .courses(
+        Some(10),
+        None,
+        Some(CourseFilter {
+          sort_by: Some(CourseSort {
+            sort_type: CourseSortType::Difficulty,
+            reverse: true,
+          }),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(courses[0].id, "COMP362");
+    assert_eq!(courses[1].id, "COMP252");
+
+    db.add_review(Review {
+      course_id: "COMP400".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP400".into(),
+      user_id: "2".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP400".into(),
+      user_id: "3".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let courses = db
+      .courses(
+        Some(10),
+        None,
+        Some(CourseFilter {
+          sort_by: Some(CourseSort {
+            sort_type: CourseSortType::ReviewCount,
+            reverse: true,
+          }),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(courses[0].id, "COMP400");
+    assert_eq!(courses[0].review_count, 3);
+    assert_eq!(courses[1].review_count, 2);
+    assert_eq!(courses[2].review_count, 2);
   }
 
   #[tokio::test(flavor = "multi_thread")]
