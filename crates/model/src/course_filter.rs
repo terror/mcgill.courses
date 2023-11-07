@@ -1,6 +1,7 @@
 use super::*;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub enum CourseSortType {
   Difficulty,
   Rating,
@@ -8,12 +9,14 @@ pub enum CourseSortType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CourseSort {
   pub sort_type: CourseSortType,
   pub reverse: bool,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CourseFilter {
   pub levels: Option<Vec<String>>,
   pub query: Option<String>,

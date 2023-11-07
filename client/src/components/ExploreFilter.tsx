@@ -4,13 +4,26 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
+import { Autocomplete } from './Autocomplete';
 import { termColorMap } from './CourseTerms';
 import { MultiSelect } from './MultiSelect';
 import { ResetButton } from './ResetButton';
 
-const termsOptions = ['Fall', 'Winter', 'Summer'];
+const termsOptions = ['Fall', 'Winter', 'Summer'] as const;
 type CourseTerm = (typeof termsOptions)[number];
+
 const levelsOptions = ['1XX', '2XX', '3XX', '4XX', '5XX', '6XX', '7XX'];
+
+const sortByOptions = [
+  '',
+  'Highest Rating',
+  'Lowest Rating',
+  'Easiest',
+  'Hardest',
+  'Most Reviews',
+  'Least Reviews',
+] as const;
+export type SortByType = (typeof sortByOptions)[number];
 
 type ExploreFilterProp = {
   selectedSubjects: string[];
@@ -19,6 +32,8 @@ type ExploreFilterProp = {
   setSelectedLevels: (selected: string[]) => void;
   selectedTerms: string[];
   setSelectedTerms: (selected: string[]) => void;
+  sortBy?: SortByType;
+  setSortBy: (selected: SortByType) => void;
   variant: 'mobile' | 'desktop';
 };
 
@@ -81,6 +96,8 @@ export const ExploreFilter = ({
   setSelectedLevels,
   selectedTerms,
   setSelectedTerms,
+  sortBy,
+  setSortBy,
   variant,
 }: ExploreFilterProp) => {
   const termToIcon = (term: CourseTerm) => {
@@ -113,11 +130,23 @@ export const ExploreFilter = ({
         Subject
       </h1>
       <div className='py-1' />
-      <div className='relative z-10'>
+      <div className='relative z-20'>
         <MultiSelect
           options={courseCodes}
           values={selectedSubjects}
           setValues={setSelectedSubjects}
+        />
+      </div>
+      <div className='py-2.5' />
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Sort By
+      </h1>
+      <div className='py-1' />
+      <div className='relative z-10'>
+        <Autocomplete
+          options={sortByOptions}
+          value={sortBy}
+          setValue={setSortBy}
         />
       </div>
       <div className='py-2.5' />

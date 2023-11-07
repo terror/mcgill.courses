@@ -137,6 +137,10 @@ impl Db {
       }
     }
 
+    if !sort_document.is_empty() {
+      document.insert("reviewCount", doc! { "$gt": 0 });
+    }
+
     Ok(
       self
         .database

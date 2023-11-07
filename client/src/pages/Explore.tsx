@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
 
 import { CourseCard } from '../components/CourseCard';
-import { ExploreFilter } from '../components/ExploreFilter';
+import { ExploreFilter, SortByType } from '../components/ExploreFilter';
 import { FilterToggle } from '../components/FilterToggle';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
@@ -14,6 +14,43 @@ import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
+
+const makeSortPayload = (sort: SortByType) => {
+  switch (sort) {
+    case '':
+      return undefined;
+    case 'Highest Rating':
+      return {
+        sortType: 'rating',
+        reverse: true,
+      };
+    case 'Lowest Rating':
+      return {
+        sortType: 'rating',
+        reverse: false,
+      };
+    case 'Hardest':
+      return {
+        sortType: 'difficulty',
+        reverse: true,
+      };
+    case 'Easiest':
+      return {
+        sortType: 'difficulty',
+        reverse: false,
+      };
+    case 'Most Reviews':
+      return {
+        sortType: 'reviewCount',
+        reverse: true,
+      };
+    case 'Least Reviews':
+      return {
+        sortType: 'reviewCount',
+        reverse: false,
+      };
+  }
+};
 
 export const Explore = () => {
   const limit = 20;
@@ -28,6 +65,7 @@ export const Explore = () => {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<SortByType>('');
 
   const [darkMode] = useDarkMode();
 
@@ -42,6 +80,7 @@ export const Explore = () => {
       )
     ),
     query,
+    sortBy: makeSortPayload(sortBy),
   };
 
   useEffect(() => {
@@ -53,7 +92,7 @@ export const Explore = () => {
       });
     setHasMore(true);
     setOffset(limit);
-  }, [selectedSubjects, selectedLevels, selectedTerms, query]);
+  }, [selectedSubjects, selectedLevels, selectedTerms, sortBy, query]);
 
   const fetchMore = async () => {
     const batch = await repo.getCourses(limit, offset, filters);
@@ -82,6 +121,8 @@ export const Explore = () => {
                   setSelectedLevels={setSelectedLevels}
                   selectedTerms={selectedTerms}
                   setSelectedTerms={setSelectedTerms}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
                   variant='mobile'
                 />
               </FilterToggle>
@@ -163,6 +204,8 @@ export const Explore = () => {
                 setSelectedLevels={setSelectedLevels}
                 selectedTerms={selectedTerms}
                 setSelectedTerms={setSelectedTerms}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
                 variant='desktop'
               />
             </div>
