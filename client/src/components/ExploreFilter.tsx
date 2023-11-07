@@ -127,26 +127,26 @@ export const ExploreFilter = ({
         }}
       />
       <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
-        Subject
-      </h1>
-      <div className='py-1' />
-      <div className='relative z-20'>
-        <MultiSelect
-          options={courseCodes}
-          values={selectedSubjects}
-          setValues={setSelectedSubjects}
-        />
-      </div>
-      <div className='py-2.5' />
-      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
         Sort By
       </h1>
       <div className='py-1' />
-      <div className='relative z-10'>
+      <div className='relative z-20'>
         <Autocomplete
           options={sortByOptions}
           value={sortBy}
           setValue={setSortBy}
+        />
+      </div>
+      <div className='py-2.5' />
+      <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
+        Subject
+      </h1>
+      <div className='py-1' />
+      <div className='relative z-10'>
+        <MultiSelect
+          options={courseCodes}
+          values={selectedSubjects}
+          setValues={setSelectedSubjects}
         />
       </div>
       <div className='py-2.5' />
