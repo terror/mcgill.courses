@@ -1,5 +1,3 @@
-use core::fmt;
-
 use super::*;
 
 #[derive(Debug, Clone)]
