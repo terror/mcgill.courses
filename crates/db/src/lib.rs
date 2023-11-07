@@ -9,9 +9,9 @@ use {
   lazy_static::lazy_static,
   log::{info, warn},
   model::{
-    Course, CourseFilter, CourseSort, CourseSortType, InitializeOptions,
-    Instructor, Interaction, InteractionKind, Notification, Review,
-    SearchResults, Subscription,
+    Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
+    Interaction, InteractionKind, Notification, Review, SearchResults,
+    Subscription,
   },
   mongodb::{
     bson::{doc, Document},
@@ -33,6 +33,7 @@ use {
 use {
   bson::DateTime,
   include_dir::{include_dir, Dir},
+  model::CourseSort,
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };
