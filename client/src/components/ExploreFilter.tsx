@@ -113,11 +113,13 @@ export const ExploreFilter = ({
         Subject
       </h1>
       <div className='py-1' />
-      <MultiSelect
-        options={courseCodes}
-        values={selectedSubjects}
-        setValues={setSelectedSubjects}
-      />
+      <div className='relative z-10'>
+        <MultiSelect
+          options={courseCodes}
+          values={selectedSubjects}
+          setValues={setSelectedSubjects}
+        />
+      </div>
       <div className='py-2.5' />
       <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
         Level
