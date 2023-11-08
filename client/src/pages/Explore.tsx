@@ -79,7 +79,7 @@ export const Explore = () => {
         (term) => currentTerms.filter((t) => t.split(' ')[0] === term)[0]
       )
     ),
-    query,
+    query: query === '' ? null : query,
     sortBy: makeSortPayload(sortBy),
   };
 

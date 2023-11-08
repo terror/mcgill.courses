@@ -87,7 +87,7 @@ impl Db {
         );
       }
 
-      if let Some(query) = query {
+      if let Some(query) = query.clone() {
         let current_terms = current_terms();
 
         let id = doc! {
@@ -127,16 +127,20 @@ impl Db {
       if let Some(sort_by) = filter.sort_by {
         let reverse = if sort_by.reverse { -1 } else { 1 };
         let field = match sort_by.sort_type {
-          CourseSortType::Rating => "avgRating",
-          CourseSortType::Difficulty => "avgDifficulty",
+          CourseSortType::Rating => {
+            document.insert("reviewCount", doc! { "$gt": 0 });
+            "avgRating"
+          }
+          CourseSortType::Difficulty => {
+            document.insert("reviewCount", doc! { "$gt": 0 });
+            "avgDifficulty"
+          }
           CourseSortType::ReviewCount => "reviewCount",
         };
         sort_document.insert(field, reverse);
+      } else if query.is_none() {
+        sort_document.insert("_id", 1);
       }
-    }
-
-    if !sort_document.is_empty() {
-      document.insert("reviewCount", doc! { "$gt": 0 });
     }
 
     Ok(
