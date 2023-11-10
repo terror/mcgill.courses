@@ -46,7 +46,11 @@ const SearchResult = ({
         key={index}
       >
         {icon}
-        <Highlight className='dark:text-gray-200' query={query} text={text} />
+        <Highlight
+          className='dark:text-gray-200'
+          query={query?.trim()}
+          text={text}
+        />
       </div>
     </Link>
   );

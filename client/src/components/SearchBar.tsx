@@ -12,7 +12,7 @@ export const SearchBar = ({
   searchSelected,
   setSearchSelected,
 }: {
-  handleInputChange: (value: string) => void;
+  handleInputChange: any;
   iconStyle?: string;
   inputStyle?: string;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;

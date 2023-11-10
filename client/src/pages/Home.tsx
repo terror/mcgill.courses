@@ -1,15 +1,44 @@
+import Index from 'flexsearch';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import data from '../../../seed/courses-2023-2024.json';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { repo } from '../lib/repo';
+import { dedupeArray } from '../lib/utils';
+import { Course } from '../model/Course';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],
 ]);
+
+const courses: Course[] = data as Course[];
+const instructors: Instructor[] = dedupeArray(
+  data.flatMap((course) => course.instructors),
+  (instructor) => instructor.name
+);
+
+const coursesIndex = new Index({
+  tokenize: 'forward',
+  limit: 6,
+});
+
+const instructorsIndex = new Index({
+  tokenize: 'forward',
+  limit: 2,
+});
+
+courses.forEach((course, i) =>
+  coursesIndex.add(
+    i,
+    `${course._id} ${course.subject} ${course.title} ${course.code}`
+  )
+);
+instructors.forEach((instructor, i) =>
+  instructorsIndex.add(i, instructor.name)
+);
 
 export const Home = () => {
   const [searchParams] = useSearchParams();
@@ -26,17 +55,19 @@ export const Home = () => {
     toast.error(alerts.get(err));
   }, []);
 
-  const handleInputChange = async (query: string) => {
-    try {
-      setResults({
-        query,
-        ...(await repo.search(query)),
-      });
-    } catch (err) {
-      toast.error(
-        'An error occurred while searching for courses, please try again later.'
-      );
-    }
+  const updateSearchResults = async (query: string) => {
+    const courseSearchResults = coursesIndex
+      .search(query, 6)
+      ?.map((id) => courses[id]);
+    const instructorSearchResults = instructorsIndex
+      .search(query, 2)
+      ?.map((id) => instructors[id]);
+
+    setResults({
+      query: query,
+      courses: courseSearchResults,
+      instructors: instructorSearchResults,
+    });
   };
 
   return (
@@ -51,7 +82,7 @@ export const Home = () => {
             </h1>
             <CourseSearchBar
               results={results}
-              handleInputChange={handleInputChange}
+              handleInputChange={updateSearchResults}
             />
           </div>
         </div>
