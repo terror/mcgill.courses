@@ -16,7 +16,7 @@ impl Db {
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options = ClientOptions::parse(format!(
-      "{}/{}?directConnection=true&replicaSet=rs0",
+      "{}/{}?replicaSet=rs0",
       env::var("MONGODB_URL")
         .unwrap_or_else(|_| { "mongodb://localhost:27017".into() }),
       db_name
@@ -240,11 +240,13 @@ impl Db {
     )
   }
 
-  pub async fn add_interaction(&self, interaction: Interaction) -> Result<()> {
+  pub async fn add_interaction(&self, interaction: Interaction) -> Result {
     let mut session = self.client.start_session(None).await?;
+
     let interaction_coll = self
       .database
       .collection::<Interaction>(Self::INTERACTION_COLLECTION);
+
     let review_coll =
       self.database.collection::<Review>(Self::REVIEW_COLLECTION);
 
@@ -296,8 +298,8 @@ impl Db {
             "userId": interaction.user_id,
           },
           doc! {
-              "$inc": {
-                "likes": increment_amount
+            "$inc": {
+              "likes": increment_amount
             }
           },
           None,
@@ -332,11 +334,13 @@ impl Db {
     course_id: &str,
     user_id: &str,
     referrer: &str,
-  ) -> Result<()> {
+  ) -> Result {
     let mut session = self.client.start_session(None).await?;
+
     let interaction_coll = self
       .database
       .collection::<Interaction>(Self::INTERACTION_COLLECTION);
+
     let review_coll =
       self.database.collection::<Review>(Self::REVIEW_COLLECTION);
 
@@ -351,9 +355,9 @@ impl Db {
       let interaction = interaction_coll
         .find_one_and_delete(
           doc! {
-              "courseId": &course_id,
-              "userId": &user_id,
-              "referrer": &referrer,
+            "courseId": &course_id,
+            "userId": &user_id,
+            "referrer": &referrer,
           },
           None,
         )
@@ -362,15 +366,18 @@ impl Db {
       match interaction {
         Some(i) => {
           review_coll.update_one_with_session(
-          doc! {
-            "courseId": &course_id,
-            "userId": &user_id,
-          },
-          doc! {
-            "$inc": {
-              "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1}
-          }
-        }, None, session).await?;
+            doc! {
+              "courseId": &course_id,
+              "userId": &user_id,
+            },
+            doc! {
+              "$inc": {
+                "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1}
+              }
+            },
+            None,
+            session
+          ).await?;
           Ok(())
         }
         None => Ok(()),
