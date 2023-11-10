@@ -1,13 +1,13 @@
-import { Course } from '../model/Course';
-import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
-import { GetInstructorPayload } from '../model/GetInstructorPayload';
-import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
-import { InteractionKind } from '../model/Interaction';
-import { Notification } from '../model/Notification';
-import { Review } from '../model/Review';
-import { SearchResults } from '../model/SearchResults';
-import { Subscription } from '../model/Subscription';
-import { UserResponse } from '../model/User';
+import type { Course } from '../model/Course';
+import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
+import type { GetInstructorPayload } from '../model/GetInstructorPayload';
+import type { GetInteractionsPayload } from '../model/GetInteractionsPayload';
+import type { InteractionKind } from '../model/Interaction';
+import type { Notification } from '../model/Notification';
+import type { Review } from '../model/Review';
+import type { SearchResults } from '../model/SearchResults';
+import type { Subscription } from '../model/Subscription';
+import type { UserResponse } from '../model/User';
 
 const prefix = '/api';
 

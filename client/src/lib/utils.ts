@@ -1,6 +1,6 @@
-import { Course } from '../model/Course';
-import { Instructor } from '../model/Instructor';
-import { Schedule } from '../model/Schedule';
+import type { Course } from '../model/Course';
+import type { Instructor } from '../model/Instructor';
+import type { Schedule } from '../model/Schedule';
 
 export const uniqueTermInstructors = (course: Course) => {
   const termInstructors = course.instructors.filter((i) =>

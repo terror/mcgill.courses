@@ -9,7 +9,8 @@ import {
   getCurrentTerms,
   uniqueTermInstructors,
 } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
+import { Highlight } from './Highlight';
 import { Tooltip } from './Tooltip';
 
 const variantToSize = (variant: 'small' | 'large') => {
@@ -38,9 +39,10 @@ export const termColorMap: Record<string, string> = {
 type CourseTermsProps = {
   course: Course;
   variant: 'large' | 'small';
+  query?: string;
 };
 
-export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
+export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
 
   const currentlyOfferedTerms = course.terms.filter((c) =>
@@ -95,7 +97,10 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
                   <div>{termToIcon(instructor.term, variant)}</div>
                 )}
                 <div className={twMerge('pr-1 font-medium dark:text-gray-200')}>
-                  {instructor.name}
+                  <Highlight
+                    text={instructor.name}
+                    query={query || undefined}
+                  />
                 </div>
               </div>
             </div>

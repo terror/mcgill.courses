@@ -13,7 +13,7 @@ import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
 
 export const Explore = () => {
   const limit = 20;
@@ -110,7 +110,7 @@ export const Explore = () => {
                         inputStyle='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
                         outerIconStyle='pl-5'
                         outerInputStyle='m-2 mt-4 lg:mt-2'
-                        placeholder='Search by identifier, title or description'
+                        placeholder='Search by course identifier, title, description or instructor name'
                         searchSelected={searchSelected}
                         setSearchSelected={setSearchSelected}
                       />
@@ -129,7 +129,7 @@ export const Explore = () => {
                         baseColor={
                           darkMode ? 'rgb(38 38 38)' : 'rgb(248 250 252)'
                         }
-                        className='first:mt-2 mb-2 rounded-lg'
+                        className='mb-2 rounded-lg first:mt-2'
                         count={10}
                         duration={2}
                         height={256}

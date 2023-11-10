@@ -40,3 +40,18 @@ pub struct Course {
   pub restrictions: Option<String>,
   pub schedule: Option<Vec<Schedule>>,
 }
+
+impl Course {
+  pub fn merge(self, other: Course) -> Course {
+    Course {
+      logical_prerequisites: other
+        .logical_prerequisites
+        .or(self.logical_prerequisites),
+      logical_corequisites: other
+        .logical_corequisites
+        .or(self.logical_corequisites),
+      schedule: other.schedule.or(self.schedule),
+      ..other
+    }
+  }
+}
