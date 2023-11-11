@@ -58,10 +58,10 @@ export const Home = () => {
   const updateSearchResults = async (query: string) => {
     const courseSearchResults = coursesIndex
       .search(query, 6)
-      ?.map((id) => courses[id]);
+      ?.map((id: number) => courses[id]);
     const instructorSearchResults = instructorsIndex
       .search(query, 2)
-      ?.map((id) => instructors[id]);
+      ?.map((id: number) => instructors[id]);
 
     setResults({
       query: query,
@@ -76,7 +76,7 @@ export const Home = () => {
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='mb-6 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
+            <h1 className='mb-6 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl py-3'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>
