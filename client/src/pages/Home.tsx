@@ -8,6 +8,7 @@ import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
 import { dedupeArray } from '../lib/utils';
 import { Course } from '../model/Course';
+import { Instructor } from '../model/Instructor';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
@@ -16,7 +17,7 @@ const alerts: Map<string, string> = new Map([
 
 const courses: Course[] = data as Course[];
 const instructors: Instructor[] = dedupeArray(
-  data.flatMap((course) => course.instructors),
+  courses.flatMap((course) => course.instructors),
   (instructor) => instructor.name
 );
 
