@@ -22,7 +22,7 @@ const instructors: Instructor[] = dedupeArray(
 
 const coursesIndex = new Index({
   tokenize: 'forward',
-  limit: 6,
+  limit: 4,
 });
 
 const instructorsIndex = new Index({
