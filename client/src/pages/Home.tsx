@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { loadSearchIndex } from '../lib/searchIndex';
+import { loadSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
@@ -29,19 +29,15 @@ export const Home = () => {
     toast.error(alerts.get(err));
   }, []);
 
-  const updateSearchResults = async (query: string) => {
-    const courseSearchResults = coursesIndex
-      .search(query, 4)
-      ?.map((id: number) => courses[id]);
-    const instructorSearchResults = instructorsIndex
-      .search(query, 2)
-      ?.map((id) => instructors[id as number]);
-
-    setResults({
-      query: query,
-      courses: courseSearchResults,
-      instructors: instructorSearchResults,
-    });
+  const handleInputChange = (query: string) => {
+    updateSearchResults(
+      query,
+      courses,
+      instructors,
+      coursesIndex,
+      instructorsIndex,
+      setResults
+    );
   };
 
   return (
@@ -56,7 +52,7 @@ export const Home = () => {
             </h1>
             <CourseSearchBar
               results={results}
-              handleInputChange={updateSearchResults}
+              handleInputChange={handleInputChange}
             />
           </div>
         </div>
