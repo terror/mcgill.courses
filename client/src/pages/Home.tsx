@@ -1,4 +1,4 @@
-import Index from 'flexsearch';
+import { Index } from 'flexsearch';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -23,12 +23,10 @@ const instructors: Instructor[] = _.uniqBy(
 
 const coursesIndex = new Index({
   tokenize: 'forward',
-  limit: 4,
 });
 
 const instructorsIndex = new Index({
   tokenize: 'forward',
-  limit: 2,
 });
 
 courses.forEach((course, i) =>
@@ -59,10 +57,10 @@ export const Home = () => {
   const updateSearchResults = async (query: string) => {
     const courseSearchResults = coursesIndex
       .search(query, 6)
-      ?.map((id: number) => courses[id]);
+      ?.map((id) => courses[id as number]);
     const instructorSearchResults = instructorsIndex
       .search(query, 2)
-      ?.map((id: number) => instructors[id]);
+      ?.map((id) => instructors[id as number]);
 
     setResults({
       query: query,
@@ -77,7 +75,7 @@ export const Home = () => {
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='mb-6 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl py-3'>
+            <h1 className='mb-6 py-3 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>
