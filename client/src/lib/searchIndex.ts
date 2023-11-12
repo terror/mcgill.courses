@@ -22,7 +22,7 @@ export const getSearchIndex = () => {
     });
 
     courses.forEach((course, i) =>
-      coursesIndex.add(
+      coursesIndex?.add(
         i,
         `${course._id} ${course.subject} ${course.title} ${course.code}`
       )
@@ -35,7 +35,7 @@ export const getSearchIndex = () => {
     });
 
     instructors.forEach((instructor, i) =>
-      instructorsIndex.add(i, instructor.name)
+      instructorsIndex?.add(i, instructor.name)
     );
   }
 
