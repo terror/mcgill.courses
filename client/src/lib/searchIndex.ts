@@ -1,4 +1,4 @@
-import Index from 'flexsearch';
+import { Index } from 'flexsearch';
 import _ from 'lodash';
 
 import data from '../../../seed/courses-2023-2024.json';
