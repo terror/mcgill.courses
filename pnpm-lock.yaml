@@ -2827,7 +2827,7 @@ packages:
       }
     dev: true
 
-  /flexsearch@0.7.31:
+  /flexsearch@0.7.11:
     resolution:
       {
         integrity: sha512-XGozTsMPYkm+6b5QL3Z9wQcJjNYxp0CYn3U1gO7dwD6PAqU1SVWZxI9CCg3z+ml3YfqdPnrBehaBrnH2AGKbNA==,
