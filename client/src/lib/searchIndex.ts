@@ -45,7 +45,7 @@ export const updateSearchResults = (
   setResults: (_: SearchResults) => void
 ) => {
   const courseSearchResults = coursesIndex
-    .search(query, 6)
+    .search(query, 4)
     ?.map((id: number) => courses[id]);
   const instructorSearchResults = instructorsIndex
     .search(query, 2)
