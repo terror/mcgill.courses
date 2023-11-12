@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { loadSearchIndex, updateSearchResults } from '../lib/searchIndex';
+import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
@@ -12,7 +12,7 @@ const alerts: Map<string, string> = new Map([
 ]);
 
 const { courses, instructors, coursesIndex, instructorsIndex } =
-  loadSearchIndex();
+  getSearchIndex();
 
 export const Home = () => {
   const [searchParams] = useSearchParams();

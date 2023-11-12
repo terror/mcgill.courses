@@ -6,32 +6,40 @@ import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import type { SearchResults } from '../model/SearchResults';
 
-export const loadSearchIndex = () => {
+let coursesIndex: Index | null = null;
+let instructorsIndex: Index | null = null;
+
+export const getSearchIndex = () => {
   const courses: Course[] = data as Course[];
   const instructors: Instructor[] = _.uniqBy(
     courses.flatMap((course: Course) => course.instructors),
     (instructor: Instructor) => instructor.name
   );
 
-  const coursesIndex = new Index({
-    tokenize: 'forward',
-    limit: 4,
-  });
+  if (coursesIndex === null) {
+    coursesIndex = new Index({
+      tokenize: 'forward',
+      limit: 4,
+    });
 
-  const instructorsIndex = new Index({
-    tokenize: 'forward',
-    limit: 2,
-  });
+    courses.forEach((course, i) =>
+      coursesIndex.add(
+        i,
+        `${course._id} ${course.subject} ${course.title} ${course.code}`
+      )
+    );
+  }
 
-  courses.forEach((course, i) =>
-    coursesIndex.add(
-      i,
-      `${course._id} ${course.subject} ${course.title} ${course.code}`
-    )
-  );
-  instructors.forEach((instructor, i) =>
-    instructorsIndex.add(i, instructor.name)
-  );
+  if (instructorsIndex === null) {
+    instructorsIndex = new Index({
+      tokenize: 'forward',
+      limit: 2,
+    });
+
+    instructors.forEach((instructor, i) =>
+      instructorsIndex.add(i, instructor.name)
+    );
+  }
 
   return { courses, instructors, coursesIndex, instructorsIndex };
 };

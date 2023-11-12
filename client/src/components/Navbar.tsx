@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
-import { loadSearchIndex, updateSearchResults } from '../lib/searchIndex.ts';
+import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import { getUrl } from '../lib/utils';
 import type { Notification } from '../model/Notification';
 import type { SearchResults } from '../model/SearchResults';
@@ -17,7 +17,7 @@ import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 
 const { courses, instructors, coursesIndex, instructorsIndex } =
-  loadSearchIndex();
+  getSearchIndex();
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
