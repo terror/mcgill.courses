@@ -1,4 +1,5 @@
 import Index from 'flexsearch';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -6,7 +7,6 @@ import { toast } from 'sonner';
 import data from '../../../seed/courses-2023-2024.json';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { dedupeArray } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import type { SearchResults } from '../model/SearchResults';
@@ -16,9 +16,9 @@ const alerts: Map<string, string> = new Map([
 ]);
 
 const courses: Course[] = data as Course[];
-const instructors: Instructor[] = dedupeArray(
-  courses.flatMap((course) => course.instructors),
-  (instructor) => instructor.name
+const instructors: Instructor[] = _.uniqBy(
+  courses.flatMap((course: Course) => course.instructors),
+  (instructor: Instructor) => instructor.name
 );
 
 const coursesIndex = new Index({
