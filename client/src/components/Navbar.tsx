@@ -15,6 +15,13 @@ import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
 
+// import { loadSearchIndex } from '../lib/searchIndex.ts'
+
+// const { courses,
+//   instructors,
+//   coursesIndex,
+//   instructorsIndex } = loadSearchIndex()
+
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

@@ -1,43 +1,18 @@
-import { Index } from 'flexsearch';
-import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import data from '../../../seed/courses-2023-2024.json';
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { Course } from '../model/Course';
-import { Instructor } from '../model/Instructor';
+import { loadSearchIndex } from '../lib/searchIndex';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],
 ]);
 
-const courses: Course[] = data as Course[];
-const instructors: Instructor[] = _.uniqBy(
-  courses.flatMap((course: Course) => course.instructors),
-  (instructor: Instructor) => instructor.name
-);
-
-const coursesIndex = new Index({
-  tokenize: 'forward',
-});
-
-const instructorsIndex = new Index({
-  tokenize: 'forward',
-});
-
-courses.forEach((course, i) =>
-  coursesIndex.add(
-    i,
-    `${course._id} ${course.subject} ${course.title} ${course.code}`
-  )
-);
-instructors.forEach((instructor, i) =>
-  instructorsIndex.add(i, instructor.name)
-);
+const { courses, instructors, coursesIndex, instructorsIndex } =
+  loadSearchIndex();
 
 export const Home = () => {
   const [searchParams] = useSearchParams();
@@ -56,8 +31,8 @@ export const Home = () => {
 
   const updateSearchResults = async (query: string) => {
     const courseSearchResults = coursesIndex
-      .search(query, 6)
-      ?.map((id) => courses[id as number]);
+      .search(query, 4)
+      ?.map((id: number) => courses[id]);
     const instructorSearchResults = instructorsIndex
       .search(query, 2)
       ?.map((id) => instructors[id as number]);
