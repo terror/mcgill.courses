@@ -2832,7 +2832,7 @@ packages:
       {
         integrity: sha512-XGozTsMPYkm+6b5QL3Z9wQcJjNYxp0CYn3U1gO7dwD6PAqU1SVWZxI9CCg3z+ml3YfqdPnrBehaBrnH2AGKbNA==,
       }
-    dev: false
+    dev: true
 
   /follow-redirects@1.15.3(debug@4.3.4):
     resolution:
