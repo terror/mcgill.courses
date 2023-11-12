@@ -35,9 +35,9 @@ const SearchResult = ({
 
   const icon =
     type === 'course' ? (
-      <Layers className='dark:text-gray-200 mr-2' />
+      <Layers className='mr-2 dark:text-gray-200' />
     ) : (
-      <User className='dark:text-gray-200 mr-2' />
+      <User className='mr-2 dark:text-gray-200' />
     );
 
   return (
