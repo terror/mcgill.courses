@@ -19,7 +19,6 @@ export const getSearchIndex = () => {
   if (coursesIndex === null) {
     coursesIndex = new Index({
       tokenize: 'forward',
-      limit: 4,
     });
 
     courses.forEach((course, i) =>
@@ -33,7 +32,6 @@ export const getSearchIndex = () => {
   if (instructorsIndex === null) {
     instructorsIndex = new Index({
       tokenize: 'forward',
-      limit: 2,
     });
 
     instructors.forEach((instructor, i) =>
@@ -54,10 +52,10 @@ export const updateSearchResults = (
 ) => {
   const courseSearchResults = coursesIndex
     .search(query, 4)
-    ?.map((id: number) => courses[id]);
+    ?.map((id) => courses[id as number]);
   const instructorSearchResults = instructorsIndex
     .search(query, 2)
-    ?.map((id: number) => instructors[id]);
+    ?.map((id) => instructors[id as number]);
 
   setResults({
     query: query,
