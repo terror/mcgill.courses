@@ -9,7 +9,8 @@ import {
   getCurrentTerms,
   uniqueTermInstructors,
 } from '../lib/utils';
-import { Course } from '../model/Course';
+import type { Course } from '../model/Course';
+import { Highlight } from './Highlight';
 import { Tooltip } from './Tooltip';
 
 const variantToSize = (variant: 'small' | 'large') => {
@@ -29,7 +30,7 @@ const termToIcon = (term: string, variant: 'small' | 'large') => {
   return icons[term.split(' ')[0].toLowerCase()];
 };
 
-const colorMap: Record<string, string> = {
+export const termColorMap: Record<string, string> = {
   fall: 'bg-red-100 text-red-900',
   winter: 'bg-sky-100 text-sky-900',
   summer: 'bg-yellow-100 text-yellow-900',
@@ -38,9 +39,10 @@ const colorMap: Record<string, string> = {
 type CourseTermsProps = {
   course: Course;
   variant: 'large' | 'small';
+  query?: string;
 };
 
-export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
+export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
   const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
 
   const currentlyOfferedTerms = course.terms.filter((c) =>
@@ -83,7 +85,7 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
               className={twMerge(
                 'relative my-1.5 rounded-full text-sm dark:bg-neutral-700',
                 variant === 'small' ? 'px-2 py-1' : 'max-w-fit p-1',
-                colorMap[term]
+                termColorMap[term]
               )}
             >
               <div className='flex items-center space-x-1.5 whitespace-nowrap'>
@@ -95,7 +97,10 @@ export const CourseTerms = ({ course, variant }: CourseTermsProps) => {
                   <div>{termToIcon(instructor.term, variant)}</div>
                 )}
                 <div className={twMerge('pr-1 font-medium dark:text-gray-200')}>
-                  {instructor.name}
+                  <Highlight
+                    text={instructor.name}
+                    query={query || undefined}
+                  />
                 </div>
               </div>
             </div>

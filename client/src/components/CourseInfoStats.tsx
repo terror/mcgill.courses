@@ -3,23 +3,26 @@ import { useEffect, useState } from 'react';
 import { IconType } from 'react-icons';
 import { LuFlame } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
+
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { round2Decimals } from '../lib/utils';
-import { Review } from '../model/Review';
+import type { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
 import { Histogram } from './Histogram';
+
+type Size = 'small' | 'medium' | 'large';
 
 type CourseInfoStatsProps = {
   allReviews: Review[];
   className?: string;
-  variant?: 'small' | 'large';
+  variant?: Size;
 };
 
 type FillBarProps = {
   width: number;
   percentage: number;
   text?: string;
-  variant?: 'small' | 'large';
+  variant?: Size;
 };
 
 const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
@@ -55,7 +58,7 @@ type StatProps = {
   title: string;
   value: number;
   icon: IconType;
-  variant: 'small' | 'large';
+  variant: Size;
 };
 
 const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
@@ -74,7 +77,7 @@ const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
       <div className='py-0.5' />
       <div className='flex items-center gap-x-2'>
         <FillBar
-          width={variant === 'large' ? 180 : 144}
+          width={variant === 'small' ? 144 : 180}
           percentage={value * 20}
           text={`${value}/5`}
           variant={variant}
@@ -124,7 +127,7 @@ export const CourseInfoStats = ({
           data={ratings}
           max={5}
           gap={10}
-          className='mx-auto hidden md:block'
+          className='mx-auto hidden sm:block'
         />
       </div>
       <div className='py-1.5' />
@@ -142,7 +145,7 @@ export const CourseInfoStats = ({
           data={difficulties}
           max={5}
           gap={10}
-          className='mx-auto hidden md:block'
+          className='mx-auto hidden sm:block'
         />
       </div>
     </div>

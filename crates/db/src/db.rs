@@ -2,6 +2,7 @@ use super::*;
 
 #[derive(Debug, Clone)]
 pub struct Db {
+  client: Client,
   database: Database,
 }
 
@@ -9,13 +10,15 @@ impl Db {
   const COURSE_COLLECTION: &str = "courses";
   const INSTRUCTOR_COLLECTION: &str = "instructors";
   const INTERACTION_COLLECTION: &str = "interactions";
+  const NOTIFICATION_COLLECTION: &str = "notifications";
   const REVIEW_COLLECTION: &str = "reviews";
+  const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options = ClientOptions::parse(format!(
-      "{}/{}",
+      "{}/{}?replicaSet=rs0",
       env::var("MONGODB_URL")
-        .unwrap_or_else(|_| "mongodb://localhost:27017".into()),
+        .unwrap_or_else(|_| { "mongodb://localhost:27017".into() }),
       db_name
     ))
     .await?;
@@ -33,6 +36,7 @@ impl Db {
 
     Ok(Self {
       database: client.database(db_name),
+      client,
     })
   }
 
@@ -48,31 +52,95 @@ impl Db {
     &self,
     limit: Option<i64>,
     offset: Option<u64>,
-    course_subjects: Option<Vec<String>>,
-    course_levels: Option<Vec<String>>,
-    course_terms: Option<Vec<String>>,
+    filter: Option<CourseFilter>,
   ) -> Result<Vec<Course>> {
     let mut document = Document::new();
+    let mut sort_document = Document::new();
 
-    if let Some(course_subjects) = course_subjects {
-      document.insert(
-        "subject",
-        doc! { "$regex": format!("^({})", course_subjects.join("|")) },
-      );
-    }
+    if let Some(filter) = filter {
+      let CourseFilter {
+        subjects,
+        levels,
+        terms,
+        query,
+        ..
+      } = filter;
 
-    if let Some(course_levels) = course_levels {
-      document.insert(
-        "code",
-        doc! { "$regex": format!("^({})", course_levels.join("|")) },
-      );
-    }
+      if let Some(subjects) = subjects {
+        document.insert(
+            "subject",
+            doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
+        );
+      }
 
-    if let Some(course_terms) = course_terms {
-      document.insert(
-        "terms",
-        doc! { "$regex": format!("^({})", course_terms.join("|")) },
-      );
+      if let Some(levels) = levels {
+        document.insert(
+            "code",
+            doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
+        );
+      }
+
+      if let Some(terms) = terms {
+        document.insert(
+          "terms",
+          doc! { "$regex": format!("^({})", terms.join("|")), "$options": "i" },
+        );
+      }
+
+      if let Some(query) = query.clone() {
+        let current_terms = current_terms();
+
+        let id = doc! {
+          "_id": doc! {
+            "$regex": format!(".*{}.*", query.replace(' ', "")),
+            "$options": "i"
+          }
+        };
+
+        let instructor = doc! {
+          "instructors": doc! {
+            "$elemMatch": doc! {
+              "name": doc! {
+                "$regex": format!(".*{}.*", query),
+                "$options": "i"
+              },
+              "term": doc! {
+                "$regex": format!(".*({}).*", current_terms.join("|")),
+                "$options": "i"
+              }
+            }
+          }
+        };
+
+        let rest = ["code", "description", "subject", "title"]
+          .into_iter()
+          .map(|field| {
+            doc! { field: doc! {
+              "$regex": format!(".*{}.*", query), "$options": "i" }
+            }
+          })
+          .collect::<Vec<Document>>();
+
+        document.insert("$or", [vec![id, instructor], rest].concat());
+      }
+
+      if let Some(sort_by) = filter.sort_by {
+        let reverse = if sort_by.reverse { -1 } else { 1 };
+        let field = match sort_by.sort_type {
+          CourseSortType::Rating => {
+            document.insert("reviewCount", doc! { "$gt": 0 });
+            "avgRating"
+          }
+          CourseSortType::Difficulty => {
+            document.insert("reviewCount", doc! { "$gt": 0 });
+            "avgDifficulty"
+          }
+          CourseSortType::ReviewCount => "reviewCount",
+        };
+        sort_document.insert(field, reverse);
+      } else if query.is_none() {
+        sort_document.insert("_id", 1);
+      }
     }
 
     Ok(
@@ -81,7 +149,11 @@ impl Db {
         .collection::<Course>(Self::COURSE_COLLECTION)
         .find(
           (!document.is_empty()).then_some(document),
-          FindOptions::builder().skip(offset).limit(limit).build(),
+          FindOptions::builder()
+            .sort((!sort_document.is_empty()).then_some(sort_document))
+            .skip(offset)
+            .limit(limit)
+            .build(),
         )
         .await?
         .try_collect::<Vec<Course>>()
@@ -109,13 +181,22 @@ impl Db {
   }
 
   pub async fn add_review(&self, review: Review) -> Result<UpdateResult> {
-    Ok(
-      self
-        .database
-        .collection::<Review>(Self::REVIEW_COLLECTION)
-        .update_one(
+    let mut session = self.client.start_session(None).await?;
+    let interaction_coll =
+      self.database.collection::<Course>(Self::COURSE_COLLECTION);
+    let review_coll =
+      self.database.collection::<Review>(Self::REVIEW_COLLECTION);
+
+    async fn transaction(
+      session: &mut ClientSession,
+      course_coll: Collection<Course>,
+      review_coll: Collection<Review>,
+      review: Review,
+    ) -> mongodb::error::Result<UpdateResult> {
+      let res = review_coll
+        .update_one_with_session(
           doc! {
-            "courseId": review.course_id,
+            "courseId": &review.course_id,
             "userId": review.user_id
           },
           UpdateModifications::Document(doc! {
@@ -124,33 +205,159 @@ impl Db {
               "difficulty": review.difficulty,
               "instructors": &review.instructors,
               "rating": review.rating,
-              "timestamp": review.timestamp
+              "timestamp": review.timestamp,
+              "likes": 0
             },
           }),
           UpdateOptions::builder().upsert(true).build(),
+          session,
         )
-        .await?,
-    )
+        .await?;
+
+      let course = course_coll
+        .find_one(
+          doc! {
+            "_id": &review.course_id,
+          },
+          None,
+        )
+        .await?
+        .ok_or(mongodb::error::Error::custom(CourseNotFoundError))?;
+
+      let count = course.review_count as f32;
+      let avg_rating =
+        (course.avg_rating * count + (review.rating as f32)) / (count + 1.0);
+      let avg_difficulty = (course.avg_difficulty * count
+        + (review.difficulty as f32))
+        / (count + 1.0);
+
+      course_coll
+        .update_one(
+          doc! {
+            "_id": &review.course_id
+          },
+          UpdateModifications::Document(doc! {
+            "$inc": { "reviewCount": 1},
+            "$set": {
+              "avgRating": avg_rating,
+              "avgDifficulty": avg_difficulty,
+            }
+          }),
+          None,
+        )
+        .await?;
+
+      Ok(res)
+    }
+
+    let res = session
+      .with_transaction(
+        (),
+        move |session, _| {
+          transaction(
+            session,
+            interaction_coll.clone(),
+            review_coll.clone(),
+            review.clone(),
+          )
+          .boxed()
+        },
+        None,
+      )
+      .await?;
+
+    Ok(res)
   }
 
   pub async fn delete_review(
     &self,
     course_id: &str,
     user_id: &str,
-  ) -> Result<DeleteResult> {
-    Ok(
-      self
-        .database
-        .collection::<Review>(Self::REVIEW_COLLECTION)
-        .delete_one(
+  ) -> Result<Review> {
+    let mut session = self.client.start_session(None).await?;
+    let interaction_coll =
+      self.database.collection::<Course>(Self::COURSE_COLLECTION);
+    let review_coll =
+      self.database.collection::<Review>(Self::REVIEW_COLLECTION);
+
+    async fn transaction(
+      session: &mut ClientSession,
+      course_coll: Collection<Course>,
+      review_coll: Collection<Review>,
+      course_id: String,
+      user_id: String,
+    ) -> mongodb::error::Result<Review> {
+      let review = review_coll
+        .find_one_and_delete_with_session(
           doc! {
-            "courseId": course_id,
-            "userId": user_id
+            "courseId": &course_id,
+            "userId": &user_id
+          },
+          None,
+          session,
+        )
+        .await?
+        .ok_or(mongodb::error::Error::custom(ReviewNotFoundError))?;
+
+      let course = course_coll
+        .find_one(
+          doc! {
+            "_id": &course_id,
           },
           None,
         )
-        .await?,
-    )
+        .await?
+        .ok_or(mongodb::error::Error::custom(CourseNotFoundError))?;
+
+      let (avg_rating, avg_difficulty) = if course.review_count == 0 {
+        (0.0, 0.0)
+      } else {
+        let count = course.review_count as f32;
+        let rating =
+          (course.avg_rating * count - (review.rating as f32)) / (count - 1.0);
+        let difficulty = (course.avg_difficulty * count
+          - (review.difficulty as f32))
+          / (count - 1.0);
+        (rating, difficulty)
+      };
+
+      course_coll
+        .update_one(
+          doc! {
+            "_id": &review.course_id
+          },
+          UpdateModifications::Document(doc! {
+            "$inc": { "reviewCount": -1},
+            "$set": {
+              "avgRating": avg_rating,
+              "avgDifficulty": avg_difficulty,
+            }
+          }),
+          None,
+        )
+        .await?;
+
+      Ok(review)
+    }
+
+    let review = session
+      .with_transaction(
+        (),
+        move |session, _| {
+          transaction(
+            session,
+            interaction_coll.clone(),
+            review_coll.clone(),
+            course_id.to_string(),
+            user_id.to_string(),
+          )
+          .boxed()
+        },
+        None,
+      )
+      .await?;
+
+    Ok(review)
   }
 
   pub async fn find_reviews_by_course_id(
@@ -190,54 +397,172 @@ impl Db {
     )
   }
 
-  pub async fn add_interaction(
-    &self,
-    interaction: Interaction,
-  ) -> Result<UpdateResult> {
-    Ok(
-      self
-        .database
-        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-        .update_one(
+  pub async fn add_interaction(&self, interaction: Interaction) -> Result {
+    let mut session = self.client.start_session(None).await?;
+
+    let interaction_coll = self
+      .database
+      .collection::<Interaction>(Self::INTERACTION_COLLECTION);
+
+    let review_coll =
+      self.database.collection::<Review>(Self::REVIEW_COLLECTION);
+
+    async fn callback(
+      session: &mut ClientSession,
+      interaction_coll: Collection<Interaction>,
+      review_coll: Collection<Review>,
+      interaction: Interaction,
+    ) -> mongodb::error::Result<()> {
+      let old = interaction_coll
+        .find_one_and_update_with_session(
           doc! {
-            "courseId": interaction.course_id,
-            "userId": interaction.user_id,
-            "referrer": interaction.referrer,
+            "courseId": &interaction.course_id,
+            "userId": &interaction.user_id,
+            "referrer": &interaction.referrer,
           },
           UpdateModifications::Document(doc! {
             "$set": {
-              "kind": Into::<Bson>::into(interaction.kind)
+              "kind": Into::<Bson>::into(&interaction.kind)
             },
           }),
-          UpdateOptions::builder().upsert(true).build(),
+          FindOneAndUpdateOptions::builder().upsert(true).build(),
+          session,
         )
-        .await?,
-    )
+        .await?;
+
+      if let Some(old) = old.clone() {
+        if old.kind == interaction.kind {
+          return Ok(());
+        }
+      }
+
+      let increment_amount = {
+        let amt = match interaction.kind {
+          InteractionKind::Like => 1,
+          InteractionKind::Dislike => -1,
+        };
+        if old.is_some() {
+          amt * 2
+        } else {
+          amt
+        }
+      };
+
+      review_coll
+        .update_one_with_session(
+          doc! {
+            "courseId": interaction.course_id,
+            "userId": interaction.user_id,
+          },
+          doc! {
+            "$inc": {
+              "likes": increment_amount
+            }
+          },
+          None,
+          session,
+        )
+        .await?;
+
+      Ok(())
+    }
+
+    session
+      .with_transaction(
+        (),
+        move |session, _| {
+          callback(
+            session,
+            interaction_coll.clone(),
+            review_coll.clone(),
+            interaction.clone(),
+          )
+          .boxed()
+        },
+        None,
+      )
+      .await?;
+
+    Ok(())
   }
 
-  pub async fn remove_interaction(
+  pub async fn delete_interaction(
     &self,
     course_id: &str,
     user_id: &str,
     referrer: &str,
-  ) -> Result<DeleteResult> {
-    Ok(
-      self
-        .database
-        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-        .delete_one(
+  ) -> Result {
+    let mut session = self.client.start_session(None).await?;
+
+    let interaction_coll = self
+      .database
+      .collection::<Interaction>(Self::INTERACTION_COLLECTION);
+
+    let review_coll =
+      self.database.collection::<Review>(Self::REVIEW_COLLECTION);
+
+    async fn callback(
+      session: &mut ClientSession,
+      interaction_coll: Collection<Interaction>,
+      review_coll: Collection<Review>,
+      course_id: String,
+      user_id: String,
+      referrer: String,
+    ) -> mongodb::error::Result<()> {
+      let interaction = interaction_coll
+        .find_one_and_delete(
           doc! {
-            "courseId": course_id,
-            "userId": user_id,
-            "referrer": referrer,
+            "courseId": &course_id,
+            "userId": &user_id,
+            "referrer": &referrer,
           },
           None,
         )
-        .await?,
-    )
+        .await?;
+
+      match interaction {
+        Some(i) => {
+          review_coll.update_one_with_session(
+            doc! {
+              "courseId": &course_id,
+              "userId": &user_id,
+            },
+            doc! {
+              "$inc": {
+                "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1}
+              }
+            },
+            None,
+            session
+          ).await?;
+          Ok(())
+        }
+        None => Ok(()),
+      }
+    }
+
+    session
+      .with_transaction(
+        (),
+        move |session, _| {
+          callback(
+            session,
+            interaction_coll.clone(),
+            review_coll.clone(),
+            course_id.to_string(),
+            user_id.to_string(),
+            referrer.to_string(),
+          )
+          .boxed()
+        },
+        None,
+      )
+      .await?;
+
+    Ok(())
   }
 
-  pub async fn remove_interactions(
+  pub async fn delete_interactions(
     &self,
     course_id: &str,
     user_id: &str,
@@ -269,6 +594,262 @@ impl Db {
         .find(doc! { "courseId": course_id, "userId": user_id }, None)
         .await?
         .try_collect::<Vec<Interaction>>()
+        .await?,
+    )
+  }
+
+  pub async fn user_interaction_for_review(
+    &self,
+    course_id: &str,
+    user_id: &str,
+    referrer: &str,
+  ) -> Result<Option<InteractionKind>> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find_one(doc! { "courseId": course_id, "userId": user_id, "referrer": referrer }, None)
+        .await?.map(|i| i.kind)
+    )
+  }
+
+  pub async fn get_subscription(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<Option<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find_one(
+          doc! {
+            "courseId": course_id,
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn get_subscriptions(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(
+          doc! {
+            "userId": user_id,
+          },
+          None,
+        )
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<InsertOneResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .insert_one(subscription, None)
+        .await?,
+    )
+  }
+
+  pub async fn delete_subscription(
+    &self,
+    subscription: Subscription,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .delete_one(
+          doc! {
+            "courseId": subscription.course_id,
+            "userId": subscription.user_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn get_notifications(
+    &self,
+    user_id: &str,
+  ) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(doc! { "userId": user_id }, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    )
+  }
+
+  pub async fn add_notifications(&self, review: Review) -> Result {
+    let course_id = review.course_id.clone();
+
+    let subscriptions = self
+      .database
+      .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+      .find(doc! { "courseId": course_id }, None)
+      .await?
+      .try_collect::<Vec<Subscription>>()
+      .await?;
+
+    let subscriptions = subscriptions
+      .into_iter()
+      .filter(|subscription| subscription.user_id != review.user_id)
+      .collect::<Vec<Subscription>>();
+
+    if subscriptions.is_empty() {
+      return Ok(());
+    }
+
+    self
+      .database
+      .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+      .insert_many(
+        subscriptions
+          .into_iter()
+          .map(|subscription| Notification {
+            review: review.clone(),
+            seen: false,
+            user_id: subscription.user_id,
+          })
+          .collect::<Vec<Notification>>(),
+        None,
+      )
+      .await?;
+
+    Ok(())
+  }
+
+  pub async fn delete_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn delete_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn purge_notifications(
+    &self,
+    user_id: &str,
+    course_id: &str,
+  ) -> Result<DeleteResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .delete_many(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id
+          },
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notifications(
+    &self,
+    creator_id: &str,
+    course_id: &str,
+    review: Review,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_many(
+          doc! {
+            "review.userId": creator_id,
+            "review.courseId": course_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "review": Into::<Bson>::into(review),
+              "seen": false
+            }
+          }),
+          None,
+        )
+        .await?,
+    )
+  }
+
+  pub async fn update_notification(
+    &self,
+    user_id: &str,
+    course_id: &str,
+    creator_id: &str,
+    seen: bool,
+  ) -> Result<UpdateResult> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .update_one(
+          doc! {
+            "userId": user_id,
+            "review.courseId": course_id,
+            "review.userId": creator_id
+          },
+          UpdateModifications::Document(doc! {
+            "$set": {
+              "seen": seen
+            }
+          }),
+          None,
+        )
         .await?,
     )
   }
@@ -482,11 +1063,37 @@ impl Db {
         .await?,
     )
   }
+
+  #[cfg(test)]
+  async fn subscriptions(&self) -> Result<Vec<Subscription>> {
+    Ok(
+      self
+        .database
+        .collection::<Subscription>(Self::SUBSCRIPTION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Subscription>>()
+        .await?,
+    )
+  }
+
+  #[cfg(test)]
+  async fn notifications(&self) -> Result<Vec<Notification>> {
+    Ok(
+      self
+        .database
+        .collection::<Notification>(Self::NOTIFICATION_COLLECTION)
+        .find(None, None)
+        .await?
+        .try_collect::<Vec<Notification>>()
+        .await?,
+    )
+  }
 }
 
 #[cfg(test)]
 mod tests {
-  use {super::*, pretty_assertions::assert_eq};
+  use {super::*, pretty_assertions::assert_eq, regex::Regex};
 
   static SEED_DIR: Dir<'_> = include_dir!("crates/db/test-seeds");
 
@@ -512,7 +1119,7 @@ mod tests {
         TEST_DATABASE_NUMBER.fetch_add(1, Ordering::Relaxed);
 
       let db_name = format!(
-        "mcgill-gg-test-{}-{}",
+        "mcgill-courses-test-{}-{}",
         std::time::SystemTime::now()
           .duration_since(std::time::SystemTime::UNIX_EPOCH)
           .unwrap()
@@ -530,35 +1137,17 @@ mod tests {
   async fn on_disk_database_is_persistent() {
     let TestContext { db, db_name } = TestContext::new().await;
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      0
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 0);
 
     db.add_course(Course::default()).await.unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
 
     drop(db);
 
     let db = Db::connect(&db_name).await.unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -578,13 +1167,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      2
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 2);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -611,13 +1194,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      1
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -637,13 +1214,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      2
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 2);
 
     fs::write(&source, get_content("update.json")).unwrap();
 
@@ -654,7 +1225,7 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 3);
 
@@ -689,13 +1260,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("COMP 202").await.unwrap();
 
@@ -724,7 +1289,7 @@ mod tests {
     .await
     .unwrap();
 
-    let courses = db.courses(None, None, None, None, None).await.unwrap();
+    let courses = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(courses.len(), 123);
 
@@ -753,13 +1318,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("COMP202").await.unwrap();
 
@@ -788,13 +1347,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("foundations of").await.unwrap();
 
@@ -823,17 +1376,11 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(Some(10), None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      10
-    );
+    assert_eq!(db.courses(Some(10), None, None).await.unwrap().len(), 10);
   }
 
   #[tokio::test(flavor = "multi_thread")]
-  async fn get_courses_with_offset() {
+  async fn get_courses_with_sort_filter() {
     let TestContext { db, db_name } = TestContext::new().await;
 
     let tempdir = TempDir::new(&db_name).unwrap();
@@ -849,18 +1396,147 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, Some(20), None, None, None)
+    db.add_review(Review {
+      course_id: "COMP252".into(),
+      user_id: "1".into(),
+      rating: 5,
+      difficulty: 4,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP252".into(),
+      user_id: "2".into(),
+      rating: 4,
+      difficulty: 3,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP362".into(),
+      user_id: "1".into(),
+      rating: 3,
+      difficulty: 5,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP362".into(),
+      user_id: "2".into(),
+      rating: 4,
+      difficulty: 4,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let courses = db
+      .courses(
+        Some(10),
+        None,
+        Some(CourseFilter {
+          sort_by: Some(CourseSort {
+            sort_type: CourseSortType::Rating,
+            reverse: true,
+          }),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    assert!(
+      db.find_course_by_id("COMP252")
         .await
         .unwrap()
-        .len(),
-      103
+        .unwrap()
+        .avg_rating
+        - 4.5
+        < 0.01,
     );
+
+    assert_eq!(courses[0].id, "COMP252");
+    assert_eq!(courses[1].id, "COMP362");
+
+    let courses = db
+      .courses(
+        Some(10),
+        None,
+        Some(CourseFilter {
+          sort_by: Some(CourseSort {
+            sort_type: CourseSortType::Difficulty,
+            reverse: true,
+          }),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(courses[0].id, "COMP362");
+    assert_eq!(courses[1].id, "COMP252");
+
+    db.add_review(Review {
+      course_id: "COMP400".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP400".into(),
+      user_id: "2".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_review(Review {
+      course_id: "COMP400".into(),
+      user_id: "3".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let courses = db
+      .courses(
+        Some(10),
+        None,
+        Some(CourseFilter {
+          sort_by: Some(CourseSort {
+            sort_type: CourseSortType::ReviewCount,
+            reverse: true,
+          }),
+          ..Default::default()
+        }),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(courses[0].id, "COMP400");
+    assert_eq!(courses[0].review_count, 3);
+    assert_eq!(courses[1].review_count, 2);
+    assert_eq!(courses[2].review_count, 2);
   }
 
   #[tokio::test(flavor = "multi_thread")]
   async fn add_reviews() {
     let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let reviews = vec![
       Review {
@@ -868,6 +1544,7 @@ mod tests {
         course_id: "MATH240".into(),
         instructors: vec![String::from("test")],
         rating: 5,
+        difficulty: 2,
         user_id: "1".into(),
         ..Default::default()
       },
@@ -875,7 +1552,8 @@ mod tests {
         content: "foo".into(),
         course_id: "MATH240".into(),
         instructors: vec![String::from("test")],
-        rating: 5,
+        rating: 4,
+        difficulty: 3,
         user_id: "2".into(),
         ..Default::default()
       },
@@ -883,7 +1561,8 @@ mod tests {
         content: "foo".into(),
         course_id: "MATH240".into(),
         instructors: vec![String::from("test")],
-        rating: 5,
+        rating: 3,
+        difficulty: 2,
         user_id: "3".into(),
         ..Default::default()
       },
@@ -895,11 +1574,29 @@ mod tests {
 
     assert_eq!(db.reviews().await.unwrap().len(), 3);
     assert_eq!(db.reviews().await.unwrap(), reviews);
+
+    let course = db.find_course_by_id("MATH240").await.unwrap().unwrap();
+    assert!(course.avg_rating - 4.0 < 0.001);
+    assert!(course.avg_difficulty - 2.33 < 0.1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
   async fn find_reviews_by_course_id() {
     let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_course(Course {
+      id: "MATH340".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let reviews = vec![
       Review {
@@ -962,6 +1659,20 @@ mod tests {
   async fn find_reviews_by_user_id() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_course(Course {
+      id: "MATH340".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
     let reviews = vec![
       Review {
         content: "foo".into(),
@@ -1004,6 +1715,20 @@ mod tests {
   #[tokio::test(flavor = "multi_thread")]
   async fn find_reviews_by_user_instructor_name() {
     let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_course(Course {
+      id: "MATH340".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let reviews = vec![
       Review {
@@ -1069,6 +1794,13 @@ mod tests {
   async fn dont_add_multiple_reviews_per_user() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
     let review = Review {
       user_id: "1".into(),
       course_id: "MATH240".into(),
@@ -1086,6 +1818,13 @@ mod tests {
   async fn update_review() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
@@ -1094,6 +1833,7 @@ mod tests {
       difficulty: 5,
       user_id: "1".into(),
       timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
     })
     .await
     .unwrap();
@@ -1108,7 +1848,8 @@ mod tests {
         rating: 4,
         difficulty: 4,
         user_id: "1".into(),
-        timestamp
+        timestamp,
+        ..Review::default()
       })
       .await
       .unwrap()
@@ -1144,6 +1885,13 @@ mod tests {
   async fn delete_review() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
@@ -1153,21 +1901,9 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.delete_review("MATH240", "2")
-        .await
-        .unwrap()
-        .deleted_count,
-      0
-    );
+    assert!(db.delete_review("MATH240", "2").await.is_err());
 
-    assert_eq!(
-      db.delete_review("MATH240", "1")
-        .await
-        .unwrap()
-        .deleted_count,
-      1
-    );
+    assert!(db.delete_review("MATH240", "1").await.is_ok());
 
     assert_eq!(db.find_review("MATH240", "1").await.unwrap(), None);
   }
@@ -1176,6 +1912,13 @@ mod tests {
   async fn delete_review_then_add_again() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
@@ -1185,13 +1928,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.delete_review("MATH240", "1")
-        .await
-        .unwrap()
-        .deleted_count,
-      1
-    );
+    assert!(db.delete_review("MATH240", "1").await.is_ok());
 
     assert!(db
       .add_review(Review {
@@ -1222,12 +1959,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, Some(vec!["MATH".into()]), None, None)
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          subjects: Some(vec!["MATH".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1256,12 +2000,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, Some(vec!["100".into()]), None)
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          levels: Some(vec!["100".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1290,12 +2041,19 @@ mod tests {
     .await
     .unwrap();
 
-    let total = db.courses(None, None, None, None, None).await.unwrap();
+    let total = db.courses(None, None, None).await.unwrap();
 
     assert_eq!(total.len(), 314);
 
     let filtered = db
-      .courses(None, None, None, None, Some(vec!["Winter".into()]))
+      .courses(
+        None,
+        None,
+        Some(CourseFilter {
+          terms: Some(vec!["Winter".into()]),
+          ..Default::default()
+        }),
+      )
       .await
       .unwrap();
 
@@ -1355,13 +2113,7 @@ mod tests {
     .await
     .unwrap();
 
-    assert_eq!(
-      db.courses(None, None, None, None, None)
-        .await
-        .unwrap()
-        .len(),
-      123
-    );
+    assert_eq!(db.courses(None, None, None).await.unwrap().len(), 123);
 
     let results = db.search("Giulia Alberini").await.unwrap();
 
@@ -1373,6 +2125,13 @@ mod tests {
   #[tokio::test(flavor = "multi_thread")]
   async fn review_interaction_flow() {
     let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
 
     let review = Review {
       content: "foo".into(),
@@ -1402,6 +2161,13 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Like);
 
+    let review = db
+      .find_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap()
+      .unwrap();
+    assert_eq!(review.likes, 1);
+
     db.add_interaction(Interaction {
       kind: InteractionKind::Dislike,
       course_id: review.course_id.clone(),
@@ -1419,7 +2185,14 @@ mod tests {
     assert_eq!(interactions.len(), 1);
     assert_eq!(interactions.first().unwrap().kind, InteractionKind::Dislike);
 
-    db.remove_interaction(&review.course_id, &review.user_id, "10")
+    let review = db
+      .find_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap()
+      .unwrap();
+    assert_eq!(review.likes, -1);
+
+    db.delete_interaction(&review.course_id, &review.user_id, "10")
       .await
       .unwrap();
 
@@ -1430,5 +2203,263 @@ mod tests {
         .len(),
       0
     );
+
+    let review = db
+      .find_review(&review.course_id, &review.user_id)
+      .await
+      .unwrap()
+      .unwrap();
+    assert_eq!(review.likes, 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn subscription_flow() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(Subscription {
+      course_id: subscription.course_id,
+      user_id: subscription.user_id,
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_many_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn notify_empty_subscribers() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
+    };
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn dont_notify_review_creator() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "1".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_subscription() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 1);
+
+    db.delete_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 0);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn delete_notification() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    let review = Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      instructors: vec![String::from("bar")],
+      rating: 5,
+      difficulty: 5,
+      user_id: "3".into(),
+      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      ..Review::default()
+    };
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    let subscription = Subscription {
+      course_id: "MATH240".into(),
+      user_id: "2".into(),
+    };
+
+    db.add_subscription(subscription.clone()).await.unwrap();
+
+    assert_eq!(db.subscriptions().await.unwrap().len(), 2);
+
+    db.add_notifications(review.clone()).await.unwrap();
+
+    assert_eq!(db.notifications().await.unwrap().len(), 2);
+
+    db.delete_notification("1", &review.course_id)
+      .await
+      .unwrap();
+
+    assert_eq!(db.get_notifications("1").await.unwrap().len(), 0);
+    assert_eq!(db.notifications().await.unwrap().len(), 1);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn filter_courses_by_query() {
+    let TestContext { db, db_name } = TestContext::new().await;
+
+    let tempdir = TempDir::new(&db_name).unwrap();
+
+    let source = tempdir.path().join("courses.json");
+
+    fs::write(&source, get_content("mix.json")).unwrap();
+
+    db.initialize(InitializeOptions {
+      source,
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let queries = vec![
+      "computer",
+      "discrete math",
+      "math240",
+      "complex analysis",
+      "How computer technologies shape social notions such as ownership, safety, and privacy",
+    ];
+
+    for query in queries {
+      let results = db
+        .courses(
+          None,
+          None,
+          Some(CourseFilter {
+            query: Some(query.into()),
+            ..Default::default()
+          }),
+        )
+        .await
+        .unwrap();
+
+      assert!(!results.is_empty());
+
+      for result in results {
+        let (a, b) = (
+          Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
+          Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+        );
+
+        assert!(
+          a.is_match(&result.id)
+            || b.is_match(&result.code)
+            || b.is_match(&result.description)
+            || b.is_match(&result.subject)
+            || b.is_match(&result.title)
+        );
+      }
+    }
+  }
+}
+
+#[derive(Debug, Clone)]
+struct CourseNotFoundError;
+
+#[derive(Debug, Clone)]
+struct ReviewNotFoundError;
+
+impl fmt::Display for CourseNotFoundError {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "Course not found")
+  }
+}
+
+impl fmt::Display for ReviewNotFoundError {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "Review not found")
   }
 }

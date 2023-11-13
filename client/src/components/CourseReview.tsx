@@ -2,21 +2,21 @@ import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
 import { Edit } from 'react-feather';
+import { BsPinFill } from 'react-icons/bs';
+import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
-import { courseIdToUrlParam } from '../lib/utils';
-import { GetInteractionsPayload } from '../model/GetInteractionsPayload';
-import { InteractionKind } from '../model/Interaction';
-import { Review } from '../model/Review';
-import { Alert } from './Alert';
-import { DeleteButton } from './DeleteButton';
-import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
-import { IconRating } from './IconRating';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
+import type { InteractionKind } from '../model/Interaction';
+import type { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
-import { BsPinFill } from 'react-icons/bs';
+import { DeleteButton } from './DeleteButton';
+import { IconRating } from './IconRating';
+import { Tooltip } from './Tooltip';
 
 const LoginPrompt = () => {
   return (
@@ -27,69 +27,86 @@ const LoginPrompt = () => {
 };
 
 type ReviewInteractionsProps = {
-  courseId: string;
-  userId: string;
+  review: Review;
   setPromptLogin: (_: boolean) => void;
+  updateLikes: (likes: number) => void;
+};
+
+const interactionToNum = (kind: InteractionKind) => {
+  return kind === 'like' ? 1 : -1;
+};
+
+const getLikeChange = (
+  before: InteractionKind | undefined | null,
+  after: InteractionKind
+) => {
+  if (!before) return interactionToNum(after);
+  if (before === after) return 0;
+  return interactionToNum(after) * 2;
 };
 
 const ReviewInteractions = ({
-  courseId,
-  userId,
+  review,
   setPromptLogin,
+  updateLikes,
 }: ReviewInteractionsProps) => {
   const user = useAuth();
 
-  const [error, setError] = useState('');
-  const [kind, setKind] = useState<InteractionKind | undefined>();
-  const [likes, setLikes] = useState(0);
+  const [kind, setKind] = useState<InteractionKind | undefined | null>(
+    undefined
+  );
+
+  const { courseId, userId, likes } = review;
 
   useEffect(() => {
     refreshInteractions();
-  }, []);
+  }, [review]);
 
-  const refreshInteractions = () => {
-    fetchClient
-      .getData<GetInteractionsPayload>(
-        `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${user?.id}`
-      )
-      .then((payload: GetInteractionsPayload) => {
-        setKind(payload.kind);
-        setLikes(payload.likes);
-      })
-      .catch((err) => setError(err.toString()));
+  const refreshInteractions = async () => {
+    try {
+      const payload = await repo.getInteractions(courseId, userId, user?.id);
+      setKind(payload.kind);
+    } catch (err: any) {
+      toast.error(err.toString());
+    }
   };
 
-  const addInteraction = (interactionKind: InteractionKind) => {
-    if (!user) return;
-    fetchClient
-      .post(
-        '/interactions',
-        {
-          kind: interactionKind,
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      .then(() => refreshInteractions())
-      .catch((err) => setError(err.toString()));
+  const addInteraction = async (interactionKind: InteractionKind) => {
+    try {
+      await repo.addInteraction(interactionKind, courseId, userId, user?.id);
+      const change = getLikeChange(kind, interactionKind);
+      updateLikes(review.likes + change);
+
+      await refreshInteractions();
+      toast.success(
+        `Successfully ${interactionKind}d review for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
+    } catch (err: any) {
+      toast.error(err.toString());
+    }
   };
 
-  const removeInteraction = () => {
-    if (!user) return;
-    fetchClient
-      .delete(
-        '/interactions',
-        {
-          course_id: courseId,
-          user_id: userId,
-          referrer: user.id,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      .then(() => refreshInteractions())
-      .catch((err) => setError(err.toString()));
+  const removeInteraction = async () => {
+    try {
+      await repo.removeInteraction(courseId, userId, user?.id);
+      if (!kind) {
+        throw new Error("Can't remove interaction that doesn't exist.");
+      }
+      updateLikes(review.likes - interactionToNum(kind));
+
+      await refreshInteractions();
+      toast.success(
+        `Successfully removed interaction for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
+    } catch (err: any) {
+      toast.error(err.toString());
+    }
   };
 
   const displayLoginPrompt = () => {
@@ -115,7 +132,6 @@ const ReviewInteractions = ({
 
   return (
     <Fragment>
-      {error ? <Alert status='error' message={error} /> : null}
       <div className='mb-0.5 flex items-center'>
         <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <LuThumbsUp
@@ -147,9 +163,11 @@ type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
   openEditReview: () => void;
+  updateLikes?: (likes: number) => void;
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
+  className?: string;
 };
 
 export const CourseReview = ({
@@ -157,29 +175,34 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
+  updateLikes,
+  className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
 
-  const dateStr = format(
-    new Date(parseInt(review.timestamp.$date.$numberLong, 10)),
-    'P'
-  );
+  const date = new Date(parseInt(review.timestamp.$date.$numberLong, 10));
+
+  const shortDate = format(date, 'P'),
+    longDate = format(date, 'EEEE, MMMM d, yyyy');
 
   return (
     <div
-      className={
-        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800'
-      }
+      className={twMerge(
+        'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800',
+        className
+      )}
     >
       <div className='flex flex-col'>
         <div className='flex w-full'>
           <div className='relative flex w-full flex-col'>
             <div className='flex w-full'>
-              <p className='py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
-                {dateStr}
-              </p>
+              <Tooltip text={longDate}>
+                <p className='cursor-default py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
+                  {shortDate}
+                </p>
+              </Tooltip>
               {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
@@ -284,11 +307,13 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          <ReviewInteractions
-            courseId={review.courseId}
-            userId={review.userId}
-            setPromptLogin={setPromptLogin}
-          />
+          {updateLikes && (
+            <ReviewInteractions
+              review={review}
+              setPromptLogin={setPromptLogin}
+              updateLikes={updateLikes}
+            />
+          )}
         </div>
       </div>
     </div>

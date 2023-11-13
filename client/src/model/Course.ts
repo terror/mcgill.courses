@@ -1,6 +1,6 @@
-import { Instructor } from './Instructor';
-import { ReqNode } from './Requirements';
-import { Schedule } from './Schedule';
+import type { Instructor } from './Instructor';
+import type { ReqNode } from './Requirements';
+import type { Schedule } from './Schedule';
 
 export type Course = {
   _id: string;

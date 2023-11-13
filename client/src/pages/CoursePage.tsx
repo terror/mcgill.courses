@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { AddReviewForm } from '../components/AddReviewForm';
-import { Alert, AlertStatus } from '../components/Alert';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -11,15 +11,15 @@ import { EditReviewForm } from '../components/EditReviewForm';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
-import { fetchClient } from '../lib/fetchClient';
+import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
-import { Requirements } from '../model/Requirements';
-import { Review } from '../model/Review';
+import type { Course } from '../model/Course';
+import type { Requirements } from '../model/Requirements';
+import type { Review } from '../model/Review';
 import { Loading } from './Loading';
 
 export const CoursePage = () => {
@@ -30,12 +30,9 @@ export const CoursePage = () => {
 
   const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertStatus, setAlertStatus] = useState<AlertStatus | null>(null);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
   const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
-  const [key, setKey] = useState(0);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
 
@@ -45,24 +42,30 @@ export const CoursePage = () => {
 
   const refetch = () => {
     const id = params.id?.replace('-', '').toUpperCase();
-    fetchClient
-      .getData<GetCourseWithReviewsPayload | null>(
-        `/courses/${id}?with_reviews=true`
-      )
-      .then((payload) => {
+
+    const inner = async () => {
+      try {
+        const payload = await repo.getCourseWithReviews(id);
+
         if (payload === null) {
           setCourse(null);
           return;
         }
 
-        if (firstFetch.current) {
-          setCourse(payload.course);
-        }
+        if (firstFetch.current) setCourse(payload.course);
+
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
+
         firstFetch.current = false;
-      })
-      .catch((err) => console.log(err));
+      } catch (err) {
+        toast.error(
+          'An error occurred while trying to fetch course information.'
+        );
+      }
+    };
+
+    inner();
   };
 
   useEffect(refetch, [params.id]);
@@ -99,31 +102,20 @@ export const CoursePage = () => {
     user && !allReviews?.find((r) => r.userId === user?.id)
   );
 
-  const remountAlert = () => {
-    setKey(key + 1);
-  };
-
   const handleSubmit = (successMessage: string) => {
     return (res: Response) => {
-      remountAlert();
       if (res.ok) {
-        setAlertStatus('success');
-        setAlertMessage(successMessage);
+        toast.success(successMessage);
         setAddReviewOpen(false);
         refetch();
       } else {
-        setAlertMessage('An error occurred.');
-        setAlertStatus('error');
+        toast.error('An error occurred.');
       }
     };
   };
 
   const handleDelete = async (review: Review) => {
-    const res = await fetchClient.delete(
-      '/reviews',
-      { course_id: review.courseId },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+    const res = await repo.deleteReview(review.courseId);
 
     if (res.ok) {
       setShowingReviews(
@@ -139,6 +131,25 @@ export const CoursePage = () => {
     handleSubmit('Review deleted successfully.')(res);
 
     localStorage.removeItem(course._id);
+  };
+
+  const updateLikes = (review: Review) => {
+    return (likes: number) => {
+      if (allReviews) {
+        const updated = allReviews.slice();
+        const r = updated.find(
+          (r) => r.courseId == review.courseId && r.userId == review.userId
+        );
+
+        if (r === undefined) {
+          toast.error("Can't update likes for review that doesn't exist.");
+          return;
+        }
+
+        r.likes = likes;
+        setAllReviews(updated);
+      }
+    };
   };
 
   return (
@@ -157,14 +168,12 @@ export const CoursePage = () => {
               className={canReview ? 'mb-4' : ''}
             />
             {canReview && (
-              <>
-                <CourseReviewPrompt
-                  openAddReview={() => setAddReviewOpen(true)}
-                />
-              </>
+              <CourseReviewPrompt
+                openAddReview={() => setAddReviewOpen(true)}
+              />
             )}
             <div className='py-2' />
-            {allReviews && allReviews.length > 0 && (
+            {allReviews && allReviews.length > 0 ? (
               <div className='mb-2'>
                 <ReviewFilter
                   course={course}
@@ -173,6 +182,8 @@ export const CoursePage = () => {
                   setShowAllReviews={setShowAllReviews}
                 />
               </div>
+            ) : (
+              <ReviewEmptyPrompt className='my-8' variant='course' />
             )}
             <div className='w-full shadow-sm'>
               {userReview && (
@@ -181,6 +192,7 @@ export const CoursePage = () => {
                   handleDelete={() => handleDelete(userReview)}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
+                  updateLikes={updateLikes(userReview)}
                 />
               )}
               {showingReviews &&
@@ -194,6 +206,7 @@ export const CoursePage = () => {
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
                       review={review}
+                      updateLikes={updateLikes(review)}
                     />
                   ))}
             </div>
@@ -225,14 +238,18 @@ export const CoursePage = () => {
                   openAddReview={() => setAddReviewOpen(true)}
                 />
               )}
-              <div className='my-2'>
-                <ReviewFilter
-                  course={course}
-                  allReviews={allReviews ?? []}
-                  setReviews={setShowingReviews}
-                  setShowAllReviews={setShowAllReviews}
-                />
-              </div>
+              {allReviews && allReviews.length > 0 ? (
+                <div className='my-2'>
+                  <ReviewFilter
+                    course={course}
+                    allReviews={allReviews ?? []}
+                    setReviews={setShowingReviews}
+                    setShowAllReviews={setShowAllReviews}
+                  />
+                </div>
+              ) : (
+                <ReviewEmptyPrompt className='my-8' variant='course' />
+              )}
               <div className='w-full shadow-sm'>
                 {userReview && (
                   <CourseReview
@@ -240,6 +257,7 @@ export const CoursePage = () => {
                     handleDelete={() => handleDelete(userReview)}
                     openEditReview={() => setEditReviewOpen(true)}
                     review={userReview}
+                    updateLikes={updateLikes(userReview)}
                   />
                 )}
                 {showingReviews &&
@@ -255,6 +273,7 @@ export const CoursePage = () => {
                         key={i}
                         openEditReview={() => setEditReviewOpen(true)}
                         review={review}
+                        updateLikes={updateLikes(review)}
                       />
                     ))}
               </div>
@@ -285,9 +304,6 @@ export const CoursePage = () => {
             review={userReview}
             handleSubmit={handleSubmit('Review edited successfully.')}
           />
-        )}
-        {alertStatus && (
-          <Alert status={alertStatus} key={key} message={alertMessage} />
         )}
       </div>
       <JumpToTopButton />

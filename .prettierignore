@@ -1,9 +1,10 @@
 /client/dist
 /coverage
-/crates/extractor/mocks
+/crates/extractor/test-samples
 /mocks
 /node_modules
 /seed
 /target
 /tools
 courses.json
+pnpm-lock.yaml

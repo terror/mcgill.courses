@@ -1,18 +1,20 @@
 import _ from 'lodash';
+import { Fragment, useEffect, useState } from 'react';
+import { ExternalLink } from 'react-feather';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+
 import { CourseInfoStats } from '../components/CourseInfoStats';
 import { CourseReview } from '../components/CourseReview';
-import { Fragment, useEffect, useState } from 'react';
-import { GetInstructorPayload } from '../model/GetInstructorPayload';
-import { Instructor as InstructorType } from '../model/Instructor';
 import { Layout } from '../components/Layout';
-import { Link, useParams } from 'react-router-dom';
+import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
+import { useAuth } from '../hooks/useAuth';
+import { repo } from '../lib/repo';
+import { courseIdToUrlParam } from '../lib/utils';
+import type { Instructor as InstructorType } from '../model/Instructor';
+import type { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
-import { Review } from '../model/Review';
-import { courseIdToUrlParam } from '../lib/utils';
-import { fetchClient } from '../lib/fetchClient';
-import { useAuth } from '../hooks/useAuth';
-import { ExternalLink } from 'react-feather';
 
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
@@ -27,16 +29,17 @@ export const Instructor = () => {
   const user = useAuth();
 
   useEffect(() => {
-    if (params.name) {
-      fetchClient
-        .getData<GetInstructorPayload>(
-          `/instructors/${decodeURIComponent(params.name)}`
-        )
-        .then((payload) => {
-          setInstructor(payload.instructor);
-          setReviews(payload.reviews);
-        });
-    }
+    if (!params.name) return;
+
+    repo
+      .getInstructor(params.name)
+      .then((data) => {
+        setInstructor(data.instructor);
+        setReviews(data.reviews);
+      })
+      .catch(() => {
+        toast.error('Failed to fetch instructor.');
+      });
   }, [params.name]);
 
   if (instructor === undefined) return <Loading />;
@@ -44,6 +47,25 @@ export const Instructor = () => {
 
   const userReview = reviews.find((r) => r.userId === user?.id),
     uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
+
+  const updateLikes = (review: Review) => {
+    return (likes: number) => {
+      if (reviews) {
+        const updated = reviews.slice();
+        const r = updated.find(
+          (r) => r.courseId == review.courseId && r.userId == review.userId
+        );
+
+        if (r === undefined) {
+          toast.error("Can't update likes for review that doesn't exist.");
+          return;
+        }
+
+        r.likes = likes;
+        setReviews(updated);
+      }
+    };
+  };
 
   return (
     <Layout>
@@ -86,15 +108,12 @@ export const Instructor = () => {
                   "This professor hasn't taught any courses that have been reviewed yet."
                 )}
               </p>
-              {uniqueReviews.length !== 0 && (
+              {reviews.length !== 0 && (
                 <Fragment>
                   <div className='grow py-3' />
-                  <CourseInfoStats
-                    className='md:hidden'
-                    allReviews={uniqueReviews}
-                  />
-                  <p className='text-sm text-gray-500 dark:text-gray-400'>
-                    {uniqueReviews.length} review(s)
+                  <CourseInfoStats className='md:hidden' allReviews={reviews} />
+                  <p className='mt-6 text-sm text-gray-500 dark:text-gray-400'>
+                    {reviews.length} review(s)
                   </p>
                 </Fragment>
               )}
@@ -102,7 +121,7 @@ export const Instructor = () => {
             <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
               <CourseInfoStats
                 variant='large'
-                allReviews={uniqueReviews}
+                allReviews={reviews}
                 className='lg:mr-8'
               />
             </div>
@@ -118,6 +137,7 @@ export const Instructor = () => {
               includeTaughtBy={false}
               openEditReview={() => undefined}
               review={userReview}
+              updateLikes={updateLikes(userReview)}
             />
           )}
           {reviews &&
@@ -132,6 +152,7 @@ export const Instructor = () => {
                   key={i}
                   openEditReview={() => undefined}
                   review={review}
+                  updateLikes={updateLikes(review)}
                 />
               ))}
         </div>
@@ -144,6 +165,9 @@ export const Instructor = () => {
               Show all {reviews.length} reviews
             </button>
           </div>
+        )}
+        {reviews.length === 0 && (
+          <ReviewEmptyPrompt className='my-8' variant='instructor' />
         )}
       </div>
     </Layout>

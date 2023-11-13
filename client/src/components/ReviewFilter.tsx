@@ -1,12 +1,10 @@
 import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
-import { Course } from '../model/Course';
-import { Review } from '../model/Review';
+import type { Course } from '../model/Course';
+import type { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
-import { Disclosure } from '@headlessui/react';
-import { LuChevronDown } from 'react-icons/lu';
-import { twMerge } from 'tailwind-merge';
+import { FilterToggle } from './FilterToggle';
 import { ResetButton } from './ResetButton';
 
 const sortTypes = [
@@ -16,6 +14,8 @@ const sortTypes = [
   'Lowest Rating',
   'Hardest',
   'Easiest',
+  'Most Liked',
+  'Most Disliked',
 ] as const;
 
 export type ReviewSortType = (typeof sortTypes)[number];
@@ -66,6 +66,10 @@ export const ReviewFilter = ({
               return b.difficulty - a.difficulty;
             case 'Easiest':
               return a.difficulty - b.difficulty;
+            case 'Most Liked':
+              return b.likes - a.likes;
+            case 'Most Disliked':
+              return a.likes - b.likes;
             default:
               return (
                 parseInt(b.timestamp.$date.$numberLong, 10) -
@@ -89,62 +93,43 @@ export const ReviewFilter = ({
 
   return (
     <div className='flex flex-col rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
-      <Disclosure>
-        {({ open }) => (
-          <>
-            <Disclosure.Button>
-              <div className='flex w-full justify-between rounded-lg bg-gray-200 px-4 py-2 text-red-500 dark:bg-neutral-700'>
-                <h1 className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                  Filter...
-                </h1>
-                <LuChevronDown
-                  className={twMerge(
-                    open ? 'rotate-180 transform' : '',
-                    'h-5 w-5 text-gray-500'
-                  )}
-                />
-              </div>
-            </Disclosure.Button>
-            <Disclosure.Panel className='relative'>
-              <div className='py-2' />
-              <div className='p-1'>
-                <div className='flex gap-x-2'>
-                  <div className='w-2/5'>
-                    <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
-                      Sort By
-                    </h2>
-                    <div className='relative z-10'>
-                      <Autocomplete
-                        options={sorts}
-                        value={sortBy}
-                        setValue={(val: string) =>
-                          setSortBy(val as ReviewSortType)
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className='w-3/5'>
-                    <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
-                      Instructor
-                    </h2>
-                    <div className='relative z-10'>
-                      <Autocomplete
-                        options={uniqueInstructors}
-                        value={selectedInstructor}
-                        setValue={setSelectedInstructor}
-                      />
-                    </div>
-                  </div>
+      <FilterToggle>
+        <div className='py-2' />
+        <div className='relative'>
+          <div className='p-1'>
+            <div className='flex gap-x-2'>
+              <div className='w-2/5'>
+                <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                  Sort By
+                </h2>
+                <div className='relative z-10'>
+                  <Autocomplete
+                    options={sorts}
+                    value={sortBy}
+                    setValue={(val: string) => setSortBy(val as ReviewSortType)}
+                  />
                 </div>
               </div>
-              <ResetButton
-                className='absolute right-2 top-2 ml-auto'
-                onClear={reset}
-              />
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+              <div className='w-3/5'>
+                <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                  Instructor
+                </h2>
+                <div className='relative z-10'>
+                  <Autocomplete
+                    options={uniqueInstructors}
+                    value={selectedInstructor}
+                    setValue={setSelectedInstructor}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <ResetButton
+            className='absolute -top-4 right-2 ml-auto'
+            onClear={reset}
+          />
+        </div>
+      </FilterToggle>
     </div>
   );
 };

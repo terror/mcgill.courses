@@ -1,17 +1,8 @@
 use super::*;
+use derivative::Derivative;
 
-#[derive(
-  Clone,
-  Debug,
-  Default,
-  Deserialize,
-  Eq,
-  Hash,
-  Ord,
-  PartialEq,
-  PartialOrd,
-  Serialize,
-)]
+#[derive(Clone, Debug, Default, Deserialize, Derivative, Serialize)]
+#[derivative(Eq, Hash, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Course {
   #[serde(rename = "_id")]
@@ -39,4 +30,51 @@ pub struct Course {
   pub logical_corequisites: Option<ReqNode>,
   pub restrictions: Option<String>,
   pub schedule: Option<Vec<Schedule>>,
+  #[derivative(PartialEq = "ignore")]
+  #[derivative(Hash = "ignore")]
+  #[serde(default = "zero_f32")]
+  pub avg_rating: f32,
+  #[derivative(PartialEq = "ignore")]
+  #[derivative(Hash = "ignore")]
+  #[serde(default = "zero_f32")]
+  pub avg_difficulty: f32,
+  #[derivative(PartialEq = "ignore")]
+  #[derivative(Hash = "ignore")]
+  #[serde(default = "zero")]
+  pub review_count: i32,
+}
+
+impl Ord for Course {
+  fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    self.id.cmp(&other.id)
+  }
+}
+
+impl PartialOrd for Course {
+  fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl Course {
+  pub fn merge(self, other: Course) -> Course {
+    Course {
+      logical_prerequisites: other
+        .logical_prerequisites
+        .or(self.logical_prerequisites),
+      logical_corequisites: other
+        .logical_corequisites
+        .or(self.logical_corequisites),
+      schedule: other.schedule.or(self.schedule),
+      ..other
+    }
+  }
+}
+
+const fn zero() -> i32 {
+  0
+}
+
+const fn zero_f32() -> f32 {
+  0.0
 }

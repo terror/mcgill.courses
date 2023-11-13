@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
-import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Block, Schedule, TimeBlock } from '../model/Schedule';
-import { Tooltip } from './Tooltip';
 import * as buildingCodes from '../assets/buildingCodes.json';
+import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
+import type { Course } from '../model/Course';
+import type { Block, Schedule, TimeBlock } from '../model/Schedule';
+import { Tooltip } from './Tooltip';
 
 const dayToWeekday = (day: string) => {
   switch (day) {
@@ -54,7 +54,7 @@ const BlockLocation = ({ location }: { location: string }) => {
   return (
     <span className='relative whitespace-nowrap'>
       <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
-        <p className='inline-block'> {location}</p>
+        <p className='inline-block cursor-default'> {location}</p>
       </Tooltip>
     </span>
   );
@@ -120,6 +120,10 @@ export const SchedulesDisplay = ({
     return null;
   }
 
+  const maxDisplayLength =
+    _.max(schedules.flatMap((s) => s.blocks.map((b) => b.display.length))) ?? 0;
+  const displayWidth = maxDisplayLength * 9;
+
   const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
     <div key={scheduleIndex}>
       {schedule.blocks?.map((block: Block, blockIndex) => (
@@ -130,8 +134,10 @@ export const SchedulesDisplay = ({
             )}
           >
             <div className='flex flex-row flex-wrap whitespace-pre-wrap text-left md:flex-row'>
-              <div className='w-20 font-medium'>{block.display}</div>
-              <div className='w-24 font-normal text-gray-700 dark:text-gray-300'>
+              <div className='font-medium' style={{ width: displayWidth }}>
+                {block.display}
+              </div>
+              <div className='mx-4 font-normal text-gray-700 dark:text-gray-300'>
                 {block.campus}
               </div>
               <div>
@@ -188,7 +194,7 @@ export const SchedulesDisplay = ({
                   ))
                 ) : (
                   <div className='flex flex-col'>
-                    <div className='flex flex-row justify-center rounded-b-md bg-neutral-700 px-3 py-2 dark:text-neutral-400'>
+                    <div className='flex flex-row justify-center rounded-b-md px-3 py-2 dark:bg-neutral-700 dark:text-neutral-400'>
                       <p>No scheduled time block.</p>
                     </div>
                   </div>

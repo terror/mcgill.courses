@@ -1,12 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import { Fragment } from 'react';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { fetchClient } from '../lib/fetchClient';
-import { Course } from '../model/Course';
-import { Review } from '../model/Review';
+import { repo } from '../lib/repo';
+import type { Course } from '../model/Course';
+import type { Review } from '../model/Review';
 import { ReviewForm, ReviewSchema } from './ReviewForm';
 
 type EditReviewFormProps = {
@@ -33,12 +34,17 @@ export const EditReviewForm = ({
     difficulty: review.difficulty,
   };
 
+  const handleClose = () => {
+    onClose();
+    toast.success('Review draft saved.');
+  };
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
         as='div'
         className={twMerge('relative z-50', darkMode ? 'dark' : '')}
-        onClose={onClose}
+        onClose={handleClose}
       >
         <Transition.Child
           as={Fragment}
@@ -75,14 +81,7 @@ export const EditReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await fetchClient.put(
-                      `/reviews`,
-                      {
-                        course_id: course._id,
-                        ...values,
-                      },
-                      { headers: { 'Content-Type': 'application/json' } }
-                    );
+                    const res = await repo.updateReview(course._id, values);
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);

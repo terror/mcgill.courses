@@ -1,17 +1,17 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import VisGraph, { GraphData, Node, Edge } from 'react-vis-graph-wrapper';
+import VisGraph, { Edge, GraphData, Node } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import {
-  spliceCourseCode,
   courseIdToUrlParam,
   isValidCourseCode,
+  spliceCourseCode,
 } from '../lib/utils';
-import { Course } from '../model/Course';
-import { ReqNode } from '../model/Requirements';
+import type { Course } from '../model/Course';
+import type { ReqNode } from '../model/Requirements';
 
 type CourseGraphProps = {
   course: Course;

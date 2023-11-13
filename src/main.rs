@@ -38,10 +38,10 @@ use {
   env_logger::Env,
   futures::TryStreamExt,
   http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
-  log::{debug, error, info, trace},
+  log::{debug, error, info, trace, warn},
   model::{
-    Course, CourseListing, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Review, Schedule,
+    Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
+    Interaction, InteractionKind, Review, Schedule, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
@@ -87,6 +87,7 @@ mod hash;
 mod instructors;
 mod interactions;
 mod loader;
+mod notifications;
 mod object;
 mod options;
 mod page;
@@ -96,6 +97,7 @@ mod search;
 mod server;
 mod state;
 mod subcommand;
+mod subscriptions;
 mod user;
 mod vec_ext;
 mod vsb_client;
