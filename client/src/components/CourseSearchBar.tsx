@@ -50,7 +50,7 @@ const SearchResult = ({
       <div
         className={twMerge(
           'flex border-gray-200 p-3 text-left dark:border-neutral-700 transition-all duration-75',
-          toHighlight ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-700'
+          toHighlight ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
         key={index}
       >
@@ -78,7 +78,7 @@ const ExploreButton = () => {
       <div
         className={twMerge(
           'flex cursor-pointer items-center p-3 text-left dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 transition-all duration-200',
-          isHovering ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-700'
+          isHovering ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
       >
         <Layers className='dark:text-gray-200' />
@@ -132,7 +132,7 @@ export const CourseSearchBar = ({
       <SearchBar
         handleInputChange={handleInputChange}
         inputStyle={twMerge(
-          'block w-full bg-gray-100 border border-gray-300 shadow-sm p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px] dark:border-gray-500',
+          'block w-full bg-gray-100 border border-gray-300 shadow-sm p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px] dark:border-gray-700',
           searchSelected ? 'border-b-1' : ''
         )}
         onKeyDown={handleKeyDown}
