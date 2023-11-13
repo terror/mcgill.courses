@@ -49,7 +49,7 @@ const SearchResult = ({
     >
       <div
         className={twMerge(
-          'flex border-gray-200 p-3 text-left dark:border-neutral-700 transition-all duration-200',
+          'flex border-gray-200 p-3 text-left dark:border-neutral-700 transition-all duration-75',
           toHighlight ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-700'
         )}
         key={index}
