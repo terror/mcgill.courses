@@ -113,10 +113,9 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
   const mobile = useMediaQuery('(max-width: 576px)');
 
   return (
-    <tr className='p-2 text-left odd:bg-slate-100'>
-      <td className='px-2 font-semibold'>{block.display}</td>
-      <td className='px-2 text-gray-700 dark:text-gray-300'>{block.campus}</td>
-      <td className='px-2'>
+    <tr className='p-2 text-left odd:bg-neutral-100'>
+      <td className='pl-6 font-semibold'>{block.display}</td>
+      <td className='py-2 text-gray-700'>
         <span className='inline-block font-medium'>
           {((split) =>
             split.map((location: string, index) => (
@@ -130,30 +129,30 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
         </span>
       </td>
       {mobile ? (
-        <div className='flex justify-between px-2'>
-          <td className='font-medium'>
+        <>
+          <td className='py-2 text-sm font-medium'>
             {block.timeblocks.map((tb) => (
               <div>
                 {tb.startTime} - {tb.endTime}
               </div>
             ))}
           </td>
-          <td>
+          <td className='p-2'>
             {block.timeblocks.map((tb) => (
               <TimeblockDays days={tb.days} />
             ))}
           </td>
-        </div>
+        </>
       ) : (
         <>
-          <td className='px-2 font-medium'>
+          <td className='py-2 text-sm font-medium'>
             {block.timeblocks.map((tb) => (
               <div>
                 {tb.startTime} - {tb.endTime}
               </div>
             ))}
           </td>
-          <td className='px-2'>
+          <td className='p-2'>
             {block.timeblocks.map((tb) => (
               <TimeblockDays days={tb.days} />
             ))}
@@ -190,10 +189,12 @@ export const SchedulesDisplay = ({
   console.log(scheduleByTerm);
 
   useEffect(() => {
-    const first = offeredTerms.at(0);
-    setSelectedTerm(first);
-    setBlocks(first ? scheduleByTerm[first] : undefined);
+    setSelectedTerm(offeredTerms.at(0));
   }, [course]);
+
+  useEffect(() => {
+    setBlocks(selectedTerm ? scheduleByTerm[selectedTerm] : undefined);
+  }, [selectedTerm]);
 
   if (!selectedTerm || !blocks) {
     return null;
@@ -211,7 +212,7 @@ export const SchedulesDisplay = ({
           <button
             key={i}
             className={twMerge(
-              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b-2`,
+              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b`,
               term === selectedTerm
                 ? 'bg-slate-50 dark:bg-neutral-800'
                 : 'bg-slate-200 dark:bg-neutral-600 hover:bg-slate-100 dark:hover:bg-neutral-700',
@@ -229,10 +230,6 @@ export const SchedulesDisplay = ({
       </div>
       <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-700 dark:text-gray-200'>
         <table>
-          <colgroup>
-            <col style={{ width: 'auto' }} />
-            <col style={{ width: 'auto' }} />
-          </colgroup>
           {blocks.length <= 5 || showAll
             ? blocks.map((s) => <ScheduleRow block={s} />)
             : blocks.slice(0, 5).map((s) => <ScheduleRow block={s} />)}
