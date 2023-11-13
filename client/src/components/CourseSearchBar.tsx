@@ -19,6 +19,9 @@ type SearchResultProps = {
   url: string;
 };
 
+const highlightResultStyle =
+  'bg-red-50 border-l-red-500 border-l-4 dark:bg-red-100 dark:border-l-red-600 dark:bg-neutral-600';
+
 const SearchResult = ({
   index,
   query,
@@ -27,26 +30,59 @@ const SearchResult = ({
   type,
   url,
 }: SearchResultProps) => {
+  const [isHovering, setIsHovering] = useState(false);
+  const toHighlight = isHovering || selectedIndex === index;
+
   const icon =
     type === 'course' ? (
-      <Layers className='mr-2 dark:text-white' />
+      <Layers className='mr-2 dark:text-gray-200' />
     ) : (
-      <User className='mr-2 dark:text-white' />
+      <User className='mr-2 dark:text-gray-200' />
     );
 
   return (
-    <Link to={url}>
+    <Link
+      to={url}
+      className='cursor-pointer'
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <div
         className={twMerge(
-          'flex cursor-pointer border-b border-gray-200 p-3 text-left hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-700',
-          selectedIndex === index
-            ? 'bg-gray-100 dark:bg-neutral-700'
-            : 'bg-white dark:bg-neutral-800'
+          'flex border-gray-200 p-3 text-left dark:border-neutral-700 transition-all duration-75',
+          toHighlight ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
         key={index}
       >
         {icon}
-        <Highlight className='dark:text-gray-200' query={query} text={text} />
+        <Highlight
+          className='dark:text-gray-200'
+          query={query?.trim()}
+          text={text}
+        />
+      </div>
+    </Link>
+  );
+};
+
+const ExploreButton = () => {
+  const [isHovering, setIsHovering] = useState(false);
+
+  return (
+    <Link
+      to={`/explore`}
+      className='cursor-pointer'
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      <div
+        className={twMerge(
+          'flex cursor-pointer items-center p-3 text-left dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 transition-all duration-200',
+          isHovering ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
+        )}
+      >
+        <Layers className='dark:text-gray-200' />
+        <div className='z-50 ml-2 dark:text-gray-200'>Explore all courses</div>
       </div>
     </Link>
   );
@@ -96,8 +132,8 @@ export const CourseSearchBar = ({
       <SearchBar
         handleInputChange={handleInputChange}
         inputStyle={twMerge(
-          'block w-full rounded-t-lg bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px]',
-          searchSelected ? '' : 'rounded-b-lg'
+          'block w-full bg-gray-100 border border-gray-300 shadow-sm p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px] dark:border-gray-700 rounded-sm',
+          searchSelected ? 'border-b-1' : ''
         )}
         onKeyDown={handleKeyDown}
         placeholder='Search for courses, subjects or professors'
@@ -105,7 +141,7 @@ export const CourseSearchBar = ({
         setSearchSelected={setSearchSelected}
       />
       {searchSelected && (
-        <div className='absolute top-full z-50 w-full overflow-hidden rounded-b-lg bg-white shadow-md dark:bg-neutral-800'>
+        <div className='absolute top-full z-50 w-full overflow-hidden bg-white shadow-md dark:bg-neutral-800'>
           {results.courses.map((result, index) => (
             <SearchResult
               index={index}
@@ -128,11 +164,7 @@ export const CourseSearchBar = ({
               key={result.name + index}
             />
           ))}
-          <Link to={`/explore`}>
-            <div className='flex cursor-pointer items-center p-3 text-left hover:bg-gray-100 dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700'>
-              <Layers /> <div className='z-50 ml-2'>Explore all courses</div>
-            </div>
-          </Link>
+          <ExploreButton />
         </div>
       )}
     </div>

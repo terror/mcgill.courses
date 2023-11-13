@@ -4,12 +4,15 @@ import { toast } from 'sonner';
 
 import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { repo } from '../lib/repo';
+import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],
 ]);
+
+const { courses, instructors, coursesIndex, instructorsIndex } =
+  getSearchIndex();
 
 export const Home = () => {
   const [searchParams] = useSearchParams();
@@ -26,17 +29,15 @@ export const Home = () => {
     toast.error(alerts.get(err));
   }, []);
 
-  const handleInputChange = async (query: string) => {
-    try {
-      setResults({
-        query,
-        ...(await repo.search(query)),
-      });
-    } catch (err) {
-      toast.error(
-        'An error occurred while searching for courses, please try again later.'
-      );
-    }
+  const handleInputChange = (query: string) => {
+    updateSearchResults(
+      query,
+      courses,
+      instructors,
+      coursesIndex,
+      instructorsIndex,
+      setResults
+    );
   };
 
   return (
@@ -45,7 +46,7 @@ export const Home = () => {
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
           <div className='text-center'>
-            <h1 className='mb-6 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
+            <h1 className='mb-6 py-3 text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>
