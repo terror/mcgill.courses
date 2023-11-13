@@ -132,6 +132,25 @@ export const CoursePage = () => {
     localStorage.removeItem(course._id);
   };
 
+  const updateLikes = (review: Review) => {
+    return (likes: number) => {
+      if (allReviews) {
+        const updated = allReviews.slice();
+        const r = updated.find(
+          (r) => r.courseId == review.courseId && r.userId == review.userId
+        );
+
+        if (r === undefined) {
+          toast.error("Can't update likes for review that doesn't exist.");
+          return;
+        }
+
+        r.likes = likes;
+        setAllReviews(updated);
+      }
+    };
+  };
+
   return (
     <Layout>
       <div className='mx-auto max-w-6xl'>
@@ -172,6 +191,7 @@ export const CoursePage = () => {
                   handleDelete={() => handleDelete(userReview)}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
+                  updateLikes={updateLikes(userReview)}
                 />
               )}
               {showingReviews &&
@@ -185,6 +205,7 @@ export const CoursePage = () => {
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
                       review={review}
+                      updateLikes={updateLikes(review)}
                     />
                   ))}
             </div>
@@ -235,6 +256,7 @@ export const CoursePage = () => {
                     handleDelete={() => handleDelete(userReview)}
                     openEditReview={() => setEditReviewOpen(true)}
                     review={userReview}
+                    updateLikes={updateLikes(userReview)}
                   />
                 )}
                 {showingReviews &&
@@ -250,6 +272,7 @@ export const CoursePage = () => {
                         key={i}
                         openEditReview={() => setEditReviewOpen(true)}
                         review={review}
+                        updateLikes={updateLikes(review)}
                       />
                     ))}
               </div>

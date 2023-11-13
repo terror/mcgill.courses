@@ -27,30 +27,45 @@ const LoginPrompt = () => {
 };
 
 type ReviewInteractionsProps = {
-  courseId: string;
-  userId: string;
+  review: Review;
   setPromptLogin: (_: boolean) => void;
+  updateLikes: (likes: number) => void;
+};
+
+const interactionToNum = (kind: InteractionKind) => {
+  return kind === 'like' ? 1 : -1;
+};
+
+const getLikeChange = (
+  before: InteractionKind | undefined | null,
+  after: InteractionKind
+) => {
+  if (!before) return interactionToNum(after);
+  if (before === after) return 0;
+  return interactionToNum(after) * 2;
 };
 
 const ReviewInteractions = ({
-  courseId,
-  userId,
+  review,
   setPromptLogin,
+  updateLikes,
 }: ReviewInteractionsProps) => {
   const user = useAuth();
 
-  const [kind, setKind] = useState<InteractionKind | undefined>();
-  const [likes, setLikes] = useState(0);
+  const [kind, setKind] = useState<InteractionKind | undefined | null>(
+    undefined
+  );
+
+  const { courseId, userId, likes } = review;
 
   useEffect(() => {
     refreshInteractions();
-  }, []);
+  }, [review]);
 
   const refreshInteractions = async () => {
     try {
       const payload = await repo.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
-      setLikes(payload.likes);
     } catch (err: any) {
       toast.error(err.toString());
     }
@@ -59,6 +74,9 @@ const ReviewInteractions = ({
   const addInteraction = async (interactionKind: InteractionKind) => {
     try {
       await repo.addInteraction(interactionKind, courseId, userId, user?.id);
+      const change = getLikeChange(kind, interactionKind);
+      updateLikes(review.likes + change);
+
       await refreshInteractions();
       toast.success(
         `Successfully ${interactionKind}d review for ${spliceCourseCode(
@@ -74,6 +92,11 @@ const ReviewInteractions = ({
   const removeInteraction = async () => {
     try {
       await repo.removeInteraction(courseId, userId, user?.id);
+      if (!kind) {
+        throw new Error("Can't remove interaction that doesn't exist.");
+      }
+      updateLikes(review.likes - interactionToNum(kind));
+
       await refreshInteractions();
       toast.success(
         `Successfully removed interaction for ${spliceCourseCode(
@@ -140,6 +163,7 @@ type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
   openEditReview: () => void;
+  updateLikes?: (likes: number) => void;
   review: Review;
   showCourse?: boolean;
   includeTaughtBy?: boolean;
@@ -151,6 +175,7 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
+  updateLikes,
   className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
@@ -282,11 +307,13 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          <ReviewInteractions
-            courseId={review.courseId}
-            userId={review.userId}
-            setPromptLogin={setPromptLogin}
-          />
+          {updateLikes && (
+            <ReviewInteractions
+              review={review}
+              setPromptLogin={setPromptLogin}
+              updateLikes={updateLikes}
+            />
+          )}
         </div>
       </div>
     </div>

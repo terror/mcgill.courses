@@ -1,48 +1,30 @@
 use super::*;
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct GetInteractionsParams {
+pub(crate) struct GetUserInteractionParams {
   pub(crate) course_id: String,
   pub(crate) user_id: String,
-  pub(crate) referrer: Option<String>,
+  pub(crate) referrer: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
-pub(crate) struct GetInteractionsPayload {
+pub(crate) struct GetUserInteractionPayload {
   pub(crate) kind: Option<InteractionKind>,
-  pub(crate) likes: i64,
 }
 
-pub(crate) async fn get_interactions(
-  params: Query<GetInteractionsParams>,
+pub(crate) async fn get_user_interaction(
+  params: Query<GetUserInteractionParams>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  let interactions = db
-    .interactions_for_review(&params.course_id, &params.user_id)
+  let kind = db
+    .user_interaction_for_review(
+      &params.course_id,
+      &params.user_id,
+      &params.referrer,
+    )
     .await?;
 
-  let likes = interactions
-    .iter()
-    .filter(|i| i.kind == InteractionKind::Like)
-    .count() as i64;
-
-  let dislikes = interactions
-    .iter()
-    .filter(|i| i.kind == InteractionKind::Dislike)
-    .count() as i64;
-
-  let kind = match params.referrer.clone() {
-    Some(referrer) => interactions
-      .into_iter()
-      .find(|i| i.referrer == referrer)
-      .map(|i| i.kind),
-    None => None,
-  };
-
-  Ok(Json(GetInteractionsPayload {
-    kind,
-    likes: likes - dislikes,
-  }))
+  Ok(Json(GetUserInteractionPayload { kind }))
 }
 
 #[derive(Debug, Deserialize)]

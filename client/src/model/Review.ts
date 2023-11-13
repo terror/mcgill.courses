@@ -12,4 +12,5 @@ export type Review = {
   difficulty: number; // 0-5
   timestamp: Timestamp;
   userId: string;
+  likes: number;
 };
