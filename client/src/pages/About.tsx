@@ -71,7 +71,7 @@ const Person = ({
   links?: PersonLink[];
 }) => {
   return (
-    <li className='flex items-center gap-x-4 mt-6'>
+    <li className='mt-6 flex items-center gap-x-4'>
       <img className='w-[100px] rounded-full' src={imageUrl} />
       <div className='flex-row'>
         <Paragraph>{name}</Paragraph>
@@ -174,7 +174,7 @@ const people = [
 export const About = () => {
   return (
     <Layout>
-      <div className='mx-auto max-w-[800px] px-2 my-auto mb-10 flex flex-col'>
+      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2'>
         <Title>Welcome to mcgill.courses!</Title>
         <Paragraph className='text-xl leading-loose text-gray-700 dark:text-gray-200'>
           <Link className='underline' to='/'>
@@ -215,7 +215,7 @@ export const About = () => {
           out to us, either by submitting an issue or pull request on our Github
           repository, or directly by email.
         </Paragraph>
-        <div className='flex gap-x-2 mt-6'>
+        <div className='mt-6 flex gap-x-2'>
           <a
             target='_blank'
             href='https://www.github.com/terror/mcgill.courses'

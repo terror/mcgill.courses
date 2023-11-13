@@ -22,6 +22,7 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "date-fns": "^2.30.0",
+    "flexsearch": "^0.7.21",
     "formik": "^2.4.5",
     "formik-persist-values": "^1.4.1",
     "lodash": "^4.17.21",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@types/flexsearch": "^0.7.6",
     "@types/lodash": "^4.14.199",
     "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7",
