@@ -17,7 +17,7 @@ impl Db {
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
       ClientOptions::parse(env::var("MONGODB_URL").unwrap_or_else(|_| {
-        format!("mongodb://localhost:27017/{}?replicaSet=rs0", db_name).into()
+        format!("mongodb://localhost:27017/{}?replicaSet=rs0", db_name)
       }))
       .await?;
 
