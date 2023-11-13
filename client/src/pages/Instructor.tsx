@@ -32,7 +32,7 @@ export const Instructor = () => {
     if (!params.name) return;
 
     repo
-      .getInstructor(params.name!)
+      .getInstructor(params.name)
       .then((data) => {
         setInstructor(data.instructor);
         setReviews(data.reviews);
