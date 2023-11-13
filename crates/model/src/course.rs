@@ -2,7 +2,7 @@ use super::*;
 use derivative::Derivative;
 
 #[derive(Clone, Debug, Default, Deserialize, Derivative, Serialize)]
-#[derivative(Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derivative(Eq, Hash, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Course {
   #[serde(rename = "_id")]
@@ -31,20 +31,29 @@ pub struct Course {
   pub restrictions: Option<String>,
   pub schedule: Option<Vec<Schedule>>,
   #[derivative(PartialEq = "ignore")]
-  #[derivative(Ord = "ignore")]
   #[derivative(Hash = "ignore")]
   #[serde(default = "zero_f32")]
   pub avg_rating: f32,
   #[derivative(PartialEq = "ignore")]
-  #[derivative(Ord = "ignore")]
   #[derivative(Hash = "ignore")]
   #[serde(default = "zero_f32")]
   pub avg_difficulty: f32,
   #[derivative(PartialEq = "ignore")]
-  #[derivative(Ord = "ignore")]
   #[derivative(Hash = "ignore")]
   #[serde(default = "zero")]
   pub review_count: i32,
+}
+
+impl Ord for Course {
+  fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    self.id.cmp(&other.id)
+  }
+}
+
+impl PartialOrd for Course {
+  fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    Some(self.cmp(other))
+  }
 }
 
 impl Course {
