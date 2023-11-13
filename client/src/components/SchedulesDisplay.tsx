@@ -1,34 +1,14 @@
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
-import { sortSchedulesByBlocks, sortTerms } from '../lib/utils';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import { sortTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
-import type { Block, Schedule, TimeBlock } from '../model/Schedule';
+import type { Block, Schedule } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
-
-const dayToWeekday = (day: string) => {
-  switch (day) {
-    case '1':
-      return 'Sunday';
-    case '2':
-      return 'Monday';
-    case '3':
-      return 'Tuesday';
-    case '4':
-      return 'Wednesday';
-    case '5':
-      return 'Thursday';
-    case '6':
-      return 'Friday';
-    case '7':
-      return 'Saturday';
-    default:
-      throw new Error('Invalid day');
-  }
-};
 
 const VSBtimeToDisplay = (time: string) => {
   const approxTimeOfTheDay = parseInt(time, 10) / 60;
@@ -43,9 +23,51 @@ const VSBtimeToDisplay = (time: string) => {
   `;
 };
 
-type SchedulesDisplayProps = {
-  course: Course;
-  className?: string;
+type ScheduleBlock = Omit<Block, 'timeblocks'> & {
+  timeblocks: RepeatingBlock[];
+};
+
+type RepeatingBlock = {
+  days: string[];
+  startTime: string;
+  endTime: string;
+};
+
+const getSections = (
+  schedules: Schedule[]
+): Record<string, ScheduleBlock[]> => {
+  // group the unique sections by term, i.e Lec 001, Lec 002, Lab 003, etc.
+  const termBlocks = _.mapValues(
+    _.groupBy(schedules, (s) => s.term),
+    (scheds) =>
+      _.sortBy(
+        _.uniqBy(
+          scheds.flatMap((s) => s.blocks),
+          (b) => b.display
+        ),
+        (b) => b.display.split(' ', 2)[1]
+      )
+  );
+
+  // For each section, group together all timeblocks that occur at the same time
+  // into a single RepeatingBlock.
+  const termBlockTimes = _.mapValues(termBlocks, (blocks) =>
+    blocks.map((b) => ({
+      ...b,
+      timeblocks: Object.entries(
+        _.groupBy(b.timeblocks, (tb) => `${tb.t1}-${tb.t2}`)
+      ).map(([time, tbs]) => {
+        const [t1, t2] = time.split('-', 2);
+        return {
+          days: tbs.map((tb) => tb.day),
+          startTime: VSBtimeToDisplay(t1),
+          endTime: VSBtimeToDisplay(t2),
+        };
+      }),
+    }))
+  );
+
+  return termBlockTimes;
 };
 
 const BlockLocation = ({ location }: { location: string }) => {
@@ -60,6 +82,93 @@ const BlockLocation = ({ location }: { location: string }) => {
   );
 };
 
+type TimeblockDaysProps = {
+  days: string[];
+};
+
+const TimeblockDays = ({ days }: TimeblockDaysProps) => {
+  const dayNums = days.map((d) => parseInt(d, 10));
+  return (
+    <div className='flex gap-1'>
+      {['M', 'T', 'W', 'T', 'F'].map((day, i) => (
+        <span
+          className={twMerge(
+            dayNums.includes(i + 2)
+              ? 'font-semibold text-gray-800'
+              : 'text-gray-400 font-extralight'
+          )}
+        >
+          {day}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+type ScheduleRowProps = {
+  block: ScheduleBlock;
+};
+
+const ScheduleRow = ({ block }: ScheduleRowProps) => {
+  const mobile = useMediaQuery('(max-width: 576px)');
+
+  return (
+    <tr className='p-2 text-left odd:bg-slate-100'>
+      <td className='px-2 font-semibold'>{block.display}</td>
+      <td className='px-2 text-gray-700 dark:text-gray-300'>{block.campus}</td>
+      <td className='px-2'>
+        <span className='inline-block font-medium'>
+          {((split) =>
+            split.map((location: string, index) => (
+              <span key={index}>
+                <BlockLocation location={location.trim()} />
+                {index !== split.length - 1 && (
+                  <span className='inline-block'>,&nbsp;</span>
+                )}
+              </span>
+            )))(block.location.split(';'))}
+        </span>
+      </td>
+      {mobile ? (
+        <div className='flex justify-between px-2'>
+          <td className='font-medium'>
+            {block.timeblocks.map((tb) => (
+              <div>
+                {tb.startTime} - {tb.endTime}
+              </div>
+            ))}
+          </td>
+          <td>
+            {block.timeblocks.map((tb) => (
+              <TimeblockDays days={tb.days} />
+            ))}
+          </td>
+        </div>
+      ) : (
+        <>
+          <td className='px-2 font-medium'>
+            {block.timeblocks.map((tb) => (
+              <div>
+                {tb.startTime} - {tb.endTime}
+              </div>
+            ))}
+          </td>
+          <td className='px-2'>
+            {block.timeblocks.map((tb) => (
+              <TimeblockDays days={tb.days} />
+            ))}
+          </td>
+        </>
+      )}
+    </tr>
+  );
+};
+
+type SchedulesDisplayProps = {
+  course: Course;
+  className?: string;
+};
+
 export const SchedulesDisplay = ({
   course,
   className,
@@ -72,140 +181,23 @@ export const SchedulesDisplay = ({
     _.uniq(schedules.map((schedule) => schedule.term))
   );
 
-  const [currrentlyDisplayingCourse, setCurrentlyDisplayingCourse] =
-    useState<string>(course._id);
-
-  const [currentlyDisplayingTerm, setCurrentlyDisplayingTerm] =
-    useState<string>(offeredTerms[0]);
-
-  const [currentlyDisplayingSchedules, setCurrentlyDisplayingSchedules] =
-    useState<Schedule[]>(
-      schedules.filter((schedule) => schedule.term === currentlyDisplayingTerm)
-    );
-
-  const [openBlock, setOpenBlock] = useState<Block | null>(null);
+  const [selectedTerm, setSelectedTerm] = useState(offeredTerms.at(0));
   const [showAll, setShowAll] = useState(false);
-
-  if (currrentlyDisplayingCourse !== course._id) {
-    setCurrentlyDisplayingCourse(course._id);
-    setCurrentlyDisplayingTerm(offeredTerms[0]);
-  }
+  const scheduleByTerm = useMemo(() => getSections(schedules), [course]);
+  const [blocks, setBlocks] = useState(
+    selectedTerm ? scheduleByTerm[selectedTerm] : undefined
+  );
+  console.log(scheduleByTerm);
 
   useEffect(() => {
-    const temp = schedules.filter(
-      (schedule) => schedule.term === currentlyDisplayingTerm
-    );
+    const first = offeredTerms.at(0);
+    setSelectedTerm(first);
+    setBlocks(first ? scheduleByTerm[first] : undefined);
+  }, [course]);
 
-    const uniqueTimeSlots: Schedule[] = [];
-
-    for (const schedule of temp) {
-      for (const block of schedule.blocks) {
-        uniqueTimeSlots.push({
-          ...schedule,
-          blocks: [block],
-        });
-      }
-    }
-
-    const uniqueByBlocks = _.uniqBy(
-      uniqueTimeSlots,
-      (t) => t.blocks[0].display
-    );
-
-    setCurrentlyDisplayingSchedules(sortSchedulesByBlocks(uniqueByBlocks));
-    setOpenBlock(null);
-  }, [currentlyDisplayingTerm]);
-
-  if (offeredTerms.length === 0) {
+  if (!selectedTerm || !blocks) {
     return null;
   }
-
-  const maxDisplayLength =
-    _.max(schedules.flatMap((s) => s.blocks.map((b) => b.display.length))) ?? 0;
-  const displayWidth = maxDisplayLength * 9;
-
-  const singleScheduleRow = (schedule: Schedule, scheduleIndex: number) => (
-    <div key={scheduleIndex}>
-      {schedule.blocks?.map((block: Block, blockIndex) => (
-        <div key={blockIndex} className='flex flex-col'>
-          <div
-            className={twMerge(
-              'flex flex-row justify-between border-t border-neutral-200 p-2 px-3 pl-5 dark:border-neutral-600'
-            )}
-          >
-            <div className='flex flex-row flex-wrap whitespace-pre-wrap text-left md:flex-row'>
-              <div className='font-medium' style={{ width: displayWidth }}>
-                {block.display}
-              </div>
-              <div className='mx-4 font-normal text-gray-700 dark:text-gray-300'>
-                {block.campus}
-              </div>
-              <div>
-                <span className='inline-block font-medium'>
-                  {((split) =>
-                    split.map((location: string, index) => (
-                      <span key={index}>
-                        <BlockLocation location={location.trim()} />
-                        {index !== split.length - 1 && (
-                          <span className='inline-block'>, </span>
-                        )}
-                      </span>
-                    )))(block.location.split(';'))}
-                </span>
-              </div>
-            </div>
-            <button
-              onClick={() =>
-                openBlock !== block ? setOpenBlock(block) : setOpenBlock(null)
-              }
-            >
-              <IoIosArrowDown
-                className={twMerge(
-                  openBlock === block ? 'rotate-180 transform' : '',
-                  'mx-2 h-5 w-5 text-gray-900 dark:text-gray-300'
-                )}
-              />
-            </button>
-          </div>
-          <div
-            className='overflow-y-hidden transition-all duration-300 ease-in-out'
-            style={{
-              height:
-                openBlock === block
-                  ? Math.max(block.timeblocks.length * 40, 40)
-                  : 0,
-              opacity: openBlock === block ? 1 : 0,
-            }}
-          >
-            {openBlock && openBlock === block && (
-              <div className='flex flex-col'>
-                {block.timeblocks.length > 0 ? (
-                  block.timeblocks?.map((timeblock: TimeBlock, i) => (
-                    <div
-                      key={i}
-                      className='flex flex-row justify-between px-3 py-2 pl-5 font-medium text-gray-600 dark:text-neutral-300'
-                    >
-                      <p>{dayToWeekday(timeblock.day)}</p>
-                      <p className='pr-2'>
-                        {VSBtimeToDisplay(timeblock.t1)} -{' '}
-                        {VSBtimeToDisplay(timeblock.t2)}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <div className='flex flex-col'>
-                    <div className='flex flex-row justify-center rounded-b-md px-3 py-2 dark:bg-neutral-700 dark:text-neutral-400'>
-                      <p>No scheduled time block.</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <div
@@ -219,15 +211,15 @@ export const SchedulesDisplay = ({
           <button
             key={i}
             className={twMerge(
-              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200`,
-              term === currentlyDisplayingTerm
-                ? 'bg-slate-200 dark:bg-neutral-600'
-                : 'bg-slate-50 hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700',
+              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b-2`,
+              term === selectedTerm
+                ? 'bg-slate-50 dark:bg-neutral-800'
+                : 'bg-slate-200 dark:bg-neutral-600 hover:bg-slate-100 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
             )}
             onClick={() => {
-              setCurrentlyDisplayingTerm(term);
+              setSelectedTerm(term);
               setShowAll(false);
             }}
           >
@@ -236,10 +228,16 @@ export const SchedulesDisplay = ({
         ))}
       </div>
       <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-700 dark:text-gray-200'>
-        {currentlyDisplayingSchedules.length <= 5 || showAll
-          ? currentlyDisplayingSchedules.map(singleScheduleRow)
-          : currentlyDisplayingSchedules.slice(0, 5).map(singleScheduleRow)}
-        {currentlyDisplayingSchedules.length > 5 && (
+        <table>
+          <colgroup>
+            <col style={{ width: 'auto' }} />
+            <col style={{ width: 'auto' }} />
+          </colgroup>
+          {blocks.length <= 5 || showAll
+            ? blocks.map((s) => <ScheduleRow block={s} />)
+            : blocks.slice(0, 5).map((s) => <ScheduleRow block={s} />)}
+        </table>
+        {blocks.length > 5 && (
           <div className='flex flex-row justify-center'>
             <button
               className='flex flex-row items-center justify-center py-2 text-center font-medium transition duration-300 ease-in-out hover:cursor-pointer dark:text-gray-200'

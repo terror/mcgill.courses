@@ -9,6 +9,8 @@ import { Course } from '../model/Course';
 import { Block, TimeBlock } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
 
+// Unused component, can use this later for schedule builder
+
 const TIMESLOT_HEIGHT = 20;
 const HEIGHT_FACTOR = (TIMESLOT_HEIGHT * 2) / 60;
 

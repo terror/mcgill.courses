@@ -13,7 +13,6 @@ import { NotFound } from '../components/NotFound';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import { VisualSchedule } from '../components/VisualSchedule';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
@@ -210,7 +209,7 @@ export const CoursePage = () => {
           </div>
           <div className='py-2.5' />
           <SchedulesDisplay course={course} />
-          <VisualSchedule course={course} />
+          {/* <VisualSchedule course={course} /> */}
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
               {canReview && (
