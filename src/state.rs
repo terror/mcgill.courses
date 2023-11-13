@@ -74,8 +74,10 @@ impl State {
       request_client: reqwest::Client::new(),
       session_store: session_store.unwrap_or(
         MongodbSessionStore::new(
-          &env::var("MONGODB_URL")
-            .unwrap_or_else(|_| "mongodb://localhost:27017".into()),
+          &env::var("MONGODB_URL").unwrap_or_else(|_| {
+            "mongodb://localhost:27017/?directConnection=true&replicaSet=rs0"
+              .into()
+          }),
           &db.name(),
           "store",
         )

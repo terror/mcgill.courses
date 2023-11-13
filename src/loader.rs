@@ -298,6 +298,7 @@ impl Loader {
       logical_prerequisites: course_page.requirements.logical_prerequisites,
       logical_corequisites: course_page.requirements.logical_corequisites,
       schedule,
+      ..Default::default()
     })
   }
 }

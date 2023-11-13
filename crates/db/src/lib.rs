@@ -1,14 +1,17 @@
 use {
   bson::Bson,
   chrono::{Datelike, Utc},
+  core::fmt,
   futures::Future,
+  futures::FutureExt,
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
   log::{info, warn},
   model::{
-    Course, CourseFilter, InitializeOptions, Instructor, Interaction,
-    Notification, Review, SearchResults, Subscription,
+    Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
+    Interaction, InteractionKind, Notification, Review, SearchResults,
+    Subscription,
   },
   mongodb::{
     bson::{doc, Document},
@@ -17,6 +20,7 @@ use {
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
     Client, Cursor, Database, IndexModel,
   },
+  mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
   {
@@ -29,7 +33,7 @@ use {
 use {
   bson::DateTime,
   include_dir::{include_dir, Dir},
-  model::InteractionKind,
+  model::CourseSort,
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };
