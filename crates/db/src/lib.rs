@@ -1,6 +1,7 @@
 use {
   bson::Bson,
   chrono::{Datelike, Utc},
+  core::fmt,
   futures::Future,
   futures::FutureExt,
   futures::{future::join_all, TryStreamExt},
@@ -8,8 +9,9 @@ use {
   lazy_static::lazy_static,
   log::{info, warn},
   model::{
-    Course, CourseFilter, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Notification, Review, SearchResults, Subscription,
+    Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
+    Interaction, InteractionKind, Notification, Review, SearchResults,
+    Subscription,
   },
   mongodb::{
     bson::{doc, Document},
@@ -31,6 +33,7 @@ use {
 use {
   bson::DateTime,
   include_dir::{include_dir, Dir},
+  model::CourseSort,
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };
