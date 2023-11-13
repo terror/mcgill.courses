@@ -81,7 +81,8 @@ export const TermsAndConditions = () => {
         <p className={p}>
           At mcgill.courses, we believe in fostering a positive and respectful
           community environment. We encourage users to follow these community
-          guidelines when leaving reviews for courses offered at McGill University:
+          guidelines when leaving reviews for courses offered at McGill
+          University:
         </p>
 
         <p className={p}>
