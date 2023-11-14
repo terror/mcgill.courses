@@ -118,7 +118,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
           {allReviews.length} review(s)
         </p>
       </div>
-      <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
+      <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:mx-5 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
         <CourseInfoStats
           variant='large'
           allReviews={allReviews}

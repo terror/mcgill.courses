@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
+import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import { getUrl } from '../lib/utils';
 import type { Notification } from '../model/Notification';
 import type { SearchResults } from '../model/SearchResults';
@@ -14,6 +15,9 @@ import { DarkModeToggle } from './DarkModeToggle';
 import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
+
+const { courses, instructors, coursesIndex, instructorsIndex } =
+  getSearchIndex();
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -43,17 +47,15 @@ export const Navbar = () => {
       .catch(() => toast.error('Failed to get notifications.'));
   }, []);
 
-  const handleInputChange = async (query: string) => {
-    try {
-      setResults({
-        query,
-        ...(await repo.search(query)),
-      });
-    } catch (err) {
-      toast.error(
-        'An error occurred while searching for courses, please try again later.'
-      );
-    }
+  const handleInputChange = (query: string) => {
+    updateSearchResults(
+      query,
+      courses,
+      instructors,
+      coursesIndex,
+      instructorsIndex,
+      setResults
+    );
   };
 
   return (

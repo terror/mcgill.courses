@@ -1,10 +1,6 @@
 use {
   bson::{doc, Bson, DateTime},
-  chrono::prelude::*,
-  serde::{
-    de::{self, MapAccess, Visitor},
-    Deserialize, Deserializer, Serialize,
-  },
+  serde::{Deserialize, Serialize},
   std::{
     fmt::{self, Display, Formatter},
     path::PathBuf,
@@ -27,7 +23,7 @@ mod subscription;
 
 pub use crate::{
   course::Course,
-  course_filter::CourseFilter,
+  course_filter::{CourseFilter, CourseSort, CourseSortType},
   course_listing::CourseListing,
   course_page::CoursePage,
   initialize_options::InitializeOptions,
