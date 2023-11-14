@@ -15,13 +15,14 @@ impl Db {
   const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
-    let mut client_options = ClientOptions::parse(format!(
-      "{}/{}?replicaSet=rs0",
-      env::var("MONGODB_URL")
-        .unwrap_or_else(|_| { "mongodb://localhost:27017".into() }),
-      db_name
-    ))
-    .await?;
+    let mut client_options =
+      ClientOptions::parse(env::var("MONGODB_URL").unwrap_or_else(|_| {
+        format!(
+          "mongodb://localhost:27017/{}?directConnection=true&replicaSet=rs0",
+          db_name
+        )
+      }))
+      .await?;
 
     client_options.app_name = Some(db_name.to_string());
 
