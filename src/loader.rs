@@ -61,7 +61,7 @@ pub(crate) struct Loader {
 }
 
 impl Loader {
-  const BASE_URL: &str = "https://www.mcgill.ca";
+  const BASE_URL: &'static str = "https://www.mcgill.ca";
 
   pub(crate) fn run(&self, source: PathBuf) -> Result {
     info!("Running extractor...");

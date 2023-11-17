@@ -1,7 +1,6 @@
 import { Tab } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { User } from 'react-feather';
-import { FaTrash } from 'react-icons/fa';
 import { LuFileText } from 'react-icons/lu';
 import { VscBell } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
@@ -9,6 +8,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { CourseReview } from '../components/CourseReview';
+import { DeleteButton } from '../components/DeleteButton';
 import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
@@ -202,9 +202,14 @@ export const Profile = () => {
                     >
                       {subscription.courseId}
                     </Link>
-                    <FaTrash
-                      onClick={() => removeSubscription(subscription.courseId)}
-                      className='ml-auto dark:text-white'
+                    <DeleteButton
+                      title='Delete Subscription'
+                      className='ml-auto'
+                      text={`Are you sure you want to delete your subscription for ${subscription.courseId}? `}
+                      onConfirm={() =>
+                        removeSubscription(subscription.courseId)
+                      }
+                      size={20}
                     />
                   </div>
                 ))
