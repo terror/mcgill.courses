@@ -10,6 +10,7 @@ type DeleteButtonProps = {
   text: string;
   onConfirm: () => void;
   size: number;
+  className?: string;
 };
 
 export const DeleteButton = ({
@@ -17,6 +18,7 @@ export const DeleteButton = ({
   text,
   onConfirm,
   size = 20,
+  className,
 }: DeleteButtonProps) => {
   const [open, setOpen] = useState(false);
 
@@ -29,7 +31,11 @@ export const DeleteButton = ({
 
   return (
     <>
-      <button type='button' className='h-fit' onClick={() => setOpen(true)}>
+      <button
+        type='button'
+        className={twMerge('h-fit', className)}
+        onClick={() => setOpen(true)}
+      >
         <Trash2
           className='stroke-gray-500 transition duration-200 hover:stroke-red-600 dark:stroke-gray-400 dark:hover:stroke-red-600'
           size={size}
