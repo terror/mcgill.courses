@@ -7,7 +7,7 @@ pub(crate) struct VsbClient<'a> {
 }
 
 impl<'a> VsbClient<'a> {
-  const BASE_URL: &str = "https://vsb.mcgill.ca/vsb/getclassdata.jsp";
+  const BASE_URL: &'static str = "https://vsb.mcgill.ca/vsb/getclassdata.jsp";
 
   pub(crate) fn new(
     client: &'a reqwest::blocking::Client,
