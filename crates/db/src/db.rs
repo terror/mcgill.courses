@@ -7,12 +7,12 @@ pub struct Db {
 }
 
 impl Db {
-  const COURSE_COLLECTION: &str = "courses";
-  const INSTRUCTOR_COLLECTION: &str = "instructors";
-  const INTERACTION_COLLECTION: &str = "interactions";
-  const NOTIFICATION_COLLECTION: &str = "notifications";
-  const REVIEW_COLLECTION: &str = "reviews";
-  const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
+  const COURSE_COLLECTION: &'static str = "courses";
+  const INSTRUCTOR_COLLECTION: &'static str = "instructors";
+  const INTERACTION_COLLECTION: &'static str = "interactions";
+  const NOTIFICATION_COLLECTION: &'static str = "notifications";
+  const REVIEW_COLLECTION: &'static str = "reviews";
+  const SUBSCRIPTION_COLLECTION: &'static str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
