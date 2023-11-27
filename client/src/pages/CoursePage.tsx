@@ -230,7 +230,6 @@ export const CoursePage = () => {
           </div>
           <div className='py-2.5' />
           <SchedulesDisplay course={course} />
-          {/* <VisualSchedule course={course} /> */}
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
               {canReview && (
