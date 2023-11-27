@@ -7,8 +7,8 @@ pub(crate) struct Initializer {
 }
 
 impl Initializer {
-  const COURSE_COLLECTION: &str = "courses";
-  const INSTRUCTOR_COLLECTION: &str = "instructors";
+  const COURSE_COLLECTION: &'static str = "courses";
+  const INSTRUCTOR_COLLECTION: &'static str = "instructors";
 
   pub(crate) fn new(db: Db, options: InitializeOptions) -> Self {
     Self { db, options }
