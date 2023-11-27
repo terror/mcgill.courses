@@ -167,7 +167,6 @@ export const SchedulesDisplay = ({
   const [blocks, setBlocks] = useState(
     selectedTerm ? scheduleByTerm[selectedTerm] : undefined
   );
-  console.log(scheduleByTerm);
 
   useEffect(() => {
     setSelectedTerm(offeredTerms.at(0));
