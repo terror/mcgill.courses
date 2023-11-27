@@ -4,7 +4,6 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
-import { useMediaQuery } from '../hooks/useMediaQuery';
 import { sortTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Block, Schedule } from '../model/Schedule';
@@ -76,7 +75,10 @@ const BlockLocation = ({ location }: { location: string }) => {
   return (
     <span className='relative whitespace-nowrap'>
       <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
-        <p className='inline-block cursor-default'> {location}</p>
+        <p className='inline-block cursor-default text-sm sm:text-base'>
+          {' '}
+          {location}
+        </p>
       </Tooltip>
     </span>
   );
@@ -93,6 +95,7 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
       {['M', 'T', 'W', 'T', 'F'].map((day, i) => (
         <span
           className={twMerge(
+            'sm:text-base text-sm',
             dayNums.includes(i + 2)
               ? 'font-semibold text-gray-800'
               : 'text-gray-400 font-extralight'
@@ -110,55 +113,33 @@ type ScheduleRowProps = {
 };
 
 const ScheduleRow = ({ block }: ScheduleRowProps) => {
-  const mobile = useMediaQuery('(max-width: 576px)');
-
   return (
     <tr className='p-2 text-left odd:bg-neutral-100'>
-      <td className='pl-6 font-semibold'>{block.display}</td>
+      <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
+        {block.display}
+      </td>
       <td className='py-2 text-gray-700'>
-        <span className='inline-block font-medium'>
+        <div className='flex flex-col items-start pl-1 text-center font-medium'>
           {((split) =>
             split.map((location: string, index) => (
               <span key={index}>
                 <BlockLocation location={location.trim()} />
-                {index !== split.length - 1 && (
-                  <span className='inline-block'>,&nbsp;</span>
-                )}
               </span>
             )))(block.location.split(';'))}
-        </span>
+        </div>
       </td>
-      {mobile ? (
-        <>
-          <td className='py-2 text-sm font-medium'>
-            {block.timeblocks.map((tb) => (
-              <div>
-                {tb.startTime} - {tb.endTime}
-              </div>
-            ))}
-          </td>
-          <td className='p-2'>
-            {block.timeblocks.map((tb) => (
-              <TimeblockDays days={tb.days} />
-            ))}
-          </td>
-        </>
-      ) : (
-        <>
-          <td className='py-2 text-sm font-medium'>
-            {block.timeblocks.map((tb) => (
-              <div>
-                {tb.startTime} - {tb.endTime}
-              </div>
-            ))}
-          </td>
-          <td className='p-2'>
-            {block.timeblocks.map((tb) => (
-              <TimeblockDays days={tb.days} />
-            ))}
-          </td>
-        </>
-      )}
+      <td className='whitespace-nowrap py-2 text-sm font-medium'>
+        {block.timeblocks.map((tb) => (
+          <div>
+            {tb.startTime} - {tb.endTime}
+          </div>
+        ))}
+      </td>
+      <td className='p-2'>
+        {block.timeblocks.map((tb) => (
+          <TimeblockDays days={tb.days} />
+        ))}
+      </td>
     </tr>
   );
 };
@@ -212,7 +193,7 @@ export const SchedulesDisplay = ({
           <button
             key={i}
             className={twMerge(
-              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b`,
+              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b sm:text-base text-sm`,
               term === selectedTerm
                 ? 'bg-slate-50 dark:bg-neutral-800'
                 : 'bg-slate-200 dark:bg-neutral-600 hover:bg-slate-100 dark:hover:bg-neutral-700',
