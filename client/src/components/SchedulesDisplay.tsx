@@ -35,7 +35,7 @@ type RepeatingBlock = {
 const getSections = (
   schedules: Schedule[]
 ): Record<string, ScheduleBlock[]> => {
-  // group the unique sections by term, i.e Lec 001, Lec 002, Lab 003, etc.
+  // Group the unique sections by term, i.e Lec 001, Lec 002, Lab 003, etc.
   const termBlocks = _.mapValues(
     _.groupBy(schedules, (s) => s.term),
     (scheds) =>
