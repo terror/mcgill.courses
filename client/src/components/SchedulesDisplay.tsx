@@ -97,8 +97,8 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
           className={twMerge(
             'sm:text-base text-sm',
             dayNums.includes(i + 2)
-              ? 'font-semibold text-gray-800 dark:text-gray-200'
-              : 'text-gray-400 font-extralight dark:text-gray-500'
+              ? 'font-semibold text-gray-800 dark:text-gray-100'
+              : 'text-gray-400 font-extralight dark:text-gray-400'
           )}
         >
           {day}
