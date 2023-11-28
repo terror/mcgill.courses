@@ -97,8 +97,8 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
           className={twMerge(
             'sm:text-base text-sm',
             dayNums.includes(i + 2)
-              ? 'font-semibold text-gray-800'
-              : 'text-gray-400 font-extralight'
+              ? 'font-semibold text-gray-800 dark:text-gray-200'
+              : 'text-gray-400 font-extralight dark:text-gray-500'
           )}
         >
           {day}
@@ -114,11 +114,11 @@ type ScheduleRowProps = {
 
 const ScheduleRow = ({ block }: ScheduleRowProps) => {
   return (
-    <tr className='p-2 text-left odd:bg-neutral-100'>
+    <tr className='p-2 text-left odd:bg-neutral-100 odd:dark:bg-neutral-700'>
       <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
         {block.display}
       </td>
-      <td className='py-2 text-gray-700'>
+      <td className='py-2 text-gray-700 dark:text-gray-300'>
         <div className='flex flex-col items-start pl-1 text-center font-medium'>
           {((split) =>
             split.map((location: string, index) => (
@@ -192,7 +192,7 @@ export const SchedulesDisplay = ({
           <button
             key={i}
             className={twMerge(
-              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b sm:text-base text-sm`,
+              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b sm:text-base text-sm dark:border-b-neutral-600`,
               term === selectedTerm
                 ? 'bg-slate-50 dark:bg-neutral-800'
                 : 'bg-slate-200 dark:bg-neutral-600 hover:bg-slate-100 dark:hover:bg-neutral-700',
@@ -208,7 +208,7 @@ export const SchedulesDisplay = ({
           </button>
         ))}
       </div>
-      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-700 dark:text-gray-200'>
+      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-600 dark:text-gray-200'>
         <table>
           {blocks.length <= 5 || showAll
             ? blocks.map((s) => <ScheduleRow block={s} />)
