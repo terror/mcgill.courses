@@ -114,7 +114,7 @@ type ScheduleRowProps = {
 
 const ScheduleRow = ({ block }: ScheduleRowProps) => {
   return (
-    <tr className='p-2 text-left odd:bg-neutral-100 odd:dark:bg-neutral-700'>
+    <tr className='p-2 text-left even:bg-slate-100 even:dark:bg-[rgb(48,48,48)]'>
       <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
         {block.display}
       </td>
@@ -154,6 +154,7 @@ export const SchedulesDisplay = ({
   className,
 }: SchedulesDisplayProps) => {
   const schedules = course.schedule;
+  console.log(schedules);
 
   if (!schedules) return null;
 
@@ -174,7 +175,7 @@ export const SchedulesDisplay = ({
 
   useEffect(() => {
     setBlocks(selectedTerm ? scheduleByTerm[selectedTerm] : undefined);
-  }, [selectedTerm]);
+  }, [course, selectedTerm]);
 
   if (!selectedTerm || !blocks) {
     return null;
@@ -208,7 +209,7 @@ export const SchedulesDisplay = ({
           </button>
         ))}
       </div>
-      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-600 dark:text-gray-200'>
+      <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'>
         <table>
           {blocks.length <= 5 || showAll
             ? blocks.map((s) => <ScheduleRow block={s} />)
