@@ -123,10 +123,28 @@ impl Server {
         .fallback_service(assets.index)
     }
 
+    let service = ServiceBuilder::new()
+      .layer(
+        TraceLayer::new_for_http()
+          .on_request(|request: &Request<Body>, _span: &Span| {
+            tracing::info!(
+              "Received {} {}",
+              request.method(),
+              request.uri().path(),
+            )
+          })
+          .on_response(
+            |response: &Response, latency: Duration, _span: &Span| {
+              tracing::info!("Response {} in {:?}", response.status(), latency)
+            },
+          ),
+      )
+      .layer(CorsLayer::very_permissive());
+
     Ok(
       router
         .with_state(State::new(db, session_store).await?)
-        .layer(CorsLayer::very_permissive()),
+        .layer(service),
     )
   }
 }
