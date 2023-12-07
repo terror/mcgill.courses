@@ -1,3 +1,5 @@
+use axum::{error_handling::HandleErrorLayer, BoxError};
+
 use super::*;
 
 #[derive(Parser)]
@@ -135,6 +137,15 @@ impl Server {
             },
           ),
       )
+      // HandleErrorLayer + BufferLayer are required for RateLimitLayer to satisfy trait bounds in Axum
+      .layer(HandleErrorLayer::new(|err: BoxError| async move {
+        (
+          StatusCode::INTERNAL_SERVER_ERROR,
+          format!("Unhandled error: {}", err),
+        )
+      }))
+      .layer(BufferLayer::new(10))
+      .layer(RateLimitLayer::new(100, Duration::from_secs(1)))
       .layer(CorsLayer::very_permissive());
 
     Ok(

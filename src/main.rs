@@ -73,7 +73,7 @@ use {
     thread,
     time::Duration,
   },
-  tower::ServiceBuilder,
+  tower::{buffer::BufferLayer, limit::RateLimitLayer, ServiceBuilder},
   tower_http::{
     cors::CorsLayer,
     services::{ServeDir, ServeFile},
