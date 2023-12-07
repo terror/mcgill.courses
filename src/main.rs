@@ -22,6 +22,7 @@ use {
   async_session::{async_trait, Session, SessionStore},
   axum::{
     body::Body,
+    error_handling::HandleErrorLayer,
     extract::{
       rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
       Query, State as AppState,
@@ -29,7 +30,7 @@ use {
     headers::Cookie,
     response::{IntoResponse, Redirect, Response, TypedHeader},
     routing::{get, post, Router},
-    Json, RequestPartsExt,
+    BoxError, Json, RequestPartsExt,
   },
   base64::{engine::general_purpose::STANDARD, Engine},
   chrono::prelude::*,
