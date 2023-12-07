@@ -127,15 +127,11 @@ impl Server {
       .layer(
         TraceLayer::new_for_http()
           .on_request(|request: &Request<Body>, _span: &Span| {
-            tracing::info!(
-              "Received {} {}",
-              request.method(),
-              request.uri().path(),
-            )
+            info!("Received {} {}", request.method(), request.uri().path(),)
           })
           .on_response(
             |response: &Response, latency: Duration, _span: &Span| {
-              tracing::info!("Response {} in {:?}", response.status(), latency)
+              info!("Response {} in {:?}", response.status(), latency)
             },
           ),
       )
