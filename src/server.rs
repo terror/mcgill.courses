@@ -113,7 +113,8 @@ impl Server {
           .post(subscriptions::add_subscription)
           .delete(subscriptions::delete_subscription),
       )
-      .route("/api/user", get(user::get_user));
+      .route("/api/user", get(user::get_user))
+      .nest_service("/.well-known", ServeDir::new(".well-known"));
 
     if let Some(assets) = assets {
       info!("Adding asset directory to router...");
