@@ -21,6 +21,7 @@ use {
   async_mongodb_session::MongodbSessionStore,
   async_session::{async_trait, Session, SessionStore},
   axum::{
+    body::Body,
     extract::{
       rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
       Query, State as AppState,
@@ -37,7 +38,9 @@ use {
   dotenv::dotenv,
   env_logger::Env,
   futures::TryStreamExt,
-  http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
+  http::{
+    header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
+  },
   log::{debug, error, info, trace, warn},
   model::{
     Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
@@ -70,10 +73,13 @@ use {
     thread,
     time::Duration,
   },
+  tower::ServiceBuilder,
   tower_http::{
     cors::CorsLayer,
     services::{ServeDir, ServeFile},
+    trace::TraceLayer,
   },
+  tracing::Span,
   url::Url,
   walkdir::WalkDir,
 };
