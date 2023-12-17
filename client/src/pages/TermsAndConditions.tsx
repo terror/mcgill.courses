@@ -22,31 +22,7 @@ export const TermsAndConditions = () => {
         <Paragraph>
           mcgill.courses is committed to ensuring that the website is as useful
           and efficient as possible. For that reason, we reserve the right to
-          make changes to the website or to charge for its services, at any time
-          and for any reason. We will never charge you for the website or its
-          services without making it very clear to you exactly what you’re
-          paying for.
-        </Paragraph>
-
-        <Paragraph>
-          If you’re using the app outside of an area with Wi-Fi, you should
-          remember that the terms of the agreement with your mobile network
-          provider will still apply. As a result, you may be charged by your
-          mobile provider for the cost of data for the duration of the
-          connection while accessing the app, or other third-party charges. In
-          using the app, you’re accepting responsibility for any such charges,
-          including roaming data charges if you use the app outside of your home
-          territory (i.e. region or country) without turning off data roaming.
-          If you are not the bill payer for the device on which you’re using the
-          app, please be aware that we assume that you have received permission
-          from the bill payer for using the app.
-        </Paragraph>
-
-        <Paragraph>
-          Along the same lines, mcgill.courses cannot always take responsibility
-          for the way you use the website i.e. You need to make sure that your
-          device stays charged – if it runs out of battery and you can’t turn it
-          on to avail the Service, mcgill.courses cannot accept responsibility.
+          make changes to the website.
         </Paragraph>
 
         <Paragraph>
@@ -60,19 +36,15 @@ export const TermsAndConditions = () => {
         </Paragraph>
 
         <Paragraph>
-          At some point, we may wish to update the app. The app is currently
-          available on – the requirements for the system(and for any additional
-          systems we decide to extend the availability of the app to) may
-          change, and you’ll need to download the updates if you want to keep
-          using the app. mcgill.courses does not promise that it will always
-          update the app so that it is relevant to you and/or works with the
-          version that you have installed on your device. However, you promise
-          to always accept updates to the application when offered to you, We
-          may also wish to stop providing the app, and may terminate use of it
-          at any time without giving notice of termination to you. Unless we
-          tell you otherwise, upon any termination, (a) the rights and licenses
-          granted to you in these terms will end; (b) you must stop using the
-          app, and (if needed) delete it from your device.
+          mcgill.courses does not promise that it will always update the app so
+          that it is relevant to you and/or works with the version that you have
+          installed on your device. However, you promise to always accept
+          updates to the application when offered to you, We may also wish to
+          stop providing the app, and may terminate use of it at any time
+          without giving notice of termination to you. Unless we tell you
+          otherwise, upon any termination, (a) the rights and licenses granted
+          to you in these terms will end; (b) you must stop using the app, and
+          (if needed) delete it from your device.
         </Paragraph>
 
         <h2 className={h2}>Community Guidelines</h2>
