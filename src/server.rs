@@ -113,7 +113,8 @@ impl Server {
           .post(subscriptions::add_subscription)
           .delete(subscriptions::delete_subscription),
       )
-      .route("/api/user", get(user::get_user));
+      .route("/api/user", get(user::get_user))
+      .nest_service("/.well-known", ServeDir::new(".well-known"));
 
     if let Some(assets) = assets {
       info!("Adding asset directory to router...");
@@ -123,10 +124,24 @@ impl Server {
         .fallback_service(assets.index)
     }
 
+    let service = ServiceBuilder::new()
+      .layer(
+        TraceLayer::new_for_http()
+          .on_request(|request: &Request<Body>, _span: &Span| {
+            info!("Received {} {}", request.method(), request.uri().path(),)
+          })
+          .on_response(
+            |response: &Response, latency: Duration, _span: &Span| {
+              info!("Response {} in {:?}", response.status(), latency)
+            },
+          ),
+      )
+      .layer(CorsLayer::very_permissive());
+
     Ok(
       router
         .with_state(State::new(db, session_store).await?)
-        .layer(CorsLayer::very_permissive()),
+        .layer(service),
     )
   }
 }
