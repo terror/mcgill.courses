@@ -90,7 +90,7 @@ const Person = ({
   );
 };
 
-const Paragraph = ({
+export const Paragraph = ({
   children,
   className,
 }: {

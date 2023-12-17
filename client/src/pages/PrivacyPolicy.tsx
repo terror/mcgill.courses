@@ -1,16 +1,15 @@
 import { Layout } from '../components/Layout';
+import { Paragraph } from './About';
 
 export const PrivacyPolicy = () => {
-  const h2 = 'text-2xl text-neutral-700 dark:text-gray-300';
+  const h2 = 'text-2xl font-bold text-neutral-700 dark:text-gray-300';
   const h1 = 'text-4xl font-bold text-neutral-700 dark:text-gray-300';
-  const p =
-    'text-md hyphens-auto break-words text-justify font-medium text-neutral-500 dark:text-gray-500';
 
   return (
     <Layout>
-      <div className='space-y-5 px-10 py-7'>
+      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2 gap-9 my-10'>
         <h1 className={h1}>Privacy Policy</h1>
-        <p className={p}>
+        <Paragraph>
           mcgill.courses is an Open-Sourced app. This service is provided at no
           cost and is intended for use as is. This page is used to inform
           visitors regarding our policies with the collection, use, and
@@ -22,18 +21,18 @@ export const PrivacyPolicy = () => {
           Policy. The terms used in this Privacy Policy have the same meanings
           as in our Terms and Conditions, which are accessible at mcgill.courses
           unless otherwise defined in this Privacy Policy.
-        </p>
+        </Paragraph>
 
         <h2 className={h2}>Information Collection and Use</h2>
-        <p className={p}>
+        <Paragraph>
           For a better experience, while using our Service, we may require you
           to provide us with certain personally identifiable information.The
           information that we request will be not retained by us.
-        </p>
+        </Paragraph>
 
         <h2 className={h2}>Cookies</h2>
 
-        <p className={p}>
+        <Paragraph>
           Cookies are files with a small amount of data that are commonly used
           as anonymous unique identifiers. These are sent to your browser from
           the websites that you visit and are stored on your device's internal
@@ -49,44 +48,44 @@ export const PrivacyPolicy = () => {
           You have the option to disable or delete these cookies through your
           browser settings, but doing so may impact the functionality and
           usability of our Service.
-        </p>
+        </Paragraph>
 
         <h2 className={h2}>Security</h2>
 
-        <p className={p}>
+        <Paragraph>
           We value your trust in providing us your Personal Information, thus we
           are striving to use commercially acceptable means of protecting it.
           But remember that no method of transmission over the internet, or
           method of electronic storage is 100 % secure and reliable, and we
           cannot guarantee its absolute security.
-        </p>
+        </Paragraph>
 
         <h2 className={h2}>Links to Other Sites</h2>
 
-        <p className={p}>
+        <Paragraph>
           This Service may contain links to other sites. If you click on a
           third-party link, you will be directed to that site. Note that these
           external sites are not operated by us. Therefore, we strongly advise
           you to review the Privacy Policy of these websites. We have no control
           over and assume no responsibility for the content, privacy policies,
           or practices of any third-party sites or services.
-        </p>
+        </Paragraph>
 
         <h2 className={h2}>Changes to This Privacy Policy</h2>
 
-        <p className={p}>
+        <Paragraph>
           We may update our Privacy Policy from time to time. Thus, you are
           advised to review this page periodically for any changes. We will
           notify you of any changes by posting the new Privacy Policy on this
           page. This policy is effective as of 2023-11-12.
-        </p>
+        </Paragraph>
 
         <h2 className={h2}>Contact Us</h2>
 
-        <p className={p}>
+        <Paragraph>
           If you have any questions or suggestions about our Privacy Policy, do
           not hesitate to contact us at admin@mcgill.courses.
-        </p>
+        </Paragraph>
       </div>
     </Layout>
   );
