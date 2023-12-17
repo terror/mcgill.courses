@@ -1,5 +1,5 @@
 import { Layout } from '../components/Layout';
-import { Paragraph } from './About';
+import { Paragraph } from '../components/Paragraph';
 
 export const PrivacyPolicy = () => {
   const h2 = 'text-2xl font-bold text-neutral-700 dark:text-gray-300';
@@ -7,7 +7,7 @@ export const PrivacyPolicy = () => {
 
   return (
     <Layout>
-      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2 gap-9 my-10'>
+      <div className='m-auto my-10 flex max-w-[800px] flex-col gap-9 px-2'>
         <h1 className={h1}>Privacy Policy</h1>
         <Paragraph>
           mcgill.courses is an Open-Sourced app. This service is provided at no

@@ -3,9 +3,9 @@ import { AiOutlineGithub } from 'react-icons/ai';
 import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import { twMerge } from 'tailwind-merge';
 
 import { Layout } from '../components/Layout';
+import { Paragraph } from '../components/Paragraph';
 
 type QuestionAnswer = {
   title: string;
@@ -89,23 +89,6 @@ const Person = ({
     </li>
   );
 };
-
-export const Paragraph = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <p
-    className={twMerge(
-      'text-xl leading-loose text-gray-700 dark:text-gray-200',
-      className
-    )}
-  >
-    {children}
-  </p>
-);
 
 const questions = [
   {
