@@ -124,9 +124,7 @@ export const TermsAndConditions = () => {
           understand the consequences for violating them.
         </Paragraph>
 
-        <h2 className='text-2xl text-neutral-700 dark:text-gray-300'>
-          Changes to This Terms and Conditions
-        </h2>
+        <h2 className={h2}>Changes to This Terms and Conditions</h2>
 
         <Paragraph>
           We may update our Terms and Conditions from time to time. Thus, you
