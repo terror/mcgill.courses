@@ -57,9 +57,9 @@ export const MultiSelect = ({
         multiple
       >
         <div className='relative max-w-[240px]'>
-          <div className='relative rounded-md bg-gray-100 p-2 dark:bg-neutral-700'>
+          <div className='relative rounded-md bg-slate-200 p-2 dark:bg-neutral-700'>
             <Combobox.Input
-              className='w-full bg-gray-100 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className='w-full bg-slate-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
               onChange={(event) => setQuery(event.target.value)}
               onBlur={handleInputBlur}
             />

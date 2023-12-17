@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y libssl1.1 ca-certificates
 
 COPY --from=build /app/client/dist assets
 COPY --from=server /usr/src/app/seed seed
+COPY --from=server /usr/src/app/.well-known .well-known
 COPY --from=server /usr/src/app/target/release/server /usr/local/bin
 
 CMD server --source seed serve --asset-dir assets --initialize --db-name mcgill-courses
