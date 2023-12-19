@@ -35,9 +35,9 @@ const SearchResult = ({
 
   const icon =
     type === 'course' ? (
-      <Layers className='mr-2 dark:text-gray-200' />
+      <Layers className='dark:text-gray-200' />
     ) : (
-      <User className='mr-2 dark:text-gray-200' />
+      <User className='dark:text-gray-200' />
     );
 
   return (
@@ -54,7 +54,7 @@ const SearchResult = ({
         )}
         key={index}
       >
-        {icon}
+        <div className='mr-2 w-6'>{icon}</div>
         <Highlight
           className='dark:text-gray-200'
           query={query?.trim()}
