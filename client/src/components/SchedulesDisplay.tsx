@@ -154,7 +154,6 @@ export const SchedulesDisplay = ({
   className,
 }: SchedulesDisplayProps) => {
   const schedules = course.schedule;
-  console.log(schedules);
 
   if (!schedules) return null;
 
