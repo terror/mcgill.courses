@@ -1,6 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { User } from 'react-feather';
+import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import { getUrl } from '../lib/utils';
@@ -26,8 +27,8 @@ export const ProfileDropdown = () => {
           <div className='py-1'>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href='/profile'
+                <Link
+                  to='/profile'
                   className={twMerge(
                     active
                       ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200'
@@ -36,7 +37,7 @@ export const ProfileDropdown = () => {
                   )}
                 >
                   Profile
-                </a>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>
