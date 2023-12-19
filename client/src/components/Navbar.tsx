@@ -64,7 +64,6 @@ export const Navbar = () => {
       courses: [],
       instructors: [],
     });
-    console.log('bruh');
   };
 
   return (
