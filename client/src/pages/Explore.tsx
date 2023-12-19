@@ -156,7 +156,7 @@ export const Explore = () => {
                     />
                     {courses.map((course, i) => (
                       <CourseCard
-                        className='m-2'
+                        className='my-1.5'
                         course={course}
                         key={i}
                         query={query}

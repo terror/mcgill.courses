@@ -228,7 +228,6 @@ export const CoursePage = () => {
           <div className='flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
-          <div className='py-2.5' />
           <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
