@@ -4,7 +4,6 @@ import VisGraph, { Edge, GraphData, Node } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { useMediaQuery } from '../hooks/useMediaQuery';
 import {
   courseIdToUrlParam,
   isValidCourseCode,
@@ -74,7 +73,6 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
   const navigate = useNavigate();
 
   const [darkMode] = useDarkMode();
-  const mobile = useMediaQuery('(max-width: 480px)');
 
   const {
     nodes: prereqNodes,
@@ -175,10 +173,6 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
           offset: {
             x: 60,
             y: 0,
-          },
-          animation: {
-            duration: mobile ? 2500 : 1000,
-            easingFunction: 'easeOutCubic',
           },
         });
       }}
