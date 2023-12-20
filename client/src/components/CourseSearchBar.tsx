@@ -35,9 +35,9 @@ const SearchResult = ({
 
   const icon =
     type === 'course' ? (
-      <Layers className='mr-2 dark:text-gray-200' />
+      <Layers className='dark:text-gray-200' />
     ) : (
-      <User className='mr-2 dark:text-gray-200' />
+      <User className='dark:text-gray-200' />
     );
 
   return (
@@ -54,7 +54,7 @@ const SearchResult = ({
         )}
         key={index}
       >
-        {icon}
+        <div className='mr-2 w-6'>{icon}</div>
         <Highlight
           className='dark:text-gray-200'
           query={query?.trim()}
@@ -77,7 +77,7 @@ const ExploreButton = () => {
     >
       <div
         className={twMerge(
-          'flex cursor-pointer items-center p-3 text-left dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 transition-all duration-200',
+          'flex cursor-pointer items-center p-3 text-left dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 transition-all duration-75',
           isHovering ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
       >
