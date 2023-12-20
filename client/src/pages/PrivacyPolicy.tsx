@@ -23,13 +23,6 @@ export const PrivacyPolicy = () => {
           unless otherwise defined in this Privacy Policy.
         </Paragraph>
 
-        <h2 className={h2}>Information Collection and Use</h2>
-        <Paragraph>
-          For a better experience, while using our Service, we may require you
-          to provide us with certain personally identifiable information.The
-          information that we request will be not retained by us.
-        </Paragraph>
-
         <h2 className={h2}>Cookies</h2>
 
         <Paragraph>

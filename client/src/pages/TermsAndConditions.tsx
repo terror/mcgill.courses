@@ -25,28 +25,6 @@ export const TermsAndConditions = () => {
           make changes to the website.
         </Paragraph>
 
-        <Paragraph>
-          With respect to mcgill.courses’s responsibility for your use of the
-          app, when you’re using the app, it’s important to bear in mind that
-          although we endeavor to ensure that it is updated and correct at all
-          times, we do rely on third parties to provide information to us so
-          that we can make it available to you. mcgill.courses accepts no
-          liability for any loss, direct or indirect, you experience as a result
-          of relying wholly on this functionality of the app.
-        </Paragraph>
-
-        <Paragraph>
-          mcgill.courses does not promise that it will always update the app so
-          that it is relevant to you and/or works with the version that you have
-          installed on your device. However, you promise to always accept
-          updates to the application when offered to you, We may also wish to
-          stop providing the app, and may terminate use of it at any time
-          without giving notice of termination to you. Unless we tell you
-          otherwise, upon any termination, (a) the rights and licenses granted
-          to you in these terms will end; (b) you must stop using the app, and
-          (if needed) delete it from your device.
-        </Paragraph>
-
         <h2 className={h2}>Community Guidelines</h2>
 
         <Paragraph>
@@ -100,10 +78,9 @@ export const TermsAndConditions = () => {
 
         <Paragraph>
           We may update our Terms and Conditions from time to time. Thus, you
-          are advised to review this page periodically for any changes. We will
-          notify you of any changes by posting the new Terms and Conditions on
-          this page. If you have any questions or suggestions about our Terms
-          and Conditions, do not hesitate to contact us at admin@mcgill.courses.
+          are advised to review this page periodically for any changes. If you
+          have any questions or suggestions about our Terms and Conditions, do
+          not hesitate to contact us at admin@mcgill.courses.
         </Paragraph>
       </div>
     </Layout>
