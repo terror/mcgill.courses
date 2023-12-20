@@ -14,7 +14,7 @@ export const TermsAndConditions = () => {
           By using mcgill.courses, these terms will automatically apply to you –
           you should make sure therefore that you read them carefully before
           using the website. As the website is open-sourced, You are allowed to
-          copy or modify the app as per the liscence indicates.
+          copy or modify the app as per the licence indicates.
         </Paragraph>
 
         <h2 className={h2}>General Usage</h2>
