@@ -23,7 +23,7 @@ export const IconRatingInput = ({
           className={i < rating ? 'fill-red-500' : 'fill-gray-200'}
           id={`${name}-star-${i}`}
           key={i}
-          size={20}
+          size={22}
           strokeWidth={0}
         />
       </div>
