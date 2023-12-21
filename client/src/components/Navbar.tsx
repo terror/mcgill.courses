@@ -70,7 +70,7 @@ export const Navbar = () => {
           </Link>
         </div>
         {pathName !== '/' ? (
-          <div className='mx-8 my-auto hidden flex-1 justify-center align-middle sm:mx-12 sm:block md:mx-32'>
+          <div className='mx-8 my-auto hidden flex-1 justify-center align-middle sm:mx-12 sm:block md:mx-28'>
             <CourseSearchBar
               results={results}
               handleInputChange={handleInputChange}
@@ -78,7 +78,7 @@ export const Navbar = () => {
           </div>
         ) : null}
         {user && (
-          <div className='lg:hidden'>
+          <div className='mr-2 lg:hidden'>
             <NotificationDropdown
               notifications={notifications}
               setNotifications={setNotifications}
@@ -92,11 +92,14 @@ export const Navbar = () => {
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className='sr-only'>Open main menu</span>
-            <Bars3Icon className='h-6 w-6' aria-hidden='true' />
+            <Bars3Icon
+              className='h-6 w-6 stroke-2 text-gray-400'
+              aria-hidden='true'
+            />
           </button>
         </div>
         <div className='flex min-w-fit flex-row lg:flex-1'>
-          <div className='my-auto hidden lg:ml-auto lg:flex lg:items-center'>
+          <div className='my-auto hidden gap-x-1 lg:ml-auto lg:flex lg:items-center'>
             <DarkModeToggle />
             {user && (
               <NotificationDropdown
