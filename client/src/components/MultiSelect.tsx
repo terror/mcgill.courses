@@ -8,6 +8,7 @@ type MultiSelectProps = {
   values: string[];
   setValues: (values: string[]) => void;
   className?: string;
+  inputClassName?: string;
 };
 
 export const MultiSelect = ({
@@ -15,6 +16,7 @@ export const MultiSelect = ({
   values,
   setValues,
   className,
+  inputClassName,
 }: MultiSelectProps) => {
   const [query, setQuery] = useState('');
 
@@ -57,9 +59,17 @@ export const MultiSelect = ({
         multiple
       >
         <div className='relative max-w-[240px]'>
-          <div className='relative rounded-md bg-slate-200 p-2 dark:bg-neutral-700'>
+          <div
+            className={twMerge(
+              'relative rounded-md bg-slate-200 p-2 dark:bg-neutral-700 border dark:border-neutral-600',
+              inputClassName
+            )}
+          >
             <Combobox.Input
-              className='w-full bg-slate-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className={twMerge(
+                'w-full bg-slate-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white',
+                inputClassName
+              )}
               onChange={(event) => setQuery(event.target.value)}
               onBlur={handleInputBlur}
             />

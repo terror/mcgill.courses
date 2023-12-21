@@ -59,7 +59,7 @@ export const AddReviewForm = ({
           <div className='fixed inset-0 bg-black/25' />
         </Transition.Child>
 
-        <div className='fixed inset-y-0 left-0 w-screen overflow-y-scroll p-4'>
+        <div className='fixed inset-y-0 left-0 w-screen overflow-y-scroll'>
           <div className='flex min-h-full items-center justify-center p-4 text-center'>
             <Transition.Child
               as={Fragment}
@@ -75,7 +75,7 @@ export const AddReviewForm = ({
                   as='h3'
                   className='mb-4 text-lg font-medium leading-6 text-gray-900 dark:text-gray-200'
                 >
-                  {`Reviewing ${course._id} - ${course.title}`}
+                  {`Reviewing ${course.subject} ${course.code} - ${course.title}`}
                 </Dialog.Title>
                 <Formik
                   initialValues={initialValues}
