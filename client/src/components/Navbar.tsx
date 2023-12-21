@@ -58,6 +58,14 @@ export const Navbar = () => {
     );
   };
 
+  const reset = () => {
+    setResults({
+      query: '',
+      courses: [],
+      instructors: [],
+    });
+  };
+
   return (
     <header className='z-40'>
       <nav
@@ -74,6 +82,7 @@ export const Navbar = () => {
             <CourseSearchBar
               results={results}
               handleInputChange={handleInputChange}
+              onResultClick={reset}
             />
           </div>
         ) : null}
