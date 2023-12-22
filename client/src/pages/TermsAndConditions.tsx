@@ -2,7 +2,7 @@ import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
 export const TermsAndConditions = () => {
-  const h2 = 'text-2xl font-bold text-neutral-700 dark:text-gray-300 mb-2';
+  const h2 = 'text-2xl font-bold text-neutral-700 dark:text-gray-300 mb-4';
   const h1 = 'text-4xl font-bold text-neutral-700 dark:text-gray-300';
 
   return (

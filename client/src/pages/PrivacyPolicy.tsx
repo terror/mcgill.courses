@@ -2,7 +2,7 @@ import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
 export const PrivacyPolicy = () => {
-  const h2 = 'text-2xl font-bold text-neutral-700 dark:text-gray-300';
+  const h2 = 'text-2xl font-bold text-neutral-700 dark:text-gray-300 mb-4';
   const h1 = 'text-4xl font-bold text-neutral-700 dark:text-gray-300';
 
   return (
@@ -20,40 +20,45 @@ export const PrivacyPolicy = () => {
           unless otherwise defined in this Privacy Policy.
         </Paragraph>
 
-        <h2 className={h2}>Cookies</h2>
+        <div>
+          <h2 className={h2}>Cookies</h2>
 
-        <Paragraph>
-          Cookies are files with a small amount of data that are commonly used
-          as anonymous unique identifiers. These are sent to your browser from
-          the websites that you visit and are stored on your device's internal
-          memory. mcgill.courses uses Microsoft OAuth for user identification
-          purposes. When you log in to our Service using your Microsoft account,
-          a cookie is stored on your device's internal memory. This cookie
-          allows us to maintain your login session and cache the fact that you
-          are logged in for a certain period of time. Please note that we do not
-          store any personal data through these cookies. The cookie solely
-          serves the purpose of facilitating a seamless login experience and
-          maintaining your session on our Service. We do not have access to or
-          retain any personally identifiable information from Microsoft OAuth.
-          You have the option to disable or delete these cookies through your
-          browser settings.
-        </Paragraph>
+          <Paragraph>
+            Cookies are files with a small amount of data that are commonly used
+            as anonymous unique identifiers. These are sent to your browser from
+            the websites that you visit and are stored on your device's internal
+            memory. mcgill.courses uses Microsoft OAuth for user identification
+            purposes. When you log in to our Service using your Microsoft
+            account, a cookie is stored on your device's internal memory. This
+            cookie allows us to maintain your login session and cache the fact
+            that you are logged in for a certain period of time. Please note
+            that we do not store any personal data through these cookies. The
+            cookie solely serves the purpose of facilitating a seamless login
+            experience and maintaining your session on our Service. We do not
+            have access to or retain any personally identifiable information
+            from Microsoft OAuth. You have the option to disable or delete these
+            cookies through your browser settings.
+          </Paragraph>
+        </div>
 
-        <h2 className={h2}>Changes to This Privacy Policy</h2>
+        <div>
+          <h2 className={h2}>Changes to This Privacy Policy</h2>
 
-        <Paragraph>
-          We may update our Privacy Policy from time to time. Thus, you are
-          advised to review this page periodically for any changes. We will
-          notify you of any changes by posting the new Privacy Policy on this
-          page. This policy is effective as of 2023-12-17.
-        </Paragraph>
+          <Paragraph>
+            We may update our Privacy Policy from time to time. Thus, you are
+            advised to review this page periodically for any changes. We will
+            notify you of any changes by posting the new Privacy Policy on this
+            page. This policy is effective as of 2023-12-17.
+          </Paragraph>
+        </div>
 
-        <h2 className={h2}>Contact Us</h2>
-
-        <Paragraph>
-          If you have any questions or suggestions about our Privacy Policy, do
-          not hesitate to contact us at admin@mcgill.courses.
-        </Paragraph>
+        <div>
+          <h2 className={h2}>Contact Us</h2>
+          <Paragraph>
+            If you have any questions or suggestions about our Privacy Policy,
+            do not hesitate to contact us at admin@mcgill.courses.
+          </Paragraph>
+        </div>
       </div>
     </Layout>
   );
