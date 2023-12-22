@@ -17,6 +17,7 @@ type SearchResultProps = {
   text: string;
   type: SearchResultType;
   url: string;
+  onClick?: () => void;
 };
 
 const highlightResultStyle =
@@ -29,15 +30,16 @@ const SearchResult = ({
   text,
   type,
   url,
+  onClick,
 }: SearchResultProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const toHighlight = isHovering || selectedIndex === index;
 
   const icon =
     type === 'course' ? (
-      <Layers className='mr-2 dark:text-gray-200' />
+      <Layers className='dark:text-gray-200' />
     ) : (
-      <User className='mr-2 dark:text-gray-200' />
+      <User className='dark:text-gray-200' />
     );
 
   return (
@@ -46,6 +48,7 @@ const SearchResult = ({
       className='cursor-pointer'
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
+      onClick={onClick}
     >
       <div
         className={twMerge(
@@ -54,7 +57,7 @@ const SearchResult = ({
         )}
         key={index}
       >
-        {icon}
+        <div className='mr-2 w-6'>{icon}</div>
         <Highlight
           className='dark:text-gray-200'
           query={query?.trim()}
@@ -91,11 +94,13 @@ const ExploreButton = () => {
 type CourseSearchBarProps = {
   results: SearchResults;
   handleInputChange: (query: string) => void;
+  onResultClick?: () => void;
 };
 
 export const CourseSearchBar = ({
   results,
   handleInputChange,
+  onResultClick,
 }: CourseSearchBarProps) => {
   const navigate = useNavigate();
 
@@ -117,7 +122,7 @@ export const CourseSearchBar = ({
       );
     }
 
-    if (selectedIndex > -1 && event.key === 'Enter')
+    if (selectedIndex > -1 && event.key === 'Enter') {
       navigate(
         selectedIndex < results.courses.length
           ? `/course/${courseIdToUrlParam(results.courses[selectedIndex]._id)}`
@@ -125,11 +130,17 @@ export const CourseSearchBar = ({
               results.instructors[selectedIndex - results.courses.length].name
             )}`
       );
+      if (onResultClick) {
+        onResultClick();
+        event.currentTarget.blur();
+      }
+    }
   };
 
   return (
     <div className='relative'>
       <SearchBar
+        value={results.query}
         handleInputChange={handleInputChange}
         inputStyle={twMerge(
           'block w-full bg-gray-100 border border-gray-300 shadow-sm p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500 lg:min-w-[570px] dark:border-gray-700 rounded-sm',
@@ -151,6 +162,7 @@ export const CourseSearchBar = ({
               type='course'
               url={`/course/${courseIdToUrlParam(result._id)}`}
               key={result._id}
+              onClick={onResultClick}
             />
           ))}
           {results.instructors.map((result, index) => (
@@ -162,6 +174,7 @@ export const CourseSearchBar = ({
               type='instructor'
               url={`/instructor/${encodeURIComponent(result.name)}`}
               key={result.name + index}
+              onClick={onResultClick}
             />
           ))}
           <ExploreButton />
