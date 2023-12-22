@@ -74,7 +74,7 @@ export const EditReviewForm = ({
                   as='h3'
                   className='mb-4 text-lg font-medium leading-6 text-gray-900 dark:text-gray-200'
                 >
-                  {`Editing review of ${course._id} - ${course.title}`}
+                  {`Editing review of ${course.subject} ${course.code} - ${course.title}`}
                 </Dialog.Title>
 
                 <Formik

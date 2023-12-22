@@ -106,7 +106,7 @@ export const NotificationDropdown = ({
                 <Menu.Button className='m-2 inline-flex justify-center text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white'>
                   <div className='relative'>
                     <VscBell
-                      className='-mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-700 dark:text-white'
+                      className='-mr-1 ml-2 h-5 w-5 stroke-[0.5] text-neutral-500 dark:text-gray-400'
                       aria-hidden='true'
                     />
                     {notifications.filter((notification) => !notification.seen)
@@ -175,7 +175,7 @@ export const NotificationDropdown = ({
                         </Menu.Item>
                       ))
                     ) : (
-                      <p className='w-[325px] font-medium text-gray-700 dark:text-gray-300'>
+                      <p className='w-[325px] p-1 text-sm font-medium leading-6 text-gray-600 dark:text-gray-300'>
                         All caught up! Subscribe to courses to get notified when
                         a user leaves a review.
                       </p>
