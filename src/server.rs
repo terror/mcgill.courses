@@ -68,7 +68,11 @@ impl Server {
     });
 
     axum_server::Server::bind(addr)
-      .serve(Self::app(db, assets, None).await?.into_make_service())
+      .serve(
+        Self::app(db, assets, None)
+          .await?
+          .into_make_service_with_connect_info::<SocketAddr>(),
+      )
       .await?;
 
     Ok(())
@@ -124,6 +128,14 @@ impl Server {
         .fallback_service(assets.index)
     }
 
+    let governor_conf = Box::new(
+      GovernorConfigBuilder::default()
+        .per_millisecond(10)
+        .burst_size(100)
+        .finish()
+        .unwrap(),
+    );
+
     let service = ServiceBuilder::new()
       .layer(
         TraceLayer::new_for_http()
@@ -138,13 +150,11 @@ impl Server {
       )
       // HandleErrorLayer + BufferLayer are required for RateLimitLayer to satisfy trait bounds in Axum
       .layer(HandleErrorLayer::new(|err: BoxError| async move {
-        (
-          StatusCode::INTERNAL_SERVER_ERROR,
-          format!("Unhandled error: {}", err),
-        )
+        display_error(err)
       }))
-      .layer(BufferLayer::new(10))
-      .layer(RateLimitLayer::new(100, Duration::from_secs(1)))
+      .layer(GovernorLayer {
+        config: Box::leak(governor_conf)
+      })
       .layer(CorsLayer::very_permissive());
 
     Ok(
@@ -246,7 +256,9 @@ mod tests {
   impl ResponseExt for Response {
     async fn convert<T: DeserializeOwned>(self) -> T {
       serde_json::from_slice::<T>(
-        &hyper::body::to_bytes(self.into_body()).await.unwrap(),
+        &axum::body::to_bytes(self.into_body(), usize::MAX)
+          .await
+          .unwrap(),
       )
       .unwrap()
     }
