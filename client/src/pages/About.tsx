@@ -48,8 +48,8 @@ type TitleProps = {
 
 const Title = ({ children }: TitleProps) => {
   return (
-    <div className='mb-5 mt-10'>
-      <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
+    <div className='mb-3 mt-10 md:mb-5'>
+      <h1 className='mb-auto text-2xl font-bold text-gray-700 dark:text-gray-200 md:text-3xl'>
         {children}
       </h1>
     </div>
@@ -99,7 +99,7 @@ const Paragraph = ({
 }) => (
   <p
     className={twMerge(
-      'text-xl leading-loose text-gray-700 dark:text-gray-200',
+      'text-lg leading-loose text-gray-700 dark:text-gray-200',
       className
     )}
   >
@@ -174,9 +174,9 @@ const people = [
 export const About = () => {
   return (
     <Layout>
-      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2'>
+      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2 sm:px-8 md:px-16'>
         <Title>Welcome to mcgill.courses!</Title>
-        <Paragraph className='text-xl leading-loose text-gray-700 dark:text-gray-200'>
+        <Paragraph className='leading-loose text-gray-700 dark:text-gray-200'>
           <Link className='underline' to='/'>
             mcgill.courses
           </Link>{' '}

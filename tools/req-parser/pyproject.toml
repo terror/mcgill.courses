@@ -8,9 +8,9 @@ packages = [{ include = "mcgill" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-llama-index = "^0.7.6"
 python-dotenv = "^1.0.0"
 beautifulsoup4 = "^4.12.2"
+openai = "^1.6.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"

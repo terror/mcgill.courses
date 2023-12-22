@@ -11,6 +11,7 @@ export const SearchBar = ({
   placeholder,
   searchSelected,
   setSearchSelected,
+  value,
 }: {
   handleInputChange: (value: string) => void;
   iconStyle?: string;
@@ -21,6 +22,7 @@ export const SearchBar = ({
   placeholder?: string;
   searchSelected: boolean;
   setSearchSelected: (value: boolean) => void;
+  value?: string;
 }) => {
   return (
     <div className='relative w-full'>
@@ -50,6 +52,7 @@ export const SearchBar = ({
           placeholder={placeholder}
           spellCheck='false'
           type='text'
+          value={value}
         />
       </div>
     </div>
