@@ -225,7 +225,7 @@ export const CoursePage = () => {
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
-          <div className='flex'>
+          <div className='mb-4 flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
           <SchedulesDisplay course={course} />
