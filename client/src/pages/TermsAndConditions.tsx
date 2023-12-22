@@ -82,7 +82,7 @@ export const TermsAndConditions = () => {
             We may update our Terms and Conditions from time to time. Thus, you
             are advised to review this page periodically for any changes. If you
             have any questions or suggestions about our Terms and Conditions, do
-            not hesitate to contact us at admin@mcgill.courses.
+            not hesitate to contact us at admin[at]mcgill.courses.
           </Paragraph>
         </div>
       </div>
