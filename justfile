@@ -60,8 +60,8 @@ forbid:
 initialize *args: restart-services
   cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
 
-lint:
-  pnpm run lint
+lint *args:
+  pnpm run lint {{args}}
 
 load:
   cargo run -- --source=seed \

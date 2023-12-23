@@ -8,7 +8,9 @@ import { Explore } from './pages/Explore';
 import { Home } from './pages/Home';
 import { Instructor } from './pages/Instructor';
 import { NotFound } from './pages/NotFound';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { Profile } from './pages/Profile';
+import { TermsAndConditions } from './pages/TermsAndConditions';
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path=':name' element={<Instructor />} />
       </Route>
       <Route path='/explore' element={<Explore />} />
+      <Route path='/privacy' element={<PrivacyPolicy />} />
+      <Route path='/tos' element={<TermsAndConditions />} />
       <Route path='/about' element={<About />} />
       <Route
         path='/profile'
