@@ -113,8 +113,20 @@ impl Server {
           .post(subscriptions::add_subscription)
           .delete(subscriptions::delete_subscription),
       )
-      .route("/api/user", get(user::get_user))
-      .nest_service("/.well-known", ServeDir::new(".well-known"));
+      .route("/api/user", get(user::get_user));
+
+    // Serve microsoft identity association file
+    router = router.route(
+      "/api/.well-known/microsoft-identity-association.json",
+      get(|| async {
+        info!("Serving microsoft-identity-association.json");
+
+        fs::read_to_string(PathBuf::from(
+          ".well-known/microsoft-identity-association.json",
+        ))
+        .unwrap_or_else(|_| "Error reading file".to_string())
+      }),
+    );
 
     if let Some(assets) = assets {
       info!("Adding asset directory to router...");
