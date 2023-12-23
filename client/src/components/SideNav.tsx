@@ -28,8 +28,8 @@ const Overlay = ({ children }: OverlayProps) => {
 type SideNavProps = {
   open: boolean;
   onClose: (open: boolean) => void;
-  setPreventScroll: (value: boolean) => void;
 };
+
 export const SideNav = ({ open, onClose }: SideNavProps) => {
   const user = useAuth();
 
