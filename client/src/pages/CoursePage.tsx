@@ -153,7 +153,7 @@ export const CoursePage = () => {
 
   return (
     <Layout>
-      <div className='mx-auto max-w-6xl'>
+      <div className='mx-auto mt-10 max-w-6xl md:mt-0'>
         <CourseInfo
           course={course}
           allReviews={showingReviews}
@@ -225,10 +225,9 @@ export const CoursePage = () => {
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
-          <div className='flex'>
+          <div className='mb-4 flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
-          <div className='py-2.5' />
           <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>

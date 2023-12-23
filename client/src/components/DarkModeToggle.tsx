@@ -17,7 +17,7 @@ export const DarkModeToggle = () => {
       {darkMode ? (
         <SunIcon className='h-6 w-6 fill-gray-200 stroke-gray-200 stroke-2' />
       ) : (
-        <MoonIcon className='h-6 w-6 stroke-gray-600 stroke-2' />
+        <MoonIcon className='h-6 w-6 stroke-neutral-600 stroke-2' />
       )}
     </button>
   );
