@@ -143,9 +143,15 @@ const people = [
     links: [{ title: 'Github', url: 'https://github.com/jeffdotpng' }],
   },
   {
-    name: "Sam Zhang (CS '2025)",
+    name: "Sam Zhang (CS & Stats '2025)",
     imageUrl: 'https://avatars.githubusercontent.com/u/112342947?v=4',
-    links: [{ title: 'Github', url: 'https://github.com/samzhang02' }],
+    links: [
+      { title: 'Github', url: 'https://github.com/samzhang02' },
+      {
+        title: 'Linkedin',
+        url: 'https://www.linkedin.com/in/zhang-sam/',
+      },
+    ],
   },
   {
     name: "Joey Yu (CS '2025)",
