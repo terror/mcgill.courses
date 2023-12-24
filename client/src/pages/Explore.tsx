@@ -195,7 +195,7 @@ export const Explore = () => {
               </div>
             </InfiniteScroll>
           </div>
-          <div className='m-2 hidden lg:flex'>
+          <div className='m-2 mx-4 hidden lg:flex'>
             <ExploreFilter
               selectedSubjects={selectedSubjects}
               setSelectedSubjects={setSelectedSubjects}
