@@ -75,7 +75,7 @@ const BlockLocation = ({ location }: { location: string }) => {
   return (
     <span className='relative whitespace-nowrap'>
       <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
-        <p className='inline-block cursor-default text-xs leading-7 sm:text-base'>
+        <p className='inline-block cursor-default text-sm leading-7 sm:text-base'>
           {location}
         </p>
       </Tooltip>
@@ -94,7 +94,7 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
       {['M', 'T', 'W', 'T', 'F'].map((day, i) => (
         <span
           className={twMerge(
-            'sm:text-base sm:text-base text-xs',
+            'sm:text-base text-sm',
             dayNums.includes(i + 2)
               ? 'font-semibold text-gray-800 dark:text-gray-100'
               : 'text-gray-400 font-extralight dark:text-gray-400'
@@ -114,7 +114,7 @@ type ScheduleRowProps = {
 const ScheduleRow = ({ block }: ScheduleRowProps) => {
   return (
     <tr className='p-2 text-left even:bg-slate-100 even:dark:bg-[rgb(48,48,48)]'>
-      <td className='whitespace-nowrap pl-4 text-xs font-semibold sm:pl-6 sm:text-base '>
+      <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base '>
         {block.display}
       </td>
       <td className='py-2 text-gray-700 dark:text-gray-300'>
@@ -127,7 +127,7 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
             )))(block.location.split(';'))}
         </div>
       </td>
-      <td className='whitespace-nowrap py-2 text-xs font-medium sm:text-base'>
+      <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
         {block.timeblocks.map((tb) => (
           <div>
             {tb.startTime} - {tb.endTime}
