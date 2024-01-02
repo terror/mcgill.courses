@@ -2,7 +2,7 @@
 
 A course search and review platform for McGill university.
 
-![](https://github.com/terror/mcgill.courses/assets/31192478/9084747b-8ed3-4cc2-925d-c53422c6ea55)
+![](https://github.com/terror/mcgill.courses/assets/31192478/f68aa5c2-1dab-4591-896c-ebacd90c90e8)
 
 ### Development
 
