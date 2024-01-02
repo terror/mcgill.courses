@@ -76,7 +76,6 @@ const BlockLocation = ({ location }: { location: string }) => {
     <span className='relative whitespace-nowrap'>
       <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
         <p className='inline-block cursor-default text-sm leading-7 sm:text-base'>
-          {' '}
           {location}
         </p>
       </Tooltip>
@@ -128,7 +127,7 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
             )))(block.location.split(';'))}
         </div>
       </td>
-      <td className='whitespace-nowrap py-2 text-sm font-medium'>
+      <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
         {block.timeblocks.map((tb) => (
           <div>
             {tb.startTime} - {tb.endTime}
