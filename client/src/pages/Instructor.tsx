@@ -123,11 +123,7 @@ export const Instructor = () => {
               )}
             </div>
             <div className='ml-10 hidden w-5/12 justify-center rounded-md bg-neutral-50 py-6 dark:bg-neutral-800 md:flex lg:mt-6'>
-              <CourseInfoStats
-                variant='large'
-                allReviews={reviews}
-                className='lg:mr-8'
-              />
+              <CourseInfoStats variant='large' allReviews={reviews} />
             </div>
           </div>
         </div>
