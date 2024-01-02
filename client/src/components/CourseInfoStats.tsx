@@ -106,7 +106,7 @@ export const CourseInfoStats = ({
   return (
     <div
       className={twMerge(
-        'flex gap-x-4 bg-transparent flex-wrap',
+        'flex gap-x-4 bg-transparent',
         variant === 'large'
           ? 'flex-col gap-y-1 lg:flex-row lg:gap-x-2'
           : 'flex-row',
