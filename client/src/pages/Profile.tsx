@@ -179,7 +179,7 @@ export const Profile = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
-              <div>
+              <div className='m-4'>
                 {userSubscriptions?.length !== 0 ? (
                   userSubscriptions?.map((subscription, i) => (
                     <div
