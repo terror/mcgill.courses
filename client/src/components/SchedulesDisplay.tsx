@@ -114,7 +114,7 @@ type ScheduleRowProps = {
 const ScheduleRow = ({ block }: ScheduleRowProps) => {
   return (
     <tr className='p-2 text-left even:bg-slate-100 even:dark:bg-[rgb(48,48,48)]'>
-      <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base '>
+      <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
         {block.display}
       </td>
       <td className='py-2 text-gray-700 dark:text-gray-300'>
