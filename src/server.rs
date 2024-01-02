@@ -117,7 +117,7 @@ impl Server {
 
     // Serve microsoft identity association file
     router = router.route(
-      "/api/.well-known/microsoft-identity-association.json",
+      "/.well-known/microsoft-identity-association.json",
       get(|| async {
         info!("Serving microsoft-identity-association.json");
 

@@ -14,9 +14,6 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
-        '/.well-known/microsoft-identity-association.json': {
-          target: '/api/.well-known/microsoft-identity-association.json',
-        },
       },
     },
   };
