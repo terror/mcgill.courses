@@ -41,6 +41,7 @@ export const CoursePage = () => {
 
   useEffect(() => {
     firstFetch.current = true;
+    setShowAllReviews(false);
   }, [params.id]);
 
   const refetch = () => {
