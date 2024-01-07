@@ -30,7 +30,7 @@ pub(crate) async fn get_user_interaction(
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
 pub(crate) struct GetCourseReviewsInteractionPayload {
   pub(crate) course_id: String,
-  pub(crate) interactions: std::collections::HashMap<String, Vec<Interaction>>,
+  pub(crate) interactions: Vec<Interaction>,
 }
 
 pub(crate) async fn get_course_reviews_interactions(

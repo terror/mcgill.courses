@@ -617,25 +617,16 @@ impl Db {
   pub async fn course_reviews_interactions(
     &self,
     course_id: &str,
-  ) -> Result<HashMap<String, Vec<Interaction>>> {
-    let mut cursor = self
-      .database
-      .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-      .find(doc! { "courseId": course_id }, None)
-      .await?;
-
-    let mut user_to_interactions_map = HashMap::new();
-
-    while let Some(interaction) = cursor.try_next().await? {
-      let user_id = interaction.user_id.clone();
-
-      user_to_interactions_map
-        .entry(user_id)
-        .or_insert_with(Vec::new)
-        .push(interaction);
-    }
-
-    Ok(user_to_interactions_map)
+  ) -> Result<Vec<Interaction>> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find(doc! { "courseId": course_id }, None)
+        .await?
+        .try_collect::<Vec<Interaction>>()
+        .await?,
+    )
   }
 
   pub async fn get_subscription(

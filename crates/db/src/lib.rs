@@ -22,12 +22,7 @@ use {
   },
   mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
-  std::{
-    collections::{HashMap, HashSet},
-    env, fs,
-    hash::Hash,
-    path::PathBuf,
-  },
+  std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
   {
     crate::combine::Combine, initializer::Initializer, seed::Seed,
     str_ext::StrExt, utils::*,
