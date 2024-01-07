@@ -179,7 +179,7 @@ type CourseReviewProps = {
   openEditReview: () => void;
   updateLikes?: (likes: number) => void;
   review: Review;
-  interactions: Interaction[];
+  interactions?: Interaction[];
   showCourse?: boolean;
   includeTaughtBy?: boolean;
   className?: string;
@@ -323,7 +323,7 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          {updateLikes && (
+          {updateLikes && interactions && (
             <ReviewInteractions
               review={review}
               interactions={interactions}
