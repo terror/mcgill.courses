@@ -1,4 +1,5 @@
 import type { Course } from '../model/Course';
+import { GetCourseReviewsInteractionPayload } from '../model/GetCourseReviewsInteractionsPayload';
 import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import type { GetInstructorPayload } from '../model/GetInstructorPayload';
 import type { GetInteractionsPayload } from '../model/GetInteractionsPayload';
@@ -131,6 +132,15 @@ export const repo = {
     return client.deserialize<GetInteractionsPayload>(
       'GET',
       `/interactions?course_id=${courseId}&user_id=${userId}&referrer=${referrer}`
+    );
+  },
+
+  async getCourseInteractions(
+    courseId: string
+  ): Promise<GetCourseReviewsInteractionPayload> {
+    return client.deserialize<GetCourseReviewsInteractionPayload>(
+      'GET',
+      `/interactions/${courseId}`
     );
   },
 

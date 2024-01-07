@@ -17,6 +17,7 @@ import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
+import { Interaction } from '../model/Interaction';
 import type { Requirements } from '../model/Requirements';
 import type { Review } from '../model/Review';
 import { Loading } from './Loading';
@@ -30,6 +31,9 @@ export const CoursePage = () => {
   const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
+  const [allInteractions, setAllInteractions] = useState<
+    Interaction[] | undefined
+  >([]);
   const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
@@ -55,6 +59,14 @@ export const CoursePage = () => {
 
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
+
+        if (id !== undefined) {
+          const courseInteractionsPayload = await repo.getCourseInteractions(
+            id
+          );
+          if (courseInteractionsPayload)
+            setAllInteractions(courseInteractionsPayload.interactions);
+        }
 
         firstFetch.current = false;
       } catch (err) {
@@ -191,6 +203,14 @@ export const CoursePage = () => {
                   handleDelete={() => handleDelete(userReview)}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
+                  interactions={
+                    allInteractions
+                      ? allInteractions.filter(
+                          (interaction) =>
+                            interaction.userId === userReview.userId
+                        )
+                      : []
+                  }
                   updateLikes={updateLikes(userReview)}
                 />
               )}
@@ -201,6 +221,14 @@ export const CoursePage = () => {
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
+                      interactions={
+                        allInteractions
+                          ? allInteractions.filter(
+                              (interaction) =>
+                                interaction.userId === review.userId
+                            )
+                          : []
+                      }
                       handleDelete={() => handleDelete(review)}
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
@@ -255,6 +283,14 @@ export const CoursePage = () => {
                     handleDelete={() => handleDelete(userReview)}
                     openEditReview={() => setEditReviewOpen(true)}
                     review={userReview}
+                    interactions={
+                      allInteractions
+                        ? allInteractions.filter(
+                            (interaction) =>
+                              interaction.userId === userReview.userId
+                          )
+                        : []
+                    }
                     updateLikes={updateLikes(userReview)}
                   />
                 )}
@@ -271,6 +307,14 @@ export const CoursePage = () => {
                         key={i}
                         openEditReview={() => setEditReviewOpen(true)}
                         review={review}
+                        interactions={
+                          allInteractions
+                            ? allInteractions.filter(
+                                (interaction) =>
+                                  interaction.userId === review.userId
+                              )
+                            : []
+                        }
                         updateLikes={updateLikes(review)}
                       />
                     ))}
