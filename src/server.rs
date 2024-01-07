@@ -87,6 +87,10 @@ impl Server {
       .route("/api/courses/:id", get(courses::get_course_by_id))
       .route("/api/instructors/:name", get(instructors::get_instructor))
       .route(
+        "/api/interactions/:course_id",
+        get(interactions::get_course_reviews_interactions),
+      )
+      .route(
         "/api/interactions",
         get(interactions::get_user_interaction)
           .post(interactions::add_interaction)
