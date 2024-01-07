@@ -27,15 +27,22 @@ pub(crate) async fn get_user_interaction(
   Ok(Json(GetUserInteractionPayload { kind }))
 }
 
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+pub(crate) struct GetCourseReviewsInteractionPayload {
+  pub(crate) course_id: String,
+  pub(crate) interactions: std::collections::HashMap<String, Vec<Interaction>>,
+}
+
 pub(crate) async fn get_course_reviews_interactions(
   Path(course_id): Path<String>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
   info!("fetching review interactions for course {}", course_id);
 
-  let map = db.course_reviews_interactions(&course_id).await?;
-
-  Ok(Json(map))
+  Ok(Json(GetCourseReviewsInteractionPayload {
+    course_id: course_id.clone(),
+    interactions: db.course_reviews_interactions(&course_id).await?,
+  }))
 }
 
 #[derive(Debug, Deserialize)]
