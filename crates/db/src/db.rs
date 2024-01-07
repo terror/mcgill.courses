@@ -627,8 +627,6 @@ impl Db {
     let mut user_to_interactions_map = HashMap::new();
 
     while let Some(interaction) = cursor.try_next().await? {
-      info!("here");
-
       let user_id = interaction.user_id.clone();
 
       user_to_interactions_map
