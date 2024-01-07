@@ -81,6 +81,13 @@ export const CoursePage = () => {
 
   useEffect(refetch, [params.id]);
 
+  const interactionsMap = allInteractions.reduce((map, interaction) => {
+    if (!map.has(interaction.userdD)) map[interaction.userId] = [];
+    map[interaction.userId].push(interaction);
+
+    return map;
+  }, new Map());
+
   if (course === null) {
     return (
       <Layout>
@@ -203,14 +210,7 @@ export const CoursePage = () => {
                   handleDelete={() => handleDelete(userReview)}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
-                  interactions={
-                    allInteractions
-                      ? allInteractions.filter(
-                          (interaction) =>
-                            interaction.userId === userReview.userId
-                        )
-                      : []
-                  }
+                  interactions={interactionsMap[userReview.userId] || []}
                   updateLikes={updateLikes(userReview)}
                 />
               )}
@@ -221,14 +221,7 @@ export const CoursePage = () => {
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
-                      interactions={
-                        allInteractions
-                          ? allInteractions.filter(
-                              (interaction) =>
-                                interaction.userId === review.userId
-                            )
-                          : []
-                      }
+                      interactions={interactionsMap[review.userId] || []}
                       handleDelete={() => handleDelete(review)}
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
@@ -283,14 +276,7 @@ export const CoursePage = () => {
                     handleDelete={() => handleDelete(userReview)}
                     openEditReview={() => setEditReviewOpen(true)}
                     review={userReview}
-                    interactions={
-                      allInteractions
-                        ? allInteractions.filter(
-                            (interaction) =>
-                              interaction.userId === userReview.userId
-                          )
-                        : []
-                    }
+                    interactions={interactionsMap[userReview.userId] || []}
                     updateLikes={updateLikes(userReview)}
                   />
                 )}
@@ -307,14 +293,7 @@ export const CoursePage = () => {
                         key={i}
                         openEditReview={() => setEditReviewOpen(true)}
                         review={review}
-                        interactions={
-                          allInteractions
-                            ? allInteractions.filter(
-                                (interaction) =>
-                                  interaction.userId === review.userId
-                              )
-                            : []
-                        }
+                        interactions={interactionsMap[review.userId] || []}
                         updateLikes={updateLikes(review)}
                       />
                     ))}
