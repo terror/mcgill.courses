@@ -87,12 +87,12 @@ impl Server {
       .route("/api/courses/:id", get(courses::get_course_by_id))
       .route("/api/instructors/:name", get(instructors::get_instructor))
       .route(
-        "/api/interactions/:course_id",
-        get(interactions::get_course_reviews_interactions),
+        "/api/interactions/:course_id/referrer/:referrer",
+        get(interactions::get_user_interactions_for_course),
       )
       .route(
         "/api/interactions",
-        get(interactions::get_user_interaction)
+        get(interactions::get_interaction_kind)
           .post(interactions::add_interaction)
           .delete(interactions::delete_interaction),
       )
