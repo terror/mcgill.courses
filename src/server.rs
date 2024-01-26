@@ -170,7 +170,7 @@ mod tests {
     axum::body::Body,
     http::{Method, Request},
     interactions::{
-      GetCourseReviewsInteractionPayload, GetUserInteractionPayload,
+      GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
     },
     model::Notification,
     pretty_assertions::assert_eq,
@@ -950,8 +950,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
 
     let interaction = json! ({
@@ -1001,8 +1001,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload {
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload {
         kind: Some(InteractionKind::Like),
       }
     );
@@ -1053,8 +1053,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
   }
 
@@ -1396,8 +1396,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
   }
 
