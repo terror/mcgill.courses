@@ -1160,7 +1160,7 @@ mod tests {
   }
 
   #[tokio::test]
-  async fn get_empty_course_interactions() {
+  async fn get_empty_user_interactions_for_course() {
     let TestContext { db, mut app, .. } = TestContext::new().await;
 
     db.initialize(InitializeOptions {
@@ -1175,7 +1175,7 @@ mod tests {
         Request::builder()
           .method(http::Method::GET)
           .header("Content-Type", "application/json")
-          .uri("/api/interactions/COMP202")
+          .uri("/api/interactions/COMP202/referrer/test")
           .body(Body::empty())
           .unwrap(),
       )
@@ -1193,7 +1193,7 @@ mod tests {
   }
 
   #[tokio::test]
-  async fn get_course_interactions() {
+  async fn get_user_interactions_for_course() {
     let TestContext {
       db,
       mut app,
@@ -1271,7 +1271,7 @@ mod tests {
         Request::builder()
           .method(http::Method::GET)
           .header("Content-Type", "application/json")
-          .uri("/api/interactions/MATH240")
+          .uri("/api/interactions/MATH240/referrer/test")
           .body(Body::empty())
           .unwrap(),
       )
@@ -1287,8 +1287,6 @@ mod tests {
     assert_eq!(payload.course_id, "MATH240");
     assert_eq!(payload.interactions.len(), 1);
     assert_eq!(payload.interactions[0].kind, InteractionKind::Like);
-    assert_eq!(payload.interactions[0].course_id, "MATH240");
-    assert_eq!(payload.interactions[0].user_id, "test");
     assert_eq!(payload.interactions[0].referrer, "test");
   }
 
