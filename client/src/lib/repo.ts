@@ -135,12 +135,13 @@ export const repo = {
     );
   },
 
-  async getCourseInteractions(
-    courseId: string
+  async getUserInteractionForCourse(
+    courseId: string,
+    referrer: string
   ): Promise<GetCourseReviewsInteractionPayload> {
     return client.deserialize<GetCourseReviewsInteractionPayload>(
       'GET',
-      `/interactions/${courseId}`
+      `/interactions/${courseId}/referrer/${referrer}`
     );
   },
 

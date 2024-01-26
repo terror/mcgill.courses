@@ -31,7 +31,7 @@ export const CoursePage = () => {
   const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
-  const [allInteractions, setAllInteractions] = useState<
+  const [userInteractions, setUserInteractions] = useState<
     Interaction[] | undefined
   >([]);
   const [course, setCourse] = useState<Course | null | undefined>(undefined);
@@ -61,12 +61,12 @@ export const CoursePage = () => {
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
 
-        if (id !== undefined) {
-          const courseInteractionsPayload = await repo.getCourseInteractions(
-            id
-          );
+        if (user && id) {
+          const courseInteractionsPayload =
+            await repo.getUserInteractionForCourse(id, user.id);
+
           if (courseInteractionsPayload)
-            setAllInteractions(courseInteractionsPayload.interactions);
+            setUserInteractions(courseInteractionsPayload.interactions);
         }
 
         firstFetch.current = false;
@@ -81,15 +81,6 @@ export const CoursePage = () => {
   };
 
   useEffect(refetch, [params.id]);
-
-  const interactionsMap: Map<string, Interaction[]> = allInteractions
-    ? allInteractions.reduce((map, interaction) => {
-        if (!map.has(interaction.userId)) map.set(interaction.userId, []);
-        map.get(interaction.userId).push(interaction);
-
-        return map;
-      }, new Map())
-    : new Map();
 
   if (course === null) {
     return (
@@ -213,7 +204,7 @@ export const CoursePage = () => {
                   handleDelete={() => handleDelete(userReview)}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
-                  interactions={interactionsMap.get(userReview.userId) || []}
+                  interactions={userInteractions}
                   updateLikes={updateLikes(userReview)}
                 />
               )}
@@ -224,7 +215,7 @@ export const CoursePage = () => {
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
-                      interactions={interactionsMap.get(review.userId) || []}
+                      interactions={userInteractions}
                       handleDelete={() => handleDelete(review)}
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
@@ -279,7 +270,7 @@ export const CoursePage = () => {
                     handleDelete={() => handleDelete(userReview)}
                     openEditReview={() => setEditReviewOpen(true)}
                     review={userReview}
-                    interactions={interactionsMap.get(userReview.userId) || []}
+                    interactions={userInteractions}
                     updateLikes={updateLikes(userReview)}
                   />
                 )}
@@ -296,7 +287,7 @@ export const CoursePage = () => {
                         key={i}
                         openEditReview={() => setEditReviewOpen(true)}
                         review={review}
-                        interactions={interactionsMap.get(review.userId) || []}
+                        interactions={userInteractions}
                         updateLikes={updateLikes(review)}
                       />
                     ))}

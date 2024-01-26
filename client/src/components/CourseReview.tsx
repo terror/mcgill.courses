@@ -58,9 +58,11 @@ const ReviewInteractions = ({
   const getUserInteractionKind = (
     interactions: Interaction[]
   ): InteractionKind | undefined => {
-    return interactions.find(
-      (interaction: Interaction) => interaction.referrer === user?.id
-    )?.kind;
+    const interaction = interactions.find(
+      (interaction: Interaction) => interaction.userId === review.userId
+    );
+
+    return interaction?.kind;
   };
 
   const [kind, setKind] = useState<InteractionKind | undefined | null>(
