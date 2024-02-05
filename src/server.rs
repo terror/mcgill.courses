@@ -87,8 +87,12 @@ impl Server {
       .route("/api/courses/:id", get(courses::get_course_by_id))
       .route("/api/instructors/:name", get(instructors::get_instructor))
       .route(
+        "/api/interactions/:course_id/referrer/:referrer",
+        get(interactions::get_user_interactions_for_course),
+      )
+      .route(
         "/api/interactions",
-        get(interactions::get_user_interaction)
+        get(interactions::get_interaction_kind)
           .post(interactions::add_interaction)
           .delete(interactions::delete_interaction),
       )
@@ -165,7 +169,9 @@ mod tests {
     crate::instructors::GetInstructorPayload,
     axum::body::Body,
     http::{Method, Request},
-    interactions::GetUserInteractionPayload,
+    interactions::{
+      GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
+    },
     model::Notification,
     pretty_assertions::assert_eq,
     serde::de::DeserializeOwned,
@@ -944,8 +950,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
 
     let interaction = json! ({
@@ -995,8 +1001,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload {
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload {
         kind: Some(InteractionKind::Like),
       }
     );
@@ -1047,8 +1053,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
   }
 
@@ -1151,6 +1157,137 @@ mod tests {
     );
 
     assert_eq!(payload.reviews.len(), 1)
+  }
+
+  #[tokio::test]
+  async fn get_empty_user_interactions_for_course() {
+    let TestContext { db, mut app, .. } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Content-Type", "application/json")
+          .uri("/api/interactions/COMP202/referrer/test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response
+      .convert::<GetCourseReviewsInteractionPayload>()
+      .await;
+
+    assert_eq!(payload.course_id, "COMP202");
+    assert_eq!(payload.interactions.len(), 0);
+  }
+
+  #[tokio::test]
+  async fn get_user_interactions_for_course() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
+
+    let interaction = json! ({
+      "kind": "like",
+      "course_id": "MATH240",
+      "user_id": "test",
+      "referrer": "test"
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/interactions")
+          .body(Body::from(interaction))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      db.interactions_for_review("MATH240", "test")
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Content-Type", "application/json")
+          .uri("/api/interactions/MATH240/referrer/test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response
+      .convert::<GetCourseReviewsInteractionPayload>()
+      .await;
+
+    assert_eq!(payload.course_id, "MATH240");
+    assert_eq!(payload.interactions.len(), 1);
+    assert_eq!(payload.interactions[0].kind, InteractionKind::Like);
+    assert_eq!(payload.interactions[0].referrer, "test");
   }
 
   #[tokio::test]
@@ -1257,8 +1394,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
   }
 

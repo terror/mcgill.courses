@@ -12,6 +12,7 @@ import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import type { InteractionKind } from '../model/Interaction';
+import type { Interaction } from '../model/Interaction';
 import type { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
 import { DeleteButton } from './DeleteButton';
@@ -28,6 +29,7 @@ const LoginPrompt = () => {
 
 type ReviewInteractionsProps = {
   review: Review;
+  interactions: Interaction[];
   setPromptLogin: (_: boolean) => void;
   updateLikes: (likes: number) => void;
 };
@@ -47,20 +49,32 @@ const getLikeChange = (
 
 const ReviewInteractions = ({
   review,
+  interactions,
   setPromptLogin,
   updateLikes,
 }: ReviewInteractionsProps) => {
   const user = useAuth();
 
+  const getUserInteractionKind = (
+    interactions: Interaction[]
+  ): InteractionKind | undefined => {
+    const interaction = interactions.find(
+      (interaction: Interaction) => interaction.userId === review.userId
+    );
+
+    return interaction?.kind;
+  };
+
   const [kind, setKind] = useState<InteractionKind | undefined | null>(
     undefined
   );
 
-  const { courseId, userId, likes } = review;
+  useEffect(
+    () => setKind(getUserInteractionKind(interactions)),
+    [interactions]
+  );
 
-  useEffect(() => {
-    refreshInteractions();
-  }, [review]);
+  const { courseId, userId, likes } = review;
 
   const refreshInteractions = async () => {
     try {
@@ -78,6 +92,7 @@ const ReviewInteractions = ({
       updateLikes(review.likes + change);
 
       await refreshInteractions();
+
       toast.success(
         `Successfully ${interactionKind}d review for ${spliceCourseCode(
           courseId,
@@ -98,6 +113,7 @@ const ReviewInteractions = ({
       updateLikes(review.likes - interactionToNum(kind));
 
       await refreshInteractions();
+
       toast.success(
         `Successfully removed interaction for ${spliceCourseCode(
           courseId,
@@ -165,6 +181,7 @@ type CourseReviewProps = {
   openEditReview: () => void;
   updateLikes?: (likes: number) => void;
   review: Review;
+  interactions?: Interaction[];
   showCourse?: boolean;
   includeTaughtBy?: boolean;
   className?: string;
@@ -172,6 +189,7 @@ type CourseReviewProps = {
 
 export const CourseReview = ({
   review,
+  interactions,
   canModify,
   openEditReview,
   handleDelete,
@@ -307,9 +325,10 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          {updateLikes && (
+          {updateLikes && interactions && (
             <ReviewInteractions
               review={review}
+              interactions={interactions}
               setPromptLogin={setPromptLogin}
               updateLikes={updateLikes}
             />
