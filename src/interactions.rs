@@ -35,7 +35,7 @@ pub(crate) async fn get_user_interactions_for_course(
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
   info!(
-    "fetching review interactions from {} for course {}",
+    "Fetching review interactions from {} for course {}",
     referrer, course_id
   );
 
