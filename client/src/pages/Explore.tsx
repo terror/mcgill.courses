@@ -111,7 +111,7 @@ export const Explore = () => {
           Explore all courses
         </h1>
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
-          <div className='mx-2 lg:hidden'>
+          <div className='sm:mx-2 lg:hidden'>
             <FilterToggle>
               <ExploreFilter
                 selectedSubjects={selectedSubjects}
@@ -147,9 +147,8 @@ export const Explore = () => {
                     <SearchBar
                       handleInputChange={(value) => setQuery(value)}
                       iconStyle='mt-2 lg:mt-0'
-                      inputStyle='block rounded-lg w-full bg-slate-200 p-3 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
-                      outerIconStyle='pl-5'
-                      outerInputStyle='m-2 mt-4 lg:mt-2'
+                      inputStyle='block rounded-lg w-full bg-slate-200 p-3 pr-5 pl-10 text-sm text-black outline-none dark:border-neutral-50 dark:bg-neutral-800 dark:text-gray-200 dark:placeholder:text-neutral-500'
+                      outerInputStyle='my-2 mt-4 lg:mt-2'
                       placeholder='Search by course identifier, title, description or instructor name'
                       searchSelected={searchSelected}
                       setSearchSelected={setSearchSelected}
@@ -195,7 +194,7 @@ export const Explore = () => {
               </div>
             </InfiniteScroll>
           </div>
-          <div className='m-2 hidden lg:flex'>
+          <div className='m-2 mx-4 hidden lg:flex'>
             <ExploreFilter
               selectedSubjects={selectedSubjects}
               setSelectedSubjects={setSelectedSubjects}

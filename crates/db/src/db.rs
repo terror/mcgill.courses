@@ -599,7 +599,7 @@ impl Db {
     )
   }
 
-  pub async fn user_interaction_for_review(
+  pub async fn interaction_kind(
     &self,
     course_id: &str,
     user_id: &str,
@@ -611,6 +611,22 @@ impl Db {
         .collection::<Interaction>(Self::INTERACTION_COLLECTION)
         .find_one(doc! { "courseId": course_id, "userId": user_id, "referrer": referrer }, None)
         .await?.map(|i| i.kind)
+    )
+  }
+
+  pub async fn user_interactions_for_course(
+    &self,
+    course_id: &str,
+    referrer: &str,
+  ) -> Result<Vec<Interaction>> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find(doc! { "courseId": course_id, "referrer": referrer }, None)
+        .await?
+        .try_collect::<Vec<Interaction>>()
+        .await?,
     )
   }
 
