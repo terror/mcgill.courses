@@ -630,21 +630,6 @@ impl Db {
     )
   }
 
-  pub async fn course_reviews_interactions(
-    &self,
-    course_id: &str,
-  ) -> Result<Vec<Interaction>> {
-    Ok(
-      self
-        .database
-        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
-        .find(doc! { "courseId": course_id }, None)
-        .await?
-        .try_collect::<Vec<Interaction>>()
-        .await?,
-    )
-  }
-
   pub async fn get_subscription(
     &self,
     user_id: &str,

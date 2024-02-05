@@ -135,7 +135,7 @@ export const repo = {
     );
   },
 
-  async getUserInteractionForCourse(
+  async getUserInteractionsForCourse(
     courseId: string,
     referrer: string
   ): Promise<GetCourseReviewsInteractionPayload> {

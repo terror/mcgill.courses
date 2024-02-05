@@ -63,10 +63,9 @@ export const CoursePage = () => {
 
         if (user && id) {
           const courseInteractionsPayload =
-            await repo.getUserInteractionForCourse(id, user.id);
+            await repo.getUserInteractionsForCourse(id, user.id);
 
-          if (courseInteractionsPayload)
-            setUserInteractions(courseInteractionsPayload.interactions);
+          setUserInteractions(courseInteractionsPayload.interactions);
         }
 
         firstFetch.current = false;
