@@ -162,14 +162,6 @@ impl Server {
         .fallback_service(assets.index)
     }
 
-    let governor_config = Box::new(
-      GovernorConfigBuilder::default()
-        .per_millisecond(10)
-        .burst_size(100)
-        .finish()
-        .ok_or(anyhow!("Failed to create governor configuration"))?,
-    );
-
     let trace_layer = TraceLayer::new_for_http()
       .on_request(|request: &Request<Body>, _span: &Span| {
         info!("Received {} {}", request.method(), request.uri().path(),)
@@ -189,7 +181,13 @@ impl Server {
             display_error(err)
           }))
           .layer(GovernorLayer {
-            config: Box::leak(governor_config),
+            config: Box::leak(Box::new(
+              GovernorConfigBuilder::default()
+                .per_millisecond(10)
+                .burst_size(100)
+                .finish()
+                .ok_or(anyhow!("Failed to create governor configuration"))?,
+            )),
           })
           .layer(CorsLayer::very_permissive()),
       )
