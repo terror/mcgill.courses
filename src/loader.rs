@@ -133,10 +133,7 @@ impl Loader {
     Ok(())
   }
 
-  fn post_process(
-    &self,
-    courses: &mut Vec<Course>,
-  ) -> Result<Vec<Course>, Error> {
+  fn post_process(&self, courses: &mut [Course]) -> Result<Vec<Course>, Error> {
     info!("Post processing courses...");
 
     for i in 0..courses.len() {

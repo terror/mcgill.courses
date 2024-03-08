@@ -16,6 +16,14 @@ pub(crate) struct Server {
   skip_courses: bool,
 }
 
+#[derive(Debug)]
+struct AppConfig<'a> {
+  db: Arc<Db>,
+  assets: Option<Assets<'a>>,
+  session_store: MongodbSessionStore,
+  rate_limit: bool,
+}
+
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
     let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
@@ -67,22 +75,32 @@ impl Server {
       route: "/assets",
     });
 
+    let session_store = MongodbSessionStore::new(
+      &env::var("MONGODB_URL").unwrap_or_else(|_| {
+        "mongodb://localhost:27017/?directConnection=true&replicaSet=rs0".into()
+      }),
+      &db.name(),
+      "store",
+    )
+    .await?;
+
     axum_server::Server::bind(addr)
       .serve(
-        Self::app(db, assets, None)
-          .await?
-          .into_make_service_with_connect_info::<SocketAddr>(),
+        Self::app(AppConfig {
+          db,
+          assets,
+          session_store,
+          rate_limit: true,
+        })
+        .await?
+        .into_make_service_with_connect_info::<SocketAddr>(),
       )
       .await?;
 
     Ok(())
   }
 
-  async fn app(
-    db: Arc<Db>,
-    assets: Option<Assets<'_>>,
-    session_store: Option<MongodbSessionStore>,
-  ) -> Result<Router> {
+  async fn app(config: AppConfig<'_>) -> Result<Router> {
     let mut router = Router::new()
       .route("/api/auth/authorized", get(auth::login_authorized))
       .route("/api/auth/login", get(auth::microsoft_auth))
@@ -136,7 +154,7 @@ impl Server {
       }),
     );
 
-    if let Some(assets) = assets {
+    if let Some(assets) = config.assets {
       info!("Adding asset directory to router...");
 
       router = router
@@ -144,40 +162,44 @@ impl Server {
         .fallback_service(assets.index)
     }
 
-    let governor_conf = Box::new(
+    let governor_config = Box::new(
       GovernorConfigBuilder::default()
         .per_millisecond(10)
         .burst_size(100)
         .finish()
-        .unwrap(),
+        .ok_or(anyhow!("Failed to create governor configuration"))?,
     );
 
-    let service = ServiceBuilder::new()
-      .layer(
-        TraceLayer::new_for_http()
-          .on_request(|request: &Request<Body>, _span: &Span| {
-            info!("Received {} {}", request.method(), request.uri().path(),)
-          })
-          .on_response(
-            |response: &Response, latency: Duration, _span: &Span| {
-              info!("Response {} in {:?}", response.status(), latency)
-            },
-          ),
-      )
-      // HandleErrorLayer + BufferLayer are required for RateLimitLayer to satisfy trait bounds in Axum
-      .layer(HandleErrorLayer::new(|err: BoxError| async move {
-        display_error(err)
-      }))
-      .layer(GovernorLayer {
-        config: Box::leak(governor_conf)
+    let trace_layer = TraceLayer::new_for_http()
+      .on_request(|request: &Request<Body>, _span: &Span| {
+        info!("Received {} {}", request.method(), request.uri().path(),)
       })
-      .layer(CorsLayer::very_permissive());
+      .on_response(|response: &Response, latency: Duration, _span: &Span| {
+        info!("Response {} in {:?}", response.status(), latency)
+      });
 
-    Ok(
-      router
-        .with_state(State::new(db, session_store).await?)
-        .layer(service),
-    )
+    let router =
+      router.with_state(State::new(config.db, config.session_store).await?);
+
+    Ok(if config.rate_limit {
+      router.layer(
+        ServiceBuilder::new()
+          .layer(trace_layer)
+          .layer(HandleErrorLayer::new(|err: BoxError| async move {
+            display_error(err)
+          }))
+          .layer(GovernorLayer {
+            config: Box::leak(governor_config),
+          })
+          .layer(CorsLayer::very_permissive()),
+      )
+    } else {
+      router.layer(
+        ServiceBuilder::new()
+          .layer(trace_layer)
+          .layer(CorsLayer::very_permissive()),
+      )
+    })
   }
 }
 
@@ -233,9 +255,14 @@ mod tests {
       .await
       .unwrap();
 
-      let app = Server::app(db.clone(), None, Some(session_store.clone()))
-        .await
-        .unwrap();
+      let app = Server::app(AppConfig {
+        db: db.clone(),
+        assets: None,
+        session_store: session_store.clone(),
+        rate_limit: false,
+      })
+      .await
+      .unwrap();
 
       TestContext {
         app,
