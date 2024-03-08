@@ -22,14 +22,14 @@ use {
   async_session::{async_trait, Session, SessionStore},
   axum::{
     body::Body,
-    extract::{
-      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
-      Query, State as AppState,
-    },
-    headers::Cookie,
-    response::{IntoResponse, Redirect, Response, TypedHeader},
+    error_handling::HandleErrorLayer,
+    extract::{FromRef, FromRequestParts, Path, Query, State as AppState},
+    response::{IntoResponse, Redirect, Response},
     routing::{get, post, Router},
-    Json, RequestPartsExt,
+    BoxError, Json, RequestPartsExt,
+  },
+  axum_extra::{
+    headers::Cookie, typed_header::TypedHeaderRejectionReason, TypedHeader,
   },
   base64::{engine::general_purpose::STANDARD, Engine},
   chrono::prelude::*,
@@ -74,6 +74,9 @@ use {
     time::Duration,
   },
   tower::ServiceBuilder,
+  tower_governor::{
+    errors::display_error, governor::GovernorConfigBuilder, GovernorLayer,
+  },
   tower_http::{
     cors::CorsLayer,
     services::{ServeDir, ServeFile},

@@ -36,7 +36,7 @@ impl FromRef<State> for MongodbSessionStore {
 impl State {
   pub(crate) async fn new(
     db: Arc<Db>,
-    session_store: Option<MongodbSessionStore>,
+    session_store: MongodbSessionStore,
   ) -> Result<Self> {
     let client_secret = env::var("MS_CLIENT_SECRET")
       .expect("Missing the MS_CLIENT_SECRET environment variable.");
@@ -72,17 +72,7 @@ impl State {
         .expect("Invalid redirect URL"),
       ),
       request_client: reqwest::Client::new(),
-      session_store: session_store.unwrap_or(
-        MongodbSessionStore::new(
-          &env::var("MONGODB_URL").unwrap_or_else(|_| {
-            "mongodb://localhost:27017/?directConnection=true&replicaSet=rs0"
-              .into()
-          }),
-          &db.name(),
-          "store",
-        )
-        .await?,
-      ),
+      session_store,
     })
   }
 }

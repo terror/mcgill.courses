@@ -16,6 +16,14 @@ pub(crate) struct Server {
   skip_courses: bool,
 }
 
+#[derive(Debug)]
+struct AppConfig<'a> {
+  db: Arc<Db>,
+  assets: Option<Assets<'a>>,
+  session_store: MongodbSessionStore,
+  rate_limit: bool,
+}
+
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
     let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
@@ -67,18 +75,32 @@ impl Server {
       route: "/assets",
     });
 
+    let session_store = MongodbSessionStore::new(
+      &env::var("MONGODB_URL").unwrap_or_else(|_| {
+        "mongodb://localhost:27017/?directConnection=true&replicaSet=rs0".into()
+      }),
+      &db.name(),
+      "store",
+    )
+    .await?;
+
     axum_server::Server::bind(addr)
-      .serve(Self::app(db, assets, None).await?.into_make_service())
+      .serve(
+        Self::app(AppConfig {
+          db,
+          assets,
+          session_store,
+          rate_limit: true,
+        })
+        .await?
+        .into_make_service_with_connect_info::<SocketAddr>(),
+      )
       .await?;
 
     Ok(())
   }
 
-  async fn app(
-    db: Arc<Db>,
-    assets: Option<Assets<'_>>,
-    session_store: Option<MongodbSessionStore>,
-  ) -> Result<Router> {
+  async fn app(config: AppConfig<'_>) -> Result<Router> {
     let mut router = Router::new()
       .route("/api/auth/authorized", get(auth::login_authorized))
       .route("/api/auth/login", get(auth::microsoft_auth))
@@ -132,7 +154,7 @@ impl Server {
       }),
     );
 
-    if let Some(assets) = assets {
+    if let Some(assets) = config.assets {
       info!("Adding asset directory to router...");
 
       router = router
@@ -140,7 +162,8 @@ impl Server {
         .fallback_service(assets.index)
     }
 
-    let service = ServiceBuilder::new()
+    let router = router
+      .with_state(State::new(config.db, config.session_store).await?)
       .layer(
         TraceLayer::new_for_http()
           .on_request(|request: &Request<Body>, _span: &Span| {
@@ -151,14 +174,28 @@ impl Server {
               info!("Response {} in {:?}", response.status(), latency)
             },
           ),
-      )
-      .layer(CorsLayer::very_permissive());
+      );
 
-    Ok(
-      router
-        .with_state(State::new(db, session_store).await?)
-        .layer(service),
-    )
+    Ok(if config.rate_limit {
+      router.layer(
+        ServiceBuilder::new()
+          .layer(HandleErrorLayer::new(|err: BoxError| async move {
+            display_error(err)
+          }))
+          .layer(GovernorLayer {
+            config: Box::leak(Box::new(
+              GovernorConfigBuilder::default()
+                .per_millisecond(10)
+                .burst_size(100)
+                .finish()
+                .ok_or(anyhow!("Failed to create governor configuration"))?,
+            )),
+          })
+          .layer(CorsLayer::very_permissive()),
+      )
+    } else {
+      router.layer(CorsLayer::very_permissive())
+    })
   }
 }
 
@@ -214,9 +251,14 @@ mod tests {
       .await
       .unwrap();
 
-      let app = Server::app(db.clone(), None, Some(session_store.clone()))
-        .await
-        .unwrap();
+      let app = Server::app(AppConfig {
+        db: db.clone(),
+        assets: None,
+        session_store: session_store.clone(),
+        rate_limit: false,
+      })
+      .await
+      .unwrap();
 
       TestContext {
         app,
@@ -255,7 +297,9 @@ mod tests {
   impl ResponseExt for Response {
     async fn convert<T: DeserializeOwned>(self) -> T {
       serde_json::from_slice::<T>(
-        &hyper::body::to_bytes(self.into_body()).await.unwrap(),
+        &axum::body::to_bytes(self.into_body(), usize::MAX)
+          .await
+          .unwrap(),
       )
       .unwrap()
     }
