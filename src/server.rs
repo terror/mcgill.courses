@@ -162,21 +162,23 @@ impl Server {
         .fallback_service(assets.index)
     }
 
-    let trace_layer = TraceLayer::new_for_http()
-      .on_request(|request: &Request<Body>, _span: &Span| {
-        info!("Received {} {}", request.method(), request.uri().path(),)
-      })
-      .on_response(|response: &Response, latency: Duration, _span: &Span| {
-        info!("Response {} in {:?}", response.status(), latency)
-      });
-
-    let router =
-      router.with_state(State::new(config.db, config.session_store).await?);
+    let router = router
+      .with_state(State::new(config.db, config.session_store).await?)
+      .layer(
+        TraceLayer::new_for_http()
+          .on_request(|request: &Request<Body>, _span: &Span| {
+            info!("Received {} {}", request.method(), request.uri().path(),)
+          })
+          .on_response(
+            |response: &Response, latency: Duration, _span: &Span| {
+              info!("Response {} in {:?}", response.status(), latency)
+            },
+          ),
+      );
 
     Ok(if config.rate_limit {
       router.layer(
         ServiceBuilder::new()
-          .layer(trace_layer)
           .layer(HandleErrorLayer::new(|err: BoxError| async move {
             display_error(err)
           }))
@@ -192,11 +194,7 @@ impl Server {
           .layer(CorsLayer::very_permissive()),
       )
     } else {
-      router.layer(
-        ServiceBuilder::new()
-          .layer(trace_layer)
-          .layer(CorsLayer::very_permissive()),
-      )
+      router.layer(CorsLayer::very_permissive())
     })
   }
 }
