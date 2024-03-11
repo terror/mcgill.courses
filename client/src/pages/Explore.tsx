@@ -111,7 +111,7 @@ export const Explore = () => {
           Explore all courses
         </h1>
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
-          <div className='sm:mx-2 lg:hidden'>
+          <div className='lg:hidden'>
             <FilterToggle>
               <ExploreFilter
                 selectedSubjects={selectedSubjects}
