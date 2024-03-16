@@ -124,6 +124,7 @@ export const ExploreFilter = ({
           setSelectedSubjects([]);
           setSelectedLevels([]);
           setSelectedTerms([]);
+          setSortBy('');
         }}
       />
       <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>
