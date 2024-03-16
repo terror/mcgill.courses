@@ -98,8 +98,8 @@ services:
   sleep 5
   docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
 
-test:
-  cargo test --all
+test *filter:
+  cargo test --all {{filter}}
 
 watch +COMMAND='test':
   cargo watch --clear --exec "{{COMMAND}}"

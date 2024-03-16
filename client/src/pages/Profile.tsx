@@ -24,9 +24,14 @@ export const Profile = () => {
 
   const [userReviews, setUserReviews] = useState<Review[]>();
   const [userSubscriptions, setUserSubscriptions] = useState<Subscription[]>();
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
     if (!user) return;
+
+    const selectedTabIndex = localStorage.getItem('selectedTabIndex');
+
+    if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
 
     repo
       .getReviews(user.id)
@@ -107,11 +112,15 @@ export const Profile = () => {
             </div>
           </div>
         </div>
-        <Tab.Group>
+        <Tab.Group selectedIndex={selectedTabIndex}>
           <Tab.List className='m-4 flex space-x-1 rounded-xl bg-slate-200 p-1 dark:bg-neutral-700/20'>
-            {tabs.map((tab) => (
+            {tabs.map((tab, index) => (
               <Tab
                 key={tab}
+                onClick={() => {
+                  setSelectedTabIndex(index);
+                  localStorage.setItem('selectedTabIndex', index.toString());
+                }}
                 className={({ selected }) =>
                   twMerge(
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-800',
@@ -179,7 +188,7 @@ export const Profile = () => {
               </div>
             </Tab.Panel>
             <Tab.Panel>
-              <div className='m-4'>
+              <div>
                 {userSubscriptions?.length !== 0 ? (
                   userSubscriptions?.map((subscription, i) => (
                     <div

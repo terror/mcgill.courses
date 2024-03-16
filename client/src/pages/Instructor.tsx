@@ -69,7 +69,7 @@ export const Instructor = () => {
 
   return (
     <Layout>
-      <div className='mx-auto mt-10 flex max-w-5xl md:mt-0'>
+      <div className='mx-auto mt-10 flex max-w-5xl overflow-hidden md:mt-0'>
         <div className='flex w-screen flex-row rounded-md bg-slate-50 p-2 dark:bg-neutral-800 md:mt-10'>
           <div className='flex flex-1 flex-col md:flex-row'>
             <div className='flex w-fit flex-col p-4 md:w-1/2'>
@@ -123,11 +123,7 @@ export const Instructor = () => {
               )}
             </div>
             <div className='ml-10 hidden w-5/12 justify-center rounded-md bg-neutral-50 py-6 dark:bg-neutral-800 md:flex lg:mt-6'>
-              <CourseInfoStats
-                variant='large'
-                allReviews={reviews}
-                className='lg:mr-8'
-              />
+              <CourseInfoStats variant='large' allReviews={reviews} />
             </div>
           </div>
         </div>
