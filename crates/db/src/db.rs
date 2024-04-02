@@ -69,15 +69,15 @@ impl Db {
 
       if let Some(subjects) = subjects {
         document.insert(
-            "subject",
-            doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
+          "subject",
+          doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
         );
       }
 
       if let Some(levels) = levels {
         document.insert(
-            "code",
-            doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
+          "code",
+          doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
         );
       }
 
