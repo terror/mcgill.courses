@@ -69,15 +69,15 @@ impl Db {
 
       if let Some(subjects) = subjects {
         document.insert(
-            "subject",
-            doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
+          "subject",
+          doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
         );
       }
 
       if let Some(levels) = levels {
         document.insert(
-            "code",
-            doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
+          "code",
+          doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
         );
       }
 
@@ -223,7 +223,7 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(CourseNotFoundError))?;
+        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
 
       let count = course.review_count as f32;
       let avg_rating =
@@ -298,7 +298,7 @@ impl Db {
           session,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(ReviewNotFoundError))?;
+        .ok_or(mongodb::error::Error::custom(anyhow!("Review not found")))?;
 
       let course = course_coll
         .find_one(
@@ -308,17 +308,20 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(CourseNotFoundError))?;
+        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
 
       let (avg_rating, avg_difficulty) = if course.review_count == 0 {
         (0.0, 0.0)
       } else {
         let count = course.review_count as f32;
+
         let rating =
           (course.avg_rating * count - (review.rating as f32)) / (count - 1.0);
+
         let difficulty = (course.avg_difficulty * count
           - (review.difficulty as f32))
           / (count - 1.0);
+
         (rating, difficulty)
       };
 
@@ -2460,23 +2463,5 @@ mod tests {
         );
       }
     }
-  }
-}
-
-#[derive(Debug, Clone)]
-struct CourseNotFoundError;
-
-#[derive(Debug, Clone)]
-struct ReviewNotFoundError;
-
-impl fmt::Display for CourseNotFoundError {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "Course not found")
-  }
-}
-
-impl fmt::Display for ReviewNotFoundError {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "Review not found")
   }
 }

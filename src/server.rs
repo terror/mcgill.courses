@@ -886,7 +886,7 @@ mod tests {
     .await
     .unwrap();
 
-    let cookies = vec![
+    let cookies = [
       mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await,
       mock_login(session_store, "test2", "test2@mail.mcgill.ca").await,
     ];
