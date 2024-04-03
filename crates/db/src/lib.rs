@@ -2,7 +2,6 @@ use {
   anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, Utc},
-  core::fmt,
   futures::Future,
   futures::FutureExt,
   futures::{future::join_all, TryStreamExt},
