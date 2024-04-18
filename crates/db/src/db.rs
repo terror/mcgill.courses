@@ -183,8 +183,10 @@ impl Db {
 
   pub async fn add_review(&self, review: Review) -> Result<UpdateResult> {
     let mut session = self.client.start_session(None).await?;
+
     let interaction_coll =
       self.database.collection::<Course>(Self::COURSE_COLLECTION);
+
     let review_coll =
       self.database.collection::<Review>(Self::REVIEW_COLLECTION);
 
@@ -226,8 +228,10 @@ impl Db {
         .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
 
       let count = course.review_count as f32;
+
       let avg_rating =
         (course.avg_rating * count + (review.rating as f32)) / (count + 1.0);
+
       let avg_difficulty = (course.avg_difficulty * count
         + (review.difficulty as f32))
         / (count + 1.0);
