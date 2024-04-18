@@ -175,6 +175,13 @@ export const About = () => {
           decision-making. We encourage contributions from the McGill community
           to ensure the resource remains valuable.
         </Paragraph>
+
+        <Paragraph>
+          <br />
+          <span className='font-bold'>Disclaimer</span>: mcgill.courses is not
+          affiliated with McGill University.
+        </Paragraph>
+
         <Title>History & The Team</Title>
         <Paragraph>
           <Link className='underline' to='/'>
