@@ -176,8 +176,9 @@ export const About = () => {
           to ensure the resource remains valuable.
         </Paragraph>
 
+        <br />
+
         <Paragraph>
-          <br />
           <span className='font-bold'>Disclaimer</span>: mcgill.courses is not
           affiliated with McGill University.
         </Paragraph>
