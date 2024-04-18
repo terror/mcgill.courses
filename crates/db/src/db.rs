@@ -280,8 +280,10 @@ impl Db {
     user_id: &str,
   ) -> Result<Review> {
     let mut session = self.client.start_session(None).await?;
+
     let interaction_coll =
       self.database.collection::<Course>(Self::COURSE_COLLECTION);
+
     let review_coll =
       self.database.collection::<Review>(Self::REVIEW_COLLECTION);
 
