@@ -40,7 +40,8 @@ docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || t
 ```
 
 Spawn the server with a data source (in this case the `/seed` directory) and
-initialize the database (note that seeding may take some time on slower machines):
+initialize the database (note that seeding may take some time on slower
+machines):
 
 ```bash
 cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
