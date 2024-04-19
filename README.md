@@ -11,7 +11,24 @@ You'll need [docker](https://www.docker.com/),
 on your machine to spawn the various components the project needs to run
 locally.
 
-First, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
+First, join the discord server to get access to the development environment
+variables:
+
+In `.env` within the root directory you'll have to set
+
+```
+MS_CLIENT_ID=
+MS_CLIENT_SECRET=
+MS_REDIRECT_URI=http://localhost:8000/api/auth/authorized
+```
+
+...and then in `client/.env` you'll have to set the server url
+
+```
+VITE_API_URL=http://localhost:8000
+```
+
+Second, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
 
 ```bash
 docker compose up -d
@@ -30,9 +47,6 @@ Finally, spawn the react frontend:
 pnpm install
 pnpm run dev
 ```
-
-Refer to `.env.dev.example` and `client/.env.dev.example` for what environment
-variables need to be set.
 
 _n.b._ If you have [just](https://github.com/casey/just) installed, we provide a
 `dev` recipe for doing all of the above in addition to running a watch on the
