@@ -45,21 +45,23 @@ export const Home = () => {
       <div className='relative isolate px-6 pt-14 lg:px-8'>
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
-          <div className='flex flex-col gap-12 text-center'>
+          <div className='flex flex-col gap-10 text-center'>
             <h1 className='text-left text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200 md:text-5xl'>
               Explore thousands of course and professor reviews from McGill
               students
             </h1>
-            <CourseSearchBar
-              results={results}
-              handleInputChange={handleInputChange}
-            />
-            <Link
-              to={`/explore`}
-              className='cursor-pointer text-gray-500 underline underline-offset-4 dark:text-gray-400'
-            >
-              or explore all courses <span aria-hidden='true'>&rarr;</span>{' '}
-            </Link>
+            <div className='flex flex-col gap-6 text-center'>
+              <CourseSearchBar
+                results={results}
+                handleInputChange={handleInputChange}
+              />
+              <Link
+                to={`/explore`}
+                className='cursor-pointer text-sm text-gray-500 underline underline-offset-4 dark:text-gray-400 md:text-base'
+              >
+                or explore all courses <span aria-hidden='true'>&rarr;</span>{' '}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
