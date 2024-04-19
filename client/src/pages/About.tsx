@@ -140,7 +140,10 @@ const people = [
   {
     name: "Jeff Zhang (Hons CS '2025)",
     imageUrl: 'https://avatars.githubusercontent.com/u/47371088?v=4',
-    links: [{ title: 'Github', url: 'https://github.com/jeffdotpng' }],
+    links: [
+      { title: 'Github', url: 'https://github.com/39bytes' },
+      { title: 'LinkedIn', url: 'https://www.linkedin.com/in/jeff-zhang72/' },
+    ],
   },
   {
     name: "Sam Zhang (CS & Stats '2025)",
