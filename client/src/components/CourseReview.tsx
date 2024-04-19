@@ -239,12 +239,12 @@ export const CourseReview = ({
               </div>
             </div>
             {review.content.length < 300 || readMore ? (
-              <div className='ml-1 mr-4 mt-2 hyphens-auto text-left text-gray-800 dark:text-gray-300'>
+              <div className='ml-1 mr-4 mt-2 hyphens-auto break-words text-left text-gray-800 dark:text-gray-300'>
                 {review.content}
               </div>
             ) : (
               <>
-                <div className='ml-1 mr-4 mt-2 hyphens-auto text-left text-gray-800 dark:text-gray-300'>
+                <div className='ml-1 mr-4 mt-2 hyphens-auto break-words text-left text-gray-800 dark:text-gray-300'>
                   {review.content.substring(0, 300) + '...'}
                 </div>
                 <button
