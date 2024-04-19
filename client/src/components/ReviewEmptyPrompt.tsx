@@ -12,7 +12,7 @@ export const ReviewEmptyPrompt = ({
 }: ReviewEmptyPromptProps) => {
   return (
     <div
-      className={twMerge('text-gray-600 pb-56 flex justify-center', className)}
+      className={twMerge('flex justify-center pb-56 text-gray-600', className)}
     >
       <div className='py-1' />
       <div className='mx-4 flex items-center gap-x-2 text-center text-sm sm:text-base'>

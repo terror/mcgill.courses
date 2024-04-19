@@ -44,7 +44,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
       <Overlay>
         <div
           className={twMerge(
-            'fixed h-screen inset-0 z-50 flex items-end justify-end',
+            'fixed inset-0 z-50 flex h-screen items-end justify-end',
             darkMode ? 'dark' : ''
           )}
         >

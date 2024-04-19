@@ -94,10 +94,10 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
       {['M', 'T', 'W', 'T', 'F'].map((day, i) => (
         <span
           className={twMerge(
-            'sm:text-base text-sm',
+            'text-sm sm:text-base',
             dayNums.includes(i + 2)
               ? 'font-semibold text-gray-800 dark:text-gray-100'
-              : 'text-gray-400 font-extralight dark:text-gray-400'
+              : 'font-extralight text-gray-400 dark:text-gray-400'
           )}
         >
           {day}
@@ -191,10 +191,10 @@ export const SchedulesDisplay = ({
           <button
             key={i}
             className={twMerge(
-              `flex-1 cursor-pointer p-2 text-center font-medium transition duration-300 ease-in-out dark:text-gray-200 border-b sm:text-base text-sm dark:border-b-neutral-600`,
+              `flex-1 cursor-pointer border-b p-2 text-center text-sm font-medium transition duration-300 ease-in-out dark:border-b-neutral-600 dark:text-gray-200 sm:text-base`,
               term === selectedTerm
                 ? 'bg-slate-50 dark:bg-neutral-800'
-                : 'bg-slate-200 dark:bg-neutral-600 hover:bg-slate-100 dark:hover:bg-neutral-700',
+                : 'bg-slate-200 hover:bg-slate-100 dark:bg-neutral-600 dark:hover:bg-neutral-700',
               i === 0 ? 'rounded-tl-lg' : '',
               i === offeredTerms.length - 1 ? 'rounded-tr-lg' : ''
             )}

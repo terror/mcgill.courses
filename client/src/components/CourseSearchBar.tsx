@@ -52,7 +52,7 @@ const SearchResult = ({
     >
       <div
         className={twMerge(
-          'flex border-gray-200 p-3 text-left dark:border-neutral-700 transition-all duration-75',
+          'flex border-gray-200 p-3 text-left transition-all duration-75 dark:border-neutral-700',
           toHighlight ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
         key={index}
@@ -80,7 +80,7 @@ const ExploreButton = () => {
     >
       <div
         className={twMerge(
-          'flex cursor-pointer items-center p-3 text-left dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200 transition-all duration-75',
+          'flex cursor-pointer items-center p-3 text-left transition-all duration-75 dark:border-gray-600 dark:bg-neutral-800 dark:text-gray-200',
           isHovering ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
       >

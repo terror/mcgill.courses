@@ -61,7 +61,7 @@ export const Autocomplete = <T extends string>({
                   value={val}
                   className={({ active }) =>
                     twMerge(
-                      'cursor-pointer p-2 text-gray-900 dark:text-gray-200 min-h-[32px]',
+                      'min-h-[32px] cursor-pointer p-2 text-gray-900 dark:text-gray-200',
                       active
                         ? 'bg-gray-100 dark:bg-neutral-500'
                         : 'bg-white dark:bg-neutral-600'
