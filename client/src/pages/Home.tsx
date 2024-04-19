@@ -56,7 +56,7 @@ export const Home = () => {
             />
             <Link
               to={`/explore`}
-              className='cursor-pointer text-base text-gray-500 underline underline-offset-4 dark:text-gray-400'
+              className='cursor-pointer text-gray-500 underline underline-offset-4 dark:text-gray-400'
             >
               or explore all courses <span aria-hidden='true'>&rarr;</span>{' '}
             </Link>
