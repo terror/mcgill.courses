@@ -61,7 +61,7 @@ export const MultiSelect = ({
         <div className='relative max-w-[240px]'>
           <div
             className={twMerge(
-              'relative rounded-md bg-slate-200 p-2 dark:bg-neutral-700 border dark:border-neutral-600',
+              'relative rounded-md border bg-slate-200 p-2 dark:border-neutral-600 dark:bg-neutral-700',
               inputClassName
             )}
           >

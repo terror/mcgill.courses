@@ -212,7 +212,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
         {Object.keys(terms).map((t) => (
           <div
             className={twMerge(
-              'flex-1 p-2 text-center transition duration-200 cursor-pointer',
+              'flex-1 cursor-pointer p-2 text-center transition duration-200',
               t === term ? 'bg-slate-200' : 'hover:bg-gray-100'
             )}
             onClick={handleTermClick(t)}
@@ -229,7 +229,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
               size={20}
               className={twMerge(
                 arrowsDisabled
-                  ? 'text-gray-500 cursor-not-allowed'
+                  ? 'cursor-not-allowed text-gray-500'
                   : 'cursor-pointer'
               )}
             />
@@ -242,7 +242,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
               size={20}
               className={twMerge(
                 arrowsDisabled
-                  ? 'text-gray-500 cursor-not-allowed'
+                  ? 'cursor-not-allowed text-gray-500'
                   : 'cursor-pointer'
               )}
             />
