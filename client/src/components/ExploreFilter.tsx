@@ -63,7 +63,7 @@ const FilterButton = ({
   const selectedColor = selectedClass ?? 'bg-red-200 text-red-900';
 
   const unselectedColor =
-    'bg-gray-100 dark:bg-neutral-700 text-gray-800 dark:text-gray-100';
+    'bg-gray-100 dark:bg-neutral-700 text-gray-600 dark:text-gray-300';
 
   return (
     <button
@@ -124,6 +124,7 @@ export const ExploreFilter = ({
           setSelectedSubjects([]);
           setSelectedLevels([]);
           setSelectedTerms([]);
+          setSortBy('');
         }}
       />
       <h1 className='text-sm font-semibold text-gray-600 dark:text-gray-400'>

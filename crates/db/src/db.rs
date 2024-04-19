@@ -7,21 +7,22 @@ pub struct Db {
 }
 
 impl Db {
-  const COURSE_COLLECTION: &str = "courses";
-  const INSTRUCTOR_COLLECTION: &str = "instructors";
-  const INTERACTION_COLLECTION: &str = "interactions";
-  const NOTIFICATION_COLLECTION: &str = "notifications";
-  const REVIEW_COLLECTION: &str = "reviews";
-  const SUBSCRIPTION_COLLECTION: &str = "subscriptions";
+  const COURSE_COLLECTION: &'static str = "courses";
+  const INSTRUCTOR_COLLECTION: &'static str = "instructors";
+  const INTERACTION_COLLECTION: &'static str = "interactions";
+  const NOTIFICATION_COLLECTION: &'static str = "notifications";
+  const REVIEW_COLLECTION: &'static str = "reviews";
+  const SUBSCRIPTION_COLLECTION: &'static str = "subscriptions";
 
   pub async fn connect(db_name: &str) -> Result<Self> {
-    let mut client_options = ClientOptions::parse(format!(
-      "{}/{}?replicaSet=rs0",
-      env::var("MONGODB_URL")
-        .unwrap_or_else(|_| { "mongodb://localhost:27017".into() }),
-      db_name
-    ))
-    .await?;
+    let mut client_options =
+      ClientOptions::parse(env::var("MONGODB_URL").unwrap_or_else(|_| {
+        format!(
+          "mongodb://localhost:27017/{}?directConnection=true&replicaSet=rs0",
+          db_name
+        )
+      }))
+      .await?;
 
     client_options.app_name = Some(db_name.to_string());
 
@@ -68,15 +69,15 @@ impl Db {
 
       if let Some(subjects) = subjects {
         document.insert(
-            "subject",
-            doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
+          "subject",
+          doc! { "$regex": format!("^({})", subjects.join("|")), "$options": "i" },
         );
       }
 
       if let Some(levels) = levels {
         document.insert(
-            "code",
-            doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
+          "code",
+          doc! { "$regex": format!("^({})", levels.join("|")), "$options": "i" },
         );
       }
 
@@ -182,8 +183,10 @@ impl Db {
 
   pub async fn add_review(&self, review: Review) -> Result<UpdateResult> {
     let mut session = self.client.start_session(None).await?;
+
     let interaction_coll =
       self.database.collection::<Course>(Self::COURSE_COLLECTION);
+
     let review_coll =
       self.database.collection::<Review>(Self::REVIEW_COLLECTION);
 
@@ -222,11 +225,13 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(CourseNotFoundError))?;
+        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
 
       let count = course.review_count as f32;
+
       let avg_rating =
         (course.avg_rating * count + (review.rating as f32)) / (count + 1.0);
+
       let avg_difficulty = (course.avg_difficulty * count
         + (review.difficulty as f32))
         / (count + 1.0);
@@ -275,8 +280,10 @@ impl Db {
     user_id: &str,
   ) -> Result<Review> {
     let mut session = self.client.start_session(None).await?;
+
     let interaction_coll =
       self.database.collection::<Course>(Self::COURSE_COLLECTION);
+
     let review_coll =
       self.database.collection::<Review>(Self::REVIEW_COLLECTION);
 
@@ -297,7 +304,7 @@ impl Db {
           session,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(ReviewNotFoundError))?;
+        .ok_or(mongodb::error::Error::custom(anyhow!("Review not found")))?;
 
       let course = course_coll
         .find_one(
@@ -307,17 +314,20 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(CourseNotFoundError))?;
+        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
 
       let (avg_rating, avg_difficulty) = if course.review_count == 0 {
         (0.0, 0.0)
       } else {
         let count = course.review_count as f32;
+
         let rating =
           (course.avg_rating * count - (review.rating as f32)) / (count - 1.0);
+
         let difficulty = (course.avg_difficulty * count
           - (review.difficulty as f32))
           / (count - 1.0);
+
         (rating, difficulty)
       };
 
@@ -598,7 +608,7 @@ impl Db {
     )
   }
 
-  pub async fn user_interaction_for_review(
+  pub async fn interaction_kind(
     &self,
     course_id: &str,
     user_id: &str,
@@ -610,6 +620,22 @@ impl Db {
         .collection::<Interaction>(Self::INTERACTION_COLLECTION)
         .find_one(doc! { "courseId": course_id, "userId": user_id, "referrer": referrer }, None)
         .await?.map(|i| i.kind)
+    )
+  }
+
+  pub async fn user_interactions_for_course(
+    &self,
+    course_id: &str,
+    referrer: &str,
+  ) -> Result<Vec<Interaction>> {
+    Ok(
+      self
+        .database
+        .collection::<Interaction>(Self::INTERACTION_COLLECTION)
+        .find(doc! { "courseId": course_id, "referrer": referrer }, None)
+        .await?
+        .try_collect::<Vec<Interaction>>()
+        .await?,
     )
   }
 
@@ -2443,23 +2469,5 @@ mod tests {
         );
       }
     }
-  }
-}
-
-#[derive(Debug, Clone)]
-struct CourseNotFoundError;
-
-#[derive(Debug, Clone)]
-struct ReviewNotFoundError;
-
-impl fmt::Display for CourseNotFoundError {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "Course not found")
-  }
-}
-
-impl fmt::Display for ReviewNotFoundError {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "Review not found")
   }
 }

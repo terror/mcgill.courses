@@ -8,6 +8,7 @@ type AutocompleteProps<T extends string> = {
   value?: T;
   setValue: (value: T) => void;
   className?: string;
+  inputClassName?: string;
 };
 
 export const Autocomplete = <T extends string>({
@@ -15,6 +16,7 @@ export const Autocomplete = <T extends string>({
   value,
   setValue,
   className,
+  inputClassName,
 }: AutocompleteProps<T>) => {
   const [query, setQuery] = useState('');
 
@@ -29,9 +31,12 @@ export const Autocomplete = <T extends string>({
     <div className={className}>
       <Combobox value={value} onChange={(val) => setValue(val)}>
         <div className='w-full'>
-          <div className='relative max-w-[240px] rounded-md bg-slate-200 p-2 dark:bg-neutral-700'>
+          <div className='relative max-w-[240px] rounded-md border bg-slate-200 p-2 dark:border-neutral-600 dark:bg-neutral-700'>
             <Combobox.Input
-              className='w-[87.5%] bg-slate-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white'
+              className={twMerge(
+                'w-[87.5%] bg-slate-200 text-sm outline-none dark:bg-neutral-700 dark:text-gray-200 dark:caret-white',
+                inputClassName
+              )}
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className='absolute inset-y-0 flex w-full items-center'>
@@ -56,7 +61,7 @@ export const Autocomplete = <T extends string>({
                   value={val}
                   className={({ active }) =>
                     twMerge(
-                      'cursor-pointer p-2 text-gray-900 dark:text-gray-200 min-h-[32px]',
+                      'min-h-[32px] cursor-pointer p-2 text-gray-900 dark:text-gray-200',
                       active
                         ? 'bg-gray-100 dark:bg-neutral-500'
                         : 'bg-white dark:bg-neutral-600'

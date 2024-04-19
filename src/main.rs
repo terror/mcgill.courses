@@ -21,14 +21,15 @@ use {
   async_mongodb_session::MongodbSessionStore,
   async_session::{async_trait, Session, SessionStore},
   axum::{
-    extract::{
-      rejection::TypedHeaderRejectionReason, FromRef, FromRequestParts, Path,
-      Query, State as AppState,
-    },
-    headers::Cookie,
-    response::{IntoResponse, Redirect, Response, TypedHeader},
+    body::Body,
+    error_handling::HandleErrorLayer,
+    extract::{FromRef, FromRequestParts, Path, Query, State as AppState},
+    response::{IntoResponse, Redirect, Response},
     routing::{get, post, Router},
-    Json, RequestPartsExt,
+    BoxError, Json, RequestPartsExt,
+  },
+  axum_extra::{
+    headers::Cookie, typed_header::TypedHeaderRejectionReason, TypedHeader,
   },
   base64::{engine::general_purpose::STANDARD, Engine},
   chrono::prelude::*,
@@ -37,7 +38,9 @@ use {
   dotenv::dotenv,
   env_logger::Env,
   futures::TryStreamExt,
-  http::{header, header::SET_COOKIE, request::Parts, HeaderMap, StatusCode},
+  http::{
+    header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
+  },
   log::{debug, error, info, trace, warn},
   model::{
     Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
@@ -70,10 +73,16 @@ use {
     thread,
     time::Duration,
   },
+  tower::ServiceBuilder,
+  tower_governor::{
+    errors::display_error, governor::GovernorConfigBuilder, GovernorLayer,
+  },
   tower_http::{
     cors::CorsLayer,
     services::{ServeDir, ServeFile},
+    trace::TraceLayer,
   },
+  tracing::Span,
   url::Url,
   walkdir::WalkDir,
 };

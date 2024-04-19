@@ -1,6 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
@@ -34,12 +35,16 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
 
   const [darkMode] = useDarkMode();
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : 'auto';
+  }, [open]);
+
   return (
     <Transition appear show={open}>
       <Overlay>
         <div
           className={twMerge(
-            'fixed inset-0 z-50 flex items-end justify-end',
+            'fixed inset-0 z-50 flex h-screen items-end justify-end',
             darkMode ? 'dark' : ''
           )}
         >
@@ -68,8 +73,13 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             <div className='h-screen w-full overflow-y-auto bg-white p-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
-                  <Link to='/' className=''>
-                    <img className='h-8 w-auto' src={birdImageUrl} alt='bird' />
+                  <Link to='/'>
+                    <img
+                      className='h-8 w-auto'
+                      src={birdImageUrl}
+                      alt='bird'
+                      onClick={() => onClose(false)}
+                    />
                   </Link>
                   <div className='ml-6'>
                     <DarkModeToggle />
@@ -92,10 +102,25 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                         key={item.name}
                         to={item.href}
                         className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                        onClick={() => onClose(false)}
                       >
                         {item.name}
                       </Link>
                     ))}
+                    <Link
+                      key={'privacy'}
+                      to={'/privacy'}
+                      className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                    >
+                      Privacy Policy
+                    </Link>
+                    <Link
+                      key={'tos'}
+                      to={'/tos'}
+                      className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700'
+                    >
+                      Terms and Conditions
+                    </Link>
                   </div>
                   <div className='py-6'>
                     {user ? (

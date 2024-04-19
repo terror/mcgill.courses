@@ -1,30 +1,57 @@
 use super::*;
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct GetUserInteractionParams {
+pub(crate) struct GetInteractionKindParams {
   pub(crate) course_id: String,
   pub(crate) user_id: String,
   pub(crate) referrer: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
-pub(crate) struct GetUserInteractionPayload {
+pub(crate) struct GetInteractionKindPayload {
   pub(crate) kind: Option<InteractionKind>,
 }
 
-pub(crate) async fn get_user_interaction(
-  params: Query<GetUserInteractionParams>,
+pub(crate) async fn get_interaction_kind(
+  params: Query<GetInteractionKindParams>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
   let kind = db
-    .user_interaction_for_review(
-      &params.course_id,
-      &params.user_id,
-      &params.referrer,
-    )
+    .interaction_kind(&params.course_id, &params.user_id, &params.referrer)
     .await?;
 
-  Ok(Json(GetUserInteractionPayload { kind }))
+  Ok(Json(GetInteractionKindPayload { kind }))
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+pub(crate) struct GetUserInteractionForCoursePayload {
+  pub(crate) course_id: String,
+  pub(crate) referrer: String,
+  pub(crate) interactions: Vec<Interaction>,
+}
+
+pub(crate) async fn get_user_interactions_for_course(
+  Path((course_id, referrer)): Path<(String, String)>,
+  AppState(db): AppState<Arc<Db>>,
+) -> Result<impl IntoResponse> {
+  info!(
+    "Fetching review interactions from {} for course {}",
+    referrer, course_id
+  );
+
+  Ok(Json(GetUserInteractionForCoursePayload {
+    course_id: course_id.clone(),
+    referrer: referrer.clone(),
+    interactions: db
+      .user_interactions_for_course(&course_id, &referrer)
+      .await?,
+  }))
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+pub(crate) struct GetCourseReviewsInteractionPayload {
+  pub(crate) course_id: String,
+  pub(crate) interactions: Vec<Interaction>,
 }
 
 #[derive(Debug, Deserialize)]

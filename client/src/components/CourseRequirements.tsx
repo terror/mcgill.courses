@@ -106,7 +106,7 @@ export const CourseRequirements = ({
       )}
     >
       <button
-        className='absolute right-4 top-4 z-10 cursor-pointer rounded-full p-1 transition duration-150 hover:bg-gray-200 dark:hover:bg-gray-700'
+        className='absolute right-4 top-4 z-10 cursor-pointer rounded-full bg-gray-200 p-1.5 transition duration-150 hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-neutral-600'
         onClick={handleGraphToggle}
       >
         <ToggleButtonIcon

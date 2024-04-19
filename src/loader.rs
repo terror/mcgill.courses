@@ -61,7 +61,7 @@ pub(crate) struct Loader {
 }
 
 impl Loader {
-  const BASE_URL: &str = "https://www.mcgill.ca";
+  const BASE_URL: &'static str = "https://www.mcgill.ca";
 
   pub(crate) fn run(&self, source: PathBuf) -> Result {
     info!("Running extractor...");
@@ -133,10 +133,7 @@ impl Loader {
     Ok(())
   }
 
-  fn post_process(
-    &self,
-    courses: &mut Vec<Course>,
-  ) -> Result<Vec<Course>, Error> {
+  fn post_process(&self, courses: &mut [Course]) -> Result<Vec<Course>, Error> {
     info!("Post processing courses...");
 
     for i in 0..courses.len() {

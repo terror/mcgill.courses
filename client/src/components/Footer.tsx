@@ -43,8 +43,9 @@ export const Footer = () => {
           </div>
         ))}
       </div>
-      <div className='mr-10'>
+      <div className='mr-10 space-x-6'>
         <NavItem name={'Privacy Policy'} href={'/privacy'} />
+        <NavItem name={'Terms and Conditions'} href={'/tos'} />
       </div>
     </nav>
   );

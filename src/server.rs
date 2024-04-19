@@ -16,6 +16,14 @@ pub(crate) struct Server {
   skip_courses: bool,
 }
 
+#[derive(Debug)]
+struct AppConfig<'a> {
+  db: Arc<Db>,
+  assets: Option<Assets<'a>>,
+  session_store: MongodbSessionStore,
+  rate_limit: bool,
+}
+
 impl Server {
   pub(crate) async fn run(self, source: PathBuf) -> Result {
     let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
@@ -67,18 +75,32 @@ impl Server {
       route: "/assets",
     });
 
+    let session_store = MongodbSessionStore::new(
+      &env::var("MONGODB_URL").unwrap_or_else(|_| {
+        "mongodb://localhost:27017/?directConnection=true&replicaSet=rs0".into()
+      }),
+      &db.name(),
+      "store",
+    )
+    .await?;
+
     axum_server::Server::bind(addr)
-      .serve(Self::app(db, assets, None).await?.into_make_service())
+      .serve(
+        Self::app(AppConfig {
+          db,
+          assets,
+          session_store,
+          rate_limit: true,
+        })
+        .await?
+        .into_make_service_with_connect_info::<SocketAddr>(),
+      )
       .await?;
 
     Ok(())
   }
 
-  async fn app(
-    db: Arc<Db>,
-    assets: Option<Assets<'_>>,
-    session_store: Option<MongodbSessionStore>,
-  ) -> Result<Router> {
+  async fn app(config: AppConfig<'_>) -> Result<Router> {
     let mut router = Router::new()
       .route("/api/auth/authorized", get(auth::login_authorized))
       .route("/api/auth/login", get(auth::microsoft_auth))
@@ -87,8 +109,12 @@ impl Server {
       .route("/api/courses/:id", get(courses::get_course_by_id))
       .route("/api/instructors/:name", get(instructors::get_instructor))
       .route(
+        "/api/interactions/:course_id/referrer/:referrer",
+        get(interactions::get_user_interactions_for_course),
+      )
+      .route(
         "/api/interactions",
-        get(interactions::get_user_interaction)
+        get(interactions::get_interaction_kind)
           .post(interactions::add_interaction)
           .delete(interactions::delete_interaction),
       )
@@ -115,7 +141,20 @@ impl Server {
       )
       .route("/api/user", get(user::get_user));
 
-    if let Some(assets) = assets {
+    // Serve microsoft identity association file
+    router = router.route(
+      "/.well-known/microsoft-identity-association.json",
+      get(|| async {
+        info!("Serving microsoft-identity-association.json");
+
+        fs::read_to_string(PathBuf::from(
+          ".well-known/microsoft-identity-association.json",
+        ))
+        .unwrap_or_else(|_| "Error reading file".to_string())
+      }),
+    );
+
+    if let Some(assets) = config.assets {
       info!("Adding asset directory to router...");
 
       router = router
@@ -123,11 +162,40 @@ impl Server {
         .fallback_service(assets.index)
     }
 
-    Ok(
-      router
-        .with_state(State::new(db, session_store).await?)
-        .layer(CorsLayer::very_permissive()),
-    )
+    let router = router
+      .with_state(State::new(config.db, config.session_store).await?)
+      .layer(
+        TraceLayer::new_for_http()
+          .on_request(|request: &Request<Body>, _span: &Span| {
+            info!("Received {} {}", request.method(), request.uri().path(),)
+          })
+          .on_response(
+            |response: &Response, latency: Duration, _span: &Span| {
+              info!("Response {} in {:?}", response.status(), latency)
+            },
+          ),
+      );
+
+    Ok(if config.rate_limit {
+      router.layer(
+        ServiceBuilder::new()
+          .layer(HandleErrorLayer::new(|err: BoxError| async move {
+            display_error(err)
+          }))
+          .layer(GovernorLayer {
+            config: Box::leak(Box::new(
+              GovernorConfigBuilder::default()
+                .per_millisecond(10)
+                .burst_size(100)
+                .finish()
+                .ok_or(anyhow!("Failed to create governor configuration"))?,
+            )),
+          })
+          .layer(CorsLayer::very_permissive()),
+      )
+    } else {
+      router.layer(CorsLayer::very_permissive())
+    })
   }
 }
 
@@ -138,7 +206,9 @@ mod tests {
     crate::instructors::GetInstructorPayload,
     axum::body::Body,
     http::{Method, Request},
-    interactions::GetUserInteractionPayload,
+    interactions::{
+      GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
+    },
     model::Notification,
     pretty_assertions::assert_eq,
     serde::de::DeserializeOwned,
@@ -181,9 +251,14 @@ mod tests {
       .await
       .unwrap();
 
-      let app = Server::app(db.clone(), None, Some(session_store.clone()))
-        .await
-        .unwrap();
+      let app = Server::app(AppConfig {
+        db: db.clone(),
+        assets: None,
+        session_store: session_store.clone(),
+        rate_limit: false,
+      })
+      .await
+      .unwrap();
 
       TestContext {
         app,
@@ -222,7 +297,9 @@ mod tests {
   impl ResponseExt for Response {
     async fn convert<T: DeserializeOwned>(self) -> T {
       serde_json::from_slice::<T>(
-        &hyper::body::to_bytes(self.into_body()).await.unwrap(),
+        &axum::body::to_bytes(self.into_body(), usize::MAX)
+          .await
+          .unwrap(),
       )
       .unwrap()
     }
@@ -809,7 +886,7 @@ mod tests {
     .await
     .unwrap();
 
-    let cookies = vec![
+    let cookies = [
       mock_login(session_store.clone(), "test", "test@mail.mcgill.ca").await,
       mock_login(session_store, "test2", "test2@mail.mcgill.ca").await,
     ];
@@ -917,8 +994,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
 
     let interaction = json! ({
@@ -968,8 +1045,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload {
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload {
         kind: Some(InteractionKind::Like),
       }
     );
@@ -1020,8 +1097,8 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
   }
 
@@ -1124,6 +1201,137 @@ mod tests {
     );
 
     assert_eq!(payload.reviews.len(), 1)
+  }
+
+  #[tokio::test]
+  async fn get_empty_user_interactions_for_course() {
+    let TestContext { db, mut app, .. } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Content-Type", "application/json")
+          .uri("/api/interactions/COMP202/referrer/test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response
+      .convert::<GetCourseReviewsInteractionPayload>()
+      .await;
+
+    assert_eq!(payload.course_id, "COMP202");
+    assert_eq!(payload.interactions.len(), 0);
+  }
+
+  #[tokio::test]
+  async fn get_user_interactions_for_course() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(session_store, "test", "test@mail.mcgill.ca").await;
+
+    let review = json!({
+      "content": "test",
+      "course_id": "MATH240",
+      "instructors": ["Adrian Roshan Vetta"],
+      "rating": 5,
+      "difficulty": 5
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/reviews")
+          .body(Body::from(review))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+    assert_eq!(db.find_reviews_by_user_id("test").await.unwrap().len(), 1);
+
+    let interaction = json! ({
+      "kind": "like",
+      "course_id": "MATH240",
+      "user_id": "test",
+      "referrer": "test"
+    })
+    .to_string();
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/interactions")
+          .body(Body::from(interaction))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_eq!(
+      db.interactions_for_review("MATH240", "test")
+        .await
+        .unwrap()
+        .len(),
+      1
+    );
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Content-Type", "application/json")
+          .uri("/api/interactions/MATH240/referrer/test")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response
+      .convert::<GetCourseReviewsInteractionPayload>()
+      .await;
+
+    assert_eq!(payload.course_id, "MATH240");
+    assert_eq!(payload.interactions.len(), 1);
+    assert_eq!(payload.interactions[0].kind, InteractionKind::Like);
+    assert_eq!(payload.interactions[0].referrer, "test");
   }
 
   #[tokio::test]
@@ -1230,8 +1438,8 @@ mod tests {
       .unwrap();
 
     assert_eq!(
-      response.convert::<GetUserInteractionPayload>().await,
-      GetUserInteractionPayload { kind: None }
+      response.convert::<GetInteractionKindPayload>().await,
+      GetInteractionKindPayload { kind: None }
     );
   }
 

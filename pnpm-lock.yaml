@@ -58,7 +58,7 @@ dependencies:
     version: 6.16.0(react-dom@18.2.0)(react@18.2.0)
   react-vis-graph-wrapper:
     specifier: ^0.1.3
-    version: 0.1.3(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0)(keycharm@0.4.0)(react@18.2.0)(uuid@9.0.1)(vis-util@5.0.6)
+    version: 0.1.3(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1)(keycharm@0.4.0)(react@18.2.0)(uuid@9.0.1)(vis-util@5.0.7)
   sonner:
     specifier: ^0.7.4
     version: 0.7.4(react-dom@18.2.0)(react@18.2.0)
@@ -74,8 +74,8 @@ dependencies:
 
 devDependencies:
   '@trivago/prettier-plugin-sort-imports':
-    specifier: ^4.2.0
-    version: 4.2.0(prettier@2.8.8)
+    specifier: ^4.3.0
+    version: 4.3.0(prettier@3.2.5)
   '@types/flexsearch':
     specifier: ^0.7.6
     version: 0.7.6
@@ -125,11 +125,11 @@ devDependencies:
     specifier: ^8.4.30
     version: 8.4.30
   prettier:
-    specifier: ^2.8.8
-    version: 2.8.8
+    specifier: ^3.2.5
+    version: 3.2.5
   prettier-plugin-tailwindcss:
-    specifier: ^0.2.8
-    version: 0.2.8(@trivago/prettier-plugin-sort-imports@4.2.0)(prettier@2.8.8)
+    specifier: ^0.5.14
+    version: 0.5.14(@trivago/prettier-plugin-sort-imports@4.3.0)(prettier@3.2.5)
   start-server-and-test:
     specifier: ^2.0.1
     version: 2.0.1
@@ -206,7 +206,7 @@ packages:
     resolution: {integrity: sha512-oLcVCTeIFadUoArDTwpluncplrYBmTCCZZgXCbgNGvOBBiSDDK3eWO4b/+eOTli5tKv1lg+a5/NAXg+nTcei1w==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.23.3
       jsesc: 2.5.2
       source-map: 0.5.7
     dev: true
@@ -370,18 +370,18 @@ packages:
       '@babel/types': 7.23.3
     dev: true
 
-  /@babel/traverse@7.17.3:
-    resolution: {integrity: sha512-5irClVky7TxRWIRtxlh2WPUUOLhcPN06AGgaQSB8AEwuyEBgJVuJ5imdHm5zxk8w0QS5T+tDfnDxAlhWjpb7cw==}
+  /@babel/traverse@7.23.2:
+    resolution: {integrity: sha512-azpe59SQ48qG6nu2CzcMLbxUudtN+dOM9kDbUqGq3HXUJRlo7i8fvPoxQUzYgLZ4cMVmuZgm8vvBpNeRhd6XSw==}
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.22.13
-      '@babel/generator': 7.17.7
+      '@babel/generator': 7.23.3
       '@babel/helper-environment-visitor': 7.22.20
       '@babel/helper-function-name': 7.23.0
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.3
-      '@babel/types': 7.17.0
+      '@babel/types': 7.23.3
       debug: 4.3.4(supports-color@8.1.1)
       globals: 11.12.0
     transitivePeerDependencies:
@@ -467,7 +467,7 @@ packages:
     resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
     engines: {node: '>=0.8.0'}
     dependencies:
-      '@types/hammerjs': 2.0.44
+      '@types/hammerjs': 2.0.45
     dev: false
 
   /@esbuild/android-arm64@0.18.20:
@@ -829,8 +829,8 @@ packages:
     resolution: {integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==}
     dev: true
 
-  /@trivago/prettier-plugin-sort-imports@4.2.0(prettier@2.8.8):
-    resolution: {integrity: sha512-YBepjbt+ZNBVmN3ev1amQH3lWCmHyt5qTbLCp/syXJRu/Kw2koXh44qayB1gMRxcL/gV8egmjN5xWSrYyfUtyw==}
+  /@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.2.5):
+    resolution: {integrity: sha512-r3n0onD3BTOVUNPhR4lhVK4/pABGpbA7bW3eumZnYdKaHkf1qEC+Mag6DPbGNuuh0eG8AaYj+YqmVHSiGslaTQ==}
     peerDependencies:
       '@vue/compiler-sfc': 3.x
       prettier: 2.x - 3.x
@@ -840,24 +840,21 @@ packages:
     dependencies:
       '@babel/generator': 7.17.7
       '@babel/parser': 7.23.3
-      '@babel/traverse': 7.17.3
+      '@babel/traverse': 7.23.2
       '@babel/types': 7.17.0
       javascript-natural-sort: 0.7.1
       lodash: 4.17.21
-      prettier: 2.8.8
+      prettier: 3.2.5
     transitivePeerDependencies:
       - supports-color
     dev: true
 
   /@types/flexsearch@0.7.6:
-    resolution:
-      {
-        integrity: sha512-H5IXcRn96/gaDmo+rDl2aJuIJsob8dgOXDqf8K0t8rWZd1AFNaaspmRsElESiU+EWE33qfbFPgI0OC/B1g9FCA==,
-      }
+    resolution: {integrity: sha512-H5IXcRn96/gaDmo+rDl2aJuIJsob8dgOXDqf8K0t8rWZd1AFNaaspmRsElESiU+EWE33qfbFPgI0OC/B1g9FCA==}
     dev: true
 
-  /@types/hammerjs@2.0.44:
-    resolution: {integrity: sha512-pdGBkAh4ggfXAkiwgmTdROJe3mwvLWJYm6JiaAwCtskAU0Weh+JQyyMTbhvxjxD2n8sr8PrxVwyDzmpnK4pUrQ==}
+  /@types/hammerjs@2.0.45:
+    resolution: {integrity: sha512-qkcUlZmX6c4J8q45taBKTL3p+LbITgyx7qhlPYOdOHZB7B31K0mXbP5YA7i7SgDeEGuI9MnumiKPEMrxg8j3KQ==}
     dev: false
 
   /@types/hoist-non-react-statics@3.3.5:
@@ -1499,8 +1496,8 @@ packages:
     engines: {node: '>=4.0.0'}
     dev: true
 
-  /component-emitter@1.3.0:
-    resolution: {integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==}
+  /component-emitter@1.3.1:
+    resolution: {integrity: sha512-T0+barUSQRTUQASh8bx02dl+DhF54GtIDY13Y3m9oWTklKbb3Wv974meRpeZ3lp1JpLVECWWNHC4vaG2XHXouQ==}
     dev: false
 
   /concat-map@0.0.1:
@@ -2099,10 +2096,7 @@ packages:
     dev: true
 
   /flexsearch@0.7.21:
-    resolution:
-      {
-        integrity: sha512-W7cHV7Hrwjid6lWmy0IhsWDFQboWSng25U3VVywpHOTJnnAZNPScog67G+cVpeX9f7yDD21ih0WDrMMT+JoaYg==,
-      }
+    resolution: {integrity: sha512-W7cHV7Hrwjid6lWmy0IhsWDFQboWSng25U3VVywpHOTJnnAZNPScog67G+cVpeX9f7yDD21ih0WDrMMT+JoaYg==}
     dev: false
 
   /follow-redirects@1.15.3(debug@4.3.4):
@@ -3148,25 +3142,26 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-tailwindcss@0.2.8(@trivago/prettier-plugin-sort-imports@4.2.0)(prettier@2.8.8):
-    resolution: {integrity: sha512-KgPcEnJeIijlMjsA6WwYgRs5rh3/q76oInqtMXBA/EMcamrcYJpyhtRhyX1ayT9hnHlHTuO8sIifHF10WuSDKg==}
-    engines: {node: '>=12.17.0'}
+  /prettier-plugin-tailwindcss@0.5.14(@trivago/prettier-plugin-sort-imports@4.3.0)(prettier@3.2.5):
+    resolution: {integrity: sha512-Puaz+wPUAhFp8Lo9HuciYKM2Y2XExESjeT+9NQoVFXZsPPnc9VYss2SpxdQ6vbatmt8/4+SN0oe0I1cPDABg9Q==}
+    engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
       '@prettier/plugin-pug': '*'
       '@shopify/prettier-plugin-liquid': '*'
-      '@shufo/prettier-plugin-blade': '*'
       '@trivago/prettier-plugin-sort-imports': '*'
-      prettier: '>=2.2.0'
+      '@zackad/prettier-plugin-twig-melody': '*'
+      prettier: ^3.0
       prettier-plugin-astro: '*'
       prettier-plugin-css-order: '*'
       prettier-plugin-import-sort: '*'
       prettier-plugin-jsdoc: '*'
+      prettier-plugin-marko: '*'
       prettier-plugin-organize-attributes: '*'
       prettier-plugin-organize-imports: '*'
+      prettier-plugin-sort-imports: '*'
       prettier-plugin-style-order: '*'
       prettier-plugin-svelte: '*'
-      prettier-plugin-twig-melody: '*'
     peerDependenciesMeta:
       '@ianvs/prettier-plugin-sort-imports':
         optional: true
@@ -3174,9 +3169,9 @@ packages:
         optional: true
       '@shopify/prettier-plugin-liquid':
         optional: true
-      '@shufo/prettier-plugin-blade':
-        optional: true
       '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      '@zackad/prettier-plugin-twig-melody':
         optional: true
       prettier-plugin-astro:
         optional: true
@@ -3186,24 +3181,26 @@ packages:
         optional: true
       prettier-plugin-jsdoc:
         optional: true
+      prettier-plugin-marko:
+        optional: true
       prettier-plugin-organize-attributes:
         optional: true
       prettier-plugin-organize-imports:
+        optional: true
+      prettier-plugin-sort-imports:
         optional: true
       prettier-plugin-style-order:
         optional: true
       prettier-plugin-svelte:
         optional: true
-      prettier-plugin-twig-melody:
-        optional: true
     dependencies:
-      '@trivago/prettier-plugin-sort-imports': 4.2.0(prettier@2.8.8)
-      prettier: 2.8.8
+      '@trivago/prettier-plugin-sort-imports': 4.3.0(prettier@3.2.5)
+      prettier: 3.2.5
     dev: true
 
-  /prettier@2.8.8:
-    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
-    engines: {node: '>=10.13.0'}
+  /prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+    engines: {node: '>=14'}
     hasBin: true
     dev: true
 
@@ -3395,7 +3392,7 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /react-vis-graph-wrapper@0.1.3(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0)(keycharm@0.4.0)(react@18.2.0)(uuid@9.0.1)(vis-util@5.0.6):
+  /react-vis-graph-wrapper@0.1.3(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1)(keycharm@0.4.0)(react@18.2.0)(uuid@9.0.1)(vis-util@5.0.7):
     resolution: {integrity: sha512-joKVERnXoruwHNaK9WVguM+RjlQBrwRweimtmKN7qWbJZ39ue+EPMU2Q/KN860qXcWO4YA5VGsUSxVKzZhaucA==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -3405,8 +3402,8 @@ packages:
       lodash: 4.17.21
       lodash-es: 4.17.21
       react: 18.2.0
-      vis-data: 7.1.8(uuid@9.0.1)(vis-util@5.0.6)
-      vis-network: 9.1.9(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0)(keycharm@0.4.0)(uuid@9.0.1)(vis-data@7.1.8)(vis-util@5.0.6)
+      vis-data: 7.1.8(uuid@9.0.1)(vis-util@5.0.7)
+      vis-network: 9.1.9(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1)(keycharm@0.4.0)(uuid@9.0.1)(vis-data@7.1.8)(vis-util@5.0.7)
     transitivePeerDependencies:
       - '@egjs/hammerjs'
       - component-emitter
@@ -4090,17 +4087,17 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vis-data@7.1.8(uuid@9.0.1)(vis-util@5.0.6):
+  /vis-data@7.1.8(uuid@9.0.1)(vis-util@5.0.7):
     resolution: {integrity: sha512-h/cxRDVqnpqqpTBqwUbbKIpWVovOQ+h5rbFS/kio8TUH1np98Lv9bHdWZxahJlyzBaBR9KGvwGHB00jn3MjLbQ==}
     peerDependencies:
       uuid: ^3.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
       vis-util: ^5.0.1
     dependencies:
       uuid: 9.0.1
-      vis-util: 5.0.6(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0)
+      vis-util: 5.0.7(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1)
     dev: false
 
-  /vis-network@9.1.9(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0)(keycharm@0.4.0)(uuid@9.0.1)(vis-data@7.1.8)(vis-util@5.0.6):
+  /vis-network@9.1.9(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1)(keycharm@0.4.0)(uuid@9.0.1)(vis-data@7.1.8)(vis-util@5.0.7):
     resolution: {integrity: sha512-Ft+hLBVyiLstVYSb69Q1OIQeh3FeUxHJn0WdFcq+BFPqs+Vq1ibMi2sb//cxgq1CP7PH4yOXnHxEH/B2VzpZYA==}
     peerDependencies:
       '@egjs/hammerjs': ^2.0.0
@@ -4111,22 +4108,22 @@ packages:
       vis-util: ^5.0.1
     dependencies:
       '@egjs/hammerjs': 2.0.17
-      component-emitter: 1.3.0
+      component-emitter: 1.3.1
       keycharm: 0.4.0
       uuid: 9.0.1
-      vis-data: 7.1.8(uuid@9.0.1)(vis-util@5.0.6)
-      vis-util: 5.0.6(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0)
+      vis-data: 7.1.8(uuid@9.0.1)(vis-util@5.0.7)
+      vis-util: 5.0.7(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1)
     dev: false
 
-  /vis-util@5.0.6(@egjs/hammerjs@2.0.17)(component-emitter@1.3.0):
-    resolution: {integrity: sha512-HyAZ+x3q6/Xh6OFPIQOGPOPgnHL9KVNvWW6+k3aTCbAG8Tq7vncgRat6oY8ywZ7j1Fq0mOfUb6fLrFvfI9nUKg==}
+  /vis-util@5.0.7(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1):
+    resolution: {integrity: sha512-E3L03G3+trvc/X4LXvBfih3YIHcKS2WrP0XTdZefr6W6Qi/2nNCqZfe4JFfJU6DcQLm6Gxqj2Pfl+02859oL5A==}
     engines: {node: '>=8'}
     peerDependencies:
       '@egjs/hammerjs': ^2.0.0
-      component-emitter: ^1.3.0
+      component-emitter: ^1.3.0 || ^2.0.0
     dependencies:
       '@egjs/hammerjs': 2.0.17
-      component-emitter: 1.3.0
+      component-emitter: 1.3.1
     dev: false
 
   /vite@4.4.9:

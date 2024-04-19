@@ -6,15 +6,18 @@ import {
   isValidElement,
   useState,
 } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type TooltipProps = {
   text: string;
   offset?: { x: number; y: number };
+  className?: string;
 };
 
 export const Tooltip = ({
   text,
   offset = { x: 0, y: -8 },
+  className,
   children,
 }: TooltipProps & PropsWithChildren) => {
   const [show, setShow] = useState(false);
@@ -26,8 +29,11 @@ export const Tooltip = ({
   return (
     <span className='relative'>
       <Transition
-        show={show}
-        className='absolute z-10 min-w-fit -translate-x-0 -translate-y-full rounded-md bg-white p-2 text-center text-xs font-medium text-gray-700 dark:bg-neutral-500 dark:text-gray-100'
+        show={show && !!text}
+        className={twMerge(
+          'absolute z-10 min-w-fit -translate-x-0 -translate-y-full rounded-md bg-white p-2 text-center text-xs font-medium text-gray-700 dark:bg-neutral-500 dark:text-gray-100',
+          className
+        )}
         style={{
           left: offset.x,
           top: offset.y,

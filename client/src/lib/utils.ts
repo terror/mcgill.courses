@@ -88,3 +88,5 @@ export const spliceCourseCode = (courseCode: string, delimiter: string) =>
   courseCode.slice(0, 4) + delimiter + courseCode.slice(4);
 
 export const round2Decimals = (n: number) => Math.round(n * 100) / 100;
+
+export const mod = (n: number, m: number) => ((n % m) + m) % m;

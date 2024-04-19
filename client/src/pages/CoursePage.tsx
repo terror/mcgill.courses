@@ -18,6 +18,7 @@ import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
+import { Interaction } from '../model/Interaction';
 import type { Requirements } from '../model/Requirements';
 import type { Review } from '../model/Review';
 import { Loading } from './Loading';
@@ -31,6 +32,9 @@ export const CoursePage = () => {
   const firstFetch = useRef(true);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
+  const [userInteractions, setUserInteractions] = useState<
+    Interaction[] | undefined
+  >([]);
   const [course, setCourse] = useState<Course | null | undefined>(undefined);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
@@ -38,6 +42,7 @@ export const CoursePage = () => {
 
   useEffect(() => {
     firstFetch.current = true;
+    setShowAllReviews(false);
   }, [params.id]);
 
   const refetch = () => {
@@ -56,6 +61,13 @@ export const CoursePage = () => {
 
         setShowingReviews(payload.reviews);
         setAllReviews(payload.reviews);
+
+        if (user && id) {
+          const courseInteractionsPayload =
+            await repo.getUserInteractionsForCourse(id, user.id);
+
+          setUserInteractions(courseInteractionsPayload.interactions);
+        }
 
         firstFetch.current = false;
       } catch (err) {
@@ -154,7 +166,7 @@ export const CoursePage = () => {
 
   return (
     <Layout>
-      <div className='mx-auto max-w-6xl'>
+      <div className='mx-auto mt-10 max-w-6xl md:mt-0'>
         <CourseInfo
           course={course}
           allReviews={showingReviews}
@@ -192,6 +204,7 @@ export const CoursePage = () => {
                   handleDelete={() => handleDelete(userReview)}
                   openEditReview={() => setEditReviewOpen(true)}
                   review={userReview}
+                  interactions={userInteractions}
                   updateLikes={updateLikes(userReview)}
                 />
               )}
@@ -202,6 +215,7 @@ export const CoursePage = () => {
                   .map((review, i) => (
                     <CourseReview
                       canModify={Boolean(user && review.userId === user.id)}
+                      interactions={userInteractions}
                       handleDelete={() => handleDelete(review)}
                       key={i}
                       openEditReview={() => setEditReviewOpen(true)}
@@ -226,10 +240,9 @@ export const CoursePage = () => {
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
-          <div className='flex'>
+          <div className='mb-4 flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
-          <div className='py-2.5' />
           <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
@@ -257,6 +270,7 @@ export const CoursePage = () => {
                     handleDelete={() => handleDelete(userReview)}
                     openEditReview={() => setEditReviewOpen(true)}
                     review={userReview}
+                    interactions={userInteractions}
                     updateLikes={updateLikes(userReview)}
                   />
                 )}
@@ -273,6 +287,7 @@ export const CoursePage = () => {
                         key={i}
                         openEditReview={() => setEditReviewOpen(true)}
                         review={review}
+                        interactions={userInteractions}
                         updateLikes={updateLikes(review)}
                       />
                     ))}

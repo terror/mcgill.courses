@@ -3,9 +3,9 @@ import { AiOutlineGithub } from 'react-icons/ai';
 import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import { twMerge } from 'tailwind-merge';
 
 import { Layout } from '../components/Layout';
+import { Paragraph } from '../components/Paragraph';
 
 type QuestionAnswer = {
   title: string;
@@ -48,8 +48,8 @@ type TitleProps = {
 
 const Title = ({ children }: TitleProps) => {
   return (
-    <div className='mb-5 mt-10'>
-      <h1 className='mb-auto text-4xl font-bold text-gray-700 dark:text-gray-200'>
+    <div className='mb-3 mt-10 md:mb-5'>
+      <h1 className='mb-auto text-2xl font-bold text-gray-700 dark:text-gray-200 md:text-3xl'>
         {children}
       </h1>
     </div>
@@ -89,23 +89,6 @@ const Person = ({
     </li>
   );
 };
-
-const Paragraph = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <p
-    className={twMerge(
-      'text-xl leading-loose text-gray-700 dark:text-gray-200',
-      className
-    )}
-  >
-    {children}
-  </p>
-);
 
 const questions = [
   {
@@ -157,12 +140,21 @@ const people = [
   {
     name: "Jeff Zhang (Hons CS '2025)",
     imageUrl: 'https://avatars.githubusercontent.com/u/47371088?v=4',
-    links: [{ title: 'Github', url: 'https://github.com/jeffdotpng' }],
+    links: [
+      { title: 'Github', url: 'https://github.com/39bytes' },
+      { title: 'LinkedIn', url: 'https://www.linkedin.com/in/jeff-zhang72/' },
+    ],
   },
   {
-    name: "Sam Zhang (CS '2025)",
+    name: "Sam Zhang (CS & Stats '2025)",
     imageUrl: 'https://avatars.githubusercontent.com/u/112342947?v=4',
-    links: [{ title: 'Github', url: 'https://github.com/samzhang02' }],
+    links: [
+      { title: 'Github', url: 'https://github.com/samzhang02' },
+      {
+        title: 'Linkedin',
+        url: 'https://www.linkedin.com/in/zhang-sam/',
+      },
+    ],
   },
   {
     name: "Joey Yu (CS '2025)",
@@ -174,9 +166,9 @@ const people = [
 export const About = () => {
   return (
     <Layout>
-      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2'>
+      <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2 sm:px-8 md:px-16'>
         <Title>Welcome to mcgill.courses!</Title>
-        <Paragraph className='text-xl leading-loose text-gray-700 dark:text-gray-200'>
+        <Paragraph className='leading-loose text-gray-700 dark:text-gray-200'>
           <Link className='underline' to='/'>
             mcgill.courses
           </Link>{' '}
@@ -186,6 +178,14 @@ export const About = () => {
           decision-making. We encourage contributions from the McGill community
           to ensure the resource remains valuable.
         </Paragraph>
+
+        <br />
+
+        <Paragraph>
+          <span className='font-bold'>Disclaimer</span>: mcgill.courses is not
+          affiliated with McGill University.
+        </Paragraph>
+
         <Title>History & The Team</Title>
         <Paragraph>
           <Link className='underline' to='/'>

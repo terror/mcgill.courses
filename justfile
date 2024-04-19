@@ -60,8 +60,8 @@ forbid:
 initialize *args: restart-services
   cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
 
-lint:
-  pnpm run lint
+lint *args:
+  pnpm run lint {{args}}
 
 load:
   cargo run -- --source=seed \
@@ -98,8 +98,8 @@ services:
   sleep 5
   docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
 
-test:
-  cargo test --all
+test *filter:
+  cargo test --all {{filter}}
 
 watch +COMMAND='test':
   cargo watch --clear --exec "{{COMMAND}}"
