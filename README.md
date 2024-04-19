@@ -30,14 +30,18 @@ MS_REDIRECT_URI=http://localhost:8000/api/auth/authorized
 VITE_API_URL=http://localhost:8000
 ```
 
-Second, mount a local [mongodb](https://www.mongodb.com/) instance with docker:
+Second, mount a local [mongodb](https://www.mongodb.com/) instance with docker
+and initiate the replica set:
 
 ```bash
-docker compose up -d
+docker compose up --no-recreate -d
+sleep 5
+docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
 ```
 
 Spawn the server with a data source (in this case the `/seed` directory) and
-initialize the database:
+initialize the database (note that initial seeding may take some time on slower
+machines):
 
 ```bash
 cargo run -- --source=seed serve --initialize --db-name=mcgill-courses
