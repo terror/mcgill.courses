@@ -11,6 +11,7 @@ import { Layout } from '../components/Layout';
 import { SearchBar } from '../components/SearchBar';
 import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useExploreFilterState } from '../hooks/useExploreFilterState';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
@@ -62,12 +63,11 @@ export const Explore = () => {
 
   const [query, setQuery] = useState<string>('');
   const [searchSelected, setSearchSelected] = useState<boolean>(false);
-  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<SortByType>('');
 
   const [darkMode] = useDarkMode();
+
+  const { selectedSubjects, selectedLevels, selectedTerms, sortBy } =
+    useExploreFilterState();
 
   const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
 
@@ -113,17 +113,7 @@ export const Explore = () => {
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
           <div className='lg:hidden'>
             <FilterToggle>
-              <ExploreFilter
-                selectedSubjects={selectedSubjects}
-                setSelectedSubjects={setSelectedSubjects}
-                selectedLevels={selectedLevels}
-                setSelectedLevels={setSelectedLevels}
-                selectedTerms={selectedTerms}
-                setSelectedTerms={setSelectedTerms}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                variant='mobile'
-              />
+              <ExploreFilter variant='mobile' />
             </FilterToggle>
           </div>
           <div className='lg:flex-1'>
@@ -195,17 +185,7 @@ export const Explore = () => {
             </InfiniteScroll>
           </div>
           <div className='m-2 mx-4 hidden lg:flex'>
-            <ExploreFilter
-              selectedSubjects={selectedSubjects}
-              setSelectedSubjects={setSelectedSubjects}
-              selectedLevels={selectedLevels}
-              setSelectedLevels={setSelectedLevels}
-              selectedTerms={selectedTerms}
-              setSelectedTerms={setSelectedTerms}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              variant='desktop'
-            />
+            <ExploreFilter variant='desktop' />
           </div>
         </div>
       </div>

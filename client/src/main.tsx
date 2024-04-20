@@ -12,6 +12,7 @@ import './index.css';
 import { ErrorPage } from './pages/ErrorPage';
 import AuthProvider from './providers/AuthProvider';
 import { DarkModeProvider } from './providers/DarkModeProvider';
+import ExploreFilterStateProvider from './providers/ExploreFilterStateProvider';
 
 const Root = () => {
   // When an error occurs, we want all of the state in the app
@@ -31,8 +32,10 @@ const Root = () => {
             onReset={() => setKey(key + 1)}
           >
             <AuthProvider>
-              <Toaster richColors />
-              <App key={key} />
+              <ExploreFilterStateProvider>
+                <Toaster richColors />
+                <App key={key} />
+              </ExploreFilterStateProvider>
             </AuthProvider>
           </ErrorBoundary>
         </DarkModeProvider>

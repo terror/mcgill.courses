@@ -4,6 +4,7 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
+import { useExploreFilterState } from '../hooks/useExploreFilterState';
 import { Autocomplete } from './Autocomplete';
 import { termColorMap } from './CourseTerms';
 import { MultiSelect } from './MultiSelect';
@@ -26,14 +27,6 @@ const sortByOptions = [
 export type SortByType = (typeof sortByOptions)[number];
 
 type ExploreFilterProp = {
-  selectedSubjects: string[];
-  setSelectedSubjects: (selected: string[]) => void;
-  selectedLevels: string[];
-  setSelectedLevels: (selected: string[]) => void;
-  selectedTerms: string[];
-  setSelectedTerms: (selected: string[]) => void;
-  sortBy?: SortByType;
-  setSortBy: (selected: SortByType) => void;
   variant: 'mobile' | 'desktop';
 };
 
@@ -89,17 +82,18 @@ const FilterButton = ({
   );
 };
 
-export const ExploreFilter = ({
-  selectedSubjects,
-  setSelectedSubjects,
-  selectedLevels,
-  setSelectedLevels,
-  selectedTerms,
-  setSelectedTerms,
-  sortBy,
-  setSortBy,
-  variant,
-}: ExploreFilterProp) => {
+export const ExploreFilter = ({ variant }: ExploreFilterProp) => {
+  const {
+    selectedSubjects,
+    setSelectedSubjects,
+    selectedLevels,
+    setSelectedLevels,
+    selectedTerms,
+    setSelectedTerms,
+    sortBy,
+    setSortBy,
+  } = useExploreFilterState();
+
   const termToIcon = (term: CourseTerm) => {
     switch (term) {
       case 'Fall':
