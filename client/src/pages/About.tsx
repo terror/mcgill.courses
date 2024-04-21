@@ -1,6 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
+import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
@@ -227,6 +228,12 @@ export const About = () => {
           </a>
           <a href='https://discord.gg/d67aYpC7'>
             <FaDiscord
+              className='text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
+              size={40}
+            />
+          </a>
+          <a href='mailto:admin@mcgill.courses'>
+            <FiMail
               className='text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
             />

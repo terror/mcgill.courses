@@ -59,6 +59,10 @@ export const PrivacyPolicy = () => {
             do not hesitate to contact us at on{' '}
             <span className='underline'>
               <a href='https://discord.gg/d67aYpC7'>Discord</a>
+            </span>{' '}
+            or at{' '}
+            <span className='underline'>
+              <a href='mailto:admin@mcgill.courses'>admin@mcgill.courses</a>
             </span>
             .
           </Paragraph>
