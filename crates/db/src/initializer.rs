@@ -116,7 +116,25 @@ impl Initializer {
   async fn seed(&self) -> Result {
     info!("Seeding the database...");
 
-    for seed in self.collect()? {
+    let mut seeds = self.collect()?;
+
+    let courses = seeds
+      .clone()
+      .into_iter()
+      .filter(|seed| matches!(seed, Seed::Courses(_)))
+      .collect::<Vec<Seed>>();
+
+    seeds.retain(|seed| !matches!(seed, Seed::Courses(_)));
+
+    if self.options.latest_courses {
+      if let Some(last) = courses.last() {
+        seeds.insert(0, last.clone());
+      }
+    } else {
+      seeds.splice(..0, courses);
+    };
+
+    for seed in seeds {
       match seed {
         Seed::Courses((path, courses)) if !self.options.skip_courses => {
           info!("Seeding courses from {}...", path.display());
@@ -131,9 +149,9 @@ impl Initializer {
             Ok(())
           };
 
-          self.populate(courses, runner).await?;
+          self.populate(courses.to_vec(), runner).await?;
         }
-        Seed::Reviews((path, reviews)) => {
+        Seed::Reviews((path, reviews)) if !self.options.skip_reviews => {
           info!("Seeding reviews from {}...", path.display());
 
           let runner = |db: Db, item: Review| async move {
@@ -141,14 +159,12 @@ impl Initializer {
             Ok(())
           };
 
-          self.populate(reviews, runner).await?;
+          self.populate(reviews.to_vec(), runner).await?;
         }
-        Seed::Unknown(path) => {
-          warn!(
-            "Unknown seed type encountered from {}, continuing...",
-            path.display()
-          );
-        }
+        Seed::Unknown(path) => warn!(
+          "Unknown seed type encountered from {}, continuing...",
+          path.display()
+        ),
         _ => continue,
       }
     }

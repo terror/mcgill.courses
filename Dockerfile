@@ -27,4 +27,4 @@ COPY --from=server /usr/src/app/seed seed
 COPY --from=server /usr/src/app/.well-known .well-known
 COPY --from=server /usr/src/app/target/release/server /usr/local/bin
 
-CMD server --source seed serve --initialize --asset-dir assets --db-name mcgill-courses
+CMD server --source seed serve --initialize --latest-courses --skip-reviews --asset-dir assets --db-name mcgill-courses
