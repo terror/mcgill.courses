@@ -926,7 +926,7 @@ impl Db {
                 "prerequisites": course.prerequisites,
                 "prerequisitesText": course.prerequisites_text,
                 "restrictions": course.restrictions,
-                "schedule": course.schedule.combine_opt(found.schedule),
+                "schedule": found.schedule,
                 "subject": course.subject,
                 "terms": course.terms.combine(found.terms),
                 "title": course.title.clone(),
