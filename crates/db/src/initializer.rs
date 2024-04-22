@@ -161,10 +161,12 @@ impl Initializer {
 
           self.populate(reviews, runner).await?;
         }
-        Seed::Unknown(path) => warn!(
-          "Unknown seed type encountered from {}, continuing...",
-          path.display()
-        ),
+        Seed::Unknown(path) => {
+          warn!(
+            "Unknown seed type encountered from {}, continuing...",
+            path.display()
+          )
+        }
         _ => continue,
       }
     }
