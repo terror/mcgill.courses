@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { AiOutlineGithub } from 'react-icons/ai';
+import { FaDiscord } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
@@ -213,7 +214,7 @@ export const About = () => {
         <Paragraph>
           If you have any questions or concerns, please don't hesitate to reach
           out to us, either by submitting an issue or pull request on our Github
-          repository, or directly by email.
+          repository, or in the community Discord server.
         </Paragraph>
         <div className='mt-6 flex gap-x-2'>
           <a
@@ -225,7 +226,13 @@ export const About = () => {
               size={40}
             />
           </a>
-          <a href='mailto:'>
+          <a href='https://discord.gg/d67aYpC7'>
+            <FaDiscord
+              className='text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
+              size={40}
+            />
+          </a>
+          <a href='mailto:admin@mcgill.courses'>
             <FiMail
               className='text-gray-500 transition-colors duration-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100'
               size={40}
