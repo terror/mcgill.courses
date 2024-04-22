@@ -165,7 +165,7 @@ impl Initializer {
           warn!(
             "Unknown seed type encountered from {}, continuing...",
             path.display()
-          )
+          );
         }
         _ => continue,
       }
