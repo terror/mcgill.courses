@@ -149,7 +149,7 @@ impl Initializer {
             Ok(())
           };
 
-          self.populate(courses.to_vec(), runner).await?;
+          self.populate(courses, runner).await?;
         }
         Seed::Reviews((path, reviews)) if !self.options.skip_reviews => {
           info!("Seeding reviews from {}...", path.display());
@@ -159,7 +159,7 @@ impl Initializer {
             Ok(())
           };
 
-          self.populate(reviews.to_vec(), runner).await?;
+          self.populate(reviews, runner).await?;
         }
         Seed::Unknown(path) => warn!(
           "Unknown seed type encountered from {}, continuing...",
