@@ -82,7 +82,15 @@ export const TermsAndConditions = () => {
             We may update our Terms and Conditions from time to time. Thus, you
             are advised to review this page periodically for any changes. If you
             have any questions or suggestions about our Terms and Conditions, do
-            not hesitate to contact us at admin[at]mcgill.courses.
+            not hesitate to contact us on{' '}
+            <span className='underline'>
+              <a href='https://discord.gg/d67aYpC7'>Discord</a>
+            </span>{' '}
+            or at{' '}
+            <span className='underline'>
+              <a href='mailto:admin@mcgill.courses'>admin@mcgill.courses</a>
+            </span>
+            .
           </Paragraph>
         </div>
       </div>

@@ -56,7 +56,15 @@ export const PrivacyPolicy = () => {
           <h2 className={h2}>Contact Us</h2>
           <Paragraph>
             If you have any questions or suggestions about our Privacy Policy,
-            do not hesitate to contact us at admin@mcgill.courses.
+            do not hesitate to contact us at on{' '}
+            <span className='underline'>
+              <a href='https://discord.gg/d67aYpC7'>Discord</a>
+            </span>{' '}
+            or at{' '}
+            <span className='underline'>
+              <a href='mailto:admin@mcgill.courses'>admin@mcgill.courses</a>
+            </span>
+            .
           </Paragraph>
         </div>
       </div>
