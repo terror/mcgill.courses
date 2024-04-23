@@ -93,10 +93,16 @@ export const repo = {
     });
   },
 
-  async getReviews(userId?: string): Promise<Review[]> {
+  async getReviews(
+    userId?: string,
+    limit?: number,
+    offset?: number
+  ): Promise<Review[]> {
     return client.deserialize<Review[]>(
       'GET',
-      userId ? `/reviews?user_id=${userId}` : '/reviews'
+      userId
+        ? `/reviews?user_id=${userId}`
+        : `/reviews?limit=${limit}&offset=${offset}`
     );
   },
 

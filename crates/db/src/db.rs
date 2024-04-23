@@ -1077,6 +1077,30 @@ impl Db {
     )
   }
 
+  #[cfg(not(test))]
+  pub async fn reviews(
+    &self,
+    limit: Option<i64>,
+    offset: Option<u64>,
+  ) -> Result<Vec<Review>> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Self::REVIEW_COLLECTION)
+        .find(
+          None,
+          FindOptions::builder()
+            .sort(doc! { "timestamp": -1 })
+            .skip(offset)
+            .limit(limit)
+            .build(),
+        )
+        .await?
+        .try_collect::<Vec<Review>>()
+        .await?,
+    )
+  }
+
   #[cfg(test)]
   async fn instructors(&self) -> Result<Vec<Instructor>> {
     Ok(

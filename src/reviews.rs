@@ -3,8 +3,10 @@ use super::*;
 #[derive(Debug, Deserialize)]
 pub(crate) struct GetReviewsParams {
   pub(crate) course_id: Option<String>,
-  pub(crate) user_id: Option<String>,
   pub(crate) instructor_name: Option<String>,
+  pub(crate) limit: Option<i64>,
+  pub(crate) offset: Option<u64>,
+  pub(crate) user_id: Option<String>,
 }
 
 pub(crate) async fn get_reviews(
@@ -25,7 +27,13 @@ pub(crate) async fn get_reviews(
     reviews.extend(db.find_reviews_by_instructor_name(instructor_name).await?)
   }
 
-  Ok(Json(reviews.into_iter().collect::<HashSet<Review>>()))
+  if reviews.is_empty() {
+    return Ok(Json(db.reviews(params.limit, params.offset).await?));
+  }
+
+  let filtered = reviews.into_iter().collect::<HashSet<Review>>();
+
+  Ok(Json(filtered.into_iter().collect()))
 }
 
 pub(crate) async fn get_review(
