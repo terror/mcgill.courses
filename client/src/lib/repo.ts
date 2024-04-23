@@ -93,8 +93,11 @@ export const repo = {
     });
   },
 
-  async getReviews(userId: string): Promise<Review[]> {
-    return client.deserialize<Review[]>('GET', `/reviews?user_id=${userId}`);
+  async getReviews(userId?: string): Promise<Review[]> {
+    return client.deserialize<Review[]>(
+      'GET',
+      userId ? `/reviews?user_id=${userId}` : '/reviews'
+    );
   },
 
   async addReview(courseId: string, values: any): Promise<Response> {
