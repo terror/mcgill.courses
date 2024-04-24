@@ -34,7 +34,7 @@ export const Profile = () => {
     if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
 
     repo
-      .getReviews(user.id)
+      .getReviews({ userId: user.id, sorted: true })
       .then((data) => setUserReviews(data))
       .catch(() =>
         toast.error(

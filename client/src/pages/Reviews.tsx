@@ -7,7 +7,7 @@ import { CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { repo } from '../lib/repo';
-import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
+import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
 import { Review } from '../model/Review';
 
 export const Reviews = () => {
@@ -19,7 +19,7 @@ export const Reviews = () => {
 
   useEffect(() => {
     repo
-      .getReviews(undefined, limit, offset)
+      .getReviews({ limit, offset, sorted: true })
       .then((data) => setReviews(data))
       .catch(() => {
         toast.error('Failed to fetch reviews. Please try again later.');
@@ -29,7 +29,7 @@ export const Reviews = () => {
   }, []);
 
   const fetchMore = async () => {
-    const batch = await repo.getReviews(undefined, limit, offset);
+    const batch = await repo.getReviews({ limit, offset, sorted: true });
 
     if (batch.length === 0) setHasMore(false);
     else {
@@ -59,11 +59,16 @@ export const Reviews = () => {
           style={{ overflowY: 'hidden' }}
         >
           {reviews.map((review, i) => (
-            <div>
-              <p className='mb-5 mt-5 font-semibold text-gray-800 dark:text-gray-200'>
+            <div key={i}>
+              <p className='my-2 font-semibold text-gray-800 dark:text-gray-200'>
                 <Link to={`/course/${courseIdToUrlParam(review.courseId)}`}>
                   {spliceCourseCode(review.courseId, ' ')}
                 </Link>
+              </p>
+              <p className='my-2 font-semibold text-gray-600 dark:text-gray-400'>
+                {timeSince(
+                  new Date(parseInt(review.timestamp.$date.$numberLong))
+                )}
               </p>
               <CourseReview
                 className='rounded-lg'
