@@ -21,7 +21,7 @@ pub(crate) async fn get_reviews(
       Some(ReviewFilter {
         course_id: params.course_id.clone(),
         instructor_name: params.instructor_name.clone(),
-        sorted: params.sorted.clone(),
+        sorted: params.sorted,
         user_id: params.user_id.clone(),
       }),
     )
