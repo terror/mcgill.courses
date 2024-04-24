@@ -92,7 +92,7 @@ export const round2Decimals = (n: number) => Math.round(n * 100) / 100;
 export const mod = (n: number, m: number) => ((n % m) + m) % m;
 
 export const timeSince = (date: Date) => {
-  const seconds = Math.floor((new Date() - date) / 1000);
+  const seconds = Math.floor((new Date().valueOf() - date.valueOf()) / 1000);
 
   let interval = Math.floor(seconds / 31536000);
 
