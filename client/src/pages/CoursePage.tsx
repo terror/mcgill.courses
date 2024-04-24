@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { AddReviewForm } from '../components/AddReviewForm';
+import { BuildingLocation } from '../components/BuildingLocation';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -236,6 +237,8 @@ export const CoursePage = () => {
           </div>
           <div className='col-span-2'>
             <CourseRequirements course={course} requirements={requirements} />
+            <div className='py-2'></div>
+            <BuildingLocation course={course} />
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
