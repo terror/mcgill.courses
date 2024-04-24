@@ -112,7 +112,7 @@ export const repo = {
     });
   },
 
-  async getReviews(options?: {
+  async getReviews(params?: {
     limit?: number;
     offset?: number;
     courseId?: string;
@@ -123,12 +123,12 @@ export const repo = {
     return client.deserialize<Review[]>(
       'GET',
       client.buildQuery('/reviews', {
-        limit: options?.limit,
-        offset: options?.offset,
-        course_id: options?.courseId,
-        instructor_name: options?.instructorName,
-        sorted: options?.sorted,
-        user_id: options?.userId,
+        limit: params?.limit,
+        offset: params?.offset,
+        course_id: params?.courseId,
+        instructor_name: params?.instructorName,
+        sorted: params?.sorted,
+        user_id: params?.userId,
       })
     );
   },
