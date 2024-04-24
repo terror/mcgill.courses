@@ -3,6 +3,7 @@ import { NavItem } from './NavItem';
 export const navigationItems = [
   { name: 'Home', href: '/' },
   { name: 'Explore', href: '/explore' },
+  { name: 'Reviews', href: '/reviews' },
   { name: 'About', href: '/about' },
 ];
 

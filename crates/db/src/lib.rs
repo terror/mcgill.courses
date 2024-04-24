@@ -29,6 +29,9 @@ use {
   },
 };
 
+#[cfg(not(test))]
+use model::ReviewFilter;
+
 #[cfg(test)]
 use {
   bson::DateTime,

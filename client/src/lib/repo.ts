@@ -14,7 +14,26 @@ const prefix = '/api';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
+interface Params {
+  [key: string]: string | number | boolean | undefined;
+}
+
 const client = {
+  buildQuery(baseURL: string, params?: Params): string {
+    let query = baseURL;
+
+    if (params) {
+      const keys = Object.keys(params);
+
+      query += `?${keys
+        .filter((key) => params[key] !== undefined)
+        .map((key) => `${key}=${params[key]}`)
+        .join('&')}`;
+    }
+
+    return query;
+  },
+
   async get(endpoint: string, init?: RequestInit): Promise<Response> {
     return fetch(prefix + endpoint, init);
   },
@@ -93,8 +112,25 @@ export const repo = {
     });
   },
 
-  async getReviews(userId: string): Promise<Review[]> {
-    return client.deserialize<Review[]>('GET', `/reviews?user_id=${userId}`);
+  async getReviews(params?: {
+    limit?: number;
+    offset?: number;
+    courseId?: string;
+    instructorName?: string;
+    sorted?: boolean;
+    userId?: string;
+  }): Promise<Review[]> {
+    return client.deserialize<Review[]>(
+      'GET',
+      client.buildQuery('/reviews', {
+        limit: params?.limit,
+        offset: params?.offset,
+        course_id: params?.courseId,
+        instructor_name: params?.instructorName,
+        sorted: params?.sorted,
+        user_id: params?.userId,
+      })
+    );
   },
 
   async addReview(courseId: string, values: any): Promise<Response> {

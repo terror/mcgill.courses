@@ -55,8 +55,7 @@ impl Db {
     offset: Option<u64>,
     filter: Option<CourseFilter>,
   ) -> Result<Vec<Course>> {
-    let mut document = Document::new();
-    let mut sort_document = Document::new();
+    let (mut document, mut sort_document) = (Document::new(), Document::new());
 
     if let Some(filter) = filter {
       let CourseFilter {
@@ -1071,6 +1070,61 @@ impl Db {
         .database
         .collection::<Review>(Self::REVIEW_COLLECTION)
         .find(None, None)
+        .await?
+        .try_collect::<Vec<Review>>()
+        .await?,
+    )
+  }
+
+  #[cfg(not(test))]
+  pub async fn reviews(
+    &self,
+    limit: Option<i64>,
+    offset: Option<u64>,
+    filter: Option<ReviewFilter>,
+  ) -> Result<Vec<Review>> {
+    let (mut document, mut sort_document) = (Document::new(), Document::new());
+
+    if let Some(filter) = filter {
+      let ReviewFilter {
+        course_id,
+        instructor_name,
+        sorted,
+        user_id,
+      } = filter;
+
+      if let Some(course_id) = course_id {
+        document.insert("courseId", course_id);
+      }
+
+      if let Some(user_id) = user_id {
+        document.insert("userId", user_id);
+      }
+
+      if let Some(instructor_name) = instructor_name {
+        document.insert(
+          "instructors",
+          doc! { "instructors": { "$in": vec![instructor_name] } },
+        );
+      }
+
+      if sorted.unwrap_or(false) {
+        sort_document.insert("timestamp", -1);
+      }
+    }
+
+    Ok(
+      self
+        .database
+        .collection::<Review>(Self::REVIEW_COLLECTION)
+        .find(
+          (!document.is_empty()).then_some(document),
+          FindOptions::builder()
+            .sort((!sort_document.is_empty()).then_some(sort_document))
+            .skip(offset)
+            .limit(limit)
+            .build(),
+        )
         .await?
         .try_collect::<Vec<Review>>()
         .await?,
