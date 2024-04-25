@@ -10,8 +10,8 @@ use {
   log::{info, warn},
   model::{
     Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
-    Interaction, InteractionKind, Notification, Review, SearchResults,
-    Subscription,
+    Interaction, InteractionKind, Notification, Review, ReviewFilter,
+    SearchResults, Subscription,
   },
   mongodb::{
     bson::{doc, Document},
