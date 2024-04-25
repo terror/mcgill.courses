@@ -11,7 +11,7 @@ pub(crate) struct GetReviewsParams {
   pub(crate) with_user_count: Option<bool>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetReviewsPayload {
   pub reviews: Vec<Review>,
