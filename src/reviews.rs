@@ -3,29 +3,44 @@ use super::*;
 #[derive(Debug, Deserialize)]
 pub(crate) struct GetReviewsParams {
   pub(crate) course_id: Option<String>,
-  pub(crate) user_id: Option<String>,
   pub(crate) instructor_name: Option<String>,
+  pub(crate) limit: Option<i64>,
+  pub(crate) offset: Option<u64>,
+  pub(crate) sorted: Option<bool>,
+  pub(crate) user_id: Option<String>,
+  pub(crate) with_user_count: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct GetReviewsPayload {
+  pub reviews: Vec<Review>,
+  pub unique_user_count: Option<u64>,
 }
 
 pub(crate) async fn get_reviews(
   params: Query<GetReviewsParams>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  let mut reviews = vec![];
-
-  if let Some(course_id) = &params.course_id {
-    reviews.extend(db.find_reviews_by_course_id(course_id).await?)
-  }
-
-  if let Some(user_id) = &params.user_id {
-    reviews.extend(db.find_reviews_by_user_id(user_id).await?)
-  }
-
-  if let Some(instructor_name) = &params.instructor_name {
-    reviews.extend(db.find_reviews_by_instructor_name(instructor_name).await?)
-  }
-
-  Ok(Json(reviews.into_iter().collect::<HashSet<Review>>()))
+  Ok(Json(GetReviewsPayload {
+    reviews: db
+      .reviews(
+        params.limit,
+        params.offset,
+        Some(ReviewFilter {
+          course_id: params.course_id.clone(),
+          instructor_name: params.instructor_name.clone(),
+          sorted: params.sorted,
+          user_id: params.user_id.clone(),
+        }),
+      )
+      .await?,
+    unique_user_count: if params.with_user_count.unwrap_or(false) {
+      Some(db.unique_user_count().await?)
+    } else {
+      None
+    },
+  }))
 }
 
 pub(crate) async fn get_review(
