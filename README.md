@@ -129,9 +129,9 @@ the environment.
 ### Deployment
 
 We continuously deploy our site with [Render](https://render.com/) using a
-[docker image](https://github.com/terror/mcgill.courses), and have a
-[MongoDB](https://en.wikipedia.org/wiki/MongoDB?useskin=vector) instance hosted
-on [Atlas](https://www.mongodb.com/atlas/database).
+[docker image](https://github.com/terror/mcgill.courses/blob/master/Dockerfile),
+and have a [MongoDB](https://en.wikipedia.org/wiki/MongoDB?useskin=vector)
+instance hosted on [Atlas](https://www.mongodb.com/atlas/database).
 
 We also use
 [S3](https://aws.amazon.com/pm/serv-s3/?trk=936e5692-d2c9-4e52-a837-088366a7ac3f&sc_channel=ps)
