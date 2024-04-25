@@ -161,6 +161,16 @@ impl Db {
     )
   }
 
+  pub async fn course_count(&self) -> Result<u64> {
+    Ok(
+      self
+        .database
+        .collection::<Course>(Self::COURSE_COLLECTION)
+        .count_documents(None, None)
+        .await?,
+    )
+  }
+
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
       courses: self
