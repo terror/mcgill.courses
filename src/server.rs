@@ -8,12 +8,16 @@ pub(crate) struct Server {
   port: u16,
   #[clap(long, default_value = "admin", help = "Database name")]
   db_name: String,
+  #[clap(long, default_value = "false", help = "Seed latest courses only")]
+  latest_courses: bool,
   #[clap(long, default_value = "false", help = "Enable multithreaded seeding")]
   multithreaded: bool,
   #[clap(long, default_value = "false", help = "Initialize the database")]
   initialize: bool,
   #[clap(long, default_value = "false", help = "Skip course seeding")]
   skip_courses: bool,
+  #[clap(long, default_value = "false", help = "Skip review seeding")]
+  skip_reviews: bool,
 }
 
 #[derive(Debug)]
@@ -57,8 +61,10 @@ impl Server {
         tokio::spawn(async move {
           if let Err(error) = clone
             .initialize(InitializeOptions {
+              latest_courses: self.latest_courses,
               multithreaded: self.multithreaded,
               skip_courses: self.skip_courses,
+              skip_reviews: self.skip_reviews,
               source,
             })
             .await
@@ -211,6 +217,7 @@ mod tests {
     },
     model::Notification,
     pretty_assertions::assert_eq,
+    reviews::GetReviewsPayload,
     serde::de::DeserializeOwned,
     serde_json::json,
     std::sync::atomic::{AtomicUsize, Ordering},
@@ -867,7 +874,11 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(response.convert::<Vec<Review>>().await.len(), 3);
+
+    assert_eq!(
+      response.convert::<GetReviewsPayload>().await.reviews.len(),
+      3
+    );
   }
 
   #[tokio::test]
@@ -935,7 +946,11 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(response.convert::<Vec<Review>>().await.len(), 2)
+
+    assert_eq!(
+      response.convert::<GetReviewsPayload>().await.reviews.len(),
+      2
+    )
   }
 
   #[tokio::test]

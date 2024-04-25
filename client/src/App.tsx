@@ -10,26 +10,30 @@ import { Instructor } from './pages/Instructor';
 import { NotFound } from './pages/NotFound';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { Profile } from './pages/Profile';
+import { Reviews } from './pages/Reviews';
 import { TermsAndConditions } from './pages/TermsAndConditions';
 
 const App = () => {
   return (
     <Routes>
       <Route index element={<Home />} />
-      <Route path='course'>
-        <Route path=':id' element={<CoursePage />} />
-      </Route>
-      <Route path='instructor'>
-        <Route path=':name' element={<Instructor />} />
-      </Route>
+      <Route path='/about' element={<About />} />
       <Route path='/explore' element={<Explore />} />
       <Route path='/privacy' element={<PrivacyPolicy />} />
-      <Route path='/tos' element={<TermsAndConditions />} />
-      <Route path='/about' element={<About />} />
       <Route
         path='/profile'
         element={<PrivateRoute children={<Profile />} />}
       />
+      <Route path='/reviews' element={<Reviews />} />
+      <Route path='/tos' element={<TermsAndConditions />} />
+      <Route path='course'>
+        {' '}
+        <Route path=':id' element={<CoursePage />} />{' '}
+      </Route>
+      <Route path='instructor'>
+        {' '}
+        <Route path=':name' element={<Instructor />} />{' '}
+      </Route>
       <Route path='*' element={<NotFound />} />
     </Routes>
   );

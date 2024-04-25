@@ -1,6 +1,6 @@
 use super::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub(crate) enum Seed {
   Courses((PathBuf, Vec<Course>)),
   Reviews((PathBuf, Vec<Review>)),
