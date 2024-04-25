@@ -126,6 +126,21 @@ python3 main.py <file>
 _n.b._ This will require an [OpenAI](https://openai.com/) API key to be set in
 the environment.
 
+### Deployment
+
+We continuously deploy our site with [Render](https://render.com/) using a
+[docker image](https://github.com/terror/mcgill.courses), and have a
+[MongoDB](https://en.wikipedia.org/wiki/MongoDB?useskin=vector) instance hosted
+on [Atlas](https://www.mongodb.com/atlas/database).
+
+We also use
+[S3](https://aws.amazon.com/pm/serv-s3/?trk=936e5692-d2c9-4e52-a837-088366a7ac3f&sc_channel=ps)
+to host a bucket for referring to a hash when deciding whether or not to seed
+courses in our production environment, and Microsoft's
+[identity platform](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow)
+for handling our OAuth 2.0
+[authentication flow](https://github.com/terror/mcgill.courses/blob/master/src/auth.rs).
+
 ### Prior Art
 
 There are a few notable projects worth mentioning that are similar in nature to
