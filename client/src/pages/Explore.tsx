@@ -115,7 +115,7 @@ export const Explore = () => {
           <h1 className='text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             Explore all courses
           </h1>
-          <p className='mt-2 font-semibold text-gray-600 dark:text-gray-400'>
+          <p className='mt-2 text-gray-600 dark:text-gray-400'>
             Check out information and reviews about all{' '}
             {courseCount?.toLocaleString('en-us')} courses offered by McGill
             University.
