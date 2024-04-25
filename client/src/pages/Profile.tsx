@@ -145,7 +145,7 @@ export const Profile = () => {
                 ) : userReviews.length ? (
                   userReviews.map((review, i) => {
                     return (
-                      <div key={i}>
+                      <div key={i} className='mb-6'>
                         <div className='flex'>
                           <Link
                             to={`/course/${courseIdToUrlParam(
