@@ -35,7 +35,7 @@ export const Profile = () => {
 
     repo
       .getReviews({ userId: user.id, sorted: true })
-      .then((data) => setUserReviews(data))
+      .then((data) => setUserReviews(data.reviews))
       .catch(() =>
         toast.error(
           'An error occurred while fetching your reviews, please try again later.'

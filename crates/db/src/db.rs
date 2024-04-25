@@ -1063,20 +1063,6 @@ impl Db {
     self.find_instructor(doc! { "name": name }).await
   }
 
-  #[cfg(test)]
-  async fn reviews(&self) -> Result<Vec<Review>> {
-    Ok(
-      self
-        .database
-        .collection::<Review>(Self::REVIEW_COLLECTION)
-        .find(None, None)
-        .await?
-        .try_collect::<Vec<Review>>()
-        .await?,
-    )
-  }
-
-  #[cfg(not(test))]
   pub async fn reviews(
     &self,
     limit: Option<i64>,
@@ -1128,6 +1114,18 @@ impl Db {
         .await?
         .try_collect::<Vec<Review>>()
         .await?,
+    )
+  }
+
+  pub async fn unique_user_count(&self) -> Result<u64> {
+    Ok(
+      self
+        .reviews(None, None, None)
+        .await?
+        .iter()
+        .map(|review| review.user_id.clone())
+        .collect::<HashSet<String>>()
+        .len() as u64,
     )
   }
 
@@ -1652,8 +1650,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     let course = db.find_course_by_id("MATH240").await.unwrap().unwrap();
     assert!(course.avg_rating - 4.0 < 0.001);
@@ -1709,8 +1707,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     assert_eq!(
       db.find_reviews_by_course_id("MATH240").await.unwrap(),
@@ -1778,8 +1776,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     assert_eq!(
       db.find_reviews_by_user_id("2").await.unwrap(),
@@ -1842,8 +1840,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     assert_eq!(
       db.find_reviews_by_instructor_name("test").await.unwrap(),
@@ -1891,7 +1889,7 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 1);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -2222,7 +2220,7 @@ mod tests {
 
     db.add_review(review.clone()).await.unwrap();
 
-    assert_eq!(db.reviews().await.unwrap().len(), 1);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
 
     db.add_interaction(Interaction {
       kind: InteractionKind::Like,
