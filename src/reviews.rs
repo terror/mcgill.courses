@@ -8,25 +8,39 @@ pub(crate) struct GetReviewsParams {
   pub(crate) offset: Option<u64>,
   pub(crate) sorted: Option<bool>,
   pub(crate) user_id: Option<String>,
+  pub(crate) with_user_count: Option<bool>,
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct GetReviewsPayload {
+  pub reviews: Vec<Review>,
+  pub unique_user_count: Option<u64>,
 }
 
 pub(crate) async fn get_reviews(
   params: Query<GetReviewsParams>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(
-    db.reviews(
-      params.limit,
-      params.offset,
-      Some(ReviewFilter {
-        course_id: params.course_id.clone(),
-        instructor_name: params.instructor_name.clone(),
-        sorted: params.sorted,
-        user_id: params.user_id.clone(),
-      }),
-    )
-    .await?,
-  ))
+  Ok(Json(GetReviewsPayload {
+    reviews: db
+      .reviews(
+        params.limit,
+        params.offset,
+        Some(ReviewFilter {
+          course_id: params.course_id.clone(),
+          instructor_name: params.instructor_name.clone(),
+          sorted: params.sorted,
+          user_id: params.user_id.clone(),
+        }),
+      )
+      .await?,
+    unique_user_count: if params.with_user_count.unwrap_or(false) {
+      Some(db.unique_user_count().await?)
+    } else {
+      None
+    },
+  }))
 }
 
 pub(crate) async fn get_review(

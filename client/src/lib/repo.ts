@@ -3,9 +3,9 @@ import { GetCourseReviewsInteractionPayload } from '../model/GetCourseReviewsInt
 import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import type { GetInstructorPayload } from '../model/GetInstructorPayload';
 import type { GetInteractionsPayload } from '../model/GetInteractionsPayload';
+import { GetReviewsPayload } from '../model/GetReviewsPayload';
 import type { InteractionKind } from '../model/Interaction';
 import type { Notification } from '../model/Notification';
-import type { Review } from '../model/Review';
 import type { SearchResults } from '../model/SearchResults';
 import type { Subscription } from '../model/Subscription';
 import type { UserResponse } from '../model/User';
@@ -113,22 +113,24 @@ export const repo = {
   },
 
   async getReviews(params?: {
-    limit?: number;
-    offset?: number;
     courseId?: string;
     instructorName?: string;
+    limit?: number;
+    offset?: number;
     sorted?: boolean;
     userId?: string;
-  }): Promise<Review[]> {
-    return client.deserialize<Review[]>(
+    withUserCount?: boolean;
+  }): Promise<GetReviewsPayload> {
+    return client.deserialize<GetReviewsPayload>(
       'GET',
       client.buildQuery('/reviews', {
-        limit: params?.limit,
-        offset: params?.offset,
         course_id: params?.courseId,
         instructor_name: params?.instructorName,
+        limit: params?.limit,
+        offset: params?.offset,
         sorted: params?.sorted,
         user_id: params?.userId,
+        with_user_count: params?.withUserCount,
       })
     );
   },

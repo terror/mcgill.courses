@@ -10,8 +10,8 @@ use {
   log::{info, warn},
   model::{
     Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
-    Interaction, InteractionKind, Notification, Review, SearchResults,
-    Subscription,
+    Interaction, InteractionKind, Notification, Review, ReviewFilter,
+    SearchResults, Subscription,
   },
   mongodb::{
     bson::{doc, Document},
@@ -28,9 +28,6 @@ use {
     str_ext::StrExt, utils::*,
   },
 };
-
-#[cfg(not(test))]
-use model::ReviewFilter;
 
 #[cfg(test)]
 use {
