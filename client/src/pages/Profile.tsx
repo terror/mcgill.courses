@@ -18,12 +18,17 @@ import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import type { Review } from '../model/Review';
 import type { Subscription } from '../model/Subscription';
+import { Loading } from './Loading';
 
 export const Profile = () => {
   const user = useAuth();
 
-  const [userReviews, setUserReviews] = useState<Review[]>();
-  const [userSubscriptions, setUserSubscriptions] = useState<Subscription[]>();
+  const [userReviews, setUserReviews] = useState<Review[] | undefined>(
+    undefined
+  );
+  const [userSubscriptions, setUserSubscriptions] = useState<
+    Subscription[] | undefined
+  >(undefined);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
@@ -72,6 +77,8 @@ export const Profile = () => {
       );
     }
   };
+
+  if (!userReviews || !userSubscriptions) return <Loading />;
 
   const tabs = ['Reviews', 'Subscriptions'];
 
