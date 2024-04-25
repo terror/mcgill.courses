@@ -137,7 +137,7 @@ export const Profile = () => {
           </Tab.List>
           <Tab.Panels>
             <Tab.Panel>
-              <div className='m-4'>
+              <div className='m-4 flex flex-col gap-4'>
                 {userReviews === undefined ? (
                   <div className='mt-2 text-center'>
                     <Spinner />
@@ -145,7 +145,7 @@ export const Profile = () => {
                 ) : userReviews.length ? (
                   userReviews.map((review, i) => {
                     return (
-                      <div key={i} className='mb-6'>
+                      <div key={i}>
                         <div className='flex'>
                           <Link
                             to={`/course/${courseIdToUrlParam(
