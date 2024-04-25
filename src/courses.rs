@@ -8,13 +8,11 @@ pub(crate) struct GetCoursesParams {
 
 pub(crate) async fn get_courses(
   Query(params): Query<GetCoursesParams>,
-  AppState(state): AppState<State>,
+  AppState(db): AppState<Arc<Db>>,
   filter: Json<CourseFilter>,
 ) -> Result<impl IntoResponse> {
   Ok(Json(
-    state
-      .db
-      .courses(params.limit, params.offset, Some(filter.0))
+    db.courses(params.limit, params.offset, Some(filter.0))
       .await?,
   ))
 }
