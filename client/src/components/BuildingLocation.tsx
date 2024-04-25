@@ -7,6 +7,7 @@ import {
 } from '@vis.gl/react-google-maps';
 import { useState } from 'react';
 
+import { getGoogleAPIKey } from '../lib/utils';
 import type { Course } from '../model/Course';
 
 type LocationProps = {
@@ -36,7 +37,7 @@ export const BuildingLocation = ({ course }: LocationProps) => {
         </h2>
 
         <div style={{ height: 350 }}>
-          <APIProvider apiKey={'AIzaSyCqO-chYezCvS3L20S6SRqrezleGTRbKJI'}>
+          <APIProvider apiKey={getGoogleAPIKey()}>
             <Map defaultCenter={position} defaultZoom={15}>
               <Marker ref={markerRef1} position={position} />
               <InfoWindow anchor={marker1}>
