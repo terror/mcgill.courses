@@ -211,6 +211,7 @@ mod tests {
     super::*,
     crate::instructors::GetInstructorPayload,
     axum::body::Body,
+    courses::GetCoursesPayload,
     http::{Method, Request},
     interactions::{
       GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
@@ -349,10 +350,10 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
-    assert_eq!(
-      response.convert::<Vec<Course>>().await,
-      db.courses(None, None, None).await.unwrap()
-    );
+    let payload = response.convert::<GetCoursesPayload>().await;
+
+    assert_eq!(payload.courses, db.courses(None, None, None).await.unwrap());
+    assert_eq!(payload.course_count, None);
   }
 
   #[tokio::test]
@@ -386,8 +387,10 @@ mod tests {
 
     assert_eq!(response.status(), StatusCode::OK);
 
+    let payload = response.convert::<GetCoursesPayload>().await;
+
     assert_eq!(
-      response.convert::<Vec<Course>>().await,
+      payload.courses,
       db.courses(Some(10), Some(40), None).await.unwrap()
     );
   }

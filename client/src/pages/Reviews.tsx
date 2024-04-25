@@ -55,7 +55,7 @@ export const Reviews = () => {
           <h1 className='text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             What people are saying
           </h1>
-          <p className='mt-2 font-semibold text-gray-600 dark:text-gray-400'>
+          <p className='mt-2 text-gray-600 dark:text-gray-400'>
             Check out what {reviewCount.toLocaleString('en-us')} people have
             said about courses at McGill University.
           </p>
@@ -77,13 +77,14 @@ export const Reviews = () => {
           >
             <div className='ml-auto flex w-full max-w-xl flex-col lg:max-w-4xl'>
               {reviews.map((review: Review, i: number) => (
-                <div>
-                  <p className='my-2 font-semibold text-gray-800 dark:text-gray-200'>
-                    <Link to={`/course/${courseIdToUrlParam(review.courseId)}`}>
-                      {spliceCourseCode(review.courseId, ' ')}
-                    </Link>
-                  </p>
-                  <p className='my-2 font-semibold text-gray-600 dark:text-gray-400'>
+                <div className='mb-6'>
+                  <Link
+                    to={`/course/${courseIdToUrlParam(review.courseId)}`}
+                    className='font-semibold text-gray-800 hover:underline dark:text-gray-200'
+                  >
+                    {spliceCourseCode(review.courseId, ' ')}
+                  </Link>
+                  <p className='mb-3 text-xs font-medium text-gray-600 dark:text-gray-400'>
                     {timeSince(
                       new Date(parseInt(review.timestamp.$date.$numberLong))
                     )}
