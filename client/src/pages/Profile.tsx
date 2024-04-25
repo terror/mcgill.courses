@@ -34,8 +34,8 @@ export const Profile = () => {
     if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
 
     repo
-      .getReviews(user.id)
-      .then((data) => setUserReviews(data))
+      .getReviews({ userId: user.id, sorted: true })
+      .then((data) => setUserReviews(data.reviews))
       .catch(() =>
         toast.error(
           'An error occurred while fetching your reviews, please try again later.'

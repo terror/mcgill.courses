@@ -217,6 +217,7 @@ mod tests {
     },
     model::Notification,
     pretty_assertions::assert_eq,
+    reviews::GetReviewsPayload,
     serde::de::DeserializeOwned,
     serde_json::json,
     std::sync::atomic::{AtomicUsize, Ordering},
@@ -873,7 +874,11 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(response.convert::<Vec<Review>>().await.len(), 3);
+
+    assert_eq!(
+      response.convert::<GetReviewsPayload>().await.reviews.len(),
+      3
+    );
   }
 
   #[tokio::test]
@@ -941,7 +946,11 @@ mod tests {
       .unwrap();
 
     assert_eq!(response.status(), StatusCode::OK);
-    assert_eq!(response.convert::<Vec<Review>>().await.len(), 2)
+
+    assert_eq!(
+      response.convert::<GetReviewsPayload>().await.reviews.len(),
+      2
+    )
   }
 
   #[tokio::test]
