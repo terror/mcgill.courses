@@ -1,6 +1,6 @@
-import type { Course } from '../model/Course';
 import { GetCourseReviewsInteractionPayload } from '../model/GetCourseReviewsInteractionsPayload';
 import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
+import { GetCoursesPayload } from '../model/GetCoursesPayload';
 import type { GetInstructorPayload } from '../model/GetInstructorPayload';
 import type { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { GetReviewsPayload } from '../model/GetReviewsPayload';
@@ -260,11 +260,16 @@ export const repo = {
   async getCourses(
     limit: number,
     offset: number,
-    filters: any
-  ): Promise<Course[]> {
-    return client.deserialize<Course[]>(
+    withCourseCount?: boolean,
+    filters?: any
+  ): Promise<GetCoursesPayload> {
+    return client.deserialize<GetCoursesPayload>(
       'POST',
-      `/courses?limit=${limit}&offset=${offset}`,
+      client.buildQuery(`/courses`, {
+        limit,
+        offset,
+        with_course_count: withCourseCount,
+      }),
       {
         headers: {
           'Content-Type': 'application/json',
