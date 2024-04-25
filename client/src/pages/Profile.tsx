@@ -151,7 +151,7 @@ export const Profile = () => {
                             to={`/course/${courseIdToUrlParam(
                               review.courseId
                             )}`}
-                            className='text-xl font-bold text-gray-700 duration-200 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500'
+                            className='text-xl font-semibold text-gray-800 hover:underline dark:text-gray-200'
                           >
                             {spliceCourseCode(review.courseId, ' ')}
                           </Link>
