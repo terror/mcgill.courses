@@ -7,11 +7,12 @@ pub(crate) struct GetCoursesParams {
   with_course_count: Option<bool>,
 }
 
+#[typeshare]
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetCoursesPayload {
   pub(crate) courses: Vec<Course>,
-  pub(crate) course_count: Option<u64>,
+  pub(crate) course_count: Option<u32>,
 }
 
 pub(crate) async fn get_courses(

@@ -161,13 +161,14 @@ impl Db {
     )
   }
 
-  pub async fn course_count(&self) -> Result<u64> {
+  pub async fn course_count(&self) -> Result<u32> {
     Ok(
       self
         .database
         .collection::<Course>(Self::COURSE_COLLECTION)
         .count_documents(None, None)
-        .await?,
+        .await?
+        .try_into()?,
     )
   }
 
@@ -1127,7 +1128,7 @@ impl Db {
     )
   }
 
-  pub async fn unique_user_count(&self) -> Result<u64> {
+  pub async fn unique_user_count(&self) -> Result<u32> {
     Ok(
       self
         .reviews(None, None, None)
@@ -1135,7 +1136,8 @@ impl Db {
         .iter()
         .map(|review| review.user_id.clone())
         .collect::<HashSet<String>>()
-        .len() as u64,
+        .len()
+        .try_into()?,
     )
   }
 

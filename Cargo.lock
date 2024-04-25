@@ -1755,6 +1755,7 @@ dependencies = [
  "derivative",
  "serde",
  "serde_json",
+ "typeshare",
 ]
 
 [[package]]
@@ -2858,6 +2859,7 @@ dependencies = [
  "tower-http",
  "tower_governor",
  "tracing",
+ "typeshare",
  "url",
  "walkdir",
 ]
@@ -3457,6 +3459,28 @@ name = "typenum"
 version = "1.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
+
+[[package]]
+name = "typeshare"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "99877a66770b25072a67101e80790fd7fe9ed9eff8c69ffb81e9bf5cbea7733f"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "typeshare-annotation",
+]
+
+[[package]]
+name = "typeshare-annotation"
+version = "1.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ecce25dea8aeaadc44909f4c1226d22d84512fccd07d22447ecbad176bc09545"
+dependencies = [
+ "quote",
+ "syn 2.0.42",
+]
 
 [[package]]
 name = "unicase"

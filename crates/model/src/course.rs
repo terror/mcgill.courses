@@ -1,6 +1,6 @@
 use super::*;
-use derivative::Derivative;
 
+#[typeshare]
 #[derive(Clone, Debug, Default, Deserialize, Derivative, Serialize)]
 #[derivative(Eq, Hash, PartialEq)]
 #[serde(rename_all = "camelCase")]
