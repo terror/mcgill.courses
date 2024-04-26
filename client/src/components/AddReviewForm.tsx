@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { repo } from '../lib/repo';
-import type { Course } from '../model/Course';
+import type { Course } from '../lib/types';
 import {
   ReviewForm,
   ReviewFormInitialValues,

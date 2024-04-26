@@ -58,7 +58,7 @@ forbid:
   ./bin/forbid
 
 gen-types:
-  typeshare -l typescript -o ./client/src/lib/types.ts .
+  ./bin/typeshare
 
 initialize *args: restart-services
   cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}

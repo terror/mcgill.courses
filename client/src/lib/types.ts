@@ -66,6 +66,18 @@ export interface Course {
   reviewCount: number;
 }
 
+export enum InteractionKind {
+  Like = 'like',
+  Dislike = 'dislike',
+}
+
+export interface Interaction {
+  kind: InteractionKind;
+  userId: string;
+  courseId: string;
+  referrer: string;
+}
+
 export interface Review {
   content: string;
   courseId: string;
@@ -84,13 +96,13 @@ export interface Notification {
 }
 
 export interface Requirements {
-  prerequisites_text?: string;
-  corequisites_text?: string;
+  prerequisitesText?: string;
+  corequisitesText?: string;
   corequisites: string[];
   prerequisites: string[];
   restrictions?: string;
-  logical_prerequisites?: ReqNode;
-  logical_corequisites?: ReqNode;
+  logicalPrerequisites?: ReqNode;
+  logicalCorequisites?: ReqNode;
 }
 
 export interface SearchResults {
@@ -108,9 +120,23 @@ export interface GetCoursesPayload {
   courseCount?: number;
 }
 
+export interface GetCoursePayload {
+  course: Course;
+  reviews?: Review[];
+}
+
 export interface GetInstructorPayload {
   instructor?: Instructor;
   reviews: Review[];
+}
+
+export interface GetInteractionKindPayload {
+  kind?: InteractionKind;
+}
+
+export interface GetCourseReviewsInteractionPayload {
+  course_id: string;
+  interactions: Interaction[];
 }
 
 export interface GetReviewsPayload {
@@ -130,4 +156,10 @@ export interface UserResponse {
 export enum Operator {
   And = 'AND',
   Or = 'OR',
+}
+
+export interface DateTime {
+  $date: {
+    $numberLong: string;
+  };
 }

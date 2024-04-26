@@ -4,9 +4,8 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
+import type { Block, Course, Schedule } from '../lib/types';
 import { sortTerms } from '../lib/utils';
-import type { Course } from '../model/Course';
-import type { Block, Schedule } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
 
 const VSBtimeToDisplay = (time: string) => {
@@ -42,9 +41,9 @@ const getSections = (
       _.sortBy(
         _.uniqBy(
           scheds.flatMap((s) => s.blocks),
-          (b) => b.display
+          (b) => b?.display
         ),
-        (b) => b.display.split(' ', 2)[1]
+        (b) => b?.display?.split(' ', 2)[1]
       )
   );
 
@@ -54,7 +53,7 @@ const getSections = (
     blocks.map((b) => ({
       ...b,
       timeblocks: Object.entries(
-        _.groupBy(b.timeblocks, (tb) => `${tb.t1}-${tb.t2}`)
+        _.groupBy(b?.timeblocks, (tb) => `${tb.t1}-${tb.t2}`)
       ).map(([time, tbs]) => {
         const [t1, t2] = time.split('-', 2);
         return {
@@ -120,11 +119,11 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
       <td className='py-2 text-gray-700 dark:text-gray-300'>
         <div className='flex flex-col items-start pl-1 text-center font-medium'>
           {((split) =>
-            split.map((location: string, index) => (
+            split?.map((location: string, index) => (
               <span key={index}>
                 <BlockLocation location={location.trim()} />
               </span>
-            )))(block.location.split(';'))}
+            )))(block?.location?.split(';'))}
         </div>
       </td>
       <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>

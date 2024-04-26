@@ -8,8 +8,8 @@ import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { repo } from '../lib/repo';
+import { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
-import { Review } from '../model/Review';
 import { Loading } from './Loading';
 
 export const Reviews = () => {

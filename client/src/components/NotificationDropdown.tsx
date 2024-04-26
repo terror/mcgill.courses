@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { repo } from '../lib/repo';
+import type { Notification } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import type { Notification } from '../model/Notification';
 import { CourseReview } from './CourseReview';
 
 export const NotificationDropdown = ({

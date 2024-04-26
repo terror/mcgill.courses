@@ -7,9 +7,8 @@ import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
+import { Notification, SearchResults } from '../lib/types';
 import { getUrl } from '../lib/utils';
-import type { Notification } from '../model/Notification';
-import type { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
 import { NotificationDropdown } from './NotificationDropdown';
@@ -26,7 +25,7 @@ export const Navbar = () => {
     'text-gray-900 dark:text-gray-200'
   );
 
-  const [results, setResults] = useState<SearchResults>({
+  const [results, setResults] = useState<SearchResults & { query: string }>({
     query: '',
     courses: [],
     instructors: [],

@@ -13,8 +13,8 @@ import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useExploreFilterState } from '../hooks/useExploreFilterState';
 import { repo } from '../lib/repo';
+import type { Course } from '../lib/types';
 import { getCurrentTerms } from '../lib/utils';
-import type { Course } from '../model/Course';
 
 const makeSortPayload = (sort: SortByType) => {
   switch (sort) {
