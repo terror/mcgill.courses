@@ -2532,4 +2532,78 @@ mod tests {
       }
     }
   }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn unique_user_count() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_course(Course {
+      id: "COMP202".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 0);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 0);
+
+    db.add_review(Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 1);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
+
+    db.add_review(Review {
+      content: "bar".into(),
+      course_id: "COMP202".into(),
+      user_id: "2".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 2);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 2);
+
+    db.add_review(Review {
+      content: "bar".into(),
+      course_id: "COMP202".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 2);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn course_count() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    assert_eq!(db.course_count().await.unwrap(), 0);
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.course_count().await.unwrap(), 1);
+  }
 }
