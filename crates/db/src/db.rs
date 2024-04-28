@@ -1130,12 +1130,12 @@ impl Db {
   pub async fn unique_user_count(&self) -> Result<u64> {
     Ok(
       self
-        .reviews(None, None, None)
+        .database
+        .collection::<Review>(Self::REVIEW_COLLECTION)
+        .distinct("userId", None, None)
         .await?
-        .iter()
-        .map(|review| review.user_id.clone())
-        .collect::<HashSet<String>>()
-        .len() as u64,
+        .len()
+        .try_into()?,
     )
   }
 
