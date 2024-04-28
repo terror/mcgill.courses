@@ -39,6 +39,7 @@ export const CoursePage = () => {
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
+  const [selectedTerm, setSelectedTerm] = useState<string | undefined>();
 
   useEffect(() => {
     firstFetch.current = true;
@@ -178,6 +179,8 @@ export const CoursePage = () => {
             <SchedulesDisplay
               course={course}
               className={canReview ? 'mb-4' : ''}
+              selectedTerm={selectedTerm}
+              setSelectedTerm={setSelectedTerm}
             />
             {canReview && (
               <CourseReviewPrompt
@@ -238,16 +241,25 @@ export const CoursePage = () => {
           <div className='col-span-2'>
             <CourseRequirements course={course} requirements={requirements} />
             <div className='py-2'></div>
-            <BuildingLocation course={course} />
+            {selectedTerm && (
+              <BuildingLocation course={course} selectedTerm={selectedTerm} />
+            )}
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
           <div className='mb-4 flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
-          <SchedulesDisplay course={course} />
+          <SchedulesDisplay
+            course={course}
+            selectedTerm={selectedTerm}
+            setSelectedTerm={setSelectedTerm}
+          />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
+              {selectedTerm && (
+                <BuildingLocation course={course} selectedTerm={selectedTerm} />
+              )}
               {canReview && (
                 <CourseReviewPrompt
                   openAddReview={() => setAddReviewOpen(true)}

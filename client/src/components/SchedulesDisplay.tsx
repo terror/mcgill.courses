@@ -146,11 +146,15 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
 type SchedulesDisplayProps = {
   course: Course;
   className?: string;
+  selectedTerm: string | undefined;
+  setSelectedTerm: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 export const SchedulesDisplay = ({
   course,
   className,
+  selectedTerm,
+  setSelectedTerm,
 }: SchedulesDisplayProps) => {
   const schedules = course.schedule;
 
@@ -160,7 +164,6 @@ export const SchedulesDisplay = ({
     _.uniq(schedules.map((schedule) => schedule.term))
   );
 
-  const [selectedTerm, setSelectedTerm] = useState(offeredTerms.at(0));
   const [showAll, setShowAll] = useState(false);
   const scheduleByTerm = useMemo(() => getSections(schedules), [course]);
   const [blocks, setBlocks] = useState(

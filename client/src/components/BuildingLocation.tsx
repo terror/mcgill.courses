@@ -5,7 +5,7 @@ import {
   Marker,
   useMarkerRef,
 } from '@vis.gl/react-google-maps';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
 import * as buildingCoordinates from '../assets/buildingCoordinates.json';
@@ -14,6 +14,7 @@ import type { Course } from '../model/Course';
 
 type LocationProps = {
   course: Course;
+  selectedTerm: string;
 };
 
 type MarkerProps = {
@@ -33,25 +34,31 @@ const BuildingMarker = ({ position, buildingName }: MarkerProps) => {
   );
 };
 
-export const BuildingLocation = ({ course }: LocationProps) => {
-  const [position, setPosition] = useState({ lat: 45.5048, lng: -73.5772 });
-
+export const BuildingLocation = ({ course, selectedTerm }: LocationProps) => {
   const codes = new Set<string>();
-  for (const schedule of course.schedule) {
-    // not sure what blocks are, defaulting to taking first element
+  for (const schedule of course.schedule ?? []) {
+    if (schedule.term != selectedTerm) continue;
     for (const block of schedule.blocks) {
+      if (block.location.trim().length == 0) continue;
       block.location
         .split('; ')
         .map((x) => x.split(' ')[0])
         .forEach((x) => codes.add(x));
     }
   }
+
   const buildings = Array.from(codes).map((building) => ({
     coord: buildingCoordinates[
       building as keyof typeof buildingCoordinates
     ] as google.maps.LatLngLiteral,
     name: buildingCodes[building as keyof typeof buildingCodes],
   }));
+
+  const center = { lat: 0, lng: 0 };
+  buildings.forEach((building) => {
+    center.lat += building.coord.lat / buildings.length;
+    center.lng += building.coord.lng / buildings.length;
+  });
 
   return (
     <div
@@ -60,20 +67,16 @@ export const BuildingLocation = ({ course }: LocationProps) => {
       }
     >
       <div className='p-6'>
-        <h2
-          onClick={() => {
-            setPosition({ lat: 45.5048, lng: -73.5762 });
-          }}
-          className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'
-        >
-          Building Location
+        <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
+          Building Location for {selectedTerm}
         </h2>
 
         <div style={{ height: 350 }}>
           <APIProvider apiKey={getGoogleAPIKey()}>
-            <Map defaultCenter={position} defaultZoom={15}>
+            <Map center={center} defaultZoom={16}>
               {buildings.map((building) => (
                 <BuildingMarker
+                  key={building.name}
                   position={building.coord}
                   buildingName={building.name}
                 />
