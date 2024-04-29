@@ -96,7 +96,7 @@ export const BuildingLocation = ({
                     <div style={{ height: 500 }}>
                       <APIProvider apiKey={getGoogleAPIKey()}>
                         <Map
-                          defaultCenter={{ lat: 45.5048, lng: -73.5772 }}
+                          defaultCenter={building.coordinates}
                           defaultZoom={15}
                         >
                           <BuildingMarker
