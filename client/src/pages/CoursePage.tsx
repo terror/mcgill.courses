@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { AddReviewForm } from '../components/AddReviewForm';
-import { BuildingLocation } from '../components/BuildingLocation';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -39,7 +38,6 @@ export const CoursePage = () => {
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
-  const [selectedTerm, setSelectedTerm] = useState<string | undefined>();
 
   useEffect(() => {
     firstFetch.current = true;
@@ -179,8 +177,6 @@ export const CoursePage = () => {
             <SchedulesDisplay
               course={course}
               className={canReview ? 'mb-4' : ''}
-              selectedTerm={selectedTerm}
-              setSelectedTerm={setSelectedTerm}
             />
             {canReview && (
               <CourseReviewPrompt
@@ -241,25 +237,15 @@ export const CoursePage = () => {
           <div className='col-span-2'>
             <CourseRequirements course={course} requirements={requirements} />
             <div className='py-2'></div>
-            {selectedTerm && (
-              <BuildingLocation course={course} selectedTerm={selectedTerm} />
-            )}
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
           <div className='mb-4 flex'>
             <CourseRequirements course={course} requirements={requirements} />
           </div>
-          <SchedulesDisplay
-            course={course}
-            selectedTerm={selectedTerm}
-            setSelectedTerm={setSelectedTerm}
-          />
+          <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
-              {selectedTerm && (
-                <BuildingLocation course={course} selectedTerm={selectedTerm} />
-              )}
               {canReview && (
                 <CourseReviewPrompt
                   openAddReview={() => setAddReviewOpen(true)}
