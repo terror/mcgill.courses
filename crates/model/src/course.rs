@@ -1,5 +1,4 @@
 use super::*;
-use derivative::Derivative;
 
 #[derive(Clone, Debug, Default, Deserialize, Derivative, Serialize)]
 #[derivative(Eq, Hash, PartialEq)]
@@ -65,7 +64,7 @@ impl Course {
       logical_corequisites: other
         .logical_corequisites
         .or(self.logical_corequisites),
-      schedule: other.schedule.or(self.schedule),
+      schedule: Some(other.schedule.combine_opt(self.schedule)),
       ..other
     }
   }

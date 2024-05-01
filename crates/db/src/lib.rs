@@ -2,6 +2,7 @@ use {
   anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, Utc},
+  combine::Combine,
   futures::Future,
   futures::FutureExt,
   futures::{future::join_all, TryStreamExt},
@@ -23,10 +24,7 @@ use {
   mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
-  {
-    crate::combine::Combine, initializer::Initializer, seed::Seed,
-    str_ext::StrExt, utils::*,
-  },
+  {initializer::Initializer, seed::Seed, str_ext::StrExt, utils::*},
 };
 
 #[cfg(test)]
