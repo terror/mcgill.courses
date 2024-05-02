@@ -58,6 +58,7 @@ export const Explore = () => {
   const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[] | undefined>(undefined);
+  const [courseCount, setCourseCount] = useState<number | undefined>(undefined);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
 
@@ -85,8 +86,11 @@ export const Explore = () => {
 
   useEffect(() => {
     repo
-      .getCourses(limit, 0, filters)
-      .then((data) => setCourses(data))
+      .getCourses(limit, 0, true, filters)
+      .then((data) => {
+        setCourses(data.courses);
+        setCourseCount(data.courseCount);
+      })
       .catch(() => {
         toast.error('Failed to fetch courses. Please try again later.');
       });
@@ -95,11 +99,11 @@ export const Explore = () => {
   }, [selectedSubjects, selectedLevels, selectedTerms, sortBy, query]);
 
   const fetchMore = async () => {
-    const batch = await repo.getCourses(limit, offset, filters);
+    const batch = await repo.getCourses(limit, offset, false, filters);
 
-    if (batch.length === 0) setHasMore(false);
+    if (batch.courses.length === 0) setHasMore(false);
     else {
-      setCourses(courses?.concat(batch));
+      setCourses(courses?.concat(batch.courses));
       setOffset(offset + limit);
     }
   };
@@ -107,9 +111,16 @@ export const Explore = () => {
   return (
     <Layout>
       <div className='flex flex-col items-center py-8'>
-        <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
-          Explore all courses
-        </h1>
+        <div className='mb-16'>
+          <h1 className='text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+            Explore all courses
+          </h1>
+          <p className='mt-2 text-gray-600 dark:text-gray-400'>
+            Check out information and reviews about all{' '}
+            {courseCount?.toLocaleString('en-us')} courses offered by McGill
+            University.
+          </p>
+        </div>
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
           <div className='lg:hidden'>
             <FilterToggle>

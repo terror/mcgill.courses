@@ -118,21 +118,19 @@ impl Initializer {
 
     let mut seeds = self.collect()?;
 
-    let courses = seeds
-      .clone()
-      .into_iter()
-      .filter(|seed| matches!(seed, Seed::Courses(_)))
-      .collect::<Vec<Seed>>();
-
-    seeds.retain(|seed| !matches!(seed, Seed::Courses(_)));
-
     if self.options.latest_courses {
+      let courses = seeds
+        .clone()
+        .into_iter()
+        .filter(|seed| matches!(seed, Seed::Courses(_)))
+        .collect::<Vec<Seed>>();
+
+      seeds.retain(|seed| !matches!(seed, Seed::Courses(_)));
+
       if let Some(last) = courses.last() {
         seeds.insert(0, last.clone());
       }
-    } else {
-      seeds.splice(..0, courses);
-    };
+    }
 
     for seed in seeds {
       match seed {
