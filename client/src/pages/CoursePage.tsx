@@ -244,7 +244,9 @@ export const CoursePage = () => {
 
           <div className='col-span-2 flex flex-col gap-5'>
             <CourseRequirements course={course} requirements={requirements} />
-            {courseAverages && <CourseAverages averages={courseAverages} />}
+            {courseAverages && courseAverages.length >= 1 && (
+              <CourseAverages averages={courseAverages} />
+            )}
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
@@ -253,7 +255,9 @@ export const CoursePage = () => {
           </div>
 
           <div className='mb-4 flex'>
-            {courseAverages && <CourseAverages averages={courseAverages} />}
+            {courseAverages && courseAverages.length >= 1 && (
+              <CourseAverages averages={courseAverages} />
+            )}
           </div>
           <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
