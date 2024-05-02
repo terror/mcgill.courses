@@ -116,7 +116,9 @@ export const CoursePage = () => {
     user && !allReviews?.find((r) => r.userId === user?.id)
   );
 
-  const courseAverages: TermAverage[] = courseAverageData[course._id];
+  const allCourseAverages: Record<string, TermAverage[]> =
+    courseAverageData as Record<string, TermAverage[]>;
+  const courseAverages: TermAverage[] = allCourseAverages[course._id];
 
   const handleSubmit = (successMessage: string) => {
     return (res: Response) => {
