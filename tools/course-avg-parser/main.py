@@ -1,4 +1,5 @@
-# Source code from Google API documentation
+# Source code from Google's API documentation
+# https://developers.google.com/sheets/api/quickstart/python
 
 import json
 import os.path
@@ -40,7 +41,7 @@ def expand_term(term: str):
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
-# The ID and range of a sample spreadsheet.
+# The ID and range of the crowdsourced average spreadsheet from McGill Enhanced.
 SPREADSHEET_ID = "1NGUBQuF8FI6ebna86S1RHpc27srxpMbaSyjipIkr-gk"
 RANGE_NAME = "ResultsSimple!A3:F"
 
