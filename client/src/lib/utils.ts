@@ -46,7 +46,7 @@ export const filterCurrentInstructors = (instructors: Instructor[]) => {
 };
 
 export const sortTerms = (terms: string[]) => {
-  const order = ['Summer', 'Fall', 'Winter'];
+  const order = ['Fall', 'Winter', 'Summer'];
 
   return terms.sort((a, b) => {
     return a.split(' ')[1] === b.split(' ')[1]
