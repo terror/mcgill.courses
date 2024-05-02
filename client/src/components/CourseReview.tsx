@@ -44,6 +44,7 @@ const getLikeChange = (
 ) => {
   if (!before) return interactionToNum(after);
   if (before === after) return 0;
+
   return interactionToNum(after) * 2;
 };
 
