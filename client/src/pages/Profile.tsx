@@ -18,12 +18,17 @@ import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import type { Review } from '../model/Review';
 import type { Subscription } from '../model/Subscription';
+import { Loading } from './Loading';
 
 export const Profile = () => {
   const user = useAuth();
 
-  const [userReviews, setUserReviews] = useState<Review[]>();
-  const [userSubscriptions, setUserSubscriptions] = useState<Subscription[]>();
+  const [userReviews, setUserReviews] = useState<Review[] | undefined>(
+    undefined
+  );
+  const [userSubscriptions, setUserSubscriptions] = useState<
+    Subscription[] | undefined
+  >(undefined);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
@@ -72,6 +77,8 @@ export const Profile = () => {
       );
     }
   };
+
+  if (!userReviews || !userSubscriptions) return <Loading />;
 
   const tabs = ['Reviews', 'Subscriptions'];
 
@@ -137,42 +144,36 @@ export const Profile = () => {
           </Tab.List>
           <Tab.Panels>
             <Tab.Panel>
-              <div className='m-4'>
+              <div className='m-4 flex flex-col gap-4'>
                 {userReviews === undefined ? (
                   <div className='mt-2 text-center'>
                     <Spinner />
                   </div>
                 ) : userReviews.length ? (
-                  userReviews
-                    .sort(
-                      (a, b) =>
-                        parseInt(a.timestamp.$date.$numberLong, 10) -
-                        parseInt(b.timestamp.$date.$numberLong, 10)
-                    )
-                    .map((review, i) => {
-                      return (
-                        <div key={i}>
-                          <div className='flex'>
-                            <Link
-                              to={`/course/${courseIdToUrlParam(
-                                review.courseId
-                              )}`}
-                              className='text-xl font-bold text-gray-700 duration-200 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500'
-                            >
-                              {spliceCourseCode(review.courseId, ' ')}
-                            </Link>
-                          </div>
-                          <div className='my-2 rounded-lg border-gray-800 duration-300 ease-in-out'>
-                            <CourseReview
-                              canModify={false}
-                              handleDelete={() => null}
-                              openEditReview={() => null}
-                              review={review}
-                            />
-                          </div>
+                  userReviews.map((review, i) => {
+                    return (
+                      <div key={i}>
+                        <div className='flex'>
+                          <Link
+                            to={`/course/${courseIdToUrlParam(
+                              review.courseId
+                            )}`}
+                            className='text-xl font-semibold text-gray-800 hover:underline dark:text-gray-200'
+                          >
+                            {spliceCourseCode(review.courseId, ' ')}
+                          </Link>
                         </div>
-                      );
-                    })
+                        <div className='my-2 rounded-lg border-gray-800 duration-300 ease-in-out'>
+                          <CourseReview
+                            canModify={false}
+                            handleDelete={() => null}
+                            openEditReview={() => null}
+                            review={review}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })
                 ) : (
                   <div className='flex w-full items-center justify-center gap-x-2'>
                     <LuFileText
