@@ -16,7 +16,7 @@ export const CourseAverages = ({ averages }: CourseAveragesProps) => {
         Class Averages
       </h2>
 
-      <hr className='my-2 mt-5 w-full border border-neutral-700' />
+      <hr className='my-2 mt-5 w-full border border-neutral-200 dark:border-neutral-700' />
 
       {averages
         .sort((a, b) => compareTerms(a.term, b.term))
@@ -31,7 +31,7 @@ export const CourseAverages = ({ averages }: CourseAveragesProps) => {
                 {average.average}
               </p>
             </div>
-            <hr className='my-2 w-full border border-neutral-700' />
+            <hr className='my-2 w-full border border-neutral-200 dark:border-neutral-700' />
           </>
         ))}
 
