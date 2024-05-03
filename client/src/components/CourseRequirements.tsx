@@ -4,7 +4,7 @@ import { PiGraphFill } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { Course, Requirements } from '../lib/types';
+import type { Course, Requirements } from '../lib/model';
 import { capitalize, punctuate } from '../lib/utils';
 import { CourseGraph } from './CourseGraph';
 

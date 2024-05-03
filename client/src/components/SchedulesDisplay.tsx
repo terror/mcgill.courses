@@ -4,7 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
-import type { Block, Course, Schedule } from '../lib/types';
+import type { Block, Course, Schedule } from '../lib/model';
 import { sortTerms } from '../lib/utils';
 import { Tooltip } from './Tooltip';
 
@@ -222,7 +222,7 @@ export const SchedulesDisplay = ({
               <IoIosArrowDown
                 className={`${
                   showAll ? 'rotate-180' : ''
-                } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
+                } mx-2 size-5 text-gray-900 dark:text-gray-300`}
               />
             </button>
           </div>

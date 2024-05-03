@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
-import { Course, Review } from '../lib/types';
+import type { Course, Review } from '../lib/model';
 import { Autocomplete } from './Autocomplete';
 import { FilterToggle } from './FilterToggle';
 import { ResetButton } from './ResetButton';

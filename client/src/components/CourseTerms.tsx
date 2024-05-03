@@ -4,7 +4,7 @@ import { GoX } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import type { Course } from '../lib/types';
+import type { Course } from '../lib/model';
 import {
   filterCurrentInstructors,
   getCurrentTerms,

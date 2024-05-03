@@ -4,7 +4,7 @@ import VisGraph, { Edge, GraphData, Node } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { Course, ReqNode } from '../lib/types';
+import { Course, ReqNode } from '../lib/model';
 import {
   courseIdToUrlParam,
   isValidCourseCode,

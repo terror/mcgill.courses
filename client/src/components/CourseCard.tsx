@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import type { Course } from '../lib/types';
+import type { Course } from '../lib/model';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { CourseTerms } from './CourseTerms';
 import { Highlight } from './Highlight';

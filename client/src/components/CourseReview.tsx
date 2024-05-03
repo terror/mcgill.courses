@@ -9,9 +9,9 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
+import type { Interaction, Review } from '../lib/model';
+import { InteractionKind } from '../lib/model';
 import { repo } from '../lib/repo';
-import type { Interaction, Review } from '../lib/types';
-import { InteractionKind } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { BirdIcon } from './BirdIcon';
 import { DeleteButton } from './DeleteButton';

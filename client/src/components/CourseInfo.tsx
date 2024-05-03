@@ -4,8 +4,8 @@ import { VscBell, VscBellSlash } from 'react-icons/vsc';
 import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
+import type { Course, Review } from '../lib/model';
 import { repo } from '../lib/repo';
-import type { Course, Review } from '../lib/types';
 import { CourseInfoStats } from './CourseInfoStats';
 import { CourseTerms } from './CourseTerms';
 

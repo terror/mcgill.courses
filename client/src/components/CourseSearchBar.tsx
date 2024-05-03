@@ -3,7 +3,7 @@ import { Layers, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { SearchResults } from '../lib/types';
+import { SearchResults } from '../lib/model';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { Highlight } from './Highlight';
 import { SearchBar } from './SearchBar';

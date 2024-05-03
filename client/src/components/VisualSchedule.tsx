@@ -4,9 +4,8 @@ import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
+import type { Block, Course, TimeBlock } from '../lib/model';
 import { mod, sortTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Block, TimeBlock } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
 
 // Unused component, can use this later for schedule builder

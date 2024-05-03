@@ -5,9 +5,9 @@ import { toast } from 'sonner';
 
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
+import type { Notification, SearchResults } from '../lib/model';
 import { repo } from '../lib/repo';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
-import { Notification, SearchResults } from '../lib/types';
 import { getUrl } from '../lib/utils';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
@@ -101,7 +101,7 @@ export const Navbar = () => {
           >
             <span className='sr-only'>Open main menu</span>
             <Bars3Icon
-              className='h-6 w-6 stroke-2 text-gray-400'
+              className='size-6 stroke-2 text-gray-400'
               aria-hidden='true'
             />
           </button>
