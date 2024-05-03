@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OUTPUT=./client/src/lib/types.ts
+OUTPUT=./client/src/lib/model.ts
 
 typeshare -l typescript -o $OUTPUT .
 

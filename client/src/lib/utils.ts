@@ -1,4 +1,4 @@
-import type { Course, Instructor, Schedule } from '../lib/types';
+import type { Course, Instructor, Schedule } from '../lib/model';
 
 /**
  * Extracts a list of unique instructors for each term associated with a course.
@@ -10,7 +10,7 @@ import type { Course, Instructor, Schedule } from '../lib/types';
  * @returns An array of instructors, one per term, sorted by term order: Fall, Winter, Summer.
  */
 export const uniqueTermInstructors = (course: Course) => {
-  const termInstructors = course.instructors.filter((i) =>
+  const termInstructors = course.instructors.filter((i: Instructor) =>
     course.terms.includes(i.term)
   );
 
