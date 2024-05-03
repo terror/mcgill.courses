@@ -2,6 +2,8 @@ use super::*;
 
 pub(crate) trait Combine<T> {
   fn combine(self, other: Vec<T>) -> Vec<T>;
+
+  #[allow(dead_code)]
   fn combine_opt(self, other: Option<Vec<T>>) -> Vec<T>;
 }
 
@@ -30,7 +32,7 @@ impl<T: Eq + Hash + Clone> Combine<T> for Option<Vec<T>> {
       .collect()
   }
 
-  #[allow(unused)]
+  #[allow(dead_code)]
   fn combine_opt(self, other: Option<Vec<T>>) -> Vec<T> {
     [self.unwrap_or_default(), other.unwrap_or_default()]
       .concat()
