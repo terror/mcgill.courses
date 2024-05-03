@@ -14,8 +14,8 @@ import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { ReviewFilter } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
+import { Course, Interaction, Requirements, Review } from '../lib/model';
 import { repo } from '../lib/repo';
-import { Course, Interaction, Requirements, Review } from '../lib/types';
 import { getCurrentTerms } from '../lib/utils';
 import { Loading } from './Loading';
 

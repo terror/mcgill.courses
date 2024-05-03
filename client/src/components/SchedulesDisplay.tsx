@@ -26,7 +26,7 @@ type ScheduleBlock = Omit<Block, 'timeblocks'> & {
 };
 
 type RepeatingBlock = {
-  days: string[];
+  days: (string | undefined)[];
   startTime: string;
   endTime: string;
 };
@@ -83,18 +83,23 @@ const BlockLocation = ({ location }: { location: string }) => {
 };
 
 type TimeblockDaysProps = {
-  days: string[];
+  days: (string | undefined)[];
 };
 
 const TimeblockDays = ({ days }: TimeblockDaysProps) => {
-  const dayNums = days.map((d) => parseInt(d, 10));
+  const dayNums: string[] = [];
+
+  for (const d of days) if (d !== undefined) dayNums.push(d);
+
+  const parsed = dayNums.map((d) => parseInt(d, 10));
+
   return (
     <div className='flex gap-1'>
       {['M', 'T', 'W', 'T', 'F'].map((day, i) => (
         <span
           className={twMerge(
             'text-sm sm:text-base',
-            dayNums.includes(i + 2)
+            parsed.includes(i + 2)
               ? 'font-semibold text-gray-800 dark:text-gray-100'
               : 'font-extralight text-gray-400 dark:text-gray-400'
           )}
@@ -123,7 +128,7 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
               <span key={index}>
                 <BlockLocation location={location.trim()} />
               </span>
-            )))(block?.location?.split(';'))}
+            )))(block.location?.split(';'))}
         </div>
       </td>
       <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
@@ -155,9 +160,12 @@ export const SchedulesDisplay = ({
 
   if (!schedules) return null;
 
-  const offeredTerms = sortTerms(
-    _.uniq(schedules.map((schedule) => schedule.term))
-  );
+  const terms: string[] = [];
+
+  for (const term of schedules.map((schedule) => schedule.term))
+    if (term !== undefined) terms.push(term);
+
+  const offeredTerms = sortTerms(_.uniq(terms));
 
   const [selectedTerm, setSelectedTerm] = useState(offeredTerms.at(0));
   const [showAll, setShowAll] = useState(false);

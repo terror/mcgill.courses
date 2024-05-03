@@ -10,7 +10,7 @@ import {
   SearchResults,
   Subscription,
   UserResponse,
-} from './types';
+} from './model';
 
 const prefix = '/api';
 

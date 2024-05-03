@@ -5,7 +5,7 @@ import { LuFlame } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 
 import { useMediaQuery } from '../hooks/useMediaQuery';
-import type { Review } from '../lib/types';
+import type { Review } from '../lib/model';
 import { round2Decimals } from '../lib/utils';
 import { BirdIcon } from './BirdIcon';
 import { Histogram } from './Histogram';
