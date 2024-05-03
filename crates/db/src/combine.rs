@@ -30,6 +30,7 @@ impl<T: Eq + Hash + Clone> Combine<T> for Option<Vec<T>> {
       .collect()
   }
 
+  #[allow(unused)]
   fn combine_opt(self, other: Option<Vec<T>>) -> Vec<T> {
     [self.unwrap_or_default(), other.unwrap_or_default()]
       .concat()
