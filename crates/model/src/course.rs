@@ -44,6 +44,14 @@ pub struct Course {
   pub review_count: i32,
 }
 
+const fn zero() -> i32 {
+  0
+}
+
+const fn zero_f32() -> f32 {
+  0.0
+}
+
 impl Ord for Course {
   fn cmp(&self, other: &Self) -> std::cmp::Ordering {
     self.id.cmp(&other.id)
@@ -65,16 +73,8 @@ impl Course {
       logical_corequisites: other
         .logical_corequisites
         .or(self.logical_corequisites),
-      schedule: other.schedule.or(self.schedule),
+      schedule: Some(other.schedule.combine_opt(self.schedule)),
       ..other
     }
   }
-}
-
-const fn zero() -> i32 {
-  0
-}
-
-const fn zero_f32() -> f32 {
-  0.0
 }

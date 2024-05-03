@@ -1,5 +1,6 @@
 use {
   bson::{doc, Bson, DateTime},
+  combine::Combine,
   derivative::Derivative,
   serde::{Deserialize, Serialize},
   std::{
