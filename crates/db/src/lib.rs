@@ -23,7 +23,7 @@ use {
   },
   mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
-  std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
+  std::{collections::HashSet, env, fs, path::PathBuf},
   {initializer::Initializer, seed::Seed, str_ext::StrExt, utils::*},
 };
 
@@ -38,7 +38,6 @@ use {
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
-mod combine;
 mod db;
 mod initializer;
 mod seed;
