@@ -30,7 +30,7 @@ impl Db {
 
     client
       .database(db_name)
-      .run_command(doc! {"ping": 1}, None)
+      .run_command(doc! { "ping": 1 }, None)
       .await?;
 
     info!("Connected to MongoDB.");
@@ -251,7 +251,7 @@ impl Db {
             "_id": &review.course_id
           },
           UpdateModifications::Document(doc! {
-            "$inc": { "reviewCount": 1},
+            "$inc": { "reviewCount": 1 },
             "$set": {
               "avgRating": avg_rating,
               "avgDifficulty": avg_difficulty,
@@ -346,7 +346,7 @@ impl Db {
             "_id": &review.course_id
           },
           UpdateModifications::Document(doc! {
-            "$inc": { "reviewCount": -1},
+            "$inc": { "reviewCount": -1 },
             "$set": {
               "avgRating": avg_rating,
               "avgDifficulty": avg_difficulty,
@@ -548,7 +548,7 @@ impl Db {
             },
             doc! {
               "$inc": {
-                "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1}
+                "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1 }
               }
             },
             None,
