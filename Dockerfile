@@ -12,7 +12,7 @@ FROM client AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build -- --mode=production
 
-FROM rust:1.70-buster as server
+FROM rust:slim-buster as server
 
 WORKDIR /usr/src/app
 COPY . .
