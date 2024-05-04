@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async';
+
 import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
@@ -7,6 +9,23 @@ export const PrivacyPolicy = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Privacy Policy - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/privacy`} />
+        <meta property='og:title' content={`Privacy Policy - mcgill.courses`} />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/privacy`}
+        />
+        <meta
+          property='twitter:title'
+          content={`Privacy Policy - mcgill.courses`}
+        />
+      </Helmet>
+
       <div className='m-auto my-10 flex max-w-[800px] flex-col gap-9 px-2'>
         <h1 className={h1}>Privacy Policy</h1>
         <Paragraph>

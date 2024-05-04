@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -165,6 +166,34 @@ export const CoursePage = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>
+          {course._id} - {course.title} - mcgill.courses
+        </title>
+        <meta name='description' content={course.description} />
+
+        <meta property='og:type' content='website' />
+        <meta
+          property='og:url'
+          content={`https://mcgill.courses/${course._id}`}
+        />
+        <meta
+          property='og:title'
+          content={`${course._id}- ${course.title} - mcgill.courses`}
+        />
+        <meta property='og:description' content={course.description} />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/${course._id}`}
+        />
+        <meta
+          property='twitter:title'
+          content={`${course._id}- ${course.title} - mcgill.courses`}
+        />
+        <meta property='twitter:description' content={course.description} />
+      </Helmet>
+
       <div className='mx-auto mt-10 max-w-6xl md:mt-0'>
         <CourseInfo
           course={course}

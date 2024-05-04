@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -50,6 +51,32 @@ export const Reviews = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Reviews - mcgill.courses</title>
+        <meta
+          name='description'
+          content='Check out the latest reviews from students of McGill University.'
+        />
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/reviews`} />
+        <meta property='og:title' content={`Reviews - mcgill.courses`} />
+        <meta
+          property='og:description'
+          content='Check out the latest reviews from students of McGill University.'
+        />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/reviews`}
+        />
+        <meta property='twitter:title' content={`Reviews - mcgill.courses`} />
+        <meta
+          property='twitter:description'
+          content='Check out the latest reviews from students of McGill University.'
+        />
+      </Helmet>
+
       <div className='flex flex-col items-center py-8'>
         <div className='mb-16'>
           <h1 className='text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
