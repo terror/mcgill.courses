@@ -89,13 +89,15 @@ export const Reviews = () => {
                       new Date(parseInt(review.timestamp.$date.$numberLong))
                     )}
                   </p>
-                  <CourseReview
-                    key={i}
-                    canModify={false}
-                    review={review}
-                    openEditReview={() => undefined}
-                    handleDelete={() => undefined}
-                  />
+                  <div>
+                    <CourseReview
+                      key={i}
+                      canModify={false}
+                      review={review}
+                      openEditReview={() => undefined}
+                      handleDelete={() => undefined}
+                    />
+                  </div>
                 </div>
               ))}
               {!hasMore ? (
