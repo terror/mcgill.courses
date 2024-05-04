@@ -87,6 +87,13 @@ export const Profile = () => {
     <Layout>
       <Helmet>
         <title>Profile - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/about`} />
+        <meta property='og:title' content={`Profile - mcgill.courses`} />
+
+        <meta property='twitter:url' content={`https://mcgill.courses/about`} />
+        <meta property='twitter:title' content={`Profile - mcgill.courses`} />
       </Helmet>
 
       <div className='mx-auto max-w-2xl'>

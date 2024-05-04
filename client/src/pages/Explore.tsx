@@ -117,6 +117,24 @@ export const Explore = () => {
           name='description'
           content='Check out information and reviews about all courses offered by McGill University.'
         />
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/explore`} />
+        <meta property='og:title' content={`Explore - mcgill.courses`} />
+        <meta
+          property='og:description'
+          content='Check out information and reviews about all courses offered by McGill University.'
+        />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/explore`}
+        />
+        <meta property='twitter:title' content={`Explore - mcgill.courses`} />
+        <meta
+          property='twitter:description'
+          content='Check out information and reviews about all courses offered by McGill University.'
+        />
       </Helmet>
 
       <div className='flex flex-col items-center py-8'>

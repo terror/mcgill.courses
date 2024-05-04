@@ -10,7 +10,20 @@ export const TermsAndConditions = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Terms and Condiitons - mcgill.courses</title>
+        <title>Terms and Conditions - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/tos`} />
+        <meta
+          property='og:title'
+          content={`Terms and Conditions - mcgill.courses`}
+        />
+
+        <meta property='twitter:url' content={`https://mcgill.courses/tos`} />
+        <meta
+          property='twitter:title'
+          content={`Terms and Conditions - mcgill.courses`}
+        />
       </Helmet>
 
       <div className='m-auto my-10 flex max-w-[800px] flex-col gap-9 px-2'>

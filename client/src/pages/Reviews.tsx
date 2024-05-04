@@ -57,6 +57,24 @@ export const Reviews = () => {
           name='description'
           content='Check out the latest reviews from students of McGill University.'
         />
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/reviews`} />
+        <meta property='og:title' content={`Reviews - mcgill.courses`} />
+        <meta
+          property='og:description'
+          content='Check out the latest reviews from students of McGill University.'
+        />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/reviews`}
+        />
+        <meta property='twitter:title' content={`Reviews - mcgill.courses`} />
+        <meta
+          property='twitter:description'
+          content='Check out the latest reviews from students of McGill University.'
+        />
       </Helmet>
 
       <div className='flex flex-col items-center py-8'>

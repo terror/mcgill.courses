@@ -72,6 +72,22 @@ export const Instructor = () => {
     <Layout>
       <Helmet>
         <title>{instructor.name} - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/explore`} />
+        <meta
+          property='og:title'
+          content={`${instructor.name}- mcgill.courses`}
+        />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/explore`}
+        />
+        <meta
+          property='twitter:title'
+          content={`${instructor.name}- mcgill.courses`}
+        />
       </Helmet>
 
       <div className='mx-auto mt-10 flex max-w-5xl overflow-hidden md:mt-0'>

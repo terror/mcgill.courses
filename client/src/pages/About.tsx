@@ -21,10 +21,6 @@ type QuestionsAnswersProps = {
 const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
     <div className='flex min-w-full max-w-md flex-col items-center space-y-3 dark:bg-neutral-900'>
-      <Helmet>
-        <title>About - mcgill.courses</title>
-      </Helmet>
-
       {input.map((item: QuestionAnswer) => (
         <Disclosure as='div' key={item.title} className='w-full'>
           {({ open }) => (
@@ -173,6 +169,20 @@ export const About = () => {
   return (
     <Layout>
       <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2 sm:px-8 md:px-16'>
+        <Helmet>
+          <title>About - mcgill.courses</title>
+
+          <meta property='og:type' content='website' />
+          <meta property='og:url' content={`https://mcgill.courses/about`} />
+          <meta property='og:title' content={`About - mcgill.courses`} />
+
+          <meta
+            property='twitter:url'
+            content={`https://mcgill.courses/about`}
+          />
+          <meta property='twitter:title' content={`About - mcgill.courses`} />
+        </Helmet>
+
         <Title>Welcome to mcgill.courses!</Title>
         <Paragraph className='leading-loose text-gray-700 dark:text-gray-200'>
           <Link className='underline' to='/'>
