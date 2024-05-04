@@ -45,14 +45,16 @@ export const filterCurrentInstructors = (instructors: Instructor[]) => {
   return instructors.filter((i) => currentTerm.includes(i.term));
 };
 
-export const sortTerms = (terms: string[]) => {
-  const order = ['Fall', 'Winter', 'Summer'];
+const TERM_ORDER = ['Summer', 'Fall', 'Winter'];
 
-  return terms.sort((a, b) => {
-    return a.split(' ')[1] === b.split(' ')[1]
-      ? order.indexOf(a.split(' ')[0]) - order.indexOf(b.split(' ')[0])
-      : parseInt(a.split(' ')[1], 10) - parseInt(b.split(' ')[1], 10);
-  });
+export const compareTerms = (a: string, b: string) => {
+  return a.split(' ')[1] === b.split(' ')[1]
+    ? TERM_ORDER.indexOf(a.split(' ')[0]) - TERM_ORDER.indexOf(b.split(' ')[0])
+    : parseInt(a.split(' ')[1], 10) - parseInt(b.split(' ')[1], 10);
+};
+
+export const sortTerms = (terms: string[]) => {
+  return terms.sort(compareTerms);
 };
 
 export const sortSchedulesByBlocks = (schedules: Schedule[]) => {
