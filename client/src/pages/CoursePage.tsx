@@ -171,6 +171,27 @@ export const CoursePage = () => {
           {course._id} - {course.title} - mcgill.courses
         </title>
         <meta name='description' content={course.description} />
+
+        <meta property='og:type' content='website' />
+        <meta
+          property='og:url'
+          content={`https://mcgill.courses/${course._id}`}
+        />
+        <meta
+          property='og:title'
+          content={`${course._id}- ${course.title} - mcgill.courses`}
+        />
+        <meta property='og:description' content={course.description} />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/${course._id}`}
+        />
+        <meta
+          property='twitter:title'
+          content={`${course._id}- ${course.title} - mcgill.courses`}
+        />
+        <meta property='twitter:description' content={course.description} />
       </Helmet>
 
       <div className='mx-auto mt-10 max-w-6xl md:mt-0'>

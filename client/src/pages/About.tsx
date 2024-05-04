@@ -34,7 +34,7 @@ const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
                 <IoIosArrowDown
                   className={`${
                     open ? 'rotate-180' : ''
-                  } h-5 w-5 text-gray-900 dark:text-gray-300`}
+                  } size-5 text-gray-900 dark:text-gray-300`}
                 />
               </Disclosure.Button>
               <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
