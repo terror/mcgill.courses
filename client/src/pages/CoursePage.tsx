@@ -245,7 +245,7 @@ export const CoursePage = () => {
           <div className='col-span-2 flex flex-col gap-5'>
             <CourseRequirements course={course} requirements={requirements} />
             {courseAverages && courseAverages.length >= 1 && (
-              <CourseAverages averages={courseAverages} />
+              <CourseAverages course={course} averages={courseAverages} />
             )}
           </div>
         </div>
@@ -256,7 +256,7 @@ export const CoursePage = () => {
 
           <div className='mb-4 flex'>
             {courseAverages && courseAverages.length >= 1 && (
-              <CourseAverages averages={courseAverages} />
+              <CourseAverages course={course} averages={courseAverages} />
             )}
           </div>
           <SchedulesDisplay course={course} />
