@@ -45,7 +45,7 @@ export const filterCurrentInstructors = (instructors: Instructor[]) => {
   return instructors.filter((i) => currentTerm.includes(i.term));
 };
 
-const TERM_ORDER = ['Summer', 'Fall', 'Winter'];
+const TERM_ORDER = ['Winter', 'Summer', 'Fall'];
 
 export const compareTerms = (a: string, b: string) => {
   return a.split(' ')[1] === b.split(' ')[1]
