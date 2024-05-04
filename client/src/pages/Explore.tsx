@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
@@ -110,6 +111,14 @@ export const Explore = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Explore - mcgill.courses</title>
+        <meta
+          name='description'
+          content='Check out information and reviews about all courses offered by McGill University.'
+        />
+      </Helmet>
+
       <div className='flex flex-col items-center py-8'>
         <div className='mb-16'>
           <h1 className='text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>

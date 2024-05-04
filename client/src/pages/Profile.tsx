@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { User } from 'react-feather';
+import { Helmet } from 'react-helmet-async';
 import { LuFileText } from 'react-icons/lu';
 import { VscBell } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
@@ -84,6 +85,10 @@ export const Profile = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Profile - mcgill.courses</title>
+      </Helmet>
+
       <div className='mx-auto max-w-2xl'>
         <JumpToTopButton />
         <div className='flex w-full justify-center'>

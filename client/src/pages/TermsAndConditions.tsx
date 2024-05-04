@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async';
+
 import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
@@ -7,6 +9,10 @@ export const TermsAndConditions = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Terms and Condiitons - mcgill.courses</title>
+      </Helmet>
+
       <div className='m-auto my-10 flex max-w-[800px] flex-col gap-9 px-2'>
         <h1 className={h1}>Terms and Conditions</h1>
 

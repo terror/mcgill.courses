@@ -1,4 +1,5 @@
 import { Disclosure } from '@headlessui/react';
+import { Helmet } from 'react-helmet-async';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
@@ -20,6 +21,10 @@ type QuestionsAnswersProps = {
 const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
   return (
     <div className='flex min-w-full max-w-md flex-col items-center space-y-3 dark:bg-neutral-900'>
+      <Helmet>
+        <title>About - mcgill.courses</title>
+      </Helmet>
+
       {input.map((item: QuestionAnswer) => (
         <Disclosure as='div' key={item.title} className='w-full'>
           {({ open }) => (
