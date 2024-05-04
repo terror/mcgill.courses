@@ -67,20 +67,21 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
 
       <div className='py-1' />
 
-      <button
-        className='flex w-full items-center gap-2 text-sm text-gray-500 dark:text-gray-400 md:text-lg'
-        onClick={() => setShowAll(!showAll)}
-      >
-        <p className='my-auto ml-auto text-base font-medium'>
-          {showAll ? 'Show less' : 'Show all'}
-        </p>
-        {showAll ? (
-          <IoIosArrowUp className='my-auto mr-auto font-extrabold' />
-        ) : (
-          <IoIosArrowDown className='my-auto mr-auto font-extrabold' />
-        )}
-      </button>
-
+      {averages.length > 6 && (
+        <button
+          className='flex w-full items-center gap-2 text-sm text-gray-500 dark:text-gray-400 md:text-lg'
+          onClick={() => setShowAll(!showAll)}
+        >
+          <p className='my-auto ml-auto text-base font-medium'>
+            {showAll ? 'Show less' : 'Show all'}
+          </p>
+          {showAll ? (
+            <IoIosArrowUp className='my-auto mr-auto font-extrabold' />
+          ) : (
+            <IoIosArrowDown className='my-auto mr-auto font-extrabold' />
+          )}
+        </button>
+      )}
       <p className='mt-5 text-center text-xs text-gray-700 dark:text-gray-200'>
         Supported by{' '}
         <a href='https://demetrios-koziris.github.io/McGillEnhanced/'>
