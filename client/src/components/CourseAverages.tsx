@@ -31,8 +31,6 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
       </h2>
       <div className='py-1' />
 
-      {/* <hr className='my-1 mt-2 w-full border border-neutral-200 dark:border-neutral-700' /> */}
-
       {averages
         .sort((a, b) => compareTerms(b.term, a.term))
         .slice(0, showAll ? averages.length : 6)
