@@ -4,6 +4,7 @@ import '@fontsource/inter/700.css';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
@@ -25,21 +26,23 @@ const Root = () => {
 
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <DarkModeProvider>
-          <ErrorBoundary
-            FallbackComponent={ErrorPage}
-            onReset={() => setKey(key + 1)}
-          >
-            <AuthProvider>
-              <ExploreFilterStateProvider>
-                <Toaster richColors />
-                <App key={key} />
-              </ExploreFilterStateProvider>
-            </AuthProvider>
-          </ErrorBoundary>
-        </DarkModeProvider>
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <DarkModeProvider>
+            <ErrorBoundary
+              FallbackComponent={ErrorPage}
+              onReset={() => setKey(key + 1)}
+            >
+              <AuthProvider>
+                <ExploreFilterStateProvider>
+                  <Toaster richColors />
+                  <App key={key} />
+                </ExploreFilterStateProvider>
+              </AuthProvider>
+            </ErrorBoundary>
+          </DarkModeProvider>
+        </BrowserRouter>
+      </HelmetProvider>
     </React.StrictMode>
   );
 };

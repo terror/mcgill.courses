@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
 import { ExternalLink } from 'react-feather';
+import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -69,6 +70,26 @@ export const Instructor = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>{instructor.name} - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/explore`} />
+        <meta
+          property='og:title'
+          content={`${instructor.name}- mcgill.courses`}
+        />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/explore`}
+        />
+        <meta
+          property='twitter:title'
+          content={`${instructor.name}- mcgill.courses`}
+        />
+      </Helmet>
+
       <div className='mx-auto mt-10 flex max-w-5xl overflow-hidden md:mt-0'>
         <div className='flex w-screen flex-row rounded-md bg-slate-50 p-2 dark:bg-neutral-800 md:mt-10'>
           <div className='flex flex-1 flex-col md:flex-row'>

@@ -1,4 +1,5 @@
 import { Disclosure } from '@headlessui/react';
+import { Helmet } from 'react-helmet-async';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
@@ -29,7 +30,7 @@ const QuestionsAnswers = ({ input }: QuestionsAnswersProps) => {
                 <IoIosArrowDown
                   className={`${
                     open ? 'rotate-180' : ''
-                  } h-5 w-5 text-gray-900 dark:text-gray-300`}
+                  } size-5 text-gray-900 dark:text-gray-300`}
                 />
               </Disclosure.Button>
               <Disclosure.Panel className='px-4 pb-2 pt-4 text-sm text-gray-700 dark:text-gray-200'>
@@ -168,6 +169,20 @@ export const About = () => {
   return (
     <Layout>
       <div className='m-auto mb-10 flex max-w-[800px] flex-col px-2 sm:px-8 md:px-16'>
+        <Helmet>
+          <title>About - mcgill.courses</title>
+
+          <meta property='og:type' content='website' />
+          <meta property='og:url' content={`https://mcgill.courses/about`} />
+          <meta property='og:title' content={`About - mcgill.courses`} />
+
+          <meta
+            property='twitter:url'
+            content={`https://mcgill.courses/about`}
+          />
+          <meta property='twitter:title' content={`About - mcgill.courses`} />
+        </Helmet>
+
         <Title>Welcome to mcgill.courses!</Title>
         <Paragraph className='leading-loose text-gray-700 dark:text-gray-200'>
           <Link className='underline' to='/'>
