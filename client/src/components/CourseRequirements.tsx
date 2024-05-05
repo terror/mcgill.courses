@@ -99,7 +99,9 @@ const ReqsBlock = ({ title, text, transform }: ReqsBlockProps) => {
       </h2>
       {text ? (
         <div className='text-gray-500 dark:text-gray-400'>
-          {transform == 'html' ? transformHtml(text) : transformText(text)}
+          {transform == 'html'
+            ? transformHtml(punctuate(text))
+            : transformText(punctuate(text))}
         </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
