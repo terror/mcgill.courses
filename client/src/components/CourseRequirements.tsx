@@ -12,9 +12,12 @@ import { CourseGraph } from './CourseGraph';
 type ReqsBlockProps = {
   title: string;
   text?: string;
+  transform: Transform;
 };
 
-const transform = (html: string): React.ReactNode[] => {
+type Transform = 'text' | 'html';
+
+const transformHtml = (html: string): React.ReactNode[] => {
   const text = html.substring(html.indexOf(':') + 1);
 
   const doc = new DOMParser().parseFromString(
@@ -59,7 +62,36 @@ const transform = (html: string): React.ReactNode[] => {
   });
 };
 
-const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
+const transformText = (text: string): React.ReactNode[] => {
+  const courseCodeRegex = /\b([A-Z]{4})\s(\d{3})\b/g,
+    nodes = [];
+
+  let lastIndex = 0;
+
+  text.replace(courseCodeRegex, (match, code, number, index) => {
+    if (index > lastIndex) nodes.push(text.substring(lastIndex, index));
+
+    nodes.push(
+      <Link
+        key={`course-${index}`}
+        to={`/course/${code}-${number}`}
+        className='text-gray-800 hover:underline dark:text-gray-200'
+      >
+        {`${code} ${number}`}
+      </Link>
+    );
+
+    lastIndex = index + match.length;
+
+    return match;
+  });
+
+  if (lastIndex < text.length) nodes.push(text.substring(lastIndex));
+
+  return nodes;
+};
+
+const ReqsBlock = ({ title, text, transform }: ReqsBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
@@ -67,7 +99,7 @@ const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
       </h2>
       {text ? (
         <div className='text-gray-500 dark:text-gray-400'>
-          {transform(text)}
+          {transform == 'html' ? transformHtml(text) : transformText(text)}
         </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
@@ -119,21 +151,18 @@ export const CourseRequirements = ({
           <ReqsBlock
             title='Prerequisites'
             text={requirements.prerequisitesText}
+            transform='html'
           />
           <ReqsBlock
             title='Corequisites'
             text={requirements.corequisitesText}
+            transform='html'
           />
-          <div>
-            <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
-              Restrictions
-            </h2>
-            <p className='text-gray-500 dark:text-gray-400'>
-              {requirements.restrictions !== null
-                ? capitalize(punctuate(requirements.restrictions))
-                : 'This course has no restrictions.'}
-            </p>
-          </div>
+          <ReqsBlock
+            title='Restrictions'
+            text={requirements.restrictions}
+            transform='text'
+          />
         </div>
       ) : (
         <CourseGraph course={course} />
