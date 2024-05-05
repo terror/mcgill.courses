@@ -23,7 +23,7 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
   return (
     <div
       className={
-        'relative w-full rounded-md bg-slate-50 p-5 shadow-sm dark:bg-neutral-800'
+        'relative w-full rounded-md bg-slate-50 p-6 shadow-sm dark:bg-neutral-800'
       }
     >
       <h2 className='mb-2 mt-1 text-lg font-bold leading-none text-gray-700 dark:text-gray-200 md:text-xl'>
