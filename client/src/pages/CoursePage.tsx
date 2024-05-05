@@ -3,7 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import courseAverageData from '../assets/courseAveragesData.json';
 import { AddReviewForm } from '../components/AddReviewForm';
+import { CourseAverages } from '../components/CourseAverages';
 import { CourseInfo } from '../components/CourseInfo';
 import { CourseRequirements } from '../components/CourseRequirements';
 import { CourseReview } from '../components/CourseReview';
@@ -21,6 +23,7 @@ import type { Course } from '../model/Course';
 import { Interaction } from '../model/Interaction';
 import type { Requirements } from '../model/Requirements';
 import type { Review } from '../model/Review';
+import { TermAverage } from '../model/TermAverage';
 import { Loading } from './Loading';
 
 export const CoursePage = () => {
@@ -113,6 +116,10 @@ export const CoursePage = () => {
   const canReview = Boolean(
     user && !allReviews?.find((r) => r.userId === user?.id)
   );
+
+  const allCourseAverages: Record<string, TermAverage[]> =
+    courseAverageData as Record<string, TermAverage[]>;
+  const courseAverages: TermAverage[] = allCourseAverages[course._id];
 
   const handleSubmit = (successMessage: string) => {
     return (res: Response) => {
@@ -263,13 +270,23 @@ export const CoursePage = () => {
               </div>
             )}
           </div>
-          <div className='col-span-2'>
+
+          <div className='col-span-2 flex flex-col gap-5'>
             <CourseRequirements course={course} requirements={requirements} />
+            {courseAverages && courseAverages.length >= 1 && (
+              <CourseAverages course={course} averages={courseAverages} />
+            )}
           </div>
         </div>
         <div className='flex flex-col lg:hidden'>
           <div className='mb-4 flex'>
             <CourseRequirements course={course} requirements={requirements} />
+          </div>
+
+          <div className='mb-4 flex'>
+            {courseAverages && courseAverages.length >= 1 && (
+              <CourseAverages course={course} averages={courseAverages} />
+            )}
           </div>
           <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
