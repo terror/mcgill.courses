@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -42,6 +43,14 @@ export const Home = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>mcgill.courses</title>
+        <meta
+          name='description'
+          content='Explore thousands of course and professor reviews from McGill students.'
+        />
+      </Helmet>
+
       <div className='relative isolate px-6 pt-14 lg:px-8'>
         <div className='mx-auto max-w-2xl py-8'>
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'></div>
