@@ -9,12 +9,6 @@ import type { Course } from '../model/Course';
 import type { Requirements } from '../model/Requirements';
 import { CourseGraph } from './CourseGraph';
 
-type ReqsBlockProps = {
-  title: string;
-  text?: string;
-  transform: Transform;
-};
-
 type Transform = 'text' | 'html';
 
 const transformHtml = (html: string): React.ReactNode[] => {
@@ -63,21 +57,25 @@ const transformHtml = (html: string): React.ReactNode[] => {
 };
 
 const transformText = (text: string): React.ReactNode[] => {
-  const courseCodeRegex = /\b([A-Z]{4})\s(\d{3})\b/g,
-    nodes = [];
+  const nodes = [],
+    regex = /\b([A-Z]{4})\s(\d{3})([A-Za-z]\d?)?\b/g;
 
   let lastIndex = 0;
 
-  text.replace(courseCodeRegex, (match, code, number, index) => {
+  text.replace(regex, (match, code, number, level, index) => {
     if (index > lastIndex) nodes.push(text.substring(lastIndex, index));
+
+    const courseLink = level
+      ? `${code}-${number}${level}`
+      : `${code}-${number}`;
 
     nodes.push(
       <Link
         key={`course-${index}`}
-        to={`/course/${code}-${number}`}
+        to={`/course/${courseLink}`}
         className='text-gray-800 hover:underline dark:text-gray-200'
       >
-        {`${code} ${number}`}
+        {`${code} ${number}${level ? level : ''}`}
       </Link>
     );
 
@@ -91,7 +89,17 @@ const transformText = (text: string): React.ReactNode[] => {
   return nodes;
 };
 
-const ReqsBlock = ({ title, text, transform }: ReqsBlockProps) => {
+type RequirementBlockProps = {
+  title: string;
+  text?: string;
+  transform: Transform;
+};
+
+const RequirementBlock = ({
+  title,
+  text,
+  transform,
+}: RequirementBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
@@ -150,17 +158,17 @@ export const CourseRequirements = ({
       </button>
       {!showGraph ? (
         <div className='space-y-7 p-6'>
-          <ReqsBlock
+          <RequirementBlock
             title='Prerequisites'
             text={requirements.prerequisitesText}
             transform='html'
           />
-          <ReqsBlock
+          <RequirementBlock
             title='Corequisites'
             text={requirements.corequisitesText}
             transform='html'
           />
-          <ReqsBlock
+          <RequirementBlock
             title='Restrictions'
             text={requirements.restrictions}
             transform='text'
