@@ -14,7 +14,7 @@ locally.
 First, join the discord server to get access to the development environment
 variables:
 
-https://discord.gg/edfravxD
+[https://discord.gg/fSVSqfPHSV](https://discord.gg/fSVSqfPHSV)
 
 In `.env` within the root directory you'll have to set
 
