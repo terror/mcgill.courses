@@ -1,32 +1,30 @@
-import type { Course } from '../model/Course';
-import type { Instructor } from '../model/Instructor';
+import _ from 'lodash';
+
+import { Course } from '../model/Course';
+import { Instructor } from '../model/Instructor';
 import type { Schedule } from '../model/Schedule';
 
-export const uniqueTermInstructors = (course: Course) => {
-  const termInstructors = course.instructors.filter((i) =>
-    course.terms.includes(i.term)
+const COURSE_TERM_ORDER = ['Fall', 'Winter', 'Summer'];
+
+export const groupCurrentCourseTermInstructors = (course: Course) => {
+  const currentTerms = getCurrentTerms();
+
+  const currentInstructors = course.instructors.filter((i) =>
+    currentTerms.includes(i.term)
   );
-
-  const unique = [];
-  const filledTerms = new Set();
-
-  for (const instructor of termInstructors) {
-    if (!filledTerms.has(instructor.term)) {
-      unique.push(instructor);
-      filledTerms.add(instructor.term);
-    }
-  }
-
-  const order = ['Fall', 'Winter', 'Summer'];
+  const termGroups = _.groupBy(currentInstructors, (i: Instructor) => i.term);
 
   for (const term of course.terms) {
-    if (!filledTerms.has(term))
-      unique.push({ term, name: 'No Instructor Assigned' });
+    if (term in termGroups || !currentTerms.includes(term)) continue;
+    termGroups[term] = [];
   }
 
-  unique.sort((a, b) => order.indexOf(a.term) - order.indexOf(b.term));
+  const entries = Object.entries(termGroups);
 
-  return unique;
+  const indexOfTerm = (term: string) =>
+    COURSE_TERM_ORDER.indexOf(term.split(' ')[0]);
+
+  return entries.sort(([a], [b]) => indexOfTerm(a) - indexOfTerm(b));
 };
 
 export const getCurrentTerms = (): [string, string, string] => {
@@ -38,11 +36,6 @@ export const getCurrentTerms = (): [string, string, string] => {
     return [`Fall ${year}`, `Winter ${year + 1}`, `Summer ${year + 1}`];
 
   return [`Fall ${year - 1}`, `Winter ${year}`, `Summer ${year}`];
-};
-
-export const filterCurrentInstructors = (instructors: Instructor[]) => {
-  const currentTerm = getCurrentTerms();
-  return instructors.filter((i) => currentTerm.includes(i.term));
 };
 
 const TERM_ORDER = ['Winter', 'Summer', 'Fall'];
