@@ -16,7 +16,7 @@ export const groupCurrentCourseTermInstructors = (course: Course) => {
 
   for (const term of course.terms) {
     if (term in termGroups || !currentTerms.includes(term)) continue;
-    termGroups[term] = [];
+    termGroups[term] = [{ name: 'No Instructor Assigned', term }];
   }
 
   const entries = Object.entries(termGroups);

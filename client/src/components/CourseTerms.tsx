@@ -122,7 +122,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                           )}
                         >
                           <Highlight
-                            text={ins.name ?? 'No Instructor Assigned'}
+                            text={ins.name}
                             query={query || undefined}
                           />
                         </div>
