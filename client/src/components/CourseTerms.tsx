@@ -32,6 +32,22 @@ const seasonToIcon = (season: string, variant: 'small' | 'large') => {
   return icons[season.split(' ')[0].toLowerCase()];
 };
 
+type SeasonIconProps = {
+  variant: 'small' | 'large';
+  term: string;
+  season: string;
+};
+
+const SeasonIcon = ({ variant, term, season }: SeasonIconProps) => {
+  if (variant === 'large') {
+    <Tooltip text={term}>
+      <div>{seasonToIcon(season, variant)}</div>
+    </Tooltip>;
+  }
+
+  return <div>{seasonToIcon(season, variant)}</div>;
+};
+
 export const termColorMap: Record<string, string> = {
   fall: 'bg-red-100 text-red-900',
   winter: 'bg-sky-100 text-sky-900',
@@ -98,29 +114,23 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                 expandedState[i] ? 'rounded-xl' : 'rounded-full'
               )}
             >
-              <div className={twMerge('flex flex-col gap-y-1')}>
-                {(expandedState[i] ? instructors : instructors.slice(0, 1)).map(
-                  (ins) => (
+              {instructors.length > 0 ? (
+                <div className={twMerge('flex flex-col gap-y-1')}>
+                  {(expandedState[i]
+                    ? instructors
+                    : instructors.slice(0, 1)
+                  ).map((ins) => (
                     <Link
                       key={ins.name}
-                      className={twMerge(
-                        instructors.length === 0 ? 'pointer-events-none' : ''
-                      )}
                       to={`/instructor/${encodeURIComponent(ins.name)}`}
                     >
                       <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                        {variant === 'large' ? (
-                          <Tooltip text={term}>
-                            <div>{seasonToIcon(season, variant)}</div>
-                          </Tooltip>
-                        ) : (
-                          <div>{seasonToIcon(season, variant)}</div>
-                        )}
-                        <div
-                          className={twMerge(
-                            'pr-1 font-medium dark:text-gray-200'
-                          )}
-                        >
+                        <SeasonIcon
+                          term={term}
+                          season={season}
+                          variant={variant}
+                        />
+                        <div className='pr-1 font-medium dark:text-gray-200'>
                           <Highlight
                             text={ins.name}
                             query={query || undefined}
@@ -128,9 +138,16 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                         </div>
                       </div>
                     </Link>
-                  )
-                )}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                  <SeasonIcon term={term} season={season} variant={variant} />
+                  <div className={'pr-1 font-medium dark:text-gray-200'}>
+                    No Instructor Assigned
+                  </div>
+                </div>
+              )}
               {instructors.length > 1 && (
                 <span
                   className='cursor-pointer font-semibold dark:text-gray-200'
