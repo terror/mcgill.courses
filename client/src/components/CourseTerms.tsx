@@ -154,13 +154,15 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                   onClick={() => handleToggle(i)}
                 >
                   +{instructors.length - 1}
-                  <ChevronDown
-                    className={twMerge(
-                      'inline-block',
-                      expandedState[i] ? 'rotate-180' : 'rotate-0'
-                    )}
-                    size={16}
-                  />
+                  {variant === 'large' && (
+                    <ChevronDown
+                      className={twMerge(
+                        'inline-block',
+                        expandedState[i] ? 'rotate-180' : 'rotate-0'
+                      )}
+                      size={16}
+                    />
+                  )}
                 </span>
               )}
             </div>
