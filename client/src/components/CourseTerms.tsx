@@ -19,33 +19,29 @@ const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 18;
 };
 
-const seasonToIcon = (season: string, variant: 'small' | 'large') => {
-  type IconMap = { [key: string]: JSX.Element };
-  const size = variantToSize(variant);
+type SeasonIconProps = {
+  variant: 'small' | 'large';
+  term: string;
+};
 
-  const icons: IconMap = {
+const SeasonIcon = ({ variant, term }: SeasonIconProps) => {
+  const size = variantToSize(variant);
+  const season = term.split(' ')[0].toLowerCase();
+
+  const icons: Record<string, JSX.Element> = {
     fall: <FaLeaf size={size} color='brown' />,
     winter: <FaRegSnowflake size={size} color='skyblue' />,
     summer: <BsSun size={size} color='orange' />,
   };
+  const icon = icons[season];
 
-  return icons[season.split(' ')[0].toLowerCase()];
-};
-
-type SeasonIconProps = {
-  variant: 'small' | 'large';
-  term: string;
-  season: string;
-};
-
-const SeasonIcon = ({ variant, term, season }: SeasonIconProps) => {
   if (variant === 'large') {
     <Tooltip text={term}>
-      <div>{seasonToIcon(season, variant)}</div>
+      <div>{icon}</div>
     </Tooltip>;
   }
 
-  return <div>{seasonToIcon(season, variant)}</div>;
+  return <div>{icon}</div>;
 };
 
 export const termColorMap: Record<string, string> = {
@@ -125,11 +121,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                       to={`/instructor/${encodeURIComponent(ins.name)}`}
                     >
                       <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                        <SeasonIcon
-                          term={term}
-                          season={season}
-                          variant={variant}
-                        />
+                        <SeasonIcon term={term} variant={variant} />
                         <div className='pr-1 font-medium dark:text-gray-200'>
                           <Highlight
                             text={ins.name}
@@ -142,7 +134,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                 </div>
               ) : (
                 <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                  <SeasonIcon term={term} season={season} variant={variant} />
+                  <SeasonIcon term={term} variant={variant} />
                   <div className={'pr-1 font-medium dark:text-gray-200'}>
                     No Instructor Assigned
                   </div>
