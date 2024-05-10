@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
@@ -37,9 +37,9 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
         .map((average) => {
           const instructor = instructors[average.term];
           return (
-            <>
+            <Fragment key={average.term}>
               <div className='flex items-center'>
-                <p className='w-11/12 text-gray-500 dark:text-gray-400'>
+                <div className='w-11/12 text-gray-500 dark:text-gray-400'>
                   <div>
                     <div className='mb-0.5 text-sm'>{average.term}</div>
                     <div className='text-xs'>
@@ -55,13 +55,13 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
                       )}
                     </div>
                   </div>
-                </p>
-                <p className='font-medium text-gray-700 dark:text-gray-200'>
+                </div>
+                <div className='font-medium text-gray-700 dark:text-gray-200'>
                   {average.average}
-                </p>
+                </div>
               </div>
               <hr className='my-1 w-full border border-neutral-200 dark:border-neutral-700' />
-            </>
+            </Fragment>
           );
         })}
 

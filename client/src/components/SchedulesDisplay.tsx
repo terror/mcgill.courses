@@ -93,6 +93,7 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
     <div className='flex gap-1'>
       {['M', 'T', 'W', 'T', 'F'].map((day, i) => (
         <span
+          key={day + i}
           className={twMerge(
             'text-sm sm:text-base',
             dayNums.includes(i + 2)
@@ -128,15 +129,15 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
         </div>
       </td>
       <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
-        {block.timeblocks.map((tb) => (
-          <div>
+        {block.timeblocks.map((tb, i) => (
+          <div key={i}>
             {tb.startTime} - {tb.endTime}
           </div>
         ))}
       </td>
       <td className='p-2'>
-        {block.timeblocks.map((tb) => (
-          <TimeblockDays days={tb.days} />
+        {block.timeblocks.map((tb, i) => (
+          <TimeblockDays days={tb.days} key={i} />
         ))}
       </td>
     </tr>
@@ -209,9 +210,13 @@ export const SchedulesDisplay = ({
       </div>
       <div className='flex flex-col rounded-b-lg bg-slate-50 dark:bg-neutral-800 dark:text-gray-200'>
         <table>
-          {blocks.length <= 5 || showAll
-            ? blocks.map((s) => <ScheduleRow block={s} />)
-            : blocks.slice(0, 5).map((s) => <ScheduleRow block={s} />)}
+          <tbody>
+            {blocks.length <= 5 || showAll
+              ? blocks.map((s, i) => <ScheduleRow key={i} block={s} />)
+              : blocks
+                  .slice(0, 5)
+                  .map((s, i) => <ScheduleRow key={i} block={s} />)}
+          </tbody>
         </table>
         {blocks.length > 5 && (
           <div className='flex flex-row justify-center'>
@@ -223,7 +228,7 @@ export const SchedulesDisplay = ({
               <IoIosArrowDown
                 className={`${
                   showAll ? 'rotate-180' : ''
-                } mx-2 h-5 w-5 text-gray-900 dark:text-gray-300`}
+                } mx-2 size-5 text-gray-900 dark:text-gray-300`}
               />
             </button>
           </div>
