@@ -4,19 +4,31 @@ use super::*;
 pub(crate) struct GetCoursesParams {
   limit: Option<i64>,
   offset: Option<u64>,
+  with_course_count: Option<bool>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct GetCoursesPayload {
+  pub(crate) courses: Vec<Course>,
+  pub(crate) course_count: Option<u64>,
 }
 
 pub(crate) async fn get_courses(
   Query(params): Query<GetCoursesParams>,
-  AppState(state): AppState<State>,
+  AppState(db): AppState<Arc<Db>>,
   filter: Json<CourseFilter>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(
-    state
-      .db
+  Ok(Json(GetCoursesPayload {
+    courses: db
       .courses(params.limit, params.offset, Some(filter.0))
       .await?,
-  ))
+    course_count: if params.with_course_count.unwrap_or(false) {
+      Some(db.course_count().await?)
+    } else {
+      None
+    },
+  }))
 }
 
 #[derive(Debug, Deserialize)]

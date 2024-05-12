@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ import { Layout } from '../components/Layout';
 import { SearchBar } from '../components/SearchBar';
 import { Spinner } from '../components/Spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useExploreFilterState } from '../hooks/useExploreFilterState';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
@@ -57,17 +59,17 @@ export const Explore = () => {
   const currentTerms = getCurrentTerms();
 
   const [courses, setCourses] = useState<Course[] | undefined>(undefined);
+  const [courseCount, setCourseCount] = useState<number | undefined>(undefined);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(limit);
 
   const [query, setQuery] = useState<string>('');
   const [searchSelected, setSearchSelected] = useState<boolean>(false);
-  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<SortByType>('');
 
   const [darkMode] = useDarkMode();
+
+  const { selectedSubjects, selectedLevels, selectedTerms, sortBy } =
+    useExploreFilterState();
 
   const nullable = (arr: string[]) => (arr.length === 0 ? null : arr);
 
@@ -85,8 +87,11 @@ export const Explore = () => {
 
   useEffect(() => {
     repo
-      .getCourses(limit, 0, filters)
-      .then((data) => setCourses(data))
+      .getCourses(limit, 0, true, filters)
+      .then((data) => {
+        setCourses(data.courses);
+        setCourseCount(data.courseCount);
+      })
       .catch(() => {
         toast.error('Failed to fetch courses. Please try again later.');
       });
@@ -95,35 +100,58 @@ export const Explore = () => {
   }, [selectedSubjects, selectedLevels, selectedTerms, sortBy, query]);
 
   const fetchMore = async () => {
-    const batch = await repo.getCourses(limit, offset, filters);
+    const batch = await repo.getCourses(limit, offset, false, filters);
 
-    if (batch.length === 0) setHasMore(false);
+    if (batch.courses.length === 0) setHasMore(false);
     else {
-      setCourses(courses?.concat(batch));
+      setCourses(courses?.concat(batch.courses));
       setOffset(offset + limit);
     }
   };
 
   return (
     <Layout>
+      <Helmet>
+        <title>Explore - mcgill.courses</title>
+        <meta
+          name='description'
+          content='Check out information and reviews about all courses offered by McGill University.'
+        />
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/explore`} />
+        <meta property='og:title' content={`Explore - mcgill.courses`} />
+        <meta
+          property='og:description'
+          content='Check out information and reviews about all courses offered by McGill University.'
+        />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/explore`}
+        />
+        <meta property='twitter:title' content={`Explore - mcgill.courses`} />
+        <meta
+          property='twitter:description'
+          content='Check out information and reviews about all courses offered by McGill University.'
+        />
+      </Helmet>
+
       <div className='flex flex-col items-center py-8'>
-        <h1 className='mb-16 text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
-          Explore all courses
-        </h1>
+        <div className='mb-16'>
+          <h1 className='text-center text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+            Explore all courses
+          </h1>
+          <p className='mt-2 text-center text-sm text-gray-600 dark:text-gray-400 md:text-base'>
+            Check out information and reviews about all{' '}
+            {courseCount?.toLocaleString('en-us')} courses offered by McGill
+            University.
+          </p>
+        </div>
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
           <div className='lg:hidden'>
             <FilterToggle>
-              <ExploreFilter
-                selectedSubjects={selectedSubjects}
-                setSelectedSubjects={setSelectedSubjects}
-                selectedLevels={selectedLevels}
-                setSelectedLevels={setSelectedLevels}
-                selectedTerms={selectedTerms}
-                setSelectedTerms={setSelectedTerms}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                variant='mobile'
-              />
+              <ExploreFilter variant='mobile' />
             </FilterToggle>
           </div>
           <div className='lg:flex-1'>
@@ -195,17 +223,7 @@ export const Explore = () => {
             </InfiniteScroll>
           </div>
           <div className='m-2 mx-4 hidden lg:flex'>
-            <ExploreFilter
-              selectedSubjects={selectedSubjects}
-              setSelectedSubjects={setSelectedSubjects}
-              selectedLevels={selectedLevels}
-              setSelectedLevels={setSelectedLevels}
-              selectedTerms={selectedTerms}
-              setSelectedTerms={setSelectedTerms}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              variant='desktop'
-            />
+            <ExploreFilter variant='desktop' />
           </div>
         </div>
       </div>

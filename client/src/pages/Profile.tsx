@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { User } from 'react-feather';
+import { Helmet } from 'react-helmet-async';
 import { LuFileText } from 'react-icons/lu';
 import { VscBell } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
@@ -18,12 +19,17 @@ import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import type { Review } from '../model/Review';
 import type { Subscription } from '../model/Subscription';
+import { Loading } from './Loading';
 
 export const Profile = () => {
   const user = useAuth();
 
-  const [userReviews, setUserReviews] = useState<Review[]>();
-  const [userSubscriptions, setUserSubscriptions] = useState<Subscription[]>();
+  const [userReviews, setUserReviews] = useState<Review[] | undefined>(
+    undefined
+  );
+  const [userSubscriptions, setUserSubscriptions] = useState<
+    Subscription[] | undefined
+  >(undefined);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
@@ -34,8 +40,8 @@ export const Profile = () => {
     if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
 
     repo
-      .getReviews(user.id)
-      .then((data) => setUserReviews(data))
+      .getReviews({ userId: user.id, sorted: true })
+      .then((data) => setUserReviews(data.reviews))
       .catch(() =>
         toast.error(
           'An error occurred while fetching your reviews, please try again later.'
@@ -73,10 +79,23 @@ export const Profile = () => {
     }
   };
 
+  if (!userReviews || !userSubscriptions) return <Loading />;
+
   const tabs = ['Reviews', 'Subscriptions'];
 
   return (
     <Layout>
+      <Helmet>
+        <title>Profile - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/about`} />
+        <meta property='og:title' content={`Profile - mcgill.courses`} />
+
+        <meta property='twitter:url' content={`https://mcgill.courses/about`} />
+        <meta property='twitter:title' content={`Profile - mcgill.courses`} />
+      </Helmet>
+
       <div className='mx-auto max-w-2xl'>
         <JumpToTopButton />
         <div className='flex w-full justify-center'>
@@ -137,42 +156,36 @@ export const Profile = () => {
           </Tab.List>
           <Tab.Panels>
             <Tab.Panel>
-              <div className='m-4'>
+              <div className='m-4 flex flex-col gap-4'>
                 {userReviews === undefined ? (
                   <div className='mt-2 text-center'>
                     <Spinner />
                   </div>
                 ) : userReviews.length ? (
-                  userReviews
-                    .sort(
-                      (a, b) =>
-                        parseInt(a.timestamp.$date.$numberLong, 10) -
-                        parseInt(b.timestamp.$date.$numberLong, 10)
-                    )
-                    .map((review, i) => {
-                      return (
-                        <div key={i}>
-                          <div className='flex'>
-                            <Link
-                              to={`/course/${courseIdToUrlParam(
-                                review.courseId
-                              )}`}
-                              className='text-xl font-bold text-gray-700 duration-200 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500'
-                            >
-                              {spliceCourseCode(review.courseId, ' ')}
-                            </Link>
-                          </div>
-                          <div className='my-2 rounded-lg border-gray-800 duration-300 ease-in-out'>
-                            <CourseReview
-                              canModify={false}
-                              handleDelete={() => null}
-                              openEditReview={() => null}
-                              review={review}
-                            />
-                          </div>
+                  userReviews.map((review, i) => {
+                    return (
+                      <div key={i}>
+                        <div className='flex'>
+                          <Link
+                            to={`/course/${courseIdToUrlParam(
+                              review.courseId
+                            )}`}
+                            className='text-xl font-semibold text-gray-800 hover:underline dark:text-gray-200'
+                          >
+                            {spliceCourseCode(review.courseId, ' ')}
+                          </Link>
                         </div>
-                      );
-                    })
+                        <div className='my-2 rounded-lg border-gray-800 duration-300 ease-in-out'>
+                          <CourseReview
+                            canModify={false}
+                            handleDelete={() => null}
+                            openEditReview={() => null}
+                            review={review}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })
                 ) : (
                   <div className='flex w-full items-center justify-center gap-x-2'>
                     <LuFileText

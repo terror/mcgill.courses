@@ -1,5 +1,7 @@
 use {
   bson::{doc, Bson, DateTime},
+  combine::Combine,
+  derivative::Derivative,
   serde::{Deserialize, Serialize},
   std::{
     fmt::{self, Display, Formatter},
@@ -17,6 +19,7 @@ mod interaction;
 mod notification;
 mod requirements;
 mod review;
+mod review_filter;
 mod schedule;
 mod search_results;
 mod subscription;
@@ -32,6 +35,7 @@ pub use crate::{
   notification::Notification,
   requirements::{Operator, ReqNode, Requirement, Requirements},
   review::Review,
+  review_filter::ReviewFilter,
   schedule::*,
   search_results::SearchResults,
   subscription::Subscription,

@@ -70,7 +70,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
             leaveFrom='translate-x-0'
             leaveTo='translate-x-full'
           >
-            <div className='h-screen w-full overflow-y-auto bg-white p-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+            <div className='z-[999] h-screen w-full overflow-y-auto bg-white p-6 dark:bg-neutral-800 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
                   <Link to='/'>
@@ -91,7 +91,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                   onClick={() => onClose(false)}
                 >
                   <span className='sr-only'>Close menu</span>
-                  <XMarkIcon className='h-6 w-6' aria-hidden='true' />
+                  <XMarkIcon className='size-6' aria-hidden='true' />
                 </button>
               </div>
               <div className='mt-6 flow-root'>

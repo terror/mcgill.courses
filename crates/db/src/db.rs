@@ -30,7 +30,7 @@ impl Db {
 
     client
       .database(db_name)
-      .run_command(doc! {"ping": 1}, None)
+      .run_command(doc! { "ping": 1 }, None)
       .await?;
 
     info!("Connected to MongoDB.");
@@ -55,8 +55,7 @@ impl Db {
     offset: Option<u64>,
     filter: Option<CourseFilter>,
   ) -> Result<Vec<Course>> {
-    let mut document = Document::new();
-    let mut sort_document = Document::new();
+    let (mut document, mut sort_document) = (Document::new(), Document::new());
 
     if let Some(filter) = filter {
       let CourseFilter {
@@ -162,6 +161,16 @@ impl Db {
     )
   }
 
+  pub async fn course_count(&self) -> Result<u64> {
+    Ok(
+      self
+        .database
+        .collection::<Course>(Self::COURSE_COLLECTION)
+        .count_documents(None, None)
+        .await?,
+    )
+  }
+
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
       courses: self
@@ -242,7 +251,7 @@ impl Db {
             "_id": &review.course_id
           },
           UpdateModifications::Document(doc! {
-            "$inc": { "reviewCount": 1},
+            "$inc": { "reviewCount": 1 },
             "$set": {
               "avgRating": avg_rating,
               "avgDifficulty": avg_difficulty,
@@ -337,7 +346,7 @@ impl Db {
             "_id": &review.course_id
           },
           UpdateModifications::Document(doc! {
-            "$inc": { "reviewCount": -1},
+            "$inc": { "reviewCount": -1 },
             "$set": {
               "avgRating": avg_rating,
               "avgDifficulty": avg_difficulty,
@@ -539,7 +548,7 @@ impl Db {
             },
             doc! {
               "$inc": {
-                "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1}
+                "likes": match i.kind { InteractionKind::Like => -1, InteractionKind::Dislike => 1 }
               }
             },
             None,
@@ -926,7 +935,7 @@ impl Db {
                 "prerequisites": course.prerequisites,
                 "prerequisitesText": course.prerequisites_text,
                 "restrictions": course.restrictions,
-                "schedule": course.schedule.combine_opt(found.schedule),
+                "schedule": course.schedule,
                 "subject": course.subject,
                 "terms": course.terms.combine(found.terms),
                 "title": course.title.clone(),
@@ -1064,16 +1073,69 @@ impl Db {
     self.find_instructor(doc! { "name": name }).await
   }
 
-  #[cfg(test)]
-  async fn reviews(&self) -> Result<Vec<Review>> {
+  pub async fn reviews(
+    &self,
+    limit: Option<i64>,
+    offset: Option<u64>,
+    filter: Option<ReviewFilter>,
+  ) -> Result<Vec<Review>> {
+    let (mut document, mut sort_document) = (Document::new(), Document::new());
+
+    if let Some(filter) = filter {
+      let ReviewFilter {
+        course_id,
+        instructor_name,
+        sorted,
+        user_id,
+      } = filter;
+
+      if let Some(course_id) = course_id {
+        document.insert("courseId", course_id);
+      }
+
+      if let Some(user_id) = user_id {
+        document.insert("userId", user_id);
+      }
+
+      if let Some(instructor_name) = instructor_name {
+        document.insert(
+          "instructors",
+          doc! { "instructors": { "$in": vec![instructor_name] } },
+        );
+      }
+
+      if sorted.unwrap_or(false) {
+        sort_document.insert("timestamp", -1);
+      }
+    }
+
     Ok(
       self
         .database
         .collection::<Review>(Self::REVIEW_COLLECTION)
-        .find(None, None)
+        .find(
+          (!document.is_empty()).then_some(document),
+          FindOptions::builder()
+            .sort((!sort_document.is_empty()).then_some(sort_document))
+            .skip(offset)
+            .limit(limit)
+            .build(),
+        )
         .await?
         .try_collect::<Vec<Review>>()
         .await?,
+    )
+  }
+
+  pub async fn unique_user_count(&self) -> Result<u64> {
+    Ok(
+      self
+        .database
+        .collection::<Review>(Self::REVIEW_COLLECTION)
+        .distinct("userId", None, None)
+        .await?
+        .len()
+        .try_into()?,
     )
   }
 
@@ -1598,8 +1660,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     let course = db.find_course_by_id("MATH240").await.unwrap().unwrap();
     assert!(course.avg_rating - 4.0 < 0.001);
@@ -1655,8 +1717,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     assert_eq!(
       db.find_reviews_by_course_id("MATH240").await.unwrap(),
@@ -1724,8 +1786,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     assert_eq!(
       db.find_reviews_by_user_id("2").await.unwrap(),
@@ -1788,8 +1850,8 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 3);
-    assert_eq!(db.reviews().await.unwrap(), reviews);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+    assert_eq!(db.reviews(None, None, None).await.unwrap(), reviews);
 
     assert_eq!(
       db.find_reviews_by_instructor_name("test").await.unwrap(),
@@ -1837,7 +1899,7 @@ mod tests {
       db.add_review(review.clone()).await.unwrap();
     }
 
-    assert_eq!(db.reviews().await.unwrap().len(), 1);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -2168,7 +2230,7 @@ mod tests {
 
     db.add_review(review.clone()).await.unwrap();
 
-    assert_eq!(db.reviews().await.unwrap().len(), 1);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
 
     db.add_interaction(Interaction {
       kind: InteractionKind::Like,
@@ -2469,5 +2531,79 @@ mod tests {
         );
       }
     }
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn unique_user_count() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    db.add_course(Course {
+      id: "COMP202".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 0);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 0);
+
+    db.add_review(Review {
+      content: "foo".into(),
+      course_id: "MATH240".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 1);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
+
+    db.add_review(Review {
+      content: "bar".into(),
+      course_id: "COMP202".into(),
+      user_id: "2".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 2);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 2);
+
+    db.add_review(Review {
+      content: "bar".into(),
+      course_id: "COMP202".into(),
+      user_id: "1".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 2);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 3);
+  }
+
+  #[tokio::test(flavor = "multi_thread")]
+  async fn course_count() {
+    let TestContext { db, .. } = TestContext::new().await;
+
+    assert_eq!(db.course_count().await.unwrap(), 0);
+
+    db.add_course(Course {
+      id: "MATH240".into(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.course_count().await.unwrap(), 1);
   }
 }

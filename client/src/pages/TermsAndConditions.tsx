@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async';
+
 import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
@@ -7,6 +9,23 @@ export const TermsAndConditions = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Terms and Conditions - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/tos`} />
+        <meta
+          property='og:title'
+          content={`Terms and Conditions - mcgill.courses`}
+        />
+
+        <meta property='twitter:url' content={`https://mcgill.courses/tos`} />
+        <meta
+          property='twitter:title'
+          content={`Terms and Conditions - mcgill.courses`}
+        />
+      </Helmet>
+
       <div className='m-auto my-10 flex max-w-[800px] flex-col gap-9 px-2'>
         <h1 className={h1}>Terms and Conditions</h1>
 
@@ -82,7 +101,15 @@ export const TermsAndConditions = () => {
             We may update our Terms and Conditions from time to time. Thus, you
             are advised to review this page periodically for any changes. If you
             have any questions or suggestions about our Terms and Conditions, do
-            not hesitate to contact us at admin[at]mcgill.courses.
+            not hesitate to contact us on{' '}
+            <span className='underline'>
+              <a href='https://discord.gg/d67aYpC7'>Discord</a>
+            </span>{' '}
+            or at{' '}
+            <span className='underline'>
+              <a href='mailto:admin@mcgill.courses'>admin@mcgill.courses</a>
+            </span>
+            .
           </Paragraph>
         </div>
       </div>

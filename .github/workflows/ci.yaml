@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Download actionlint
         id: actionlint
@@ -36,10 +36,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9.0.6
 
       - name: Info
         run: |
@@ -74,26 +74,24 @@ jobs:
       MS_REDIRECT_URI: ${{ secrets.MS_REDIRECT_URI }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install toolchain
         id: toolchain
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           target: x86_64-unknown-linux-musl
-          override: true
           components: llvm-tools-preview
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
 
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
-          brew unlink mongodb-community@5.0
-          brew install mongodb-community@6.0
-          echo -e 'replication:\n  replSetName: rs0' >> /usr/local/etc/mongod.conf
-          brew services start mongodb-community@6.0
+          brew install mongodb-community@7.0
+          echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
+          brew services start mongodb-community@7.0
           mongosh --eval 'rs.initiate()'
 
       - name: Install grcov
@@ -119,24 +117,22 @@ jobs:
       MS_REDIRECT_URI: ${{ secrets.MS_REDIRECT_URI }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install rust toolchain components
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
-          override: true
           toolchain: stable
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
 
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
-          brew unlink mongodb-community@5.0
-          brew install mongodb-community@6.0
-          echo -e 'replication:\n  replSetName: rs0' >> /usr/local/etc/mongod.conf
-          brew services start mongodb-community@6.0
+          brew install mongodb-community@7.0
+          echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
+          brew services start mongodb-community@7.0
           mongosh --eval 'rs.initiate()'
 
       - name: Info

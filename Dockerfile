@@ -12,7 +12,7 @@ FROM client AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build -- --mode=production
 
-FROM rust:1.70-buster as server
+FROM rust:slim-buster as server
 
 WORKDIR /usr/src/app
 COPY . .
@@ -27,4 +27,4 @@ COPY --from=server /usr/src/app/seed seed
 COPY --from=server /usr/src/app/.well-known .well-known
 COPY --from=server /usr/src/app/target/release/server /usr/local/bin
 
-CMD server --source seed serve --asset-dir assets --db-name mcgill-courses
+CMD server --source seed serve --initialize --latest-courses --skip-reviews --asset-dir assets --db-name mcgill-courses

@@ -2,6 +2,7 @@ use {
   anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, Utc},
+  combine::Combine,
   futures::Future,
   futures::FutureExt,
   futures::{future::join_all, TryStreamExt},
@@ -10,8 +11,8 @@ use {
   log::{info, warn},
   model::{
     Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
-    Interaction, InteractionKind, Notification, Review, SearchResults,
-    Subscription,
+    Interaction, InteractionKind, Notification, Review, ReviewFilter,
+    SearchResults, Subscription,
   },
   mongodb::{
     bson::{doc, Document},
@@ -22,11 +23,8 @@ use {
   },
   mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
-  std::{collections::HashSet, env, fs, hash::Hash, path::PathBuf},
-  {
-    crate::combine::Combine, initializer::Initializer, seed::Seed,
-    str_ext::StrExt, utils::*,
-  },
+  std::{collections::HashSet, env, fs, path::PathBuf},
+  {initializer::Initializer, seed::Seed, str_ext::StrExt, utils::*},
 };
 
 #[cfg(test)]
@@ -40,7 +38,6 @@ use {
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
-mod combine;
 mod db;
 mod initializer;
 mod seed;

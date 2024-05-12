@@ -1,11 +1,11 @@
-import type { Course } from '../model/Course';
 import { GetCourseReviewsInteractionPayload } from '../model/GetCourseReviewsInteractionsPayload';
 import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
+import { GetCoursesPayload } from '../model/GetCoursesPayload';
 import type { GetInstructorPayload } from '../model/GetInstructorPayload';
 import type { GetInteractionsPayload } from '../model/GetInteractionsPayload';
+import { GetReviewsPayload } from '../model/GetReviewsPayload';
 import type { InteractionKind } from '../model/Interaction';
 import type { Notification } from '../model/Notification';
-import type { Review } from '../model/Review';
 import type { SearchResults } from '../model/SearchResults';
 import type { Subscription } from '../model/Subscription';
 import type { UserResponse } from '../model/User';
@@ -14,7 +14,26 @@ const prefix = '/api';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
+interface Params {
+  [key: string]: string | number | boolean | undefined;
+}
+
 const client = {
+  buildQuery(baseURL: string, params?: Params): string {
+    let query = baseURL;
+
+    if (params) {
+      const keys = Object.keys(params);
+
+      query += `?${keys
+        .filter((key) => params[key] !== undefined)
+        .map((key) => `${key}=${params[key]}`)
+        .join('&')}`;
+    }
+
+    return query;
+  },
+
   async get(endpoint: string, init?: RequestInit): Promise<Response> {
     return fetch(prefix + endpoint, init);
   },
@@ -93,8 +112,27 @@ export const repo = {
     });
   },
 
-  async getReviews(userId: string): Promise<Review[]> {
-    return client.deserialize<Review[]>('GET', `/reviews?user_id=${userId}`);
+  async getReviews(params?: {
+    courseId?: string;
+    instructorName?: string;
+    limit?: number;
+    offset?: number;
+    sorted?: boolean;
+    userId?: string;
+    withUserCount?: boolean;
+  }): Promise<GetReviewsPayload> {
+    return client.deserialize<GetReviewsPayload>(
+      'GET',
+      client.buildQuery('/reviews', {
+        course_id: params?.courseId,
+        instructor_name: params?.instructorName,
+        limit: params?.limit,
+        offset: params?.offset,
+        sorted: params?.sorted,
+        user_id: params?.userId,
+        with_user_count: params?.withUserCount,
+      })
+    );
   },
 
   async addReview(courseId: string, values: any): Promise<Response> {
@@ -222,11 +260,16 @@ export const repo = {
   async getCourses(
     limit: number,
     offset: number,
-    filters: any
-  ): Promise<Course[]> {
-    return client.deserialize<Course[]>(
+    withCourseCount?: boolean,
+    filters?: any
+  ): Promise<GetCoursesPayload> {
+    return client.deserialize<GetCoursesPayload>(
       'POST',
-      `/courses?limit=${limit}&offset=${offset}`,
+      client.buildQuery(`/courses`, {
+        limit,
+        offset,
+        with_course_count: withCourseCount,
+      }),
       {
         headers: {
           'Content-Type': 'application/json',

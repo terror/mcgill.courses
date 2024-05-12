@@ -1,3 +1,6 @@
+import { produce } from 'immer';
+import { useEffect, useState } from 'react';
+import { ChevronDown } from 'react-feather';
 import { BsSun } from 'react-icons/bs';
 import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { GoX } from 'react-icons/go';
@@ -5,9 +8,8 @@ import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import {
-  filterCurrentInstructors,
   getCurrentTerms,
-  uniqueTermInstructors,
+  groupCurrentCourseTermInstructors,
 } from '../lib/utils';
 import type { Course } from '../model/Course';
 import { Highlight } from './Highlight';
@@ -17,17 +19,29 @@ const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 18;
 };
 
-const termToIcon = (term: string, variant: 'small' | 'large') => {
-  type IconMap = { [key: string]: JSX.Element };
-  const size = variantToSize(variant);
+type SeasonIconProps = {
+  variant: 'small' | 'large';
+  term: string;
+};
 
-  const icons: IconMap = {
+const SeasonIcon = ({ variant, term }: SeasonIconProps) => {
+  const size = variantToSize(variant);
+  const season = term.split(' ')[0].toLowerCase();
+
+  const icons: Record<string, JSX.Element> = {
     fall: <FaLeaf size={size} color='brown' />,
     winter: <FaRegSnowflake size={size} color='skyblue' />,
     summer: <BsSun size={size} color='orange' />,
   };
+  const icon = icons[season];
 
-  return icons[term.split(' ')[0].toLowerCase()];
+  if (variant === 'large') {
+    <Tooltip text={term}>
+      <div>{icon}</div>
+    </Tooltip>;
+  }
+
+  return <div>{icon}</div>;
 };
 
 export const termColorMap: Record<string, string> = {
@@ -43,7 +57,23 @@ type CourseTermsProps = {
 };
 
 export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
-  const instructors = filterCurrentInstructors(uniqueTermInstructors(course));
+  const instructorGroups = groupCurrentCourseTermInstructors(course);
+
+  const initialExpandedState = () => instructorGroups.map(() => false);
+
+  const [expandedState, setExpandedState] = useState(initialExpandedState());
+
+  const handleToggle = (i: number) => {
+    setExpandedState(
+      produce(expandedState, (draft) => {
+        draft[i] = !draft[i];
+      })
+    );
+  };
+
+  useEffect(() => {
+    setExpandedState(initialExpandedState());
+  }, [course]);
 
   const currentlyOfferedTerms = course.terms.filter((c) =>
     getCurrentTerms().includes(c)
@@ -68,43 +98,67 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
 
   return (
     <div className='mr-auto flex flex-wrap gap-x-2'>
-      {instructors.map((instructor, i) => {
-        const term = instructor.term.split(' ')[0].toLowerCase();
+      {instructorGroups.map(([term, instructors], i) => {
+        const season = term.split(' ')[0].toLowerCase();
         return (
-          <Link
-            key={i}
-            className={twMerge(
-              instructor.name === 'No Instructor Assigned'
-                ? 'pointer-events-none'
-                : ''
-            )}
-            to={`/instructor/${encodeURIComponent(instructor.name)}`}
-          >
+          <div className='relative' key={term}>
             <div
-              key={i}
               className={twMerge(
-                'relative my-1.5 rounded-full text-sm dark:bg-neutral-700',
-                variant === 'small' ? 'px-2 py-1' : 'max-w-fit p-1',
-                termColorMap[term]
+                'my-1.5 flex text-sm dark:bg-neutral-700',
+                variant === 'small' ? 'px-2 py-1' : 'max-w-fit px-2 py-1',
+                termColorMap[season],
+                expandedState[i] ? 'rounded-xl' : 'rounded-full'
               )}
             >
-              <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                {variant === 'large' ? (
-                  <Tooltip text={instructor.term}>
-                    <div>{termToIcon(instructor.term, variant)}</div>
-                  </Tooltip>
-                ) : (
-                  <div>{termToIcon(instructor.term, variant)}</div>
-                )}
-                <div className={twMerge('pr-1 font-medium dark:text-gray-200')}>
-                  <Highlight
-                    text={instructor.name}
-                    query={query || undefined}
-                  />
+              {instructors.length > 0 ? (
+                <div className={twMerge('flex flex-col gap-y-1')}>
+                  {(expandedState[i]
+                    ? instructors
+                    : instructors.slice(0, 1)
+                  ).map((ins) => (
+                    <Link
+                      key={ins.name}
+                      to={`/instructor/${encodeURIComponent(ins.name)}`}
+                    >
+                      <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                        <SeasonIcon term={term} variant={variant} />
+                        <div className='pr-1 font-medium dark:text-gray-200'>
+                          <Highlight
+                            text={ins.name}
+                            query={query || undefined}
+                          />
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </div>
+              ) : (
+                <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                  <SeasonIcon term={term} variant={variant} />
+                  <div className={'pr-1 font-medium dark:text-gray-200'}>
+                    No Instructor Assigned
+                  </div>
+                </div>
+              )}
+              {instructors.length > 1 && (
+                <span
+                  className='cursor-pointer font-semibold dark:text-gray-200'
+                  onClick={() => handleToggle(i)}
+                >
+                  +{instructors.length - 1}
+                  {variant === 'large' && (
+                    <ChevronDown
+                      className={twMerge(
+                        'inline-block',
+                        expandedState[i] ? 'rotate-180' : 'rotate-0'
+                      )}
+                      size={16}
+                    />
+                  )}
+                </span>
+              )}
             </div>
-          </Link>
+          </div>
         );
       })}
     </div>

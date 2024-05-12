@@ -9,12 +9,9 @@ import type { Course } from '../model/Course';
 import type { Requirements } from '../model/Requirements';
 import { CourseGraph } from './CourseGraph';
 
-type ReqsBlockProps = {
-  title: string;
-  text?: string;
-};
+type Transform = 'text' | 'html';
 
-const transform = (html: string): React.ReactNode[] => {
+const transformHtml = (html: string): React.ReactNode[] => {
   const text = html.substring(html.indexOf(':') + 1);
 
   const doc = new DOMParser().parseFromString(
@@ -59,7 +56,50 @@ const transform = (html: string): React.ReactNode[] => {
   });
 };
 
-const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
+const transformText = (text: string): React.ReactNode[] => {
+  const nodes = [],
+    regex = /\b([A-Z]{4})\s(\d{3})([A-Za-z]\d?)?\b/g;
+
+  let lastIndex = 0;
+
+  text.replace(regex, (match, code, number, level, index) => {
+    if (index > lastIndex) nodes.push(text.substring(lastIndex, index));
+
+    const courseLink = level
+      ? `${code}-${number}${level}`
+      : `${code}-${number}`;
+
+    nodes.push(
+      <Link
+        key={`course-${index}`}
+        to={`/course/${courseLink}`}
+        className='text-gray-800 hover:underline dark:text-gray-200'
+      >
+        {`${code} ${number}${level ? level : ''}`}
+      </Link>
+    );
+
+    lastIndex = index + match.length;
+
+    return match;
+  });
+
+  if (lastIndex < text.length) nodes.push(text.substring(lastIndex));
+
+  return nodes;
+};
+
+type RequirementBlockProps = {
+  title: string;
+  text?: string;
+  transform: Transform;
+};
+
+const RequirementBlock = ({
+  title,
+  text,
+  transform,
+}: RequirementBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
@@ -67,7 +107,9 @@ const ReqsBlock = ({ title, text }: ReqsBlockProps) => {
       </h2>
       {text ? (
         <div className='text-gray-500 dark:text-gray-400'>
-          {transform(text)}
+          {transform == 'html'
+            ? transformHtml(text)
+            : transformText(capitalize(punctuate(text.trim())))}
         </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
@@ -116,24 +158,21 @@ export const CourseRequirements = ({
       </button>
       {!showGraph ? (
         <div className='space-y-7 p-6'>
-          <ReqsBlock
+          <RequirementBlock
             title='Prerequisites'
             text={requirements.prerequisitesText}
+            transform='html'
           />
-          <ReqsBlock
+          <RequirementBlock
             title='Corequisites'
             text={requirements.corequisitesText}
+            transform='html'
           />
-          <div>
-            <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
-              Restrictions
-            </h2>
-            <p className='text-gray-500 dark:text-gray-400'>
-              {requirements.restrictions !== null
-                ? capitalize(punctuate(requirements.restrictions))
-                : 'This course has no restrictions.'}
-            </p>
-          </div>
+          <RequirementBlock
+            title='Restrictions'
+            text={requirements.restrictions}
+            transform='text'
+          />
         </div>
       ) : (
         <CourseGraph course={course} />

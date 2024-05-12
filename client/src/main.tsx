@@ -4,6 +4,7 @@ import '@fontsource/inter/700.css';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
@@ -12,6 +13,7 @@ import './index.css';
 import { ErrorPage } from './pages/ErrorPage';
 import AuthProvider from './providers/AuthProvider';
 import { DarkModeProvider } from './providers/DarkModeProvider';
+import ExploreFilterStateProvider from './providers/ExploreFilterStateProvider';
 
 const Root = () => {
   // When an error occurs, we want all of the state in the app
@@ -24,19 +26,23 @@ const Root = () => {
 
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <DarkModeProvider>
-          <ErrorBoundary
-            FallbackComponent={ErrorPage}
-            onReset={() => setKey(key + 1)}
-          >
-            <AuthProvider>
-              <Toaster richColors />
-              <App key={key} />
-            </AuthProvider>
-          </ErrorBoundary>
-        </DarkModeProvider>
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <DarkModeProvider>
+            <ErrorBoundary
+              FallbackComponent={ErrorPage}
+              onReset={() => setKey(key + 1)}
+            >
+              <AuthProvider>
+                <ExploreFilterStateProvider>
+                  <Toaster richColors />
+                  <App key={key} />
+                </ExploreFilterStateProvider>
+              </AuthProvider>
+            </ErrorBoundary>
+          </DarkModeProvider>
+        </BrowserRouter>
+      </HelmetProvider>
     </React.StrictMode>
   );
 };

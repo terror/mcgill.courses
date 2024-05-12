@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async';
+
 import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
@@ -7,6 +9,23 @@ export const PrivacyPolicy = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Privacy Policy - mcgill.courses</title>
+
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content={`https://mcgill.courses/privacy`} />
+        <meta property='og:title' content={`Privacy Policy - mcgill.courses`} />
+
+        <meta
+          property='twitter:url'
+          content={`https://mcgill.courses/privacy`}
+        />
+        <meta
+          property='twitter:title'
+          content={`Privacy Policy - mcgill.courses`}
+        />
+      </Helmet>
+
       <div className='m-auto my-10 flex max-w-[800px] flex-col gap-9 px-2'>
         <h1 className={h1}>Privacy Policy</h1>
         <Paragraph>
@@ -56,7 +75,15 @@ export const PrivacyPolicy = () => {
           <h2 className={h2}>Contact Us</h2>
           <Paragraph>
             If you have any questions or suggestions about our Privacy Policy,
-            do not hesitate to contact us at admin@mcgill.courses.
+            do not hesitate to contact us at on{' '}
+            <span className='underline'>
+              <a href='https://discord.gg/d67aYpC7'>Discord</a>
+            </span>{' '}
+            or at{' '}
+            <span className='underline'>
+              <a href='mailto:admin@mcgill.courses'>admin@mcgill.courses</a>
+            </span>
+            .
           </Paragraph>
         </div>
       </div>
