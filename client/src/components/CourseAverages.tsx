@@ -1,14 +1,28 @@
-import { Fragment, useState } from 'react';
+import { produce } from 'immer';
+import _ from 'lodash';
+import { Fragment, useEffect, useState } from 'react';
+import { ChevronDown } from 'react-feather';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
 import { compareTerms } from '../lib/utils';
 import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import { TermAverage } from '../model/TermAverage';
 
-const makeInstructorsMap = (instructors: Instructor[]) =>
-  Object.fromEntries(instructors.map((i) => [i.term, i.name]));
+type InstructorLinkProps = {
+  instructor: Instructor;
+};
+
+const InstructorLink = ({ instructor }: InstructorLinkProps) => (
+  <Link
+    to={`/instructor/${encodeURIComponent(instructor.name)}`}
+    className='font-semibold hover:underline'
+  >
+    {instructor.name}
+  </Link>
+);
 
 type CourseAveragesProps = {
   course: Course;
@@ -18,7 +32,21 @@ type CourseAveragesProps = {
 export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
   const [showAll, setShowAll] = useState<boolean>(false);
 
-  const instructors = makeInstructorsMap(course.instructors);
+  const termInstructors = _.groupBy(course.instructors, (i) => i.term);
+
+  const initialExpandedState = () => _.mapValues(termInstructors, () => false);
+  const [expandedState, setExpandedState] = useState(initialExpandedState());
+
+  const handleToggle = (term: string) => {
+    setExpandedState(
+      produce(expandedState, (draft) => {
+        draft[term] = !draft[term];
+      })
+    );
+  };
+  useEffect(() => {
+    setExpandedState(initialExpandedState());
+  }, [course]);
 
   return (
     <div
@@ -35,21 +63,44 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
         .sort((a, b) => compareTerms(b.term, a.term))
         .slice(0, showAll ? averages.length : 6)
         .map((average) => {
-          const instructor = instructors[average.term];
+          const instructors = termInstructors[average.term];
           return (
             <Fragment key={average.term}>
               <div className='flex items-center'>
                 <div className='w-11/12 text-gray-500 dark:text-gray-400'>
                   <div>
                     <div className='mb-0.5 text-sm'>{average.term}</div>
-                    <div className='text-xs'>
-                      {instructor ? (
-                        <Link
-                          to={`/instructor/${encodeURIComponent(instructor ?? '')}`}
-                          className='font-semibold hover:underline'
-                        >
-                          {instructors[average.term]}
-                        </Link>
+                    <div className='flex text-xs'>
+                      {instructors ? (
+                        <div>
+                          <InstructorLink instructor={instructors[0]} />
+                          {instructors.length > 1 && (
+                            <span
+                              className='ml-1 cursor-pointer font-semibold dark:text-gray-200'
+                              onClick={() => handleToggle(average.term)}
+                            >
+                              +{instructors.length - 1}
+                              <ChevronDown
+                                className={twMerge(
+                                  'inline-block',
+                                  expandedState[average.term]
+                                    ? 'rotate-180'
+                                    : 'rotate-0'
+                                )}
+                                size={16}
+                              />
+                            </span>
+                          )}
+                          <div className='flex flex-col gap-y-0.5'>
+                            {expandedState[average.term] && (
+                              <>
+                                {instructors.slice(1).map((ins) => (
+                                  <InstructorLink instructor={ins} />
+                                ))}
+                              </>
+                            )}
+                          </div>
+                        </div>
                       ) : (
                         <div>Instructor Unknown</div>
                       )}

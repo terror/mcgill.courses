@@ -111,7 +111,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
               )}
             >
               {instructors.length > 0 ? (
-                <div className={twMerge('flex flex-col gap-y-1')}>
+                <div className='flex flex-col gap-y-1'>
                   {(expandedState[i]
                     ? instructors
                     : instructors.slice(0, 1)
