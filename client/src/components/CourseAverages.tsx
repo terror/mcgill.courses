@@ -46,6 +46,7 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
   };
   useEffect(() => {
     setExpandedState(initialExpandedState());
+    setShowAll(false);
   }, [course]);
 
   return (
