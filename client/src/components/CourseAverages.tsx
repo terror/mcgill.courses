@@ -83,7 +83,7 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
                               +{instructors.length - 1}
                               <ChevronDown
                                 className={twMerge(
-                                  'inline-block',
+                                  'ml-1 inline-block',
                                   expandedState[average.term]
                                     ? 'rotate-180'
                                     : 'rotate-0'
