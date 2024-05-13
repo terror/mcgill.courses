@@ -111,7 +111,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
               )}
             >
               {instructors.length > 0 ? (
-                <div className={twMerge('flex flex-col gap-y-1')}>
+                <div className='flex flex-col gap-y-1'>
                   {(expandedState[i]
                     ? instructors
                     : instructors.slice(0, 1)
@@ -149,7 +149,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                   {variant === 'large' && (
                     <ChevronDown
                       className={twMerge(
-                        'inline-block',
+                        'ml-1 inline-block',
                         expandedState[i] ? 'rotate-180' : 'rotate-0'
                       )}
                       size={16}
