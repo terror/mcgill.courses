@@ -19,17 +19,29 @@ const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 18;
 };
 
-const seasonToIcon = (season: string, variant: 'small' | 'large') => {
-  type IconMap = { [key: string]: JSX.Element };
-  const size = variantToSize(variant);
+type SeasonIconProps = {
+  variant: 'small' | 'large';
+  term: string;
+};
 
-  const icons: IconMap = {
+const SeasonIcon = ({ variant, term }: SeasonIconProps) => {
+  const size = variantToSize(variant);
+  const season = term.split(' ')[0].toLowerCase();
+
+  const icons: Record<string, JSX.Element> = {
     fall: <FaLeaf size={size} color='brown' />,
     winter: <FaRegSnowflake size={size} color='skyblue' />,
     summer: <BsSun size={size} color='orange' />,
   };
+  const icon = icons[season];
 
-  return icons[season.split(' ')[0].toLowerCase()];
+  if (variant === 'large') {
+    <Tooltip text={term}>
+      <div>{icon}</div>
+    </Tooltip>;
+  }
+
+  return <div>{icon}</div>;
 };
 
 export const termColorMap: Record<string, string> = {
@@ -98,29 +110,19 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                 expandedState[i] ? 'rounded-xl' : 'rounded-full'
               )}
             >
-              <div className={twMerge('flex flex-col gap-y-1')}>
-                {(expandedState[i] ? instructors : instructors.slice(0, 1)).map(
-                  (ins) => (
+              {instructors.length > 0 ? (
+                <div className='flex flex-col gap-y-1'>
+                  {(expandedState[i]
+                    ? instructors
+                    : instructors.slice(0, 1)
+                  ).map((ins) => (
                     <Link
                       key={ins.name}
-                      className={twMerge(
-                        instructors.length === 0 ? 'pointer-events-none' : ''
-                      )}
                       to={`/instructor/${encodeURIComponent(ins.name)}`}
                     >
                       <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                        {variant === 'large' ? (
-                          <Tooltip text={term}>
-                            <div>{seasonToIcon(season, variant)}</div>
-                          </Tooltip>
-                        ) : (
-                          <div>{seasonToIcon(season, variant)}</div>
-                        )}
-                        <div
-                          className={twMerge(
-                            'pr-1 font-medium dark:text-gray-200'
-                          )}
-                        >
+                        <SeasonIcon term={term} variant={variant} />
+                        <div className='pr-1 font-medium dark:text-gray-200'>
                           <Highlight
                             text={ins.name}
                             query={query || undefined}
@@ -128,22 +130,31 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                         </div>
                       </div>
                     </Link>
-                  )
-                )}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                  <SeasonIcon term={term} variant={variant} />
+                  <div className={'pr-1 font-medium dark:text-gray-200'}>
+                    No Instructor Assigned
+                  </div>
+                </div>
+              )}
               {instructors.length > 1 && (
                 <span
                   className='cursor-pointer font-semibold dark:text-gray-200'
                   onClick={() => handleToggle(i)}
                 >
                   +{instructors.length - 1}
-                  <ChevronDown
-                    className={twMerge(
-                      'inline-block',
-                      expandedState[i] ? 'rotate-180' : 'rotate-0'
-                    )}
-                    size={16}
-                  />
+                  {variant === 'large' && (
+                    <ChevronDown
+                      className={twMerge(
+                        'ml-1 inline-block',
+                        expandedState[i] ? 'rotate-180' : 'rotate-0'
+                      )}
+                      size={16}
+                    />
+                  )}
                 </span>
               )}
             </div>
