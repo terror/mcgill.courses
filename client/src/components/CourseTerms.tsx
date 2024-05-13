@@ -149,7 +149,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
                   {variant === 'large' && (
                     <ChevronDown
                       className={twMerge(
-                        'inline-block',
+                        'ml-1 inline-block',
                         expandedState[i] ? 'rotate-180' : 'rotate-0'
                       )}
                       size={16}
