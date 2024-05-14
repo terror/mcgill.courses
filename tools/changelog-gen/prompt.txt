@@ -7,5 +7,5 @@ Examples:
 - Fix issue with overflowing text in long paragraphs.
 - Update dependencies to improve performance and security.
 
-Be sure not to mention 'This pull request', be straight to the point and try
+Be sure not to mention 'This pull request' or anything similar, be straight to the point and try
 to be as concise and as easy to understand for non-technical users as possible.

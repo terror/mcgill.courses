@@ -11,7 +11,7 @@ use {
   octocrab::{models, params},
   serde::{Deserialize, Serialize},
   std::{
-    collections::{HashMap, HashSet},
+    collections::HashMap,
     fmt::Display,
     fs::{self, File},
     path::PathBuf,
@@ -19,13 +19,16 @@ use {
   },
 };
 
+const BASE_URL: &str = "https://github.com";
+
 #[derive(Debug)]
 struct PullRequest<'a> {
   title: Option<&'a str>,
   description: Option<&'a str>,
   number: u64,
-  url: &'a str,
   merged_at: Option<DateTime<Utc>>,
+  user: &'a str,
+  repository: &'a str,
 }
 
 impl Display for PullRequest<'_> {
@@ -88,26 +91,38 @@ impl PullRequest<'_> {
 
     Ok(Some(summary))
   }
+
+  fn url(self) -> Result<String> {
+    Ok(format!(
+      "{}/{}/{}/pull/{}",
+      BASE_URL, self.user, self.repository, self.number
+    ))
+  }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, Hash, PartialEq)]
-struct Item<'a> {
+struct Item {
   number: u64,
   summary: Option<String>,
-  url: &'a str,
+  url: String,
+  merged_at: DateTime<Utc>,
 }
 
-impl Item<'_> {
-  async fn try_from(pull_request: PullRequest<'_>) -> Result<Item> {
+impl Item {
+  async fn try_from(
+    pull_request: PullRequest<'_>,
+    merged_at: DateTime<Utc>,
+  ) -> Result<Item> {
     Ok(Item {
       number: pull_request.number,
       summary: pull_request.summary().await?,
-      url: pull_request.url,
+      url: pull_request.url()?,
+      merged_at,
     })
   }
 }
 
-type Entry<'a> = HashMap<String, HashSet<Item<'a>>>;
+type Entry = HashMap<String, Vec<Item>>;
 
 #[derive(Parser)]
 struct Arguments {
@@ -115,6 +130,8 @@ struct Arguments {
   output: PathBuf,
   #[clap(long)]
   regenerate: Vec<u64>,
+  #[clap(long, default_value = "false")]
+  regenerate_all: bool,
   #[clap(long, default_value = "mcgill.courses")]
   repo: String,
   #[clap(long, default_value = "terror")]
@@ -122,11 +139,11 @@ struct Arguments {
 }
 
 impl Arguments {
-  async fn run(self) -> Result {
+  async fn run(&self) -> Result {
     let client = octocrab::instance();
 
     let page = client
-      .pulls(self.user, self.repo)
+      .pulls(&self.user, &self.repo)
       .list()
       .state(params::State::All)
       .per_page(50)
@@ -160,8 +177,9 @@ impl Arguments {
         title: pull_request.title.as_deref(),
         description: pull_request.body.as_deref(),
         number: pull_request.number,
-        url: pull_request.url.as_str(),
         merged_at: pull_request.merged_at,
+        user: &self.user,
+        repository: &self.repo,
       })
       .collect::<Vec<_>>();
 
@@ -172,31 +190,35 @@ impl Arguments {
         let month = merged_at.format("%B %Y").to_string();
 
         if let Some(item) = existing_items.get(&pull_request.number) {
-          if self.regenerate.contains(&pull_request.number) {
+          if self.regenerate_all
+            || self.regenerate.contains(&pull_request.number)
+          {
             grouped
               .entry(month)
-              .or_insert_with(HashSet::new)
-              .insert(Item::try_from(pull_request).await?);
+              .or_insert_with(Vec::new)
+              .push(Item::try_from(pull_request, merged_at).await?);
           } else {
             grouped
               .entry(month)
-              .or_insert_with(HashSet::new)
-              .insert(item.clone());
+              .or_insert_with(Vec::new)
+              .push(item.clone());
           }
-
-          continue;
+        } else {
+          grouped
+            .entry(month)
+            .or_insert_with(Vec::new)
+            .push(Item::try_from(pull_request, merged_at).await?);
         }
-
-        grouped
-          .entry(month)
-          .or_insert_with(HashSet::new)
-          .insert(Item::try_from(pull_request).await?);
       }
+    }
+
+    for items in grouped.values_mut() {
+      items.sort_by(|a, b| b.merged_at.cmp(&a.merged_at));
     }
 
     info!("Writing to {}", self.output.display());
 
-    fs::write(self.output, serde_json::to_string_pretty(&grouped)?)?;
+    fs::write(&self.output, serde_json::to_string_pretty(&grouped)?)?;
 
     Ok(())
   }
