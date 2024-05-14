@@ -195,18 +195,15 @@ impl Arguments {
           {
             grouped
               .entry(month)
-              .or_insert_with(Vec::new)
+              .or_default()
               .push(Item::try_from(pull_request, merged_at).await?);
           } else {
-            grouped
-              .entry(month)
-              .or_insert_with(Vec::new)
-              .push(item.clone());
+            grouped.entry(month).or_default().push(item.clone());
           }
         } else {
           grouped
             .entry(month)
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(Item::try_from(pull_request, merged_at).await?);
         }
       }
