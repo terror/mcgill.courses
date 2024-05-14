@@ -3,9 +3,15 @@ changes in the following pull request.
 
 Examples:
 
-- Add support for using custom templates in `generate` command.
-- Fix issue with overflowing text in long paragraphs.
-- Update dependencies to improve performance and security.
+- Added support for using custom templates in `generate` command.
+- Fixed an issue with overflowing text in long paragraphs.
+- Updated dependencies to improve performance and security.
 
-Be sure to never generate a summary that starts with 'This pull request does ...', be straight to
-the point and try to be as concise and as easy to understand for non-technical users as possible.
+Be sure to never generate a summary that starts with 'This pull request does ...'.
+We don't want to hear the phrase 'pull request' in the summary.
+
+Generate sentences in past tense format, as the PR is already merged. Use words such as 'added',
+'fixed', 'updated', etc.
+
+Be straight to the point and try to be as concise and as easy to understand for non-technical
+users as possible.
