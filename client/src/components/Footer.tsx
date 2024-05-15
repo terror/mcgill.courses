@@ -5,7 +5,6 @@ export const navigationItems = [
   { name: 'Explore', href: '/explore' },
   { name: 'Reviews', href: '/reviews' },
   { name: 'About', href: '/about' },
-  { name: 'Changelog', href: '/changelog' },
 ];
 
 export const Footer = () => {
