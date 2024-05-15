@@ -56,7 +56,7 @@ export const Changelog = () => {
               {items.map((item, index) => (
                 <div key={index} className='mt-4'>
                   <p className='text-lg text-gray-800 dark:text-gray-300'>
-                    - {item.summary} (
+                    - {item.summary.replace('/^- /', '')} (
                     <a
                       href={item.url}
                       className='text-blue-600 dark:text-blue-400'

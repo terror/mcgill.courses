@@ -13,5 +13,9 @@ We don't want to hear the phrase 'pull request' in the summary.
 Generate sentences in past tense format, as the PR is already merged. Use words such as 'added',
 'fixed', 'updated', etc.
 
+Never include a '-' at the beginning of the sentence.
+
+Never mention the issue number if its present within the pull request description.
+
 Be straight to the point and try to be as concise and as easy to understand for non-technical
 users as possible.

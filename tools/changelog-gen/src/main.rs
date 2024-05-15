@@ -128,7 +128,7 @@ type Entry = HashMap<String, Vec<Item>>;
 struct Arguments {
   #[clap(long, default_value = "../../client/src/assets/changelog.json")]
   output: PathBuf,
-  #[clap(long)]
+  #[clap(long, value_delimiter = ' ', num_args = 0..)]
   regenerate: Vec<u64>,
   #[clap(long, default_value = "false")]
   regenerate_all: bool,
@@ -209,13 +209,17 @@ impl Arguments {
       }
     }
 
-    for items in grouped.values_mut() {
-      items.sort_by(|a, b| b.merged_at.cmp(&a.merged_at));
+    if !grouped.is_empty() {
+      info!("Writing to {}", self.output.display());
+
+      for items in grouped.values_mut() {
+        items.sort_by(|a, b| b.merged_at.cmp(&a.merged_at));
+      }
+
+      fs::write(&self.output, serde_json::to_string_pretty(&grouped)?)?;
     }
 
-    info!("Writing to {}", self.output.display());
-
-    fs::write(&self.output, serde_json::to_string_pretty(&grouped)?)?;
+    info!("Generated changelog successfully");
 
     Ok(())
   }
