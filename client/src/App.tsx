@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { PrivateRoute } from './components/PrivateRoute';
 import { About } from './pages/About';
+import { Changelog } from './pages/Changelog';
 import { CoursePage } from './pages/CoursePage';
 import { Explore } from './pages/Explore';
 import { Home } from './pages/Home';
@@ -18,6 +19,7 @@ const App = () => {
     <Routes>
       <Route index element={<Home />} />
       <Route path='/about' element={<About />} />
+      <Route path='/changelog' element={<Changelog />} />
       <Route path='/explore' element={<Explore />} />
       <Route path='/privacy' element={<PrivacyPolicy />} />
       <Route

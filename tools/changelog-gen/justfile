@@ -1,0 +1,9 @@
+set dotenv-load
+
+export RUST_LOG := 'info'
+
+fmt:
+  cargo fmt
+
+run *args:
+  cargo run -- {{args}}
