@@ -30,35 +30,6 @@ jobs:
       - name: Check workflow
         run: ${{ steps.actionlint.outputs.executable }} -color
 
-  changelog:
-    name: Changelog
-
-    runs-on: macos-latest
-
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install rust toolchain components
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Info
-        run: |
-          rustup --version
-          cargo --version
-
-      - name: Install the changelog generator binary
-        run: cargo install --path tools/changelog-gen
-
-      - name: Run changelog generator
-        run: changelog-gen --output ./client/src/assets/changelog.json
-
   client:
     name: Client
 
