@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [workspace]
-members = ["crates/*"]
+members = ["crates/*", "tools/changelog-gen"]
 
 [dependencies]
 anyhow = "1.0.71"
