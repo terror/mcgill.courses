@@ -73,9 +73,9 @@ const Person = ({
   links?: PersonLink[];
 }) => {
   return (
-    <li className='mt-6 flex items-center gap-x-4'>
+    <li className='flex flex-col items-center gap-y-2 p-4'>
       <img className='w-[100px] rounded-full' src={imageUrl} />
-      <div className='flex-row'>
+      <div className='flex flex-col items-center'>
         <Paragraph>{name}</Paragraph>
         <div className='flex gap-x-2'>
           {links?.map((link: PersonLink, i) => (
@@ -182,27 +182,36 @@ export const About = () => {
           />
           <meta property='twitter:title' content={`About - mcgill.courses`} />
         </Helmet>
-
-        <Title>Welcome to mcgill.courses!</Title>
+        <Title>
+          Welcome to{' '}
+          <span
+            style={{
+              color: 'rgb(197, 31, 31)',
+            }}
+          >
+            mcgill.courses
+          </span>
+          !
+        </Title>
         <Paragraph className='leading-loose text-gray-700 dark:text-gray-200'>
           <Link className='underline' to='/'>
             mcgill.courses
           </Link>{' '}
           is an open-sourced, student-made review website for courses offered
-          and instructors teaching at McGill University. Our platform aims to
-          provide transparent and accurate information to help with informed
-          decision-making. We encourage contributions from the McGill community
-          to ensure the resource remains valuable.
+          and instructors teaching at{' '}
+          <a className='underline' href='https://www.mcgill.ca/'>
+            McGill University
+          </a>
+          . Our platform aims to provide transparent and accurate information to
+          help with informed decision-making. We encourage contributions from
+          the McGill community to ensure the resource remains valuable.
         </Paragraph>
-
         <br />
-
         <Paragraph>
           <span className='font-bold'>Disclaimer</span>: mcgill.courses is not
           affiliated with McGill University.
         </Paragraph>
-
-        <Title>History & The Team</Title>
+        <Title>History</Title>
         <Paragraph>
           <Link className='underline' to='/'>
             mcgill.courses
@@ -220,9 +229,19 @@ export const About = () => {
           it has grown into a full-fledged platform with a team of dedicated
           developers and designers.
         </Paragraph>
-        {people.map((person) => (
-          <Person {...person} />
-        ))}
+        <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+          {people.map((person) => (
+            <Person key={person.name} {...person} />
+          ))}
+        </ul>
+        <Paragraph className='mt-4'>
+          For those curious about what the development team has been shipping,
+          check out our{' '}
+          <Link className='underline' to='/changelog'>
+            changelog
+          </Link>{' '}
+          page!
+        </Paragraph>
         <Title>FAQ</Title>
         <QuestionsAnswers input={questions} />
         <Title>Contact Us</Title>

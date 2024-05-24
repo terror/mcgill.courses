@@ -79,10 +79,10 @@ export const Reviews = () => {
 
       <div className='flex flex-col items-center py-8'>
         <div className='mb-16'>
-          <h1 className='text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
+          <h1 className='text-center text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl'>
             What people are saying
           </h1>
-          <p className='mt-2 text-gray-600 dark:text-gray-400'>
+          <p className='mt-2 text-center text-gray-600 dark:text-gray-400'>
             Check out what {reviewCount.toLocaleString('en-us')} people have
             said about courses at McGill University.
           </p>
