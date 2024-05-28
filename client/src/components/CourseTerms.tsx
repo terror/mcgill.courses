@@ -60,7 +60,8 @@ type CourseTermsProps = {
 export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
   const instructorGroups = groupCurrentCourseTermInstructors(course);
 
-  const initialExpandedState = () => instructorGroups.map(() => false);
+  const initialExpandedState = () =>
+    Object.entries(instructorGroups).map(() => false);
 
   const [expandedState, setExpandedState] = useState(initialExpandedState());
 
@@ -99,7 +100,7 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
 
   return (
     <div className='mr-auto flex flex-wrap gap-x-2'>
-      {instructorGroups
+      {Object.entries(instructorGroups)
         .sort((a, b) => compareTerms(a[0], b[0]))
         .map(([term, instructors], i) => {
           const season = term.split(' ')[0].toLowerCase();

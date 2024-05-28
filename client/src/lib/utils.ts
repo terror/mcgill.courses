@@ -18,9 +18,7 @@ export const groupCurrentCourseTermInstructors = (course: Course) => {
     termGroups[term] = [];
   }
 
-  const entries = Object.entries(termGroups);
-
-  return entries;
+  return termGroups;
 };
 
 export const getCurrentTerms = (): [string, string, string] => {
