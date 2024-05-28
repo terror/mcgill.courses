@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import {
+  compareTerms,
   getCurrentTerms,
   groupCurrentCourseTermInstructors,
 } from '../lib/utils';
@@ -98,69 +99,71 @@ export const CourseTerms = ({ course, variant, query }: CourseTermsProps) => {
 
   return (
     <div className='mr-auto flex flex-wrap gap-x-2'>
-      {instructorGroups.map(([term, instructors], i) => {
-        const season = term.split(' ')[0].toLowerCase();
-        return (
-          <div className='relative' key={term}>
-            <div
-              className={twMerge(
-                'my-1.5 flex text-sm dark:bg-neutral-700',
-                variant === 'small' ? 'px-2 py-1' : 'max-w-fit px-2 py-1',
-                termColorMap[season],
-                expandedState[i] ? 'rounded-xl' : 'rounded-full'
-              )}
-            >
-              {instructors.length > 0 ? (
-                <div className='flex flex-col gap-y-1'>
-                  {(expandedState[i]
-                    ? instructors
-                    : instructors.slice(0, 1)
-                  ).map((ins) => (
-                    <Link
-                      key={ins.name}
-                      to={`/instructor/${encodeURIComponent(ins.name)}`}
-                    >
-                      <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                        <SeasonIcon term={term} variant={variant} />
-                        <div className='pr-1 font-medium dark:text-gray-200'>
-                          <Highlight
-                            text={ins.name}
-                            query={query || undefined}
-                          />
+      {instructorGroups
+        .sort((a, b) => compareTerms(a[0], b[0]))
+        .map(([term, instructors], i) => {
+          const season = term.split(' ')[0].toLowerCase();
+          return (
+            <div className='relative' key={term}>
+              <div
+                className={twMerge(
+                  'my-1.5 flex text-sm dark:bg-neutral-700',
+                  variant === 'small' ? 'px-2 py-1' : 'max-w-fit px-2 py-1',
+                  termColorMap[season],
+                  expandedState[i] ? 'rounded-xl' : 'rounded-full'
+                )}
+              >
+                {instructors.length > 0 ? (
+                  <div className='flex flex-col gap-y-1'>
+                    {(expandedState[i]
+                      ? instructors
+                      : instructors.slice(0, 1)
+                    ).map((ins) => (
+                      <Link
+                        key={ins.name}
+                        to={`/instructor/${encodeURIComponent(ins.name)}`}
+                      >
+                        <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                          <SeasonIcon term={term} variant={variant} />
+                          <div className='pr-1 font-medium dark:text-gray-200'>
+                            <Highlight
+                              text={ins.name}
+                              query={query || undefined}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className='flex items-center space-x-1.5 whitespace-nowrap'>
-                  <SeasonIcon term={term} variant={variant} />
-                  <div className={'pr-1 font-medium dark:text-gray-200'}>
-                    No Instructor Assigned
+                      </Link>
+                    ))}
                   </div>
-                </div>
-              )}
-              {instructors.length > 1 && (
-                <span
-                  className='cursor-pointer font-semibold dark:text-gray-200'
-                  onClick={() => handleToggle(i)}
-                >
-                  +{instructors.length - 1}
-                  {variant === 'large' && (
-                    <ChevronDown
-                      className={twMerge(
-                        'ml-1 inline-block',
-                        expandedState[i] ? 'rotate-180' : 'rotate-0'
-                      )}
-                      size={16}
-                    />
-                  )}
-                </span>
-              )}
+                ) : (
+                  <div className='flex items-center space-x-1.5 whitespace-nowrap'>
+                    <SeasonIcon term={term} variant={variant} />
+                    <div className={'pr-1 font-medium dark:text-gray-200'}>
+                      No Instructor Assigned
+                    </div>
+                  </div>
+                )}
+                {instructors.length > 1 && (
+                  <span
+                    className='cursor-pointer font-semibold dark:text-gray-200'
+                    onClick={() => handleToggle(i)}
+                  >
+                    +{instructors.length - 1}
+                    {variant === 'large' && (
+                      <ChevronDown
+                        className={twMerge(
+                          'ml-1 inline-block',
+                          expandedState[i] ? 'rotate-180' : 'rotate-0'
+                        )}
+                        size={16}
+                      />
+                    )}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };
