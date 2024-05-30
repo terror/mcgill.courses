@@ -4,14 +4,13 @@ import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
 import type { Schedule } from '../model/Schedule';
 
-const COURSE_TERM_ORDER = ['Fall', 'Winter', 'Summer'];
-
 export const groupCurrentCourseTermInstructors = (course: Course) => {
   const currentTerms = getCurrentTerms();
 
   const currentInstructors = course.instructors.filter((i) =>
     currentTerms.includes(i.term)
   );
+
   const termGroups = _.groupBy(currentInstructors, (i: Instructor) => i.term);
 
   for (const term of course.terms) {
@@ -19,18 +18,16 @@ export const groupCurrentCourseTermInstructors = (course: Course) => {
     termGroups[term] = [];
   }
 
-  const entries = Object.entries(termGroups);
-
-  const indexOfTerm = (term: string) =>
-    COURSE_TERM_ORDER.indexOf(term.split(' ')[0]);
-
-  return entries.sort(([a], [b]) => indexOfTerm(a) - indexOfTerm(b));
+  return termGroups;
 };
 
 export const getCurrentTerms = (): [string, string, string] => {
   const now = new Date();
   const month = now.getMonth() + 1;
   const year = now.getFullYear();
+
+  if (month >= 5 && month < 8)
+    return [`Summer ${year}`, `Fall ${year}`, `Winter ${year + 1}`];
 
   if (month >= 8)
     return [`Fall ${year}`, `Winter ${year + 1}`, `Summer ${year + 1}`];
