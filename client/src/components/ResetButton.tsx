@@ -3,10 +3,15 @@ import { twMerge } from 'tailwind-merge';
 
 type ResetButtonProps = {
   className?: string;
+  size?: number;
   onClear: () => void;
 };
 
-export const ResetButton = ({ className, onClear }: ResetButtonProps) => {
+export const ResetButton = ({
+  size = 20,
+  className,
+  onClear,
+}: ResetButtonProps) => {
   return (
     <div
       className={twMerge(
@@ -15,7 +20,10 @@ export const ResetButton = ({ className, onClear }: ResetButtonProps) => {
       )}
     >
       <button onClick={onClear}>
-        <RefreshCw className={'h-5 w-5 text-gray-500 dark:text-neutral-400'} />
+        <RefreshCw
+          size={size}
+          className={'text-gray-500 dark:text-neutral-400'}
+        />
       </button>
     </div>
   );

@@ -188,7 +188,9 @@ export const Instructor = () => {
           </div>
         )}
         {reviews.length === 0 && (
-          <ReviewEmptyPrompt className='my-8' variant='instructor' />
+          <ReviewEmptyPrompt className='my-8'>
+            No reviews have been left for this instructor yet, be the first!
+          </ReviewEmptyPrompt>
         )}
       </div>
     </Layout>

@@ -230,7 +230,9 @@ export const CoursePage = () => {
                 />
               </div>
             ) : (
-              <ReviewEmptyPrompt className='my-8' variant='course' />
+              <ReviewEmptyPrompt className='my-8'>
+                No reviews have been left for this course yet, be the first!
+              </ReviewEmptyPrompt>
             )}
             <div className='w-full shadow-sm'>
               {userReview && (
@@ -306,7 +308,9 @@ export const CoursePage = () => {
                   />
                 </div>
               ) : (
-                <ReviewEmptyPrompt className='my-8' variant='course' />
+                <ReviewEmptyPrompt className='my-8'>
+                  No reviews have been left for this course yet, be the first!
+                </ReviewEmptyPrompt>
               )}
               <div className='w-full shadow-sm'>
                 {userReview && (
@@ -319,7 +323,7 @@ export const CoursePage = () => {
                     updateLikes={updateLikes(userReview)}
                   />
                 )}
-                {showingReviews &&
+                {showingReviews.length > 0 ? (
                   showingReviews
                     .filter((review) =>
                       user ? review.userId !== user.id : true
@@ -335,7 +339,13 @@ export const CoursePage = () => {
                         interactions={userInteractions}
                         updateLikes={updateLikes(review)}
                       />
-                    ))}
+                    ))
+                ) : (
+                  <ReviewEmptyPrompt className='my-8'>
+                    No reviews have been left for this course yet for this
+                    instructor.
+                  </ReviewEmptyPrompt>
+                )}
               </div>
               {!showAllReviews && showingReviews.length > 8 && (
                 <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
