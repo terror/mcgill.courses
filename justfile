@@ -71,10 +71,6 @@ load:
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
     --course-delay 1000 \
     --page-delay 1000 \
-    --mcgill-terms 2024-2025 \
-    --vsb-terms 202405  \
-    --vsb-terms 202409 \
-    --vsb-terms 202501 \
 
 readme:
   present --in-place README.md
