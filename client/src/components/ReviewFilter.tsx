@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
@@ -22,19 +22,24 @@ export type ReviewSortType = (typeof sortTypes)[number];
 type ReviewFilterProps = {
   course: Course;
   allReviews: Review[];
+  sortBy: ReviewSortType;
+  selectedInstructor: string;
   setReviews: Dispatch<SetStateAction<Review[]>>;
   setShowAllReviews: Dispatch<SetStateAction<boolean>>;
+  setSelectedInstructor: Dispatch<SetStateAction<string>>;
+  setSortBy: Dispatch<SetStateAction<ReviewSortType>>;
 };
 
 export const ReviewFilter = ({
   course,
   allReviews,
+  sortBy,
+  selectedInstructor,
   setReviews,
   setShowAllReviews,
+  setSortBy,
+  setSelectedInstructor,
 }: ReviewFilterProps) => {
-  const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
-  const [selectedInstructor, setSelectedInstructor] = useState<string>('');
-
   useEffect(() => {
     setReviews(
       allReviews

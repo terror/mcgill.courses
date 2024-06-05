@@ -14,7 +14,7 @@ import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
 import { NotFound } from '../components/NotFound';
 import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
-import { ReviewFilter } from '../components/ReviewFilter';
+import { ReviewFilter, ReviewSortType } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
@@ -42,6 +42,9 @@ export const CoursePage = () => {
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
+
+  const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
+  const [selectedInstructor, setSelectedInstructor] = useState('');
 
   useEffect(() => {
     firstFetch.current = true;
@@ -227,6 +230,10 @@ export const CoursePage = () => {
                   allReviews={allReviews ?? []}
                   setReviews={setShowingReviews}
                   setShowAllReviews={setShowAllReviews}
+                  sortBy={sortBy}
+                  selectedInstructor={selectedInstructor}
+                  setSortBy={setSortBy}
+                  setSelectedInstructor={setSelectedInstructor}
                 />
               </div>
             ) : (
@@ -245,26 +252,35 @@ export const CoursePage = () => {
                   updateLikes={updateLikes(userReview)}
                 />
               )}
-              {showingReviews &&
-                showingReviews
-                  .filter((review) => (user ? review.userId !== user.id : true))
-                  .slice(0, showAllReviews ? showingReviews.length : 8)
-                  .map((review, i) => (
-                    <CourseReview
-                      canModify={Boolean(user && review.userId === user.id)}
-                      interactions={userInteractions}
-                      handleDelete={() => handleDelete(review)}
-                      key={i}
-                      openEditReview={() => setEditReviewOpen(true)}
-                      review={review}
-                      updateLikes={updateLikes(review)}
-                    />
-                  ))}
+              {showingReviews.length > 0
+                ? showingReviews
+                    .filter((review) =>
+                      user ? review.userId !== user.id : true
+                    )
+                    .slice(0, showAllReviews ? showingReviews.length : 8)
+                    .map((review, i) => (
+                      <CourseReview
+                        canModify={Boolean(user && review.userId === user.id)}
+                        interactions={userInteractions}
+                        handleDelete={() => handleDelete(review)}
+                        key={i}
+                        openEditReview={() => setEditReviewOpen(true)}
+                        review={review}
+                        updateLikes={updateLikes(review)}
+                      />
+                    ))
+                : allReviews &&
+                  allReviews.length > 0 && (
+                    <ReviewEmptyPrompt className='my-8'>
+                      No reviews have been left for this course yet for this
+                      instructor.
+                    </ReviewEmptyPrompt>
+                  )}
             </div>
             {!showAllReviews && showingReviews.length > 8 && (
               <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                 <button
-                  className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+                  className='size-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                   onClick={() => setShowAllReviews(true)}
                 >
                   Show all {showingReviews.length} reviews
@@ -305,6 +321,10 @@ export const CoursePage = () => {
                     allReviews={allReviews ?? []}
                     setReviews={setShowingReviews}
                     setShowAllReviews={setShowAllReviews}
+                    sortBy={sortBy}
+                    selectedInstructor={selectedInstructor}
+                    setSortBy={setSortBy}
+                    setSelectedInstructor={setSelectedInstructor}
                   />
                 </div>
               ) : (
@@ -323,34 +343,35 @@ export const CoursePage = () => {
                     updateLikes={updateLikes(userReview)}
                   />
                 )}
-                {showingReviews.length > 0 ? (
-                  showingReviews
-                    .filter((review) =>
-                      user ? review.userId !== user.id : true
-                    )
-                    .slice(0, showAllReviews ? showingReviews.length : 8)
-                    .map((review, i) => (
-                      <CourseReview
-                        canModify={Boolean(user && review.userId === user.id)}
-                        handleDelete={() => handleDelete(review)}
-                        key={i}
-                        openEditReview={() => setEditReviewOpen(true)}
-                        review={review}
-                        interactions={userInteractions}
-                        updateLikes={updateLikes(review)}
-                      />
-                    ))
-                ) : (
-                  <ReviewEmptyPrompt className='my-8'>
-                    No reviews have been left for this course yet for this
-                    instructor.
-                  </ReviewEmptyPrompt>
-                )}
+                {showingReviews.length > 0
+                  ? showingReviews
+                      .filter((review) =>
+                        user ? review.userId !== user.id : true
+                      )
+                      .slice(0, showAllReviews ? showingReviews.length : 8)
+                      .map((review, i) => (
+                        <CourseReview
+                          canModify={Boolean(user && review.userId === user.id)}
+                          handleDelete={() => handleDelete(review)}
+                          key={i}
+                          openEditReview={() => setEditReviewOpen(true)}
+                          review={review}
+                          interactions={userInteractions}
+                          updateLikes={updateLikes(review)}
+                        />
+                      ))
+                  : allReviews &&
+                    allReviews.length > 0 && (
+                      <ReviewEmptyPrompt className='my-8'>
+                        No reviews have been left for this course yet for this
+                        instructor.
+                      </ReviewEmptyPrompt>
+                    )}
               </div>
               {!showAllReviews && showingReviews.length > 8 && (
                 <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                   <button
-                    className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+                    className='size-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                     onClick={() => setShowAllReviews(true)}
                   >
                     Show all {showingReviews.length} reviews
