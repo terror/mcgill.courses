@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import changelogItems from '../assets/changelog.json';
@@ -23,6 +24,13 @@ const sortChangelogItems = (
 
 export const Changelog = () => {
   const sortedChangelogItems = sortChangelogItems(typedChangelogItems);
+  const [expandedMonths, setExpandedMonths] = useState<string[]>([]);
+
+  const toggleShowAll = (month: string) => {
+    setExpandedMonths((prev) =>
+      prev.includes(month) ? prev.filter((m) => m !== month) : [...prev, month]
+    );
+  };
 
   return (
     <Layout>
@@ -53,22 +61,32 @@ export const Changelog = () => {
               <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-200'>
                 {month}
               </h2>
-              {items.map((item, index) => (
-                <div key={index} className='mt-4'>
-                  <p className='text-lg text-gray-800 dark:text-gray-300'>
-                    - {item.summary.replace('/^- /', '')} (
-                    <a
-                      href={item.url}
-                      className='text-blue-600 dark:text-blue-400'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      #{item.number}
-                    </a>
-                    )
-                  </p>
-                </div>
-              ))}
+              {items
+                .slice(0, expandedMonths.includes(month) ? items.length : 5)
+                .map((item, index) => (
+                  <div key={index} className='mt-4'>
+                    <p className='text-lg text-gray-800 dark:text-gray-300'>
+                      - {item.summary.replace('/^- /', '')} (
+                      <a
+                        href={item.url}
+                        className='text-blue-600 dark:text-blue-400'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        #{item.number}
+                      </a>
+                      )
+                    </p>
+                  </div>
+                ))}
+              {items.length > 10 && (
+                <button
+                  onClick={() => toggleShowAll(month)}
+                  className='mt-4 underline dark:text-blue-400'
+                >
+                  {expandedMonths.includes(month) ? 'Show less' : 'Show all'}
+                </button>
+              )}
             </div>
           ))}
         </div>
