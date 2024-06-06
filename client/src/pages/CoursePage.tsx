@@ -272,8 +272,8 @@ export const CoursePage = () => {
                 : allReviews &&
                   allReviews.length > 0 && (
                     <ReviewEmptyPrompt className='my-8'>
-                      No reviews have been left for this course yet for this
-                      instructor.
+                      No reviews have been left for this course with this
+                      instructor yet.
                     </ReviewEmptyPrompt>
                   )}
             </div>
@@ -363,8 +363,8 @@ export const CoursePage = () => {
                   : allReviews &&
                     allReviews.length > 0 && (
                       <ReviewEmptyPrompt className='my-8'>
-                        No reviews have been left for this course yet for this
-                        instructor.
+                        No reviews have been left for this course with this
+                        instructor yet.
                       </ReviewEmptyPrompt>
                     )}
               </div>
