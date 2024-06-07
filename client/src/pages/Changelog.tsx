@@ -82,7 +82,7 @@ export const Changelog = () => {
               {items.length > 10 && (
                 <button
                   onClick={() => toggleShowAll(month)}
-                  className='mt-4 underline dark:text-blue-400'
+                  className='mt-4 underline dark:text-gray-400'
                 >
                   {expandedMonths.includes(month) ? 'Show less' : 'Show all'}
                 </button>
