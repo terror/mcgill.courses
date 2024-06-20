@@ -158,7 +158,9 @@ export const SchedulesDisplay = ({
   if (!schedules) return null;
 
   const offeredTerms = sortTerms(
-    _.uniq(schedules.map((schedule) => schedule.term))
+    _.uniq(schedules.map((schedule) => schedule.term)).filter(
+      (term) => term in course.terms
+    )
   );
 
   const [selectedTerm, setSelectedTerm] = useState(offeredTerms.at(0));
