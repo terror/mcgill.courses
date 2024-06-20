@@ -158,8 +158,8 @@ export const SchedulesDisplay = ({
   if (!schedules) return null;
 
   const offeredTerms = sortTerms(
-    _.uniq(schedules.map((schedule) => schedule.term)).filter(
-      (term) => term in course.terms
+    _.uniq(schedules.map((schedule) => schedule.term)).filter((term) =>
+      course.terms.includes(term)
     )
   );
 
