@@ -12,7 +12,9 @@
     { "term": "Fall 2021", "average": "B-" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ACCT352": [
     { "term": "Fall 2016", "average": "B" },
@@ -45,7 +47,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ACCT362": [
     { "term": "Winter 2018", "average": "B+" },
@@ -237,7 +240,8 @@
     { "term": "Fall 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "AEPH112": [
     { "term": "Fall 2013", "average": "B+" },
@@ -275,7 +279,8 @@
   ],
   "AERO401": [
     { "term": "Fall 2019", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "AFRI200": [
     { "term": "Winter 2016", "average": "B+" },
@@ -285,7 +290,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "AFRI401": [
     { "term": "Fall 2016", "average": "A" },
@@ -369,7 +375,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "ANAT314": [
     { "term": "Winter 2019", "average": "B" },
@@ -439,7 +446,8 @@
     { "term": "Fall 2019", "average": "B" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "ANAT416": [
     { "term": "Winter 2016", "average": "A-" },
@@ -469,7 +477,8 @@
     { "term": "Fall 2017", "average": "B+" },
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2019", "average": "B+" },
-    { "term": "Fall 2020", "average": "B+" }
+    { "term": "Fall 2020", "average": "B+" },
+    { "term": "Fall 2021", "average": "B+" }
   ],
   "ANSC312": [
     { "term": "Winter 2017", "average": "B+" },
@@ -572,7 +581,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Summer 2022", "average": "A-" }
+    { "term": "Summer 2022", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ANTH210": [
     { "term": "Winter 2013", "average": "B" },
@@ -584,7 +594,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ANTH212": [
     { "term": "Winter 2016", "average": "B+" },
@@ -637,16 +648,21 @@
     { "term": "Fall 2022", "average": "A" }
   ],
   "ANTH303": [{ "term": "Fall 2022", "average": "B+" }],
-  "ANTH304": [{ "term": "Fall 2022", "average": "B+" }],
+  "ANTH304": [
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
+  ],
   "ANTH307": [
     { "term": "Fall 2020", "average": "A" },
-    { "term": "Winter 2022", "average": "A-" }
+    { "term": "Winter 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "ANTH308": [
     { "term": "Winter 2017", "average": "B" },
     { "term": "Winter 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A" },
+    { "term": "Fall 2021", "average": "B" },
     { "term": "Winter 2023", "average": "B+" }
   ],
   "ANTH311": [
@@ -718,7 +734,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "ANTH355": [
     { "term": "Winter 2018", "average": "B+" },
@@ -738,11 +755,15 @@
   ],
   "ANTH359": [
     { "term": "Winter 2019", "average": "B+" },
+    { "term": "Winter 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B+" }
   ],
   "ANTH361": [{ "term": "Fall 2019", "average": "A-" }],
   "ANTH370": [{ "term": "Fall 2022", "average": "A-" }],
-  "ANTH380": [{ "term": "Fall 2017", "average": "A" }],
+  "ANTH380": [
+    { "term": "Fall 2017", "average": "A" },
+    { "term": "Summer 2023", "average": "A-" }
+  ],
   "ANTH381": [{ "term": "Winter 2023", "average": "A-" }],
   "ANTH423": [{ "term": "Winter 2022", "average": "A" }],
   "ANTH440": [{ "term": "Fall 2021", "average": "A-" }],
@@ -841,6 +862,7 @@
     { "term": "Fall 2021", "average": "A" },
     { "term": "Summer 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B+" },
+    { "term": "Summer 2023", "average": "A-" },
     { "term": "Fall 2023", "average": "A-" }
   ],
   "ARTH204": [
@@ -965,7 +987,8 @@
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "ATOC184": [
     { "term": "Winter 2015", "average": "A-" },
@@ -1026,7 +1049,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2021", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "BIEN210": [
     { "term": "Winter 2017", "average": "A-" },
@@ -1034,7 +1058,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "BIEN219": [
     { "term": "Fall 2020", "average": "A-" },
@@ -1139,7 +1164,8 @@
   "BIEN550": [
     { "term": "Fall 2017", "average": "A" },
     { "term": "Fall 2021", "average": "A" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "BIEN560": [{ "term": "Fall 2022", "average": "A-" }],
   "BIEN570": [{ "term": "Fall 2022", "average": "A" }],
@@ -1156,7 +1182,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "BIOC220": [
     { "term": "Winter 2016", "average": "B+" },
@@ -1165,7 +1192,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "BIOC311": [
     { "term": "Fall 2015", "average": "A-" },
@@ -1184,7 +1212,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "BIOC320": [
     { "term": "Fall 2016", "average": "B+" },
@@ -1244,7 +1273,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "BIOL115": [
     { "term": "Fall 2013", "average": "B+" },
@@ -1281,7 +1311,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "BIOL202": [
     { "term": "Winter 2014", "average": "B" },
@@ -1298,7 +1329,8 @@
     { "term": "Summer 2020", "average": "B-" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B-" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "BIOL205": [
     { "term": "Winter 2015", "average": "B+" },
@@ -1436,7 +1468,8 @@
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2021", "average": "B" }
+    { "term": "Fall 2021", "average": "B" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "BIOL309": [
     { "term": "Fall 2013", "average": "A-" },
@@ -1486,7 +1519,8 @@
   ],
   "BIOL352": [
     { "term": "Winter 2021", "average": "A" },
-    { "term": "Winter 2022", "average": "A" }
+    { "term": "Winter 2022", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "BIOL370": [
     { "term": "Fall 2016", "average": "B" },
@@ -1521,8 +1555,10 @@
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
+  "BIOL530": [{ "term": "Winter 2023", "average": "A" }],
   "BIOL553": [{ "term": "Winter 2014", "average": "A-" }],
   "BIOT505": [
     { "term": "Fall 2016", "average": "A" },
@@ -1541,7 +1577,8 @@
     { "term": "Winter 2018", "average": "B" },
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "B+" },
-    { "term": "Winter 2022", "average": "B+" }
+    { "term": "Winter 2022", "average": "B+" },
+    { "term": "Winter 2023", "average": "B" }
   ],
   "BREE205": [
     { "term": "Fall 2012", "average": "A-" },
@@ -1733,6 +1770,7 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" }
   ],
+  "BUSA300": [{ "term": "Fall 2023", "average": "B+" }],
   "BUSA356": [
     { "term": "Fall 2016", "average": "B+" },
     { "term": "Winter 2017", "average": "B+" },
@@ -1741,7 +1779,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "BUSA364": [
     { "term": "Winter 2018", "average": "B" },
@@ -1972,7 +2011,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CHEE314": [
     { "term": "Fall 2014", "average": "B" },
@@ -1992,7 +2032,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "C+" },
-    { "term": "Winter 2023", "average": "C+" }
+    { "term": "Winter 2023", "average": "C+" },
+    { "term": "Winter 2024", "average": "C+" }
   ],
   "CHEE351": [
     { "term": "Winter 2015", "average": "B" },
@@ -2001,7 +2042,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CHEE360": [
     { "term": "Fall 2016", "average": "B+" },
@@ -2101,7 +2143,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "CHEE484": [
     { "term": "Winter 2015", "average": "B-" },
@@ -2110,7 +2153,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B-" },
-    { "term": "Winter 2023", "average": "B-" }
+    { "term": "Winter 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "C+" }
   ],
   "CHEE491": [
     { "term": "Winter 2017", "average": "A-" },
@@ -2123,6 +2167,7 @@
     { "term": "Fall 2017", "average": "B+" },
     { "term": "Fall 2018", "average": "A" },
     { "term": "Fall 2020", "average": "A" },
+    { "term": "Fall 2021", "average": "A-" },
     { "term": "Fall 2022", "average": "B+" }
   ],
   "CHEE543": [{ "term": "Winter 2023", "average": "A-" }],
@@ -2136,6 +2181,7 @@
     { "term": "Winter 2019", "average": "B-" },
     { "term": "Fall 2020", "average": "B+" },
     { "term": "Fall 2021", "average": "B" },
+    { "term": "Fall 2022", "average": "B+" },
     { "term": "Fall 2023", "average": "B" }
   ],
   "CHEE593": [{ "term": "Winter 2015", "average": "A-" }],
@@ -2163,7 +2209,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "CHEM122": [
     { "term": "Winter 2016", "average": "A-" },
@@ -2183,7 +2230,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Summer 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Summer 2023", "average": "A-" }
+    { "term": "Summer 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "CHEM183": [
     { "term": "Fall 2013", "average": "B+" },
@@ -2227,7 +2275,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CHEM211": [{ "term": "Summer 2020", "average": "A-" }],
   "CHEM212": [
@@ -2257,6 +2306,7 @@
     { "term": "Summer 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
+    { "term": "Summer 2023", "average": "B+" },
     { "term": "Fall 2023", "average": "A-" }
   ],
   "CHEM213": [
@@ -2273,7 +2323,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CHEM219": [{ "term": "Winter 2018", "average": "B" }],
   "CHEM222": [
@@ -2297,7 +2348,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "CHEM223": [
     { "term": "Fall 2015", "average": "B-" },
@@ -2388,7 +2440,10 @@
     { "term": "Fall 2023", "average": "B-" }
   ],
   "CHEM332": [{ "term": "Winter 2019", "average": "B+" }],
-  "CHEM334": [{ "term": "Winter 2021", "average": "A" }],
+  "CHEM334": [
+    { "term": "Winter 2021", "average": "A" },
+    { "term": "Winter 2023", "average": "B+" }
+  ],
   "CHEM345": [
     { "term": "Fall 2017", "average": "B-" },
     { "term": "Fall 2018", "average": "B-" },
@@ -2407,7 +2462,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Winter 2022", "average": "A-" }
+    { "term": "Winter 2022", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "CHEM365": [{ "term": "Winter 2019", "average": "B-" }],
   "CHEM367": [
@@ -2443,7 +2499,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CIVE205": [
     { "term": "Fall 2014", "average": "B" },
@@ -2472,7 +2529,8 @@
     { "term": "Winter 2019", "average": "B-" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "CIVE207": [
     { "term": "Fall 2014", "average": "B" },
@@ -2492,7 +2550,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B-" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CIVE208": [
     { "term": "Fall 2016", "average": "A-" },
@@ -2597,14 +2656,16 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "CIVE323": [
     { "term": "Fall 2017", "average": "A-" },
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B" },
     { "term": "Fall 2020", "average": "B" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "CIVE324": [
     { "term": "Winter 2018", "average": "A-" },
@@ -2665,7 +2726,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "A-" }
+    { "term": "Fall 2021", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "CLAS203": [
     { "term": "Fall 2013", "average": "A-" },
@@ -2680,7 +2742,8 @@
     { "term": "Summer 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "CLAS206": [
     { "term": "Winter 2014", "average": "A-" },
@@ -2703,14 +2766,16 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "CLAS215": [{ "term": "Summer 2020", "average": "A-" }],
   "CLAS220": [
     { "term": "Fall 2016", "average": "B" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "CLAS240": [
     { "term": "Fall 2016", "average": "B+" },
@@ -2758,7 +2823,8 @@
   "CMRK200": [{ "term": "Fall 2017", "average": "B" }],
   "COGS444D2": [
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "COMP102": [
     { "term": "Fall 2015", "average": "B+" },
@@ -2804,7 +2870,8 @@
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "COMP204": [
     { "term": "Fall 2018", "average": "B" },
@@ -2817,7 +2884,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "COMP206": [
     { "term": "Fall 2013", "average": "B" },
@@ -2839,7 +2907,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "COMP208": [
     { "term": "Fall 2013", "average": "B" },
@@ -2894,7 +2963,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "COMP251": [
     { "term": "Winter 2014", "average": "B+" },
@@ -2914,7 +2984,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "COMP252": [
     { "term": "Winter 2014", "average": "B" },
@@ -2946,7 +3017,8 @@
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "COMP302": [
     { "term": "Winter 2014", "average": "B+" },
@@ -2967,7 +3039,8 @@
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "COMP303": [
     { "term": "Fall 2014", "average": "C+" },
@@ -2986,7 +3059,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "C+" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B-" }
+    { "term": "Fall 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "COMP307": [
     { "term": "Fall 2014", "average": "B+" },
@@ -3000,7 +3074,8 @@
   "COMP308": [
     { "term": "Winter 2017", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "COMP310": [
     { "term": "Fall 2014", "average": "B" },
@@ -3044,7 +3119,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "COMP330": [
     { "term": "Fall 2015", "average": "B+" },
@@ -3058,9 +3134,13 @@
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
-  "COMP345": [{ "term": "Winter 2023", "average": "A-" }],
+  "COMP345": [
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
+  ],
   "COMP350": [
     { "term": "Fall 2014", "average": "B" },
     { "term": "Fall 2015", "average": "B-" },
@@ -3086,7 +3166,8 @@
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "C+" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "COMP361D2": [
     { "term": "Winter 2016", "average": "B+" },
@@ -3180,7 +3261,8 @@
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B-" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2021", "average": "B-" }
+    { "term": "Fall 2021", "average": "B-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "COMP523": [{ "term": "Winter 2022", "average": "B+" }],
   "COMP525": [
@@ -3208,7 +3290,8 @@
   "COMP546": [
     { "term": "Winter 2018", "average": "B" },
     { "term": "Winter 2019", "average": "B-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "COMP547": [
     { "term": "Winter 2018", "average": "B-" },
@@ -3237,7 +3320,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "COMP553": [{ "term": "Fall 2019", "average": "B+" }],
   "COMP557": [
@@ -3261,7 +3345,8 @@
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "COMP564": [{ "term": "Winter 2019", "average": "B+" }],
   "COMP579": [
@@ -3298,6 +3383,7 @@
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Summer 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
+    { "term": "Summer 2022", "average": "A-" },
     { "term": "Summer 2023", "average": "A-" }
   ],
   "COMS210": [
@@ -3336,7 +3422,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "A-" }
+    { "term": "Fall 2021", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "COMS320": [{ "term": "Winter 2021", "average": "A-" }],
   "COMS330": [{ "term": "Winter 2022", "average": "A-" }],
@@ -3350,6 +3437,7 @@
     { "term": "Fall 2017", "average": "A" },
     { "term": "Winter 2019", "average": "A" }
   ],
+  "COMS360": [{ "term": "Fall 2023", "average": "A-" }],
   "COMS361": [
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2019", "average": "A-" },
@@ -3369,7 +3457,8 @@
     { "term": "Winter 2019", "average": "B-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "EAST212": [
     { "term": "Winter 2014", "average": "B+" },
@@ -3387,7 +3476,8 @@
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "EAST215": [
     { "term": "Fall 2020", "average": "A-" },
@@ -3405,7 +3495,8 @@
     { "term": "Winter 2018", "average": "A-" },
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "EAST240": [
     { "term": "Summer 2018", "average": "A-" },
@@ -3459,6 +3550,7 @@
   "EAST369": [{ "term": "Fall 2021", "average": "A" }],
   "EAST375": [{ "term": "Winter 2022", "average": "A-" }],
   "EAST388": [{ "term": "Fall 2021", "average": "B+" }],
+  "EAST464": [{ "term": "Fall 2023", "average": "A" }],
   "ECON205": [
     { "term": "Fall 2013", "average": "A-" },
     { "term": "Fall 2014", "average": "A-" },
@@ -3496,7 +3588,8 @@
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "ECON209": [
     { "term": "Summer 2014", "average": "B-" },
@@ -3534,7 +3627,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECON223": [
     { "term": "Winter 2015", "average": "A" },
@@ -3616,7 +3710,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ECON302": [
     { "term": "Fall 2016", "average": "B+" },
@@ -3737,6 +3832,7 @@
     { "term": "Winter 2023", "average": "B-" }
   ],
   "ECON332": [{ "term": "Fall 2023", "average": "B" }],
+  "ECON333": [{ "term": "Winter 2024", "average": "B-" }],
   "ECON334": [
     { "term": "Winter 2017", "average": "B+" },
     { "term": "Winter 2019", "average": "B" },
@@ -3794,6 +3890,7 @@
     { "term": "Winter 2023", "average": "B+" }
   ],
   "ECON408": [
+    { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2021", "average": "A" },
@@ -3812,6 +3909,7 @@
     { "term": "Fall 2023", "average": "A-" }
   ],
   "ECON424": [
+    { "term": "Winter 2018", "average": "B" },
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" }
@@ -3820,7 +3918,10 @@
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" }
   ],
-  "ECON434": [{ "term": "Winter 2021", "average": "B+" }],
+  "ECON434": [
+    { "term": "Winter 2021", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
+  ],
   "ECON440": [
     { "term": "Winter 2019", "average": "B-" },
     { "term": "Winter 2022", "average": "B+" },
@@ -3839,6 +3940,7 @@
   "ECON452": [
     { "term": "Winter 2016", "average": "B+" },
     { "term": "Fall 2018", "average": "B+" },
+    { "term": "Fall 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
@@ -3923,7 +4025,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ECSE206": [
     { "term": "Winter 2017", "average": "B-" },
@@ -3938,7 +4041,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ECSE209": [
     { "term": "Fall 2022", "average": "B+" },
@@ -3964,7 +4068,8 @@
     { "term": "Winter 2022", "average": "B-" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B-" }
+    { "term": "Fall 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "C+" }
   ],
   "ECSE211": [
     { "term": "Fall 2014", "average": "B+" },
@@ -3983,7 +4088,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B-" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ECSE221": [
     { "term": "Winter 2014", "average": "B-" },
@@ -4006,7 +4112,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECSE223": [
     { "term": "Winter 2017", "average": "B+" },
@@ -4036,7 +4143,9 @@
     { "term": "Winter 2021", "average": "B" },
     { "term": "Winter 2022", "average": "C" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B-" }
+    { "term": "Winter 2023", "average": "B-" },
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "ECSE291": [
     { "term": "Fall 2014", "average": "A-" },
@@ -4104,7 +4213,8 @@
     { "term": "Fall 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A" },
     { "term": "Fall 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECSE316": [
     { "term": "Winter 2019", "average": "B" },
@@ -4129,7 +4239,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECSE322": [
     { "term": "Winter 2015", "average": "B" },
@@ -4156,14 +4267,16 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "ECSE325": [
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECSE326": [
     { "term": "Fall 2018", "average": "A-" },
@@ -4279,7 +4392,8 @@
     { "term": "Fall 2020", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A" }
+    { "term": "Fall 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "ECSE416": [{ "term": "Fall 2021", "average": "A-" }],
   "ECSE420": [
@@ -4309,7 +4423,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B-" }
+    { "term": "Winter 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "ECSE426": [{ "term": "Fall 2017", "average": "A-" }],
   "ECSE427": [
@@ -4325,7 +4440,8 @@
     { "term": "Fall 2021", "average": "B" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECSE428": [
     { "term": "Winter 2016", "average": "A" },
@@ -4379,11 +4495,13 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A" }
+    { "term": "Fall 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "ECSE446": [
     { "term": "Fall 2018", "average": "B+" },
-    { "term": "Fall 2019", "average": "B+" }
+    { "term": "Fall 2019", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "ECSE456": [
     { "term": "Fall 2017", "average": "A" },
@@ -4424,6 +4542,7 @@
     { "term": "Fall 2018", "average": "A" },
     { "term": "Fall 2019", "average": "A" }
   ],
+  "ECSE509": [{ "term": "Fall 2023", "average": "B+" }],
   "ECSE512": [{ "term": "Fall 2018", "average": "B+" }],
   "ECSE543": [
     { "term": "Fall 2018", "average": "A" },
@@ -4431,11 +4550,15 @@
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2022", "average": "A" }
   ],
-  "ECSE551": [{ "term": "Fall 2020", "average": "A-" }],
+  "ECSE551": [
+    { "term": "Fall 2020", "average": "A-" },
+    { "term": "Fall 2022", "average": "A" }
+  ],
   "ECSE552": [
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2023", "average": "A-" }
   ],
+  "ECSE557": [{ "term": "Winter 2024", "average": "A" }],
   "EDEA241": [{ "term": "Winter 2017", "average": "A" }],
   "EDEC201": [
     { "term": "Fall 2016", "average": "A-" },
@@ -4623,7 +4746,8 @@
   "EDES366": [
     { "term": "Winter 2015", "average": "A-" },
     { "term": "Fall 2019", "average": "A-" },
-    { "term": "Winter 2021", "average": "A" }
+    { "term": "Winter 2021", "average": "A" },
+    { "term": "Fall 2022", "average": "A-" }
   ],
   "EDKP100": [
     { "term": "Fall 2017", "average": "A-" },
@@ -4698,7 +4822,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "EDKP342": [
     { "term": "Winter 2018", "average": "A-" },
@@ -4810,7 +4935,8 @@
     { "term": "Winter 2021", "average": "A" },
     { "term": "Fall 2021", "average": "A-" },
     { "term": "Fall 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "EDPE335": [
     { "term": "Winter 2021", "average": "A-" },
@@ -4820,7 +4946,8 @@
   "EDPE375": [
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "EDPE377": [{ "term": "Winter 2023", "average": "A" }],
   "EDPI309": [
@@ -4962,7 +5089,8 @@
     { "term": "Fall 2017", "average": "B-" },
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2021", "average": "B+" }
+    { "term": "Fall 2021", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ENGL228": [
     { "term": "Winter 2016", "average": "B" },
@@ -5013,7 +5141,8 @@
   ],
   "ENGL279": [
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2021", "average": "B" }
+    { "term": "Fall 2021", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "ENGL280": [
     { "term": "Winter 2017", "average": "B" },
@@ -5070,6 +5199,7 @@
     { "term": "Fall 2017", "average": "B" },
     { "term": "Fall 2018", "average": "B+" }
   ],
+  "ENGL317": [{ "term": "Fall 2023", "average": "A-" }],
   "ENGL318": [
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
@@ -5109,7 +5239,8 @@
   ],
   "ENGL335": [
     { "term": "Winter 2015", "average": "B-" },
-    { "term": "Summer 2020", "average": "B+" }
+    { "term": "Summer 2020", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "ENGL336": [
     { "term": "Fall 2018", "average": "B" },
@@ -5154,7 +5285,8 @@
   ],
   "ENGL360": [
     { "term": "Fall 2016", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "ENGL362": [{ "term": "Summer 2020", "average": "B" }],
   "ENGL363": [{ "term": "Fall 2018", "average": "B+" }],
@@ -5180,14 +5312,18 @@
   "ENGL391": [
     { "term": "Summer 2018", "average": "B" },
     { "term": "Summer 2021", "average": "A-" },
-    { "term": "Summer 2022", "average": "A-" }
+    { "term": "Summer 2022", "average": "A-" },
+    { "term": "Winter 2023", "average": "B" }
   ],
   "ENGL394": [
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Summer 2022", "average": "A-" }
   ],
   "ENGL405": [{ "term": "Fall 2022", "average": "B+" }],
-  "ENGL409": [{ "term": "Fall 2021", "average": "A-" }],
+  "ENGL409": [
+    { "term": "Fall 2021", "average": "A-" },
+    { "term": "Fall 2022", "average": "B+" }
+  ],
   "ENGL414": [{ "term": "Fall 2016", "average": "B+" }],
   "ENGL415": [{ "term": "Winter 2017", "average": "B+" }],
   "ENGL418": [{ "term": "Winter 2022", "average": "B+" }],
@@ -5331,7 +5467,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "ENVR400": [
     { "term": "Winter 2015", "average": "B+" },
@@ -5348,7 +5485,8 @@
     { "term": "Fall 2017", "average": "A-" },
     { "term": "Fall 2019", "average": "A" },
     { "term": "Fall 2020", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "ENVR451": [{ "term": "Winter 2014", "average": "A" }],
   "EPSC180": [
@@ -5435,7 +5573,8 @@
   "EPSC233": [
     { "term": "Fall 2017", "average": "B+" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "EPSC320": [{ "term": "Fall 2018", "average": "B+" }],
   "EPSC519": [{ "term": "Fall 2021", "average": "A" }],
@@ -5501,7 +5640,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "A" },
     { "term": "Winter 2023", "average": "A" },
-    { "term": "Fall 2023", "average": "A" }
+    { "term": "Fall 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "FACC220": [
     { "term": "Fall 2012", "average": "B+" },
@@ -5544,7 +5684,8 @@
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "FACC400": [
     { "term": "Winter 2016", "average": "A-" },
@@ -5561,7 +5702,8 @@
     { "term": "Winter 2022", "average": "A" },
     { "term": "Fall 2022", "average": "A" },
     { "term": "Winter 2023", "average": "A" },
-    { "term": "Fall 2023", "average": "A" }
+    { "term": "Fall 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "FACC500": [
     { "term": "Fall 2020", "average": "A-" },
@@ -5810,14 +5952,16 @@
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "FINE492": [{ "term": "Winter 2018", "average": "B+" }],
   "FINE541N2": [{ "term": "Fall 2017", "average": "A-" }],
   "FINE547": [{ "term": "Fall 2021", "average": "A-" }],
   "FREN201": [
     { "term": "Fall 2017", "average": "B+" },
-    { "term": "Fall 2019", "average": "B+" }
+    { "term": "Fall 2019", "average": "B+" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "FREN222": [{ "term": "Fall 2018", "average": "B+" }],
   "FREN231": [
@@ -5861,7 +6005,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "FRSL103": [
     { "term": "Fall 2013", "average": "B-" },
@@ -5921,7 +6066,8 @@
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "FRSL211D2": [
     { "term": "Winter 2014", "average": "B+" },
@@ -5947,7 +6093,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "FRSL325": [
     { "term": "Winter 2016", "average": "B+" },
@@ -5991,7 +6138,10 @@
     { "term": "Fall 2021", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" }
   ],
-  "FSCI198": [{ "term": "Fall 2022", "average": "A" }],
+  "FSCI198": [
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
+  ],
   "FSCI500": [{ "term": "Winter 2022", "average": "A" }],
   "GEOG200": [
     { "term": "Fall 2015", "average": "B+" },
@@ -6043,7 +6193,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "GEOG210": [
     { "term": "Winter 2016", "average": "B+" },
@@ -6073,7 +6224,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "GEOG221": [
     { "term": "Winter 2013", "average": "B+" },
@@ -6210,7 +6362,8 @@
     { "term": "Winter 2018", "average": "B" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "GEOG360": [
     { "term": "Winter 2017", "average": "A-" },
@@ -6286,7 +6439,8 @@
     { "term": "Summer 2021", "average": "A-" },
     { "term": "Fall 2021", "average": "A" },
     { "term": "Fall 2022", "average": "A-" },
-    { "term": "Summer 2023", "average": "A-" }
+    { "term": "Summer 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "GSFS250": [
     { "term": "Fall 2016", "average": "B+" },
@@ -6311,6 +6465,8 @@
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Summer 2020", "average": "A-" }
   ],
+  "GSFS302": [{ "term": "Winter 2024", "average": "A-" }],
+  "GSFS304": [{ "term": "Fall 2023", "average": "A-" }],
   "GSFS305": [
     { "term": "Fall 2017", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
@@ -6363,7 +6519,8 @@
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Winter 2023", "average": "A-" }
   ],
   "HISP220D2": [
     { "term": "Winter 2015", "average": "B+" },
@@ -6372,6 +6529,7 @@
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
+    { "term": "Winter 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "A-" }
   ],
   "HISP225": [
@@ -6451,7 +6609,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "HIST205": [
     { "term": "Fall 2014", "average": "B+" },
@@ -6537,7 +6696,8 @@
     { "term": "Winter 2021", "average": "B" },
     { "term": "Summer 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "HIST216": [
     { "term": "Fall 2018", "average": "B" },
@@ -6579,8 +6739,10 @@
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
+  "HIST224": [{ "term": "Winter 2023", "average": "A-" }],
   "HIST226": [
     { "term": "Fall 2017", "average": "B" },
     { "term": "Winter 2019", "average": "A-" },
@@ -6731,7 +6893,8 @@
     { "term": "Fall 2016", "average": "A-" },
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "A-" }
+    { "term": "Fall 2021", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "HIST340": [
     { "term": "Fall 2016", "average": "A-" },
@@ -6804,6 +6967,7 @@
     { "term": "Fall 2015", "average": "B" },
     { "term": "Fall 2020", "average": "B+" }
   ],
+  "HIST363": [{ "term": "Winter 2023", "average": "A-" }],
   "HIST364": [
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Winter 2023", "average": "A-" }
@@ -6858,7 +7022,8 @@
   "HIST387": [
     { "term": "Fall 2017", "average": "B" },
     { "term": "Fall 2018", "average": "B" },
-    { "term": "Fall 2021", "average": "B" }
+    { "term": "Fall 2021", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "HIST388": [
     { "term": "Winter 2017", "average": "B+" },
@@ -6977,7 +7142,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Winter 2023", "average": "B+" }
   ],
   "INSY339": [{ "term": "Winter 2021", "average": "A-" }],
   "INSY341": [
@@ -6987,7 +7153,8 @@
   "INSY432": [{ "term": "Fall 2017", "average": "B+" }],
   "INSY437": [
     { "term": "Winter 2018", "average": "B+" },
-    { "term": "Winter 2019", "average": "B+" }
+    { "term": "Winter 2019", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "INSY440": [{ "term": "Fall 2017", "average": "B+" }],
   "INSY442": [
@@ -7026,7 +7193,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "INTD350": [
     { "term": "Winter 2018", "average": "A-" },
@@ -7180,7 +7348,8 @@
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Winter 2022", "average": "B+" }
+    { "term": "Winter 2022", "average": "B+" },
+    { "term": "Fall 2022", "average": "B+" }
   ],
   "ITAL215D2": [
     { "term": "Winter 2022", "average": "B+" },
@@ -7193,7 +7362,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "ITAL355": [
     { "term": "Winter 2015", "average": "B+" },
@@ -7201,6 +7371,7 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" }
   ],
+  "ITAL374": [{ "term": "Fall 2023", "average": "A-" }],
   "ITAL375": [
     { "term": "Winter 2014", "average": "B+" },
     { "term": "Summer 2020", "average": "A-" },
@@ -7223,7 +7394,8 @@
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "JWST245": [{ "term": "Fall 2021", "average": "A" }],
   "JWST254": [{ "term": "Fall 2018", "average": "B+" }],
@@ -7266,7 +7438,8 @@
   "LAWG103": [
     { "term": "Fall 2020", "average": "B" },
     { "term": "Fall 2021", "average": "B" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "LAWG210": [
     { "term": "Fall 2017", "average": "B" },
@@ -7367,7 +7540,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "LING325": [
     { "term": "Fall 2015", "average": "B" },
@@ -7391,7 +7565,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "LING331": [
     { "term": "Fall 2013", "average": "B+" },
@@ -7401,7 +7576,8 @@
     { "term": "Fall 2019", "average": "B" },
     { "term": "Fall 2020", "average": "B+" },
     { "term": "Fall 2021", "average": "B" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "LING345": [{ "term": "Winter 2023", "average": "B+" }],
   "LING350": [
@@ -7415,7 +7591,8 @@
     { "term": "Fall 2017", "average": "B+" },
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Summer 2020", "average": "A" },
-    { "term": "Fall 2021", "average": "B+" }
+    { "term": "Fall 2021", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "LING360": [
     { "term": "Fall 2015", "average": "C+" },
@@ -7443,7 +7620,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "LING390": [{ "term": "Fall 2014", "average": "B+" }],
   "LING410": [{ "term": "Fall 2019", "average": "B+" }],
@@ -7489,6 +7667,7 @@
     { "term": "Winter 2017", "average": "A-" },
     { "term": "Winter 2018", "average": "A-" },
     { "term": "Winter 2019", "average": "B+" },
+    { "term": "Winter 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B" }
   ],
   "LSCI204": [
@@ -7602,7 +7781,8 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B-" },
     { "term": "Summer 2023", "average": "C+" },
-    { "term": "Fall 2023", "average": "B-" }
+    { "term": "Fall 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MATH139": [
     { "term": "Fall 2013", "average": "B-" },
@@ -7646,7 +7826,8 @@
     { "term": "Fall 2022", "average": "B-" },
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B-" }
+    { "term": "Fall 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "C+" }
   ],
   "MATH141": [
     { "term": "Winter 2013", "average": "B-" },
@@ -7680,7 +7861,8 @@
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MATH150": [
     { "term": "Fall 2012", "average": "B" },
@@ -7755,7 +7937,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH208": [
     { "term": "Fall 2019", "average": "A-" },
@@ -7791,7 +7974,8 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "C+" },
     { "term": "Summer 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "C+" }
   ],
   "MATH223": [
     { "term": "Fall 2013", "average": "B" },
@@ -7813,7 +7997,8 @@
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B-" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH235": [
     { "term": "Fall 2014", "average": "B-" },
@@ -7835,7 +8020,8 @@
     { "term": "Winter 2019", "average": "C+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "MATH240": [
     { "term": "Fall 2013", "average": "B" },
@@ -7876,7 +8062,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH247": [
     { "term": "Winter 2016", "average": "B-" },
@@ -7885,7 +8072,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH248": [
     { "term": "Fall 2015", "average": "B+" },
@@ -7905,7 +8093,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH251": [
     { "term": "Winter 2015", "average": "B+" },
@@ -7915,7 +8104,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH254": [
     { "term": "Fall 2015", "average": "B+" },
@@ -7936,7 +8126,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "MATH262": [
     { "term": "Fall 2013", "average": "B+" },
@@ -7967,7 +8158,8 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "MATH263": [
     { "term": "Fall 2013", "average": "C+" },
@@ -7998,7 +8190,8 @@
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MATH264": [
     { "term": "Winter 2014", "average": "B-" },
@@ -8028,7 +8221,8 @@
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B-" }
+    { "term": "Fall 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH270": [
     { "term": "Winter 2014", "average": "B" },
@@ -8054,7 +8248,8 @@
   "MATH308": [
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "MATH314": [
     { "term": "Winter 2014", "average": "B" },
@@ -8074,7 +8269,8 @@
     { "term": "Winter 2022", "average": "B-" },
     { "term": "Fall 2022", "average": "C+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MATH315": [
     { "term": "Winter 2014", "average": "B+" },
@@ -8184,7 +8380,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MATH325": [
     { "term": "Fall 2014", "average": "B" },
@@ -8195,7 +8392,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MATH326": [
     { "term": "Fall 2014", "average": "B+" },
@@ -8218,7 +8416,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B-" },
-    { "term": "Winter 2023", "average": "B-" }
+    { "term": "Winter 2023", "average": "B-" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "MATH338": [
     { "term": "Fall 2014", "average": "A-" },
@@ -8239,7 +8438,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MATH348": [
     { "term": "Fall 2016", "average": "B" },
@@ -8354,7 +8554,8 @@
     { "term": "Winter 2016", "average": "B+" },
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "MATH524": [
     { "term": "Fall 2020", "average": "A-" },
@@ -8382,6 +8583,7 @@
   ],
   "MATH559": [{ "term": "Fall 2023", "average": "B+" }],
   "MATH576": [{ "term": "Fall 2023", "average": "A-" }],
+  "MATH577": [{ "term": "Winter 2024", "average": "B+" }],
   "MECH201": [
     { "term": "Fall 2013", "average": "A" },
     { "term": "Fall 2014", "average": "A" },
@@ -8437,7 +8639,8 @@
     { "term": "Winter 2022", "average": "C+" },
     { "term": "Fall 2022", "average": "C+" },
     { "term": "Winter 2023", "average": "C+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B-" }
   ],
   "MECH240": [
     { "term": "Winter 2015", "average": "B" },
@@ -8488,7 +8691,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "MECH289": [
     { "term": "Fall 2015", "average": "A-" },
@@ -8506,7 +8710,8 @@
     { "term": "Winter 2022", "average": "A" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "MECH290": [
     { "term": "Winter 2014", "average": "A-" },
@@ -8647,7 +8852,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B-" }
+    { "term": "Winter 2023", "average": "B-" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "MECH346": [
     { "term": "Fall 2015", "average": "B+" },
@@ -8843,7 +9049,8 @@
     { "term": "Summer 2022", "average": "B" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "MGCR222": [
     { "term": "Winter 2013", "average": "B" },
@@ -8868,9 +9075,13 @@
     { "term": "Summer 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
-  "MGCR250": [{ "term": "Fall 2023", "average": "B+" }],
+  "MGCR250": [
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
+  ],
   "MGCR271": [
     { "term": "Fall 2014", "average": "B" },
     { "term": "Winter 2015", "average": "C+" },
@@ -8894,7 +9105,8 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MGCR293": [
     { "term": "Fall 2014", "average": "B" },
@@ -8935,7 +9147,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MGCR341": [
     { "term": "Winter 2014", "average": "B" },
@@ -8964,7 +9177,8 @@
     { "term": "Fall 2022", "average": "B" },
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MGCR352": [
     { "term": "Fall 2014", "average": "B+" },
@@ -9011,6 +9225,10 @@
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" }
   ],
+  "MGCR372": [
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
+  ],
   "MGCR382": [
     { "term": "Winter 2015", "average": "B+" },
     { "term": "Fall 2015", "average": "B" },
@@ -9030,7 +9248,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MGCR423": [
     { "term": "Fall 2015", "average": "B+" },
@@ -9072,7 +9291,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Summer 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Summer 2023", "average": "B+" }
   ],
   "MGPO362": [
     { "term": "Fall 2018", "average": "B+" },
@@ -9087,13 +9307,18 @@
   "MGPO364": [
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
-    { "term": "Winter 2022", "average": "B+" }
+    { "term": "Winter 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "MGPO365": [
     { "term": "Fall 2016", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" }
   ],
   "MGPO383": [{ "term": "Winter 2021", "average": "A-" }],
+  "MGPO434": [
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
+  ],
   "MGPO435": [
     { "term": "Winter 2017", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
@@ -9110,14 +9335,16 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "MGPO440": [
     { "term": "Fall 2017", "average": "B" },
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "MGPO460": [
     { "term": "Fall 2016", "average": "B" },
@@ -9126,7 +9353,8 @@
   "MGPO469": [
     { "term": "Winter 2017", "average": "B+" },
     { "term": "Winter 2018", "average": "B+" },
-    { "term": "Winter 2022", "average": "B+" }
+    { "term": "Winter 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "MGPO470": [
     { "term": "Fall 2016", "average": "B+" },
@@ -9136,7 +9364,8 @@
   ],
   "MGPO475": [
     { "term": "Fall 2018", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "MGSC372": [
     { "term": "Fall 2015", "average": "B+" },
@@ -9153,7 +9382,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "MGSC373": [
     { "term": "Fall 2016", "average": "B" },
@@ -9163,7 +9393,8 @@
   ],
   "MGSC401": [
     { "term": "Fall 2018", "average": "B+" },
-    { "term": "Summer 2020", "average": "A-" }
+    { "term": "Summer 2020", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "MGSC404": [
     { "term": "Fall 2018", "average": "B+" },
@@ -9173,7 +9404,10 @@
     { "term": "Winter 2018", "average": "B" },
     { "term": "Winter 2023", "average": "B" }
   ],
-  "MICR338": [{ "term": "Fall 2018", "average": "B+" }],
+  "MICR338": [
+    { "term": "Fall 2018", "average": "B+" },
+    { "term": "Fall 2022", "average": "B" }
+  ],
   "MICR341": [
     { "term": "Fall 2017", "average": "A-" },
     { "term": "Fall 2023", "average": "B" }
@@ -9270,7 +9504,8 @@
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "B" }
+    { "term": "Fall 2021", "average": "B" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "MIME320": [
     { "term": "Winter 2018", "average": "A-" },
@@ -9332,7 +9567,8 @@
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B-" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2021", "average": "B-" }
+    { "term": "Fall 2021", "average": "B-" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "MIME360": [
     { "term": "Fall 2016", "average": "B" },
@@ -9340,7 +9576,8 @@
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "B-" }
+    { "term": "Fall 2021", "average": "B-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "MIME362": [
     { "term": "Fall 2018", "average": "B+" },
@@ -9384,7 +9621,8 @@
     { "term": "Fall 2017", "average": "B+" },
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "MIME473": [
     { "term": "Winter 2019", "average": "B+" },
@@ -9428,7 +9666,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "MIMM301": [
     { "term": "Winter 2019", "average": "A" },
@@ -9548,7 +9787,10 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" }
   ],
-  "MRKT440": [{ "term": "Fall 2021", "average": "B+" }],
+  "MRKT440": [
+    { "term": "Fall 2021", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
+  ],
   "MRKT451": [
     { "term": "Winter 2017", "average": "B+" },
     { "term": "Fall 2018", "average": "B+" },
@@ -9641,7 +9883,8 @@
     { "term": "Fall 2021", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "MUAR374": [
     { "term": "Summer 2019", "average": "A-" },
@@ -9708,7 +9951,8 @@
     { "term": "Winter 2022", "average": "A" },
     { "term": "Fall 2022", "average": "A" },
     { "term": "Winter 2023", "average": "A" },
-    { "term": "Fall 2023", "average": "A" }
+    { "term": "Fall 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "MUEN568": [{ "term": "Winter 2016", "average": "A" }],
   "MUEN570": [{ "term": "Winter 2018", "average": "A" }],
@@ -9770,7 +10014,8 @@
     { "term": "Summer 2020", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Winter 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "MUHL380": [{ "term": "Winter 2022", "average": "A" }],
   "MUHL383": [{ "term": "Fall 2020", "average": "A-" }],
@@ -9807,7 +10052,8 @@
     { "term": "Fall 2018", "average": "A" },
     { "term": "Fall 2019", "average": "A" },
     { "term": "Fall 2020", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "MUIN281": [
     { "term": "Winter 2017", "average": "A-" },
@@ -9906,7 +10152,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "MUSP241": [
     { "term": "Winter 2017", "average": "B" },
@@ -9951,7 +10198,8 @@
     { "term": "Summer 2019", "average": "B+" },
     { "term": "Fall 2019", "average": "B-" },
     { "term": "Fall 2020", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "MUTH251": [
     { "term": "Winter 2017", "average": "A-" },
@@ -9999,7 +10247,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "NSCI300": [
     { "term": "Winter 2017", "average": "A-" },
@@ -10012,12 +10261,14 @@
   "NSCI400D2": [
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
-    { "term": "Winter 2022", "average": "A" }
+    { "term": "Winter 2022", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "NSCI420D2": [
     { "term": "Winter 2017", "average": "A" },
     { "term": "Winter 2018", "average": "A" },
-    { "term": "Winter 2022", "average": "A" }
+    { "term": "Winter 2022", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "NUR1200": [
     { "term": "Winter 2016", "average": "B-" },
@@ -10030,14 +10281,16 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "NUR1210": [
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "NUR1219": [{ "term": "Winter 2018", "average": "A" }],
   "NUR1220": [{ "term": "Fall 2016", "average": "A-" }],
@@ -10049,7 +10302,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2021", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1223": [
     { "term": "Fall 2013", "average": "B+" },
@@ -10061,7 +10315,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1225": [
     { "term": "Winter 2018", "average": "A-" },
@@ -10076,7 +10331,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2021", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1231": [
     { "term": "Winter 2018", "average": "A-" },
@@ -10093,7 +10349,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "NUR1236": [
     { "term": "Winter 2018", "average": "A-" },
@@ -10107,7 +10364,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "NUR1301": [
     { "term": "Winter 2019", "average": "B+" },
@@ -10125,15 +10383,18 @@
   "NUR1312": [
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
-    { "term": "Fall 2020", "average": "A-" }
+    { "term": "Fall 2020", "average": "A-" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1318": [
     { "term": "Fall 2019", "average": "A" },
-    { "term": "Fall 2020", "average": "A" }
+    { "term": "Fall 2020", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1320": [
     { "term": "Winter 2018", "average": "A" },
-    { "term": "Winter 2021", "average": "A" }
+    { "term": "Winter 2021", "average": "A" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "NUR1322": [{ "term": "Winter 2018", "average": "B+" }],
   "NUR1323": [
@@ -10141,7 +10402,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "NUR1324": [
     { "term": "Winter 2018", "average": "B" },
@@ -10153,18 +10415,23 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1326": [
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2023", "average": "A" }
   ],
-  "NUR1327": [{ "term": "Winter 2021", "average": "A" }],
+  "NUR1327": [
+    { "term": "Winter 2021", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
+  ],
   "NUR1329": [
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2020", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1331": [{ "term": "Fall 2017", "average": "A-" }],
   "NUR1332": [{ "term": "Winter 2018", "average": "A-" }],
@@ -10177,13 +10444,18 @@
     { "term": "Fall 2018", "average": "A" },
     { "term": "Fall 2019", "average": "A" },
     { "term": "Winter 2021", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "NUR1338": [
     { "term": "Fall 2019", "average": "A-" },
-    { "term": "Fall 2020", "average": "A" }
+    { "term": "Fall 2020", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
-  "NUR1339": [{ "term": "Winter 2021", "average": "A" }],
+  "NUR1339": [
+    { "term": "Winter 2021", "average": "A" },
+    { "term": "Winter 2024", "average": "A-" }
+  ],
   "NUR1420": [{ "term": "Fall 2018", "average": "B+" }],
   "NUR1422": [
     { "term": "Fall 2015", "average": "A-" },
@@ -10244,7 +10516,8 @@
     { "term": "Fall 2018", "average": "B-" },
     { "term": "Fall 2019", "average": "C+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2022", "average": "C+" }
+    { "term": "Fall 2022", "average": "C+" },
+    { "term": "Fall 2023", "average": "C+" }
   ],
   "NUTR310": [
     { "term": "Winter 2018", "average": "A" },
@@ -10410,7 +10683,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "PHAR300": [
     { "term": "Fall 2015", "average": "B" },
@@ -10495,7 +10769,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PHGY212": [
     { "term": "Fall 2013", "average": "B+" },
@@ -10519,7 +10794,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PHGY311": [
     { "term": "Fall 2014", "average": "B" },
@@ -10593,7 +10869,8 @@
     { "term": "Winter 2018", "average": "A-" },
     { "term": "Winter 2019", "average": "A" },
     { "term": "Winter 2021", "average": "A-" },
-    { "term": "Winter 2022", "average": "B+" }
+    { "term": "Winter 2022", "average": "B+" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "PHIL202": [
     { "term": "Winter 2023", "average": "A-" },
@@ -10702,7 +10979,8 @@
   "PHIL311": [{ "term": "Fall 2018", "average": "B+" }],
   "PHIL327": [
     { "term": "Winter 2018", "average": "B+" },
-    { "term": "Fall 2019", "average": "B" }
+    { "term": "Fall 2019", "average": "B" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "PHIL334": [
     { "term": "Fall 2015", "average": "B" },
@@ -10713,7 +10991,10 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" }
   ],
-  "PHIL336": [{ "term": "Fall 2019", "average": "B" }],
+  "PHIL336": [
+    { "term": "Fall 2019", "average": "B" },
+    { "term": "Fall 2023", "average": "B+" }
+  ],
   "PHIL341": [
     { "term": "Fall 2012", "average": "B+" },
     { "term": "Winter 2016", "average": "A-" },
@@ -10778,7 +11059,8 @@
   ],
   "PHIL361": [
     { "term": "Winter 2019", "average": "B" },
-    { "term": "Winter 2021", "average": "B+" }
+    { "term": "Winter 2021", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PHIL367": [
     { "term": "Fall 2018", "average": "B+" },
@@ -10832,7 +11114,10 @@
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" }
   ],
-  "PHIL475": [{ "term": "Fall 2021", "average": "A-" }],
+  "PHIL475": [
+    { "term": "Fall 2021", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
+  ],
   "PHIL480": [{ "term": "Fall 2021", "average": "B" }],
   "PHIL481": [{ "term": "Fall 2022", "average": "A" }],
   "PHTH245": [
@@ -10879,7 +11164,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PHYS131": [
     { "term": "Fall 2012", "average": "B-" },
@@ -10905,7 +11191,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PHYS180": [
     { "term": "Fall 2011", "average": "B" },
@@ -10927,7 +11214,8 @@
     { "term": "Winter 2019", "average": "A" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PHYS182": [
     { "term": "Fall 2015", "average": "B+" },
@@ -10972,7 +11260,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "PHYS230": [
     { "term": "Fall 2015", "average": "B-" },
@@ -11001,7 +11290,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PHYS242": [
     { "term": "Fall 2017", "average": "B+" },
@@ -11060,7 +11350,8 @@
     { "term": "Fall 2019", "average": "A-" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "PHYS271": [
     { "term": "Winter 2015", "average": "B" },
@@ -11116,7 +11407,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PHYS346": [
     { "term": "Fall 2020", "average": "A-" },
@@ -11173,7 +11465,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PHYS434": [
     { "term": "Winter 2019", "average": "B" },
@@ -11193,7 +11486,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PHYS512": [
     { "term": "Fall 2019", "average": "A-" },
@@ -11407,7 +11701,8 @@
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "POLI322": [
     { "term": "Winter 2022", "average": "B" },
@@ -11460,7 +11755,8 @@
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "POLI338": [{ "term": "Summer 2023", "average": "B+" }],
   "POLI339": [
@@ -11487,7 +11783,8 @@
   "POLI342": [
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "B+" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "POLI345": [
     { "term": "Fall 2016", "average": "B+" },
@@ -11513,7 +11810,8 @@
     { "term": "Fall 2018", "average": "B" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
-    { "term": "Winter 2022", "average": "B+" }
+    { "term": "Winter 2022", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "POLI348": [
     { "term": "Fall 2021", "average": "B+" },
@@ -11560,7 +11858,8 @@
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "POLI359": [
     { "term": "Winter 2016", "average": "B+" },
@@ -11576,7 +11875,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "POLI361": [
     { "term": "Summer 2015", "average": "B+" },
@@ -11650,7 +11950,8 @@
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "POLI381": [
     { "term": "Winter 2017", "average": "B" },
@@ -11669,7 +11970,10 @@
     { "term": "Fall 2021", "average": "B+" }
   ],
   "POLI419": [{ "term": "Fall 2017", "average": "B+" }],
-  "POLI422": [{ "term": "Fall 2022", "average": "B+" }],
+  "POLI422": [
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
+  ],
   "POLI423": [{ "term": "Fall 2018", "average": "B+" }],
   "POLI425": [{ "term": "Winter 2017", "average": "B" }],
   "POLI426": [{ "term": "Fall 2020", "average": "B" }],
@@ -11684,7 +11988,8 @@
   ],
   "POLI433": [
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2022", "average": "B-" }
+    { "term": "Fall 2022", "average": "B-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "POLI435": [
     { "term": "Winter 2019", "average": "B" },
@@ -11712,6 +12017,7 @@
   ],
   "POLI445": [
     { "term": "Fall 2015", "average": "B+" },
+    { "term": "Fall 2017", "average": "B+" },
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "B+" },
@@ -11909,7 +12215,8 @@
     { "term": "Summer 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PSYC213": [
     { "term": "Winter 2015", "average": "B" },
@@ -11925,7 +12232,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Summer 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Summer 2023", "average": "B+" }
+    { "term": "Summer 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PSYC215": [
     { "term": "Winter 2012", "average": "B+" },
@@ -11950,7 +12258,8 @@
     { "term": "Winter 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "B-" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PSYC301": [
     { "term": "Fall 2017", "average": "B+" },
@@ -11962,7 +12271,8 @@
     { "term": "Winter 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "PSYC304": [
     { "term": "Fall 2015", "average": "B+" },
@@ -12008,7 +12318,10 @@
     { "term": "Summer 2023", "average": "A-" },
     { "term": "Fall 2023", "average": "A" }
   ],
-  "PSYC306": [{ "term": "Winter 2023", "average": "B+" }],
+  "PSYC306": [
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "A" }
+  ],
   "PSYC310": [
     { "term": "Winter 2013", "average": "B+" },
     { "term": "Winter 2018", "average": "A-" },
@@ -12107,7 +12420,8 @@
     { "term": "Fall 2020", "average": "A-" },
     { "term": "Fall 2021", "average": "B" },
     { "term": "Fall 2022", "average": "B" },
-    { "term": "Summer 2023", "average": "B+" }
+    { "term": "Summer 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "PSYC338": [
     { "term": "Winter 2016", "average": "B+" },
@@ -12123,13 +12437,15 @@
     { "term": "Fall 2019", "average": "B" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "PSYC380D2": [
     { "term": "Winter 2017", "average": "A" },
     { "term": "Winter 2018", "average": "A" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "PSYC403": [
     { "term": "Fall 2016", "average": "B+" },
@@ -12173,7 +12489,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PSYC413": [
     { "term": "Fall 2018", "average": "B+" },
@@ -12182,7 +12499,8 @@
   ],
   "PSYC427": [
     { "term": "Winter 2018", "average": "A-" },
-    { "term": "Winter 2021", "average": "A-" }
+    { "term": "Winter 2021", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PSYC433": [
     { "term": "Winter 2018", "average": "A-" },
@@ -12201,7 +12519,10 @@
     { "term": "Fall 2022", "average": "A" },
     { "term": "Fall 2023", "average": "A" }
   ],
-  "PSYC443": [{ "term": "Winter 2023", "average": "A-" }],
+  "PSYC443": [
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
+  ],
   "PSYC444": [
     { "term": "Winter 2018", "average": "B+" },
     { "term": "Winter 2019", "average": "A-" },
@@ -12219,7 +12540,8 @@
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Summer 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Winter 2024", "average": "B+" }
   ],
   "PSYC473": [
     { "term": "Winter 2019", "average": "B" },
@@ -12262,7 +12584,8 @@
     { "term": "Fall 2017", "average": "A" },
     { "term": "Fall 2018", "average": "A" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "A" }
+    { "term": "Fall 2021", "average": "A" },
+    { "term": "Fall 2022", "average": "A" }
   ],
   "PSYT301": [
     { "term": "Winter 2016", "average": "B+" },
@@ -12313,7 +12636,8 @@
     { "term": "Fall 2017", "average": "B+" },
     { "term": "Fall 2019", "average": "B" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "B" }
+    { "term": "Fall 2022", "average": "B" },
+    { "term": "Fall 2023", "average": "B-" }
   ],
   "REDM400": [{ "term": "Winter 2017", "average": "A" }],
   "RELG201": [
@@ -12323,7 +12647,8 @@
     { "term": "Fall 2018", "average": "A-" },
     { "term": "Fall 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A-" },
-    { "term": "Fall 2021", "average": "A-" }
+    { "term": "Fall 2021", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "RELG202": [
     { "term": "Winter 2013", "average": "A" },
@@ -12331,7 +12656,8 @@
     { "term": "Winter 2018", "average": "A" },
     { "term": "Winter 2019", "average": "A" },
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "B+" }
+    { "term": "Fall 2022", "average": "B+" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "RELG203": [
     { "term": "Fall 2012", "average": "B+" },
@@ -12355,7 +12681,8 @@
     { "term": "Winter 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "RELG205": [
     { "term": "Fall 2021", "average": "B+" },
@@ -12371,7 +12698,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "B+" },
-    { "term": "Winter 2023", "average": "B" }
+    { "term": "Winter 2023", "average": "B" },
+    { "term": "Winter 2024", "average": "B" }
   ],
   "RELG208": [
     { "term": "Fall 2015", "average": "A-" },
@@ -12410,7 +12738,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "B" },
-    { "term": "Winter 2023", "average": "B+" }
+    { "term": "Winter 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "RELG254": [
     { "term": "Winter 2019", "average": "B+" },
@@ -12441,9 +12770,13 @@
     { "term": "Summer 2020", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A" }
   ],
-  "RELG288": [{ "term": "Winter 2022", "average": "A-" }],
+  "RELG288": [
+    { "term": "Winter 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
+  ],
   "RELG300": [
     { "term": "Fall 2016", "average": "A-" },
     { "term": "Fall 2017", "average": "A" },
@@ -12516,7 +12849,8 @@
     { "term": "Winter 2019", "average": "A" },
     { "term": "Winter 2021", "average": "A" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "RELG451": [{ "term": "Fall 2020", "average": "A-" }],
   "RETL402": [
@@ -12566,7 +12900,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "A-" },
     { "term": "Winter 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A-" }
+    { "term": "Winter 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "RUSS229": [
     { "term": "Fall 2018", "average": "A" },
@@ -12622,7 +12957,8 @@
     { "term": "Fall 2021", "average": "B+" },
     { "term": "Winter 2022", "average": "A" },
     { "term": "Fall 2022", "average": "A-" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "SOCI211": [
     { "term": "Fall 2014", "average": "B" },
@@ -12645,7 +12981,8 @@
     { "term": "Winter 2022", "average": "B-" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B" },
-    { "term": "Summer 2023", "average": "B+" }
+    { "term": "Summer 2023", "average": "B+" },
+    { "term": "Fall 2023", "average": "B+" }
   ],
   "SOCI212": [
     { "term": "Fall 2017", "average": "A-" },
@@ -12776,7 +13113,8 @@
     { "term": "Fall 2019", "average": "B-" },
     { "term": "Fall 2020", "average": "B+" },
     { "term": "Fall 2021", "average": "B-" },
-    { "term": "Fall 2022", "average": "B-" }
+    { "term": "Fall 2022", "average": "B-" },
+    { "term": "Fall 2023", "average": "B" }
   ],
   "SOCI305": [
     { "term": "Winter 2016", "average": "A-" },
@@ -12796,7 +13134,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Fall 2020", "average": "A" },
     { "term": "Winter 2022", "average": "A" },
-    { "term": "Winter 2023", "average": "A" }
+    { "term": "Winter 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" }
   ],
   "SOCI310": [
     { "term": "Winter 2015", "average": "B+" },
@@ -12830,7 +13169,8 @@
   "SOCI325": [
     { "term": "Winter 2021", "average": "A" },
     { "term": "Fall 2021", "average": "A" },
-    { "term": "Fall 2022", "average": "A" }
+    { "term": "Fall 2022", "average": "A" },
+    { "term": "Fall 2023", "average": "A" }
   ],
   "SOCI326": [
     { "term": "Fall 2021", "average": "B" },
@@ -12914,13 +13254,17 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Summer 2019", "average": "A-" },
     { "term": "Winter 2021", "average": "A-" },
-    { "term": "Winter 2022", "average": "A-" }
+    { "term": "Winter 2022", "average": "A-" },
+    { "term": "Winter 2023", "average": "A-" }
   ],
   "SOCI420": [
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2023", "average": "B" }
   ],
-  "SOCI461": [{ "term": "Winter 2018", "average": "A-" }],
+  "SOCI461": [
+    { "term": "Winter 2018", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
+  ],
   "SWRK219": [{ "term": "Winter 2023", "average": "A" }],
   "SWRK220": [
     { "term": "Fall 2017", "average": "A-" },
@@ -12964,12 +13308,14 @@
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
     { "term": "Summer 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "WCOM250": [
     { "term": "Fall 2022", "average": "A" },
     { "term": "Winter 2023", "average": "A" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "A-" }
   ],
   "WCOM314": [
     { "term": "Fall 2022", "average": "A-" },
@@ -12979,14 +13325,16 @@
   "WCOM333": [{ "term": "Winter 2023", "average": "A-" }],
   "WILD302": [
     { "term": "Fall 2021", "average": "A-" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "WILD307": [
     { "term": "Fall 2014", "average": "B+" },
     { "term": "Fall 2016", "average": "A-" },
     { "term": "Fall 2018", "average": "B+" },
     { "term": "Fall 2021", "average": "B+" },
-    { "term": "Fall 2022", "average": "A-" }
+    { "term": "Fall 2022", "average": "A-" },
+    { "term": "Fall 2023", "average": "A-" }
   ],
   "WILD350": [
     { "term": "Winter 2015", "average": "B+" },
