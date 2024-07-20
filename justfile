@@ -57,6 +57,11 @@ fmt-check:
 forbid:
   ./bin/forbid
 
+generate-changelog:
+  cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+    -- \
+    --output client/src/assets/changelog.json
+
 initialize *args: restart-services
   cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
 
