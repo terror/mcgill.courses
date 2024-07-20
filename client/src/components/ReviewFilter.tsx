@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
-import { FilterToggle } from './FilterToggle';
 import { ResetButton } from './ResetButton';
 
 const sortTypes = [
@@ -23,19 +22,24 @@ export type ReviewSortType = (typeof sortTypes)[number];
 type ReviewFilterProps = {
   course: Course;
   allReviews: Review[];
+  sortBy: ReviewSortType;
+  selectedInstructor: string;
   setReviews: Dispatch<SetStateAction<Review[]>>;
   setShowAllReviews: Dispatch<SetStateAction<boolean>>;
+  setSelectedInstructor: Dispatch<SetStateAction<string>>;
+  setSortBy: Dispatch<SetStateAction<ReviewSortType>>;
 };
 
 export const ReviewFilter = ({
   course,
   allReviews,
+  sortBy,
+  selectedInstructor,
   setReviews,
   setShowAllReviews,
+  setSortBy,
+  setSelectedInstructor,
 }: ReviewFilterProps) => {
-  const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
-  const [selectedInstructor, setSelectedInstructor] = useState<string>('');
-
   useEffect(() => {
     setReviews(
       allReviews
@@ -79,7 +83,7 @@ export const ReviewFilter = ({
         })
     );
     setShowAllReviews(false);
-  }, [sortBy, selectedInstructor]);
+  }, [sortBy, selectedInstructor, allReviews]);
 
   const reset = () => {
     setSortBy('Most Recent');
@@ -92,44 +96,41 @@ export const ReviewFilter = ({
   const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
 
   return (
-    <div className='flex flex-col rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
-      <FilterToggle>
-        <div className='py-2' />
-        <div className='relative'>
-          <div className='p-1'>
-            <div className='flex gap-x-2'>
-              <div className='w-2/5'>
-                <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
-                  Sort By
-                </h2>
-                <div className='relative z-10'>
-                  <Autocomplete
-                    options={sorts}
-                    value={sortBy}
-                    setValue={(val: string) => setSortBy(val as ReviewSortType)}
-                  />
-                </div>
+    <div className='rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
+      <div className='relative mt-6 xs:mt-0 xs:flex xs:items-center'>
+        <div className='p-1'>
+          <div className='flex max-w-sm gap-x-2'>
+            <div className='w-2/5 xs:max-w-56'>
+              <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                Sort By
+              </h2>
+              <div className='relative z-10'>
+                <Autocomplete
+                  options={sorts}
+                  value={sortBy}
+                  setValue={(val: string) => setSortBy(val as ReviewSortType)}
+                />
               </div>
-              <div className='w-3/5'>
-                <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
-                  Instructor
-                </h2>
-                <div className='relative z-10'>
-                  <Autocomplete
-                    options={uniqueInstructors}
-                    value={selectedInstructor}
-                    setValue={setSelectedInstructor}
-                  />
-                </div>
+            </div>
+            <div className='w-3/5 xs:w-auto'>
+              <h2 className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+                Instructor
+              </h2>
+              <div className='relative z-10'>
+                <Autocomplete
+                  options={uniqueInstructors}
+                  value={selectedInstructor}
+                  setValue={setSelectedInstructor}
+                />
               </div>
             </div>
           </div>
-          <ResetButton
-            className='absolute -top-4 right-2 ml-auto'
-            onClear={reset}
-          />
         </div>
-      </FilterToggle>
+        <ResetButton
+          className='absolute -top-2 right-2 xs:static xs:mt-6 '
+          onClear={reset}
+        />
+      </div>
     </div>
   );
 };
