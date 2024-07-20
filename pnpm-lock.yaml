@@ -21,7 +21,7 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0
       flexsearch:
-        specifier: ^0.7.43
+        specifier: ^0.7.21
         version: 0.7.43
       formik:
         specifier: ^2.4.6
