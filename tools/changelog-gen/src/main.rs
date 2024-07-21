@@ -49,7 +49,7 @@ impl PullRequest<'_> {
 
     let mut prompt = String::new();
 
-    prompt.push_str(&fs::read_to_string("prompt.txt")?);
+    prompt.push_str(include_str!("../prompt.txt"));
 
     if let Some(title) = self.title {
       prompt.push_str(&format!("\nTitle of the pull request: {}\n", title));

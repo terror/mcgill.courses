@@ -16,6 +16,7 @@ export type CourseData = Pick<
 
 export const getSearchIndex = () => {
   const courses = data as CourseData[];
+
   const instructors: Instructor[] = _.uniqBy(
     courses.flatMap((course: CourseData) => course.instructors),
     (instructor: Instructor) => instructor.name
@@ -58,6 +59,7 @@ export const updateSearchResults = (
   const courseSearchResults = coursesIndex
     .search(query, 4)
     ?.map((id) => courses[id as number]);
+
   const instructorSearchResults = instructorsIndex
     .search(query, 2)
     ?.map((id) => instructors[id as number]);
