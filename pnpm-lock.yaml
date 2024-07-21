@@ -22,7 +22,7 @@ importers:
         version: 2.30.0
       flexsearch:
         specifier: ^0.7.21
-        version: 0.7.43
+        version: 0.7.21
       formik:
         specifier: ^2.4.6
         version: 2.4.6(react@18.3.1)
@@ -1223,8 +1223,8 @@ packages:
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
 
-  flexsearch@0.7.43:
-    resolution: {integrity: sha512-c5o/+Um8aqCSOXGcZoqZOm+NqtVwNsvVpWv6lfmSclU954O3wvQKxxK8zj74fPaSJbXpSLTs4PRhh+wnoCXnKg==}
+  flexsearch@0.7.21:
+    resolution: {integrity: sha512-W7cHV7Hrwjid6lWmy0IhsWDFQboWSng25U3VVywpHOTJnnAZNPScog67G+cVpeX9f7yDD21ih0WDrMMT+JoaYg==}
 
   follow-redirects@1.15.6:
     resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
@@ -3790,7 +3790,7 @@ snapshots:
 
   flatted@3.3.1: {}
 
-  flexsearch@0.7.43: {}
+  flexsearch@0.7.21: {}
 
   follow-redirects@1.15.6(debug@4.3.5):
     optionalDependencies:
