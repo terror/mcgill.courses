@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
@@ -135,10 +136,23 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
           </div>
         ))}
       </td>
-      <td className='p-2'>
+      <td className='p-2 xs:pr-0'>
         {block.timeblocks.map((tb, i) => (
           <TimeblockDays days={tb.days} key={i} />
         ))}
+      </td>
+      <td
+        className='hidden cursor-pointer pr-2 text-xs font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
+        onClick={() => {
+          toast.promise(navigator.clipboard.writeText(block.crn), {
+            success: `Copied CRN for ${block.display} to clipboard.`,
+            loading: undefined,
+            error:
+              'Something went wrong when trying to copy section CRN, please try again!',
+          });
+        }}
+      >
+        CRN: {block.crn}
       </td>
     </tr>
   );
