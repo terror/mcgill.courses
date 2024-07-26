@@ -142,7 +142,7 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
         ))}
       </td>
       <td
-        className='hidden cursor-pointer pr-2 text-xs font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
+        className='hidden cursor-pointer pr-2 text-sm font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
         onClick={() => {
           toast.promise(navigator.clipboard.writeText(block.crn), {
             success: `Copied CRN for ${block.display} to clipboard.`,
