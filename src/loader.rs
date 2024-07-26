@@ -41,14 +41,15 @@ pub(crate) struct Loader {
       "2020-2021",
       "2021-2022",
       "2022-2023",
-      "2023-2024"
+      "2023-2024",
+      "2024-2025",
     ],
     help = "The mcgill terms to scrape"
   )]
   mcgill_terms: Vec<String>,
   #[clap(
     long,
-    default_values = ["202305", "202309", "202401"],
+    default_values = ["202405", "202409", "202501"],
     help = "The schedule builder terms to scrape"
   )]
   vsb_terms: Vec<usize>,
