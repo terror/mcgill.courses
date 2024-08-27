@@ -88,7 +88,7 @@ jobs:
 
       - name: Install mongodb
         run: |
-          brew cleanup -s
+          rm /Users/runner/Library/Caches/Homebrew/downloads/9d619530e717388268b96b352b44b5a51257c9874d2f8a4efe26666631660321--mongodb-macos-arm64-7.0.14.tgz
           brew tap mongodb/brew
           brew install mongodb-community@7.0
           echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
@@ -130,7 +130,7 @@ jobs:
 
       - name: Install mongodb
         run: |
-          brew cleanup -s
+          rm /Users/runner/Library/Caches/Homebrew/downloads/9d619530e717388268b96b352b44b5a51257c9874d2f8a4efe26666631660321--mongodb-macos-arm64-7.0.14.tgz
           brew tap mongodb/brew
           brew install mongodb-community@7.0
           echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
