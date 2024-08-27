@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { User } from 'react-feather';
+import { ChevronRight, User } from 'react-feather';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -20,16 +20,20 @@ const MenuItem: React.FC<MenuItemProps> = ({ href, onClick, children }) => {
           active
             ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200 rounded-lg'
             : 'text-gray-700 dark:bg-neutral-800 dark:text-gray-200',
-          'block px-3 py-2 text-sm w-full text-left'
+          'flex items-center justify-between px-3 py-2 text-sm w-full text-left'
         );
+
+        const icon = href && active && <ChevronRight size={20} />;
 
         return href ? (
           <Link to={href} className={className}>
             {children}
+            {icon}
           </Link>
         ) : (
           <button onClick={onClick} className={className}>
             {children}
+            {icon}
           </button>
         );
       }}
