@@ -38,10 +38,6 @@ const MenuItem: React.FC<MenuItemProps> = ({ href, onClick, children }) => {
 };
 
 export const ProfileDropdown = () => {
-  const handleLogout = () => {
-    window.location.href = `${getUrl()}/api/auth/logout?redirect=${window.location.origin}`;
-  };
-
   return (
     <Menu as='div' className='relative inline-block text-left'>
       <div>
@@ -61,7 +57,13 @@ export const ProfileDropdown = () => {
         <Menu.Items className='absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none dark:bg-neutral-800 dark:text-gray-200'>
           <div className='mx-2 my-1 py-1'>
             <MenuItem href='/profile'>Profile</MenuItem>
-            <MenuItem onClick={handleLogout}>Log out</MenuItem>
+            <MenuItem
+              onClick={() =>
+                (window.location.href = `${getUrl()}/api/auth/logout?redirect=${window.location.origin}`)
+              }
+            >
+              Log out
+            </MenuItem>
           </div>
         </Menu.Items>
       </Transition>
