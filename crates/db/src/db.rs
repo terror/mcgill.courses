@@ -1139,6 +1139,15 @@ impl Db {
     )
   }
 
+  pub async fn invalidate_course_schedules(&self) -> Result {
+    self
+      .database
+      .collection::<Course>(Self::COURSE_COLLECTION)
+      .update_many(doc! {}, doc! {"$set": {"schedule": null}}, None)
+      .await?;
+    Ok(())
+  }
+
   #[cfg(test)]
   async fn instructors(&self) -> Result<Vec<Instructor>> {
     Ok(
