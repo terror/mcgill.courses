@@ -86,16 +86,6 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Clear homebrew cache
-        run: |
-          brew cleanup
-          rm -rf $(brew --cache)
-
-      - name: Update homebrew
-        run: |
-          brew update
-          brew tap --repair
-
       - name: Install mongodb
         run: |
           brew tap mongodb/brew
@@ -136,16 +126,6 @@ jobs:
           toolchain: stable
 
       - uses: Swatinem/rust-cache@v2
-
-      - name: Clear homebrew cache
-        run: |
-          brew cleanup
-          rm -rf $(brew --cache)
-
-      - name: Update homebrew
-        run: |
-          brew update
-          brew tap --repair
 
       - name: Install mongodb
         run: |
