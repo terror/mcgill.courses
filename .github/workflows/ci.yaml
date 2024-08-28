@@ -87,7 +87,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       - name: Clear homebrew cache
-        run: brew cleanup && rm -rf $(brew --cache)
+        run: |
+          brew cleanup
+          rm -rf $(brew --cache)
 
       - name: Update homebrew
         run: |
@@ -136,7 +138,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       - name: Clear homebrew cache
-        run: brew cleanup && rm -rf $(brew --cache)
+        run: |
+          brew cleanup
+          rm -rf $(brew --cache)
 
       - name: Update homebrew
         run: |
