@@ -98,7 +98,7 @@ jobs:
 
       - name: Install mongodb
         run: |
-          brew untap mongodb/brew && brew tap mongodb/brew
+          brew tap mongodb/brew
           brew install mongodb-community@7.0
           echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
           brew services start mongodb-community@7.0
@@ -149,7 +149,7 @@ jobs:
 
       - name: Install mongodb
         run: |
-          brew untap mongodb/brew && brew tap mongodb/brew
+          brew tap mongodb/brew
           brew install mongodb-community@7.0
           echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
           brew services start mongodb-community@7.0
