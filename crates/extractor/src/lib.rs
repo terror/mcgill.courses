@@ -642,7 +642,8 @@ mod tests {
               t1: Some("515".into()),
               t2: Some("1255".into()),
             }
-          ])
+          ]),
+          crn: Some("683".into()),
         }]),
         term: Some("Summer 2023".into())
       }]

@@ -137,6 +137,7 @@ impl Element for Schedule {
               campus: block.value().attr("campus").map(String::from),
               display: block.value().attr("disp").map(String::from),
               location: block.value().attr("location").map(String::from),
+              crn: block.value().attr("key").map(String::from),
               timeblocks: Some(
                 timeblocks
                   .iter()
