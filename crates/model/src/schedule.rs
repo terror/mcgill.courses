@@ -17,6 +17,7 @@ pub struct Block {
   pub display: Option<String>,
   pub location: Option<String>,
   pub timeblocks: Option<Vec<TimeBlock>>,
+  pub crn: Option<String>,
 }
 
 impl Into<Bson> for Block {
@@ -26,6 +27,7 @@ impl Into<Bson> for Block {
       "display": self.display.map(String::from),
       "location": self.location.map(String::from),
       "timeblocks": self.timeblocks.map(Vec::from),
+      "crn": self.crn.map(String::from),
     })
   }
 }

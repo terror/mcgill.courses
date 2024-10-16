@@ -3,6 +3,7 @@ export type Block = {
   display: string;
   location: string;
   timeblocks: TimeBlock[];
+  crn: string;
 };
 
 export type TimeBlock = {
