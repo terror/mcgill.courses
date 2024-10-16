@@ -25,6 +25,7 @@
     "flexsearch": "^0.7.21",
     "formik": "^2.4.6",
     "formik-persist-values": "^1.4.1",
+    "framer-motion": "^11.11.9",
     "immer": "^10.1.1",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
