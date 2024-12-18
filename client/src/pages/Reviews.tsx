@@ -19,14 +19,16 @@ export const Reviews = () => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
   const [reviews, setReviews] = useState<Review[] | undefined>(undefined);
-  const [reviewCount, setReviewCount] = useState<number | undefined>(undefined);
+  const [uniqueUserCount, setUniqueUserCount] = useState<number | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     repo
       .getReviews({ limit, offset: 0, sorted: true, withUserCount: true })
       .then((data) => {
         setReviews(data.reviews);
-        setReviewCount(data.uniqueUserCount);
+        setUniqueUserCount(data.uniqueUserCount);
       })
       .catch(() => {
         toast.error('Failed to fetch reviews. Please try again later.');
@@ -45,7 +47,7 @@ export const Reviews = () => {
     }
   };
 
-  if (reviews === undefined || reviewCount === undefined) {
+  if (reviews === undefined || uniqueUserCount === undefined) {
     return <Loading />;
   }
 
@@ -83,8 +85,9 @@ export const Reviews = () => {
             What people are saying
           </h1>
           <p className='mt-2 text-center text-gray-600 dark:text-gray-400'>
-            Check out what {reviewCount.toLocaleString('en-us')} people have
-            said about courses at McGill University.
+            Check out what {uniqueUserCount.toLocaleString('en-us')} verified
+            McGill student{uniqueUserCount === 1 ? '' : 's'} on our platform
+            have said about courses at McGill University.
           </p>
         </div>
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
