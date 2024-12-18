@@ -1128,6 +1128,7 @@ impl Db {
   }
 
   pub async fn unique_user_count(&self) -> Result<u64> {
+    // Timestamp of https://github.com/terror/mcgill.courses/pull/500
     let rmp_scrape_epoch: chrono::DateTime<Utc> =
       Utc.timestamp_opt(1713472800, 0).unwrap();
 
