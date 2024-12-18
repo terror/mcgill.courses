@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
 import { Fragment, useEffect, useState } from 'react';
-import { Edit } from 'react-feather';
+import { Edit, Tag } from 'react-feather';
 import { BsPinFill } from 'react-icons/bs';
 import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,9 @@ import { BirdIcon } from './BirdIcon';
 import { DeleteButton } from './DeleteButton';
 import { IconRating } from './IconRating';
 import { Tooltip } from './Tooltip';
+
+// timestamp of https://github.com/terror/mcgill.courses/pull/500
+const RMP_SCRAPE_EPOCH = new Date(1713472800 * 1000);
 
 const LoginPrompt = () => {
   return (
@@ -217,11 +220,19 @@ export const CourseReview = ({
         <div className='flex w-full'>
           <div className='relative flex w-full flex-col'>
             <div className='flex w-full'>
-              <Tooltip text={longDate}>
+              <Tooltip text={longDate} className='w-48'>
                 <p className='cursor-default py-2 text-xs font-medium text-gray-700 dark:text-gray-300'>
                   {shortDate}
                 </p>
               </Tooltip>
+              {date < RMP_SCRAPE_EPOCH && (
+                <Tooltip
+                  text='External review from RateMyProfessor'
+                  className='w-36'
+                >
+                  <Tag className='ml-2 mt-1 w-4 text-blue-500' />
+                </Tooltip>
+              )}
               {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
