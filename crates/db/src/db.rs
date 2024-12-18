@@ -1128,15 +1128,28 @@ impl Db {
   }
 
   pub async fn unique_user_count(&self) -> Result<u64> {
-    Ok(
-      self
-        .database
-        .collection::<Review>(Self::REVIEW_COLLECTION)
-        .distinct("userId", None, None)
-        .await?
-        .len()
-        .try_into()?,
-    )
+    let rmp_scrape_epoch: chrono::DateTime<Utc> =
+      Utc.timestamp_opt(1713472800, 0).unwrap();
+
+    let reviews = self
+      .database
+      .collection::<Review>(Self::REVIEW_COLLECTION)
+      .find(
+        doc! {
+          "timestamp": { "$gte": rmp_scrape_epoch }
+        },
+        None,
+      )
+      .await?
+      .try_collect::<Vec<Review>>()
+      .await?;
+
+    let unique_users = reviews
+      .into_iter()
+      .map(|review| review.user_id)
+      .collect::<HashSet<String>>();
+
+    Ok(unique_users.len().try_into()?)
   }
 
   #[cfg(test)]
@@ -2537,6 +2550,12 @@ mod tests {
   async fn unique_user_count() {
     let TestContext { db, .. } = TestContext::new().await;
 
+    let rmp_scrape_epoch = Utc.timestamp_opt(1713472800, 0).unwrap();
+
+    let before_epoch = rmp_scrape_epoch - chrono::Duration::hours(1);
+
+    let after_epoch = rmp_scrape_epoch + chrono::Duration::hours(1);
+
     db.add_course(Course {
       id: "MATH240".into(),
       ..Default::default()
@@ -2554,34 +2573,40 @@ mod tests {
     assert_eq!(db.unique_user_count().await.unwrap(), 0);
     assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 0);
 
+    // Add review before epoch - should not be counted
     db.add_review(Review {
       content: "foo".into(),
       course_id: "MATH240".into(),
       user_id: "1".into(),
+      timestamp: DateTime::from_chrono(before_epoch),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    assert_eq!(db.unique_user_count().await.unwrap(), 0);
+    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
+
+    // Add review after epoch - should be counted
+    db.add_review(Review {
+      content: "bar".into(),
+      course_id: "COMP202".into(),
+      user_id: "2".into(),
+      timestamp: DateTime::from_chrono(after_epoch),
       ..Default::default()
     })
     .await
     .unwrap();
 
     assert_eq!(db.unique_user_count().await.unwrap(), 1);
-    assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 1);
-
-    db.add_review(Review {
-      content: "bar".into(),
-      course_id: "COMP202".into(),
-      user_id: "2".into(),
-      ..Default::default()
-    })
-    .await
-    .unwrap();
-
-    assert_eq!(db.unique_user_count().await.unwrap(), 2);
     assert_eq!(db.reviews(None, None, None).await.unwrap().len(), 2);
 
+    // Add another review after epoch - should be counted
     db.add_review(Review {
-      content: "bar".into(),
+      content: "baz".into(),
       course_id: "COMP202".into(),
       user_id: "1".into(),
+      timestamp: DateTime::from_chrono(after_epoch),
       ..Default::default()
     })
     .await
