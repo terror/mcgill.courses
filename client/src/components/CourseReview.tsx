@@ -19,7 +19,7 @@ import { DeleteButton } from './DeleteButton';
 import { IconRating } from './IconRating';
 import { Tooltip } from './Tooltip';
 
-// timestamp of https://github.com/terror/mcgill.courses/pull/500
+// Timestamp of https://github.com/terror/mcgill.courses/pull/500
 const RMP_SCRAPE_EPOCH = new Date(1713472800 * 1000);
 
 const LoginPrompt = () => {
@@ -227,10 +227,10 @@ export const CourseReview = ({
               </Tooltip>
               {date < RMP_SCRAPE_EPOCH && (
                 <Tooltip
-                  text='External review from RateMyProfessor'
+                  text='External review from RateMyProfessors'
                   className='w-36'
                 >
-                  <Tag className='ml-2 mt-1 w-4 text-blue-500' />
+                  <Tag className='ml-2 mt-1 w-4 text-red-600' />
                 </Tooltip>
               )}
               {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
