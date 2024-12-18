@@ -1135,22 +1135,16 @@ impl Db {
     let reviews = self
       .database
       .collection::<Review>(Self::REVIEW_COLLECTION)
-      .find(
+      .distinct(
+        "userId",
         doc! {
-          "timestamp": { "$gte": rmp_scrape_epoch }
+            "timestamp": { "$gte": rmp_scrape_epoch }
         },
         None,
       )
-      .await?
-      .try_collect::<Vec<Review>>()
       .await?;
 
-    let unique_users = reviews
-      .into_iter()
-      .map(|review| review.user_id)
-      .collect::<HashSet<String>>();
-
-    Ok(unique_users.len().try_into()?)
+    Ok(reviews.len().try_into()?)
   }
 
   #[cfg(test)]
