@@ -87,7 +87,7 @@ export const Reviews = () => {
           <p className='mt-2 text-center text-gray-600 dark:text-gray-400'>
             Check out what {uniqueUserCount.toLocaleString('en-us')} verified
             McGill student{uniqueUserCount === 1 ? '' : 's'} on our platform
-            {uniqueUserCount === 1 ? 'has' : 'have'} said about courses at
+            {uniqueUserCount === 1 ? ' has' : ' have'} said about courses at
             McGill University.
           </p>
         </div>
