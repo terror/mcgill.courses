@@ -2231,7 +2231,8 @@
     { "term": "Summer 2022", "average": "A-" },
     { "term": "Winter 2023", "average": "A-" },
     { "term": "Summer 2023", "average": "A-" },
-    { "term": "Winter 2024", "average": "A" }
+    { "term": "Winter 2024", "average": "A" },
+    { "term": "Summer 2024", "average": "A" }
   ],
   "CHEM183": [
     { "term": "Fall 2013", "average": "B+" },
@@ -2307,7 +2308,8 @@
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Summer 2024", "average": "B+" }
   ],
   "CHEM213": [
     { "term": "Fall 2018", "average": "C+" },
@@ -2349,7 +2351,8 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Winter 2024", "average": "A-" }
+    { "term": "Winter 2024", "average": "A-" },
+    { "term": "Summer 2024", "average": "A-" }
   ],
   "CHEM223": [
     { "term": "Fall 2015", "average": "B-" },
@@ -2571,7 +2574,8 @@
     { "term": "Summer 2020", "average": "A" },
     { "term": "Summer 2021", "average": "A-" },
     { "term": "Summer 2022", "average": "A" },
-    { "term": "Summer 2023", "average": "A-" }
+    { "term": "Summer 2023", "average": "A-" },
+    { "term": "Summer 2024", "average": "A-" }
   ],
   "CIVE225": [
     { "term": "Winter 2017", "average": "B" },
@@ -2871,7 +2875,8 @@
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
     { "term": "Fall 2023", "average": "A-" },
-    { "term": "Winter 2024", "average": "B+" }
+    { "term": "Winter 2024", "average": "B+" },
+    { "term": "Summer 2024", "average": "B+" }
   ],
   "COMP204": [
     { "term": "Fall 2018", "average": "B" },
@@ -5685,7 +5690,8 @@
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
     { "term": "Fall 2023", "average": "B" },
-    { "term": "Winter 2024", "average": "B" }
+    { "term": "Winter 2024", "average": "B" },
+    { "term": "Summer 2024", "average": "B" }
   ],
   "FACC400": [
     { "term": "Winter 2016", "average": "A-" },
@@ -7862,7 +7868,8 @@
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B+" },
     { "term": "Fall 2023", "average": "B" },
-    { "term": "Winter 2024", "average": "B" }
+    { "term": "Winter 2024", "average": "B" },
+    { "term": "Summer 2024", "average": "C+" }
   ],
   "MATH150": [
     { "term": "Fall 2012", "average": "B" },
@@ -7927,7 +7934,9 @@
     { "term": "Fall 2022", "average": "A" },
     { "term": "Winter 2023", "average": "A" },
     { "term": "Summer 2023", "average": "A" },
-    { "term": "Fall 2023", "average": "A" }
+    { "term": "Fall 2023", "average": "A" },
+    { "term": "Winter 2024", "average": "A" },
+    { "term": "Summer 2024", "average": "A-" }
   ],
   "MATH204": [
     { "term": "Winter 2015", "average": "B+" },
@@ -7975,7 +7984,8 @@
     { "term": "Winter 2023", "average": "C+" },
     { "term": "Summer 2023", "average": "B" },
     { "term": "Fall 2023", "average": "B+" },
-    { "term": "Winter 2024", "average": "C+" }
+    { "term": "Winter 2024", "average": "C+" },
+    { "term": "Summer 2024", "average": "B+" }
   ],
   "MATH223": [
     { "term": "Fall 2013", "average": "B" },
@@ -8159,7 +8169,8 @@
     { "term": "Winter 2023", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
     { "term": "Fall 2023", "average": "A-" },
-    { "term": "Winter 2024", "average": "B-" }
+    { "term": "Winter 2024", "average": "B-" },
+    { "term": "Summer 2024", "average": "B-" }
   ],
   "MATH263": [
     { "term": "Fall 2013", "average": "C+" },
@@ -9178,7 +9189,8 @@
     { "term": "Winter 2023", "average": "B+" },
     { "term": "Summer 2023", "average": "B+" },
     { "term": "Fall 2023", "average": "B" },
-    { "term": "Winter 2024", "average": "B+" }
+    { "term": "Winter 2024", "average": "B+" },
+    { "term": "Summer 2024", "average": "B" }
   ],
   "MGCR352": [
     { "term": "Fall 2014", "average": "B+" },
@@ -10896,7 +10908,8 @@
     { "term": "Summer 2022", "average": "B+" },
     { "term": "Fall 2022", "average": "B" },
     { "term": "Summer 2023", "average": "B" },
-    { "term": "Fall 2023", "average": "B+" }
+    { "term": "Fall 2023", "average": "B+" },
+    { "term": "Summer 2024", "average": "B+" }
   ],
   "PHIL221": [
     { "term": "Winter 2015", "average": "A-" },
@@ -10936,7 +10949,9 @@
     { "term": "Winter 2022", "average": "B+" },
     { "term": "Summer 2022", "average": "A" },
     { "term": "Winter 2023", "average": "B+" },
-    { "term": "Summer 2023", "average": "A-" }
+    { "term": "Summer 2023", "average": "A-" },
+    { "term": "Winter 2024", "average": "B+" },
+    { "term": "Summer 2024", "average": "A-" }
   ],
   "PHIL240": [
     { "term": "Fall 2014", "average": "B" },
@@ -11657,7 +11672,8 @@
     { "term": "Summer 2021", "average": "B+" },
     { "term": "Fall 2021", "average": "B-" },
     { "term": "Fall 2022", "average": "B" },
-    { "term": "Fall 2023", "average": "B" }
+    { "term": "Fall 2023", "average": "B" },
+    { "term": "Summer 2024", "average": "B+" }
   ],
   "POLI311": [
     { "term": "Summer 2015", "average": "B+" },
@@ -12288,7 +12304,8 @@
     { "term": "Summer 2022", "average": "A-" },
     { "term": "Fall 2022", "average": "A-" },
     { "term": "Summer 2023", "average": "A-" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Summer 2024", "average": "B+" }
   ],
   "PSYC305": [
     { "term": "Winter 2013", "average": "B+" },
@@ -13194,7 +13211,8 @@
     { "term": "Winter 2019", "average": "B+" },
     { "term": "Winter 2021", "average": "B+" },
     { "term": "Fall 2022", "average": "B+" },
-    { "term": "Fall 2023", "average": "A-" }
+    { "term": "Fall 2023", "average": "A-" },
+    { "term": "Summer 2024", "average": "A-" }
   ],
   "SOCI335": [
     { "term": "Fall 2015", "average": "A-" },
@@ -13309,7 +13327,8 @@
     { "term": "Winter 2023", "average": "A-" },
     { "term": "Summer 2023", "average": "A-" },
     { "term": "Fall 2023", "average": "A-" },
-    { "term": "Winter 2024", "average": "A-" }
+    { "term": "Winter 2024", "average": "A-" },
+    { "term": "Summer 2024", "average": "A-" }
   ],
   "WCOM250": [
     { "term": "Fall 2022", "average": "A" },
