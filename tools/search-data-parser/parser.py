@@ -44,7 +44,7 @@ def main(seed_path: str, out_path: str):
     }
 
     with open(out_path, "w") as f:
-        json.dump(output, f)
+        json.dump(output, f, separators=(",", ":"))
     print(f"Output written to {out_path}")
 
 
