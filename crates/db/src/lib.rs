@@ -1,7 +1,7 @@
 use {
   anyhow::anyhow,
   bson::Bson,
-  chrono::{Datelike, Utc},
+  chrono::{Datelike, TimeZone, Utc},
   combine::Combine,
   futures::Future,
   futures::FutureExt,

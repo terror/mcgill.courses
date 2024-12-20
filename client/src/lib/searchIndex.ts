@@ -55,6 +55,7 @@ export const updateSearchResults = (
   const courseSearchResults = coursesIndex
     .search(query, 4)
     ?.map((id) => courses[id as number]);
+
   const instructorSearchResults = instructorsIndex
     .search(query, 2)
     ?.map((id) => instructors[id as number]);

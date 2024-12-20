@@ -1,10 +1,45 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { User } from 'react-feather';
+import { ChevronRight, User } from 'react-feather';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import { getUrl } from '../lib/utils';
+
+interface MenuItemProps {
+  href?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({ href, onClick, children }) => {
+  return (
+    <Menu.Item>
+      {({ active }) => {
+        const className = twMerge(
+          active
+            ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200 rounded-lg'
+            : 'text-gray-700 dark:bg-neutral-800 dark:text-gray-200',
+          'flex items-center justify-between px-3 py-2 text-sm w-full text-left'
+        );
+
+        const icon = href && active && <ChevronRight size={20} />;
+
+        return href ? (
+          <Link to={href} className={className}>
+            {children}
+            {icon}
+          </Link>
+        ) : (
+          <button onClick={onClick} className={className}>
+            {children}
+            {icon}
+          </button>
+        );
+      }}
+    </Menu.Item>
+  );
+};
 
 export const ProfileDropdown = () => {
   return (
@@ -24,39 +59,15 @@ export const ProfileDropdown = () => {
         leaveTo='transform opacity-0 scale-95'
       >
         <Menu.Items className='absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none dark:bg-neutral-800 dark:text-gray-200'>
-          <div className='py-1'>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to='/profile'
-                  className={twMerge(
-                    active
-                      ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200'
-                      : 'text-gray-700 dark:bg-neutral-800 dark:text-gray-200',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  Profile
-                </Link>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href={`${getUrl()}/api/auth/logout?redirect=${
-                    window.location.origin
-                  }`}
-                  className={twMerge(
-                    active
-                      ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-gray-200'
-                      : 'text-gray-700 dark:bg-neutral-800 dark:text-gray-200',
-                    'block w-full px-4 py-2 text-left text-sm'
-                  )}
-                >
-                  Log out
-                </a>
-              )}
-            </Menu.Item>
+          <div className='mx-2 my-1 py-1'>
+            <MenuItem href='/profile'>Profile</MenuItem>
+            <MenuItem
+              onClick={() =>
+                (window.location.href = `${getUrl()}/api/auth/logout?redirect=${window.location.origin}`)
+              }
+            >
+              Log out
+            </MenuItem>
           </div>
         </Menu.Items>
       </Transition>

@@ -57,6 +57,12 @@ fmt-check:
 forbid:
   ./bin/forbid
 
+generate-changelog *args:
+  cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+    -- \
+    --output client/src/assets/changelog.json \
+    {{args}}
+
 initialize *args: restart-services
   cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
 
@@ -66,9 +72,11 @@ lint *args:
 load:
   cargo run -- --source=seed \
     load \
-    --batch-size=200 \
+    --batch-size=1 \
     --scrape-vsb \
-    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
+    --course-delay 1000 \
+    --page-delay 1000
 
 readme:
   present --in-place README.md

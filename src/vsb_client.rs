@@ -23,23 +23,23 @@ impl<'a> VsbClient<'a> {
   ) -> Result<Vec<Schedule>> {
     info!("Scraping schedules for {}...", code);
 
-    Ok(
-      terms
-        .into_iter()
-        .map(|term| -> Result<Vec<Schedule>> {
-          Ok(extractor::extract_course_schedules(
-            &self
-              .client
-              .get(self.url(code, term))
-              .retry(self.retries)?
-              .text()?,
-          )?)
-        })
-        .collect::<Result<Vec<_>>>()?
-        .into_iter()
-        .flatten()
-        .collect(),
-    )
+    let schedules = terms
+      .into_iter()
+      .map(|term| -> Result<Vec<Schedule>> {
+        let res = &self
+          .client
+          .get(self.url(code, term))
+          .retry(self.retries)?
+          .text()?;
+
+        Ok(extractor::extract_course_schedules(res)?)
+      })
+      .collect::<Result<Vec<_>>>()?
+      .into_iter()
+      .flatten()
+      .collect();
+
+    Ok(schedules)
   }
 
   fn url(&self, code: &str, term: usize) -> String {
