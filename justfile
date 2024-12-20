@@ -42,7 +42,6 @@ dev: services
 
 dev-deps:
   cargo install present
-  pnpm install
 
 e2e:
   pnpm run cy:e2e
