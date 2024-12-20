@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the steps required to maintain and update the data for mcgill.courses regularly. Performing these steps together ensures data integrity and provides the most up-to-date course information for users.
+mcgill.courses relies heavily on scraped data as McGill does not provide any open APIs for course information. This document outlines the steps required to maintain and update the data for mcgill.courses regularly. Performing these steps together ensures data integrity and provides the most up-to-date course information for users.
 
 The following tasks must be completed:
 
