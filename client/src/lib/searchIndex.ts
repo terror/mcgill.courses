@@ -1,9 +1,7 @@
 import { Index } from 'flexsearch';
-import _ from 'lodash';
 
 import data from '../assets/searchData.json';
 import { Course } from '../model/Course';
-import { Instructor } from '../model/Instructor';
 import type { SearchResults } from '../model/SearchResults';
 
 let coursesIndex: Index | null = null;
@@ -14,13 +12,11 @@ export type CourseData = Pick<
   '_id' | 'subject' | 'title' | 'code' | 'instructors'
 >;
 
-export const getSearchIndex = () => {
-  const courses = data as CourseData[];
+export type InstructorName = string;
 
-  const instructors: Instructor[] = _.uniqBy(
-    courses.flatMap((course: CourseData) => course.instructors),
-    (instructor: Instructor) => instructor.name
-  );
+export const getSearchIndex = () => {
+  const courses = data.courses as CourseData[];
+  const instructors = data.instructors as InstructorName[];
 
   if (coursesIndex === null) {
     coursesIndex = new Index({
@@ -40,8 +36,8 @@ export const getSearchIndex = () => {
       tokenize: 'forward',
     });
 
-    instructors.forEach((instructor, i) =>
-      instructorsIndex?.add(i, instructor.name)
+    instructors.forEach((instructorName, i) =>
+      instructorsIndex?.add(i, instructorName)
     );
   }
 
@@ -51,7 +47,7 @@ export const getSearchIndex = () => {
 export const updateSearchResults = (
   query: string,
   courses: CourseData[],
-  instructors: Instructor[],
+  instructors: InstructorName[],
   coursesIndex: Index,
   instructorsIndex: Index,
   setResults: (_: SearchResults) => void
