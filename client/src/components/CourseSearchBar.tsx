@@ -127,7 +127,7 @@ export const CourseSearchBar = ({
         selectedIndex < results.courses.length
           ? `/course/${courseIdToUrlParam(results.courses[selectedIndex]._id)}`
           : `/instructor/${encodeURIComponent(
-              results.instructors[selectedIndex - results.courses.length].name
+              results.instructors[selectedIndex - results.courses.length]
             )}`
       );
       if (onResultClick) {
@@ -170,10 +170,10 @@ export const CourseSearchBar = ({
               index={results.courses.length + index}
               query={results.query}
               selectedIndex={selectedIndex}
-              text={result.name}
+              text={result}
               type='instructor'
-              url={`/instructor/${encodeURIComponent(result.name)}`}
-              key={result.name + index}
+              url={`/instructor/${encodeURIComponent(result)}`}
+              key={result + index}
               onClick={onResultClick}
             />
           ))}

@@ -3,16 +3,17 @@ import json
 import os
 import argparse
 
+
 @dataclass
 class Course:
     _id: str
     subject: str
     title: str
     code: str
-    instructors: list
+
 
 def main(seed_path: str, out_path: str):
-    course_map: dict[str, Course] = {}
+    data_paths = []
 
     for filename in sorted(os.listdir(seed_path)):
         file_path = os.path.join(seed_path, filename)
@@ -20,26 +21,32 @@ def main(seed_path: str, out_path: str):
         if not os.path.isfile(file_path) or "course" not in file_path:
             continue
 
+        data_paths.append(file_path)
+
+    unique_courses = {}
+    unique_instructors = set()
+    for file_path in data_paths:
         with open(file_path, "r") as fobj:
             courses = json.load(fobj)
             for course in courses:
-                course_id = course["_id"]
-                if course_id not in course_map:
-                    course_map[course_id] = Course(
-                        course["_id"],
-                        course["subject"],
-                        course["title"],
-                        course["code"],
-                        course["instructors"],
-                    )
-                else:
-                    course_map[course_id].instructors += course["instructors"]
+                unique_courses[course["_id"]] = Course(
+                    course["_id"],
+                    course["subject"],
+                    course["title"],
+                    course["code"],
+                )
+                for instructor in course["instructors"]:
+                    unique_instructors.add(instructor["name"])
 
-    output = [course.__dict__ for course in course_map.values()]
+    output = {
+        "courses": [course.__dict__ for course in unique_courses.values()],
+        "instructors": list(unique_instructors),
+    }
 
     with open(out_path, "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f)
     print(f"Output written to {out_path}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
