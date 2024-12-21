@@ -141,19 +141,21 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
           <TimeblockDays days={tb.days} key={i} />
         ))}
       </td>
-      <td
-        className='hidden cursor-pointer pr-2 text-sm font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
-        onClick={() => {
-          toast.promise(navigator.clipboard.writeText(block.crn), {
-            success: `Copied CRN for ${block.display} to clipboard.`,
-            loading: undefined,
-            error:
-              'Something went wrong when trying to copy section CRN, please try again!',
-          });
-        }}
-      >
-        CRN: {block.crn}
-      </td>
+      {block.crn && (
+        <td
+          className='hidden cursor-pointer pr-2 text-sm font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
+          onClick={() => {
+            toast.promise(navigator.clipboard.writeText(block.crn), {
+              success: `Copied CRN for ${block.display} to clipboard.`,
+              loading: undefined,
+              error:
+                'Something went wrong when trying to copy section CRN, please try again!',
+            });
+          }}
+        >
+          CRN: {block.crn}
+        </td>
+      )}
     </tr>
   );
 };
