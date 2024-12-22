@@ -180,7 +180,7 @@ export const Instructor = () => {
         {!showAllReviews && reviews.length > 8 && (
           <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
             <button
-              className='h-full w-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
+              className='size-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
               onClick={() => setShowAllReviews(true)}
             >
               Show all {reviews.length} reviews
