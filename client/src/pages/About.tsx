@@ -33,7 +33,7 @@ const Questions = ({ input }: QuestionsProps) => {
                   animate={{ rotate: open ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <IoIosArrowDown className='h-5 w-5 text-gray-900 dark:text-gray-300' />
+                  <IoIosArrowDown className='size-5 text-gray-900 dark:text-gray-300' />
                 </motion.div>
               </Disclosure.Button>
               <AnimatePresence initial={false}>

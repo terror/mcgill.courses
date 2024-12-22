@@ -102,7 +102,7 @@ export const Navbar = () => {
           >
             <span className='sr-only'>Open main menu</span>
             <Bars3Icon
-              className='h-6 w-6 stroke-2 text-gray-400'
+              className='size-6 stroke-2 text-gray-400'
               aria-hidden='true'
             />
           </button>
