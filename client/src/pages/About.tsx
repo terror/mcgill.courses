@@ -99,7 +99,7 @@ const Person = ({
   return (
     <div className='flex flex-col items-center gap-y-2 rounded-lg p-4 transition-transform duration-300 ease-in-out hover:scale-105'>
       <img
-        className='h-[100px] w-[100px] rounded-full object-cover shadow-md'
+        className='size-[100px] rounded-full object-cover shadow-md'
         src={imageUrl}
         alt={name}
       />
