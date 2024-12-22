@@ -33,7 +33,7 @@ const Questions = ({ input }: QuestionsProps) => {
                   animate={{ rotate: open ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <IoIosArrowDown className='h-5 w-5 text-gray-900 dark:text-gray-300' />
+                  <IoIosArrowDown className='size-5 text-gray-900 dark:text-gray-300' />
                 </motion.div>
               </Disclosure.Button>
               <AnimatePresence initial={false}>
@@ -99,7 +99,7 @@ const Person = ({
   return (
     <div className='flex flex-col items-center gap-y-2 rounded-lg p-4 transition-transform duration-300 ease-in-out hover:scale-105'>
       <img
-        className='h-[100px] w-[100px] rounded-full object-cover shadow-md'
+        className='size-[100px] rounded-full object-cover shadow-md'
         src={imageUrl}
         alt={name}
       />

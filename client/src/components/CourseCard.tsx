@@ -16,6 +16,7 @@ export const CourseCard = ({ course, className, query }: CourseCardProps) => {
     course.description.length > 400
       ? course.description.slice(0, 400) + ' ...'
       : course.description;
+
   return (
     <Link
       to={`/course/${courseIdToUrlParam(course._id)}`}

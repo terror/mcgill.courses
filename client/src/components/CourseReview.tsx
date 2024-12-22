@@ -153,7 +153,7 @@ const ReviewInteractions = ({
   return (
     <Fragment>
       <div className='mb-0.5 flex items-center'>
-        <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+        <div className='flex size-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <LuThumbsUp
             onClick={handleLike}
             className={twMerge(
@@ -165,7 +165,7 @@ const ReviewInteractions = ({
         <span className='text-sm font-bold text-gray-700 dark:text-white'>
           {likes}
         </span>
-        <div className='flex h-8 w-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
+        <div className='flex size-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
           <LuThumbsDown
             onClick={handleDislike}
             className={twMerge(

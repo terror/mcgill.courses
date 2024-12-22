@@ -4,7 +4,7 @@ import { ChevronRight, User } from 'react-feather';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { getUrl } from '../lib/utils';
+import { env } from '../lib/constants';
 
 interface MenuItemProps {
   href?: string;
@@ -46,7 +46,7 @@ export const ProfileDropdown = () => {
     <Menu as='div' className='relative inline-block text-left'>
       <div>
         <Menu.Button className='rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-gray-500 hover:bg-gray-100 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700'>
-          <User className='h-5 w-5 dark:text-gray-400' aria-hidden='true' />
+          <User className='size-5 dark:text-gray-400' aria-hidden='true' />
         </Menu.Button>
       </div>
       <Transition
@@ -63,7 +63,7 @@ export const ProfileDropdown = () => {
             <MenuItem href='/profile'>Profile</MenuItem>
             <MenuItem
               onClick={() =>
-                (window.location.href = `${getUrl()}/api/auth/logout?redirect=${window.location.origin}`)
+                (window.location.href = `${env.VITE_API_URL}/api/auth/logout?redirect=${window.location.origin}`)
               }
             >
               Log out

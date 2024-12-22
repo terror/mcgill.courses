@@ -18,6 +18,6 @@
     "target": "ESNext",
     "useDefineForClassFields": true
   },
-  "include": ["client/src"],
+  "include": ["client/src", "jest.setup.ts", "jest.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
