@@ -4,7 +4,7 @@ import { ChevronRight, User } from 'react-feather';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { getUrl } from '../lib/utils';
+import { env } from '../lib/constants';
 
 interface MenuItemProps {
   href?: string;
@@ -63,7 +63,7 @@ export const ProfileDropdown = () => {
             <MenuItem href='/profile'>Profile</MenuItem>
             <MenuItem
               onClick={() =>
-                (window.location.href = `${getUrl()}/api/auth/logout?redirect=${window.location.origin}`)
+                (window.location.href = `${env.VITE_API_URL}/api/auth/logout?redirect=${window.location.origin}`)
               }
             >
               Log out

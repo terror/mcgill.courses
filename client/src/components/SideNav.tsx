@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge';
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
-import { getUrl } from '../lib/utils';
+import { env } from '../lib/constants';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
 
@@ -132,7 +132,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                           Profile
                         </Link>
                         <a
-                          href={`${getUrl()}/api/auth/logout?redirect=${
+                          href={`${env.VITE_API_URL}/api/auth/logout?redirect=${
                             window.location.origin
                           }`}
                           className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'
@@ -142,7 +142,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
                       </>
                     ) : (
                       <a
-                        href={`${getUrl()}/api/auth/login?redirect=${
+                        href={`${env.VITE_API_URL}/api/auth/login?redirect=${
                           window.location.href
                         }`}
                         className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-200  dark:hover:bg-neutral-700'

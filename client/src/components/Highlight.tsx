@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { escapeRegExp } from 'lodash';
 
 export const Highlight = ({
   text,
@@ -12,7 +12,7 @@ export const Highlight = ({
   return (
     <span className={className}>
       {text
-        .split(new RegExp(`(${_.escapeRegExp(query)})`, 'gi'))
+        .split(new RegExp(`(${escapeRegExp(query)})`, 'gi'))
         .map((part, i) => (
           <span
             key={i}

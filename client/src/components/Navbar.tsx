@@ -5,9 +5,9 @@ import { toast } from 'sonner';
 
 import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
+import { env } from '../lib/constants';
 import { repo } from '../lib/repo';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
-import { getUrl } from '../lib/utils';
 import type { Notification } from '../model/Notification';
 import type { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
@@ -122,7 +122,7 @@ export const Navbar = () => {
               <ProfileDropdown />
             ) : (
               <a
-                href={`${getUrl()}/api/auth/login?redirect=${
+                href={`${env.VITE_API_URL}/api/auth/login?redirect=${
                   window.location.href
                 }`}
                 className='my-auto text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200'
