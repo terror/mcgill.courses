@@ -164,7 +164,8 @@ const questions = [
 const people = [
   {
     name: "Liam Scalzulli (CS '2025)",
-    imageUrl: 'https://avatars.githubusercontent.com/u/31192478?v=4',
+    imageUrl:
+      'https://media.licdn.com/dms/image/v2/D4E03AQGcvphemecHHw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718323978830?e=1741219200&v=beta&t=jo2_mDIk2QFvzLURprB2Cxck_Ez5Z2UfAsm7tBhUYnA',
     links: [
       { title: 'Github', url: 'https://github.com/terror' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/liamscalzulli/' },
@@ -172,7 +173,8 @@ const people = [
   },
   {
     name: "Jeff Zhang (Hons CS '2025)",
-    imageUrl: 'https://avatars.githubusercontent.com/u/47371088?v=4',
+    imageUrl:
+      'https://media.licdn.com/dms/image/v2/D4E03AQEiV-UNsvxZHg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1712454391246?e=1741219200&v=beta&t=WAHy8QoDxR50pIZdkFRUBcEzsiWnClx-eFaFlVtsjLc',
     links: [
       { title: 'Github', url: 'https://github.com/39bytes' },
       { title: 'LinkedIn', url: 'https://www.linkedin.com/in/jeff-zhang72/' },
@@ -180,7 +182,8 @@ const people = [
   },
   {
     name: "Sam Zhang (CS & Stats '2025)",
-    imageUrl: 'https://avatars.githubusercontent.com/u/112342947?v=4',
+    imageUrl:
+      'https://media.licdn.com/dms/image/v2/D5603AQGOMBYq2DtcxQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1696648321898?e=1741824000&v=beta&t=e0MAXmge5Reo4MFQGcg7BOdpJEPTII6TqnWPF3r5gkA',
     links: [
       { title: 'Github', url: 'https://github.com/samzhang02' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/zhang-sam/' },
@@ -188,7 +191,8 @@ const people = [
   },
   {
     name: "Joey Yu (CS '2025)",
-    imageUrl: 'https://avatars.githubusercontent.com/u/25695219?v=4',
+    imageUrl:
+      'https://media.licdn.com/dms/image/v2/D4E03AQHQfxpD5h1Y2w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1721320736053?e=1741824000&v=beta&t=2q77Ue28ab60dDeouczAXdLVWGYB9BYEni57nz65cms',
     links: [{ title: 'Github', url: 'https://github.com/itsjoeoui' }],
   },
 ];
