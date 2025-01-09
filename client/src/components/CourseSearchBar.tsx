@@ -122,7 +122,7 @@ export const CourseSearchBar = ({
       );
     }
 
-    if (selectedIndex > -1 && event.key === 'Enter') {
+    if (selectedIndex > -1 && event.key === 'Enter' && length !== 0) {
       navigate(
         selectedIndex < results.courses.length
           ? `/course/${courseIdToUrlParam(results.courses[selectedIndex]._id)}`
@@ -130,6 +130,7 @@ export const CourseSearchBar = ({
               results.instructors[selectedIndex - results.courses.length]
             )}`
       );
+
       if (onResultClick) {
         onResultClick();
         event.currentTarget.blur();
