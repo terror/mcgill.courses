@@ -1,8 +1,7 @@
 import { Tab } from '@headlessui/react';
+import { FileText, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { User } from 'react-feather';
 import { Helmet } from 'react-helmet-async';
-import { LuFileText } from 'react-icons/lu';
 import { VscBell } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -106,7 +105,7 @@ export const Profile = () => {
                 Your Profile
               </h1>
               <div className='flex items-center gap-x-1'>
-                <LuFileText
+                <FileText
                   className='text-neutral-500 dark:text-gray-400'
                   aria-hidden='true'
                   size={20}
@@ -188,7 +187,7 @@ export const Profile = () => {
                   })
                 ) : (
                   <div className='flex w-full items-center justify-center gap-x-2'>
-                    <LuFileText
+                    <FileText
                       className='stroke-[1.25] text-gray-400 dark:text-gray-600'
                       size={40}
                     />
