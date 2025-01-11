@@ -41,8 +41,8 @@ export const groupCurrentCourseTermInstructors = (
 export const getCurrentTerms = (): [string, string, string] => {
   const now = new Date();
 
-  const month = now.getMonth() + 1,
-    year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
 
   if (month >= 5 && month < 8) {
     return [`Summer ${year}`, `Fall ${year}`, `Winter ${year + 1}`];
@@ -53,6 +53,29 @@ export const getCurrentTerms = (): [string, string, string] => {
   }
 
   return [`Fall ${year - 1}`, `Winter ${year}`, `Summer ${year}`];
+};
+
+/**
+ * Determines the current academic term based on the current date.
+ * - May-July: Summer <year>
+ * - August-December: Fall <year>
+ * - January-April: Winter <year>
+ * @returns string The current term
+ */
+export const getCurrentTerm = (): string => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+
+  if (month >= 5 && month < 8) {
+    return `Summer ${year}`;
+  }
+
+  if (month >= 8) {
+    return `Fall ${year}`;
+  }
+
+  return `Winter ${year}`;
 };
 
 /**
