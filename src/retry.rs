@@ -116,7 +116,7 @@ mod tests {
     let start = Instant::now();
 
     let response = client
-      .get(&format!("{}/success", server.url()))
+      .get(format!("{}/success", server.url()))
       .retry(3)
       .expect("Request should succeed");
 
@@ -151,7 +151,7 @@ mod tests {
     let start = Instant::now();
 
     let response = client
-      .get(&format!("{}/eventually-success", server.url()))
+      .get(format!("{}/eventually-success", server.url()))
       .retry(3)
       .expect("Request should eventually succeed");
 
@@ -176,9 +176,7 @@ mod tests {
 
     let start = Instant::now();
 
-    let result = client
-      .get(&format!("{}/always-fail", server.url()))
-      .retry(3);
+    let result = client.get(format!("{}/always-fail", server.url())).retry(3);
 
     mock.assert();
     assert!(result.is_err());
@@ -204,7 +202,7 @@ mod tests {
     let start = Instant::now();
 
     let result = client
-      .get(&format!("{}/long-retry", server.url()))
+      .get(format!("{}/long-retry", server.url()))
       .retry_with_config(RetryConfig {
         max_retries: 9,
         base_delay: Duration::from_millis(1),
@@ -233,7 +231,7 @@ mod tests {
     let start = Instant::now();
 
     let result = client
-      .get(&format!("{}/no-retry", server.url()))
+      .get(format!("{}/no-retry", server.url()))
       .retry_with_config(RetryConfig {
         max_retries: 0,
         base_delay: Duration::from_millis(50),
@@ -269,7 +267,7 @@ mod tests {
     let start = Instant::now();
 
     let response = client
-      .get(&format!("{}/retry-4xx", server.url()))
+      .get(format!("{}/retry-4xx", server.url()))
       .retry_with_config(RetryConfig {
         max_retries: 1,
         base_delay: Duration::from_millis(50),
