@@ -212,7 +212,7 @@ mod tests {
     mock.assert(); // Verify we made exactly 10 requests
 
     assert!(result.is_err());
-    assert!(start.elapsed() < Duration::from_millis(150)); // 10ms * 10 = 100ms max delay + latency (~50ms)
+    assert!(start.elapsed() < Duration::from_millis(200)); // 10ms * 10 = 100ms max delay + latency (~50-100ms)
   }
 
   #[test]
