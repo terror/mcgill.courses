@@ -16,5 +16,8 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    ssr: {
+      noExternal: ['react-vis-graph-wrapper', 'vis-network'],
+    },
   };
 });

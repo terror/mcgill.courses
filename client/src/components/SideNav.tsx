@@ -6,12 +6,12 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { env } from '../lib/constants';
 import { DarkModeToggle } from './DarkModeToggle';
 import { navigationItems } from './Footer';
+import { Logo } from './Logo';
 
 type OverlayProps = {
   children: React.ReactNode;
@@ -74,12 +74,7 @@ export const SideNav = ({ open, onClose }: SideNavProps) => {
               <div className='mt-1 flex items-center justify-between'>
                 <div className='flex items-center'>
                   <Link to='/'>
-                    <img
-                      className='h-8 w-auto'
-                      src={birdImageUrl}
-                      alt='bird'
-                      onClick={() => onClose(false)}
-                    />
+                    <Logo size={32} />
                   </Link>
                   <div className='ml-6'>
                     <DarkModeToggle />
