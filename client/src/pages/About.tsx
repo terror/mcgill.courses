@@ -8,6 +8,7 @@ import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
+import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
 import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
@@ -165,7 +166,7 @@ const people = [
   {
     name: "Liam Scalzulli (CS '2025)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQGcvphemecHHw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718323978830?e=1741219200&v=beta&t=jo2_mDIk2QFvzLURprB2Cxck_Ez5Z2UfAsm7tBhUYnA',
+      'https://media.licdn.com/dms/image/v2/D4E03AQGcvphemecHHw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1718302697434?e=1747872000&v=beta&t=7if0H3er0T-M5Ze-tNlTCwD540N2BwNW9hGkdnhvjIk',
     links: [
       { title: 'Github', url: 'https://github.com/terror' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/liamscalzulli/' },
@@ -174,7 +175,7 @@ const people = [
   {
     name: "Jeff Zhang (Hons CS '2025)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQEiV-UNsvxZHg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1712454391246?e=1741219200&v=beta&t=WAHy8QoDxR50pIZdkFRUBcEzsiWnClx-eFaFlVtsjLc',
+      'https://media.licdn.com/dms/image/v2/D4E03AQEiV-UNsvxZHg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1712454391246?e=1747872000&v=beta&t=aorR1YBDIdAcJinY0oMl1x5h3B6tK-B4RymgovborWM',
     links: [
       { title: 'Github', url: 'https://github.com/39bytes' },
       { title: 'LinkedIn', url: 'https://www.linkedin.com/in/jeff-zhang72/' },
@@ -183,7 +184,7 @@ const people = [
   {
     name: "Sam Zhang (CS & Stats '2025)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D5603AQGOMBYq2DtcxQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1696648321898?e=1741824000&v=beta&t=e0MAXmge5Reo4MFQGcg7BOdpJEPTII6TqnWPF3r5gkA',
+      'https://media.licdn.com/dms/image/v2/D4E03AQG8t9QPiG5_QQ/profile-displayphoto-shrink_800_800/B4EZTuCUymG0Ac-/0/1739160375140?e=1747872000&v=beta&t=oK9_CrkWN2glRgzcaGYpEkpAlCCOWm-y-5b5GGAJPYw',
     links: [
       { title: 'Github', url: 'https://github.com/samzhang02' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/zhang-sam/' },
@@ -192,7 +193,7 @@ const people = [
   {
     name: "Joey Yu (CS '2025)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQHQfxpD5h1Y2w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1721320736053?e=1741824000&v=beta&t=2q77Ue28ab60dDeouczAXdLVWGYB9BYEni57nz65cms',
+      'https://media.licdn.com/dms/image/v2/D4E03AQHQfxpD5h1Y2w/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1721320736101?e=1747872000&v=beta&t=OCwxZW3XLHcY13eqkOt1BfgA0bN3cC4vSJ9ASeP761I',
     links: [{ title: 'Github', url: 'https://github.com/itsjoeoui' }],
   },
 ];
@@ -301,6 +302,39 @@ export const About = () => {
             </Link>{' '}
             to see what we've been working on!
           </Paragraph>
+        </motion.div>
+
+        <motion.div variants={fadeInUp}>
+          <Title>Contributors</Title>
+          <motion.ul variants={fadeInUp} className='mt-8'>
+            <div className='flex gap-4'>
+              <a
+                href='https://www.instagram.com/mcgilldesignconsultancy'
+                className='m-auto size-fit flex-none'
+              >
+                <img src={McGillDesignConsultancyLogoUrl} className='size-16' />
+              </a>
+              <Paragraph>
+                A heartfelt thank you to{' '}
+                {/* Sebastian didn't provide a contact*/}
+                <span className='underline'>Sebastien Chow</span> and{' '}
+                <a
+                  className='underline'
+                  href='https://www.linkedin.com/in/guo-eugene/ '
+                >
+                  Eugene Guo
+                </a>{' '}
+                from{' '}
+                <a
+                  href='https://www.instagram.com/mcgilldesignconsultancy'
+                  className='underline'
+                >
+                  McGill Design Consultancy
+                </a>{' '}
+                for their amazing work on our logo design.
+              </Paragraph>
+            </div>
+          </motion.ul>
         </motion.div>
 
         <motion.div variants={fadeInUp}>

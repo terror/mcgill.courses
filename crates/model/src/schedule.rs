@@ -23,11 +23,11 @@ pub struct Block {
 impl Into<Bson> for Block {
   fn into(self) -> bson::Bson {
     Bson::Document(doc! {
-      "campus": self.campus.map(String::from),
-      "display": self.display.map(String::from),
-      "location": self.location.map(String::from),
-      "timeblocks": self.timeblocks.map(Vec::from),
-      "crn": self.crn.map(String::from),
+      "campus": self.campus,
+      "display": self.display,
+      "location": self.location,
+      "timeblocks": self.timeblocks,
+      "crn": self.crn,
     })
   }
 }
@@ -53,9 +53,9 @@ pub struct TimeBlock {
 impl Into<Bson> for TimeBlock {
   fn into(self) -> bson::Bson {
     Bson::Document(doc! {
-      "day": self.day.map(String::from),
-      "t1": self.t1.map(String::from),
-      "t2": self.t2.map(String::from),
+      "day": self.day,
+      "t1": self.t1,
+      "t2": self.t2,
     })
   }
 }
@@ -80,8 +80,8 @@ pub struct Schedule {
 impl Into<Bson> for Schedule {
   fn into(self) -> bson::Bson {
     Bson::Document(doc! {
-      "blocks": self.blocks.map(Vec::from),
-      "term": self.term.map(String::from),
+      "blocks": self.blocks,
+      "term": self.term,
     })
   }
 }
