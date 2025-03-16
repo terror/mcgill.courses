@@ -8,6 +8,7 @@ import { FiMail } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
+import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
 import { Layout } from '../components/Layout';
 import { Paragraph } from '../components/Paragraph';
 
@@ -301,6 +302,39 @@ export const About = () => {
             </Link>{' '}
             to see what we've been working on!
           </Paragraph>
+        </motion.div>
+
+        <motion.div variants={fadeInUp}>
+          <Title>Contributors</Title>
+          <motion.ul variants={fadeInUp} className='mt-8'>
+            <div className='flex gap-4'>
+              <a
+                href='https://www.instagram.com/mcgilldesignconsultancy'
+                className='m-auto size-fit flex-none'
+              >
+                <img src={McGillDesignConsultancyLogoUrl} className='size-16' />
+              </a>
+              <Paragraph>
+                A heartfelt thank you to{' '}
+                {/* Sebastian didn't provide a contact*/}
+                <span className='underline'>Sebastien Chow</span> and{' '}
+                <a
+                  className='underline'
+                  href='https://www.linkedin.com/in/guo-eugene/ '
+                >
+                  Eugene Guo
+                </a>{' '}
+                from{' '}
+                <a
+                  href='https://www.instagram.com/mcgilldesignconsultancy'
+                  className='underline'
+                >
+                  McGill Design Consultancy
+                </a>{' '}
+                for their amazing work on our logo design.
+              </Paragraph>
+            </div>
+          </motion.ul>
         </motion.div>
 
         <motion.div variants={fadeInUp}>
