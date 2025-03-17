@@ -118,7 +118,7 @@ them. You can find them all under the `/tools` directory from the project root.
 
 Our changelog page (https://mcgill.courses/changelog) is automated by this tool.
 
-We feed PR titles and descriptions to an AI (in this case hard-coded to GPT-3.5)
+We feed PR titles and descriptions to a large language model (in this case hard-coded to GPT-3.5)
 to generate a user-friendly summary using
 [this prompt](https://github.com/terror/mcgill.courses/blob/master/tools/changelog-gen/prompt.txt).
 
@@ -203,5 +203,5 @@ new ideas with regard to its functionality and design, namely:
   the University of Waterloo
 - [cloudberry.fyi](https://www.cloudberry.fyi/) - A post-modern schedule builder
   for McGill students
-- [mcgill.wtf](https://mcgill.wtf/) - A fast full-text search engine for McGill
+- [mcgill.wtf](https://github.com/terror/mcgill.wtf) - A fast full-text search engine for McGill
   courses

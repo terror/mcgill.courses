@@ -1,5 +1,3 @@
-# Search Data Parser Tool
-
 The search bar on the frontend of mcgill.courses indexes course data to extract course and instructor keywords to enable fast client-side search.
 
 mcgill.courses stores a json copy of scraped course data as a seed file for database initialization. We actually just reuse this data to index the search data.
