@@ -4,7 +4,7 @@ A course search and review platform for McGill university.
 
 ![](https://github.com/terror/mcgill.courses/assets/31192478/b7689337-0322-49b8-a67b-c8f23d1eb5fa)
 
-### Development
+## Development
 
 You'll need [docker](https://www.docker.com/),
 [cargo](https://doc.rust-lang.org/cargo/) and [pnpm](https://pnpm.io/) installed
@@ -109,24 +109,29 @@ can run:
 just load
 ```
 
-We parse prerequisites and corequisites using
-[llama-index](https://www.llamaindex.ai/) with custom examples, all the code
-lives in
+## Tools
+
+We have a few tools that we use throughout the project, below documents some of
+them. You can find them all under the `/tools` directory from the project root.
+
+### `req-parser`
+
+We parse prerequisites and corequisites using a fine-tuned large language model
+with custom examples, all the code lives in
 [`/tools/req-parser`](https://github.com/terror/mcgill.courses/tree/master/tools/req-parser).
 
 If you need to run the requirement parser on a file, simply:
 
 ```bash
 cd tools/req-parser
-poetry install
-poetry shell
-python3 main.py <file>
+uv install
+uv run main.py <file>
 ```
 
-_n.b._ This will require an [OpenAI](https://openai.com/) API key to be set in
-the environment.
+_n.b._ This will require an [OpenAI](https://openai.com/) API key and the name
+of the fine-tuned model to be set in the environment.
 
-### Deployment
+## Deployment
 
 We continuously deploy our site with [Render](https://render.com/) using a
 [docker image](https://github.com/terror/mcgill.courses/blob/master/Dockerfile),
@@ -141,7 +146,7 @@ courses in our production environment, and Microsoft's
 for handling our OAuth 2.0
 [authentication flow](https://github.com/terror/mcgill.courses/blob/master/src/auth.rs).
 
-### Prior Art
+## Prior Art
 
 There are a few notable projects worth mentioning that are similar in nature to
 [mcgill.courses](https://mcgill.courses), and have either led to inspiration or

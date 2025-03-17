@@ -42,6 +42,7 @@ dev: services
 
 dev-deps:
   cargo install present
+  curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
   pnpm run cy:e2e

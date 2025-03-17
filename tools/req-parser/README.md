@@ -12,11 +12,10 @@ accuracy with our output.
 
 ### Setup
 
-First, install dependencies and run a shell:
+First, install dependencies:
 
 ```bash
-poetry install
-poetry shell
+uv install
 ```
 
 Refer to `.env.example` for what environment variables need to be set.
@@ -26,7 +25,7 @@ Refer to `.env.example` for what environment variables need to be set.
 It's a single python script you can run, passing in a file on disk:
 
 ```bash
-python3 main.py ../../seed/courses-2024-2025.json
+uv run main.py ../../seed/courses-2024-2025.json
 ```
 
 It will run and populate a few fields on pre-existing course entries with the
@@ -34,10 +33,10 @@ generated graph structure.
 
 For full usage information, see the output below:
 
-```
+```present uv run main.py --help
 usage: main.py [-h] [-d DELAY] [-o] file
 
-Parse logical course requirements from existing data.
+Parse logical course requirements from existing data
 
 positional arguments:
   file                  The path to the course JSON file.
@@ -46,7 +45,8 @@ options:
   -h, --help            show this help message and exit
   -d DELAY, --delay DELAY
                         The delay between requests in milliseconds.
-  -o, --overwrite       Reparse all courses, even if they already have parsed requirements.
+  -o, --overwrite       Reparse all courses, even if they already have parsed
+                        requirements.
 ```
 
 ### Prior Art
