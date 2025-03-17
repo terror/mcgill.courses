@@ -193,8 +193,6 @@ courses in our production environment, and Microsoft's
 for handling our OAuth 2.0
 [authentication flow](https://github.com/terror/mcgill.courses/blob/master/src/auth.rs).
 
-### `search-index-builder`
-
 ## Prior Art
 
 There are a few notable projects worth mentioning that are similar in nature to
