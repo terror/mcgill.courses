@@ -36,7 +36,7 @@ For full usage information, see the output below:
 ```present uv run main.py --help
 usage: main.py [-h] [-d DELAY] [-o] file
 
-Parse logical course requirements from existing data
+Parse logical course requirements from existing data.
 
 positional arguments:
   file                  The path to the course JSON file.

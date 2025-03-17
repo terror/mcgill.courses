@@ -114,6 +114,49 @@ just load
 We have a few tools that we use throughout the project, below documents some of
 them. You can find them all under the `/tools` directory from the project root.
 
+### `changelog-gen`
+
+Our changelog page (https://mcgill.courses/changelog) is automated by this tool.
+
+We feed PR titles and descriptions to an AI (in this case hard-coded to GPT-3.5)
+to generate a user-friendly summary using
+[this prompt](https://github.com/terror/mcgill.courses/blob/master/tools/changelog-gen/prompt.txt).
+
+The tool assumes you have an [OpenAI](https://openai.com/) API key set in the
+environment, and you can use it from the project root like:
+
+```bash
+cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+  -- \
+  --output client/src/assets/changelog.json
+```
+
+This will run the changelog generator on all
+[up-to-date merged PRs](https://github.com/terror/mcgill.courses/pulls?q=is:pr+is:closed)
+from our GitHub repository, populating `changelog.json` with the results.
+
+There are a few other options the tool supports:
+
+```present cargo run --manifest-path tools/changelog-gen/Cargo.toml -- --help
+Usage: changelog-gen [OPTIONS]
+
+Options:
+      --output <OUTPUT>               [default: ../../client/src/assets/changelog.json]
+      --regenerate [<REGENERATE>...]
+      --regenerate-all
+      --repo <REPO>                   [default: mcgill.courses]
+      --user <USER>                   [default: terror]
+  -h, --help                          Print help
+```
+
+For instance, you can regenerate single entries by specifying their pull request
+number.
+
+### `course-average-fetcher`
+
+This tool is used to populate a JSON file with crowdsourced course average
+information we display on [course pages](https://mcgill.courses/course/econ208).
+
 ### `req-parser`
 
 We parse prerequisites and corequisites using a fine-tuned large language model
@@ -131,6 +174,10 @@ uv run main.py <file>
 _n.b._ This will require an [OpenAI](https://openai.com/) API key and the name
 of the fine-tuned model to be set in the environment.
 
+### `search-index-aggregator`
+
+TODO
+
 ## Deployment
 
 We continuously deploy our site with [Render](https://render.com/) using a
@@ -145,6 +192,8 @@ courses in our production environment, and Microsoft's
 [identity platform](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow)
 for handling our OAuth 2.0
 [authentication flow](https://github.com/terror/mcgill.courses/blob/master/src/auth.rs).
+
+### `search-index-builder`
 
 ## Prior Art
 
