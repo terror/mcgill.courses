@@ -59,7 +59,7 @@ forbid:
   ./bin/forbid
 
 generate-changelog *args:
-  RUST_LOG=info cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+  RUST_LOG=info cargo run --manifest-path tools/changelog-generator/Cargo.toml \
     -- \
     --output client/src/assets/changelog.json \
     {{args}}

@@ -114,19 +114,19 @@ just load
 We have a few tools that we use throughout the project, below documents some of
 them. You can find them all under the `/tools` directory from the project root.
 
-### `changelog-gen`
+### `changelog-generator`
 
 Our changelog page (https://mcgill.courses/changelog) is automated by this tool.
 
-We feed PR titles and descriptions to a large language model (in this case hard-coded to GPT-3.5)
-to generate a user-friendly summary using
-[this prompt](https://github.com/terror/mcgill.courses/blob/master/tools/changelog-gen/prompt.txt).
+We feed PR titles and descriptions to a large language model (in this case
+hard-coded to GPT-3.5) to generate a user-friendly summary using
+[this prompt](https://github.com/terror/mcgill.courses/blob/master/tools/changelog-generator/prompt.txt).
 
 The tool assumes you have an [OpenAI](https://openai.com/) API key set in the
 environment, and you can use it from the project root like:
 
 ```bash
-cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+cargo run --manifest-path tools/changelog-generator/Cargo.toml \
   -- \
   --output client/src/assets/changelog.json
 ```
@@ -137,8 +137,8 @@ from our GitHub repository, populating `changelog.json` with the results.
 
 There are a few other options the tool supports:
 
-```present cargo run --manifest-path tools/changelog-gen/Cargo.toml -- --help
-Usage: changelog-gen [OPTIONS]
+```present cargo run --manifest-path tools/changelog-generator/Cargo.toml -- --help
+Usage: changelog-generator [OPTIONS]
 
 Options:
       --output <OUTPUT>               [default: ../../client/src/assets/changelog.json]
@@ -176,7 +176,9 @@ of the fine-tuned model to be set in the environment.
 
 ### `search-index-aggregator`
 
-TODO
+This tool selectively includes only the JSON fields (from database seed files)
+required by the search component, significantly reducing payload size and
+improving resource efficiency.
 
 ## Deployment
 
@@ -203,5 +205,5 @@ new ideas with regard to its functionality and design, namely:
   the University of Waterloo
 - [cloudberry.fyi](https://www.cloudberry.fyi/) - A post-modern schedule builder
   for McGill students
-- [mcgill.wtf](https://github.com/terror/mcgill.wtf) - A fast full-text search engine for McGill
-  courses
+- [mcgill.wtf](https://github.com/terror/mcgill.wtf) - A fast full-text search
+  engine for McGill courses

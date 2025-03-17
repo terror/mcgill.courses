@@ -1,7 +1,8 @@
-import argparse
 import json
 import os
 from dataclasses import dataclass
+
+from arrg import app, argument
 
 
 @dataclass
@@ -12,60 +13,57 @@ class Course:
   code: str
 
 
-def main(seed_path: str, out_path: str):
-  data_paths = []
+@app(description='Aggregate course data from seed files and export to JSON.')
+class App:
+  seed_path: str = argument(
+    '-s', '--seed-path', default='seed', help='Path to the directory containing seed files.'
+  )
+  output_path: str = argument(
+    '-o',
+    '--output-path',
+    default='client/src/assets/searchData.json',
+    help='Path to the output JSON file.',
+  )
 
-  for filename in sorted(os.listdir(seed_path)):
-    file_path = os.path.join(seed_path, filename)
+  def run(self) -> None:
+    data_paths = []
 
-    if not os.path.isfile(file_path) or 'course' not in file_path:
-      continue
+    for filename in sorted(os.listdir(self.seed_path)):
+      file_path = os.path.join(self.seed_path, filename)
 
-    data_paths.append(file_path)
+      if not os.path.isfile(file_path) or 'course' not in file_path:
+        continue
 
-  unique_courses = {}
-  unique_instructors = set()
+      data_paths.append(file_path)
 
-  for file_path in data_paths:
-    with open(file_path, 'r') as fobj:
-      courses = json.load(fobj)
-      for course in courses:
-        unique_courses[course['_id']] = Course(
-          course['_id'],
-          course['subject'],
-          course['title'],
-          course['code'],
-        )
-        for instructor in course['instructors']:
-          unique_instructors.add(instructor['name'])
+    unique_courses = {}
+    unique_instructors = set()
 
-  output = {
-    'courses': [course.__dict__ for course in unique_courses.values()],
-    'instructors': list(unique_instructors),
-  }
+    for file_path in data_paths:
+      with open(file_path, 'r') as fobj:
+        courses = json.load(fobj)
 
-  with open(out_path, 'w') as f:
-    json.dump(output, f, separators=(',', ':'))
-  print(f'Output written to {out_path}')
+        for course in courses:
+          unique_courses[course['_id']] = Course(
+            course['_id'],
+            course['subject'],
+            course['title'],
+            course['code'],
+          )
+
+          for instructor in course['instructors']:
+            unique_instructors.add(instructor['name'])
+
+    output = {
+      'courses': [course.__dict__ for course in unique_courses.values()],
+      'instructors': list(unique_instructors),
+    }
+
+    with open(self.output_path, 'w') as f:
+      json.dump(output, f, separators=(',', ':'))
+
+    print(f'Output written to {self.output_path}')
 
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser(
-    description='Aggregate course data from seed files and export to JSON.'
-  )
-  parser.add_argument(
-    '--seed-path',
-    type=str,
-    default=os.path.join('..', '..', 'seed'),
-    help='Path to the directory containing seed files (default: ../../seed)',
-  )
-  parser.add_argument(
-    '--out-path',
-    type=str,
-    default=os.path.join('..', '..', 'client', 'src', 'assets', 'searchData.json'),
-    help='Path to the output JSON file (default: ../../client/src/assets/searchData.json)',
-  )
-
-  args = parser.parse_args()
-
-  main(seed_path=args.seed_path, out_path=args.out_path)
+  App.from_args().run()

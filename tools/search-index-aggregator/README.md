@@ -1,10 +1,16 @@
-The search bar on the frontend of mcgill.courses indexes course data to extract course and instructor keywords to enable fast client-side search.
+The search functionality in mcgill.courses implements client-side indexing of course data,
+extracting course and instructor keywords for optimized search performance.
 
-mcgill.courses stores a json copy of scraped course data as a seed file for database initialization. We actually just reuse this data to index the search data.
+Our system utilizes a JSON seed file containing scraped course data for database initialization,
+which we repurpose for the search indexing process.
 
-However, the files themselves are quite big and when all packaged to the client side, takes a lot of ressources. We do a quick parsing with this tool to only include json fields needed for the search bar to save data.
+To address performance concerns, the raw data files are substantial and would consume
+excessive resources when bundled for client-side delivery.
 
-## Usage
+**search-index-aggregator** selectively includes only the JSON fields required by the
+search component, significantly reducing payload size and improving resource efficiency.
+
+### Usage
 
 Run this tool from this directory directly:
 
