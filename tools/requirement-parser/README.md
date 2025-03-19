@@ -1,4 +1,4 @@
-**req-parser** is a tool to generate JSON-based course graph structures for
+**requirement-parser** is a tool to generate JSON-based course graph structures for
 course entries used within the application.
 
 <div align='center'>
@@ -15,7 +15,7 @@ accuracy with our output.
 First, install dependencies:
 
 ```bash
-uv install
+uv sync
 ```
 
 Refer to `.env.example` for what environment variables need to be set.

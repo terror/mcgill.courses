@@ -5,7 +5,7 @@
 First, install dependencies:
 
 ```bash
-uv install
+uv sync
 ```
 
 You also need a Google account and a Google Could project for authentication required to use the Google Sheets API,

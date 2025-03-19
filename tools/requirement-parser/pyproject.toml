@@ -1,5 +1,5 @@
 [project]
-name = "req-parser"
+name = "requirement-parser"
 version = "0.0.0"
 description = "A requirement parser for McGill courses"
 readme = "README.md"
