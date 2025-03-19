@@ -112,21 +112,27 @@ just load
 ## Tools
 
 We have a few tools that we use throughout the project, below documents some of
-them. You can find them all under the [`/tools`](https://github.com/terror/mcgill.courses/tree/master/tools)
-directory from the project root.
+them. You can find them all under the
+[`/tools`](https://github.com/terror/mcgill.courses/tree/master/tools) directory
+from the project root.
 
-For python-based tools, we highly recommend you install [uv](https://docs.astral.sh/uv/)
-on your system. On macOS or linux, you can do it as follows:
+For python-based tools, we highly recommend you install
+[uv](https://docs.astral.sh/uv/) on your system. On macOS or linux, you can do
+it as follows:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Follow the [documentation](https://docs.astral.sh/uv/getting-started/installation/) for other systems.
+Follow the
+[documentation](https://docs.astral.sh/uv/getting-started/installation/) for
+other systems.
 
 ### `changelog-generator`
 
-Our changelog page ([https://mcgill.courses/changelog](https://mcgill.courses/changelog)) is automated by this tool.
+Our changelog page
+([https://mcgill.courses/changelog](https://mcgill.courses/changelog)) is
+automated by this tool.
 
 We feed PR titles and descriptions to a large language model (in this case
 hard-coded to GPT-3.5) to generate a user-friendly summary using
@@ -143,7 +149,8 @@ cargo run --manifest-path tools/changelog-generator/Cargo.toml \
 
 This will run the changelog generator on all
 [up-to-date merged PRs](https://github.com/terror/mcgill.courses/pulls?q=is:pr+is:closed)
-from our GitHub repository, populating [`changelog.json`](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/changelog.json)
+from our GitHub repository, populating
+[`changelog.json`](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/changelog.json)
 with the results.
 
 There are a few other options the tool supports:
@@ -165,11 +172,15 @@ number.
 
 ### `course-average-fetcher`
 
-This tool is used to populate a [JSON file](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/courseAveragesData.json)
-with course average information we display on [course pages](https://mcgill.courses/course/econ208).
+This tool is used to populate a
+[JSON file](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/courseAveragesData.json)
+with course average information we display on
+[course pages](https://mcgill.courses/course/econ208).
 
-We read and parse a [crowdsourced google sheet](https://docs.google.com/spreadsheets/d/1NGUBQuF8FI6ebna86S1RHpc27srxpMbaSyjipIkr-gk/edit?gid=233834959#gid=233834959)
-with historical course averages provided generously by the [McGill enhanced](https://demetrios-koziris.github.io/McGillEnhanced/) team.
+We read and parse a
+[crowdsourced google sheet](https://docs.google.com/spreadsheets/d/1NGUBQuF8FI6ebna86S1RHpc27srxpMbaSyjipIkr-gk/edit?gid=233834959#gid=233834959)
+with historical course averages provided generously by the
+[McGill enhanced](https://demetrios-koziris.github.io/McGillEnhanced/) team.
 
 ### `requirement-parser`
 
@@ -188,13 +199,15 @@ uv run main.py <file>
 _n.b._ This will require an [OpenAI](https://openai.com/) API key and the name
 of the fine-tuned model to be set in the environment.
 
-For more information about how this works, check out our [research project](https://github.com/SamZhang02/llmbda).
+For more information about how this works, check out our
+[research project](https://github.com/SamZhang02/llmbda).
 
 ### `search-index-aggregator`
 
-This tool selectively includes only the JSON fields (from database seed files)
-required by the search component, significantly reducing payload size and
-improving resource efficiency.
+This tool selectively includes only the
+[JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/searchData.json)
+(from database seed files) required by the search component, significantly
+reducing payload size and improving resource efficiency.
 
 ## Deployment
 
