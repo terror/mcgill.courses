@@ -206,8 +206,8 @@ For more information about how this works, check out our
 
 This tool selectively includes only the
 [JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/searchData.json)
-(from database seed files) required by the search component, significantly
-reducing payload size and improving resource efficiency.
+(from database [seed files](https://github.com/terror/mcgill.courses/tree/master/seed))
+required by the search component, significantly reducing payload size and improving resource efficiency.
 
 ## Deployment
 
