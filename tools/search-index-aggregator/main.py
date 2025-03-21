@@ -18,6 +18,7 @@ class App:
   seed_path: str = argument(
     '-s', '--seed-path', default='seed', help='Path to the directory containing seed files.'
   )
+
   output_path: str = argument(
     '-o',
     '--output-path',
