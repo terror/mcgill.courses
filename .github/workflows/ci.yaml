@@ -94,7 +94,7 @@ jobs:
           brew tap mongodb/brew
           brew install mongodb-community@7.0
           echo -e 'replication:\n  replSetName: rs0' >> /opt/homebrew/etc/mongod.conf
-          launchctl load -w $(brew --prefix)/opt/mongodb-community@7.0/homebrew.mxcl.mongodb-community@7.0.plist
+          brew services start mongodb-community@7.0
           mongosh --eval 'rs.initiate()'
 
       - name: Install grcov
