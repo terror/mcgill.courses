@@ -1,4 +1,4 @@
-**req-parser** is a tool to generate JSON-based course graph structures for
+**requirement-parser** is a tool to generate JSON-based course graph structures for
 course entries used within the application.
 
 <div align='center'>
@@ -15,7 +15,7 @@ accuracy with our output.
 First, install dependencies:
 
 ```bash
-uv install
+uv sync
 ```
 
 Refer to `.env.example` for what environment variables need to be set.
@@ -36,7 +36,7 @@ For full usage information, see the output below:
 ```present uv run main.py --help
 usage: main.py [-h] [-d DELAY] [-o] file
 
-Parse logical course requirements from existing data
+Parse logical course requirements from existing data.
 
 positional arguments:
   file                  The path to the course JSON file.

@@ -100,7 +100,7 @@ def preprocess_html(html: str) -> str:
   return result
 
 
-@app(description='Parse logical course requirements from existing data')
+@app(description='Parse logical course requirements from existing data.')
 class App:
   file: str = argument(help='The path to the course JSON file.')
 
