@@ -7,4 +7,4 @@ readme:
   present --in-place README.md
 
 run *args:
-  python3 main.py {{args}}
+  uv run main.py {{args}}

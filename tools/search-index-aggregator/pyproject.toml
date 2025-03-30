@@ -1,14 +1,11 @@
 [project]
-name = "req-parser"
+name = "search-index-aggregator"
 version = "0.0.0"
-description = "A requirement parser for McGill courses"
+description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "arrg>=0.1.0",
-  "beautifulsoup4>=4.13.3",
-  "openai>=1.66.3",
-  "python-dotenv>=1.0.1",
+    "arrg>=0.1.0",
 ]
 
 [tool.ruff]

@@ -112,24 +112,104 @@ just load
 ## Tools
 
 We have a few tools that we use throughout the project, below documents some of
-them. You can find them all under the `/tools` directory from the project root.
+them. You can find them all under the
+[`/tools`](https://github.com/terror/mcgill.courses/tree/master/tools) directory
+from the project root.
 
-### `req-parser`
+For python-based tools, we highly recommend you install
+[uv](https://docs.astral.sh/uv/) on your system. On macOS or linux, you can do
+it as follows:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Follow the
+[documentation](https://docs.astral.sh/uv/getting-started/installation/) for
+other systems.
+
+### `changelog-generator`
+
+Our changelog page
+([https://mcgill.courses/changelog](https://mcgill.courses/changelog)) is
+automated by this tool.
+
+We feed PR titles and descriptions to a large language model (in this case
+hard-coded to GPT-3.5) to generate a user-friendly summary using
+[this prompt](https://github.com/terror/mcgill.courses/blob/master/tools/changelog-generator/prompt.txt).
+
+The tool assumes you have an [OpenAI](https://openai.com/) API key set in the
+environment, and you can use it from the project root like:
+
+```bash
+cargo run --manifest-path tools/changelog-generator/Cargo.toml \
+  -- \
+  --output client/src/assets/changelog.json
+```
+
+This will run the changelog generator on all
+[up-to-date merged PRs](https://github.com/terror/mcgill.courses/pulls?q=is:pr+is:closed)
+from our GitHub repository, populating
+[`changelog.json`](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/changelog.json)
+with the results.
+
+There are a few other options the tool supports:
+
+```present cargo run --manifest-path tools/changelog-generator/Cargo.toml -- --help
+Usage: changelog-generator [OPTIONS]
+
+Options:
+      --output <OUTPUT>               [default: ../../client/src/assets/changelog.json]
+      --regenerate [<REGENERATE>...]
+      --regenerate-all
+      --repo <REPO>                   [default: mcgill.courses]
+      --user <USER>                   [default: terror]
+  -h, --help                          Print help
+```
+
+For instance, you can regenerate single entries by specifying their pull request
+number.
+
+### `course-average-fetcher`
+
+This tool is used to populate a
+[JSON file](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/courseAveragesData.json)
+with course average information we display on
+[course pages](https://mcgill.courses/course/econ208).
+
+We read and parse a
+[crowdsourced google sheet](https://docs.google.com/spreadsheets/d/1NGUBQuF8FI6ebna86S1RHpc27srxpMbaSyjipIkr-gk/edit?gid=233834959#gid=233834959)
+with historical course averages provided generously by the
+[McGill enhanced](https://demetrios-koziris.github.io/McGillEnhanced/) team.
+
+### `requirement-parser`
 
 We parse prerequisites and corequisites using a fine-tuned large language model
 with custom examples, all the code lives in
-[`/tools/req-parser`](https://github.com/terror/mcgill.courses/tree/master/tools/req-parser).
+[`/tools/requirement-parser`](https://github.com/terror/mcgill.courses/tree/master/tools/req-parser).
 
 If you need to run the requirement parser on a file, simply:
 
 ```bash
-cd tools/req-parser
-uv install
+cd tools/requirement-parser
+uv sync
 uv run main.py <file>
 ```
 
 _n.b._ This will require an [OpenAI](https://openai.com/) API key and the name
 of the fine-tuned model to be set in the environment.
+
+For more information about how this works, check out our
+[research project](https://github.com/SamZhang02/llmbda).
+
+### `search-index-aggregator`
+
+This tool selectively includes only the
+[JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/searchData.json)
+(from database
+[seed files](https://github.com/terror/mcgill.courses/tree/master/seed))
+required by the search component, significantly reducing payload size and
+improving resource efficiency.
 
 ## Deployment
 
@@ -156,5 +236,5 @@ new ideas with regard to its functionality and design, namely:
   the University of Waterloo
 - [cloudberry.fyi](https://www.cloudberry.fyi/) - A post-modern schedule builder
   for McGill students
-- [mcgill.wtf](https://mcgill.wtf/) - A fast full-text search engine for McGill
-  courses
+- [mcgill.wtf](https://github.com/terror/mcgill.wtf) - A fast full-text search
+  engine for McGill courses
