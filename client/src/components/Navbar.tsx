@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import birdImageUrl from '../assets/bird.png';
 import { useAuth } from '../hooks/useAuth';
 import { env } from '../lib/constants';
 import { repo } from '../lib/repo';
@@ -12,6 +11,7 @@ import type { Notification } from '../model/Notification';
 import type { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
+import { Logo } from './Logo';
 import { NotificationDropdown } from './NotificationDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { SideNav } from './SideNav';
@@ -73,8 +73,8 @@ export const Navbar = () => {
         aria-label='Global'
       >
         <div className='z-40 my-auto mr-auto flex min-w-[48px] lg:flex-1'>
-          <Link to='/' className='-m-1.5 p-1.5'>
-            <img className='h-12 w-auto' src={birdImageUrl} alt='bird' />
+          <Link to='/'>
+            <Logo className='pt-2' />
           </Link>
         </div>
         {pathName !== '/' ? (
