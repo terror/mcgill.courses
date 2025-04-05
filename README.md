@@ -1,7 +1,6 @@
-## mcgill.courses    <a><img src="https://github.com/user-attachments/assets/3d835599-381c-4d82-8e71-4d80be190909" height="40" valign="top" /></a>
+## mcgill.courses <a><img src="https://github.com/user-attachments/assets/3d835599-381c-4d82-8e71-4d80be190909" height="40" valign="top" /></a>
 
 A course search and review platform for McGill university.
-
 
 ![mcgill_courses_sc](https://github.com/user-attachments/assets/651f4a4b-cf32-4a67-81ad-8a82ac0883c2)
 
