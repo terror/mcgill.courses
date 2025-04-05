@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import { Search } from 'react-feather';
 import { twMerge } from 'tailwind-merge';
 
@@ -12,6 +13,7 @@ export const SearchBar = ({
   searchSelected,
   setSearchSelected,
   value,
+  inputRef,
 }: {
   handleInputChange: (value: string) => void;
   iconStyle?: string;
@@ -23,6 +25,7 @@ export const SearchBar = ({
   searchSelected: boolean;
   setSearchSelected: (value: boolean) => void;
   value?: string;
+  inputRef?: RefObject<HTMLInputElement>;
 }) => {
   return (
     <div className='relative w-full'>
@@ -53,6 +56,7 @@ export const SearchBar = ({
           spellCheck='false'
           type='text'
           value={value}
+          ref={inputRef}
         />
       </div>
     </div>
