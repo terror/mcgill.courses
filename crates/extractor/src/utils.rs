@@ -19,7 +19,7 @@ pub(crate) fn get_course_code_from_link(link: &ElementRef) -> String {
     .attr("href")
     .unwrap_or("")
     .split('/')
-    .last()
+    .next_back()
     .unwrap_or("")
     .to_ascii_uppercase()
     .replace('-', " ")
