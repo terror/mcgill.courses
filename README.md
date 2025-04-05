@@ -1,8 +1,9 @@
-## mcgill.courses <a><img src="https://user-images.githubusercontent.com/31192478/235252457-6364a167-29d7-4b24-96f5-db73c38209e8.png" height="40" valign="top" /></a>
+## mcgill.courses    <a><img src="https://github.com/user-attachments/assets/3d835599-381c-4d82-8e71-4d80be190909" height="40" valign="top" /></a>
 
 A course search and review platform for McGill university.
 
-![](https://github.com/terror/mcgill.courses/assets/31192478/b7689337-0322-49b8-a67b-c8f23d1eb5fa)
+
+![mcgill_courses_sc](https://github.com/user-attachments/assets/651f4a4b-cf32-4a67-81ad-8a82ac0883c2)
 
 ## Development
 
