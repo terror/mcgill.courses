@@ -53,7 +53,7 @@ export const SearchBar = ({
           onFocus={() => setSearchSelected(true)}
           onKeyDown={onKeyDown}
           placeholder={placeholder}
-          spellCheck='false'
+          spellCheck={false}
           type='text'
           value={value}
           ref={inputRef}
