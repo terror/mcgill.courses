@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -16,13 +16,19 @@ const { courses, instructors, coursesIndex, instructorsIndex } =
   getSearchIndex();
 
 export const Home = () => {
-  const [searchParams] = useSearchParams();
+  const searchBarInputRef = useRef<HTMLInputElement>(null);
 
+  const [searchParams] = useSearchParams();
   const [results, setResults] = useState<SearchResults>({
     query: '',
     courses: [],
     instructors: [],
   });
+
+  useEffect(() => {
+    const isDesktopScreen = window.innerWidth >= 1024;
+    if (isDesktopScreen) searchBarInputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const err = searchParams.get('err');
@@ -63,6 +69,7 @@ export const Home = () => {
               <CourseSearchBar
                 results={results}
                 handleInputChange={handleInputChange}
+                inputRef={searchBarInputRef}
               />
               <Link
                 to={`/explore`}
