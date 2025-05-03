@@ -51,9 +51,9 @@ mod tests {
   "#;
 
   #[test]
-  fn get_course_codes_works() {
+  fn get_course_codes() {
     assert_eq!(
-      get_course_codes(
+      super::get_course_codes(
         &Html::parse_fragment(HTML)
           .root_element()
           .select_single("p")
@@ -65,9 +65,9 @@ mod tests {
   }
 
   #[test]
-  fn get_course_code_from_link_works() {
+  fn get_course_code_from_link() {
     assert_eq!(
-      get_course_code_from_link(
+      super::get_course_code_from_link(
         &Html::parse_fragment(
           "<html><a href=\"/study/2022-2023/courses/comp-250\"></a></html>"
         )
@@ -80,9 +80,9 @@ mod tests {
   }
 
   #[test]
-  fn get_text_works() {
+  fn get_text() {
     assert_eq!(
-      get_text(
+      super::get_text(
         &Html::parse_fragment(HTML)
           .root_element()
           .select_single("p")
@@ -93,9 +93,9 @@ mod tests {
   }
 
   #[test]
-  fn dedup_works() {
+  fn dedup() {
     let mut v = vec!["a".to_string(), "b".to_string(), "a".to_string()];
-    dedup(&mut v);
+    super::dedup(&mut v);
     assert_eq!(v, vec!["a".to_string(), "b".to_string()]);
   }
 }
