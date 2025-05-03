@@ -25,7 +25,7 @@ impl CourseExtractor for ECalendarExtractor {
       return Ok(Some(filtered_course_listings));
     }
 
-    return Ok(None);
+    Ok(None)
   }
 
   fn extract_course_page(text: &str) -> Result<CoursePage> {
