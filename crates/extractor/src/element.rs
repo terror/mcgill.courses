@@ -108,8 +108,8 @@ impl Element for CoursePage {
         .trim()
         .to_owned()
         .replace("&amp;", "&"),
-      instructors: extract_course_instructors(&element)?,
-      requirements: extract_course_requirements(&element)?,
+      instructors: ECalendarExtractor::extract_course_instructors(&element)?,
+      requirements: ECalendarExtractor::extract_course_requirements(&element)?,
     })
   }
 }
