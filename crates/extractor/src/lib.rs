@@ -57,7 +57,7 @@ mod tests {
   fn extract_ecalendar_course_listings_2009_2010() {
     assert_eq!(
       ECalendarExtractor::extract_course_listings(&get_content(
-        "course_listings_2009_2010.html"
+        "ecalendar_course_listings_2009_2010.html"
       ))
       .unwrap()
       .unwrap(),
@@ -226,7 +226,7 @@ mod tests {
   fn extract_ecalendar_course_listings_2022_2023() {
     assert_eq!(
       ECalendarExtractor::extract_course_listings(&get_content(
-        "course_listings_2022_2023.html"
+        "ecalendar_course_listings_2022_2023.html"
       ))
       .unwrap()
       .unwrap(),
@@ -380,8 +380,10 @@ mod tests {
   fn extract_ecalendar_course_instructors_2022_2023() {
     assert_eq!(
       ECalendarExtractor::extract_course_instructors(
-        &Html::parse_fragment(&get_content("course_page_2022_2023.html"))
-          .root_element()
+        &Html::parse_fragment(&get_content(
+          "ecalendar_course_page_2022_2023.html"
+        ))
+        .root_element()
       )
       .unwrap(),
       vec![
@@ -413,7 +415,7 @@ mod tests {
   fn extract_ecalendar_course_requirements_2022_2023() {
     assert_eq!(
       ECalendarExtractor::extract_course_requirements(&Html::parse_fragment(
-        &get_content("course_page_2022_2023.html"),
+        &get_content("ecalendar_course_page_2022_2023.html"),
       ).root_element())
       .unwrap(),
       Requirements {
@@ -430,7 +432,7 @@ mod tests {
   fn extract_ecalendar_course_page_2009_2010() {
     assert_eq!(
       ECalendarExtractor::extract_course_page(
-        &get_content("course_page_2009_2010.html")
+        &get_content("ecalendar_course_page_2009_2010.html")
       )
       .unwrap(),
       CoursePage {
@@ -476,7 +478,7 @@ mod tests {
   fn extract_ecalendar_course_page_2022_2023() {
     assert_eq!(
       ECalendarExtractor::extract_course_page(
-        &get_content("course_page_2022_2023.html"),
+        &get_content("ecalendar_course_page_2022_2023.html"),
       )
       .unwrap(),
       CoursePage {
@@ -523,7 +525,7 @@ mod tests {
   fn extract_vsb_course_schedules_202305() {
     assert_eq!(
       VsbExtractor::extract_course_schedules(&get_content(
-        "course_schedules_202305.xml"
+        "vsb_course_schedules_202305.xml"
       ))
       .unwrap(),
       vec![Schedule {
@@ -553,7 +555,7 @@ mod tests {
   #[test]
   fn extract_ecalendar_course_page_with_amp() {
     assert_eq!(
-      ECalendarExtractor::extract_course_page(&get_content("course_page_with_amp.html"),)
+      ECalendarExtractor::extract_course_page(&get_content("ecalendar_course_page_with_amp.html"),)
         .unwrap(),
       CoursePage {
         title: "E & M Laboratory".into(),
