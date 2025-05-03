@@ -37,6 +37,7 @@ use {
   db::Db,
   dotenv::dotenv,
   env_logger::Env,
+  extractor::{ECalendarExtractor, Extractor},
   futures::TryStreamExt,
   http::{
     header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,

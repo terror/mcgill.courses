@@ -17,29 +17,36 @@ mod utils;
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
-pub fn extract_course_listings(
-  text: &str,
-) -> Result<Option<Vec<CourseListing>>> {
-  match Html::parse_fragment(text)
-    .root_element()
-    .select_optional("div[class='view-content']")?
-  {
-    Some(content) => Ok(Some(
-      content
-        .select_many("div[class~='views-row']")?
-        .into_iter()
-        .map(CourseListing::from_element)
-        .collect::<Result<Vec<CourseListing>, _>>()?
-        .into_iter()
-        .map(|listing| listing.filter_terms())
-        .collect(),
-    )),
-    None => Ok(None),
-  }
+pub trait Extractor {
+  fn extract_course_listings(text: &str) -> Result<Option<Vec<CourseListing>>>;
+  fn extract_course_page(text: &str) -> Result<CoursePage>;
 }
 
-pub fn extract_course_page(text: &str) -> Result<CoursePage> {
-  CoursePage::from_element(Html::parse_fragment(text).root_element())
+pub struct ECalendarExtractor;
+
+impl Extractor for ECalendarExtractor {
+  fn extract_course_listings(text: &str) -> Result<Option<Vec<CourseListing>>> {
+    match Html::parse_fragment(text)
+      .root_element()
+      .select_optional("div[class='view-content']")?
+    {
+      Some(content) => Ok(Some(
+        content
+          .select_many("div[class~='views-row']")?
+          .into_iter()
+          .map(CourseListing::from_element)
+          .collect::<Result<Vec<CourseListing>, _>>()?
+          .into_iter()
+          .map(|listing| listing.filter_terms())
+          .collect(),
+      )),
+      None => Ok(None),
+    }
+  }
+
+  fn extract_course_page(text: &str) -> Result<CoursePage> {
+    CoursePage::from_element(Html::parse_fragment(text).root_element())
+  }
 }
 
 pub fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
@@ -135,8 +142,8 @@ fn extract_course_requirements(element: &ElementRef) -> Result<Requirements> {
 mod tests {
   use {
     super::{
-      Block, CourseListing, CoursePage, Html, Instructor, Requirements,
-      Schedule, TimeBlock,
+      Block, CourseListing, CoursePage, Extractor, Html, Instructor,
+      Requirements, Schedule, TimeBlock,
     },
     include_dir::{include_dir, Dir},
     pretty_assertions::assert_eq,
@@ -156,7 +163,7 @@ mod tests {
   #[test]
   fn extract_course_listings_2009_2010() {
     assert_eq!(
-      super::extract_course_listings(&get_content(
+      super::ECalendarExtractor::extract_course_listings(&get_content(
         "course_listings_2009_2010.html"
       ))
       .unwrap()
@@ -325,7 +332,7 @@ mod tests {
   #[test]
   fn extract_course_listings_2022_2023() {
     assert_eq!(
-      super::extract_course_listings(&get_content(
+      super::ECalendarExtractor::extract_course_listings(&get_content(
         "course_listings_2022_2023.html"
       ))
       .unwrap()
@@ -529,7 +536,7 @@ mod tests {
   #[test]
   fn extract_course_page_2009_2010() {
     assert_eq!(
-      super::extract_course_page(
+      super::ECalendarExtractor::extract_course_page(
         &get_content("course_page_2009_2010.html")
       )
       .unwrap(),
@@ -575,7 +582,7 @@ mod tests {
   #[test]
   fn extract_course_page_2022_2023() {
     assert_eq!(
-      super::extract_course_page(
+      super::ECalendarExtractor::extract_course_page(
         &get_content("course_page_2022_2023.html"),
       )
       .unwrap(),
@@ -653,7 +660,7 @@ mod tests {
   #[test]
   fn extract_course_page_with_amp() {
     assert_eq!(
-      super::extract_course_page(&get_content("course_page_with_amp.html"),)
+      super::ECalendarExtractor::extract_course_page(&get_content("course_page_with_amp.html"),)
         .unwrap(),
       CoursePage {
         title: "E & M Laboratory".into(),
