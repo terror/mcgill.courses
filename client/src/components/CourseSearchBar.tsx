@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 import { Layers, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
@@ -95,12 +95,14 @@ type CourseSearchBarProps = {
   results: SearchResults;
   handleInputChange: (query: string) => void;
   onResultClick?: () => void;
+  inputRef?: RefObject<HTMLInputElement>;
 };
 
 export const CourseSearchBar = ({
   results,
   handleInputChange,
   onResultClick,
+  inputRef,
 }: CourseSearchBarProps) => {
   const navigate = useNavigate();
 
@@ -151,6 +153,7 @@ export const CourseSearchBar = ({
         placeholder='Search for courses, subjects or professors'
         searchSelected={searchSelected}
         setSearchSelected={setSearchSelected}
+        inputRef={inputRef}
       />
       {searchSelected && (
         <div className='absolute top-full z-50 w-full overflow-hidden bg-white shadow-md dark:bg-neutral-800'>
