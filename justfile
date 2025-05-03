@@ -42,6 +42,7 @@ dev: services
 
 dev-deps:
   cargo install present
+  curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
   pnpm run cy:e2e
@@ -58,7 +59,7 @@ forbid:
   ./bin/forbid
 
 generate-changelog *args:
-  cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+  RUST_LOG=info cargo run --manifest-path tools/changelog-generator/Cargo.toml \
     -- \
     --output client/src/assets/changelog.json \
     {{args}}

@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
-import { sortTerms } from '../lib/utils';
+import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Block, Schedule } from '../model/Schedule';
 import { Tooltip } from './Tooltip';
@@ -160,6 +160,11 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
   );
 };
 
+const getDefaultTerm = (offeredTerms: string[]) => {
+  const currentTerm = getCurrentTerm();
+  return offeredTerms.includes(currentTerm) ? currentTerm : offeredTerms.at(0);
+};
+
 type SchedulesDisplayProps = {
   course: Course;
   className?: string;
@@ -179,7 +184,9 @@ export const SchedulesDisplay = ({
     )
   );
 
-  const [selectedTerm, setSelectedTerm] = useState(offeredTerms.at(0));
+  const [selectedTerm, setSelectedTerm] = useState(
+    getDefaultTerm(offeredTerms)
+  );
   const [showAll, setShowAll] = useState(false);
   const scheduleByTerm = useMemo(() => getSections(schedules), [course]);
   const [blocks, setBlocks] = useState(
@@ -187,7 +194,7 @@ export const SchedulesDisplay = ({
   );
 
   useEffect(() => {
-    setSelectedTerm(offeredTerms.at(0));
+    setSelectedTerm(getDefaultTerm(offeredTerms));
   }, [course]);
 
   useEffect(() => {
