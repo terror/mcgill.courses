@@ -197,14 +197,14 @@ impl Loader {
       .build()?;
 
     let listings = {
-      let mut listings = extractor::extract_course_listings(
+      let mut listings = ECalendarExtractor::extract_course_listings(
         &client.get(&page.url).retry(self.retries)?.text()?,
       );
 
       while listings.is_err() {
         warn!("Retrying course listings: {}", page.url);
         thread::sleep(Duration::from_millis(500));
-        listings = extractor::extract_course_listings(
+        listings = ECalendarExtractor::extract_course_listings(
           &client.get(&page.url).retry(self.retries)?.text()?,
         );
       }
@@ -241,14 +241,14 @@ impl Loader {
       .build()?;
 
     let course_page = {
-      let mut course_page = extractor::extract_course_page(
+      let mut course_page = ECalendarExtractor::extract_course_page(
         &client.get(&listing.url).retry(self.retries)?.text()?,
       );
 
       while course_page.is_err() {
         warn!("Retrying course page: {}", listing.url);
         thread::sleep(Duration::from_millis(500));
-        course_page = extractor::extract_course_page(
+        course_page = ECalendarExtractor::extract_course_page(
           &client.get(&listing.url).retry(self.retries)?.text()?,
         );
       }
