@@ -14,6 +14,7 @@ pub use {
   ecalendar_extractor::ECalendarExtractor, vsb_extractor::VsbExtractor,
 };
 
+mod catalog_extractor;
 mod ecalendar_extractor;
 mod select;
 mod utils;
