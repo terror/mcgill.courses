@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import courseAverageData from '../assets/courseAveragesData.json';
-import { Layout } from '../components/Layout';
 import { AddReviewForm } from '../components/add-review-form';
 import { CourseAverages } from '../components/course-averages';
 import { CourseInfo } from '../components/course-info';
@@ -12,6 +11,7 @@ import { CourseRequirements } from '../components/course-requirements';
 import { CourseReview } from '../components/course-review';
 import { CourseReviewPrompt } from '../components/course-review-prompt';
 import { EditReviewForm } from '../components/edit-review-form';
+import { Layout } from '../components/layout';
 import { NotFound } from '../components/not-found';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { ReviewFilter, ReviewSortType } from '../components/review-filter';

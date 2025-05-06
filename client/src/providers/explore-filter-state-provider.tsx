@@ -1,6 +1,6 @@
 import { PropsWithChildren, createContext, useMemo, useState } from 'react';
 
-import type { SortByType } from '../components/ExploreFilter';
+import type { SortByType } from '../components/explore-filter';
 
 type ExploreFilterState = {
   selectedSubjects: string[];

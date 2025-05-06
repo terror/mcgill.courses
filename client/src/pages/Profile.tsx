@@ -8,11 +8,11 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
 import { CourseReview } from '../components/course-review';
 import { DeleteButton } from '../components/delete-button';
 import { JumpToTopButton } from '../components/jump-to-top-button';
+import { Layout } from '../components/layout';
+import { Spinner } from '../components/spinner';
 import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import { courseIdToUrlParam } from '../lib/utils';

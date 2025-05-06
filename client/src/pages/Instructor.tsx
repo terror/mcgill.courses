@@ -5,9 +5,9 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { Layout } from '../components/Layout';
 import { CourseInfoStats } from '../components/course-info-stats';
 import { CourseReview } from '../components/course-review';
+import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';

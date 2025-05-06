@@ -9,8 +9,8 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
-import { Layout } from '../components/Layout';
-import { Paragraph } from '../components/Paragraph';
+import { Layout } from '../components/layout';
+import { Paragraph } from '../components/paragraph';
 
 type Question = {
   title: string;

@@ -4,10 +4,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
 import { CourseReview } from '../components/course-review';
 import { JumpToTopButton } from '../components/jump-to-top-button';
+import { Layout } from '../components/layout';
+import { Spinner } from '../components/spinner';
 import { api } from '../lib/api';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
 import { Review } from '../model/Review';

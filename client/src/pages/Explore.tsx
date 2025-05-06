@@ -4,13 +4,13 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
 
-import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
 import { CourseCard } from '../components/course-card';
 import { ExploreFilter, SortByType } from '../components/explore-filter';
 import { FilterToggle } from '../components/filter-toggle';
 import { JumpToTopButton } from '../components/jump-to-top-button';
+import { Layout } from '../components/layout';
 import { SearchBar } from '../components/search-bar';
+import { Spinner } from '../components/spinner';
 import { useDarkMode } from '../hooks/use-dark-mode';
 import { useExploreFilterState } from '../hooks/use-explore-filter-state';
 import { api } from '../lib/api';

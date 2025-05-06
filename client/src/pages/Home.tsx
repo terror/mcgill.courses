@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { Layout } from '../components/Layout';
 import { CourseSearchBar } from '../components/course-search-bar';
+import { Layout } from '../components/layout';
 import { getSearchIndex, updateSearchResults } from '../lib/search-index';
 import type { SearchResults } from '../model/SearchResults';
 
