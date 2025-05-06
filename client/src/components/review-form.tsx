@@ -5,9 +5,9 @@ import { LuFlame } from 'react-icons/lu';
 import * as Yup from 'yup';
 
 import type { Course } from '../model/Course';
-import { BirdIcon } from './BirdIcon';
-import { IconRatingInput } from './IconRatingInput';
-import { MultiSelect } from './MultiSelect';
+import { BirdIcon } from './bird-icon';
+import { IconRatingInput } from './icon-rating-input';
+import { MultiSelect } from './multi-select';
 
 export const ReviewSchema = Yup.object().shape({
   content: Yup.string()

@@ -4,11 +4,11 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { CourseReview } from '../components/CourseReview';
-import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
-import { repo } from '../lib/repo';
+import { CourseReview } from '../components/course-review';
+import { JumpToTopButton } from '../components/jump-to-top-button';
+import { api } from '../lib/api';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
 import { Review } from '../model/Review';
 import { Loading } from './Loading';
@@ -24,7 +24,7 @@ export const Reviews = () => {
   );
 
   useEffect(() => {
-    repo
+    api
       .getReviews({ limit, offset: 0, sorted: true, withUserCount: true })
       .then((data) => {
         setReviews(data.reviews);
@@ -38,7 +38,7 @@ export const Reviews = () => {
   }, []);
 
   const fetchMore = async () => {
-    const batch = await repo.getReviews({ limit, offset, sorted: true });
+    const batch = await api.getReviews({ limit, offset, sorted: true });
 
     if (batch.reviews.length === 0) setHasMore(false);
     else {

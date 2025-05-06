@@ -5,8 +5,8 @@ import { twMerge } from 'tailwind-merge';
 
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import type { SearchResults } from '../model/SearchResults';
-import { Highlight } from './Highlight';
-import { SearchBar } from './SearchBar';
+import { Highlight } from './highlight';
+import { SearchBar } from './search-bar';
 
 type SearchResultType = 'course' | 'instructor';
 

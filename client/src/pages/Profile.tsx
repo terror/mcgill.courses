@@ -8,13 +8,13 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { CourseReview } from '../components/CourseReview';
-import { DeleteButton } from '../components/DeleteButton';
-import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
-import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { CourseReview } from '../components/course-review';
+import { DeleteButton } from '../components/delete-button';
+import { JumpToTopButton } from '../components/jump-to-top-button';
+import { useAuth } from '../hooks/use-auth';
+import { api } from '../lib/api';
 import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import type { Review } from '../model/Review';
@@ -39,7 +39,7 @@ export const Profile = () => {
 
     if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
 
-    repo
+    api
       .getReviews({ userId: user.id, sorted: true })
       .then((data) => setUserReviews(data.reviews))
       .catch(() =>
@@ -48,7 +48,7 @@ export const Profile = () => {
         )
       );
 
-    repo
+    api
       .getSubscriptions()
       .then((data) => setUserSubscriptions(data))
       .catch(() =>
@@ -60,7 +60,7 @@ export const Profile = () => {
 
   const removeSubscription = async (courseId: string) => {
     try {
-      await repo.removeSubscription(courseId);
+      await api.removeSubscription(courseId);
       setUserSubscriptions(
         userSubscriptions?.filter(
           (subscription) => subscription.courseId !== courseId

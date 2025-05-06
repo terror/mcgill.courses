@@ -4,34 +4,35 @@ import { Fragment } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { useDarkMode } from '../hooks/useDarkMode';
-import { repo } from '../lib/repo';
+import { useDarkMode } from '../hooks/use-dark-mode';
+import { api } from '../lib/api';
 import type { Course } from '../model/Course';
-import type { Review } from '../model/Review';
-import { ReviewForm, ReviewSchema } from './ReviewForm';
+import {
+  ReviewForm,
+  ReviewFormInitialValues,
+  ReviewSchema,
+} from './review-form';
 
-type EditReviewFormProps = {
+type ReviewFormProps = {
   course: Course;
-  review: Review;
   open: boolean;
   onClose: () => void;
   handleSubmit: (res: Response) => void;
 };
 
-export const EditReviewForm = ({
+export const AddReviewForm = ({
   course,
-  review,
   open,
   onClose,
   handleSubmit,
-}: EditReviewFormProps) => {
+}: ReviewFormProps) => {
   const [darkMode] = useDarkMode();
 
-  const initialValues = {
-    content: review.content,
-    instructors: review.instructors,
-    rating: review.rating,
-    difficulty: review.difficulty,
+  const initialValues: ReviewFormInitialValues = {
+    content: '',
+    instructors: [],
+    rating: 0,
+    difficulty: 0,
   };
 
   const handleClose = () => {
@@ -58,7 +59,7 @@ export const EditReviewForm = ({
           <div className='fixed inset-0 bg-black/25' />
         </Transition.Child>
 
-        <div className='fixed inset-y-0 left-0 w-screen overflow-y-auto'>
+        <div className='fixed inset-y-0 left-0 w-screen overflow-y-scroll'>
           <div className='flex min-h-full items-center justify-center p-4 text-center'>
             <Transition.Child
               as={Fragment}
@@ -74,14 +75,13 @@ export const EditReviewForm = ({
                   as='h3'
                   className='mb-4 text-lg font-medium leading-6 text-gray-900 dark:text-gray-200'
                 >
-                  {`Editing review of ${course.subject} ${course.code} - ${course.title}`}
+                  {`Reviewing ${course.subject} ${course.code} - ${course.title}`}
                 </Dialog.Title>
-
                 <Formik
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await repo.updateReview(course._id, values);
+                    const res = await api.addReview(course._id, values);
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);

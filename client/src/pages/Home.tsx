@@ -3,9 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { CourseSearchBar } from '../components/CourseSearchBar';
 import { Layout } from '../components/Layout';
-import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
+import { CourseSearchBar } from '../components/course-search-bar';
+import { getSearchIndex, updateSearchResults } from '../lib/search-index';
 import type { SearchResults } from '../model/SearchResults';
 
 const alerts: Map<string, string> = new Map([

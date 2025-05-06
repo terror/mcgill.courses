@@ -1,7 +1,7 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Route, Routes } from 'react-router-dom';
 
-import { PrivateRoute } from './components/PrivateRoute';
+import { PrivateRoute } from './components/private-route';
 import { About } from './pages/About';
 import { Changelog } from './pages/Changelog';
 import { CoursePage } from './pages/CoursePage';

@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
+import { api } from '../lib/api';
 import { env } from '../lib/constants';
-import { repo } from '../lib/repo';
-import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
+import { getSearchIndex, updateSearchResults } from '../lib/search-index';
 import type { Notification } from '../model/Notification';
 import type { SearchResults } from '../model/SearchResults';
-import { CourseSearchBar } from './CourseSearchBar';
-import { DarkModeToggle } from './DarkModeToggle';
-import { Logo } from './Logo';
-import { NotificationDropdown } from './NotificationDropdown';
-import { ProfileDropdown } from './ProfileDropdown';
-import { SideNav } from './SideNav';
+import { CourseSearchBar } from './course-search-bar';
+import { DarkModeToggle } from './dark-mode-toggle';
+import { Logo } from './logo';
+import { NotificationDropdown } from './notification-dropdown';
+import { ProfileDropdown } from './profile-dropdown';
+import { SideNav } from './side-nav';
 
 const { courses, instructors, coursesIndex, instructorsIndex } =
   getSearchIndex();
@@ -41,7 +41,7 @@ export const Navbar = () => {
   useEffect(() => {
     if (!user) return;
 
-    repo
+    api
       .getNotifications()
       .then((data) => setNotifications(data))
       .catch(() => toast.error('Failed to get notifications.'));

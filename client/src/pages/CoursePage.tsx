@@ -4,20 +4,20 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import courseAverageData from '../assets/courseAveragesData.json';
-import { AddReviewForm } from '../components/AddReviewForm';
-import { CourseAverages } from '../components/CourseAverages';
-import { CourseInfo } from '../components/CourseInfo';
-import { CourseRequirements } from '../components/CourseRequirements';
-import { CourseReview } from '../components/CourseReview';
-import { CourseReviewPrompt } from '../components/CourseReviewPrompt';
-import { EditReviewForm } from '../components/EditReviewForm';
 import { Layout } from '../components/Layout';
-import { NotFound } from '../components/NotFound';
-import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
-import { ReviewFilter, ReviewSortType } from '../components/ReviewFilter';
-import { SchedulesDisplay } from '../components/SchedulesDisplay';
-import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { AddReviewForm } from '../components/add-review-form';
+import { CourseAverages } from '../components/course-averages';
+import { CourseInfo } from '../components/course-info';
+import { CourseRequirements } from '../components/course-requirements';
+import { CourseReview } from '../components/course-review';
+import { CourseReviewPrompt } from '../components/course-review-prompt';
+import { EditReviewForm } from '../components/edit-review-form';
+import { NotFound } from '../components/not-found';
+import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
+import { ReviewFilter, ReviewSortType } from '../components/review-filter';
+import { SchedulesDisplay } from '../components/schedules-display';
+import { useAuth } from '../hooks/use-auth';
+import { api } from '../lib/api';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import { Interaction } from '../model/Interaction';
@@ -56,7 +56,7 @@ export const CoursePage = () => {
 
     const inner = async () => {
       try {
-        const payload = await repo.getCourseWithReviews(id);
+        const payload = await api.getCourseWithReviews(id);
 
         if (payload === null) {
           setCourse(null);
@@ -70,7 +70,7 @@ export const CoursePage = () => {
 
         if (user && id) {
           const courseInteractionsPayload =
-            await repo.getUserInteractionsForCourse(id, user.id);
+            await api.getUserInteractionsForCourse(id, user.id);
 
           setUserInteractions(courseInteractionsPayload.interactions);
         }
@@ -137,7 +137,7 @@ export const CoursePage = () => {
   };
 
   const handleDelete = async (review: Review) => {
-    const res = await repo.deleteReview(review.courseId);
+    const res = await api.deleteReview(review.courseId);
 
     if (res.ok) {
       setShowingReviews(

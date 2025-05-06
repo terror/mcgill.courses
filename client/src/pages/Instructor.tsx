@@ -5,12 +5,12 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { CourseInfoStats } from '../components/CourseInfoStats';
-import { CourseReview } from '../components/CourseReview';
 import { Layout } from '../components/Layout';
-import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
-import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { CourseInfoStats } from '../components/course-info-stats';
+import { CourseReview } from '../components/course-review';
+import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
+import { useAuth } from '../hooks/use-auth';
+import { api } from '../lib/api';
 import { courseIdToUrlParam } from '../lib/utils';
 import type { Instructor as InstructorType } from '../model/Instructor';
 import type { Review } from '../model/Review';
@@ -32,7 +32,7 @@ export const Instructor = () => {
   useEffect(() => {
     if (!params.name) return;
 
-    repo
+    api
       .getInstructor(params.name)
       .then((data) => {
         setInstructor(data.instructor);

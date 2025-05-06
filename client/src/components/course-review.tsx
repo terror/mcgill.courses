@@ -8,16 +8,16 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { useAuth } from '../hooks/use-auth';
+import { api } from '../lib/api';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import type { InteractionKind } from '../model/Interaction';
 import type { Interaction } from '../model/Interaction';
 import type { Review } from '../model/Review';
-import { BirdIcon } from './BirdIcon';
-import { DeleteButton } from './DeleteButton';
-import { IconRating } from './IconRating';
-import { Tooltip } from './Tooltip';
+import { BirdIcon } from './bird-icon';
+import { DeleteButton } from './delete-button';
+import { IconRating } from './icon-rating';
+import { Tooltip } from './tooltip';
 
 // Timestamp of https://github.com/terror/mcgill.courses/pull/500
 const RMP_SCRAPE_EPOCH = new Date(1713472800 * 1000);
@@ -82,7 +82,7 @@ const ReviewInteractions = ({
 
   const refreshInteractions = async () => {
     try {
-      const payload = await repo.getInteractions(courseId, userId, user?.id);
+      const payload = await api.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
     } catch (err: any) {
       toast.error(err.toString());
@@ -91,7 +91,7 @@ const ReviewInteractions = ({
 
   const addInteraction = async (interactionKind: InteractionKind) => {
     try {
-      await repo.addInteraction(interactionKind, courseId, userId, user?.id);
+      await api.addInteraction(interactionKind, courseId, userId, user?.id);
       const change = getLikeChange(kind, interactionKind);
       updateLikes(review.likes + change);
 
@@ -110,7 +110,7 @@ const ReviewInteractions = ({
 
   const removeInteraction = async () => {
     try {
-      await repo.removeInteraction(courseId, userId, user?.id);
+      await api.removeInteraction(courseId, userId, user?.id);
       if (!kind) {
         throw new Error("Can't remove interaction that doesn't exist.");
       }
