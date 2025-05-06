@@ -1,5 +1,5 @@
-import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
+import { Layout } from '../components/layout';
+import { Spinner } from '../components/spinner';
 
 export const Loading = () => (
   <Layout>

@@ -4,11 +4,11 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
-import { useExploreFilterState } from '../hooks/useExploreFilterState';
-import { Autocomplete } from './Autocomplete';
-import { termColorMap } from './CourseTerms';
-import { MultiSelect } from './MultiSelect';
-import { ResetButton } from './ResetButton';
+import { useExploreFilterState } from '../hooks/use-explore-filter-state';
+import { Autocomplete } from './autocomplete';
+import { termColorMap } from './course-terms';
+import { MultiSelect } from './multi-select';
+import { ResetButton } from './reset-button';
 
 const termsOptions = ['Fall', 'Winter', 'Summer'] as const;
 type CourseTerm = (typeof termsOptions)[number];

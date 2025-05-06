@@ -8,7 +8,7 @@ import * as buildingCodes from '../assets/buildingCodes.json';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Block, Schedule } from '../model/Schedule';
-import { Tooltip } from './Tooltip';
+import { Tooltip } from './tooltip';
 
 const VSBtimeToDisplay = (time: string) => {
   const approxTimeOfTheDay = parseInt(time, 10) / 60;

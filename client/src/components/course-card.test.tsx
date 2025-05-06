@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { CourseCard } from '../components/CourseCard';
+import { CourseCard } from '../components/course-card';
 import type { Course } from '../model/Course';
 
 const renderWithRouter = (ui: React.ReactElement) => {

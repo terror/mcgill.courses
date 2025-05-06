@@ -3,12 +3,12 @@ import { ExternalLink } from 'react-feather';
 import { VscBell, VscBellSlash } from 'react-icons/vsc';
 import { toast } from 'sonner';
 
-import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { useAuth } from '../hooks/use-auth';
+import { api } from '../lib/api';
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
-import { CourseInfoStats } from './CourseInfoStats';
-import { CourseTerms } from './CourseTerms';
+import { CourseInfoStats } from './course-info-stats';
+import { CourseTerms } from './course-terms';
 
 type CourseInfoProps = {
   course: Course;
@@ -24,7 +24,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   useEffect(() => {
     if (!user) return;
 
-    repo
+    api
       .getSubscription(course._id)
       .then((data) => {
         setIsSubscribed(data !== null);
@@ -38,7 +38,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
 
   const subscribe = async () => {
     try {
-      await repo.addSubcription(course._id);
+      await api.addSubcription(course._id);
       setIsSubscribed(true);
       toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
     } catch (err) {
@@ -50,7 +50,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
 
   const unsubscribe = async () => {
     try {
-      await repo.removeSubscription(course._id);
+      await api.removeSubscription(course._id);
       setIsSubscribed(false);
       toast.success(
         `Unsubscribed from course ${course.subject} ${course.code}`

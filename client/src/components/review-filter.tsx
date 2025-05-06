@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
-import { Autocomplete } from './Autocomplete';
-import { ResetButton } from './ResetButton';
+import { Autocomplete } from './autocomplete';
+import { ResetButton } from './reset-button';
 
 const sortTypes = [
   'Most Recent',

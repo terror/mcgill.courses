@@ -1,4 +1,4 @@
-import type { CourseData, InstructorName } from '../lib/searchIndex';
+import type { CourseData, InstructorName } from '../lib/search-index';
 
 export type SearchResults = {
   query?: string;

@@ -4,11 +4,11 @@ import { IconType } from 'react-icons';
 import { LuFlame } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 
-import { useMediaQuery } from '../hooks/useMediaQuery';
+import { useMediaQuery } from '../hooks/use-media-query';
 import { round2Decimals } from '../lib/utils';
 import type { Review } from '../model/Review';
-import { BirdIcon } from './BirdIcon';
-import { Histogram } from './Histogram';
+import { BirdIcon } from './bird-icon';
+import { Histogram } from './histogram';
 
 type Size = 'small' | 'medium' | 'large';
 

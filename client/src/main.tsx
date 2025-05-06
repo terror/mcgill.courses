@@ -11,9 +11,9 @@ import { Toaster } from 'sonner';
 import App from './App';
 import './index.css';
 import { ErrorPage } from './pages/ErrorPage';
-import AuthProvider from './providers/AuthProvider';
-import { DarkModeProvider } from './providers/DarkModeProvider';
-import ExploreFilterStateProvider from './providers/ExploreFilterStateProvider';
+import AuthProvider from './providers/auth-provider';
+import { DarkModeProvider } from './providers/dark-mode-provider';
+import ExploreFilterStateProvider from './providers/explore-filter-state-provider';
 
 const Root = () => {
   // When an error occurs, we want all of the state in the app

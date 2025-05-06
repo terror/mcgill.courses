@@ -81,7 +81,7 @@ const client = {
   },
 };
 
-export const repo = {
+export const api = {
   async getSubscription(courseId: string): Promise<Subscription | null> {
     return client.deserialize<Subscription | null>(
       'GET',

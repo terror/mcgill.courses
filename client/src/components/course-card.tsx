@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import type { Course } from '../model/Course';
-import { CourseTerms } from './CourseTerms';
-import { Highlight } from './Highlight';
+import { CourseTerms } from './course-terms';
+import { Highlight } from './highlight';
 
 type CourseCardProps = {
   course: Course;

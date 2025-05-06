@@ -1,6 +1,6 @@
 import darkModeLogoUrl from '../assets/logo_darkmode.svg';
 import lightModeLogoUrl from '../assets/logo_lightmode.svg';
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useDarkMode } from '../hooks/use-dark-mode';
 
 type LogoProps = {
   darkMode?: boolean;

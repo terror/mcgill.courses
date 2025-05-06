@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { User } from '../model/User';
 
 export const AuthContext = createContext<User | undefined>(undefined);
@@ -13,7 +13,7 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   useEffect(() => {
     setLoading(true);
 
-    repo
+    api
       .getUser()
       .then((data) => {
         setUser(data.user);

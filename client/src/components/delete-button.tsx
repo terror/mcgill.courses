@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import { Trash2 } from 'react-feather';
 import { twMerge } from 'tailwind-merge';
 
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useDarkMode } from '../hooks/use-dark-mode';
 
 type DeleteButtonProps = {
   title: string;

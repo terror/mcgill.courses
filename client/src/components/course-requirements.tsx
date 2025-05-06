@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
 import { capitalize, punctuate } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Requirements } from '../model/Requirements';
-import { CourseGraph } from './CourseGraph';
+import { CourseGraph } from './course-graph';
 
 type Transform = 'text' | 'html';
 
