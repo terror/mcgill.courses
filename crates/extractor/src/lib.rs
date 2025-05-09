@@ -1,6 +1,7 @@
 use {
-  anyhow::anyhow,
+  anyhow::{anyhow, bail},
   model::{Block, CoursePage, Requirement, Requirements, Schedule, TimeBlock},
+  regex::Regex,
   scraper::{ElementRef, Html, Selector},
   select::Select,
   std::collections::HashSet,
@@ -146,6 +147,7 @@ mod tests {
         instructors: vec![],
         requirements: Requirements {
           prerequisites_text: Some("Prerequisites: COMP 250; MATH 235 or MATH 240".into()),
+          prerequisites: vec!["COMP250".into(), "MATH235".into(), "MATH240".into()],
           restrictions: Some("Not open to students who have taken or are taking: COMP 252 or COMP 260.".into()),
           ..Requirements::default()
         }

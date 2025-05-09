@@ -1,6 +1,3 @@
-use anyhow::bail;
-use regex::Regex;
-
 use super::*;
 
 pub fn extract_course_urls(text: &str) -> Result<Vec<String>> {
