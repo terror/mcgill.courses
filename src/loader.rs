@@ -252,7 +252,12 @@ impl Loader {
         listings
           .iter()
           .map(|listing| CourseListing {
-            url: format!("{}{}", self.extraction_mode.base_url(), listing.url),
+            url: match self.extraction_mode {
+              ExtractionMode::Catalog => listing.clone().url,
+              calendar @ ExtractionMode::ECalendar => {
+                format!("{}{}", calendar.base_url(), listing.url)
+              }
+            },
             ..listing.clone()
           })
           .collect(),
