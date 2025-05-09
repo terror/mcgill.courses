@@ -642,4 +642,24 @@ mod tests {
       ]
     );
   }
+
+  #[test]
+  fn extract_catalog_course_page_2025_2026() {
+    assert_eq!(
+      CatalogExtractor.extract_course_page(
+        &get_content("catalog_course_page_2025_2026.html"),
+      )
+      .unwrap(),
+      CoursePage {
+        title: "Algorithms and Data Structures".into(),
+        credits: "3".into(),
+        subject: "COMP".into(),
+        code: "251".into(),
+        faculty_url: "/study/2022-2023/faculties/science".into(),
+        description: "Data Structures: priority queues, balanced binary search trees, hash tables, graphs. Algorithms: topological sort, connected components, shortest paths, minimum spanning trees, bipartite matching, network flows. Algorithm design: greedy, divide and conquer, dynamic programming, randomization. Mathematicaltools: proofs of asymptotic complexity and program correctness, Master theorem.".into(),
+        instructors: vec![],
+        requirements: Requirements::default()
+      }
+    );
+  }
 }
