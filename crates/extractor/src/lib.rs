@@ -9,7 +9,7 @@ use {
 
 pub use vsb_extractor::VsbExtractor;
 
-mod courses;
+pub mod courses;
 mod select;
 mod utils;
 mod vsb_extractor;

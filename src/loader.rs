@@ -160,33 +160,26 @@ impl Loader {
     let url = "https://coursecatalogue.mcgill.ca/courses/";
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
-    let page_text = client.get(url).retry(self.retries)?.text()?;
-    extractor::extract_course_urls
+    let page = client.get(url).retry(self.retries)?.text()?;
+    extractor::courses::extract_course_urls(&page)
   }
 
-  fn parse_course(
-    &self,
-    listing: CourseListing,
-    scrape_vsb: bool,
-  ) -> Result<Course> {
-    info!("{:?}", listing);
+  fn parse_course(&self, url: &str, scrape_vsb: bool) -> Result<Course> {
+    info!("{}", url);
 
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
-    let extractor = self.extraction_mode.course_extractor();
-
     let course_page = {
-      let mut course_page = extractor.extract_course_page(
-        &client.get(&listing.url).retry(self.retries)?.text()?,
+      let page_text = client.get(url).retry(self.retries)?.text()?;
+      let mut course_page = extractor::courses::extract_course_page(
+        &client.get(url).retry(self.retries)?.text()?,
       );
-
       while course_page.is_err() {
-        warn!("Retrying course page: {}", listing.url);
+        warn!("Retrying course page: {}", url);
 
         thread::sleep(Duration::from_millis(500));
-
-        course_page = extractor.extract_course_page(
-          &client.get(&listing.url).retry(self.retries)?.text()?,
+        course_page = extractor::courses::extract_course_page(
+          &client.get(url).retry(self.retries)?.text()?,
         );
       }
 
@@ -217,15 +210,9 @@ impl Loader {
       credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
-      level: listing.level.unwrap_or_default(),
       url: listing.url,
       department: listing.department.unwrap_or_default(),
       faculty: listing.faculty.unwrap_or_default(),
-      faculty_url: format!(
-        "{}{}",
-        self.extraction_mode.base_url(),
-        course_page.faculty_url
-      ),
       terms: listing.terms,
       description: course_page.description,
       instructors: course_page.instructors,
