@@ -91,15 +91,26 @@ For full usage information, see the output below:
 Usage: server load [OPTIONS] --user-agent <USER_AGENT>
 
 Options:
-      --user-agent <USER_AGENT>      A user agent
-      --course-delay <COURSE_DELAY>  Time delay between course requests in milliseconds [default: 0]
-      --page-delay <PAGE_DELAY>      Time delay between page requests in milliseconds [default: 0]
-      --retries <RETRIES>            Number of retries [default: 10]
-      --batch-size <BATCH_SIZE>      Number of pages to scrape per concurrent batch [default: 20]
-      --mcgill-terms <MCGILL_TERMS>  The mcgill terms to scrape [default: 2009-2010 2010-2011 2011-2012 2012-2013 2013-2014 2014-2015 2015-2016 2016-2017 2017-2018 2018-2019 2019-2020 2020-2021 2021-2022 2022-2023 2023-2024 2024-2025]
-      --vsb-terms <VSB_TERMS>        The schedule builder terms to scrape [default: 202405 202409 202501]
-      --scrape-vsb                   Scrape visual schedule builder information
-  -h, --help                         Print help
+      --batch-size <BATCH_SIZE>
+          Number of pages to scrape per concurrent batch [default: 20]
+      --course-delay <COURSE_DELAY>
+          Time delay between course requests in milliseconds [default: 0]
+      --extraction-mode <EXTRACTION_MODE>
+          Extraction mode [default: catalog] [possible values: e-calendar, catalog]
+      --mcgill-terms <MCGILL_TERMS>
+          The mcgill terms to scrape [default: 2009-2010 2010-2011 2011-2012 2012-2013 2013-2014 2014-2015 2015-2016 2016-2017 2017-2018 2018-2019 2019-2020 2020-2021 2021-2022 2022-2023 2023-2024 2024-2025]
+      --page-delay <PAGE_DELAY>
+          Time delay between page requests in milliseconds [default: 0]
+      --retries <RETRIES>
+          Number of retries [default: 10]
+      --scrape-vsb
+          Scrape visual schedule builder information
+      --user-agent <USER_AGENT>
+          A user agent
+      --vsb-terms <VSB_TERMS>
+          The schedule builder terms to scrape [default: 202405 202409 202501]
+  -h, --help
+          Print help
 ```
 
 Alternatively, if you have [just](https://github.com/casey/just) installed, you
