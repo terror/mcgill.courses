@@ -6,7 +6,6 @@ pub struct CoursePage {
   pub credits: String,
   pub subject: String,
   pub code: String,
-  pub faculty_url: String,
   pub description: String,
   pub instructors: Vec<Instructor>,
   pub requirements: Requirements,

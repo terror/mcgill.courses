@@ -26,24 +26,7 @@ pub(crate) struct Loader {
 
   #[clap(
     long,
-    default_values = [
-      "2009-2010",
-      "2010-2011",
-      "2011-2012",
-      "2012-2013",
-      "2013-2014",
-      "2014-2015",
-      "2015-2016",
-      "2016-2017",
-      "2017-2018",
-      "2018-2019",
-      "2019-2020",
-      "2020-2021",
-      "2021-2022",
-      "2022-2023",
-      "2023-2024",
-      "2024-2025",
-    ],
+    default_values = ["2025-2026",],
     help = "The mcgill terms to scrape"
   )]
   mcgill_terms: Vec<String>,
@@ -173,93 +156,12 @@ impl Loader {
     Ok(courses.to_vec())
   }
 
-  fn aggregate_urls(&self, term: &str, start: usize, end: usize) -> Vec<Page> {
-    (start..=end)
-      .map(|index| {
-        let url = match self.extraction_mode {
-          ecalendar @ ExtractionMode::ECalendar => {
-            format!(
-              "{}/study/{}/courses/search?page={}",
-              ecalendar.base_url(),
-              term,
-              index
-            )
-          }
-          catalog @ ExtractionMode::Catalog => {
-            format!(
-              "{}/search/?f[0]=type:courses&query=*&page={}",
-              catalog.base_url(),
-              index
-            )
-          }
-        };
-
-        Page { number: index, url }
-      })
-      .collect()
-  }
-
-  fn parse_course_listing_pages(
-    &self,
-    pages: Vec<Page>,
-  ) -> Result<Option<Vec<CourseListing>>> {
-    Ok(
-      pages
-        .par_iter()
-        .flat_map(|page| {
-          self
-            .parse_course_listing_page(page)
-            .unwrap_or(Some(Vec::new()))
-            .unwrap_or_default()
-        })
-        .collect::<Vec<CourseListing>>()
-        .into_option(),
-    )
-  }
-
-  fn parse_course_listing_page(
-    &self,
-    page: &Page,
-  ) -> Result<Option<Vec<CourseListing>>> {
-    info!("Parsing html on page: {}...", page.number);
-
+  fn get_course_urls(&self) -> Result<Vec<String>> {
+    let url = "https://coursecatalogue.mcgill.ca/courses/";
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
-    let extractor = self.extraction_mode.course_extractor();
-
-    let listings = {
-      let mut listings = extractor.extract_course_listings(
-        &client.get(&page.url).retry(self.retries)?.text()?,
-      );
-
-      while listings.is_err() {
-        warn!("Retrying course listings: {}", page.url);
-
-        thread::sleep(Duration::from_millis(500));
-
-        listings = extractor.extract_course_listings(
-          &client.get(&page.url).retry(self.retries)?.text()?,
-        );
-      }
-
-      listings?
-    };
-
-    thread::sleep(Duration::from_millis(self.page_delay));
-
-    if let Some(listings) = listings {
-      return Ok(Some(
-        listings
-          .iter()
-          .map(|listing| CourseListing {
-            url: format!("{}{}", self.extraction_mode.base_url(), listing.url),
-            ..listing.clone()
-          })
-          .collect(),
-      ));
-    }
-
-    Ok(None)
+    let page_text = client.get(url).retry(self.retries)?.text()?;
+    extractor::extract_course_urls
   }
 
   fn parse_course(
