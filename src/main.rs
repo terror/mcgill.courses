@@ -4,6 +4,7 @@ use {
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
+    extraction_mode::ExtractionMode,
     hash::Hash,
     loader::Loader,
     object::Object,
@@ -38,7 +39,8 @@ use {
   dotenv::dotenv,
   env_logger::Env,
   extractor::{
-    CourseExtractor, ECalendarExtractor, ScheduleExtractor, VsbExtractor,
+    CatalogExtractor, CourseExtractor, ECalendarExtractor, ScheduleExtractor,
+    VsbExtractor,
   },
   futures::TryStreamExt,
   http::{
@@ -54,7 +56,7 @@ use {
     RedirectUrl, Scope, TokenUrl,
   },
   rayon::prelude::*,
-  reqwest::blocking::RequestBuilder,
+  reqwest::blocking::{Client, RequestBuilder},
   rusoto_core::Region,
   rusoto_s3::S3Client,
   rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
@@ -96,6 +98,7 @@ mod assets;
 mod auth;
 mod courses;
 mod error;
+mod extraction_mode;
 mod hash;
 mod instructors;
 mod interactions;

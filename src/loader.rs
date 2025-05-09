@@ -2,28 +2,28 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Loader {
-  #[clap(long, help = "A user agent")]
-  user_agent: String,
-  #[clap(
-    long,
-    default_value = "0",
-    help = "Time delay between course requests in milliseconds"
-  )]
-  course_delay: u64,
-  #[clap(
-    long,
-    default_value = "0",
-    help = "Time delay between page requests in milliseconds"
-  )]
-  page_delay: u64,
-  #[clap(long, default_value = "10", help = "Number of retries")]
-  retries: usize,
   #[clap(
     long,
     default_value = "20",
     help = "Number of pages to scrape per concurrent batch"
   )]
   batch_size: usize,
+
+  #[clap(
+    long,
+    default_value = "0",
+    help = "Time delay between course requests in milliseconds"
+  )]
+  course_delay: u64,
+
+  #[clap(
+    default_value = "catalog",
+    help = "Extraction mode",
+    long,
+    value_enum
+  )]
+  extraction_mode: ExtractionMode,
+
   #[clap(
     long,
     default_values = [
@@ -47,23 +47,35 @@ pub(crate) struct Loader {
     help = "The mcgill terms to scrape"
   )]
   mcgill_terms: Vec<String>,
+
   #[clap(
     long,
-    default_values = ["202405", "202409", "202501"],
-    help = "The schedule builder terms to scrape"
+    default_value = "0",
+    help = "Time delay between page requests in milliseconds"
   )]
-  vsb_terms: Vec<usize>,
+  page_delay: u64,
+
+  #[clap(long, default_value = "10", help = "Number of retries")]
+  retries: usize,
   #[clap(
     long,
     default_value = "false",
     help = "Scrape visual schedule builder information"
   )]
   scrape_vsb: bool,
+
+  #[clap(long, help = "A user agent")]
+  user_agent: String,
+
+  #[clap(
+    long,
+    default_values = ["202405", "202409", "202501"],
+    help = "The schedule builder terms to scrape"
+  )]
+  vsb_terms: Vec<usize>,
 }
 
 impl Loader {
-  const BASE_URL: &'static str = "https://www.mcgill.ca";
-
   pub(crate) fn run(&self, source: PathBuf) -> Result {
     info!("Running extractor...");
 
@@ -97,9 +109,10 @@ impl Loader {
 
       courses.sort();
 
-      let source = match source.is_dir() {
-        true => source.join(format!("courses-{term}.json")),
-        _ => source.clone(),
+      let source = if source.is_dir() {
+        source.join(format!("courses-{term}.json"))
+      } else {
+        source.clone()
       };
 
       if source.exists() {
@@ -119,14 +132,13 @@ impl Loader {
           })
           .collect::<Vec<Course>>();
 
-        fs::write(
-          &source,
-          serde_json::to_string_pretty(&self.post_process(&mut merged)?)?,
-        )?;
+        let courses = &self.post_process(&mut merged)?;
+
+        fs::write(&source, serde_json::to_string_pretty(&courses)?)?;
       } else {
         fs::write(
           &source,
-          serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
+          serde_json::to_string_pretty(&&self.post_process(&mut courses)?)?,
         )?;
       }
     }
@@ -137,17 +149,24 @@ impl Loader {
   fn post_process(&self, courses: &mut [Course]) -> Result<Vec<Course>, Error> {
     info!("Post processing courses...");
 
-    for i in 0..courses.len() {
-      let mut leading_to = Vec::new();
+    let mapping = courses
+      .iter()
+      .enumerate()
+      .map(|(index, course)| {
+        (
+          index,
+          courses
+            .iter()
+            .filter(|other| {
+              other.id != course.id && other.prerequisites.contains(&course.id)
+            })
+            .map(|other| other.id.clone())
+            .collect(),
+        )
+      })
+      .collect::<Vec<(usize, Vec<String>)>>();
 
-      for j in (0..courses.len()).filter(|&j| j != i) {
-        let (curr, other) = (&courses[i], &courses[j]);
-
-        if other.prerequisites.contains(&curr.id) {
-          leading_to.push(other.id.clone());
-        }
-      }
-
+    for (i, leading_to) in mapping {
       courses[i].leading_to = leading_to;
     }
 
@@ -156,14 +175,26 @@ impl Loader {
 
   fn aggregate_urls(&self, term: &str, start: usize, end: usize) -> Vec<Page> {
     (start..=end)
-      .map(|index| Page {
-        number: index,
-        url: format!(
-          "{}/study/{}/courses/search?page={}",
-          Loader::BASE_URL,
-          term,
-          index
-        ),
+      .map(|index| {
+        let url = match self.extraction_mode {
+          ecalendar @ ExtractionMode::ECalendar => {
+            format!(
+              "{}/study/{}/courses/search?page={}",
+              ecalendar.base_url(),
+              term,
+              index
+            )
+          }
+          catalog @ ExtractionMode::Catalog => {
+            format!(
+              "{}/search/?f[0]=type:courses&query=*&page={}",
+              catalog.base_url(),
+              index
+            )
+          }
+        };
+
+        Page { number: index, url }
       })
       .collect()
   }
@@ -192,19 +223,21 @@ impl Loader {
   ) -> Result<Option<Vec<CourseListing>>> {
     info!("Parsing html on page: {}...", page.number);
 
-    let client = reqwest::blocking::Client::builder()
-      .user_agent(&self.user_agent)
-      .build()?;
+    let client = Client::builder().user_agent(&self.user_agent).build()?;
+
+    let extractor = self.extraction_mode.course_extractor();
 
     let listings = {
-      let mut listings = ECalendarExtractor::extract_course_listings(
+      let mut listings = extractor.extract_course_listings(
         &client.get(&page.url).retry(self.retries)?.text()?,
       );
 
       while listings.is_err() {
         warn!("Retrying course listings: {}", page.url);
+
         thread::sleep(Duration::from_millis(500));
-        listings = ECalendarExtractor::extract_course_listings(
+
+        listings = extractor.extract_course_listings(
           &client.get(&page.url).retry(self.retries)?.text()?,
         );
       }
@@ -219,7 +252,7 @@ impl Loader {
         listings
           .iter()
           .map(|listing| CourseListing {
-            url: format!("{}{}", Loader::BASE_URL, listing.url),
+            url: format!("{}{}", self.extraction_mode.base_url(), listing.url),
             ..listing.clone()
           })
           .collect(),
@@ -236,19 +269,21 @@ impl Loader {
   ) -> Result<Course> {
     info!("{:?}", listing);
 
-    let client = reqwest::blocking::Client::builder()
-      .user_agent(&self.user_agent)
-      .build()?;
+    let client = Client::builder().user_agent(&self.user_agent).build()?;
+
+    let extractor = self.extraction_mode.course_extractor();
 
     let course_page = {
-      let mut course_page = ECalendarExtractor::extract_course_page(
+      let mut course_page = extractor.extract_course_page(
         &client.get(&listing.url).retry(self.retries)?.text()?,
       );
 
       while course_page.is_err() {
         warn!("Retrying course page: {}", listing.url);
+
         thread::sleep(Duration::from_millis(500));
-        course_page = ECalendarExtractor::extract_course_page(
+
+        course_page = extractor.extract_course_page(
           &client.get(&listing.url).retry(self.retries)?.text()?,
         );
       }
@@ -263,12 +298,13 @@ impl Loader {
 
     thread::sleep(Duration::from_millis(self.course_delay));
 
-    let schedule = match scrape_vsb {
-      true => Some(VsbClient::new(&client, self.retries)?.schedule(
+    let schedule = if scrape_vsb {
+      Some(VsbClient::new(&client, self.retries)?.schedule(
         &format!("{}-{}", course_page.subject, course_page.code),
         self.vsb_terms.clone(),
-      )?),
-      _ => None,
+      )?)
+    } else {
+      None
     };
 
     Ok(Course {
@@ -283,7 +319,11 @@ impl Loader {
       url: listing.url,
       department: listing.department,
       faculty: listing.faculty,
-      faculty_url: format!("{}{}", Loader::BASE_URL, course_page.faculty_url),
+      faculty_url: format!(
+        "{}{}",
+        self.extraction_mode.base_url(),
+        course_page.faculty_url
+      ),
       terms: listing.terms,
       description: course_page.description,
       instructors: course_page.instructors,

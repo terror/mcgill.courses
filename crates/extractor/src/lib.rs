@@ -11,7 +11,8 @@ use {
 };
 
 pub use {
-  ecalendar_extractor::ECalendarExtractor, vsb_extractor::VsbExtractor,
+  catalog_extractor::CatalogExtractor, ecalendar_extractor::ECalendarExtractor,
+  vsb_extractor::VsbExtractor,
 };
 
 mod catalog_extractor;
@@ -23,8 +24,12 @@ mod vsb_extractor;
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
 pub trait CourseExtractor {
-  fn extract_course_listings(text: &str) -> Result<Option<Vec<CourseListing>>>;
-  fn extract_course_page(text: &str) -> Result<CoursePage>;
+  fn extract_course_listings(
+    &self,
+    text: &str,
+  ) -> Result<Option<Vec<CourseListing>>>;
+
+  fn extract_course_page(&self, text: &str) -> Result<CoursePage>;
 }
 
 pub trait ScheduleExtractor {
@@ -56,11 +61,12 @@ mod tests {
   #[test]
   fn extract_ecalendar_course_listings_2009_2010() {
     assert_eq!(
-      ECalendarExtractor::extract_course_listings(&get_content(
-        "ecalendar_course_listings_2009_2010.html"
-      ))
-      .unwrap()
-      .unwrap(),
+      ECalendarExtractor
+        .extract_course_listings(&get_content(
+          "ecalendar_course_listings_2009_2010.html"
+        ))
+        .unwrap()
+        .unwrap(),
       vec![
         CourseListing {
           department: "Management".into(),
@@ -225,11 +231,12 @@ mod tests {
   #[test]
   fn extract_ecalendar_course_listings_2022_2023() {
     assert_eq!(
-      ECalendarExtractor::extract_course_listings(&get_content(
-        "ecalendar_course_listings_2022_2023.html"
-      ))
-      .unwrap()
-      .unwrap(),
+      ECalendarExtractor
+        .extract_course_listings(&get_content(
+          "ecalendar_course_listings_2022_2023.html"
+        ))
+        .unwrap()
+        .unwrap(),
       vec![
         CourseListing {
           department: "Bioresource Engineering".into(),
@@ -431,7 +438,7 @@ mod tests {
   #[test]
   fn extract_ecalendar_course_page_2009_2010() {
     assert_eq!(
-      ECalendarExtractor::extract_course_page(
+      ECalendarExtractor.extract_course_page(
         &get_content("ecalendar_course_page_2009_2010.html")
       )
       .unwrap(),
@@ -477,7 +484,7 @@ mod tests {
   #[test]
   fn extract_ecalendar_course_page_2022_2023() {
     assert_eq!(
-      ECalendarExtractor::extract_course_page(
+      ECalendarExtractor.extract_course_page(
         &get_content("ecalendar_course_page_2022_2023.html"),
       )
       .unwrap(),
@@ -555,7 +562,7 @@ mod tests {
   #[test]
   fn extract_ecalendar_course_page_with_amp() {
     assert_eq!(
-      ECalendarExtractor::extract_course_page(&get_content("ecalendar_course_page_with_amp.html"),)
+      ECalendarExtractor.extract_course_page(&get_content("ecalendar_course_page_with_amp.html"),)
         .unwrap(),
       CoursePage {
         title: "E & M Laboratory".into(),

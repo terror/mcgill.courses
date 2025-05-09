@@ -3,7 +3,10 @@ use super::*;
 pub struct ECalendarExtractor;
 
 impl CourseExtractor for ECalendarExtractor {
-  fn extract_course_listings(text: &str) -> Result<Option<Vec<CourseListing>>> {
+  fn extract_course_listings(
+    &self,
+    text: &str,
+  ) -> Result<Option<Vec<CourseListing>>> {
     let page = Html::parse_fragment(text);
 
     let content = page
@@ -28,7 +31,7 @@ impl CourseExtractor for ECalendarExtractor {
     Ok(None)
   }
 
-  fn extract_course_page(text: &str) -> Result<CoursePage> {
+  fn extract_course_page(&self, text: &str) -> Result<CoursePage> {
     let page = Html::parse_fragment(text);
 
     let element = page.root_element();
