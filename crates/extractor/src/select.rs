@@ -2,6 +2,7 @@ use super::*;
 
 pub(crate) trait Select<'a> {
   fn select_single(&self, selector: &str) -> Result<ElementRef<'a>>;
+  #[allow(dead_code)]
   fn try_select_single(&self, selectors: Vec<&str>) -> Result<ElementRef<'a>>;
   fn select_optional(&self, selector: &str) -> Result<Option<ElementRef<'a>>>;
   fn select_many(&self, selector: &str) -> Result<Vec<ElementRef<'a>>>;

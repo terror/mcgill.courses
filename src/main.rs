@@ -65,7 +65,6 @@ use {
     fs,
     fs::File,
     io::Read,
-    marker::Sized,
     net::SocketAddr,
     path::PathBuf,
     process,
@@ -99,7 +98,6 @@ mod loader;
 mod notifications;
 mod object;
 mod options;
-mod page;
 mod retry;
 mod reviews;
 mod search;
@@ -108,7 +106,6 @@ mod state;
 mod subcommand;
 mod subscriptions;
 mod user;
-mod vec_ext;
 mod vsb_client;
 
 type Result<T = (), E = error::Error> = std::result::Result<T, E>;
