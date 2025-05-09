@@ -9,7 +9,6 @@
     "url": "https://www.mcgill.ca/study/2023-2024/courses/comp-251",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2023-2024/faculties/science",
     "terms": ["Fall 2023", "Winter 2024"],
     "description": "Introduction to algorithm design and analysis. Graph algorithms, greedy algorithms, data structures, dynamic programming, maximum flows.",
     "instructors": [
@@ -80,7 +79,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-553",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Foundations of game theory. Computation aspects of equilibria. Theory of auctions and modern auction design. General equilibrium theory and welfare economics. Algorithmic mechanism design. Dynamic games.",
     "instructors": [

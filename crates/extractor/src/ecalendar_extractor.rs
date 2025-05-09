@@ -81,15 +81,6 @@ impl CourseExtractor for ECalendarExtractor {
       .collect::<Vec<&str>>()
       .join(" ");
 
-    let faculty_url = content
-      .select_single("div[class='meta']")?
-      .select_single("p")?
-      .select_single("a")?
-      .value()
-      .attr("href")
-      .ok_or_else(|| anyhow!("Failed to get attribute"))?
-      .to_string();
-
     let description = content
       .select_single("div[class='content']")?
       .select_single("p")?
@@ -108,7 +99,6 @@ impl CourseExtractor for ECalendarExtractor {
       credits,
       subject,
       code,
-      faculty_url,
       description,
       instructors: ECalendarExtractor::extract_course_instructors(&element)?,
       requirements: ECalendarExtractor::extract_course_requirements(&element)?,

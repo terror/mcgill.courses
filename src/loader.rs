@@ -283,7 +283,6 @@ impl Loader {
       url: listing.url,
       department: listing.department,
       faculty: listing.faculty,
-      faculty_url: format!("{}{}", Loader::BASE_URL, course_page.faculty_url),
       terms: listing.terms,
       description: course_page.description,
       instructors: course_page.instructors,
