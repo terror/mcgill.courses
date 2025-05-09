@@ -67,9 +67,6 @@ impl CourseExtractor for CatalogExtractor {
       .trim()
       .to_owned();
 
-    // TODO: Can we get the faculty url?
-    let faculty_url = String::new();
-
     // TODO: Extract instructors when they're available
     //
     // We also need to update the test in `/test-samples/`
@@ -80,7 +77,6 @@ impl CourseExtractor for CatalogExtractor {
       credits,
       subject,
       code,
-      faculty_url,
       description,
       instructors,
       requirements: Self::extract_course_requirements(&element)?,

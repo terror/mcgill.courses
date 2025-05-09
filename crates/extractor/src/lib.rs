@@ -652,7 +652,6 @@ mod tests {
         credits: "3".into(),
         subject: "COMP".into(),
         code: "251".into(),
-        faculty_url: String::new(),
         description: "Data Structures: priority queues, balanced binary search trees, hash tables, graphs. Algorithms: topological sort, connected components, shortest paths, minimum spanning trees, bipartite matching, network flows. Algorithm design: greedy, divide and conquer, dynamic programming, randomization. Mathematicaltools: proofs of asymptotic complexity and program correctness, Master theorem.".into(),
         instructors: vec![],
         requirements: Requirements {
