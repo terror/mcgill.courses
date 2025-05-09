@@ -11,7 +11,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-102",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "A course for students with no previous knowledge of computer science. The impact of computers on society.  Web design and dynamic content. The inner workings of computers (hardware).  Networking principles. Algorithm design and programming. A look at how computers store data (image, sound, and video). Software distribution policies and mechanisms.",
     "instructors": [],
@@ -33,7 +32,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-189",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "How computer technologies shape social notions such as ownership, safety, and privacy. Emphasis is on computer science powering both day-to-day technologies (e.g., online social media) and those in the news (e.g., cyberwar). Discussions will investigate technology and social issues in order to understand both.",
     "instructors": [],
@@ -55,7 +53,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-202",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Introduction to computer programming in a high level language  variables, expressions, primitive types, methods, conditionals, loops. Introduction to algorithms, data structures (arrays, strings), modular software design, libraries, file input/output, debugging, exception handling. Selected topics.",
     "instructors": [
@@ -90,7 +87,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-204",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Computer Science (Sci)  Computer programming in a high level language  variables, expressions, types, functions, conditionals, loops, objects and classes. Introduction to algorithms, modular software design, libraries, file input/output, debugging. Emphasis on applications in the life sciences.",
     "instructors": [
@@ -121,7 +117,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-206",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Comprehensive overview of programming in C, use of system calls and libraries, debugging and testing of code; use of developmental tools like make, version control systems.",
     "instructors": [
@@ -156,7 +151,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-208",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Programming and problem solving in a high level computer language  variables, expressions, types, functions, conditionals, loops, objects and classes. Introduction to algorithms such as searching and sorting. Modular software design, libraries, file input and output, debugging. Emphasis on applications in Physical Sciences\nand Engineering, such as root finding, numerical integration, diffusion, Monte Carlo methods.",
     "instructors": [
@@ -187,7 +181,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-230",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Propositional Logic, predicate calculus, proof systems, computability Turing machines, Church-Turing thesis, unsolvable problems, completeness, incompleteness, Tarski semantics, uses and misuses of Gödel's theorem.",
     "instructors": [
@@ -214,7 +207,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-250",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Mathematical tools (binary numbers, induction, recurrence relations, asymptotic complexity, establishing correctness of programs), Data structures (arrays, stacks, queues, linked lists, trees, binary trees, binary search trees, heaps, hash tables), Recursive and non-recursive algorithms (searching and sorting, tree and graph traversal). Abstract data types, inheritance. Selected topics.",
     "instructors": [
@@ -245,7 +237,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-251",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Introduction to algorithm design and analysis. Graph algorithms, greedy algorithms, data structures, dynamic programming, maximum flows.",
     "instructors": [
@@ -280,7 +271,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-252",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "The design and analysis of data structures and algorithms. The description of various computational problems and the algorithms that can be used to solve them, along with their associated data structures. Proving the correctness of algorithms and determining their computational complexity.",
     "instructors": [
@@ -307,7 +297,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-273",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Number representations, combinational and sequential digital circuits, MIPS instructions and architecture datapath and control, caches, virtual memory, interrupts and exceptions, pipelining.",
     "instructors": [
@@ -342,7 +331,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-280",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "A history of early mathematical computation. Symbolic logic and computation. Modern computer systems and networks. The rise of the internet.",
     "instructors": [],
@@ -364,7 +352,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-302",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Programming language design issues and programming paradigms. Binding and scoping, parameter passing, lambda abstraction, data abstraction, type checking. Functional and logic programming.",
     "instructors": [
@@ -402,7 +389,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-303",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Principles, mechanisms, techniques, and tools for object-oriented software design and its implementation, including encapsulation, design patterns, and unit testing.",
     "instructors": [
@@ -433,7 +419,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-307",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "The course discusses the major principles, algorithms, languages and technologies that underlie web development. Students receive practical hands-on experience through a project.",
     "instructors": [
@@ -460,7 +445,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-308",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Digital circuitry and programming interface of peripheral circuit boards (cards), e.g., graphics cards; introduction to tools and libraries that interact with the card; performance issues.",
     "instructors": [
@@ -487,7 +471,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-310",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Control and scheduling of large information processing systems. Operating system software - resource allocation, dispatching, processors, access methods, job control languages, main storage management. Batch processing, multiprogramming, multiprocessing, time sharing.",
     "instructors": [
@@ -518,7 +501,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-321",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Development of programming skills on tricky challenges, games and puzzles by means of programming competitions.",
     "instructors": [
@@ -545,7 +527,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-322",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Basics and advanced features of the C++ language. Syntax, memory management, class structure, method and operator overloading, multiple inheritance, access control, stream I/O, templates, exception handling.",
     "instructors": [
@@ -572,7 +553,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-330",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Finite automata, regular languages, context-free languages, push-down automata, models of computation, computability theory, undecidability, reduction techniques.",
     "instructors": [
@@ -603,7 +583,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-345",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "ntroduction to language data science, including theoretical approaches and practical skills. Processing, searching, and querying text data; making sense of large corpora; modelling and interpreting psycholinguistic and historical language data; building models of sequences of words; computing similarity between languages; information retrieval and extraction; question answering; and ethics.",
     "instructors": [
@@ -634,7 +613,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-350",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Computer representation of numbers, IEEE Standard for Floating Point Representation, computer arithmetic and rounding errors. Numerical stability. Matrix computations and software systems. Polynomial interpolation. Least-squares approximation. Iterative methods for solving a nonlinear equation. Discretization methods for integration and differential equations.",
     "instructors": [
@@ -667,7 +645,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-360",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Advanced algorithm design and analysis. Linear programming, complexity and NP-completeness, advanced algorithmic techniques.",
     "instructors": [
@@ -704,7 +681,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-361d1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Software development process in practice  requirement elicitation and analysis, software design, implementation, integration, test planning, and maintenance. Application of the core concepts and techniques through the realization of a large software system.",
     "instructors": [
@@ -731,7 +707,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-361d2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "See COMP 361D1 for course description.",
     "instructors": [
@@ -758,7 +733,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-362",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Basic algorithmic techniques, their applications and limitations. Problem complexity, how to deal with problems for which no efficient solutions are known.",
     "instructors": [
@@ -785,7 +759,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-364",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Concepts and tools for programmatic storage, retrieval, searching, numerical analysis, and visualization of large biological data sets.",
     "instructors": [],
@@ -807,7 +780,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-370",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Comprehensive introduction to the data science process. Orientation to the use and configuration of core data science toolkits, data collection and annotation fundamentals, principles of responsible data science, the use of quantitative tools in data science, and presentation of data science findings.",
     "instructors": [],
@@ -829,7 +801,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-396",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Independent research project with a final written report.",
     "instructors": [
@@ -864,7 +835,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-400",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "A research project in any area of computer science, involving a programming effort and/or a theoretical investigation, and supervised by a faculty member in the School of Computer Science. Final written report required.",
     "instructors": [
@@ -899,7 +869,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-401",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "A research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology. A program advisor from each department has to approve the project.",
     "instructors": [
@@ -934,7 +903,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-402",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Summer 2023", "Fall 2022", "Winter 2023"],
     "description": "One-semester research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology or related fields.",
     "instructors": [
@@ -969,7 +937,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-402d1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "A two-semester research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology or related fields.",
     "instructors": [
@@ -996,7 +963,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-402d2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "A two-semester research project applying computational approaches to a biological problem. The project is (co)-supervised by a professor in Computer Science and/or Biology or related fields.",
     "instructors": [
@@ -1023,7 +989,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-409",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Characteristics and utility of concurrent programs; formal methods for specification, verification and development of concurrent programs; communications, synchronization, resource allocation and management, coherency and integrity.",
     "instructors": [],
@@ -1045,7 +1010,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-417",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course considers issues relevant to the design of robotic and of intelligent systems. How can robots move and interact. Robotic hardware systems. Kinematics and inverse kinematics. Sensors, sensor data interpretation and sensor fusion. Path planning. Configuration spaces. Position estimation. Intelligent systems. Spatial mapping. Multi-agent systems. Applications.",
     "instructors": [
@@ -1076,7 +1040,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-421",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Database Design  conceptual design of databases (e.g., entity-relationship model), relational data model, functional dependencies. Database Manipulation  relational algebra, SQL, database application programming, triggers, access control. Database Implementation  transactions, concurrency control, recovery, query execution and query optimization.",
     "instructors": [
@@ -1107,7 +1070,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-424",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Introduction to search methods. Knowledge representation using logic and probability. Planning and decision making under uncertainty. Introduction to machine learning.",
     "instructors": [
@@ -1134,7 +1096,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-445",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Introduction to foundational ideas in computational linguistics and natural language processing. Topics include formal language theory, probability theory,\nestimation and inference, and recursively defined models of language structure. Emphasis on both the mathematical foundations of the field as well as how to\nuse these tools to understand human language.",
     "instructors": [
@@ -1161,7 +1122,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-451",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Introduction to the computational, statistical and mathematical foundations of machine learning. Algorithms for both supervised learning and unsupervised learning. Maximum likelihood estimation, neural networks, and regularization.",
     "instructors": [
@@ -1188,7 +1148,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-462",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Application of computer science techniques to problems arising in biology and medicine, techniques for modeling evolution, aligning molecular sequences, predicting structure of a molecule and other problems from computational biology.",
     "instructors": [
@@ -1215,7 +1174,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-480",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Reading course permitting independent study under the supervision of a faculty member who specializes in a subject where no course is available.",
     "instructors": [
@@ -1250,7 +1208,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-512",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Models and Architectures. Application-oriented communication paradigms (e.g. remote method invocation, group communication). Naming services. Synchronization (e.g. mutual exclusion, concurrency control). Fault-tolerance (e.g. process and replication, agreement protocols). Distributed file systems. Security. Examples of distributed systems (e.g. Web, CORBA). Advanced Topics.",
     "instructors": [
@@ -1281,7 +1238,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-514",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "The approach and the challenges in the key components of manipulators and locomotors  representations, kinematics, dynamics, rigid-body chains, redundant systems, under-actuated systems, control, planning, and perception. Practical aspects of robotics  collisions, integrating sensory feedback, and real-time software\ndevelopment.",
     "instructors": [
@@ -1308,7 +1264,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-520",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "The structure of a compiler. Lexical analysis. Parsing techniques. Syntax directed translation. Run-time implementation of various programming language constructs. Introduction to code generation for an idealized machine. Students will implement parts of a compiler.",
     "instructors": [
@@ -1335,7 +1290,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-521",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Genre and history of games, basic game design, storytelling and narrative analysis, game engines, design of virtual worlds, real-time 2D graphics, game physics and physical simulation, pathfinding and game AI, content generation, 3D game concerns, multiplayer and distributed games, social issues.",
     "instructors": [],
@@ -1357,7 +1311,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-523",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "State-of-the-art language-based techniques for enforcing security policies in distributed computing environments. Static techniques (such as type- and proof-checking technology), verification of security policies and applications such as proof-carrying code, certifying compilers, and proof-carrying authentication.",
     "instructors": [],
@@ -1379,7 +1332,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-525",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Propositional logic - syntax and semantics, temporal logic, other modal logics, model checking, symbolic model checking, binary decision diagrams, other approaches to formal verification.",
     "instructors": [
@@ -1406,7 +1358,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-527",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Introduction to modern constructive logic, its mathematical properties, and its numerous applications in computer science.",
     "instructors": [
@@ -1433,7 +1384,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-529",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Development, analysis, and maintenance of software architectures, with special focus on modular decomposition and reverse engineering.",
     "instructors": [],
@@ -1455,7 +1405,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-531",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Models for sequential and parallel computations  Turing machines, boolean circuits. The equivalence of various models and the Church-Turing thesis. Unsolvable problems. Model dependent measures of computational complexity. Abstract complexity theory. Exponentially and super-exponentially difficult problems. Complete problems.",
     "instructors": [
@@ -1482,7 +1431,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-533",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Model-driven software development; requirements engineering based on use cases and scenarios; object-oriented modelling using UML and OCL to establish complete and precise analysis and design documents; mapping to Java. Introduction to meta-modelling and model transformations, use of modelling tools.",
     "instructors": [],
@@ -1504,7 +1452,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-535",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Fundamental design principles, elements, and protocols of computer networks, focusing on the current Internet. Topics include  layered architecture, direct link networks, switching and forwarding, bridge routing, congestion control, end-to-end protocols application of DNS, HTTP, P2P, fair queuing, performance modeling and analysis.",
     "instructors": [
@@ -1531,7 +1478,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-540",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Designing and programming reliable numerical algorithms. Stability of algorithms and condition of problems. Reliable and efficient algorithms for solution of equations, linear least squares problems, the singular value decomposition, the eigenproblem and related problems. Perturbation analysis of problems. Algorithms for structured matrices.",
     "instructors": [
@@ -1558,7 +1504,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-546",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Computational models of visual perception and audition. Vision problems include stereopsis, motion, focus, perspective, color. Audition problems include source localization and recognition. Emphasis on physics of image formation, sensory signal processing, neural pathways and computation, psychophysical methods.",
     "instructors": [
@@ -1585,7 +1530,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-547",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course presents an in-depth study of modern cryptography and data security. The basic information theoretic and computational properties of classical and modern cryptographic systems are presented, followed by a cryptanalytic examination of several important systems. We will study the applications of cryptography to the security of systems.",
     "instructors": [
@@ -1612,7 +1556,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-549",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Overview of the influence of neuroscience and psychology on Artificial Intelligence (AI). Historical topics  perceptrons, the PDP framework, Hopfield nets, Boltzmann and Helmholtz machines, and the behaviourist origins of reinforcement learning. Modern topics  deep learning, attention, memory and consciousness. Emphasis on understanding the interdisciplinary foundations of modern AI.",
     "instructors": [],
@@ -1634,7 +1577,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-550",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "An introduction to the computational modelling of natural language, including algorithms, formalisms, and applications. Computational morphology, language modelling, syntactic parsing, lexical and compositional semantics, and discourse analysis. Selected applications such as automatic summarization, machine translation, and speech processing. Machine learning techniques for natural language processing.",
     "instructors": [],
@@ -1656,7 +1598,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-551",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Selected topics in machine learning and data mining, including clustering, neural networks, support vector machines, decision trees. Methods include feature selection and dimensionality reduction, error estimation and empirical validation, algorithm design and parallelization, and handling of large data sets. Emphasis on good methods and practices for deployment of real systems.",
     "instructors": [
@@ -1687,7 +1628,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-552",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Algorithmic and structural approaches in combinatorial optimization with a focus upon theory and applications. Topics include  polyhedral methods, network optimization, the ellipsoid method, graph algorithms, matroid theory and submodular functions.",
     "instructors": [],
@@ -1709,7 +1649,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-553",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Foundations of game theory. Computation aspects of equilibria. Theory of auctions and modern auction design. General equilibrium theory and welfare economics. Algorithmic mechanism design. Dynamic games.",
     "instructors": [
@@ -1736,7 +1675,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-554",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "The theory and application of approximation algorithms. Topics include  randomized algorithms, network optimization, linear programming and semi definite programming techniques, the game theoretic method, the primal-dual method, and metric embeddings.",
     "instructors": [],
@@ -1758,7 +1696,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-555",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Conceptual foundations of information privacy  security and cryptography, privacy by design, privacy threats. Technical controls for supporting privacy  authorization, authentication, access control, malware and intrusion detection. Application-specific privacy concerns of databases, web and mobile applications, cloud storage.",
     "instructors": [
@@ -1785,7 +1722,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-557",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Fundamental mathematical, algorithmic and representational issues in computer graphics  overview of graphics pipeline, homogeneous coordinates, projective transformations, line-drawing and rasterization, hidden surface removal, surface modelling (quadrics, bicubics, meshes), rendering (lighting, reflectance models, ray tracing, texture mapping), compositing colour perception, and other selected topics.",
     "instructors": [
@@ -1812,7 +1748,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-558",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Image filtering, edge detection, image features and histograms, image segmentation, image motion and tracking, projective geometry, camera calibration, homographies, epipolar geometry and stereo, point clouds and 3D registration. Applications in computer graphics and robotics.",
     "instructors": [
@@ -1839,7 +1774,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-559",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Fundamental mathematical and computational issues in computer animation with a focus on physics based simulation  overview of numerical integration methods, accuracy and absolute stability, stiff systems and constraints, rigid body motion, collision detection and response, friction, deformation, stable fluid simulation, use of motion capture, and other selected topics.",
     "instructors": [
@@ -1866,7 +1800,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-561",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Application of computer science techniques to problems arising in biology and medicine, techniques for modeling evolution, aligning molecular sequences, predicting structure of a molecule and other problems from computational biology. An in-depth exploration of key research areas.",
     "instructors": [
@@ -1893,7 +1826,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-562",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Concentration inequalities, PAC model, VC dimension, Rademacher complexity, convex optimization, gradient descent, boosting, kernels, support vector machines, regression and learning bounds. Further topics selected from  Gaussian processes, online learning, regret bounds, basic neural network theory.",
     "instructors": [
@@ -1928,7 +1860,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-564",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Fundamental concepts and techniques in computational structural biology, system\nbiology. Techniques include dynamic programming algorithms for RNA structure\nanalysis, molecular dynamics and machine learning techniques for protein structure\nprediction, and graphical models for gene regulatory and protein-protein interaction\nnetworks analysis. Practical sessions with state-of-the-art software.",
     "instructors": [],
@@ -1950,7 +1881,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-565",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Linear models in statistical genetics, causal inference, single-cell genomics, multi-omic learning, electronic health record mining. Applications of machine learning techniques  linear regression, latent factor models, variational Bayesian inference, neural networks, model interpretation.",
     "instructors": [
@@ -1983,7 +1913,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-566",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Use of computer in solving problems in discrete optimization. Linear programming and extensions. Network simplex method. Applications of linear programming. Vertex enumeration. Geometry of linear programming. Implementation issues and robustness. Students will do a project on an application of their choice.",
     "instructors": [],
@@ -2005,7 +1934,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-567",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Formulation, solution and applications of integer programs. Branch and bound, cutting plane, and column generation algorithms. Combinatorial optimization. Polyhedral methods. A large emphasis will be placed on modelling. Students will select and present a case study of an application of integer programming in an area of their choice.",
     "instructors": [],
@@ -2027,7 +1955,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-579",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Bandit algorithms, finite Markov decision processes, dynamic programming, Monte-Carlo Methods, temporal-difference learning, bootstrapping, planning, approximation methods, on versus off policy learning, policy gradient methods temporal\nabstraction and inverse reinforcement learning.",
     "instructors": [
@@ -2060,7 +1987,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-585",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Practical aspects of building software systems with machine learning components  requirements, design, delivery, quality assessment, and collaboration. Consideration of a user-centered mindset in development; integration of design and development considerations relevant to artificial intelligence, such as security, privacy, and fairness.",
     "instructors": [
@@ -2087,7 +2013,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-588",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Representation, inference and learning with graphical models; directed and undirected graphical models; exact inference; approximate inference using deterministic optimization based methods, stochastic sampling based methods; learning with complete and partial observations.",
     "instructors": [
@@ -2114,7 +2039,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-596",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Topics in computer science.",
     "instructors": [
@@ -2145,7 +2069,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-597",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Topics in computer science.",
     "instructors": [
@@ -2172,7 +2095,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-598",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Topics in computer science.",
     "instructors": [
@@ -2207,7 +2129,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-599",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Topics in computer science.",
     "instructors": [
@@ -2238,7 +2159,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Review of relevant literature in preparation for the M.Sc. research. This includes regular attendance of the Colloquium organized by the School of Computer Science.",
     "instructors": [],
@@ -2260,7 +2180,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601d1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Special topics in computer science.",
     "instructors": [],
@@ -2282,7 +2201,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601d2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See COMP 601D1 for course description.",
     "instructors": [],
@@ -2304,7 +2222,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601n1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Special topics in computer science.",
     "instructors": [],
@@ -2326,7 +2243,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-601n2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See COMP 601N1 for course description.",
     "instructors": [],
@@ -2348,7 +2264,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-602",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Exposure to ongoing research directions in computer science through regular attendance of the research colloquium organized by the School of Computer\nScience.",
     "instructors": [
@@ -2379,7 +2294,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-603",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Exposure to ongoing research directions in computer science through regular attendance of the research colloquium organized by the School of Computer\nScience.",
     "instructors": [
@@ -2410,7 +2324,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-604",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Introduction to fundamental skills in computer science. Research and communication skills; teamwork in a research group; integrity, diversity and ethics; career paths.",
     "instructors": [
@@ -2445,7 +2358,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-610",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Study of elementary data structures  lists, stacks, queues, trees, hash tables, binary search trees, red-black trees, heaps. Augmenting data structures. Sorting and selection, Recursive algorithms. Advanced data structures including binomial heaps, Fibonacci heaps, disjoint set structures, and splay trees. Amortizing. String algorithms. Huffman trees and suffix trees. Graph algorithms.",
     "instructors": [],
@@ -2467,7 +2379,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-611",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Introduction to mathematical concepts important across computer science, how to think mathematically, and how to write proofs. Proof techniques such as induction,  contradiction, and monovariants; topics in combinatorics, graph theory, algebra, analysis, and probability; mathematical analysis of algorithms, data structures, and computational complexity. Emphasis on the mathematical explanations for useful concepts.",
     "instructors": [
@@ -2494,7 +2405,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-614",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Architecture and examples of distributed information systems (e.g., federated databases, component systems, web databases). Data consistency (consistency models, advanced transaction models, advanced concurrency control, distributed recovery). Data replication and caching. Distribution queries, Schema Integration. Advanced Topics.",
     "instructors": [],
@@ -2516,7 +2426,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616d1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Introduction to current trends in Bioinformatics and closely related fields such as genomics and proteomics.",
     "instructors": [],
@@ -2538,7 +2447,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616d2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See COMP 616D1 for description.",
     "instructors": [],
@@ -2560,7 +2468,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616n1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Introduction to current trends in Bioinformatics and closely related fields such as genomics and proteomics.",
     "instructors": [],
@@ -2582,7 +2489,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-616n2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See COMP 616N1 for course description.",
     "instructors": [],
@@ -2604,7 +2510,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-618",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Techniques related to microarrays (normalization, differential expression, class prediction, class discovery), the analysis of non-coding sequence data (identification of transcription factor binding sites), single nucleotide polymorphisms, the inference of biological networks, and integrative Bioinformatics approaches.",
     "instructors": [],
@@ -2626,7 +2531,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-621",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Program analysis and transformations are used in optimizing compilers and other automatic tools such as bug-finders, verification tools and software engineering applications. Course topics include the design of intermediate representations, control flow analysis, data flow analysis at both the intra- and inter-procedural level and program transformations for performance improvement.",
     "instructors": [],
@@ -2648,7 +2552,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-642",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Efficient and reliable numerical algorithms in estimation and their applications.  Linear models and least squares estimation.  Maximum-likelihood estimation.  Kalman filtering.  Adaptive estimation, GPS measurements and mathematical models for positioning.  Position estimation. Fault detection and exclusion.",
     "instructors": [],
@@ -2670,7 +2573,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-647",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Information theoretic definitions of security, zero-knowledge protocols, secure function evaluation protocols, cryptographic primitives, privacy amplification, error correction, quantum cryptography, quantum cryptanalysis.",
     "instructors": [],
@@ -2692,7 +2594,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-649",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Review of the basic notions of cryptography and quantum information theory. Quantum key distribution and its proof of security. Quantum encryption, error-correcting codes and authentication. Quantum bit commitment, zero-knowledge and oblivious transfer. Multiparty quantum computations.",
     "instructors": [],
@@ -2714,7 +2615,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-652",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "An overview of state-of-the-art algorithms used in machine learning, including theoretical properties and practical applications of these algorithms.",
     "instructors": [],
@@ -2743,7 +2643,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-654",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Machine learning with graph-structured data. Introductions to spectral graph theory, graph signal processing, graph convolutions, graph neural networks, and the logic of graphs.",
     "instructors": [],
@@ -2771,7 +2670,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-655",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Conservative and optimistic synchronization involved in executing a discrete event simulation on a distributed platform (e.g. cluster of workstations, shared memory multiprocessor). Focus is on efficiency, strengths and limitations of the different approaches. Applications to large simulations (networks, VLSI, virtual environments).",
     "instructors": [],
@@ -2793,7 +2691,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-667",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Software fault tolerance, concepts and implementation. Failure classification; information and time redundancy; forward and backward error recovery; error confinement; idealized fault-tolerant component; sequential and concurrent systems; exception handling; transactions and atomic actions; voting; design diversity. Case studies.",
     "instructors": [],
@@ -2815,7 +2712,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-680",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Advanced algorithms for the annotation of biological sequences.  Algorithms and heuristics for pair-wise and multiple sequence alignment.  Gene-finding with hidden Markov models and variants. Motifs discovery techniques  over representation and phylogenetic footprinting approaches. RNA  secondary structure prediction. Detection of repetitive elements. Representation and annotation of protein domains.",
     "instructors": [],
@@ -2837,7 +2733,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-690",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Probabilistic analysis of algorithms and data structures under random input. Expected behaviour of search trees, tries, heaps, bucket structures and multidimensional data structures. Random sampling, divide-and-conquer, grid methods. Applications in computational geometry and in game tree searching. Combinatorial search problems. Algorithms on random graphs.",
     "instructors": [
@@ -2864,7 +2759,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-691",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Ongoing research pertaining to thesis.",
     "instructors": [
@@ -2891,7 +2785,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-693",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Ongoing research pertaining to project.",
     "instructors": [],
@@ -2913,7 +2806,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-694",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Ongoing research pertaining to project.",
     "instructors": [],
@@ -2935,7 +2827,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-695",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Ongoing research pertaining to project.",
     "instructors": [],
@@ -2957,7 +2848,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-696",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Ongoing research pertaining to thesis.",
     "instructors": [
@@ -2984,7 +2874,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-697",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Ongoing research pertaining to thesis.",
     "instructors": [
@@ -3011,7 +2900,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-698",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Ongoing research pertaining to thesis.",
     "instructors": [
@@ -3038,7 +2926,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-699",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Ongoing research pertaining to thesis.",
     "instructors": [
@@ -3065,7 +2952,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-700",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "An examination that must be passed by all doctoral candidates in order to continue in the doctoral program.",
     "instructors": [],
@@ -3087,7 +2973,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-700d1",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "An examination that must be passed by all doctoral candidates in order to continue in the doctoral program.",
     "instructors": [],
@@ -3109,7 +2994,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-700d2",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See COMP 700D1 for course description.",
     "instructors": [],
@@ -3131,7 +3015,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-701",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Submission of doctorate thesis proposal and examination that assesses the student's breadth of knowledge in the research area.",
     "instructors": [
@@ -3158,7 +3041,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-760",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Advanced topics in theory related to computer science.",
     "instructors": [
@@ -3185,7 +3067,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-761",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Advanced topics in theory related to computer science.",
     "instructors": [],
@@ -3207,7 +3088,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-762",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Advanced topics in programming.",
     "instructors": [
@@ -3234,7 +3114,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-763",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Advanced topics in programming.",
     "instructors": [],
@@ -3256,7 +3135,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-764",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Advanced topics in computing systems.",
     "instructors": [
@@ -3283,7 +3161,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-765",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Advanced topics in computing systems.",
     "instructors": [
@@ -3310,7 +3187,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-766",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Advanced topics in computing systems.",
     "instructors": [
@@ -3337,7 +3213,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/comp-767",
     "department": "Computer Science",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Advanced topics in computing systems.",
     "instructors": [
@@ -3364,7 +3239,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/coms-200",
     "department": "Art History &amp; Communications",
     "faculty": "Faculty of Arts",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/arts",
     "terms": ["Summer 2023"],
     "description": "The social and cultural implications of major developments in communications from prehistory to the electronic era. Thematic and conceptual introduction to the underlying media technologies and to some key issues and practices of historical thinking about their role in society.",
     "instructors": [
@@ -3391,7 +3265,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-111",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Sets and functions. Numeration systems. Whole numbers and integers, algorithms for whole-number computations, elementary number theory. Fractions and proportional reasoning. Real numbers, decimals and percents. A brief introduction to probability and statistics.",
     "instructors": [
@@ -3418,7 +3291,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-122",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Review of functions, exponents and radicals, exponential and logorithm. Examples of functions in business applications. Limits, continuity and derivatives. Differentiation of elementary functions. Antiderivatives. The definite integral. Techniques of Integration. Applications of differentiation and integration including differential equations. Trigonometric functions are not discussed in this course.",
     "instructors": [
@@ -3445,7 +3317,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-123",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Geometric vectors in low dimensions. Lines and planes. Dot and cross product. Linear equations and matrices. Matrix operations, properties and rank. Linear dependence and independence. Inverses and determinants. Linear programming and tableaux. Sample space, probability, combination of events. Conditional probability and Bayes Law. Random sampling. Random variables and common distributions.",
     "instructors": [
@@ -3476,7 +3347,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-125",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Differentation of single and multivarible functions; optimization of single and multivarible functions; constrained optimization of multivariable functions; elements of integration; applications to economics.",
     "instructors": [],
@@ -3498,7 +3368,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-133",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Systems of linear equations, matrices, inverses, determinants; geometric vectors in three dimensions, dot product, cross product, lines and planes; introduction to vector spaces, linear dependence and independence, bases. Linear transformations. Eigenvalues and diagonalization.",
     "instructors": [
@@ -3545,7 +3414,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-134",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Complex numbers. Systems of linear equations, matrix algebra, determinants. Subspaces of euclidean space, linear dependence and independence, bases. Bilinear and quadratic forms. The Gram-Schmidt process. Eigenvalues and eigenvectors, diagonalization. Orthogonal diagonalization of symmetric matrices. This course is intended for students in mathematics and physical sciences.",
     "instructors": [],
@@ -3567,7 +3435,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-139",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Review of trigonometry and other Precalculus topics. Limits, continuity, derivative. Differentiation of elementary functions. Antidifferentiation. Applications.",
     "instructors": [
@@ -3594,7 +3461,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-140",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Review of functions and graphs. Limits, continuity, derivative. Differentiation of elementary functions. Antidifferentiation. Applications.",
     "instructors": [
@@ -3637,7 +3503,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-141",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "The definite integral. Techniques of integration. Applications. Introduction to sequences and series.",
     "instructors": [
@@ -3688,7 +3553,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-150",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Functions, limits and continuity, differentiation, L'Hospital's rule, applications, Taylor polynomials, parametric curves, functions of several variables.",
     "instructors": [
@@ -3715,7 +3579,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-151",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Integration, methods and applications, infinite sequences and series, power series, arc length and curvature, multiple integration.",
     "instructors": [
@@ -3742,7 +3605,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-180",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "An overview of what mathematics has to offer.  This course will let you discover the beauty of mathematical ideas while only requiring a high school background in mathematics.  The topics of the course may include   prime numbers, modular arithmetic, complex numbers, matrices, permutations and combinations, probability, set theory, game theory, logic, chaos.  Additional topics may be covered depending on the instructor.",
     "instructors": [
@@ -3769,7 +3631,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-203",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Examples of statistical data and the use of graphical means to summarize the data. Basic distributions arising in the natural and behavioural sciences. The logical meaning of a test of significance and a confidence interval. Tests of significance and confidence intervals in the one and two sample setting (means, variances and proportions).",
     "instructors": [
@@ -3808,7 +3669,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-204",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "The concept of degrees of freedom and the analysis of variability. Planning of experiments. Experimental designs. Polynomial and multiple regressions. Statistical computer packages (no previous computing experience is needed). General statistical procedures requiring few assumptions about the probability model.",
     "instructors": [
@@ -3835,7 +3695,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-208",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Basic data management. Data visualization. Exploratory data analysis and descriptive statistics. Writing functions. Simulation and parallel computing. Communication data and documenting code for reproducible research.",
     "instructors": [
@@ -3862,7 +3721,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-222",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Taylor series, Taylor's theorem in one and several variables. Review of vector geometry. Partial differentiation, directional derivative. Extreme of functions of 2 or 3 variables. Parametric curves and arc length. Polar and spherical coordinates. Multiple integrals.",
     "instructors": [
@@ -3901,7 +3759,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-223",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Review of matrix algebra, determinants and systems of linear equations. Vector spaces, linear operators and their matrix representations, orthogonality. Eigenvalues and eigenvectors, diagonalization of Hermitian matrices. Applications.",
     "instructors": [
@@ -3936,7 +3793,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-228",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course is designed to reintroduce classical Euclidean geometry to tomorrow’s teachers. Topics include  Axioms and Euclid’s Elements, the triangle theorem, the Pythagorean Theorem and its extensions, basic constructions and similar triangles, Thales’ theorems and cyclic quadrilaterals, the centers of triangles, the nine-point circle, conic sections and analytic geometry, the prismatoid formula, the Platonic solids, non-Euclidean geometries.",
     "instructors": [
@@ -3963,7 +3819,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-235",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Sets, functions and relations. Methods of proof. Complex numbers. Divisibility theory for integers and modular arithmetic. Divisibility theory for polynomials. Rings, ideals and quotient rings. Fields and construction of fields from polynomial rings. Groups, subgroups and cosets; group actions on sets.",
     "instructors": [
@@ -3990,7 +3845,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-236",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Linear equations over a field. Introduction to vector spaces. Linear mappings. Matrix representation of linear mappings. Determinants. Eigenvectors and\neigenvalues. Diagonalizable operators. Cayley-Hamilton theorem. Bilinear and quadratic forms. Inner product spaces, orthogonal diagonalization of symmetric\nmatrices. Canonical forms.",
     "instructors": [
@@ -4017,7 +3871,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-240",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Introduction to discrete mathematics and applications. Logical reasoning and methods of proof. Elementary number theory and cryptography  prime numbers, modular equations, RSA encryption. Combinatorics  basic enumeration, combinatorial methods, recurrence equations. Graph theory  trees, cycles, planar\ngraphs.",
     "instructors": [
@@ -4056,7 +3909,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-242",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "A rigorous presentation of sequences and of real numbers and basic properties of continuous and differentiable functions on the real line.",
     "instructors": [
@@ -4083,7 +3935,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-243",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Definition and properties of Riemann integral, Fundamental Theorem of Calculus, Taylor's theorem. Infinite series  alternating, telescoping series,  rearrangements, conditional and absolute convergence, convergence tests. Power series and  Taylor series. Elementary functions. Introduction to metric spaces.",
     "instructors": [
@@ -4110,7 +3961,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-247",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Matrix algebra, determinants, systems of linear equations. Abstract vector spaces, inner product spaces, Fourier series. Linear transformations and their matrix representations. Eigenvalues and eigenvectors, diagonalizable and defective matrices, positive definite and semidefinite matrices. Quadratic and Hermitian forms, generalized eigenvalue problems, simultaneous reduction of quadratic forms. Applications.",
     "instructors": [
@@ -4137,7 +3987,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-248",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Partial derivatives and differentiation of functions in several variables; Jacobians;\nmaxima and minima; implicit functions. Scalar and vector fields; orthogonal curvilinear coordinates. Multiple integrals; arc length, volume and surface area. Line and surface integrals; irrotational and solenoidal fields; Green's theorem; the divergence theorem. Stokes' theorem; and applications.",
     "instructors": [
@@ -4164,7 +4013,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-249",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Functions of a complex variable; Cauchy-Riemann equations; Cauchy's theorem and consequences. Taylor and Laurent expansions. Residue calculus; evaluation of real integrals; integral representation of special functions; the complex inversion integral. Conformal mapping; Schwarz-Christoffel transformation; Poisson's integral formulas; applications.",
     "instructors": [
@@ -4191,7 +4039,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-251",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Linear equations over a field. Introduction to vector spaces. Linear maps and their matrix representation. Determinants. Canonical forms. Duality. Bilinear and\nquadratic forms. Real and complex inner product spaces. Diagonalization of self-adjoint operators.",
     "instructors": [
@@ -4218,7 +4065,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-254",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Properties of R. Cauchy and monotone sequences, Bolzano- Weierstrass theorem. Limits, limsup, liminf of functions. Pointwise, uniform continuity  Intermediate Value theorem. Inverse and monotone functions. Differentiation  Mean Value theorem, L'Hospital's rule, Taylor's Theorem.",
     "instructors": [
@@ -4245,7 +4091,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-255",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Basic point-set topology, metric spaces  open and closed sets, normed and Banach spaces, HÃ¶lder and Minkowski inequalities, sequential compactness, Heine-Borel, Banach Fixed Point theorem. Riemann-(Stieltjes) integral, Fundamental Theorem of Calculus, Taylor's theorem. Uniform convergence. Infinite series,  convergence tests, power series. Elementary functions.",
     "instructors": [
@@ -4272,7 +4117,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-262",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Engineering",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/engineering",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Series and power series, including Taylor's theorem. Brief review of vector geometry. Vector functions and curves. Partial differentiation and differential calculus for vector valued functions. Unconstrained and constrained extremal problems. Multiple integrals including surface area and change of variables.",
     "instructors": [
@@ -4315,7 +4159,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-263",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Engineering",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/engineering",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "First order ODEs. Second and higher order linear ODEs. Series solutions at ordinary and regular singular points. Laplace transforms. Linear systems of differential equations with a short review of linear algebra.",
     "instructors": [
@@ -4358,7 +4201,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-264",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Engineering",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/engineering",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Review of multiple integrals. Differential and integral calculus of vector fields including the theorems of Gauss, Green, and Stokes. Introduction to partial differential equations, separation of variables, Sturm-Liouville problems, and Fourier series.",
     "instructors": [
@@ -4393,7 +4235,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-271",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Engineering",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/engineering",
     "terms": ["Fall 2022"],
     "description": "Applied Linear Algebra. Linear Systems of Ordinary Differential Equations. Power Series Solutions. Partial Differential Equations. Sturm-Liouville Theory and Applications. Fourier Transforms.",
     "instructors": [
@@ -4420,7 +4261,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-308",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Theory and application of various techniques for the exploration and analysis of multivariate data  principal component analysis, correspondence analysis, and other visualization and dimensionality reduction techniques; supervised and unsupervised learning; linear discriminant analysis, and clustering techniques. Data applications using appropriate software.",
     "instructors": [
@@ -4455,7 +4295,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-314",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Derivative as a matrix. Chain rule. Implicit functions. Constrained maxima and minima. Jacobians. Multiple integration. Line and surface integrals. Theorems of Green, Stokes and Gauss. Fourier series with applications.",
     "instructors": [
@@ -4486,7 +4325,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-315",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "First order ordinary differential equations including elementary numerical methods. Linear differential equations. Laplace transforms. Series solutions.",
     "instructors": [
@@ -4521,7 +4359,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-316",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Algebra of complex numbers, Cauchy-Riemann equations, complex integral, Cauchy's theorems. Taylor and Laurent series, residue theory and applications.",
     "instructors": [
@@ -4548,7 +4385,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-317",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Error analysis. Numerical solutions of equations by iteration. Interpolation. Numerical differentiation and integration. Introduction to numerical solutions of differential equations.",
     "instructors": [
@@ -4575,7 +4411,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-318",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Propositional logic  truth-tables, formal proof systems, completeness and compactness theorems, Boolean algebras; first-order logic  formal proofs, Gödel's completeness theorem; axiomatic theories; set theory; Cantor's theorem, axiom of choice and Zorn's lemma, Peano arithmetic; Gödel's incompleteness theorem.",
     "instructors": [
@@ -4602,7 +4437,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-319",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "First order equations, geometric theory; second order equations, classification; Laplace, wave and heat equations, Sturm-Liouville theory, Fourier series, boundary and initial value problems.",
     "instructors": [
@@ -4629,7 +4463,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-323",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Sample space, events, conditional probability, independence of events, Bayes' Theorem. Basic combinatorial probability, random variables, discrete and continuous univariate and multivariate distributions. Independence of random variables. Inequalities, weak law of large numbers, central limit theorem.",
     "instructors": [
@@ -4672,7 +4505,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-324",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Sampling distributions, point and interval estimation, hypothesis testing, analysis of variance, contingency tables, nonparametric inference, regression, Bayesian inference.",
     "instructors": [
@@ -4703,7 +4535,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-325",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "First and second order equations, linear equations, series solutions, Frobenius method, introduction to numerical methods and to linear systems, Laplace transforms, applications.",
     "instructors": [
@@ -4730,7 +4561,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-326",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Linear systems of differential equations, linear stability theory. Nonlinear systems  existence and uniqueness, numerical methods, one and two dimensional flows, phase space, limit cycles, Poincare-Bendixson theorem, bifurcations, Hopf bifurcation, the Lorenz equations and chaos.",
     "instructors": [
@@ -4757,7 +4587,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-327",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "An overview of numerical methods for linear algebra applications and their analysis. Problem classes include linear systems, least squares problems and eigenvalue problems.",
     "instructors": [
@@ -4790,7 +4619,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-329",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Simple and compound interest, annuities certain, amortization schedules, bonds, depreciation.",
     "instructors": [
@@ -4817,7 +4645,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-335",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Computational aspects of modern algebra. Computing in groups  algorithms, algorithmic problems in groups, finitely generated abelian groups, free groups and automata, finitely presented groups. Computing in rings  elementary notions of ring theory, ideals of polynomial rings in several variables, Groebner bases, elements of field theory.",
     "instructors": [],
@@ -4839,7 +4666,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-338",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Egyptian, Babylonian, Greek, Indian and Arab contributions to mathematics are studied together with some modern developments they give rise to, for example, the problem of trisecting the angle. European mathematics from the Renaissance to the 18th century is discussed, culminating in the discovery of the infinitesimal and integral calculus by Newton and Leibnitz. Demonstration of how mathematics was done in past centuries, and involves the practice of mathematics, including detailed calculations, arguments based on geometric reasoning, and proofs.",
     "instructors": [
@@ -4866,7 +4692,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-340",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Discrete Mathematics and applications. Graph Theory  matchings, planarity, and colouring. Discrete probability. Combinatorics  enumeration, combinatorial techniques and proofs.",
     "instructors": [
@@ -4893,7 +4718,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-346",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Divisibility. Congruences. Quadratic reciprocity. Diophantine equations. Arithmetical functions.",
     "instructors": [
@@ -4920,7 +4744,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-348",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Points and lines in a triangle. Quadrilaterals. Angles in a circle. Circumscribed and inscribed circles. Congruent and similar triangles. Area. Power of a point with respect to a circle. Ceva’s theorem. Isometries. Homothety. Inversion.",
     "instructors": [
@@ -4947,7 +4770,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-350",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Discrete mathematics. Graph Theory  matching theory, connectivity, planarity, and colouring; graph minors and extremal graph theory. Combinatorics  combinatorial methods, enumerative and algebraic combinatorics, discrete probability.",
     "instructors": [
@@ -4974,7 +4796,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-352",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Seminar in Mathematical Problem Solving. The problems considered will be of the type that occur in the Putnam competition and in other similar mathematical competitions.",
     "instructors": [
@@ -5001,7 +4822,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-356",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Sample space, probability axioms, combinatorial probability. Conditional probability, Bayes' Theorem. Distribution theory with special reference to the Binomial, Poisson, and Normal distributions. Expectations, moments, moment generating functions, uni-variate transformations. Random vectors, independence, correlation, multivariate transformations. Conditional distributions, conditional expectation.Modes of stochastic convergence, laws of large numbers, Central Limit Theorem.",
     "instructors": [
@@ -5028,7 +4848,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-357",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Data analysis. Estimation and hypothesis testing. Power of tests. Likelihood ratio criterion. The chi-squared goodness of fit test. Introduction to regression analysis and analysis of variance.",
     "instructors": [
@@ -5055,7 +4874,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-358",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Point-set topology in Euclidean space; continuity and differentiability of functions in several variables. Implicit and inverse function theorems. Vector fields, divergent and curl operations. Rigorous treatment of multiple integrals  volume and surface area; and Fubini’s theorem. Line and surface integrals, conservative vector fields. Green's theorem, Stokes’ theorem and the divergence theorem.",
     "instructors": [
@@ -5082,7 +4900,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-376",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course consists of the lectures of MATH 326, but will be assessed at the honours level.",
     "instructors": [
@@ -5109,7 +4926,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-377",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "This course consists of the lectures of MATH 346, but will be assessed at the honours level.",
     "instructors": [
@@ -5136,7 +4952,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-378",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Optimization terminology. Convexity. First- and second-order optimality conditions for unconstrained problems. Numerical methods for unconstrained optimization \nGradient methods, Newton-type methods, conjugate gradient methods, trust-region methods. Least squares problems (linear + nonlinear). Optimality conditions for smooth constrained optimization problems (KKT theory). Lagrangian duality. Augmented Lagrangian methods. Active-set method for quadratic programming. SQP methods.",
     "instructors": [],
@@ -5168,7 +4983,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-387",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Error analysis. Numerical solutions of equations by iteration. Interpolation. Numerical differentiation and integration. Introduction to numerical solutions of differential equations.",
     "instructors": [],
@@ -5190,7 +5004,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-396",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Independent research project with a final written report.",
     "instructors": [],
@@ -5212,7 +5025,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-397",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "The course consists of the lectures of MATH 327 plus additional work involving theoretical assignments and/or a project. The final examination for this course may be different from that of MATH 327.",
     "instructors": [
@@ -5239,7 +5051,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-398",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Honours level  points and lines in a triangle. Quadrilaterals. Angles in a circle. Circumscribed and inscribed circles. Congruent and similar triangles. Area.\nPower of a point with respect to a circle. Ceva’s theorem. Isometries. Homothety. Inversion.",
     "instructors": [
@@ -5266,7 +5077,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-410",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "A supervised project.",
     "instructors": [
@@ -5369,7 +5179,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-417",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "An introduction to linear optimization and its applications  Duality theory, fundamental theorem, sensitivity analysis, convexity, simplex algorithm, interior-point methods, quadratic optimization, applications in game theory.",
     "instructors": [
@@ -5396,7 +5205,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-420",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Reading projects permitting independent study under the guidance of a staff member specializing in a subject where no appropriate course is available. Arrangements must be made with an instructor and the Chair before registration.",
     "instructors": [
@@ -5447,7 +5255,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-423",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Multiple regression estimators and their properties. Hypothesis tests and confidence\nintervals. Analysis of variance. Prediction and prediction intervals. Model diagnostics. Model selection. Introduction to weighted least squares. Basic contingency table analysis. Introduction to logistic and Poisson regression. Applications to experimental and observational data.",
     "instructors": [
@@ -5474,7 +5281,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-427",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Introduction to quality management; variability and productivity. Quality measurement  capability analysis, gauge capability studies. Process control  control charts for variables and attributes. Process improvement  factorial designs, fractional replications, response surface methodology, Taguchi methods. Acceptance sampling  operating characteristic curves; single, multiple and sequential acceptance sampling plans for variables and attributes.",
     "instructors": [],
@@ -5496,7 +5302,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-430",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Introduction to concepts of price and hedge derivative securities. The following concepts will be studied in both concrete and continuous time  filtrations, martingales, the change of measure technique, hedging, pricing, absence of arbitrage opportunities and the Fundamental Theorem of Asset Pricing.",
     "instructors": [],
@@ -5524,7 +5329,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-437",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "The formulation and treatment of realistic mathematical models describing biological phenomena through qualitative and quantitative mathematical techniques (e.g. local and global stability theory, bifurcation analysis and phase plane analysis) and numerical simulation. Concrete and detailed examples will be drawn from molecular and cellular biology and mammalian physiology.",
     "instructors": [
@@ -5559,7 +5363,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-447",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Conditional probability and conditional expectation, generating functions. Branching processes and random walk. Markov chains, transition matrices, classification of states, ergodic theorem, examples. Birth and death processes, queueing theory.",
     "instructors": [
@@ -5586,7 +5389,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-454",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Review of point-set topology  topological space, dense sets, completeness, compactness, connectedness and path-connectedness, separability. Arzela-Ascoli, Stone-Weierstrass, Baire category theorems. Measure theory  sigma algebras, Lebesgue measure and integration, L^1 functions. Fatou's lemma, monotone and dominated convergence theorem. Egorov, Lusin's theorems. Fubini-Tonelli theorem.",
     "instructors": [
@@ -5613,7 +5415,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-455",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Continuation of measure theory. Functional analysis   L^p spaces, linear functionals and dual spaces, Hahn-Banach theorem, Riesz representation theorem. Hilbert spaces, weak convergence. Spectral theory of compact operator. Introduction to Fourier analysis, Fourier transforms.",
     "instructors": [
@@ -5640,7 +5441,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-456",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Introduction to monoids, groups, permutation groups; the isomorphism theorems for groups; the theorems of Cayley, Lagrange and Sylow; structure of groups of low order. Introduction to ring theory; integral domains, fields, quotient field of an integral domain; polynomial rings; unique factorization domains.",
     "instructors": [
@@ -5667,7 +5467,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-457",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Introduction to modules and algebras; finitely generated modules over a principal ideal domain. Field extensions; finite fields; Galois groups; the fundamental theorem of Galois theory; application to the classical problem of solvability by radicals.",
     "instructors": [
@@ -5694,7 +5493,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-458",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "In addition to the topics of MATH 320, topics in the global theory of plane and space curves, and in the global theory of surfaces are presented. These include  total curvature and the Fary-Milnor theorem on knotted curves, abstract surfaces as 2-d manifolds, the Euler characteristic, the Gauss-Bonnet theorem for surfaces.",
     "instructors": [
@@ -5727,7 +5525,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-462",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Foundations of optimization and convex analysis, stochastic gradient descent. Divergences, loss functions, empirical loss minimization and parameter estimation. Reproducing kernel Hilbert spaces. Multiple linear regression in the context of machine learning. Classification with support vector machines. Dimensionality reduction, Johnson-Lindenstrauss Lemma. Concentration of measure and learning bounds.",
     "instructors": [
@@ -5763,7 +5560,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-463",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Introduction to convex analysis and convex optimization  Convex sets and functions, subdifferential calculus, conjugate functions, Fenchel duality, proximal calculus.\nSubgradient methods, proximal-based methods. Conditional gradient method, ADMM. Applications including data classification, network-flow problems, image processing, convex feasibility problems, DC optimization, sparse optimization, and compressed\nsensing.",
     "instructors": [
@@ -5803,7 +5599,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-466",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Functions of a complex variable, Cauchy-Riemann equations, Cauchy's theorem and its consequences. Uniform convergence on compacta. Taylor and Laurent series, open mapping theorem, Rouché's theorem and the argument principle. Calculus of residues. Fractional linear transformations and conformal mappings.",
     "instructors": [
@@ -5830,7 +5625,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-470",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "The project will contain a significant research component that requires substantial independent work consisting of a written report and oral examination or presentation.",
     "instructors": [
@@ -5953,7 +5747,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-470d1",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "The project will contain a significant research component that requires substantial independent work consisting of a written report and oral examination or presentation.",
     "instructors": [],
@@ -5975,7 +5768,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-470d2",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See MATH 470D1 for course description.",
     "instructors": [],
@@ -5997,7 +5789,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-475",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "First order partial differential equations, geometric theory, classification of second order linear equations, Sturm-Liouville problems, orthogonal functions and Fourier series, eigenfunction expansions, separation of variables for heat, wave and Laplace equations, Green's function methods, uniqueness theorems.",
     "instructors": [
@@ -6030,7 +5821,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-478",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Solution to initial value problems  Linear, Nonlinear Finite Difference Methods  accuracy and stability, Lax equivalence theorem, CFL and von Neumann conditions,\nFourier analysis  diffusion, dissipation, dispersion, and spectral methods. Solution of large sparse linear systems  iterative methods, preconditioning, incomplete\nLU, multigrid, Krylov subspaces, conjugate gradient method. Applications to, e.g., weighted least squares, duality, constrained minimization, calculus of variation,\ninverse problems, regularization, level set methods, Navier-Stokes equations",
     "instructors": [
@@ -6065,7 +5855,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-480",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Reading projects permitting independent study under the guidance of a staff member specializing in a subject where no appropriate course is available. Arrangements must be made with an instructor and the Chair before registration.",
     "instructors": [
@@ -6112,7 +5901,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-488",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Axioms of set theory, ordinal and cardinal arithmetic, consequences of the axiom of choice, models of set theory, constructible sets and the continuum hypothesis, introduction to independence proofs.",
     "instructors": [
@@ -6139,7 +5927,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-517",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Honours level introduction to linear optimization and its applications  duality theory, fundamental theorem, sensitivity analysis, convexity, simplex algorithm, interiorpoint methods, quadratic optimization, applications in game theory.",
     "instructors": [
@@ -6166,7 +5953,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-518",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Affine varieties. Radical ideals and Hilbert's Nullstellensatz. The Zariski topology. Irreducible decomposition. Dimension. Tangent spaces, smoothness and singularities. Projective spaces and projective varieties. Regular functions and morphisms. Rational maps and indeterminacy. Blowing up. Divisors and linear systems. Projective curves.",
     "instructors": [
@@ -6193,7 +5979,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-523",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Exponential families, link functions. Inference and parameter estimation for generalized linear models; model selection using analysis of deviance. Residuals. Contingency table analysis, logistic regression, multinomial regression, Poisson regression, log-linear models. Multinomial models. Overdispersion and Quasilikelihood.\nApplications to experimental and observational data.",
     "instructors": [
@@ -6220,7 +6005,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-524",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Distribution free procedures for 2-sample problem  Wilcoxon rank sum, Siegel-Tukey, Smirnov tests. Shift model  power and estimation. Single sample procedures  Sign, Wilcoxon signed rank tests. Nonparametric ANOVA  Kruskal-Wallis, Friedman tests. Association  Spearman's rank correlation, Kendall's tau. Goodness of fit  Pearson's chi-square, likelihood ratio, Kolmogorov-Smirnov tests. Statistical software packages used.",
     "instructors": [
@@ -6247,7 +6031,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-525",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Simple random sampling, domains, ratio and regression estimators, superpopulation models, stratified sampling, optimal stratification, cluster sampling, sampling with unequal probabilities, multistage sampling, complex surveys, nonresponse.",
     "instructors": [
@@ -6274,7 +6057,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-533",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Multivariate normal and chi-squared distributions; quadratic forms. Multiple linear\nregression estimators and their properties. General linear hypothesis tests. Prediction and confidence intervals. Asymptotic properties of least squares estimators. Weighted least squares. Variable selection and regularization. Selected advanced topics in regression. Applications to experimental and observational\ndata.",
     "instructors": [
@@ -6301,7 +6083,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-537",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "The formulation and treatment of realistic mathematical models describing biological phenomena through such qualitative and quantitative mathematical techniques as local and global stability theory, bifurcation analysis, phase plane analysis, and numerical simulation.  Concrete and detailed examples will be drawn from molecular, cellular and population biology and mammalian physiology.",
     "instructors": [
@@ -6334,7 +6115,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-540",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Life tables and distributions; force of mortality; premium, net premium, and reserve valuation for life insurance and annuity contracts (discrete and continuous case); cash flow analysis for portfolios of life insurance and annuities; asset liability management; numerical techniques for multiple decrement and state models; portfolio valuation of aggregate risks.",
     "instructors": [],
@@ -6356,7 +6136,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-541",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Stochastic models and inference for loss severity and claim frequency distributions; computational techniques for the aggregation of independent risks (Panjer's algorithm, FFT, etc.); risk measures and quantitative risk management applications; models and inference for multivariate data, heavy-tail distributions, and extremes; dynamic risk models based on stochastic processes and ruin theory.",
     "instructors": [],
@@ -6378,7 +6157,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-545",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Stationary processes; estimation and forecasting of ARMA models; non-stationary and seasonal models; state-space models; financial time series models; multivariate time series models; introduction to spectral analysis; long memory models.",
     "instructors": [],
@@ -6400,7 +6178,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-547",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Conditional probability and conditional expectation, generating functions. Branching processes and random walk. Markov chains transition matrices, classification of states, ergodic theorem, examples. Birth and death processes, queueing theory.",
     "instructors": [
@@ -6427,7 +6204,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-550",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Enumerative combinatorics  inclusion-exclusion, generating functions, partitions, lattices and Moebius inversion. Extremal combinatorics  Ramsey theory, Turan's theorem, Dilworth's theorem and extremal set theory. Graph theory  planarity and colouring. Applications of combinatorics.",
     "instructors": [],
@@ -6449,7 +6225,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-552",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Algorithmic and structural approaches in combinatorial optimization with a focus upon theory and applications. Topics include  polyhedral methods, network optimization, the ellipsoid method, graph algorithms, matroid theory and submodular functions.",
     "instructors": [],
@@ -6471,7 +6246,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-553",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Foundations of game theory. Computation aspects of equilibria. Theory of auctions and modern auction design. General equilibrium theory and welfare economics. Algorithmic mechanism design. Dynamic games.",
     "instructors": [
@@ -6498,7 +6272,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-555",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Kinematics. Dynamics of general fluids. Inviscid fluids, Navier-Stokes equations. Exact solutions of Navier-Stokes equations. Low and high Reynolds number flow.",
     "instructors": [],
@@ -6520,7 +6293,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-556",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Distribution theory, stochastic models and multivariate transformations. Families of distributions including location-scale families, exponential families, convolution families, exponential dispersion models and hierarchical models. Concentration inequalities. Characteristic functions. Convergence in probability, almost surely, in Lp and in distribution. Laws of large numbers and Central Limit Theorem. Stochastic simulation.",
     "instructors": [
@@ -6547,7 +6319,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-557",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Sampling theory (including large-sample theory). Likelihood functions and information matrices. Hypothesis testing, estimation theory. Regression and correlation theory.",
     "instructors": [
@@ -6574,7 +6345,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-558",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Introduction to concepts in statistically designed experiments. Randomization and replication. Completely randomized designs. Simple linear model and analysis of\nvariance. Introduction to blocking. Orthogonal block designs. Models and analysis for block designs. Factorial designs and their analysis. Row-column designs. Latin squares. Model and analysis for fixed row and column effects. Split-plot designs, model and analysis. Relations and operations on factors. Orthogonal factors. Orthogonal decomposition. Orthogonal plot structures. Hasse diagrams. Applications to real data and ethical issues.",
     "instructors": [
@@ -6609,7 +6379,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-559",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Subjective probability, Bayesian statistical inference and decision making, de Finetti’s representation. Bayesian parametric methods, optimal decisions, conjugate\nmodels, methods of prior specification and elicitation, approximation methods. Hierarchical models. Computational approaches to inference, Markov chain\nMonte Carlo methods, Metropolis—Hastings. Nonparametric Bayesian inference.",
     "instructors": [],
@@ -6631,7 +6400,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-562",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Concentration inequalities, PAC model, VC dimension, Rademacher complexity, convex optimization, gradient descent, boosting, kernels, support vector machines, regression and learning bounds. Further topics selected from  Gaussian processes, online learning, regret bounds, basic neural network theory.",
     "instructors": [
@@ -6666,7 +6434,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-563",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Honours level introduction to convex analysis and convex optimization  Convex sets and functions, subdifferential calculus, conjugate functions, Fenchel duality, proximal\ncalculus. Subgradient methods, proximal-based methods. Conditional gradient method, ADMM. Applications including data classification, network-flow problems,\nimage processing, convex feasibility problems, DC optimization, sparse optimization, and compressed sensing.",
     "instructors": [
@@ -6706,7 +6473,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-564",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Review of theory of measure and integration; product measures, Fubini's theorem; Lp spaces; basic principles of Banach spaces; Riesz representation theorem for C(X); Hilbert spaces; part of the material of MATH 565 may be covered as well.",
     "instructors": [
@@ -6733,7 +6499,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-565",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Continuation of topics from MATH 564. Signed measures, Hahn and Jordan decompositions. Radon-Nikodym theorems, complex measures, differentiation in Rn, Fourier series and integrals, additional topics.",
     "instructors": [
@@ -6760,7 +6525,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-566",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Simple connectivity, use of logarithms; argument, conservation of domain and maximum principles; analytic continuation, monodromy theorem; conformal mapping; normal families, Riemann mapping theorem; harmonic functions, Dirichlet problem; introduction to functions of several complex variables.",
     "instructors": [],
@@ -6782,7 +6546,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-567",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Banach and Hilbert spaces, theorems of Hahn-Banach and Banach-Steinhaus, open mapping theorem, closed graph theorem, Fredholm theory, spectral theorem for compact self-adjoint operators, spectral theorem for bounded self-adjoint operators.",
     "instructors": [],
@@ -6804,7 +6567,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-570",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Review of group theory; free groups and free products of groups. Sylow theorems. The category of R-modules; chain conditions, tensor products, flat, projective and injective modules. Basic commutative algebra; prime ideals and localization, Hilbert Nullstellensatz, integral extensions. Dedekind domains. Part of the material of MATH 571 may be covered as well.",
     "instructors": [
@@ -6831,7 +6593,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-571",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Completion of the topics of MATH 570. Rudiments of algebraic number theory. A deeper study of field extensions; Galois theory, separable and regular extensions. Semi-simple rings and modules. Representations of finite groups.",
     "instructors": [
@@ -6858,7 +6619,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-574",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Dynamical systems, phase space, limit sets. Review of linear systems. Stability. Liapunov functions. Stable manifold and Hartman-Grobman theorems. Local bifurcations, Hopf bifurcations, global bifurcations. Poincare Sections. Quadratic maps  chaos, symbolic dynamics, topological conjugacy. Sarkovskii's theorem, periodic doubling route to chaos. Smale Horseshoe.",
     "instructors": [],
@@ -6880,7 +6640,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-576",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Basic point-set topology, including connectedness, compactness, product spaces, separation axioms, metric spaces. The fundamental group and covering spaces. Simplicial complexes. Singular and simplicial homology. Part of the material of MATH 577 may be covered as well.",
     "instructors": [
@@ -6907,7 +6666,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-577",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Basic properties of differentiable manifolds, tangent and cotangent bundles, differential forms, de Rham cohomology, integration of forms, Riemannian metrics, geodesics, Riemann curvature.",
     "instructors": [
@@ -6934,7 +6692,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-578",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Development, analysis and effective use of numerical methods to solve problems arising in applications. Topics include direct and iterative methods for the solution of linear equations (including preconditioning), eigenvalue problems, interpolation, approximation, quadrature, solution of nonlinear systems.",
     "instructors": [
@@ -6961,7 +6718,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-579",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Numerical solution of initial and boundary value problems in science and engineering  ordinary differential equations; partial differential equations of elliptic, parabolic and hyperbolic type. Topics include Runge Kutta and linear multistep methods, adaptivity, finite elements, finite differences, finite volumes, spectral methods.",
     "instructors": [],
@@ -6983,7 +6739,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-580",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Classification and wellposedness of linear and nonlinear partial differential equations; energy methods; Dirichlet principle. Brief introduction to distributions; weak derivatives. Fundamental solutions and Green's functions for Poisson equation, regularity, harmonic functions, maximum principle. Representation formulae for solutions of heat and wave equations, Duhamel's principle. Method of Characteristics, scalar conservation laws, shocks.",
     "instructors": [
@@ -7010,7 +6765,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-581",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Systems of conservation laws and Riemann invariants. Cauchy- Kowalevskaya theorem, powers series solutions. Distributions and transforms. Weak solutions; introduction to Sobolev spaces with applications. Elliptic equations, Fredholm theory and spectra of elliptic operators. Second order parabolic and hyperbolic equations. Further advanced topics may be included.",
     "instructors": [
@@ -7037,7 +6791,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-582",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "CW-complexes, cellular approximation theorem. Homotopy groups, long exact sequence for a fiber bundle. Whitehead theorem. Freudenthal suspension theorem. Singular and cellular homology and cohomology. Hurewicz theorem. Mayer-Vietoris\nsequence. Universal coefficients theorem. Cup product, Kunneth formula, Poincare duality.",
     "instructors": [
@@ -7064,7 +6817,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-583",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Actions on trees. Cayley graphs. The word problem. Hyperbolic groups. Quasi-isometry invariants.",
     "instructors": [],
@@ -7086,7 +6838,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-587",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Probability spaces. Random variables and their expectations. Convergence of random variables in Lp. Independence and conditional expectation. Introduction to Martingales. Limit theorems including Kolmogorov's Strong Law of Large Numbers.",
     "instructors": [
@@ -7113,7 +6864,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-589",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Characteristic functions  elementary properties, inversion formula, uniqueness, convolution and continuity theorems. Weak convergence. Central limit theorem. Additional topic(s) chosen (at discretion of instructor) from  Martingale Theory; Brownian motion, stochastic calculus.",
     "instructors": [
@@ -7140,7 +6890,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-590",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "Students will attend the lectures and fulfill all the requirements of MATH 488. In addition, they will complete a project on an advanced topic agreed on with the instructor. Topics may be chosen from combinatorial set theory, Goedel's\nconstructible sets, forcing, large cardinals and descriptive set theory.",
     "instructors": [
@@ -7167,7 +6916,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-591",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Propositional logic and first order logic, completeness, compactness and Löwenheim-Skolem theorems. Introduction to axiomatic set theory. Some of the following topics  introduction to model theory, Herbrand's and Gentzen's theories, Lindström's characterization of first order logic.",
     "instructors": [],
@@ -7189,7 +6937,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-592",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Introduction to recursion theory; recursively enumerable sets, relative recursiveness. Incompleteness, undecidability and undefinability theorems of Gödel, Church, Rosser and Tarski. Some of the following topics  Turing degrees, Friedberg-Muchnik theorem, decidable and undecidable theories.",
     "instructors": [],
@@ -7211,7 +6958,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-594",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "This course covers a topic in mathematics and/or statistics.",
     "instructors": [
@@ -7238,7 +6984,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-595",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course covers a topic in analysis.",
     "instructors": [
@@ -7265,7 +7010,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-596",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "This course covers a topic in algebra and/or number theory.",
     "instructors": [
@@ -7304,7 +7048,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-597",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers a topic in applied mathematics.",
     "instructors": [],
@@ -7326,7 +7069,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-598",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "This course covers a topic in probability and/or statistics.",
     "instructors": [
@@ -7361,7 +7103,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-599",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course covers a topic in geometry and/or topology.",
     "instructors": [
@@ -7388,7 +7129,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-600",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Thesis research under supervision.",
     "instructors": [
@@ -7419,7 +7159,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-601",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Thesis research under supervision.",
     "instructors": [
@@ -7450,7 +7189,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-602",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023", "Summer 2023"],
     "description": "Preparatory work towards the Master's thesis.",
     "instructors": [
@@ -7485,7 +7223,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-604",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Thesis research under supervision.",
     "instructors": [
@@ -7516,7 +7253,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-605",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "Thesis research under supervision.",
     "instructors": [
@@ -7547,7 +7283,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-635",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Banach spaces. Hilbert spaces and linear operators on these. Spectral theory. Banach algebras. A brief introduction to locally convex spaces.",
     "instructors": [],
@@ -7569,7 +7304,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-638",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "The course will cover some advanced topics related to nonlinear elliptic and parabolic equations  the Schauder theory,  Lp theory, De Giorgi-Nash-Moser estimates,  Alexandrov-Bakelman-Pucci maximum principle, Krylov-Safarov Harnack estimates,  Evens-Krylov regularity theory and the Dirichlet problem for fully nonlinear equations.",
     "instructors": [],
@@ -7591,7 +7325,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-640",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Project research under supervision.",
     "instructors": [],
@@ -7613,7 +7346,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-641",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Project research under supervision.",
     "instructors": [],
@@ -7635,7 +7367,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-666",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Study on an advanced topic in mathematics or statistics.",
     "instructors": [],
@@ -7657,7 +7388,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-667",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Study on an advanced topic in mathematics or statistics.",
     "instructors": [],
@@ -7679,7 +7409,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-669d1",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Techniques and applications in computational science and engineering.",
     "instructors": [],
@@ -7701,7 +7430,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-669d2",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See MATH 669D1 for course description.",
     "instructors": [],
@@ -7723,7 +7451,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-671",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Discrete parameter Markov chains, including branching processes and random walks. Limit theorems and ergodic properties of Markov chains. Continuous parameter Markov chains, including birth and death process. Topics selected from the following areas  renewal processes, Brownian motion, statistical inference for stochastic processes.",
     "instructors": [],
@@ -7745,7 +7472,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-680",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "General introduction to computational methods in statistics; optimization methods; EM algorithm; random number generation and simulations; bootstrap, jackknife, cross-validation, resampling and permutation; Monte Carlo methods  Markov chain Monte Carlo and sequential Monte Carlo; computation in the R language.",
     "instructors": [],
@@ -7767,7 +7493,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-681",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Linear Processes and the Wold Decomposition; positive definite operators; Autocovariance and autocovariance generating functions; model estimation and inference; estimation for mixed processes using moments and the likelihood; diagnostic checking; tests with residuals; spectral analysis; estimation of spectral density the peridogram; spectral window and tapers; asymptotic moments of spectral estimates; fractional noise and long range dependence; continuous time models.",
     "instructors": [],
@@ -7789,7 +7514,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-682",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "Conditional probability and Bayes’ Theorem, discrete and continuous univariate and multivariate distributions, conditional distributions, moments, independence of random variables. Modes of convergence, weak law of large numbers, central limit theorem. Point and interval estimation. Likelihood inference. Bayesian estimation and inference. Hypothesis testing.",
     "instructors": [
@@ -7816,7 +7540,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-685d1",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Statistical consultation skills; overview of widely used statistical techniques; understanding the client's problem; suggesting designs and statistical analyses; performing statistical analyses; communicating with clients orally and in writing. Format  Simulated and real consultations with clients.",
     "instructors": [],
@@ -7838,7 +7561,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-685d2",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "See MATH 685D1 for course description.",
     "instructors": [],
@@ -7860,7 +7582,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-686",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "Parametric survival models. Nonparametric analysis  Kaplan-Meier estimator and its properties. Covariates with emphasis on Cox's proportional hazards model. Marginal and partial likelihood. Logrank tests. Residual analysis. Homework assignments a mixture of theory and applications. In-class discussion of data tests.",
     "instructors": [],
@@ -7882,7 +7603,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-687",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "A highly specialized study.",
     "instructors": [
@@ -7909,7 +7629,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-689",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "A highly specialized study.",
     "instructors": [],
@@ -7931,7 +7650,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-690",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "A highly specialized study.",
     "instructors": [
@@ -7962,7 +7680,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-691",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "A highly specialized study.",
     "instructors": [
@@ -7989,7 +7706,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-693",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "A highly specialized study.",
     "instructors": [
@@ -8016,7 +7732,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-695",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "A highly specialized study.",
     "instructors": [
@@ -8059,7 +7774,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-697",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "A highly specialized study.",
     "instructors": [],
@@ -8081,7 +7795,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-698",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "A highly specialized study.",
     "instructors": [
@@ -8108,7 +7821,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-699",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "A highly specialized study.",
     "instructors": [],
@@ -8130,7 +7842,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-700",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "A written examination that must be passed by all doctoral candidates in order to continue in the doctoral program.",
     "instructors": [
@@ -8161,7 +7872,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-701",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "An oral examination that must be passed by all doctoral candidates in order to continue in the doctoral program.",
     "instructors": [
@@ -8192,7 +7902,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-704",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in mathematical logic.",
     "instructors": [],
@@ -8214,7 +7923,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-706",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in geometry and topology.",
     "instructors": [],
@@ -8236,7 +7944,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-707",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in geometry and topology.",
     "instructors": [],
@@ -8258,7 +7965,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-720",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "This course covers an advanced topic in some branch of algebra.",
     "instructors": [
@@ -8293,7 +7999,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-721",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of algebra.",
     "instructors": [],
@@ -8315,7 +8020,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-722",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of algebra.",
     "instructors": [],
@@ -8337,7 +8041,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-723",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022"],
     "description": "This course covers an advanced topic in some branch of algebra.",
     "instructors": [
@@ -8364,7 +8067,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-726",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in number theory.",
     "instructors": [],
@@ -8386,7 +8088,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-727",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in number theory.",
     "instructors": [],
@@ -8408,7 +8109,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-740",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of analysis.",
     "instructors": [],
@@ -8430,7 +8130,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-741",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of analysis.",
     "instructors": [],
@@ -8452,7 +8151,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-742",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of analysis.",
     "instructors": [],
@@ -8474,7 +8172,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-743",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of analysis.",
     "instructors": [],
@@ -8496,7 +8193,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-744",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in some branch of analysis.",
     "instructors": [],
@@ -8518,7 +8214,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-756",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in Optimization.",
     "instructors": [],
@@ -8540,7 +8235,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-758",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Winter 2023"],
     "description": "This course covers an advanced topic in Optimization.",
     "instructors": [
@@ -8567,7 +8261,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-761",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in applied mathematics.",
     "instructors": [],
@@ -8589,7 +8282,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-762",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in applied mathematics.",
     "instructors": [],
@@ -8611,7 +8303,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-763",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in applied mathematics.",
     "instructors": [],
@@ -8633,7 +8324,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-764",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in applied mathematics.",
     "instructors": [],
@@ -8655,7 +8345,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-765",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic in applied mathematics.",
     "instructors": [],
@@ -8677,7 +8366,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-782",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": ["Fall 2022", "Winter 2023"],
     "description": "This course covers an advanced topic.",
     "instructors": [
@@ -8716,7 +8404,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-783",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic.",
     "instructors": [],
@@ -8738,7 +8425,6 @@
     "url": "https://www.mcgill.ca/study/2022-2023/courses/math-784",
     "department": "Mathematics and Statistics",
     "faculty": "Faculty of Science",
-    "facultyUrl": "https://www.mcgill.ca/study/2022-2023/faculties/science",
     "terms": [],
     "description": "This course covers an advanced topic.",
     "instructors": [],

@@ -12,7 +12,6 @@ export type Course = {
   url: string;
   department: string;
   faculty: string;
-  facultyUrl: string;
   terms: string[];
   description: string;
   instructors: Instructor[];

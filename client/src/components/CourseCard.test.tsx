@@ -20,7 +20,6 @@ describe('CourseCard', () => {
     url: '',
     department: 'Computer Science',
     faculty: 'Science',
-    facultyUrl: '',
     terms: ['Fall 2023', 'Winter 2024'],
     instructors: [],
     prerequisites: [],

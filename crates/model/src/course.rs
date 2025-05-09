@@ -16,7 +16,6 @@ pub struct Course {
   pub url: String,
   pub department: String,
   pub faculty: String,
-  pub faculty_url: String,
   pub terms: Vec<String>,
   pub description: String,
   pub instructors: Vec<Instructor>,
