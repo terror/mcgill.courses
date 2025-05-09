@@ -62,6 +62,7 @@ use {
   serde_json::json,
   sha2::{Digest, Sha256},
   std::{
+    backtrace::BacktraceStatus,
     collections::HashSet,
     env,
     fmt::{self, Display, Formatter},
@@ -125,6 +126,23 @@ async fn main() {
 
   if let Err(error) = Arguments::parse().run().await {
     eprintln!("error: {error}");
+
+    for (i, error) in error.0.chain().skip(1).enumerate() {
+      if i == 0 {
+        eprintln!();
+        eprintln!("because:");
+      }
+
+      eprintln!("- {error}");
+    }
+
+    let backtrace = error.0.backtrace();
+
+    if backtrace.status() == BacktraceStatus::Captured {
+      eprintln!("backtrace:");
+      eprintln!("{backtrace}");
+    }
+
     process::exit(1);
   }
 }
