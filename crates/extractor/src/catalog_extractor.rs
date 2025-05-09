@@ -67,13 +67,12 @@ impl CourseExtractor for CatalogExtractor {
       .trim()
       .to_owned();
 
-    // TODO: Extract faculty URL, can we?
+    // TODO: Can we get the faculty url?
     let faculty_url = String::new();
 
-    // TODO: Extract requirements
-    let requirements = Requirements::default();
-
-    // TODO: Extract instructors
+    // TODO: Extract instructors when they're available
+    //
+    // We also need to update the test in `/test-samples/`
     let instructors = Vec::new();
 
     Ok(CoursePage {
@@ -84,7 +83,7 @@ impl CourseExtractor for CatalogExtractor {
       faculty_url,
       description,
       instructors,
-      requirements,
+      requirements: Self::extract_course_requirements(&element)?,
     })
   }
 }
@@ -102,5 +101,52 @@ impl CatalogExtractor {
       url,
       ..Default::default()
     })
+  }
+
+  pub fn extract_course_requirements(
+    element: &ElementRef,
+  ) -> Result<Requirements> {
+    let notes = element.select_optional("div.detail-note_text ul")?;
+
+    let mut requirements = Requirements::default();
+
+    if let Some(notes) = notes {
+      let mut paragraphs = Vec::new();
+
+      for note in notes.select_many("li")? {
+        if let Some(paragraph) = note.select_optional("p")? {
+          paragraphs.push(paragraph);
+        } else {
+          paragraphs.push(note);
+        }
+      }
+
+      for paragraph in paragraphs {
+        for title in ["Prerequisite", "Corequisite", "Restriction"].iter() {
+          if paragraph.inner_html().starts_with(title) {
+            match Requirement::from(*title) {
+              Requirement::Prerequisites => {
+                requirements
+                  .set_prerequisites_text(Some(paragraph.inner_html()));
+                requirements.set_prerequisites(get_course_codes(&paragraph)?);
+              }
+              Requirement::Corequisites => {
+                requirements
+                  .set_corequisites_text(Some(paragraph.inner_html()));
+                requirements.set_corequisites(get_course_codes(&paragraph)?);
+              }
+              Requirement::Restrictions => {
+                requirements.set_restrictions(get_text(&paragraph));
+              }
+              Requirement::Unknown => {
+                return Err(anyhow!("Unknown requirement type"));
+              }
+            }
+          }
+        }
+      }
+    }
+
+    Ok(requirements)
   }
 }

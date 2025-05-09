@@ -655,10 +655,14 @@ mod tests {
         credits: "3".into(),
         subject: "COMP".into(),
         code: "251".into(),
-        faculty_url: "/study/2022-2023/faculties/science".into(),
+        faculty_url: String::new(),
         description: "Data Structures: priority queues, balanced binary search trees, hash tables, graphs. Algorithms: topological sort, connected components, shortest paths, minimum spanning trees, bipartite matching, network flows. Algorithm design: greedy, divide and conquer, dynamic programming, randomization. Mathematicaltools: proofs of asymptotic complexity and program correctness, Master theorem.".into(),
         instructors: vec![],
-        requirements: Requirements::default()
+        requirements: Requirements {
+          prerequisites_text: Some("Prerequisites: COMP 250; MATH 235 or MATH 240".into()),
+          restrictions: Some("Not open to students who have taken or are taking: COMP 252 or COMP 260.".into()),
+          ..Requirements::default()
+        }
       }
     );
   }
