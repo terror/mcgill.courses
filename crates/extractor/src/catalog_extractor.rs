@@ -37,7 +37,7 @@ impl CourseExtractor for CatalogExtractor {
 
     let parts = full_title.split(".").collect::<Vec<&str>>();
 
-    if parts.len() < 3 {
+    if parts.len() < 2 {
       return Err(anyhow!("Failed to parse course title"));
     }
 
@@ -61,11 +61,13 @@ impl CourseExtractor for CatalogExtractor {
       .trim()
       .to_owned();
 
-    let description = element
-      .select_single("div.section--description div.section__content")?
-      .inner_html()
-      .trim()
-      .to_owned();
+    let description = if let Some(element) = element
+      .select_optional("div.section--description div.section__content")?
+    {
+      element.inner_html().trim().to_owned()
+    } else {
+      String::new()
+    };
 
     // TODO: Extract instructors when they're available
     //

@@ -233,7 +233,7 @@ impl Loader {
       );
 
       while listings.is_err() {
-        warn!("Retrying course listings: {}", page.url);
+        warn!("Retrying course listings: {}, {:?}", page.url, listings);
 
         thread::sleep(Duration::from_millis(500));
 
@@ -284,7 +284,7 @@ impl Loader {
       );
 
       while course_page.is_err() {
-        warn!("Retrying course page: {}", listing.url);
+        warn!("Retrying course page: {} {:?}", listing.url, course_page);
 
         thread::sleep(Duration::from_millis(500));
 
