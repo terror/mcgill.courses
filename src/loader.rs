@@ -319,11 +319,6 @@ impl Loader {
       url: listing.url,
       department: listing.department.unwrap_or_default(),
       faculty: listing.faculty.unwrap_or_default(),
-      faculty_url: format!(
-        "{}{}",
-        self.extraction_mode.base_url(),
-        course_page.faculty_url
-      ),
       terms: listing.terms,
       description: course_page.description,
       instructors: course_page.instructors,

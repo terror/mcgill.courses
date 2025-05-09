@@ -447,7 +447,6 @@ mod tests {
         credits: "3".into(),
         subject: "ACCT".into(),
         code: "351".into(),
-        faculty_url: "/study/2009-2010/faculties/desautels".into(),
         description: "An examination of the theoretical foundation for financial reporting and revenue recognition. The tools of accounting, including a review of the accounting process and compound interest concepts. Asset recognition, measurement and disclosure. Partnership accounting.".into(),
         instructors: vec![
           Instructor {
@@ -493,7 +492,6 @@ mod tests {
         credits: "3".into(),
         subject: "MATH".into(),
         code: "240".into(),
-        faculty_url: "/study/2022-2023/faculties/science".into(),
         description: "Introduction to discrete mathematics and applications. Logical reasoning and methods of proof. Elementary number theory and cryptography  prime numbers, modular equations, RSA encryption. Combinatorics  basic enumeration, combinatorial methods, recurrence equations. Graph theory  trees, cycles, planar\ngraphs.".into(),
         instructors: vec![
           Instructor {
@@ -569,7 +567,6 @@ mod tests {
         credits: "1".into(),
         subject: "PHYS".into(),
         code: "118".into(),
-        faculty_url: "/study/2022-2023/faculties/science".into(),
         description: "The laboratory component of PHYS 142.".into(),
         instructors: vec![Instructor {
           name: "Hong Guo".into(),

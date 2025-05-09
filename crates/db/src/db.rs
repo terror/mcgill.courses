@@ -926,7 +926,6 @@ impl Db {
                 "department": course.department,
                 "description": course.description,
                 "faculty": course.faculty,
-                "facultyUrl": course.faculty_url,
                 "instructors": course.instructors.combine(found.instructors),
                 "leadingTo": course.leading_to,
                 "level": course.level,
