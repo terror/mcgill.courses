@@ -22,7 +22,14 @@ impl CourseExtractor for ECalendarExtractor {
 
       let filtered_course_listings = course_listings
         .into_iter()
-        .map(|listing| listing.filter_terms())
+        .map(|listing| CourseListing {
+          terms: listing
+            .terms
+            .into_iter()
+            .filter(|term| term != "Not Offered")
+            .collect(),
+          ..listing
+        })
         .collect();
 
       return Ok(Some(filtered_course_listings));
@@ -218,9 +225,9 @@ impl ECalendarExtractor {
       .to_string();
 
     Ok(CourseListing {
-      department,
-      faculty,
-      level,
+      department: Some(department),
+      faculty: Some(faculty),
+      level: Some(level),
       terms,
       url,
     })

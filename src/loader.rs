@@ -315,10 +315,10 @@ impl Loader {
       credits: course_page.credits,
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
-      level: listing.level,
+      level: listing.level.unwrap_or(String::new()),
       url: listing.url,
-      department: listing.department,
-      faculty: listing.faculty,
+      department: listing.department.unwrap_or(String::new()),
+      faculty: listing.faculty.unwrap_or(String::new()),
       faculty_url: format!(
         "{}{}",
         self.extraction_mode.base_url(),
