@@ -4,18 +4,15 @@ use {
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
-    extraction_mode::ExtractionMode,
     hash::Hash,
     loader::Loader,
     object::Object,
     options::Options,
-    page::Page,
     retry::Retry,
     server::Server,
     state::State,
     subcommand::Subcommand,
     user::User,
-    vec_ext::VecExt,
     vsb_client::VsbClient,
   },
   anyhow::anyhow,
@@ -38,18 +35,15 @@ use {
   db::Db,
   dotenv::dotenv,
   env_logger::Env,
-  extractor::{
-    CatalogExtractor, CourseExtractor, ECalendarExtractor, ScheduleExtractor,
-    VsbExtractor,
-  },
+  extractor::{ScheduleExtractor, VsbExtractor},
   futures::TryStreamExt,
   http::{
     header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
   },
   log::{debug, error, info, trace, warn},
   model::{
-    Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
-    Interaction, InteractionKind, Review, ReviewFilter, Schedule, Subscription,
+    Course, CourseFilter, InitializeOptions, Instructor, Interaction,
+    InteractionKind, Review, ReviewFilter, Schedule, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
@@ -98,7 +92,6 @@ mod assets;
 mod auth;
 mod courses;
 mod error;
-mod extraction_mode;
 mod hash;
 mod instructors;
 mod interactions;

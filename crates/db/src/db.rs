@@ -929,7 +929,6 @@ impl Db {
                 "facultyUrl": course.faculty_url,
                 "instructors": course.instructors.combine(found.instructors),
                 "leadingTo": course.leading_to,
-                "level": course.level,
                 "logicalCorequisites": course.logical_corequisites,
                 "logicalPrerequisites": course.logical_prerequisites,
                 "prerequisites": course.prerequisites,

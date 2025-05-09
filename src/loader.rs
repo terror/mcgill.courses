@@ -17,26 +17,11 @@ pub(crate) struct Loader {
   course_delay: u64,
 
   #[clap(
-    default_value = "catalog",
-    help = "Extraction mode",
-    long,
-    value_enum
-  )]
-  extraction_mode: ExtractionMode,
-
-  #[clap(
     long,
     default_values = ["2025-2026",],
     help = "The mcgill terms to scrape"
   )]
   mcgill_terms: Vec<String>,
-
-  #[clap(
-    long,
-    default_value = "0",
-    help = "Time delay between page requests in milliseconds"
-  )]
-  page_delay: u64,
 
   #[clap(long, default_value = "10", help = "Number of retries")]
   retries: usize,
@@ -52,35 +37,37 @@ pub(crate) struct Loader {
 
   #[clap(
     long,
-    default_values = ["202405", "202409", "202501"],
+    default_values = ["202505", "202509", "202601"],
     help = "The schedule builder terms to scrape"
   )]
   vsb_terms: Vec<usize>,
 }
 
 impl Loader {
+  const BASE_URL: &str = "https://coursecatalogue.mcgill.ca";
+
   pub(crate) fn run(&self, source: PathBuf) -> Result {
     info!("Running extractor...");
 
     for (index, term) in self.mcgill_terms.iter().enumerate() {
+      // Need to run the blocking reqwest client in another thread
+      // because we're running in a tokio context
+      let scrape_vsb = self.scrape_vsb && index == self.mcgill_terms.len() - 1;
+
+      let urls = tokio::task::block_in_place(|| self.get_course_urls())?;
+
       let mut courses = Vec::new();
-
-      let mut page = 0;
-
-      while let Some(listings) = self.parse_course_listing_pages(
-        self.aggregate_urls(term, page, page + self.batch_size),
-      )? {
-        let scrape_vsb =
-          self.scrape_vsb && index == self.mcgill_terms.len() - 1;
-
-        courses.extend(
-          listings
+      for chunk in urls.chunks(self.batch_size) {
+        let chunk = tokio::task::block_in_place(|| {
+          chunk
             .par_iter()
-            .map(|listing| self.parse_course(listing.clone(), scrape_vsb))
-            .collect::<Result<Vec<Course>, _>>()?,
-        );
-
-        page += self.batch_size;
+            .map(|url| {
+              self
+                .parse_course(&format!("{}{}", Self::BASE_URL, url), scrape_vsb)
+            })
+            .collect::<Result<Vec<Course>, _>>()
+        })?;
+        courses.extend(chunk);
       }
 
       let mut courses = courses
@@ -89,7 +76,6 @@ impl Loader {
         .into_iter()
         .filter(|course| !course.title.is_empty())
         .collect::<Vec<Course>>();
-
       courses.sort();
 
       let source = if source.is_dir() {
@@ -121,7 +107,7 @@ impl Loader {
       } else {
         fs::write(
           &source,
-          serde_json::to_string_pretty(&&self.post_process(&mut courses)?)?,
+          serde_json::to_string_pretty(&self.post_process(&mut courses)?)?,
         )?;
       }
     }
@@ -157,11 +143,13 @@ impl Loader {
   }
 
   fn get_course_urls(&self) -> Result<Vec<String>> {
-    let url = "https://coursecatalogue.mcgill.ca/courses/";
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
-    let page = client.get(url).retry(self.retries)?.text()?;
-    extractor::courses::extract_course_urls(&page)
+    let page = client
+      .get(format!("{}/courses", Self::BASE_URL))
+      .retry(self.retries)?
+      .text()?;
+    Ok(extractor::courses::extract_course_urls(&page)?)
   }
 
   fn parse_course(&self, url: &str, scrape_vsb: bool) -> Result<Course> {
@@ -170,7 +158,6 @@ impl Loader {
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
     let course_page = {
-      let page_text = client.get(url).retry(self.retries)?.text()?;
       let mut course_page = extractor::courses::extract_course_page(
         &client.get(url).retry(self.retries)?.text()?,
       );
@@ -211,8 +198,8 @@ impl Loader {
       subject: course_page.subject.clone(),
       code: course_page.code.clone(),
       url: url.to_string(),
-      department: listing.department.unwrap_or_default(),
-      faculty: listing.faculty.unwrap_or_default(),
+      department: course_page.department.unwrap_or_default(),
+      faculty: course_page.faculty.unwrap_or_default(),
       terms: course_page.terms,
       description: course_page.description,
       instructors: course_page.instructors,
