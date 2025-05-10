@@ -16,7 +16,6 @@ describe('CourseCard', () => {
     subject: 'COMP',
     code: '202',
     credits: '3',
-    level: '200',
     url: '',
     department: 'Computer Science',
     faculty: 'Science',

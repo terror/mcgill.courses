@@ -11,7 +11,6 @@ use {
 
 mod course;
 mod course_filter;
-mod course_listing;
 mod course_page;
 mod initialize_options;
 mod instructor;
@@ -27,7 +26,6 @@ mod subscription;
 pub use crate::{
   course::Course,
   course_filter::{CourseFilter, CourseSort, CourseSortType},
-  course_listing::CourseListing,
   course_page::CoursePage,
   initialize_options::InitializeOptions,
   instructor::Instructor,

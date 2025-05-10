@@ -12,7 +12,6 @@ pub struct Course {
   pub credits: String,
   pub subject: String,
   pub code: String,
-  pub level: String,
   pub url: String,
   pub department: String,
   pub faculty: String,

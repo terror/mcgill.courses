@@ -8,13 +8,11 @@ use {
     loader::Loader,
     object::Object,
     options::Options,
-    page::Page,
     retry::Retry,
     server::Server,
     state::State,
     subcommand::Subcommand,
     user::User,
-    vec_ext::VecExt,
     vsb_client::VsbClient,
   },
   anyhow::anyhow,
@@ -37,24 +35,22 @@ use {
   db::Db,
   dotenv::dotenv,
   env_logger::Env,
-  extractor::{
-    CourseExtractor, ECalendarExtractor, ScheduleExtractor, VsbExtractor,
-  },
+  extractor::{ScheduleExtractor, VsbExtractor},
   futures::TryStreamExt,
   http::{
     header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
   },
   log::{debug, error, info, trace, warn},
   model::{
-    Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
-    Interaction, InteractionKind, Review, ReviewFilter, Schedule, Subscription,
+    Course, CourseFilter, InitializeOptions, Instructor, Interaction,
+    InteractionKind, Review, ReviewFilter, Schedule, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
     RedirectUrl, Scope, TokenUrl,
   },
   rayon::prelude::*,
-  reqwest::blocking::RequestBuilder,
+  reqwest::blocking::{Client, RequestBuilder},
   rusoto_core::Region,
   rusoto_s3::S3Client,
   rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
@@ -69,7 +65,6 @@ use {
     fs,
     fs::File,
     io::Read,
-    marker::Sized,
     net::SocketAddr,
     path::PathBuf,
     process,
@@ -103,7 +98,6 @@ mod loader;
 mod notifications;
 mod object;
 mod options;
-mod page;
 mod retry;
 mod reviews;
 mod search;
@@ -112,7 +106,6 @@ mod state;
 mod subcommand;
 mod subscriptions;
 mod user;
-mod vec_ext;
 mod vsb_client;
 
 type Result<T = (), E = error::Error> = std::result::Result<T, E>;

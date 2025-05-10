@@ -8,7 +8,6 @@ export type Course = {
   credits: string;
   subject: string;
   code: string;
-  level: string;
   url: string;
   department: string;
   faculty: string;
