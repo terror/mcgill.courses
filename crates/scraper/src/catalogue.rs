@@ -2,6 +2,8 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Loader {
+  #[clap(long, default_value = "courses.json")]
+  source: PathBuf,
   #[clap(
     long,
     default_value = "20",
@@ -46,7 +48,7 @@ pub(crate) struct Loader {
 impl Loader {
   const BASE_URL: &str = "https://coursecatalogue.mcgill.ca";
 
-  pub(crate) fn run(&self, source: PathBuf) -> Result {
+  pub(crate) fn run(&self) -> Result<()> {
     info!("Running extractor...");
 
     for (index, term) in self.mcgill_terms.iter().enumerate() {
@@ -54,19 +56,16 @@ impl Loader {
       // because we're running in a tokio context
       let scrape_vsb = self.scrape_vsb && index == self.mcgill_terms.len() - 1;
 
-      let urls = tokio::task::block_in_place(|| self.get_course_urls())?;
+      let urls = self.get_course_urls()?;
 
       let mut courses = Vec::new();
       for chunk in urls.chunks(self.batch_size) {
-        let chunk = tokio::task::block_in_place(|| {
-          chunk
-            .par_iter()
-            .map(|url| {
-              self
-                .parse_course(&format!("{}{}", Self::BASE_URL, url), scrape_vsb)
-            })
-            .collect::<Result<Vec<Course>, _>>()
-        })?;
+        let chunk = chunk
+          .par_iter()
+          .map(|url| {
+            self.parse_course(&format!("{}{}", Self::BASE_URL, url), scrape_vsb)
+          })
+          .collect::<Result<Vec<Course>, _>>()?;
         courses.extend(chunk);
       }
 
@@ -78,10 +77,10 @@ impl Loader {
         .collect::<Vec<Course>>();
       courses.sort();
 
-      let source = if source.is_dir() {
-        source.join(format!("courses-{term}.json"))
+      let source = if self.source.is_dir() {
+        self.source.join(format!("courses-{term}.json"))
       } else {
-        source.clone()
+        self.source.clone()
       };
 
       if source.exists() {
@@ -115,7 +114,7 @@ impl Loader {
     Ok(())
   }
 
-  fn post_process(&self, courses: &mut [Course]) -> Result<Vec<Course>, Error> {
+  fn post_process(&self, courses: &mut [Course]) -> Result<Vec<Course>> {
     info!("Post processing courses...");
 
     let mapping = courses

@@ -32,7 +32,7 @@ impl<'a> VsbClient<'a> {
           .retry(self.retries)?
           .text()?;
 
-        Ok(VsbExtractor::extract_course_schedules(res)?)
+        VsbExtractor::extract_course_schedules(res)
       })
       .collect::<Result<Vec<_>>>()?
       .into_iter()

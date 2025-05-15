@@ -88,10 +88,10 @@ impl Retry for RequestBuilder {
       attempts += 1;
     }
 
-    Err(Error(anyhow!(
+    Err(anyhow!(
       "Request failed after {} attempts",
       config.max_retries + 1
-    )))
+    ))
   }
 }
 

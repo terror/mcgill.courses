@@ -1,4 +1,4 @@
-set dotenv-load
+set dotenv-load := true
 
 export RUST_LOG := 'info'
 
@@ -9,106 +9,101 @@ alias i := initialize
 alias t := test
 
 default:
-  just --list
+    just --list
 
 all: build clippy e2e fmt-check forbid lint test
 
 build *mode='development':
-  cargo build && pnpm run build -- --mode {{mode}}
+    cargo build && pnpm run build -- --mode {{ mode }}
 
 build-container:
-  docker build -t mcgill.courses:latest .
+    docker build -t mcgill.courses:latest .
 
 clippy:
-  ./bin/clippy
+    ./bin/clippy
 
 coverage:
-  ./bin/coverage
+    ./bin/coverage
 
 dev: services
-  concurrently \
-    --kill-others \
-    --names 'SERVER,CLIENT' \
-    --prefix-colors 'green.bold,magenta.bold' \
-    --prefix '[{name}] ' \
-    --prefix-length 2 \
-    --success first \
-    --handle-input \
-    --timestamp-format 'HH:mm:ss' \
-    --color \
-    -- \
-    'just watch run serve --db-name=mcgill-courses' \
-    'pnpm run dev'
+    concurrently \
+      --kill-others \
+      --names 'SERVER,CLIENT' \
+      --prefix-colors 'green.bold,magenta.bold' \
+      --prefix '[{name}] ' \
+      --prefix-length 2 \
+      --success first \
+      --handle-input \
+      --timestamp-format 'HH:mm:ss' \
+      --color \
+      -- \
+      'just watch run -- --db-name=mcgill-courses' \
+      'pnpm run dev'
 
 dev-deps:
-  cargo install present
-  curl -LsSf https://astral.sh/uv/install.sh | sh
+    cargo install present
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
-  pnpm run cy:e2e
+    pnpm run cy:e2e
 
 fmt:
-  cargo fmt --all
-  pnpm run format
+    cargo fmt --all
+    pnpm run format
 
 fmt-check:
-  cargo fmt --all -- --check
-  pnpm run format-check
+    cargo fmt --all -- --check
+    pnpm run format-check
 
 forbid:
-  ./bin/forbid
+    ./bin/forbid
 
 generate-changelog *args:
-  RUST_LOG=info cargo run --manifest-path tools/changelog-generator/Cargo.toml \
-    -- \
-    --output client/src/assets/changelog.json \
-    {{args}}
+    RUST_LOG=info cargo run --manifest-path tools/changelog-generator/Cargo.toml \
+      -- \
+      --output client/src/assets/changelog.json \
+      {{ args }}
 
 initialize *args: restart-services
-  cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
+    cargo run -- --source=seed --initialize --db-name=mcgill-courses {{ args }}
 
 lint *args:
-  pnpm run lint {{args}}
+    pnpm run lint {{ args }}
 
 load:
-  cargo run -- --source=seed \
-    load \
-    --batch-size=1 \
-    --scrape-vsb \
-    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
-    --course-delay 1000 \
-    --page-delay 1000
+    cargo run --manifest-path crates/scraper/Cargo.toml -- --source=seed \
+      --batch-size=1 \
+      --scrape-vsb \
+      --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
+      --course-delay 1000
 
 readme:
-  present --in-place README.md
-  @prettier --write README.md
+    present --in-place README.md
+    @prettier --write README.md
 
 restart-services:
-  docker compose down --volumes && just services
-
-run *args:
-  cargo run -- {{args}}
+    docker compose down --volumes && just services
 
 run-container: build-container
-  docker run -d \
-    -e MONGODB_URL=$MONGODB_URL \
-    -e MS_CLIENT_ID=$MS_CLIENT_ID \
-    -e MS_CLIENT_SECRET=$MS_CLIENT_SECRET \
-    -e MS_REDIRECT_URI=$MS_REDIRECT_URI \
-    -e RUST_LOG=info \
-    -p 8000:8000 \
-    mcgill.courses:latest
+    docker run -d \
+      -e MONGODB_URL=$MONGODB_URL \
+      -e MS_CLIENT_ID=$MS_CLIENT_ID \
+      -e MS_CLIENT_SECRET=$MS_CLIENT_SECRET \
+      -e MS_REDIRECT_URI=$MS_REDIRECT_URI \
+      -e RUST_LOG=info \
+      -p 8000:8000 \
+      mcgill.courses:latest
 
 serve:
-  cargo run -- serve --db-name=mcgill-courses
+    cargo run -- --db-name=mcgill-courses
 
 services:
-  docker compose up --no-recreate -d
-  sleep 5
-  docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
+    docker compose up --no-recreate -d
+    sleep 5
+    docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
 
 test *filter:
-  cargo test --all {{filter}}
+    cargo test --all {{ filter }}
 
 watch +COMMAND='test':
-  cargo watch --clear --exec "{{COMMAND}}"
+    cargo watch --clear --exec "{{ COMMAND }}"
