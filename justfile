@@ -70,12 +70,13 @@ initialize *args: restart-services
 lint *args:
     pnpm run lint {{ args }}
 
-load:
+load cookie='':
     cargo run --manifest-path crates/scraper/Cargo.toml -- --source=seed \
       --batch-size=1 \
       --scrape-vsb \
       --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
-      --course-delay 1000
+      --course-delay 1000 \
+      --cookie="{{ cookie }}"
 
 readme:
     present --in-place README.md

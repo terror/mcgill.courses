@@ -43,6 +43,13 @@ pub(crate) struct Loader {
     help = "The schedule builder terms to scrape"
   )]
   vsb_terms: Vec<usize>,
+
+  #[clap(
+    long,
+    default_value = "",
+    help = "A VSB session cookie, required for scraping course section locations"
+  )]
+  cookie: String,
 }
 
 impl Loader {
@@ -148,7 +155,7 @@ impl Loader {
       .get(format!("{}/courses", Self::BASE_URL))
       .retry(self.retries)?
       .text()?;
-    Ok(extractor::courses::extract_course_urls(&page)?)
+    extractor::courses::extract_course_urls(&page)
   }
 
   fn parse_course(&self, url: &str, scrape_vsb: bool) -> Result<Course> {
@@ -180,10 +187,13 @@ impl Loader {
     thread::sleep(Duration::from_millis(self.course_delay));
 
     let schedule = if scrape_vsb {
-      Some(VsbClient::new(&client, self.retries)?.schedule(
-        &format!("{}-{}", course_page.subject, course_page.code),
-        self.vsb_terms.clone(),
-      )?)
+      Some(
+        VsbClient::new(&self.user_agent, &self.cookie, self.retries)?
+          .schedule(
+            &format!("{}-{}", course_page.subject, course_page.code),
+            self.vsb_terms.clone(),
+          )?,
+      )
     } else {
       None
     };

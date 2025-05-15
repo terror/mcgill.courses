@@ -5,23 +5,21 @@ pub struct VsbExtractor;
 impl ScheduleExtractor for VsbExtractor {
   fn extract_course_schedules(text: &str) -> Result<Vec<Schedule>> {
     let html = Html::parse_fragment(text);
+    let err = html
+      .root_element()
+      .select_single("errors")?
+      .select_many("error")?;
 
-    Ok(
-      match html
+    Ok(if err.is_empty() {
+      html
         .root_element()
-        .select_single("errors")?
-        .select_many("error")?
-        .is_empty()
-      {
-        false => Vec::new(),
-        _ => html
-          .root_element()
-          .select_many("uselection")?
-          .into_iter()
-          .map(Self::extract_course_schedule)
-          .collect::<Result<Vec<Schedule>>>()?,
-      },
-    )
+        .select_many("uselection")?
+        .into_iter()
+        .map(Self::extract_course_schedule)
+        .collect::<Result<Vec<Schedule>>>()?
+    } else {
+      Vec::new()
+    })
   }
 }
 
