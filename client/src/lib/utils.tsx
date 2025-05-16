@@ -267,10 +267,7 @@ export const timeSince = (
 };
 
 export const replaceCourseLinks = (html: string): React.ReactNode[] => {
-  const doc = new DOMParser().parseFromString(
-    capitalize(punctuate(html.trim())),
-    'text/html'
-  );
+  const doc = new DOMParser().parseFromString(html.trim(), 'text/html');
 
   return Array.from(doc.body.childNodes).map((node, index) => {
     switch (node.nodeType) {
