@@ -61,8 +61,6 @@ impl Loader {
     info!("Running extractor...");
 
     for (index, term) in self.mcgill_terms.iter().enumerate() {
-      // Need to run the blocking reqwest client in another thread
-      // because we're running in a tokio context
       let scrape_vsb = self.scrape_vsb && index == self.mcgill_terms.len() - 1;
 
       let urls = self.get_course_urls()?;
