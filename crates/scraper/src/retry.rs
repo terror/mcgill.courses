@@ -253,7 +253,7 @@ mod tests {
 
     server
       .mock("GET", "/retry-4xx")
-      .with_status(404)
+      .with_status(400)
       .with_body("not found")
       .expect(1)
       .create();
