@@ -26,7 +26,7 @@ mod tests {
   use {
     super::*,
     crate::vsb_extractor::VsbExtractor,
-    include_dir::{Dir, include_dir},
+    include_dir::{include_dir, Dir},
     pretty_assertions::assert_eq,
   };
 
