@@ -1,3 +1,5 @@
+use model::Instructor;
+
 use super::*;
 
 #[derive(Parser)]
@@ -72,8 +74,8 @@ impl Loader {
           .map(|url| {
             self.parse_course(&format!("{}{}", Self::BASE_URL, url), scrape_vsb)
           })
-          .collect::<Result<Vec<Course>, _>>()?;
-        courses.extend(chunk);
+          .collect::<Result<Vec<Option<Course>>, _>>()?;
+        courses.extend(chunk.into_iter().flatten());
       }
 
       let mut courses = courses
@@ -158,22 +160,34 @@ impl Loader {
     extractor::courses::extract_course_urls(&page)
   }
 
-  fn parse_course(&self, url: &str, scrape_vsb: bool) -> Result<Course> {
+  fn parse_course(
+    &self,
+    url: &str,
+    scrape_vsb: bool,
+  ) -> Result<Option<Course>> {
     info!("{}", url);
 
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
     let course_page = {
-      let mut course_page = extractor::courses::extract_course_page(
-        &client.get(url).retry(self.retries)?.text()?,
-      );
+      let res = client.get(url).retry(self.retries)?;
+      if res.status() == reqwest::StatusCode::NOT_FOUND {
+        info!("Page for {} not found, skipping...", url);
+        return Ok(None);
+      }
+
+      let mut course_page =
+        extractor::courses::extract_course_page(&res.text()?);
       while course_page.is_err() {
         warn!("Retrying course page: {}", url);
 
         thread::sleep(Duration::from_millis(500));
-        course_page = extractor::courses::extract_course_page(
-          &client.get(url).retry(self.retries)?.text()?,
-        );
+        let res = client.get(url).retry(self.retries)?;
+        if res.status() == reqwest::StatusCode::NOT_FOUND {
+          info!("Page for {} not found, skipping...", url);
+          return Ok(None);
+        };
+        course_page = extractor::courses::extract_course_page(&res.text()?);
       }
 
       course_page?
@@ -198,7 +212,35 @@ impl Loader {
       None
     };
 
-    Ok(Course {
+    // Temporarily using VSB information to get term/instructor info
+    // since course catalogue doesn't have it...
+    let schedule_info = schedule.clone().map(|schedules| {
+      let mut terms = schedules
+        .iter()
+        .filter_map(|s| s.term.clone())
+        .collect::<Vec<_>>();
+      dedup(&mut terms);
+
+      let mut instructors = Vec::new();
+      for schedule in schedules {
+        if let Some(blocks) = schedule.blocks {
+          for block in blocks {
+            for instructor in block.instructors {
+              instructors.push(Instructor {
+                name: instructor,
+                term: schedule.term.clone().unwrap_or_default(),
+                ..Default::default()
+              });
+            }
+          }
+        }
+      }
+      dedup(&mut instructors);
+
+      (terms, instructors)
+    });
+
+    Ok(Some(Course {
       id: format!("{}{}", course_page.subject, course_page.code),
       id_ngrams: None,
       title: course_page.title.clone(),
@@ -209,9 +251,15 @@ impl Loader {
       url: url.to_string(),
       department: course_page.department.unwrap_or_default(),
       faculty: course_page.faculty.unwrap_or_default(),
-      terms: course_page.terms,
+      terms: schedule_info
+        .as_ref()
+        .map(|s| s.0.clone())
+        .unwrap_or(course_page.terms),
       description: course_page.description,
-      instructors: course_page.instructors,
+      instructors: schedule_info
+        .as_ref()
+        .map(|s| s.1.clone())
+        .unwrap_or(course_page.instructors),
       prerequisites_text: course_page.requirements.prerequisites_text,
       corequisites_text: course_page.requirements.corequisites_text,
       prerequisites: course_page.requirements.prerequisites,
@@ -222,6 +270,14 @@ impl Loader {
       logical_corequisites: course_page.requirements.logical_corequisites,
       schedule,
       ..Default::default()
-    })
+    }))
   }
+}
+
+fn dedup<T>(v: &mut Vec<T>)
+where
+  T: Eq + Clone + Hash,
+{
+  let mut set = HashSet::new();
+  v.retain(|e| set.insert(e.clone()));
 }

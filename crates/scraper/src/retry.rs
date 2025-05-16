@@ -47,7 +47,10 @@ impl Retry for RequestBuilder {
         .send()
       {
         Ok(response) => {
-          if response.status().is_success() {
+          // some mcgill links are 404s :(
+          if response.status().is_success()
+            || response.status() == reqwest::StatusCode::NOT_FOUND
+          {
             return Ok(response);
           } else {
             error!(

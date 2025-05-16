@@ -11,11 +11,17 @@ impl ScheduleExtractor for VsbExtractor {
       .select_many("error")?;
 
     Ok(if err.is_empty() {
+      let term = html
+        .root_element()
+        .select_single("term")?
+        .attr("v")
+        .map(String::from);
+
       html
         .root_element()
         .select_many("uselection")?
         .into_iter()
-        .map(Self::extract_course_schedule)
+        .map(|elem| Self::extract_course_schedule(elem, term.clone()))
         .collect::<Result<Vec<Schedule>>>()?
     } else {
       Vec::new()
@@ -24,17 +30,11 @@ impl ScheduleExtractor for VsbExtractor {
 }
 
 impl VsbExtractor {
-  fn extract_course_schedule(element: ElementRef) -> Result<Schedule> {
+  fn extract_course_schedule(
+    element: ElementRef,
+    term: Option<String>,
+  ) -> Result<Schedule> {
     let timeblocks = element.select_many("timeblock")?;
-
-    let term = |ssid: Option<&str>| -> Option<String> {
-      match (ssid.map(|ssid| &ssid[4..6]), ssid.map(|ssid| &ssid[0..4])) {
-        (Some("01"), Some(year)) => Some(format!("Winter {year}")),
-        (Some("05"), Some(year)) => Some(format!("Summer {year}")),
-        (Some("09"), Some(year)) => Some(format!("Fall {year}")),
-        _ => None,
-      }
-    };
 
     Ok(Schedule {
       blocks: Some(
@@ -43,7 +43,7 @@ impl VsbExtractor {
           .into_iter()
           .map(|block| {
             Ok(Block {
-              campus: block.value().attr("campus").map(String::from),
+              campus: block.value().attr("campus").map(title_case),
               display: block.value().attr("disp").map(String::from),
               location: block.value().attr("location").map(String::from),
               crn: block.value().attr("key").map(String::from),
@@ -67,11 +67,39 @@ impl VsbExtractor {
                   })
                   .collect(),
               ),
+              instructors: block
+                .value()
+                .attr("teacher")
+                .and_then(|s| {
+                  s.split("; ")
+                    .map(format_instructor_name)
+                    .collect::<Result<Vec<String>>>()
+                    .ok()
+                })
+                .unwrap_or_default(),
             })
           })
           .collect::<Result<Vec<_>>>()?,
       ),
-      term: term(element.select_single("selection")?.value().attr("ssid")),
+      term,
     })
+  }
+}
+
+fn format_instructor_name(last_first: &str) -> Result<String> {
+  let Some((last_name, first_name)) = last_first.split_once(", ") else {
+    bail!("Improperly formatted instructor name")
+  };
+
+  Ok(format!("{} {}", first_name, last_name))
+}
+
+fn title_case(s: &str) -> String {
+  let mut s = s.to_string();
+  if let Some(rest) = s.get_mut(1..) {
+    rest.make_ascii_lowercase();
+    s
+  } else {
+    s
   }
 }

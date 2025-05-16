@@ -26,7 +26,7 @@ mod tests {
   use {
     super::*,
     crate::vsb_extractor::VsbExtractor,
-    include_dir::{include_dir, Dir},
+    include_dir::{Dir, include_dir},
     pretty_assertions::assert_eq,
   };
 
@@ -42,32 +42,33 @@ mod tests {
   }
 
   #[test]
-  fn extract_vsb_course_schedules_202305() {
+  fn extract_vsb_course_schedules_202509() {
     assert_eq!(
       VsbExtractor::extract_course_schedules(&get_content(
-        "vsb_course_schedules_202305.xml"
+        "vsb_course_schedules_202509.xml"
       ))
       .unwrap(),
       vec![Schedule {
         blocks: Some(vec![Block {
           campus: Some("Downtown".into()),
-          display: Some("Lec 045".into()),
-          location: Some("BRONF 422".into()),
+          display: Some("Lec 001".into()),
+          location: Some("LEA 132".into()),
           timeblocks: Some(vec![
             TimeBlock {
-              day: Some("4".into()),
-              t1: Some("515".into()),
-              t2: Some("1255".into()),
+              day: Some("3".into()),
+              t1: Some("875".into()),
+              t2: Some("955".into()),
             },
             TimeBlock {
-              day: Some("4".into()),
-              t1: Some("515".into()),
-              t2: Some("1255".into()),
+              day: Some("5".into()),
+              t1: Some("875".into()),
+              t2: Some("955".into()),
             }
           ]),
-          crn: Some("683".into()),
+          crn: Some("2411".into()),
+          instructors: vec!["Mona Elsaadawy".into(), "Jacob Errington".into()]
         }]),
-        term: Some("Summer 2023".into())
+        term: Some("Fall 2025".into())
       }]
     );
   }

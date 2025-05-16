@@ -10,7 +10,8 @@ use {
   reqwest::blocking::{Client, RequestBuilder},
   retry::Retry,
   std::{
-    collections::HashSet, fs, path::PathBuf, process, thread, time::Duration,
+    collections::HashSet, fs, hash::Hash, path::PathBuf, process, thread,
+    time::Duration,
   },
 };
 
