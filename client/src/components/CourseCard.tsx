@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import {
-  courseIdToUrlParam,
-  replaceCourseLinks,
-  spliceCourseCode,
-} from '../lib/utils';
+import { parseCourseDescription } from '../lib/dom-utils';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import type { Course } from '../model/Course';
 import { CourseTerms } from './CourseTerms';
 import { Highlight } from './Highlight';
@@ -40,11 +37,7 @@ export const CourseCard = ({ course, className, query }: CourseCardProps) => {
         </div>
         <CourseTerms course={course} variant='small' query={query} />
         <div className='mt-2 text-gray-600 dark:text-gray-400'>
-          {query ? (
-            <Highlight text={course.description} query={query} />
-          ) : (
-            replaceCourseLinks(courseDescriptionShortened)
-          )}
+          {parseCourseDescription(courseDescriptionShortened, query)}
         </div>
       </div>
     </Link>

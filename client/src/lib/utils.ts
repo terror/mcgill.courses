@@ -1,5 +1,4 @@
 import { groupBy } from 'lodash';
-import { Link } from 'react-router-dom';
 
 import { Course } from '../model/Course';
 import { Instructor } from '../model/Instructor';
@@ -264,43 +263,4 @@ export const timeSince = (
   const years = Math.floor(months / 12);
 
   return years === 1 ? '1 year ago' : `${years} years ago`;
-};
-
-export const replaceCourseLinks = (html: string): React.ReactNode[] => {
-  const doc = new DOMParser().parseFromString(html.trim(), 'text/html');
-
-  return Array.from(doc.body.childNodes).map((node, index) => {
-    switch (node.nodeType) {
-      case Node.ELEMENT_NODE: {
-        const elem = node as HTMLElement;
-
-        if (node.nodeName === 'A') {
-          const href = elem.getAttribute('href');
-
-          if (!href) return elem.innerText;
-
-          if (!isValidCourseCode(elem.innerText))
-            return <a href={href}>{elem.innerText}</a>;
-
-          const courseCode = elem.innerText.replace(' ', '-');
-
-          return (
-            <Link
-              key={index}
-              to={`/course/${courseCode}`}
-              className='text-gray-800 hover:underline dark:text-gray-200'
-            >
-              {elem.innerText}
-            </Link>
-          );
-        }
-
-        return <span key={index}>{(node as HTMLElement).innerText}</span>;
-      }
-      case Node.TEXT_NODE:
-        return <span key={index}>{(node as Text).textContent}</span>;
-      case Node.COMMENT_NODE:
-        return null;
-    }
-  });
 };
