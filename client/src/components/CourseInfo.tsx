@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
+import { replaceCourseLinks } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
 import { CourseInfoStats } from './CourseInfoStats';
@@ -105,7 +106,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
         <CourseTerms course={course} variant='large' />
         <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
-          {course.description}
+          {replaceCourseLinks(course.description)}
         </p>
         <div className='grow py-3' />
         <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />

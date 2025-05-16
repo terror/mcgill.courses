@@ -9,51 +9,13 @@ import type { Course } from '../model/Course';
 import type { Requirements } from '../model/Requirements';
 import { CourseGraph } from './CourseGraph';
 
-type Transform = 'text' | 'html';
-
-const transformHtml = (html: string): React.ReactNode[] => {
-  const text = html.substring(html.indexOf(':') + 1);
-
-  const doc = new DOMParser().parseFromString(
-    capitalize(punctuate(text.trim())),
-    'text/html'
-  );
-
-  return Array.from(doc.body.childNodes).map((node, index) => {
-    switch (node.nodeType) {
-      case Node.ELEMENT_NODE: {
-        const elem = node as HTMLElement;
-
-        if (node.nodeName === 'A') {
-          const href = elem.getAttribute('href');
-
-          if (!href) return elem.innerText;
-
-          const courseMatch = href.match(/courses\/(.+)-(.+)/);
-
-          if (!courseMatch) return <a href={href}>{elem.innerText}</a>;
-
-          const courseCode = `${courseMatch[1]}-${courseMatch[2]}`;
-
-          return (
-            <Link
-              key={index}
-              to={`/course/${courseCode}`}
-              className='text-gray-800 hover:underline dark:text-gray-200'
-            >
-              {elem.innerText}
-            </Link>
-          );
-        }
-
-        return <span key={index}>{(node as HTMLElement).innerText}</span>;
-      }
-      case Node.TEXT_NODE:
-        return <span key={index}>{(node as Text).textContent}</span>;
-      case Node.COMMENT_NODE:
-        return null;
-    }
-  });
+// Strips prefix strings like "Prerequisites: ..." and "Corequisites: ..."
+const stripColonPrefix = (text: string): string => {
+  const parts = text.split(' ');
+  if (parts[0] && parts[0].endsWith(':')) {
+    return parts.slice(1).join(' ');
+  }
+  return text;
 };
 
 const transformText = (text: string): React.ReactNode[] => {
@@ -92,14 +54,9 @@ const transformText = (text: string): React.ReactNode[] => {
 type RequirementBlockProps = {
   title: string;
   text?: string;
-  transform: Transform;
 };
 
-const RequirementBlock = ({
-  title,
-  text,
-  transform,
-}: RequirementBlockProps) => {
+const RequirementBlock = ({ title, text }: RequirementBlockProps) => {
   return (
     <div>
       <h2 className='mb-2 mt-1 text-xl font-bold leading-none text-gray-700 dark:text-gray-200'>
@@ -107,9 +64,7 @@ const RequirementBlock = ({
       </h2>
       {text ? (
         <div className='text-gray-500 dark:text-gray-400'>
-          {transform == 'html'
-            ? transformHtml(text)
-            : transformText(capitalize(punctuate(text.trim())))}
+          {transformText(capitalize(punctuate(stripColonPrefix(text.trim()))))}
         </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
@@ -161,17 +116,14 @@ export const CourseRequirements = ({
           <RequirementBlock
             title='Prerequisites'
             text={requirements.prerequisitesText}
-            transform='html'
           />
           <RequirementBlock
             title='Corequisites'
             text={requirements.corequisitesText}
-            transform='html'
           />
           <RequirementBlock
             title='Restrictions'
             text={requirements.restrictions}
-            transform='text'
           />
         </div>
       ) : (
