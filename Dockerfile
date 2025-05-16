@@ -18,7 +18,7 @@ WORKDIR /usr/src/app
 COPY . .
 RUN cargo build --release
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install -y libssl1.1 ca-certificates
 
