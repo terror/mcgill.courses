@@ -4,6 +4,7 @@ import { VscBell, VscBellSlash } from 'react-icons/vsc';
 import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
+import { parseCourseDescription } from '../lib/dom-utils';
 import { repo } from '../lib/repo';
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
@@ -105,7 +106,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
         <CourseTerms course={course} variant='large' />
         <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
-          {course.description}
+          {parseCourseDescription(course.description)}
         </p>
         <div className='grow py-3' />
         <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />

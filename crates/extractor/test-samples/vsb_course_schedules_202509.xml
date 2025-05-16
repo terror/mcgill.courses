@@ -1,0 +1,21 @@
+<addcourse>
+<errors>
+</errors>
+<classdata date="1747354501431">
+ <campus n="DOWNTOWN" v="DOWNTOWN"/>
+ <term n="202509" v="Fall 2025"/>
+ <session n="" v=""/>
+ <course key="COMP-206" code="COMP" number="206" enr="" waiting="0" cart="" dsel="" faculty="Faculty of Science">
+  <uselection key="--202509_2411--" courseKey="COMP-206" d1="6449" d2="6547" de="70128" ss="" mp="false" too8="false" bs="246091515,422648211,434838075,422648211">
+   <selection key="--202509_2411--" va="2456" cmkey="COMP-206" thc="" ucos="{}" inst="" ac="" strm="202509" credits="3.0" creditsMax="3.0" apUnits="0.0" ucr="1">
+    <block type="Lec" key="2411" cartid="2411" secNo="001" status="A" u="false" os="598" me="-1" csos="-1" csme="-1" isFull="0" ws="0" wc="0" custstat="" c="false" hue="0" n="Waitlist section-use Quick Add" txtb="" fd="" disp="Lec 001" usn="" ot="c" nres="598" recl="0" recul="0" credits="3.0" creditsMax="3.0" rgs="" ac="" pn="" im="" hs="" attrs="{}" eattrs="{}" teacher="Elsaadawy, Mona; Errington, Jacob" location="LEA 132" campus="DOWNTOWN" psl="null" timeblockids="1,2" loos="{}" loot="{}"/>
+   </selection>
+   <timeblock id="1" day="3" t1="875" t2="955" d1="6449" d2="6547" xm="0" ot=""/>
+   <timeblock id="2" day="5" t1="875" t2="955" d1="6449" d2="6547" xm="0" ot=""/>
+  </uselection>
+  <offering key="COMP-206" cid="" ac="" ag="" ao="" ame="1" oattrs="{}" rgs="" ti="" eq="" clcn="" inst="" title="Intro to Software Systems" desc="Comprehensive overview of programming in C, use of system calls and libraries, debugging and testing of code; use of developmental tools like make, version control systems." snote="" rd=""/>
+ </course>
+ <cids>{}</cids>
+</classdata>
+
+</addcourse>

@@ -2,6 +2,8 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Server {
+  #[clap(long, default_value = "courses.json")]
+  source: PathBuf,
   #[clap(long, help = "Directory to serve assets from")]
   asset_dir: Option<PathBuf>,
   #[clap(long, default_value = "8000", help = "Port to listen on")]
@@ -29,7 +31,7 @@ struct AppConfig<'a> {
 }
 
 impl Server {
-  pub(crate) async fn run(self, source: PathBuf) -> Result {
+  pub(crate) async fn run(self) -> Result {
     let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
     info!("Listening on port: {}", addr.port());
@@ -37,7 +39,7 @@ impl Server {
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
     if self.initialize {
-      let source_hash = source.hash()?;
+      let source_hash = self.source.hash()?;
 
       let client = match env::var("ENV") {
         Ok(env) if env == "production" => Some(S3Client::new(Region::UsEast1)),
@@ -65,7 +67,7 @@ impl Server {
               multithreaded: self.multithreaded,
               skip_courses: self.skip_courses,
               skip_reviews: self.skip_reviews,
-              source,
+              source: self.source,
             })
             .await
           {

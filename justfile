@@ -37,7 +37,7 @@ dev: services
     --timestamp-format 'HH:mm:ss' \
     --color \
     -- \
-    'just watch run serve --db-name=mcgill-courses' \
+    'just watch run -- --db-name=mcgill-courses' \
     'pnpm run dev'
 
 dev-deps:
@@ -65,19 +65,18 @@ generate-changelog *args:
     {{args}}
 
 initialize *args: restart-services
-  cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
+  cargo run -- --source=seed --initialize --db-name=mcgill-courses {{args}}
 
 lint *args:
   pnpm run lint {{args}}
 
-load:
-  cargo run -- --source=seed \
-    load \
-    --batch-size=1 \
+load cookie:
+  cargo run --manifest-path crates/scraper/Cargo.toml -- --source=seed \
+    --batch-size=5 \
     --scrape-vsb \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
     --course-delay 1000 \
-    --page-delay 1000
+    --cookie {{cookie}}
 
 readme:
   present --in-place README.md
@@ -100,7 +99,7 @@ run-container: build-container
     mcgill.courses:latest
 
 serve:
-  cargo run -- serve --db-name=mcgill-courses
+  cargo run -- --db-name=mcgill-courses
 
 services:
   docker compose up --no-recreate -d

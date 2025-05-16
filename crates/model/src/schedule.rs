@@ -18,6 +18,8 @@ pub struct Block {
   pub location: Option<String>,
   pub timeblocks: Option<Vec<TimeBlock>>,
   pub crn: Option<String>,
+  #[serde(skip)]
+  pub instructors: Vec<String>,
 }
 
 impl Into<Bson> for Block {

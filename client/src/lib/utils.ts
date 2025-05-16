@@ -149,6 +149,8 @@ export const capitalize = (s: string): string =>
 export const punctuate = (s: string): string =>
   s.charAt(s.length - 1) === '.' ? s : s + '.';
 
+const COURSE_CODE_REGEX = /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/;
+
 /**
  * Validates if a string matches the course code format.
  * Valid format: 4 alphanumeric chars + space + 3 digits + optional suffix
@@ -157,7 +159,7 @@ export const punctuate = (s: string): string =>
  * @returns {boolean} True if string is a valid course code
  */
 export const isValidCourseCode = (s: string): boolean =>
-  /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/.test(s);
+  COURSE_CODE_REGEX.test(s);
 
 /**
  * Inserts a delimiter between the subject and number portions of a course code.

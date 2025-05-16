@@ -32,7 +32,7 @@ impl Hash for PathBuf {
         return Err(Error(anyhow!(
           "{} is neither a file nor a directory",
           self.display()
-        )))
+        )));
       }
     }
 

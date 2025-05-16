@@ -1,0 +1,21 @@
+[package]
+name = "scrape"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.5.38", features = ["derive"] }
+env_logger = "0.11.8"
+log = "0.4.27"
+extractor = {path = "../../crates/extractor"}
+model = { path = "../../crates/model" }
+reqwest = { version = "0.12.15", default-features = false, features = [ "blocking", "json", "rustls-tls" ] }
+serde = "1.0.219"
+serde_json = "1.0.140"
+anyhow = "1.0.98"
+chrono = "0.4.41"
+rayon = "1.10.0"
+rand = "0.9.1"
+
+[dev-dependencies]
+mockito = "1.7.0"
