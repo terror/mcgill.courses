@@ -37,7 +37,7 @@ dev: services
     --timestamp-format 'HH:mm:ss' \
     --color \
     -- \
-    'just watch run serve --db-name=mcgill-courses' \
+    'just watch run -- --db-name=mcgill-courses' \
     'pnpm run dev'
 
 dev-deps:
