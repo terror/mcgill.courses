@@ -54,7 +54,7 @@ export const parseCourseDescription = (desc: string, query?: string) => {
   return nodes;
 };
 
-export const highlight = (text: string, query: string) =>
+export const highlight = (text: string, query?: string) =>
   text.split(new RegExp(`(${escapeRegExp(query)})`, 'gi')).map((part, i) => (
     <span
       key={i}

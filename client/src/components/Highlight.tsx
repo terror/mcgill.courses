@@ -6,7 +6,7 @@ export const Highlight = ({
   className,
 }: {
   text: string;
-  query: string;
+  query?: string;
   className?: string;
 }) => {
   return <span className={className}>{highlight(text, query)}</span>;
