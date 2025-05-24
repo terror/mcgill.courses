@@ -99,7 +99,7 @@ export const Instructor = () => {
                   {params.name && decodeURIComponent(params.name)}
                 </h1>
                 <a
-                  href={`https://www.mcgill.ca/search/${params.name}`}
+                  href={`https://www.mcgill.ca/search/?query=${params.name && encodeURIComponent(params.name)}`}
                   className='my-auto dark:text-gray-200'
                   target='_blank'
                 >
