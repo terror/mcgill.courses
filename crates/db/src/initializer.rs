@@ -116,25 +116,11 @@ impl Initializer {
   async fn seed(&self) -> Result {
     info!("Seeding the database...");
 
-    let mut seeds = self.collect()?;
-
-    if self.options.latest_courses {
-      let courses = seeds
-        .clone()
-        .into_iter()
-        .filter(|seed| matches!(seed, Seed::Courses(_)))
-        .collect::<Vec<Seed>>();
-
-      seeds.retain(|seed| !matches!(seed, Seed::Courses(_)));
-
-      if let Some(last) = courses.last() {
-        seeds.insert(0, last.clone());
-      }
-    }
+    let seeds = self.collect()?;
 
     for seed in seeds {
       match seed {
-        Seed::Courses((path, courses)) if !self.options.skip_courses => {
+        Seed::Courses((path, courses)) => {
           info!("Seeding courses from {}...", path.display());
 
           let runner = |db: Db, item: Course| async move {
@@ -149,7 +135,7 @@ impl Initializer {
 
           self.populate(courses, runner).await?;
         }
-        Seed::Reviews((path, reviews)) if !self.options.skip_reviews => {
+        Seed::Reviews((path, reviews)) => {
           info!("Seeding reviews from {}...", path.display());
 
           let runner = |db: Db, item: Review| async move {
@@ -165,7 +151,6 @@ impl Initializer {
             path.display()
           );
         }
-        _ => continue,
       }
     }
 
