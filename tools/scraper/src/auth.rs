@@ -1,9 +1,8 @@
 use super::*;
 
-const VSB_LOGIN_URL: &str = "https://vsb.mcgill.ca/login.jsp";
+const CHROMEDRIVER_PORT: usize = 9515;
 const MAX_ELEM_RETRIES: usize = 5;
-
-pub const CHROMEDRIVER_PORT: usize = 9515;
+const VSB_LOGIN_URL: &str = "https://vsb.mcgill.ca/login.jsp";
 
 struct Driver(Child);
 
