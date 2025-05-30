@@ -43,6 +43,7 @@ dev: services typeshare
 dev-deps:
   cargo install present
   cargo install typeshare-cli
+  brew install --cask chromedriver
   curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
