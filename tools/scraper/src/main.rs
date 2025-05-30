@@ -1,11 +1,6 @@
 use {
-  crate::{
-    auth::{CHROMEDRIVER_PORT, get_vsb_cookie},
-    loader::Loader,
-    select::Select,
-    vsb_client::VsbClient,
-  },
-  anyhow::{Result, anyhow, bail},
+  crate::{loader::Loader, select::Select, vsb_client::VsbClient},
+  anyhow::{Error, anyhow, bail},
   chrono::Utc,
   clap::Parser,
   env_logger::Env,
@@ -21,9 +16,11 @@ use {
   retry::Retry,
   scraper::{ElementRef, Html, Selector},
   std::{
-    collections::HashSet, fs, hash::Hash, path::PathBuf, process, thread,
-    time::Duration,
+    collections::HashSet, env, fs, hash::Hash, path::PathBuf, process,
+    process::Child, thread, time::Duration,
   },
+  thirtyfour::prelude::*,
+  totp_rs::{Secret, TOTP},
 };
 
 mod auth;
@@ -35,44 +32,18 @@ mod utils;
 mod vsb_client;
 mod vsb_extractor;
 
-fn main() {
+type Result<T = (), E = Error> = std::result::Result<T, E>;
+
+fn run() -> Result {
   env_logger::Builder::from_env(Env::default().default_filter_or("info"))
     .init();
 
-  let email = std::env::var("VSB_EMAIL")
-    .expect("VSB_EMAIL must be specified for scraping");
-  let password = std::env::var("VSB_PASSWORD")
-    .expect("VSB_PASSWORD must be specified for scraping");
-  let otp_secret = std::env::var("VSB_OTP_SECRET")
-    .expect("VSB_OTP_SECRET must be specified for scraping");
+  Loader::parse().run(&auth::authenticate()?)
+}
 
-  let rt = tokio::runtime::Builder::new_current_thread()
-    .enable_all()
-    .build()
-    .unwrap();
-
-  log::info!("Starting chromedriver server");
-  let chromedriver = std::process::Command::new("chromedriver")
-    .args([format!("--port={}", CHROMEDRIVER_PORT)])
-    .spawn()
-    .unwrap();
-  std::thread::sleep(Duration::from_secs(2));
-
-  info!("Retrieving cookie for VSB authentication...");
-  // Written this way so that chromedriver server is always
-  // torn down properly
-  match rt.block_on(get_vsb_cookie(email, password, otp_secret)) {
-    Ok(cookie) => {
-      drop(chromedriver);
-      if let Err(error) = Loader::parse().run(&cookie) {
-        eprintln!("error: {error}");
-        process::exit(1);
-      }
-    }
-    Err(e) => {
-      eprintln!("error: {}", e);
-      drop(chromedriver);
-      process::exit(1);
-    }
+fn main() {
+  if let Err(error) = run() {
+    eprintln!("error: {error}");
+    process::exit(1);
   }
 }
