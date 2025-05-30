@@ -7,8 +7,16 @@ publish = false
 [workspace]
 members = ["crates/*", "tools/changelog-generator", "tools/scraper"]
 
-[dependencies]
+[workspace.dependencies]
 anyhow = "1.0.98"
+chrono = "0.4.41"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+tokio = { version = "1.45.0", features = ["rt-multi-thread", "macros"] }
+typeshare = "1.0.4"
+
+[dependencies]
+anyhow = { workspace = true }
 async-mongodb-session = { version = "3.0.0", default-features = false }
 async-session = "3.0.0"
 axum = { version = "0.7.9", features = ["json"] }
@@ -16,7 +24,7 @@ axum-extra = { version = "0.9.6", features = ["cookie", "typed-header"] }
 axum-server = "0.6.0"
 base64 = "0.21.7"
 bytes = "1.10.1"
-chrono = "0.4.41"
+chrono = { workspace = true }
 clap = { version = "4.5.38", features = ["derive"] }
 db = { path = "crates/db" }
 dotenv = "0.15.0"
@@ -30,14 +38,15 @@ rand = "0.9.1"
 reqwest = { version = "0.11.27", default-features = false, features = [ "blocking", "json", "rustls-tls"] }
 rusoto_core = { version = "0.48.0", default-features = false, features = [ "rustls", ] }
 rusoto_s3 = { version = "0.48.0", default-features = false, features = [ "rustls", ] }
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
+serde = { workspace = true }
+serde_json = { workspace = true }
 sha2 = "0.10.9"
-tokio = { version = "1.45.0", features = ["rt-multi-thread", "macros"] }
+tokio = { workspace = true }
 tower = { version = "0.4.13", features = ["tracing", "limit", "buffer"] }
 tower-http = { version = "0.5.2", features = ["cors", "fs", "trace"] }
 tower_governor = "0.2.0"
 tracing = "0.1.41"
+typeshare = { workspace = true }
 url = "2.5.4"
 walkdir = "2.5.0"
 

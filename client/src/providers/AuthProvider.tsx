@@ -2,7 +2,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { repo } from '../lib/repo';
-import type { User } from '../model/User';
+import type { User } from '../lib/types';
 
 export const AuthContext = createContext<User | undefined>(undefined);
 
