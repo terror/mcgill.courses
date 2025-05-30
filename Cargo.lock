@@ -1114,18 +1114,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "extractor"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "include_dir",
- "model",
- "pretty_assertions",
- "regex",
- "scraper",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2116,6 +2104,28 @@ name = "matchit"
 version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e7465ac9959cc2b1404e8e2367b43684a6d13790fe23056cc8c6c5a6b7bcb94"
+
+[[package]]
+name = "mcgill-courses-scraper"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "env_logger 0.11.8",
+ "include_dir",
+ "log",
+ "mockito",
+ "model",
+ "pretty_assertions",
+ "rand 0.9.1",
+ "rayon",
+ "regex",
+ "reqwest 0.12.15",
+ "scraper",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "md-5"
@@ -3368,25 +3378,6 @@ name = "scopeguard"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
-
-[[package]]
-name = "scrape"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "env_logger 0.11.8",
- "extractor",
- "log",
- "mockito",
- "model",
- "rand 0.9.1",
- "rayon",
- "reqwest 0.12.15",
- "serde",
- "serde_json",
-]
 
 [[package]]
 name = "scraper"

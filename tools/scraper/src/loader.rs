@@ -1,32 +1,31 @@
-use model::Instructor;
-
 use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Loader {
-  #[clap(long, default_value = "courses.json")]
-  source: PathBuf,
   #[clap(
     long,
     default_value = "20",
     help = "Number of pages to scrape per concurrent batch"
   )]
   batch_size: usize,
-
+  #[clap(
+    long,
+    default_value = "",
+    help = "A VSB session cookie, required for scraping course section locations"
+  )]
+  cookie: String,
   #[clap(
     long,
     default_value = "0",
     help = "Time delay between course requests in milliseconds"
   )]
   course_delay: u64,
-
   #[clap(
     long,
     default_values = ["2025-2026",],
     help = "The mcgill terms to scrape"
   )]
   mcgill_terms: Vec<String>,
-
   #[clap(long, default_value = "10", help = "Number of retries")]
   retries: usize,
   #[clap(
@@ -35,23 +34,16 @@ pub(crate) struct Loader {
     help = "Scrape visual schedule builder information"
   )]
   scrape_vsb: bool,
-
+  #[clap(long, default_value = "courses.json")]
+  source: PathBuf,
   #[clap(long, help = "A user agent")]
   user_agent: String,
-
   #[clap(
     long,
     default_values = ["202505", "202509", "202601"],
     help = "The schedule builder terms to scrape"
   )]
   vsb_terms: Vec<usize>,
-
-  #[clap(
-    long,
-    default_value = "",
-    help = "A VSB session cookie, required for scraping course section locations"
-  )]
-  cookie: String,
 }
 
 impl Loader {
@@ -66,6 +58,7 @@ impl Loader {
       let urls = self.get_course_urls()?;
 
       let mut courses = Vec::new();
+
       for chunk in urls.chunks(self.batch_size) {
         let chunk = chunk
           .par_iter()
@@ -73,6 +66,7 @@ impl Loader {
             self.parse_course(&format!("{}{}", Self::BASE_URL, url), scrape_vsb)
           })
           .collect::<Result<Vec<Option<Course>>, _>>()?;
+
         courses.extend(chunk.into_iter().flatten());
       }
 
@@ -82,6 +76,7 @@ impl Loader {
         .into_iter()
         .filter(|course| !course.title.is_empty())
         .collect::<Vec<Course>>();
+
       courses.sort();
 
       let source = if self.source.is_dir() {
@@ -155,7 +150,8 @@ impl Loader {
       .get(format!("{}/courses", Self::BASE_URL))
       .retry(self.retries)?
       .text()?;
-    extractor::courses::extract_course_urls(&page)
+
+    course_extractor::extract_course_urls(&page)
   }
 
   fn parse_course(
@@ -168,24 +164,29 @@ impl Loader {
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
     let course_page = {
-      let res = client.get(url).retry(self.retries)?;
-      if res.status() == reqwest::StatusCode::NOT_FOUND {
+      let response = client.get(url).retry(self.retries)?;
+
+      if response.status() == reqwest::StatusCode::NOT_FOUND {
         info!("Page for {} not found, skipping...", url);
         return Ok(None);
       }
 
       let mut course_page =
-        extractor::courses::extract_course_page(&res.text()?);
+        course_extractor::extract_course_page(&response.text()?);
+
       while course_page.is_err() {
         warn!("Retrying course page: {}", url);
 
         thread::sleep(Duration::from_millis(500));
-        let res = client.get(url).retry(self.retries)?;
-        if res.status() == reqwest::StatusCode::NOT_FOUND {
+
+        let response = client.get(url).retry(self.retries)?;
+
+        if response.status() == reqwest::StatusCode::NOT_FOUND {
           info!("Page for {} not found, skipping...", url);
           return Ok(None);
         };
-        course_page = extractor::courses::extract_course_page(&res.text()?);
+
+        course_page = course_extractor::extract_course_page(&response.text()?);
       }
 
       course_page?
@@ -217,9 +218,11 @@ impl Loader {
         .iter()
         .filter_map(|s| s.term.clone())
         .collect::<Vec<_>>();
-      dedup(&mut terms);
+
+      utils::dedup(&mut terms);
 
       let mut instructors = Vec::new();
+
       for schedule in schedules {
         if let Some(blocks) = schedule.blocks {
           for block in blocks {
@@ -233,7 +236,8 @@ impl Loader {
           }
         }
       }
-      dedup(&mut instructors);
+
+      utils::dedup(&mut instructors);
 
       (terms, instructors)
     });
@@ -270,12 +274,4 @@ impl Loader {
       ..Default::default()
     }))
   }
-}
-
-fn dedup<T>(v: &mut Vec<T>)
-where
-  T: Eq + Clone + Hash,
-{
-  let mut set = HashSet::new();
-  v.retain(|e| set.insert(e.clone()));
 }

@@ -1,25 +1,33 @@
 use {
-  anyhow::{Result, anyhow},
-  catalogue::Loader,
+  crate::{loader::Loader, select::Select, vsb_client::VsbClient},
+  anyhow::{Result, anyhow, bail},
+  chrono::Utc,
   clap::Parser,
   env_logger::Env,
-  extractor::{ScheduleExtractor, VsbExtractor},
   log::{error, info, warn},
-  model::{Course, Schedule},
+  model::{
+    Block, Course, CoursePage, Instructor, Requirement, Requirements, Schedule,
+    TimeBlock,
+  },
   rayon::iter::{IntoParallelRefIterator, ParallelIterator},
+  regex::Regex,
+  reqwest::StatusCode,
   reqwest::blocking::{Client, RequestBuilder},
   retry::Retry,
+  scraper::{ElementRef, Html, Selector},
   std::{
     collections::HashSet, fs, hash::Hash, path::PathBuf, process, thread,
     time::Duration,
   },
 };
 
-use crate::vsb::VsbClient;
-
-mod catalogue;
+mod course_extractor;
+mod loader;
 mod retry;
-mod vsb;
+mod select;
+mod utils;
+mod vsb_client;
+mod vsb_extractor;
 
 fn main() {
   env_logger::Builder::from_env(Env::default().default_filter_or("info"))
@@ -27,7 +35,6 @@ fn main() {
 
   if let Err(error) = Loader::parse().run() {
     eprintln!("error: {error}");
-
     process::exit(1);
   }
 }

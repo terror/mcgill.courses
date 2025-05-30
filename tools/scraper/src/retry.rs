@@ -47,9 +47,9 @@ impl Retry for RequestBuilder {
         .send()
       {
         Ok(response) => {
-          // some mcgill links are 404s :(
+          // FIXME: Figure out a better way to handle 404s.
           if response.status().is_success()
-            || response.status() == reqwest::StatusCode::NOT_FOUND
+            || response.status() == StatusCode::NOT_FOUND
           {
             return Ok(response);
           } else {
@@ -170,7 +170,7 @@ mod tests {
       .mock("GET", "/always-fail")
       .with_status(500)
       .with_body("error")
-      .expect(4)  // Initial attempt + 3 retries
+      .expect(4)  // Initial attempt + 3 retries.
       .create();
 
     let client = reqwest::blocking::Client::builder()
@@ -195,7 +195,7 @@ mod tests {
       .mock("GET", "/long-retry")
       .with_status(500)
       .with_body("error")
-      .expect(10)  // Initial attempt + 9 retries
+      .expect(10)  // Initial attempt + 9 retries.
       .create();
 
     let client = reqwest::blocking::Client::builder()
@@ -212,10 +212,10 @@ mod tests {
         max_delay: Duration::from_millis(10),
       });
 
-    mock.assert(); // Verify we made exactly 10 requests
+    mock.assert(); // Verify we made exactly 10 requests.
 
     assert!(result.is_err());
-    assert!(start.elapsed() < Duration::from_secs(1)); // 10ms * 10 = 100ms max delay + latency
+    assert!(start.elapsed() < Duration::from_secs(1)); // 10ms * 10 = 100ms max delay + latency.
   }
 
   #[test]
