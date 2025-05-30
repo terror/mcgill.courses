@@ -46,6 +46,11 @@ fn main() {
   let otp_secret = std::env::var("VSB_OTP_SECRET")
     .expect("VSB_OTP_SECRET must be specified for scraping");
 
+  let rt = tokio::runtime::Builder::new_current_thread()
+    .enable_all()
+    .build()
+    .unwrap();
+
   log::info!("Starting chromedriver server");
   let chromedriver = std::process::Command::new("chromedriver")
     .args([format!("--port={}", CHROMEDRIVER_PORT)])
@@ -56,7 +61,7 @@ fn main() {
   info!("Retrieving cookie for VSB authentication...");
   // Written this way so that chromedriver server is always
   // torn down properly
-  match retrieve_cookie(email, password, otp_secret) {
+  match rt.block_on(get_vsb_cookie(email, password, otp_secret)) {
     Ok(cookie) => {
       drop(chromedriver);
       if let Err(error) = Loader::parse().run(&cookie) {
@@ -70,17 +75,4 @@ fn main() {
       process::exit(1);
     }
   }
-}
-
-fn retrieve_cookie(
-  email: String,
-  password: String,
-  otp_secret: String,
-) -> Result<String> {
-  let rt = tokio::runtime::Builder::new_current_thread()
-    .enable_all()
-    .build()
-    .unwrap();
-
-  rt.block_on(get_vsb_cookie(email, password, otp_secret))
 }
