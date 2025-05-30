@@ -11,19 +11,19 @@ use {
   },
   anyhow::anyhow,
   async_mongodb_session::MongodbSessionStore,
-  async_session::{Session, SessionStore, async_trait},
+  async_session::{async_trait, Session, SessionStore},
   axum::{
-    BoxError, Json, RequestPartsExt,
     body::Body,
     error_handling::HandleErrorLayer,
     extract::{FromRef, FromRequestParts, Path, Query, State as AppState},
     response::{IntoResponse, Redirect, Response},
-    routing::{Router, get, post},
+    routing::{get, post, Router},
+    BoxError, Json, RequestPartsExt,
   },
   axum_extra::{
-    TypedHeader, headers::Cookie, typed_header::TypedHeaderRejectionReason,
+    headers::Cookie, typed_header::TypedHeaderRejectionReason, TypedHeader,
   },
-  base64::{Engine, engine::general_purpose::STANDARD},
+  base64::{engine::general_purpose::STANDARD, Engine},
   chrono::prelude::*,
   clap::Parser,
   db::Db,
@@ -31,7 +31,7 @@ use {
   env_logger::Env,
   futures::TryStreamExt,
   http::{
-    HeaderMap, Request, StatusCode, header, header::SET_COOKIE, request::Parts,
+    header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
   },
   log::{debug, error, info, trace},
   model::{
@@ -39,8 +39,8 @@ use {
     InteractionKind, Review, ReviewFilter, Subscription,
   },
   oauth2::{
-    AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
-    TokenUrl, basic::BasicClient,
+    basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
+    RedirectUrl, Scope, TokenUrl,
   },
   rusoto_core::Region,
   rusoto_s3::S3Client,
@@ -63,7 +63,7 @@ use {
   },
   tower::ServiceBuilder,
   tower_governor::{
-    GovernorLayer, errors::display_error, governor::GovernorConfigBuilder,
+    errors::display_error, governor::GovernorConfigBuilder, GovernorLayer,
   },
   tower_http::{
     cors::CorsLayer,
