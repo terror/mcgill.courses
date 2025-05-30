@@ -10,12 +10,6 @@ pub(crate) struct Loader {
   batch_size: usize,
   #[clap(
     long,
-    default_value = "",
-    help = "A VSB session cookie, required for scraping course section locations"
-  )]
-  cookie: String,
-  #[clap(
-    long,
     default_value = "0",
     help = "Time delay between course requests in milliseconds"
   )]
@@ -49,7 +43,7 @@ pub(crate) struct Loader {
 impl Loader {
   const BASE_URL: &str = "https://coursecatalogue.mcgill.ca";
 
-  pub(crate) fn run(&self) -> Result<()> {
+  pub(crate) fn run(&self, cookie: &str) -> Result<()> {
     info!("Running extractor...");
 
     for (index, term) in self.mcgill_terms.iter().enumerate() {
@@ -63,7 +57,11 @@ impl Loader {
         let chunk = chunk
           .par_iter()
           .map(|url| {
-            self.parse_course(&format!("{}{}", Self::BASE_URL, url), scrape_vsb)
+            self.parse_course(
+              &format!("{}{}", Self::BASE_URL, url),
+              cookie,
+              scrape_vsb,
+            )
           })
           .collect::<Result<Vec<Option<Course>>, _>>()?;
 
@@ -157,6 +155,7 @@ impl Loader {
   fn parse_course(
     &self,
     url: &str,
+    cookie: &str,
     scrape_vsb: bool,
   ) -> Result<Option<Course>> {
     info!("{}", url);
@@ -201,11 +200,10 @@ impl Loader {
 
     let schedule = if scrape_vsb {
       Some(
-        VsbClient::new(&self.user_agent, &self.cookie, self.retries)?
-          .schedule(
-            &format!("{}-{}", course_page.subject, course_page.code),
-            self.vsb_terms.clone(),
-          )?,
+        VsbClient::new(&self.user_agent, cookie, self.retries)?.schedule(
+          &format!("{}-{}", course_page.subject, course_page.code),
+          self.vsb_terms.clone(),
+        )?,
       )
     } else {
       None

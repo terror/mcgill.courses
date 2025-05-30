@@ -43,6 +43,7 @@ dev: services typeshare
 dev-deps:
   cargo install present
   cargo install typeshare-cli
+  brew install --cask chromedriver
   curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
@@ -71,13 +72,12 @@ initialize *args: restart-services
 lint *args:
   pnpm run lint {{args}}
 
-load cookie:
-  cargo run --manifest-path crates/scraper/Cargo.toml -- --source=seed \
+load:
+  cargo run --manifest-path tools/scraper/Cargo.toml -- --source=seed \
     --batch-size=5 \
     --scrape-vsb \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
-    --course-delay 1000 \
-    --cookie '{{cookie}}'
+    --course-delay 1000
 
 readme:
   present --in-place README.md

@@ -1,6 +1,6 @@
 use {
   crate::{loader::Loader, select::Select, vsb_client::VsbClient},
-  anyhow::{Result, anyhow, bail},
+  anyhow::{Error, anyhow, bail},
   chrono::Utc,
   clap::Parser,
   env_logger::Env,
@@ -16,11 +16,20 @@ use {
   retry::Retry,
   scraper::{ElementRef, Html, Selector},
   std::{
-    collections::HashSet, fs, hash::Hash, path::PathBuf, process, thread,
+    collections::HashSet,
+    env, fs,
+    hash::Hash,
+    path::PathBuf,
+    process,
+    process::{Child, Command},
+    thread,
     time::Duration,
   },
+  thirtyfour::prelude::*,
+  totp_rs::{Secret, TOTP},
 };
 
+mod auth;
 mod course_extractor;
 mod loader;
 mod retry;
@@ -29,11 +38,17 @@ mod utils;
 mod vsb_client;
 mod vsb_extractor;
 
-fn main() {
+type Result<T = (), E = Error> = std::result::Result<T, E>;
+
+fn run() -> Result {
   env_logger::Builder::from_env(Env::default().default_filter_or("info"))
     .init();
 
-  if let Err(error) = Loader::parse().run() {
+  Loader::parse().run(&auth::authenticate()?)
+}
+
+fn main() {
+  if let Err(error) = run() {
     eprintln!("error: {error}");
     process::exit(1);
   }
