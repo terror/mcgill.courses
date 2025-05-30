@@ -36,38 +36,39 @@ impl VsbClient {
   ) -> Result<Vec<Schedule>> {
     info!("Scraping schedules for {}...", code);
 
+    let url = |code: &str, term: usize| -> String {
+      let t = (Utc::now().timestamp_millis() / 60000) % 1000;
+
+      let e = (t % 3) + (t % 39) + (t % 42);
+
+      format!(
+        "{}?term={}&course_0_0={}&t={}&e={}",
+        VsbClient::BASE_URL,
+        term,
+        code,
+        t,
+        e
+      )
+    };
+
     let schedules = terms
       .into_iter()
       .map(|term| -> Result<Vec<Schedule>> {
-        let res = &self
-          .client
-          .get(self.url(code, term))
-          .retry(self.retries)?
-          .text()?;
-
-        VsbExtractor::extract_course_schedules(res)
+        vsb_extractor::extract_course_schedules(
+          &self
+            .client
+            .get(url(code, term))
+            .retry(self.retries)?
+            .text()?,
+        )
       })
       .collect::<Result<Vec<_>>>()?
       .into_iter()
       .flatten()
       .collect();
 
-    info!("Got schedules: {:?}", schedules);
+    info!("Found schedules: {:?}", schedules);
 
     Ok(schedules)
-  }
-
-  fn url(&self, code: &str, term: usize) -> String {
-    let t = (chrono::Utc::now().timestamp_millis() / 60000) % 1000;
-    let e = (t % 3) + (t % 39) + (t % 42);
-
-    format!(
-      "{}?term={}&course_0_0={}&t={}&e={}",
-      VsbClient::BASE_URL,
-      term,
-      code,
-      t,
-      e
-    )
   }
 }
