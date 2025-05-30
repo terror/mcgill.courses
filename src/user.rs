@@ -1,6 +1,7 @@
 use super::*;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[typeshare]
 pub(crate) struct User {
   id: String,
   mail: String,
@@ -25,6 +26,7 @@ impl User {
 }
 
 #[derive(Serialize, Deserialize)]
+#[typeshare]
 struct UserResponse {
   user: Option<User>,
 }

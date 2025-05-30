@@ -6,3 +6,12 @@ export interface Subscription {
   courseId: string;
   userId: string;
 }
+
+export interface User {
+  id: string;
+  mail: string;
+}
+
+export interface UserResponse {
+  user?: User;
+}

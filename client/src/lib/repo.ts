@@ -1,4 +1,5 @@
 import type { Subscription } from '../lib/types';
+import type { UserResponse } from '../lib/types';
 import { GetCourseReviewsInteractionPayload } from '../model/GetCourseReviewsInteractionsPayload';
 import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import { GetCoursesPayload } from '../model/GetCoursesPayload';
@@ -8,7 +9,6 @@ import { GetReviewsPayload } from '../model/GetReviewsPayload';
 import type { InteractionKind } from '../model/Interaction';
 import type { Notification } from '../model/Notification';
 import type { SearchResults } from '../model/SearchResults';
-import type { UserResponse } from '../model/User';
 
 const prefix = '/api';
 

@@ -25,7 +25,7 @@ clippy:
 coverage:
   ./bin/coverage
 
-dev: services
+dev: services typeshare
   concurrently \
     --kill-others \
     --names 'SERVER,CLIENT' \
