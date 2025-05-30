@@ -15,10 +15,10 @@ import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
+import type { Subscription } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import type { Review } from '../model/Review';
-import type { Subscription } from '../model/Subscription';
 import { Loading } from './Loading';
 
 export const Profile = () => {

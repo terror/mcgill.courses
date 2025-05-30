@@ -6,9 +6,9 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
+import { Instructor } from '../lib/types';
 import { compareTerms } from '../lib/utils';
 import { Course } from '../model/Course';
-import { Instructor } from '../model/Instructor';
 import { TermAverage } from '../model/TermAverage';
 
 type InstructorLinkProps = {

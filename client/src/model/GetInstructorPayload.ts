@@ -1,4 +1,4 @@
-import type { Instructor } from './Instructor';
+import type { Instructor } from '../lib/types';
 import type { Review } from './Review';
 
 export type GetInstructorPayload = {

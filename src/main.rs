@@ -71,6 +71,7 @@ use {
     trace::TraceLayer,
   },
   tracing::Span,
+  typeshare::typeshare,
   url::Url,
   walkdir::WalkDir,
 };

@@ -7,6 +7,7 @@ use {
     fmt::{self, Display, Formatter},
     path::PathBuf,
   },
+  typeshare::typeshare,
 };
 
 mod course;
@@ -34,7 +35,7 @@ pub use crate::{
   requirements::{Operator, ReqNode, Requirement, Requirements},
   review::Review,
   review_filter::ReviewFilter,
-  schedule::*,
+  schedule::{Block, Schedule, TimeBlock},
   search_results::SearchResults,
   subscription::Subscription,
 };
