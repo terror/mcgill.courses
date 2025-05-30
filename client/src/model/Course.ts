@@ -1,4 +1,4 @@
-import type { Instructor } from './Instructor';
+import type { Instructor } from '../lib/types';
 import type { ReqNode } from './Requirements';
 import type { Schedule } from './Schedule';
 
