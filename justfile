@@ -42,6 +42,7 @@ dev: services
 
 dev-deps:
   cargo install present
+  cargo install typeshare-cli
   curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
@@ -108,6 +109,9 @@ services:
 
 test *filter:
   cargo test --all {{filter}}
+
+typeshare:
+  typeshare -l typescript -o client/src/lib/types.ts .
 
 watch +COMMAND='test':
   cargo watch --clear --exec "{{COMMAND}}"
