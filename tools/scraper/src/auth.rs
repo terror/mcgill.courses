@@ -27,10 +27,9 @@ pub(crate) fn authenticate() -> Result<String> {
   log::info!("Starting chromedriver server");
 
   let _chromedriver = Driver(
-    std::process::Command::new("chromedriver")
+    Command::new("chromedriver")
       .args([format!("--port={}", CHROMEDRIVER_PORT)])
-      .spawn()
-      .unwrap(),
+      .spawn()?,
   );
 
   std::thread::sleep(Duration::from_secs(2));
