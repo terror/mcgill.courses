@@ -64,6 +64,31 @@ mod tests {
   }
 
   #[test]
+  fn format_instructor_name() {
+    assert_eq!(
+      super::format_instructor_name("Smith, John").unwrap(),
+      "John Smith"
+    );
+
+    assert_eq!(
+      super::format_instructor_name("Johnson, Mary Jane").unwrap(),
+      "Mary Jane Johnson"
+    );
+
+    assert_eq!(
+      super::format_instructor_name("O'Connor, Patrick").unwrap(),
+      "Patrick O'Connor"
+    );
+
+    assert!(super::format_instructor_name("Smith John").is_err());
+    assert!(super::format_instructor_name("Smith,John").is_err());
+    assert!(super::format_instructor_name("Smith").is_err());
+    assert!(super::format_instructor_name("").is_err());
+    assert!(super::format_instructor_name(", John").is_err());
+    assert!(super::format_instructor_name("Smith, ").is_err());
+  }
+
+  #[test]
   fn get_normal_course_codes() {
     assert_eq!(
       super::get_course_codes(
@@ -106,5 +131,18 @@ mod tests {
       ),
       "COMP 250; MATH 235 or MATH 240"
     );
+  }
+
+  #[test]
+  fn str_to_title_case() {
+    assert_eq!(super::str_to_title_case("HELLO"), "Hello");
+    assert_eq!(super::str_to_title_case("world"), "World");
+    assert_eq!(super::str_to_title_case("PROGRAMMING"), "Programming");
+    assert_eq!(super::str_to_title_case("tEST"), "Test");
+    assert_eq!(super::str_to_title_case("A"), "A");
+    assert_eq!(super::str_to_title_case("a"), "A");
+    assert_eq!(super::str_to_title_case(""), "");
+    assert_eq!(super::str_to_title_case("123ABC"), "123abc");
+    assert_eq!(super::str_to_title_case("!@#$%"), "!@#$%");
   }
 }
