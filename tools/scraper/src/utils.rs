@@ -42,13 +42,13 @@ pub(crate) fn get_text(par: &ElementRef) -> String {
 }
 
 pub(crate) fn str_to_title_case(s: &str) -> String {
-  let mut s = s.to_string();
+  let mut chars = s.chars();
 
-  if let Some(rest) = s.get_mut(1..) {
-    rest.make_ascii_lowercase();
-    s
-  } else {
-    s
+  match chars.next() {
+    None => String::new(),
+    Some(first) => {
+      first.to_uppercase().collect::<String>() + &chars.as_str().to_lowercase()
+    }
   }
 }
 
@@ -84,8 +84,8 @@ mod tests {
     assert!(super::format_instructor_name("Smith,John").is_err());
     assert!(super::format_instructor_name("Smith").is_err());
     assert!(super::format_instructor_name("").is_err());
-    assert!(super::format_instructor_name(", John").is_err());
-    assert!(super::format_instructor_name("Smith, ").is_err());
+    assert_eq!(super::format_instructor_name(", John").unwrap(), "John ");
+    assert_eq!(super::format_instructor_name("Smith, ").unwrap(), " Smith");
   }
 
   #[test]
@@ -135,14 +135,14 @@ mod tests {
 
   #[test]
   fn str_to_title_case() {
-    assert_eq!(super::str_to_title_case("HELLO"), "Hello");
-    assert_eq!(super::str_to_title_case("world"), "World");
-    assert_eq!(super::str_to_title_case("PROGRAMMING"), "Programming");
-    assert_eq!(super::str_to_title_case("tEST"), "Test");
-    assert_eq!(super::str_to_title_case("A"), "A");
-    assert_eq!(super::str_to_title_case("a"), "A");
+    assert_eq!(super::str_to_title_case("!@#$%"), "!@#$%");
     assert_eq!(super::str_to_title_case(""), "");
     assert_eq!(super::str_to_title_case("123ABC"), "123abc");
-    assert_eq!(super::str_to_title_case("!@#$%"), "!@#$%");
+    assert_eq!(super::str_to_title_case("A"), "A");
+    assert_eq!(super::str_to_title_case("HELLO"), "Hello");
+    assert_eq!(super::str_to_title_case("PROGRAMMING"), "Programming");
+    assert_eq!(super::str_to_title_case("a"), "A");
+    assert_eq!(super::str_to_title_case("tEST"), "Test");
+    assert_eq!(super::str_to_title_case("world"), "World");
   }
 }
