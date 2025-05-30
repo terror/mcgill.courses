@@ -1,6 +1,5 @@
 use super::*;
 
-use smol::Timer;
 use thirtyfour::prelude::*;
 use totp_rs::{Secret, TOTP};
 
@@ -36,28 +35,28 @@ pub async fn get_vsb_cookie(
   let email_field = retry_til_visible(&driver, By::Name("loginfmt")).await?;
   email_field.send_keys(email).await?;
   email_field.send_keys(Key::Return).await?;
-  Timer::after(Duration::from_secs(1)).await;
+  tokio::time::sleep(Duration::from_secs(1)).await;
 
   info!("Entering password...");
   let password_field = retry_til_visible(&driver, By::Name("passwd")).await?;
   password_field.send_keys(password).await?;
-  Timer::after(Duration::from_secs(1)).await;
+  tokio::time::sleep(Duration::from_secs(1)).await;
 
   info!("Signing in...");
   let submit_button = retry_til_visible(&driver, By::Id("idSIButton9")).await?;
   submit_button.click().await?;
-  Timer::after(Duration::from_secs(1)).await;
+  tokio::time::sleep(Duration::from_secs(1)).await;
 
   info!("Entering OTP...");
   let otp_field = retry_til_visible(&driver, By::Name("otc")).await?;
   otp_field.send_keys(totp.generate_current()?).await?;
   otp_field.send_keys(Key::Return).await?;
-  Timer::after(Duration::from_secs(3)).await;
+  tokio::time::sleep(Duration::from_secs(3)).await;
 
   info!("Finishing up...");
   let no_button = retry_til_visible(&driver, By::Id("idBtn_Back")).await?;
   no_button.click().await?;
-  Timer::after(Duration::from_secs(1)).await;
+  tokio::time::sleep(Duration::from_secs(1)).await;
 
   let cookies = driver.get_all_cookies().await?;
 
@@ -72,7 +71,7 @@ async fn retry_til_visible(driver: &WebDriver, by: By) -> Result<WebElement> {
     if retries > MAX_ELEM_RETRIES {
       break;
     }
-    Timer::after(Duration::from_secs(1)).await;
+    tokio::time::sleep(Duration::from_secs(1)).await;
     retries += 1;
     elem = driver.find(by.clone()).await;
   }
