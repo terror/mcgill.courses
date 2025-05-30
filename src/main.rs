@@ -1,21 +1,13 @@
 use {
   crate::{
-    arguments::Arguments,
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
     error::Error,
     hash::Hash,
-    loader::Loader,
     object::Object,
-    options::Options,
-    page::Page,
-    retry::Retry,
     server::Server,
     state::State,
-    subcommand::Subcommand,
     user::User,
-    vec_ext::VecExt,
-    vsb_client::VsbClient,
   },
   anyhow::anyhow,
   async_mongodb_session::MongodbSessionStore,
@@ -41,17 +33,15 @@ use {
   http::{
     header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
   },
-  log::{debug, error, info, trace, warn},
+  log::{debug, error, info, trace},
   model::{
-    Course, CourseFilter, CourseListing, InitializeOptions, Instructor,
-    Interaction, InteractionKind, Review, ReviewFilter, Schedule, Subscription,
+    Course, CourseFilter, InitializeOptions, Instructor, Interaction,
+    InteractionKind, Review, ReviewFilter, Subscription,
   },
   oauth2::{
     basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
     RedirectUrl, Scope, TokenUrl,
   },
-  rayon::prelude::*,
-  reqwest::blocking::RequestBuilder,
   rusoto_core::Region,
   rusoto_s3::S3Client,
   rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
@@ -59,18 +49,16 @@ use {
   serde_json::json,
   sha2::{Digest, Sha256},
   std::{
-    collections::HashSet,
+    backtrace::BacktraceStatus,
     env,
     fmt::{self, Display, Formatter},
     fs,
     fs::File,
     io::Read,
-    marker::Sized,
     net::SocketAddr,
     path::PathBuf,
     process,
     sync::Arc,
-    thread,
     time::Duration,
   },
   tower::ServiceBuilder,
@@ -87,7 +75,6 @@ use {
   walkdir::WalkDir,
 };
 
-mod arguments;
 mod assets;
 mod auth;
 mod courses;
@@ -95,21 +82,15 @@ mod error;
 mod hash;
 mod instructors;
 mod interactions;
-mod loader;
 mod notifications;
 mod object;
 mod options;
-mod page;
-mod retry;
 mod reviews;
 mod search;
 mod server;
 mod state;
-mod subcommand;
 mod subscriptions;
 mod user;
-mod vec_ext;
-mod vsb_client;
 
 type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
@@ -120,8 +101,25 @@ async fn main() {
 
   dotenv().ok();
 
-  if let Err(error) = Arguments::parse().run().await {
+  if let Err(error) = Server::parse().run().await {
     eprintln!("error: {error}");
+
+    for (i, error) in error.0.chain().skip(1).enumerate() {
+      if i == 0 {
+        eprintln!();
+        eprintln!("because:");
+      }
+
+      eprintln!("- {error}");
+    }
+
+    let backtrace = error.0.backtrace();
+
+    if backtrace.status() == BacktraceStatus::Captured {
+      eprintln!("backtrace:");
+      eprintln!("{backtrace}");
+    }
+
     process::exit(1);
   }
 }

@@ -4,6 +4,7 @@ import { VscBell, VscBellSlash } from 'react-icons/vsc';
 import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
+import { parseCourseDescription } from '../lib/dom-utils';
 import { repo } from '../lib/repo';
 import type { Course } from '../model/Course';
 import type { Review } from '../model/Review';
@@ -66,9 +67,14 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
     <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 shadow-sm dark:bg-neutral-800 md:mt-10'>
       <div className='flex w-full flex-col md:w-7/12'>
         <div className='flex flex-row space-x-2 align-middle'>
-          <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
-            {course.subject} {course.code}
-          </h1>
+          <div className='flex items-center space-x-2'>
+            <h1 className='text-3xl font-semibold text-gray-800 dark:text-gray-200'>
+              {course.subject} {course.code}
+            </h1>
+            <div className='flex h-6 items-center rounded-full bg-slate-200 px-2 text-xs font-medium dark:bg-neutral-700 dark:text-gray-300 '>
+              {course.credits} {course.credits === '1' ? 'Credit' : 'Credits'}
+            </div>
+          </div>
           <div className='flex items-center gap-2'>
             {user &&
               (isSubscribed ? (
@@ -105,7 +111,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
         <CourseTerms course={course} variant='large' />
         <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
-          {course.description}
+          {parseCourseDescription(course.description)}
         </p>
         <div className='grow py-3' />
         <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />

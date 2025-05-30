@@ -12,13 +12,13 @@ FROM client AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build -- --mode=production
 
-FROM rust:slim-buster as server
+FROM rust:1.87-slim-bullseye as server
 
 WORKDIR /usr/src/app
 COPY . .
 RUN cargo build --release
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install -y libssl1.1 ca-certificates
 
@@ -27,4 +27,4 @@ COPY --from=server /usr/src/app/seed seed
 COPY --from=server /usr/src/app/.well-known .well-known
 COPY --from=server /usr/src/app/target/release/server /usr/local/bin
 
-CMD server --source seed serve --initialize --latest-courses --skip-reviews --asset-dir assets --db-name mcgill-courses
+CMD server --source seed --initialize --latest-courses --skip-reviews --asset-dir assets --db-name mcgill-courses

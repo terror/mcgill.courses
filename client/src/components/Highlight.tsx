@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash';
+import { highlight } from '../lib/dom-utils';
 
 export const Highlight = ({
   text,
@@ -9,22 +9,5 @@ export const Highlight = ({
   query?: string;
   className?: string;
 }) => {
-  return (
-    <span className={className}>
-      {text
-        .split(new RegExp(`(${escapeRegExp(query)})`, 'gi'))
-        .map((part, i) => (
-          <span
-            key={i}
-            className={
-              part.toLowerCase().trim() === query?.toLowerCase().trim()
-                ? 'underline'
-                : ''
-            }
-          >
-            {part}
-          </span>
-        ))}
-    </span>
-  );
+  return <span className={className}>{highlight(text, query)}</span>;
 };
