@@ -2,7 +2,7 @@
 
 A course search and review platform for McGill university.
 
-![](https://github.com/user-attachments/assets/0eee8305-c292-46fe-b5ef-075e9d083b9f)
+![](https://github.com/user-attachments/assets/8807c010-6d85-4b3a-9199-4cc101417519)
 
 ## Development
 
