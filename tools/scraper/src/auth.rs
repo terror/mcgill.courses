@@ -23,7 +23,7 @@ pub(crate) fn authenticate() -> Result<String> {
   let otp_secret = env::var("VSB_OTP_SECRET")
     .expect("VSB_OTP_SECRET must be specified for scraping");
 
-  log::info!("Starting chromedriver server");
+  info!("Starting chromedriver server");
 
   let _chromedriver = Driver(
     Command::new("chromedriver")
@@ -31,7 +31,7 @@ pub(crate) fn authenticate() -> Result<String> {
       .spawn()?,
   );
 
-  std::thread::sleep(Duration::from_secs(2));
+  thread::sleep(Duration::from_secs(2));
 
   info!("Retrieving cookie for VSB authentication...");
 
