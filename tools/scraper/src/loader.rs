@@ -59,7 +59,7 @@ impl Loader {
           .map(|url| {
             self.parse_course(
               &format!("{}{}", Self::BASE_URL, url),
-              &cookie,
+              cookie,
               scrape_vsb,
             )
           })
