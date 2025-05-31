@@ -211,7 +211,7 @@ export const Explore = () => {
                 )}
                 {!hasMore ? (
                   courses?.length ? (
-                    <div className='mx-[200px] mt-4 text-center'>
+                    <div className='mx-auto mt-4 text-center'>
                       <p className='text-gray-500 dark:text-gray-400'>
                         No more courses to show
                       </p>
