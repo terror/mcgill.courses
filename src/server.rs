@@ -1,25 +1,11 @@
 use super::*;
 
-#[derive(Parser)]
+#[derive(Debug, Parser)]
 pub(crate) struct Server {
-  #[clap(long, default_value = "courses.json")]
-  source: PathBuf,
   #[clap(long, help = "Directory to serve assets from")]
   asset_dir: Option<PathBuf>,
   #[clap(long, default_value = "8000", help = "Port to listen on")]
   port: u16,
-  #[clap(long, default_value = "admin", help = "Database name")]
-  db_name: String,
-  #[clap(long, default_value = "false", help = "Seed latest courses only")]
-  latest_courses: bool,
-  #[clap(long, default_value = "false", help = "Enable multithreaded seeding")]
-  multithreaded: bool,
-  #[clap(long, default_value = "false", help = "Initialize the database")]
-  initialize: bool,
-  #[clap(long, default_value = "false", help = "Skip course seeding")]
-  skip_courses: bool,
-  #[clap(long, default_value = "false", help = "Skip review seeding")]
-  skip_reviews: bool,
 }
 
 #[derive(Debug)]
@@ -31,51 +17,12 @@ struct AppConfig<'a> {
 }
 
 impl Server {
-  pub(crate) async fn run(self) -> Result {
+  pub(crate) async fn run(self, options: Options) -> Result {
     let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
     info!("Listening on port: {}", addr.port());
 
-    let db = Arc::new(Db::connect(&self.db_name).await?);
-
-    if self.initialize {
-      let source_hash = self.source.hash()?;
-
-      let client = match env::var("ENV") {
-        Ok(env) if env == "production" => Some(S3Client::new(Region::UsEast1)),
-        _ => None,
-      };
-
-      let prev_hash = match client {
-        Some(ref client) => client.get("mcgill.courses", "source-hash").await?,
-        None => None,
-      };
-
-      if Some(&source_hash) != prev_hash.as_ref() {
-        let clone = db.clone();
-
-        if let Some(client) = client {
-          client
-            .put("mcgill.courses", "source-hash", source_hash)
-            .await?;
-        }
-
-        tokio::spawn(async move {
-          if let Err(error) = clone
-            .initialize(InitializeOptions {
-              latest_courses: self.latest_courses,
-              multithreaded: self.multithreaded,
-              skip_courses: self.skip_courses,
-              skip_reviews: self.skip_reviews,
-              source: self.source,
-            })
-            .await
-          {
-            error!("error: {error}");
-          }
-        });
-      }
-    }
+    let db = Arc::new(Db::connect(&options.db_name).await?);
 
     let assets = self.asset_dir.as_ref().map(|asset_dir| Assets {
       dir: ServeDir::new(asset_dir.clone()),

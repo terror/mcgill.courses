@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+BRANCH=$1
+DOMAIN=$2
+
+if [[ ! -d bot ]]; then
+  git clone https://github.com/moyai-orz/comp520-bot bot
+fi
+
+cd bot
+
+git fetch origin
+git checkout -B "$BRANCH"
+git reset --hard origin/"$BRANCH"
+
+./automation/setup "$DOMAIN"

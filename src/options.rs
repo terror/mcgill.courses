@@ -1,7 +1,7 @@
 use super::*;
 
-#[derive(Parser)]
+#[derive(Debug, Parser)]
 pub(crate) struct Options {
-  #[clap(long, default_value = "courses.json")]
-  pub(crate) source: PathBuf,
+  #[clap(long, default_value = "admin", help = "Database name")]
+  pub(crate) db_name: String,
 }
