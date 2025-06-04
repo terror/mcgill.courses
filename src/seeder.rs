@@ -4,7 +4,7 @@ use super::*;
 pub(crate) struct Seeder {
   #[clap(long, default_value = "false", help = "Enable multithreaded seeding")]
   multithreaded: bool,
-  #[clap(long, default_value = "courses.json")]
+  #[clap(long, default_value = "courses.json", help = "Path to seed from")]
   source: PathBuf,
 }
 

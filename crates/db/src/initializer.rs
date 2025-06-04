@@ -20,7 +20,7 @@ impl Initializer {
     Ok(())
   }
 
-  fn collect(&self) -> Result<Vec<Seed>> {
+  fn collect_seeds(&self) -> Result<Vec<Seed>> {
     Ok(if self.options.source.is_file() {
       vec![Seed::from_content(
         self.options.source.clone(),
@@ -116,7 +116,7 @@ impl Initializer {
   async fn seed(&self) -> Result {
     info!("Seeding the database...");
 
-    let seeds = self.collect()?;
+    let seeds = self.collect_seeds()?;
 
     for seed in seeds {
       match seed {
