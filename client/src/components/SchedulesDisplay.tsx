@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
+import * as buildingCoordinates from '../assets/buildingCoordinates.json';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Block, Schedule } from '../model/Schedule';
@@ -76,14 +77,24 @@ const BlockLocation = ({ location }: { location: string }) => {
 
   const [isLocationOpen, setIsLocationOpen] = useState(false);
 
+  const coordinates =
+    buildingCoordinates[code as keyof typeof buildingCoordinates];
+
   return (
     <Fragment>
       <span
         className='relative whitespace-nowrap'
-        onClick={() => setIsLocationOpen(true)}
+        onClick={() => {
+          if (coordinates !== null) setIsLocationOpen(true);
+        }}
       >
         <Tooltip text={buildingCodes[code as keyof typeof buildingCodes]}>
-          <p className='inline-block cursor-pointer text-sm leading-7 sm:text-base'>
+          <p
+            className={twMerge(
+              'inline-block text-sm leading-7 sm:text-base',
+              coordinates !== null && 'cursor-pointer'
+            )}
+          >
             {location}
           </p>
         </Tooltip>
