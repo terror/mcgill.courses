@@ -22,6 +22,7 @@
     "@fontsource/inter": "^4.5.15",
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.1.5",
+    "@vis.gl/react-google-maps": "^1.5.3",
     "date-fns": "^2.30.0",
     "flexsearch": "^0.7.21",
     "formik": "^2.4.6",

@@ -1,13 +1,15 @@
 import _ from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
+import * as buildingCoordinates from '../assets/buildingCoordinates.json';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import type { Block, Schedule } from '../model/Schedule';
+import { BuildingLocation } from './BuildingLocation';
 import { Tooltip } from './Tooltip';
 
 const VSBtimeToDisplay = (time: string) => {
@@ -71,16 +73,39 @@ const getSections = (
 };
 
 const BlockLocation = ({ location }: { location: string }) => {
-  const room = location.split(' ')[0];
+  const code = location.split(' ')[0];
+
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
+
+  const coordinates =
+    buildingCoordinates[code as keyof typeof buildingCoordinates];
 
   return (
-    <span className='relative whitespace-nowrap'>
-      <Tooltip text={buildingCodes[room as keyof typeof buildingCodes]}>
-        <p className='inline-block cursor-default text-sm leading-7 sm:text-base'>
-          {location}
-        </p>
-      </Tooltip>
-    </span>
+    <Fragment>
+      <span
+        className='relative whitespace-nowrap'
+        onClick={() => {
+          if (coordinates !== null) setIsLocationOpen(true);
+        }}
+      >
+        <Tooltip text={buildingCodes[code as keyof typeof buildingCodes]}>
+          <p
+            className={twMerge(
+              'inline-block text-sm leading-7 sm:text-base',
+              coordinates !== null && 'cursor-pointer'
+            )}
+          >
+            {location}
+          </p>
+        </Tooltip>
+      </span>
+      <BuildingLocation
+        title={buildingCodes[code as keyof typeof buildingCodes]}
+        code={code}
+        open={isLocationOpen}
+        onClose={() => setIsLocationOpen(false)}
+      />
+    </Fragment>
   );
 };
 
