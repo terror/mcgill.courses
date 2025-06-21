@@ -9,6 +9,10 @@ COPY . /app
 WORKDIR /app
 
 FROM client AS build
+
+ARG VITE_GOOGLE_API_KEY
+ENV VITE_GOOGLE_API_KEY=$VITE_GOOGLE_API_KEY
+
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build -- --mode=production
 
