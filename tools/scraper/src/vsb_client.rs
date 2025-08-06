@@ -34,7 +34,7 @@ impl VsbClient {
     code: &str,
     terms: Vec<usize>,
   ) -> Result<Vec<Schedule>> {
-    info!("Scraping schedules for {}...", code);
+    info!("Scraping schedules for {code}...");
 
     let url = |code: &str, term: usize| -> String {
       let t = (Utc::now().timestamp_millis() / 60000) % 1000;
@@ -42,12 +42,8 @@ impl VsbClient {
       let e = (t % 3) + (t % 39) + (t % 42);
 
       format!(
-        "{}?term={}&course_0_0={}&t={}&e={}",
+        "{}?term={term}&course_0_0={code}&t={t}&e={e}",
         VsbClient::BASE_URL,
-        term,
-        code,
-        t,
-        e
       )
     };
 
@@ -67,7 +63,7 @@ impl VsbClient {
       .flatten()
       .collect();
 
-    info!("Found schedules: {:?}", schedules);
+    info!("Found schedules: {schedules:?}");
 
     Ok(schedules)
   }

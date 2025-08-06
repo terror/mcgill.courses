@@ -158,7 +158,7 @@ impl Loader {
     cookie: &str,
     scrape_vsb: bool,
   ) -> Result<Option<Course>> {
-    info!("{}", url);
+    info!("{url}");
 
     let client = Client::builder().user_agent(&self.user_agent).build()?;
 
@@ -166,7 +166,7 @@ impl Loader {
       let response = client.get(url).retry(self.retries)?;
 
       if response.status() == reqwest::StatusCode::NOT_FOUND {
-        info!("Page for {} not found, skipping...", url);
+        info!("Page for {url} not found, skipping...");
         return Ok(None);
       }
 
@@ -174,14 +174,14 @@ impl Loader {
         course_extractor::extract_course_page(&response.text()?);
 
       while course_page.is_err() {
-        warn!("Retrying course page: {}", url);
+        warn!("Retrying course page: {url}");
 
         thread::sleep(Duration::from_millis(500));
 
         let response = client.get(url).retry(self.retries)?;
 
         if response.status() == reqwest::StatusCode::NOT_FOUND {
-          info!("Page for {} not found, skipping...", url);
+          info!("Page for {url} not found, skipping...");
           return Ok(None);
         };
 

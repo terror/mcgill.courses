@@ -13,7 +13,7 @@ pub(crate) fn format_instructor_name(last_first: &str) -> Result<String> {
     bail!("Improperly formatted instructor name")
   };
 
-  Ok(format!("{} {}", first_name, last_name))
+  Ok(format!("{first_name} {last_name}"))
 }
 
 pub(crate) fn get_course_codes(par: &ElementRef) -> Result<Vec<String>> {

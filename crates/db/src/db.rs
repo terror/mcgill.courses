@@ -2521,7 +2521,7 @@ mod tests {
       for result in results {
         let (a, b) = (
           Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
-          Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+          Regex::new(&format!("(?i).*{query}.*")).unwrap(),
         );
 
         assert!(

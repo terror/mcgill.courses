@@ -26,6 +26,7 @@ use {
     time::Duration,
   },
   thirtyfour::prelude::*,
+  tokio::time::sleep,
   totp_rs::{Secret, TOTP},
 };
 

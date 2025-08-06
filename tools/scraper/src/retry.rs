@@ -63,10 +63,9 @@ impl Retry for RequestBuilder {
         }
         Err(error) => {
           error!(
-            "Request failed (attempt {}/{}): {}",
+            "Request failed (attempt {}/{}): {error}",
             attempts + 1,
             config.max_retries + 1,
-            error
           );
         }
       }
@@ -84,7 +83,7 @@ impl Retry for RequestBuilder {
 
       let delay = std::cmp::min(exp_delay + jitter, config.max_delay);
 
-      warn!("Retrying in {:?}...", delay);
+      warn!("Retrying in {delay:?}...");
 
       thread::sleep(delay);
 

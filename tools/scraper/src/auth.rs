@@ -27,7 +27,7 @@ pub(crate) fn authenticate() -> Result<String> {
 
   let _chromedriver = Driver(
     Command::new("chromedriver")
-      .args([format!("--port={}", CHROMEDRIVER_PORT)])
+      .args([format!("--port={CHROMEDRIVER_PORT}")])
       .spawn()?,
   );
 
@@ -59,7 +59,7 @@ async fn get_vsb_cookie(
   caps.set_headless()?;
 
   let driver =
-    WebDriver::new(format!("http://localhost:{}", CHROMEDRIVER_PORT), caps)
+    WebDriver::new(format!("http://localhost:{CHROMEDRIVER_PORT}"), caps)
       .await?;
 
   // Need to use `new_unchecked` because Microsoft auth secret length is too short.
@@ -77,29 +77,29 @@ async fn get_vsb_cookie(
   let email_field = retry_until_visible(&driver, By::Name("loginfmt")).await?;
   email_field.send_keys(email).await?;
   email_field.send_keys(Key::Return).await?;
-  tokio::time::sleep(Duration::from_secs(1)).await;
+  sleep(Duration::from_secs(1)).await;
 
   info!("Entering password...");
   let password_field = retry_until_visible(&driver, By::Name("passwd")).await?;
   password_field.send_keys(password).await?;
-  tokio::time::sleep(Duration::from_secs(1)).await;
+  sleep(Duration::from_secs(1)).await;
 
   info!("Signing in...");
   let submit_button =
     retry_until_visible(&driver, By::Id("idSIButton9")).await?;
   submit_button.click().await?;
-  tokio::time::sleep(Duration::from_secs(1)).await;
+  sleep(Duration::from_secs(1)).await;
 
   info!("Entering OTP...");
   let otp_field = retry_until_visible(&driver, By::Name("otc")).await?;
   otp_field.send_keys(totp.generate_current()?).await?;
   otp_field.send_keys(Key::Return).await?;
-  tokio::time::sleep(Duration::from_secs(3)).await;
+  sleep(Duration::from_secs(3)).await;
 
   info!("Finishing up...");
   let no_button = retry_until_visible(&driver, By::Id("idBtn_Back")).await?;
   no_button.click().await?;
-  tokio::time::sleep(Duration::from_secs(1)).await;
+  sleep(Duration::from_secs(1)).await;
 
   let cookies = driver.get_all_cookies().await?;
 
@@ -118,7 +118,7 @@ async fn retry_until_visible(driver: &WebDriver, by: By) -> Result<WebElement> {
       break;
     }
 
-    tokio::time::sleep(Duration::from_secs(1)).await;
+    sleep(Duration::from_secs(1)).await;
 
     retries += 1;
 
