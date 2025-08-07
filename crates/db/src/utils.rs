@@ -7,7 +7,7 @@ pub(crate) fn current_terms() -> Vec<String> {
 
   if month >= 8 {
     return vec![
-      format!("Fall {}", year),
+      format!("Fall {year}"),
       format!("Winter {}", year + 1),
       format!("Summer {}", year + 1),
     ];
@@ -15,7 +15,7 @@ pub(crate) fn current_terms() -> Vec<String> {
 
   vec![
     format!("Fall {}", year - 1),
-    format!("Winter {}", year),
-    format!("Summer {}", year),
+    format!("Winter {year}"),
+    format!("Summer {year}"),
   ]
 }

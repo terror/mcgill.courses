@@ -52,13 +52,12 @@ impl PullRequest<'_> {
     prompt.push_str(include_str!("../prompt.txt"));
 
     if let Some(title) = self.title {
-      prompt.push_str(&format!("\nTitle of the pull request: {}\n", title));
+      prompt.push_str(&format!("\nTitle of the pull request: {title}\n"));
     }
 
     if let Some(description) = self.description {
       prompt.push_str(&format!(
-        "Description of the pull request: {}\n",
-        description
+        "Description of the pull request: {description}\n",
       ));
     }
 

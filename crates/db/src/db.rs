@@ -17,10 +17,7 @@ impl Db {
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
       ClientOptions::parse(env::var("MONGODB_URL").unwrap_or_else(|_| {
-        format!(
-          "mongodb://localhost:27017/{}?directConnection=true&replicaSet=rs0",
-          db_name
-        )
+        format!("mongodb://localhost:27017/{db_name}?directConnection=true&replicaSet=rs0")
       }))
       .await?;
 
@@ -2525,7 +2522,7 @@ mod tests {
       for result in results {
         let (a, b) = (
           Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
-          Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+          Regex::new(&format!("(?i).*{query}.*")).unwrap(),
         );
 
         assert!(

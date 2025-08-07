@@ -34,10 +34,7 @@ pub(crate) async fn get_user_interactions_for_course(
   Path((course_id, referrer)): Path<(String, String)>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  info!(
-    "Fetching review interactions from {} for course {}",
-    referrer, course_id
-  );
+  info!("Fetching review interactions from {referrer} for course {course_id}",);
 
   Ok(Json(GetUserInteractionForCoursePayload {
     course_id: course_id.clone(),
