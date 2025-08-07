@@ -457,7 +457,11 @@ impl Db {
           InteractionKind::Like => 1,
           InteractionKind::Dislike => -1,
         };
-        if old.is_some() { amt * 2 } else { amt }
+        if old.is_some() {
+          amt * 2
+        } else {
+          amt
+        }
       };
 
       review_coll
@@ -2017,16 +2021,15 @@ mod tests {
 
     assert!(db.delete_review("MATH240", "1").await.is_ok());
 
-    assert!(
-      db.add_review(Review {
+    assert!(db
+      .add_review(Review {
         content: "foo".into(),
         course_id: "MATH240".into(),
         user_id: "1".into(),
         ..Default::default()
       })
       .await
-      .is_ok()
-    );
+      .is_ok());
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -2148,12 +2151,10 @@ mod tests {
     assert!(filtered.len() < total.len());
 
     for course in filtered {
-      assert!(
-        course
-          .terms
-          .iter()
-          .any(|term| term.starts_with(&"Winter".to_string()))
-      );
+      assert!(course
+        .terms
+        .iter()
+        .any(|term| term.starts_with(&"Winter".to_string())));
     }
   }
 
