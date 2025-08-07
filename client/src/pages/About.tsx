@@ -166,7 +166,7 @@ const people = [
   {
     name: "Liam Scalzulli (CS '2025)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQGcvphemecHHw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1718302697434?e=1753920000&v=beta&t=p5x3skSx0I79guBh3sVxcS-r_RgM2elCGv3ZtQbFwiw',
+      'https://media.licdn.com/dms/image/v2/D4E03AQGcvphemecHHw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718323978830?e=1757548800&v=beta&t=u3pmKcOojJfZWlRy0F8GXU0PUxB1jWN0ORo58GkD57g',
     links: [
       { title: 'Github', url: 'https://github.com/terror' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/liamscalzulli/' },
@@ -175,7 +175,7 @@ const people = [
   {
     name: "Jeff Zhang (Hons CS '2026)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQEiV-UNsvxZHg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1712454391246?e=1753920000&v=beta&t=idecnNfpWlwKsT8m7SK0ROjY3USyLSos0KiOUTNHs5w',
+      'https://media.licdn.com/dms/image/v2/D4E03AQEiV-UNsvxZHg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1712454391246?e=1757548800&v=beta&t=b_oPkciiB_o4giyGt983VPidipqard9Ei_2FoVuxAyU',
     links: [
       { title: 'Github', url: 'https://github.com/39bytes' },
       { title: 'LinkedIn', url: 'https://www.linkedin.com/in/jeff-zhang72/' },
@@ -184,7 +184,7 @@ const people = [
   {
     name: "Sam Zhang (CS & Stats '2026)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQG8t9QPiG5_QQ/profile-displayphoto-shrink_800_800/B4EZTuCUymG0Ac-/0/1739160375140?e=1753920000&v=beta&t=bzuhWIGnQztPUiaMXXd53f0wOapTnJdxp0U7Fo4gZJQ',
+      'https://media.licdn.com/dms/image/v2/D4E03AQG8t9QPiG5_QQ/profile-displayphoto-shrink_400_400/B4EZTuCUymG0Ag-/0/1739160375140?e=1757548800&v=beta&t=HFdiA45GoxopE96QpHgv339GerkRv_82kgHiBMSgirM',
     links: [
       { title: 'Github', url: 'https://github.com/samzhang02' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/zhang-sam/' },
@@ -193,7 +193,7 @@ const people = [
   {
     name: "Joey Yu (CS '2026)",
     imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQFlemirPRz11Q/profile-displayphoto-shrink_400_400/B4EZY_EroqHcAw-/0/1744814914458?e=1751500800&v=beta&t=xkIEutL8gGwXxa9YnRYoFbnGzR41nwk4AYGfrI1qjpo',
+      'https://media.licdn.com/dms/image/v2/D4E03AQHG-xqH9hSkvQ/profile-displayphoto-scale_400_400/B4EZhcBmw8HgAg-/0/1753890582273?e=1757548800&v=beta&t=GvRFoLGyLi3epfkahGT9vx8ioVCHXMdX5goLRwibXAY',
     links: [{ title: 'Github', url: 'https://github.com/itsjoeoui' }],
   },
 ];
