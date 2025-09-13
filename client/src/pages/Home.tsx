@@ -75,7 +75,8 @@ export const Home = () => {
                 to={`/explore`}
                 className='mx-auto cursor-pointer text-sm text-gray-500 underline underline-offset-4 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 md:text-base'
               >
-                or explore all courses <span aria-hidden='true'>&rarr;</span>{' '}
+                or explore all courses{' '}
+                <span aria-hidden='true'>&rarr;</span>{' '}
               </Link>
             </div>
           </div>
