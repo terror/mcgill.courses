@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-bson = { version = "2.14.0", features = ["chrono-0_4"] }
+bson = { version = "2.15.0", features = ["chrono-0_4"] }
 combine = { path = "../combine" }
 derivative = "2.2.0"
 serde = { workspace = true }
