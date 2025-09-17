@@ -204,7 +204,7 @@ export const CourseReview = ({
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
 
-  const date = new Date(parseInt(review.timestamp));
+  const date = new Date(parseInt(review.timestamp, 10));
 
   const shortDate = format(date, 'P'),
     longDate = format(date, 'EEEE, MMMM d, yyyy');
