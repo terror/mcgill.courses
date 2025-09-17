@@ -12,8 +12,8 @@ import { ReviewEmptyPrompt } from '../components/ReviewEmptyPrompt';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import type { Instructor as InstructorType } from '../lib/types';
+import type { Review } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
-import type { Review } from '../model/Review';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
 

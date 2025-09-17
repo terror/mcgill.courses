@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 
+import type { Review } from '../lib/types';
 import type { Course } from '../model/Course';
-import type { Review } from '../model/Review';
 import { Autocomplete } from './Autocomplete';
 import { ResetButton } from './ResetButton';
 
@@ -53,15 +53,9 @@ export const ReviewFilter = ({
         .sort((a: Review, b: Review) => {
           switch (sortBy) {
             case 'Most Recent':
-              return (
-                parseInt(b.timestamp.$date.$numberLong, 10) -
-                parseInt(a.timestamp.$date.$numberLong, 10)
-              );
+              return parseInt(b.timestamp) - parseInt(a.timestamp);
             case 'Least Recent':
-              return (
-                parseInt(a.timestamp.$date.$numberLong, 10) -
-                parseInt(b.timestamp.$date.$numberLong, 10)
-              );
+              return parseInt(a.timestamp) - parseInt(b.timestamp);
             case 'Highest Rating':
               return b.rating - a.rating;
             case 'Lowest Rating':
@@ -75,10 +69,7 @@ export const ReviewFilter = ({
             case 'Most Disliked':
               return a.likes - b.likes;
             default:
-              return (
-                parseInt(b.timestamp.$date.$numberLong, 10) -
-                parseInt(a.timestamp.$date.$numberLong, 10)
-              );
+              return parseInt(b.timestamp) - parseInt(a.timestamp);
           }
         })
     );

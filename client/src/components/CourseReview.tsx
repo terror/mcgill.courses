@@ -10,10 +10,10 @@ import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
+import type { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import type { InteractionKind } from '../model/Interaction';
 import type { Interaction } from '../model/Interaction';
-import type { Review } from '../model/Review';
 import { BirdIcon } from './BirdIcon';
 import { DeleteButton } from './DeleteButton';
 import { IconRating } from './IconRating';
@@ -204,7 +204,7 @@ export const CourseReview = ({
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
 
-  const date = new Date(parseInt(review.timestamp.$date.$numberLong, 10));
+  const date = new Date(parseInt(review.timestamp));
 
   const shortDate = format(date, 'P'),
     longDate = format(date, 'EEEE, MMMM d, yyyy');

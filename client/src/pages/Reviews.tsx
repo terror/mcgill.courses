@@ -9,8 +9,8 @@ import { JumpToTopButton } from '../components/JumpToTopButton';
 import { Layout } from '../components/Layout';
 import { Spinner } from '../components/Spinner';
 import { repo } from '../lib/repo';
+import { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
-import { Review } from '../model/Review';
 import { Loading } from './Loading';
 
 export const Reviews = () => {
@@ -116,9 +116,7 @@ export const Reviews = () => {
                     {spliceCourseCode(review.courseId, ' ')}
                   </Link>
                   <p className='mb-3 text-xs font-medium text-gray-600 dark:text-gray-400'>
-                    {timeSince(
-                      new Date(parseInt(review.timestamp.$date.$numberLong))
-                    )}
+                    {timeSince(parseInt(review.timestamp))}
                   </p>
                   <div>
                     <CourseReview
