@@ -1,9 +1,11 @@
 use super::*;
 
 mod datetime_as_string {
-  use bson::DateTime;
-  use serde::{Deserialize, Deserializer, Serializer, de::Error};
-  use serde_json::Value;
+  use {
+    bson::DateTime,
+    serde::{Deserialize, Deserializer, Serializer, de::Error},
+    serde_json::Value,
+  };
 
   pub fn serialize<S>(
     datetime: &DateTime,
@@ -113,8 +115,10 @@ impl Into<Bson> for Review {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
-  use serde_json::{Value, json};
+  use {
+    super::*,
+    serde_json::{Value, json},
+  };
 
   #[test]
   fn serialize_datetime_as_string() {
