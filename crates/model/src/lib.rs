@@ -13,6 +13,7 @@ use {
 mod course;
 mod course_filter;
 mod course_page;
+mod datetime;
 mod initialize_options;
 mod instructor;
 mod interaction;
