@@ -3,7 +3,7 @@ use super::*;
 mod datetime_as_string {
   use {
     bson::DateTime,
-    serde::{Deserialize, Deserializer, Serializer, de::Error},
+    serde::{de::Error, Deserialize, Deserializer, Serializer},
     serde_json::Value,
   };
 
@@ -117,7 +117,7 @@ impl Into<Bson> for Review {
 mod tests {
   use {
     super::*,
-    serde_json::{Value, json},
+    serde_json::{json, Value},
   };
 
   #[test]
@@ -206,12 +206,10 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(
-      result
-        .unwrap_err()
-        .to_string()
-        .contains("invalid timestamp string")
-    );
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("invalid timestamp string"));
   }
 
   #[test]
@@ -233,12 +231,10 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(
-      result
-        .unwrap_err()
-        .to_string()
-        .contains("'$date' field must be an object")
-    );
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("'$date' field must be an object"));
   }
 
   #[test]
@@ -260,12 +256,10 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(
-      result
-        .unwrap_err()
-        .to_string()
-        .contains("missing '$numberLong' field")
-    );
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("missing '$numberLong' field"));
   }
 
   #[test]
@@ -285,12 +279,10 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(
-      result
-        .unwrap_err()
-        .to_string()
-        .contains("expected either a timestamp string or MongoDB date object")
-    );
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("expected either a timestamp string or MongoDB date object"));
   }
 
   #[test]
