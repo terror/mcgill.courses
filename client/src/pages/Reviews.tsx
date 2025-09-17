@@ -116,7 +116,7 @@ export const Reviews = () => {
                     {spliceCourseCode(review.courseId, ' ')}
                   </Link>
                   <p className='mb-3 text-xs font-medium text-gray-600 dark:text-gray-400'>
-                    {timeSince(parseInt(review.timestamp))}
+                    {timeSince(parseInt(review.timestamp, 10))}
                   </p>
                   <div>
                     <CourseReview

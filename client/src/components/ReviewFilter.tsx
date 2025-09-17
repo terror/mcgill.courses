@@ -53,9 +53,9 @@ export const ReviewFilter = ({
         .sort((a: Review, b: Review) => {
           switch (sortBy) {
             case 'Most Recent':
-              return parseInt(b.timestamp) - parseInt(a.timestamp);
+              return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10);
             case 'Least Recent':
-              return parseInt(a.timestamp) - parseInt(b.timestamp);
+              return parseInt(a.timestamp, 10) - parseInt(b.timestamp, 10);
             case 'Highest Rating':
               return b.rating - a.rating;
             case 'Lowest Rating':
@@ -69,7 +69,7 @@ export const ReviewFilter = ({
             case 'Most Disliked':
               return a.likes - b.likes;
             default:
-              return parseInt(b.timestamp) - parseInt(a.timestamp);
+              return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10);
           }
         })
     );
