@@ -1,4 +1,4 @@
-import type { Review } from './Review';
+import type { Review } from '../lib/types';
 
 export type Notification = {
   review: Review;

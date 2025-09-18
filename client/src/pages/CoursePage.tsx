@@ -18,11 +18,11 @@ import { ReviewFilter, ReviewSortType } from '../components/ReviewFilter';
 import { SchedulesDisplay } from '../components/SchedulesDisplay';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
+import type { Review } from '../lib/types';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/Course';
 import { Interaction } from '../model/Interaction';
 import type { Requirements } from '../model/Requirements';
-import type { Review } from '../model/Review';
 import { TermAverage } from '../model/TermAverage';
 import { Loading } from './Loading';
 

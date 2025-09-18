@@ -1,4 +1,4 @@
-import { Review } from './Review';
+import { Review } from '../lib/types';
 
 export type GetReviewsPayload = {
   reviews: Review[];

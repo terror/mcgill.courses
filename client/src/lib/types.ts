@@ -8,6 +8,17 @@ export interface Instructor {
   term: string;
 }
 
+export interface Review {
+  content: string;
+  courseId: string;
+  difficulty: number;
+  instructors: string[];
+  likes: number;
+  rating: number;
+  timestamp: string;
+  userId: string;
+}
+
 export interface Subscription {
   courseId: string;
   userId: string;
