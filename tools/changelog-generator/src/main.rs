@@ -1,5 +1,5 @@
 use {
-  anyhow::{Error, anyhow},
+  anyhow::{anyhow, Error},
   async_openai::types::{
     ChatCompletionRequestSystemMessageArgs, CreateChatCompletionRequestArgs,
   },
