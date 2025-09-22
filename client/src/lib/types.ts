@@ -8,6 +8,18 @@ export interface Instructor {
   term: string;
 }
 
+export enum InteractionKind {
+  Like = 'like',
+  Dislike = 'dislike',
+}
+
+export interface Interaction {
+  kind: InteractionKind;
+  userId: string;
+  courseId: string;
+  referrer: string;
+}
+
 export interface Review {
   content: string;
   courseId: string;

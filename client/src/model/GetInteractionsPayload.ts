@@ -1,4 +1,4 @@
-import type { InteractionKind } from './Interaction';
+import { InteractionKind } from '../lib/types';
 
 export type GetInteractionsPayload = {
   kind?: InteractionKind;

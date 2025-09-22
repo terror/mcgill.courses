@@ -1,13 +1,13 @@
 import type { Subscription } from '../lib/types';
 import type { UserResponse } from '../lib/types';
 import type { Notification } from '../lib/types';
+import { InteractionKind } from '../lib/types';
 import { GetCourseReviewsInteractionPayload } from '../model/GetCourseReviewsInteractionsPayload';
 import type { GetCourseWithReviewsPayload } from '../model/GetCourseWithReviewsPayload';
 import { GetCoursesPayload } from '../model/GetCoursesPayload';
 import type { GetInstructorPayload } from '../model/GetInstructorPayload';
 import type { GetInteractionsPayload } from '../model/GetInteractionsPayload';
 import { GetReviewsPayload } from '../model/GetReviewsPayload';
-import type { InteractionKind } from '../model/Interaction';
 import type { SearchResults } from '../model/SearchResults';
 
 const prefix = '/api';
