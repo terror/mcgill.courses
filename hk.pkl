@@ -1,0 +1,21 @@
+amends "package://github.com/jdx/hk/releases/download/v1.2.0/hk@1.2.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.2.0/hk@1.2.0#/Builtins.pkl"
+
+local linters = new Mapping<String, Step> {
+  ["prettier"] = Builtins.prettier
+}
+
+hooks {
+  ["check"] {
+    steps = linters
+  }
+
+  ["fix"] {
+    fix = true
+    steps = linters
+  }
+
+  ["pre-push"] {
+    steps = linters
+  }
+}
