@@ -19,6 +19,12 @@ export interface Review {
   userId: string;
 }
 
+export interface Notification {
+  review: Review;
+  seen: boolean;
+  userId: string;
+}
+
 export interface Subscription {
   courseId: string;
   userId: string;

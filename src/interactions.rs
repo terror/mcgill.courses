@@ -46,6 +46,7 @@ pub(crate) async fn get_user_interactions_for_course(
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[allow(dead_code)]
 pub(crate) struct GetCourseReviewsInteractionPayload {
   pub(crate) course_id: String,
   pub(crate) interactions: Vec<Interaction>,
