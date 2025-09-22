@@ -2,6 +2,7 @@ use super::*;
 
 #[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub enum InteractionKind {
   Like,
   Dislike,
@@ -24,6 +25,7 @@ impl Into<Bson> for InteractionKind {
 
 #[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub struct Interaction {
   pub kind: InteractionKind,
   pub user_id: String,

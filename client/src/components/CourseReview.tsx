@@ -11,9 +11,9 @@ import { twMerge } from 'tailwind-merge';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import type { Review } from '../lib/types';
+import type { Interaction } from '../lib/types';
+import { InteractionKind } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import type { InteractionKind } from '../model/Interaction';
-import type { Interaction } from '../model/Interaction';
 import { BirdIcon } from './BirdIcon';
 import { DeleteButton } from './DeleteButton';
 import { IconRating } from './IconRating';
@@ -38,7 +38,7 @@ type ReviewInteractionsProps = {
 };
 
 const interactionToNum = (kind: InteractionKind) => {
-  return kind === 'like' ? 1 : -1;
+  return kind === InteractionKind.Like ? 1 : -1;
 };
 
 const getLikeChange = (
@@ -136,17 +136,17 @@ const ReviewInteractions = ({
 
   const handleLike = () => {
     user
-      ? kind === 'like'
+      ? kind === InteractionKind.Like
         ? removeInteraction()
-        : addInteraction('like')
+        : addInteraction(InteractionKind.Like)
       : displayLoginPrompt();
   };
 
   const handleDislike = () => {
     user
-      ? kind === 'dislike'
+      ? kind === InteractionKind.Dislike
         ? removeInteraction()
-        : addInteraction('dislike')
+        : addInteraction(InteractionKind.Dislike)
       : displayLoginPrompt();
   };
 
@@ -158,7 +158,7 @@ const ReviewInteractions = ({
             onClick={handleLike}
             className={twMerge(
               'h-4 w-4 cursor-pointer stroke-gray-500',
-              kind === 'like' ? 'stroke-red-600' : ''
+              kind === InteractionKind.Like ? 'stroke-red-600' : ''
             )}
           />
         </div>
@@ -170,7 +170,7 @@ const ReviewInteractions = ({
             onClick={handleDislike}
             className={twMerge(
               'h-4 w-4 cursor-pointer stroke-gray-500',
-              kind === 'dislike' ? 'stroke-red-600' : ''
+              kind === InteractionKind.Dislike ? 'stroke-red-600' : ''
             )}
           />
         </div>
