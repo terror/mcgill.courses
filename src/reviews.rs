@@ -85,8 +85,7 @@ pub(crate) async fn add_review(
 
   let user_id = user.id();
 
-  tracing::Span::current()
-    .record("user_id", &tracing::field::display(&user_id));
+  tracing::Span::current().record("user_id", tracing::field::display(&user_id));
 
   trace!("Adding review to database...");
 
