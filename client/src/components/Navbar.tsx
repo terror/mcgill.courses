@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { env } from '../lib/constants';
 import { repo } from '../lib/repo';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
-import type { Notification } from '../model/Notification';
+import type { Notification } from '../lib/types';
 import type { SearchResults } from '../model/SearchResults';
 import { CourseSearchBar } from './CourseSearchBar';
 import { DarkModeToggle } from './DarkModeToggle';
