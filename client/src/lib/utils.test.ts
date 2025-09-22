@@ -1,5 +1,5 @@
-import type { Course } from '../model/Course';
-import type { Schedule } from '../model/Schedule';
+import type { Course } from '../model/course';
+import type { Schedule } from '../model/schedule';
 import {
   InvalidDateError,
   capitalize,

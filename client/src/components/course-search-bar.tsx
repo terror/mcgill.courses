@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import type { SearchResults } from '../model/SearchResults';
-import { Highlight } from './Highlight';
-import { SearchBar } from './SearchBar';
+import type { SearchResults } from '../model/search-results';
+import { Highlight } from './highlight';
+import { SearchBar } from './search-bar';
 
 type SearchResultType = 'course' | 'instructor';
 

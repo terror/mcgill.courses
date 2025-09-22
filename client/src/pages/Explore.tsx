@@ -4,18 +4,18 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
 import { toast } from 'sonner';
 
-import { CourseCard } from '../components/CourseCard';
-import { ExploreFilter, SortByType } from '../components/ExploreFilter';
-import { FilterToggle } from '../components/FilterToggle';
-import { JumpToTopButton } from '../components/JumpToTopButton';
-import { Layout } from '../components/Layout';
-import { SearchBar } from '../components/SearchBar';
-import { Spinner } from '../components/Spinner';
+import { CourseCard } from '../components/course-card';
+import { ExploreFilter, SortByType } from '../components/explore-filter';
+import { FilterToggle } from '../components/filter-toggle';
+import { JumpToTopButton } from '../components/jump-to-top-button';
+import { Layout } from '../components/layout';
+import { SearchBar } from '../components/search-bar';
+import { Spinner } from '../components/spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useExploreFilterState } from '../hooks/useExploreFilterState';
 import { repo } from '../lib/repo';
 import { getCurrentTerms } from '../lib/utils';
-import type { Course } from '../model/Course';
+import type { Course } from '../model/course';
 
 const makeSortPayload = (sort: SortByType) => {
   switch (sort) {

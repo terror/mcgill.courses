@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { repo } from '../lib/repo';
 import type { Notification } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import { CourseReview } from './CourseReview';
+import { CourseReview } from './course-review';
 
 export const NotificationDropdown = ({
   notifications,

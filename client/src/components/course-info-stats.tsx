@@ -7,8 +7,8 @@ import { twMerge } from 'tailwind-merge';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { Review } from '../lib/types';
 import { round2Decimals } from '../lib/utils';
-import { BirdIcon } from './BirdIcon';
-import { Histogram } from './Histogram';
+import { BirdIcon } from './bird-icon';
+import { Histogram } from './histogram';
 
 type Size = 'small' | 'medium' | 'large';
 

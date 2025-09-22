@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import changelogItems from '../assets/changelog.json';
-import { Layout } from '../components/Layout';
-import { ChangelogItem } from '../model/ChangelogItem';
+import { Layout } from '../components/layout';
+import { ChangelogItem } from '../model/changelog-item';
 
 const typedChangelogItems: Record<string, ChangelogItem[]> = changelogItems;
 

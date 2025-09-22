@@ -9,9 +9,9 @@ import { twMerge } from 'tailwind-merge';
 import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { env } from '../lib/constants';
-import { DarkModeToggle } from './DarkModeToggle';
-import { navigationItems } from './Footer';
-import { Logo } from './Logo';
+import { DarkModeToggle } from './dark-mode-toggle';
+import { navigationItems } from './footer';
+import { Logo } from './logo';
 
 type OverlayProps = {
   children: React.ReactNode;

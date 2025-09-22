@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { Footer } from './Footer';
-import { Navbar } from './Navbar';
+import { Footer } from './footer';
+import { Navbar } from './navbar';
 
 type LayoutProps = {
   children: React.ReactNode;

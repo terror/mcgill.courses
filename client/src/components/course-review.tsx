@@ -14,10 +14,10 @@ import type { Review } from '../lib/types';
 import type { Interaction } from '../lib/types';
 import { InteractionKind } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import { BirdIcon } from './BirdIcon';
-import { DeleteButton } from './DeleteButton';
-import { IconRating } from './IconRating';
-import { Tooltip } from './Tooltip';
+import { BirdIcon } from './bird-icon';
+import { DeleteButton } from './delete-button';
+import { IconRating } from './icon-rating';
+import { Tooltip } from './tooltip';
 
 // Timestamp of https://github.com/terror/mcgill.courses/pull/500
 const RMP_SCRAPE_EPOCH = new Date(1713472800 * 1000);

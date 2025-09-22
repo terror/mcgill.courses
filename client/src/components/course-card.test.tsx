@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { CourseCard } from '../components/CourseCard';
-import type { Course } from '../model/Course';
+import { CourseCard } from '../components/course-card';
+import type { Course } from '../model/course';
 
 const renderWithRouter = (ui: React.ReactElement) => {
   return render(ui, { wrapper: BrowserRouter });

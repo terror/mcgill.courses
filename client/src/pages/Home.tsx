@@ -3,10 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { CourseSearchBar } from '../components/CourseSearchBar';
-import { Layout } from '../components/Layout';
+import { CourseSearchBar } from '../components/course-search-bar';
+import { Layout } from '../components/layout';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
-import type { SearchResults } from '../model/SearchResults';
+import type { SearchResults } from '../model/search-results';
 
 const alerts: Map<string, string> = new Map([
   ['invalidMail', 'Please use a McGill email address to authenticate.'],

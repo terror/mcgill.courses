@@ -8,13 +8,13 @@ import { env } from '../lib/constants';
 import { repo } from '../lib/repo';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import type { Notification } from '../lib/types';
-import type { SearchResults } from '../model/SearchResults';
-import { CourseSearchBar } from './CourseSearchBar';
-import { DarkModeToggle } from './DarkModeToggle';
-import { Logo } from './Logo';
-import { NotificationDropdown } from './NotificationDropdown';
-import { ProfileDropdown } from './ProfileDropdown';
-import { SideNav } from './SideNav';
+import type { SearchResults } from '../model/search-results';
+import { CourseSearchBar } from './course-search-bar';
+import { DarkModeToggle } from './dark-mode-toggle';
+import { Logo } from './logo';
+import { NotificationDropdown } from './notification-dropdown';
+import { ProfileDropdown } from './profile-dropdown';
+import { SideNav } from './side-nav';
 
 const { courses, instructors, coursesIndex, instructorsIndex } =
   getSearchIndex();

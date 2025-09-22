@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 
 import type { Review } from '../lib/types';
-import type { Course } from '../model/Course';
-import { Autocomplete } from './Autocomplete';
-import { ResetButton } from './ResetButton';
+import type { Course } from '../model/course';
+import { Autocomplete } from './autocomplete';
+import { ResetButton } from './reset-button';
 
 const sortTypes = [
   'Most Recent',

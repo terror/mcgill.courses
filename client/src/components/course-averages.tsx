@@ -8,8 +8,8 @@ import { twMerge } from 'tailwind-merge';
 
 import { Instructor } from '../lib/types';
 import { compareTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { TermAverage } from '../model/TermAverage';
+import { Course } from '../model/course';
+import { TermAverage } from '../model/term-average';
 
 type InstructorLinkProps = {
   instructor: Instructor;

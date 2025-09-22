@@ -7,10 +7,10 @@ import { twMerge } from 'tailwind-merge';
 import * as buildingCodes from '../assets/buildingCodes.json';
 import * as buildingCoordinates from '../assets/buildingCoordinates.json';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
-import type { Course } from '../model/Course';
-import type { Block, Schedule } from '../model/Schedule';
-import { BuildingLocation } from './BuildingLocation';
-import { Tooltip } from './Tooltip';
+import type { Course } from '../model/course';
+import type { Block, Schedule } from '../model/schedule';
+import { BuildingLocation } from './building-location';
+import { Tooltip } from './tooltip';
 
 const VSBtimeToDisplay = (time: string) => {
   const approxTimeOfTheDay = parseInt(time, 10) / 60;

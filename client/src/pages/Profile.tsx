@@ -8,18 +8,18 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { CourseReview } from '../components/CourseReview';
-import { DeleteButton } from '../components/DeleteButton';
-import { JumpToTopButton } from '../components/JumpToTopButton';
-import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
+import { CourseReview } from '../components/course-review';
+import { DeleteButton } from '../components/delete-button';
+import { JumpToTopButton } from '../components/jump-to-top-button';
+import { Layout } from '../components/layout';
+import { Spinner } from '../components/spinner';
 import { useAuth } from '../hooks/useAuth';
 import { repo } from '../lib/repo';
 import type { Subscription } from '../lib/types';
 import type { Review } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
-import { Loading } from './Loading';
+import { Loading } from './loading';
 
 export const Profile = () => {
   const user = useAuth();

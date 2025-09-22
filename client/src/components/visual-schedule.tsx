@@ -5,9 +5,9 @@ import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
 import { mod, sortTerms } from '../lib/utils';
-import { Course } from '../model/Course';
-import { Block, TimeBlock } from '../model/Schedule';
-import { Tooltip } from './Tooltip';
+import { Course } from '../model/course';
+import { Block, TimeBlock } from '../model/schedule';
+import { Tooltip } from './tooltip';
 
 // Unused component, can use this later for schedule builder
 

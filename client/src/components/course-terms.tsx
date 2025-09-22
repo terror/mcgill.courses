@@ -12,9 +12,9 @@ import {
   getCurrentTerms,
   groupCurrentCourseTermInstructors,
 } from '../lib/utils';
-import type { Course } from '../model/Course';
-import { Highlight } from './Highlight';
-import { Tooltip } from './Tooltip';
+import type { Course } from '../model/course';
+import { Highlight } from './highlight';
+import { Tooltip } from './tooltip';
 
 const variantToSize = (variant: 'small' | 'large') => {
   return variant === 'small' ? 20 : 18;

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { Tooltip } from './Tooltip';
+import { Tooltip } from './tooltip';
 
 type HistogramProps = {
   data: number[];

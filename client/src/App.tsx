@@ -1,18 +1,18 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Route, Routes } from 'react-router-dom';
 
-import { PrivateRoute } from './components/PrivateRoute';
-import { About } from './pages/About';
-import { Changelog } from './pages/Changelog';
-import { CoursePage } from './pages/CoursePage';
-import { Explore } from './pages/Explore';
-import { Home } from './pages/Home';
-import { Instructor } from './pages/Instructor';
-import { NotFound } from './pages/NotFound';
-import { PrivacyPolicy } from './pages/PrivacyPolicy';
-import { Profile } from './pages/Profile';
-import { Reviews } from './pages/Reviews';
-import { TermsAndConditions } from './pages/TermsAndConditions';
+import { PrivateRoute } from './components/private-route';
+import { About } from './pages/about';
+import { Changelog } from './pages/changelog';
+import { CoursePage } from './pages/course-page';
+import { Explore } from './pages/explore';
+import { Home } from './pages/home';
+import { Instructor } from './pages/instructor';
+import { NotFound } from './pages/not-found';
+import { PrivacyPolicy } from './pages/privacy-policy';
+import { Profile } from './pages/profile';
+import { Reviews } from './pages/reviews';
+import { TermsAndConditions } from './pages/terms-and-conditions';
 
 const App = () => {
   return (

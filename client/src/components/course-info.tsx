@@ -7,9 +7,9 @@ import { useAuth } from '../hooks/useAuth';
 import { parseCourseDescription } from '../lib/dom-utils';
 import { repo } from '../lib/repo';
 import type { Review } from '../lib/types';
-import type { Course } from '../model/Course';
-import { CourseInfoStats } from './CourseInfoStats';
-import { CourseTerms } from './CourseTerms';
+import type { Course } from '../model/course';
+import { CourseInfoStats } from './course-info-stats';
+import { CourseTerms } from './course-terms';
 
 type CourseInfoProps = {
   course: Course;

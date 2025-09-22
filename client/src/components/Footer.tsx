@@ -1,4 +1,4 @@
-import { NavItem } from './NavItem';
+import { NavItem } from './nav-item';
 
 export const navigationItems = [
   { name: 'Home', href: '/' },

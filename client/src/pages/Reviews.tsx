@@ -4,14 +4,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { CourseReview } from '../components/CourseReview';
-import { JumpToTopButton } from '../components/JumpToTopButton';
-import { Layout } from '../components/Layout';
-import { Spinner } from '../components/Spinner';
+import { CourseReview } from '../components/course-review';
+import { JumpToTopButton } from '../components/jump-to-top-button';
+import { Layout } from '../components/layout';
+import { Spinner } from '../components/spinner';
 import { repo } from '../lib/repo';
 import { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
-import { Loading } from './Loading';
+import { Loading } from './loading';
 
 export const Reviews = () => {
   const limit = 20;
