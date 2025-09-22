@@ -6,8 +6,6 @@ use {
   chrono::{DateTime, Utc},
   clap::Parser,
   dotenv::dotenv,
-  env_logger::Env,
-  log::info,
   octocrab::{models, params},
   serde::{Deserialize, Serialize},
   std::{
@@ -17,6 +15,8 @@ use {
     path::PathBuf,
     process,
   },
+  tracing::info,
+  tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
 };
 
 const BASE_URL: &str = "https://github.com";
@@ -228,7 +228,12 @@ type Result<T = (), E = Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {
-  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+  tracing_subscriber::registry()
+    .with(
+      tracing_subscriber::EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| "info".into()),
+    )
+    .with(tracing_subscriber::fmt::layer())
     .init();
 
   dotenv().ok();

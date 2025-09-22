@@ -28,12 +28,10 @@ use {
   clap::Parser,
   db::Db,
   dotenv::dotenv,
-  env_logger::Env,
   futures::TryStreamExt,
   http::{
     header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
   },
-  log::{debug, error, info, trace},
   model::{
     Course, CourseFilter, InitializeOptions, Instructor, Interaction,
     InteractionKind, Review, ReviewFilter, Subscription,
@@ -71,6 +69,8 @@ use {
     trace::TraceLayer,
   },
   tracing::Span,
+  tracing::{debug, error, info, trace},
+  tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
   typeshare::typeshare,
   url::Url,
   walkdir::WalkDir,
@@ -97,7 +97,12 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {
-  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+  tracing_subscriber::registry()
+    .with(
+      tracing_subscriber::EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| "info".into()),
+    )
+    .with(tracing_subscriber::fmt::layer())
     .init();
 
   dotenv().ok();

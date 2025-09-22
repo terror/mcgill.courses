@@ -8,7 +8,6 @@ use {
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
-  log::{info, warn},
   model::{
     Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
     Interaction, InteractionKind, Notification, Review, ReviewFilter,
@@ -24,6 +23,7 @@ use {
   mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, env, fs, path::PathBuf},
+  tracing::{info, warn},
   {initializer::Initializer, seed::Seed, str_ext::StrExt, utils::*},
 };
 
