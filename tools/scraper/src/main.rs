@@ -3,8 +3,6 @@ use {
   anyhow::{Error, anyhow, bail},
   chrono::Utc,
   clap::Parser,
-  env_logger::Env,
-  log::{error, info, warn},
   model::{
     Block, Course, CoursePage, Instructor, Requirement, Requirements, Schedule,
     TimeBlock,
@@ -28,6 +26,8 @@ use {
   thirtyfour::prelude::*,
   tokio::time::sleep,
   totp_rs::{Secret, TOTP},
+  tracing::{error, info, warn},
+  tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
 };
 
 mod auth;
@@ -42,7 +42,12 @@ mod vsb_extractor;
 type Result<T = (), E = Error> = std::result::Result<T, E>;
 
 fn run() -> Result {
-  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
+  tracing_subscriber::registry()
+    .with(
+      tracing_subscriber::EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| "info".into()),
+    )
+    .with(tracing_subscriber::fmt::layer())
     .init();
 
   Loader::parse().run(&auth::authenticate()?)
