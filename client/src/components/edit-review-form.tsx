@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import type { Course } from '../model/course';
 import { ReviewForm, ReviewSchema } from './review-form';
@@ -81,7 +81,7 @@ export const EditReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await repo.updateReview(course._id, values);
+                    const res = await api.updateReview(course._id, values);
                     actions.setSubmitting(false);
                     onClose();
                     handleSubmit(res);

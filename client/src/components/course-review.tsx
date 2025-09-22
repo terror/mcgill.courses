@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import type { Interaction } from '../lib/types';
 import { InteractionKind } from '../lib/types';
@@ -82,7 +82,7 @@ const ReviewInteractions = ({
 
   const refreshInteractions = async () => {
     try {
-      const payload = await repo.getInteractions(courseId, userId, user?.id);
+      const payload = await api.getInteractions(courseId, userId, user?.id);
       setKind(payload.kind);
     } catch (err: any) {
       toast.error(err.toString());
@@ -91,7 +91,7 @@ const ReviewInteractions = ({
 
   const addInteraction = async (interactionKind: InteractionKind) => {
     try {
-      await repo.addInteraction(interactionKind, courseId, userId, user?.id);
+      await api.addInteraction(interactionKind, courseId, userId, user?.id);
       const change = getLikeChange(kind, interactionKind);
       updateLikes(review.likes + change);
 
@@ -110,7 +110,7 @@ const ReviewInteractions = ({
 
   const removeInteraction = async () => {
     try {
-      await repo.removeInteraction(courseId, userId, user?.id);
+      await api.removeInteraction(courseId, userId, user?.id);
       if (!kind) {
         throw new Error("Can't remove interaction that doesn't exist.");
       }

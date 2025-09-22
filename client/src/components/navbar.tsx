@@ -4,8 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
+import { api } from '../lib/api';
 import { env } from '../lib/constants';
-import { repo } from '../lib/repo';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import type { Notification } from '../lib/types';
 import type { SearchResults } from '../model/search-results';
@@ -41,7 +41,7 @@ export const Navbar = () => {
   useEffect(() => {
     if (!user) return;
 
-    repo
+    api
       .getNotifications()
       .then((data) => setNotifications(data))
       .catch(() => toast.error('Failed to get notifications.'));

@@ -6,7 +6,7 @@ import { VscBell } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { Notification } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { CourseReview } from './course-review';
@@ -67,7 +67,7 @@ export const NotificationDropdown = ({
     if (notification.seen) return;
 
     try {
-      await repo.updateNotification(
+      await api.updateNotification(
         notification.review.courseId,
         notification.review.userId,
         true
@@ -80,7 +80,7 @@ export const NotificationDropdown = ({
 
   const deleteNotification = async (courseId: string) => {
     try {
-      await repo.deleteNotification(courseId);
+      await api.deleteNotification(courseId);
       setNotifications(
         notifications.filter(
           (notification) => notification.review.courseId !== courseId

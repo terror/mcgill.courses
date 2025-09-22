@@ -8,7 +8,7 @@ import { CourseReview } from '../components/course-review';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
 import { Loading } from './loading';
@@ -24,7 +24,7 @@ export const Reviews = () => {
   );
 
   useEffect(() => {
-    repo
+    api
       .getReviews({ limit, offset: 0, sorted: true, withUserCount: true })
       .then((data) => {
         setReviews(data.reviews);
@@ -38,7 +38,7 @@ export const Reviews = () => {
   }, []);
 
   const fetchMore = async () => {
-    const batch = await repo.getReviews({ limit, offset, sorted: true });
+    const batch = await api.getReviews({ limit, offset, sorted: true });
 
     if (batch.reviews.length === 0) setHasMore(false);
     else {

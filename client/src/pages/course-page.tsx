@@ -17,7 +17,7 @@ import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { ReviewFilter, ReviewSortType } from '../components/review-filter';
 import { SchedulesDisplay } from '../components/schedules-display';
 import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import { Interaction } from '../lib/types';
 import { getCurrentTerms } from '../lib/utils';
@@ -56,7 +56,7 @@ export const CoursePage = () => {
 
     const inner = async () => {
       try {
-        const payload = await repo.getCourseWithReviews(id);
+        const payload = await api.getCourseWithReviews(id);
 
         if (payload === null) {
           setCourse(null);
@@ -70,7 +70,7 @@ export const CoursePage = () => {
 
         if (user && id) {
           const courseInteractionsPayload =
-            await repo.getUserInteractionsForCourse(id, user.id);
+            await api.getUserInteractionsForCourse(id, user.id);
 
           setUserInteractions(courseInteractionsPayload.interactions);
         }
@@ -137,7 +137,7 @@ export const CoursePage = () => {
   };
 
   const handleDelete = async (review: Review) => {
-    const res = await repo.deleteReview(review.courseId);
+    const res = await api.deleteReview(review.courseId);
 
     if (res.ok) {
       setShowingReviews(
