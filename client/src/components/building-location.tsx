@@ -11,7 +11,7 @@ import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
 import * as buildingCoordinates from '../assets/buildingCoordinates.json';
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useDarkMode } from '../hooks/use-dark-mode';
 import { env } from '../lib/constants';
 
 type MarkerProps = {

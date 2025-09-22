@@ -1,6 +1,6 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
 
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useDarkMode } from '../hooks/use-dark-mode';
 
 export const DarkModeToggle = () => {
   const [darkMode, setDarkMode] = useDarkMode();

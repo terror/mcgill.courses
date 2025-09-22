@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import type { Interaction } from '../lib/types';

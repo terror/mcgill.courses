@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useDarkMode } from '../hooks/use-dark-mode';
 import { Footer } from './footer';
 import { Navbar } from './navbar';
 

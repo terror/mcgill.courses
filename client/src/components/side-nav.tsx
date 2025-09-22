@@ -6,8 +6,8 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { useAuth } from '../hooks/useAuth';
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useAuth } from '../hooks/use-auth';
+import { useDarkMode } from '../hooks/use-dark-mode';
 import { env } from '../lib/constants';
 import { DarkModeToggle } from './dark-mode-toggle';
 import { navigationItems } from './footer';
