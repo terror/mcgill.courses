@@ -12,13 +12,13 @@ combine = { path = "../combine" }
 futures = "0.3.31"
 itertools = "0.12.1"
 lazy_static = "1.5.0"
-tracing = "0.1.41"
 model = { path = "../model" }
 mongodb = "2.8.2"
 serde = { workspace = true }
 serde_json = { workspace = true }
 stop-words = "0.7.2"
 tokio = { workspace = true }
+tracing = { workspace = true }
 
 [dev-dependencies]
 include_dir = "0.7.4"

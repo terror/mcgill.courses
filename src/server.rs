@@ -174,12 +174,43 @@ impl Server {
       .with_state(State::new(config.db, config.session_store).await?)
       .layer(
         TraceLayer::new_for_http()
-          .on_request(|request: &Request<Body>, _span: &Span| {
-            info!("Received {} {}", request.method(), request.uri().path(),)
+          .make_span_with(|request: &Request<Body>| {
+            let request_id = uuid::Uuid::new_v4().to_string();
+
+            tracing::info_span!(
+              "http_request",
+              method = %request.method(),
+              uri = %request.uri(),
+              path = %request.uri().path(),
+              query = %request.uri().query().unwrap_or(""),
+              request_id = %request_id,
+              user_agent = %request.headers()
+                .get("user-agent")
+                .and_then(|h| h.to_str().ok())
+                .unwrap_or("unknown"),
+            )
           })
-          .on_response(
-            |response: &Response, latency: Duration, _span: &Span| {
-              info!("Response {} in {:?}", response.status(), latency)
+          .on_request(|_request: &Request<Body>, span: &Span| {
+            tracing::info!(parent: span, "request started");
+          })
+          .on_response(|response: &Response, latency: Duration, span: &Span| {
+            tracing::info!(
+              parent: span,
+              status = %response.status(),
+              latency_ms = %latency.as_millis(),
+              "request completed"
+            );
+          })
+          .on_failure(
+            |error: tower_http::classify::ServerErrorsFailureClass,
+             latency: Duration,
+             span: &Span| {
+              tracing::error!(
+                parent: span,
+                error = %error,
+                latency_ms = %latency.as_millis(),
+                "request failed"
+              );
             },
           ),
       );

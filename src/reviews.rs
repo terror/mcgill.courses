@@ -18,6 +18,12 @@ pub(crate) struct GetReviewsPayload {
   pub unique_user_count: Option<u64>,
 }
 
+#[tracing::instrument(name = "api_get_reviews", skip(db), fields(
+  course_id = %params.course_id.as_deref().unwrap_or("all"),
+  instructor_name = %params.instructor_name.as_deref().unwrap_or("all"),
+  limit = %params.limit.unwrap_or(50),
+  offset = %params.offset.unwrap_or(0)
+))]
 pub(crate) async fn get_reviews(
   params: Query<GetReviewsParams>,
   AppState(db): AppState<Arc<Db>>,
@@ -60,6 +66,10 @@ pub(crate) struct AddOrUpdateReviewBody {
   pub(crate) difficulty: u32,
 }
 
+#[tracing::instrument(name = "api_add_review", skip_all, fields(
+  course_id = %body.course_id,
+  rating = %body.rating
+))]
 pub(crate) async fn add_review(
   AppState(db): AppState<Arc<Db>>,
   user: User,
@@ -73,6 +83,10 @@ pub(crate) async fn add_review(
     difficulty,
   } = body.0;
 
+  let user_id = user.id();
+
+  tracing::Span::current().record("user_id", tracing::field::display(&user_id));
+
   trace!("Adding review to database...");
 
   validate_instructors(db.clone(), &course_id, &instructors).await?;
@@ -80,11 +94,11 @@ pub(crate) async fn add_review(
   let review = Review {
     content,
     course_id: course_id.clone(),
+    difficulty,
     instructors,
     rating,
-    difficulty,
     timestamp: Utc::now().into(),
-    user_id: user.id(),
+    user_id,
     ..Review::default()
   };
 
