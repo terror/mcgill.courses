@@ -14,7 +14,7 @@ import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
 import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { Subscription } from '../lib/types';
 import type { Review } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
@@ -39,7 +39,7 @@ export const Profile = () => {
 
     if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
 
-    repo
+    api
       .getReviews({ userId: user.id, sorted: true })
       .then((data) => setUserReviews(data.reviews))
       .catch(() =>
@@ -48,7 +48,7 @@ export const Profile = () => {
         )
       );
 
-    repo
+    api
       .getSubscriptions()
       .then((data) => setUserSubscriptions(data))
       .catch(() =>
@@ -60,7 +60,7 @@ export const Profile = () => {
 
   const removeSubscription = async (courseId: string) => {
     try {
-      await repo.removeSubscription(courseId);
+      await api.removeSubscription(courseId);
       setUserSubscriptions(
         userSubscriptions?.filter(
           (subscription) => subscription.courseId !== courseId

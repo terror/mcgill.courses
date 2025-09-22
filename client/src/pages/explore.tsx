@@ -13,7 +13,7 @@ import { SearchBar } from '../components/search-bar';
 import { Spinner } from '../components/spinner';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useExploreFilterState } from '../hooks/useExploreFilterState';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/course';
 
@@ -86,7 +86,7 @@ export const Explore = () => {
   };
 
   useEffect(() => {
-    repo
+    api
       .getCourses(limit, 0, true, filters)
       .then((data) => {
         setCourses(data.courses);
@@ -100,7 +100,7 @@ export const Explore = () => {
   }, [selectedSubjects, selectedLevels, selectedTerms, sortBy, query]);
 
   const fetchMore = async () => {
-    const batch = await repo.getCourses(limit, offset, false, filters);
+    const batch = await api.getCourses(limit, offset, false, filters);
 
     if (batch.courses.length === 0) setHasMore(false);
     else {

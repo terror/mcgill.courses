@@ -10,7 +10,7 @@ import { CourseReview } from '../components/course-review';
 import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { useAuth } from '../hooks/useAuth';
-import { repo } from '../lib/repo';
+import { api } from '../lib/api';
 import type { Instructor as InstructorType } from '../lib/types';
 import type { Review } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
@@ -32,7 +32,7 @@ export const Instructor = () => {
   useEffect(() => {
     if (!params.name) return;
 
-    repo
+    api
       .getInstructor(params.name)
       .then((data) => {
         setInstructor(data.instructor);

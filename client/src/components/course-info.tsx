@@ -4,8 +4,8 @@ import { VscBell, VscBellSlash } from 'react-icons/vsc';
 import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/useAuth';
+import { api } from '../lib/api';
 import { parseCourseDescription } from '../lib/dom-utils';
-import { repo } from '../lib/repo';
 import type { Review } from '../lib/types';
 import type { Course } from '../model/course';
 import { CourseInfoStats } from './course-info-stats';
@@ -25,7 +25,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   useEffect(() => {
     if (!user) return;
 
-    repo
+    api
       .getSubscription(course._id)
       .then((data) => {
         setIsSubscribed(data !== null);
@@ -39,7 +39,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
 
   const subscribe = async () => {
     try {
-      await repo.addSubcription(course._id);
+      await api.addSubcription(course._id);
       setIsSubscribed(true);
       toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
     } catch (err) {
@@ -51,7 +51,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
 
   const unsubscribe = async () => {
     try {
-      await repo.removeSubscription(course._id);
+      await api.removeSubscription(course._id);
       setIsSubscribed(false);
       toast.success(
         `Unsubscribed from course ${course.subject} ${course.code}`
