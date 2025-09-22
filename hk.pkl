@@ -15,7 +15,9 @@ hooks {
     steps = linters
   }
 
-  ["pre-push"] {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
     steps = linters
   }
 }
