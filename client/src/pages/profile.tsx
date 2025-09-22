@@ -13,7 +13,7 @@ import { DeleteButton } from '../components/delete-button';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Subscription } from '../lib/types';
 import type { Review } from '../lib/types';

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import { env } from '../lib/constants';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';

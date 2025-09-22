@@ -16,7 +16,7 @@ import { NotFound } from '../components/not-found';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { ReviewFilter, ReviewSortType } from '../components/review-filter';
 import { SchedulesDisplay } from '../components/schedules-display';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import { Interaction } from '../lib/types';

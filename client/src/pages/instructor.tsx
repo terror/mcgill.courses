@@ -9,7 +9,7 @@ import { CourseInfoStats } from '../components/course-info-stats';
 import { CourseReview } from '../components/course-review';
 import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Instructor as InstructorType } from '../lib/types';
 import type { Review } from '../lib/types';

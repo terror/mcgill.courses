@@ -4,7 +4,7 @@ import { FaLeaf, FaRegSnowflake } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 import courseCodes from '../assets/courseCodes.json';
-import { useExploreFilterState } from '../hooks/useExploreFilterState';
+import { useExploreFilterState } from '../hooks/use-explore-filter-state';
 import { Autocomplete } from './autocomplete';
 import { termColorMap } from './course-terms';
 import { MultiSelect } from './multi-select';

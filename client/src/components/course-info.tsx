@@ -3,7 +3,7 @@ import { ExternalLink } from 'react-feather';
 import { VscBell, VscBellSlash } from 'react-icons/vsc';
 import { toast } from 'sonner';
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import { parseCourseDescription } from '../lib/dom-utils';
 import type { Review } from '../lib/types';
