@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react';
+import { Menu } from 'lucide-react';
 import { ReactComponentElement } from 'react';
-import { FaBars } from 'react-icons/fa';
 
 type BoxToggleProps = {
   title?: string;
@@ -14,7 +14,7 @@ export const BoxToggle = ({ title, child, open, setOpen }: BoxToggleProps) => {
     <div className='w-full'>
       <div className='mb-1 flex flex-row rounded-lg bg-slate-50 p-3 dark:bg-neutral-800'>
         <button className='mr-auto' onClick={() => setOpen(!open)}>
-          <FaBars className='text-gray-700 dark:text-neutral-400' />
+          <Menu className='text-gray-700 dark:text-neutral-400' />
         </button>
         {title ? <h1 className='text-2xl'>{title}</h1> : null}
       </div>

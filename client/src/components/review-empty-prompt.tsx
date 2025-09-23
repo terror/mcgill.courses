@@ -1,4 +1,4 @@
-import { LuFileText } from 'react-icons/lu';
+import { FileText } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 type ReviewEmptyPromptProps = {
@@ -16,7 +16,7 @@ export const ReviewEmptyPrompt = ({
     >
       <div className='py-1' />
       <div className='mx-4 flex items-center gap-x-2 text-center text-sm sm:text-base'>
-        <LuFileText className='stroke-gray-400 stroke-[1px]' size={40} />
+        <FileText className='stroke-gray-400 stroke-[1px]' size={40} />
         <div>{children}</div>
       </div>
     </div>

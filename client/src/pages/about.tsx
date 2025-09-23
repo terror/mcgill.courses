@@ -1,9 +1,8 @@
 import { Disclosure } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, Github, Mail } from 'lucide-react';
+import { ChevronDown, Github, Mail, MessageCircle } from 'lucide-react';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { FaDiscord } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
@@ -365,7 +364,7 @@ export const About = () => {
                 label: 'GitHub',
               },
               {
-                icon: FaDiscord,
+                icon: MessageCircle,
                 href: 'https://discord.gg/d67aYpC7',
                 label: 'Discord',
               },

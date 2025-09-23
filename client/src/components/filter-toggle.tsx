@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react';
+import { ChevronDown } from 'lucide-react';
 import { PropsWithChildren } from 'react';
-import { LuChevronDown } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 
 export const FilterToggle = ({ children }: PropsWithChildren) => {
@@ -12,7 +12,7 @@ export const FilterToggle = ({ children }: PropsWithChildren) => {
             <h1 className='text-sm font-medium text-gray-600 dark:text-gray-400'>
               Filter...
             </h1>
-            <LuChevronDown
+            <ChevronDown
               className={twMerge(
                 open ? 'rotate-180 transform' : '',
                 'h-5 w-5 text-gray-500'

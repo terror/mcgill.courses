@@ -1,8 +1,7 @@
 import { produce } from 'immer';
 import _ from 'lodash';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -128,9 +127,9 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
             {showAll ? 'Show less' : 'Show all'}
           </p>
           {showAll ? (
-            <IoIosArrowUp className='my-auto mr-auto font-extrabold' />
+            <ChevronUp className='my-auto mr-auto font-extrabold' />
           ) : (
-            <IoIosArrowDown className='my-auto mr-auto font-extrabold' />
+            <ChevronDown className='my-auto mr-auto font-extrabold' />
           )}
         </button>
       )}

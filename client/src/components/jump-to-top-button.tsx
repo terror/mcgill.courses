@@ -1,5 +1,5 @@
+import { ArrowUp } from 'lucide-react';
 import { useState } from 'react';
-import { FaArrowUp } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
 export const JumpToTopButton = () => {
@@ -25,7 +25,7 @@ export const JumpToTopButton = () => {
       disabled={!visible}
       onClick={scrollToTop}
     >
-      <FaArrowUp size={20} />
+      <ArrowUp size={20} />
     </button>
   );
 };

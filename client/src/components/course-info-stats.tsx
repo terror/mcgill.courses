@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
-import { IconType } from 'react-icons';
-import { LuFlame } from 'react-icons/lu';
+import { Flame, LucideIcon } from 'lucide-react';
+import { ComponentType, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { useMediaQuery } from '../hooks/use-media-query';
@@ -57,7 +56,7 @@ const FillBar = ({ width, percentage, text, variant }: FillBarProps) => {
 type StatProps = {
   title: string;
   value: number;
-  icon: IconType;
+  icon: LucideIcon | ComponentType<any>;
   variant: Size;
 };
 
@@ -135,7 +134,7 @@ export const CourseInfoStats = ({
         <Stat
           title='Difficulty'
           value={round2Decimals(averageDifficulty)}
-          icon={LuFlame}
+          icon={Flame}
           variant={variant}
         />
         <div className='py-2' />

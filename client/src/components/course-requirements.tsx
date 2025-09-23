@@ -1,6 +1,5 @@
+import { List, Network } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { FiList } from 'react-icons/fi';
-import { PiGraphFill } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -93,7 +92,7 @@ export const CourseRequirements = ({
     [setShowGraph]
   );
 
-  const ToggleButtonIcon = showGraph ? FiList : PiGraphFill;
+  const ToggleButtonIcon = showGraph ? List : Network;
 
   return (
     <div
