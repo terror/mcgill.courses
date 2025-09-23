@@ -5,7 +5,6 @@ edition = "2021"
 publish = false
 
 [dependencies]
-anyhow = { workspace = true }
 bson = { version = "2.15.0", features = ["chrono-0_4"] }
 chrono = { workspace = true }
 combine = { path = "../combine" }
@@ -17,6 +16,7 @@ mongodb = "2.8.2"
 serde = { workspace = true }
 serde_json = { workspace = true }
 stop-words = "0.7.2"
+thiserror = "2.0.16"
 tokio = { workspace = true }
 tracing = { workspace = true }
 

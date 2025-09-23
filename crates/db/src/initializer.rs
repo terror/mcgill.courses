@@ -103,7 +103,7 @@ impl Initializer {
       join_all(tasks)
         .await
         .into_iter()
-        .collect::<Result<Vec<_>, _>>()?;
+        .try_for_each(|result| result?)?;
     } else {
       for item in items {
         runner(self.db.clone(), item).await?;
