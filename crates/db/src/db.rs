@@ -235,7 +235,7 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
+        .ok_or(mongodb::error::Error::custom(Error::CourseNotFound))?;
 
       let count = course.review_count as f32;
 
@@ -314,7 +314,7 @@ impl Db {
           session,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(anyhow!("Review not found")))?;
+        .ok_or(mongodb::error::Error::custom(Error::ReviewNotFound))?;
 
       let course = course_coll
         .find_one(
@@ -324,7 +324,7 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
+        .ok_or(mongodb::error::Error::custom(Error::CourseNotFound))?;
 
       let (avg_rating, avg_difficulty) = if course.review_count == 0 {
         (0.0, 0.0)
@@ -461,11 +461,7 @@ impl Db {
           InteractionKind::Like => 1,
           InteractionKind::Dislike => -1,
         };
-        if old.is_some() {
-          amt * 2
-        } else {
-          amt
-        }
+        if old.is_some() { amt * 2 } else { amt }
       };
 
       review_coll
@@ -2025,15 +2021,16 @@ mod tests {
 
     assert!(db.delete_review("MATH240", "1").await.is_ok());
 
-    assert!(db
-      .add_review(Review {
+    assert!(
+      db.add_review(Review {
         content: "foo".into(),
         course_id: "MATH240".into(),
         user_id: "1".into(),
         ..Default::default()
       })
       .await
-      .is_ok());
+      .is_ok()
+    );
   }
 
   #[tokio::test(flavor = "multi_thread")]
@@ -2155,10 +2152,12 @@ mod tests {
     assert!(filtered.len() < total.len());
 
     for course in filtered {
-      assert!(course
-        .terms
-        .iter()
-        .any(|term| term.starts_with(&"Winter".to_string())));
+      assert!(
+        course
+          .terms
+          .iter()
+          .any(|term| term.starts_with(&"Winter".to_string()))
+      );
     }
   }
 
