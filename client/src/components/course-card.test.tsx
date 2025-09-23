@@ -5,7 +5,17 @@ import { CourseCard } from '../components/course-card';
 import type { Course } from '../model/course';
 
 const renderWithRouter = (ui: React.ReactElement) => {
-  return render(ui, { wrapper: BrowserRouter });
+  const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
+      {children}
+    </BrowserRouter>
+  );
+  return render(ui, { wrapper: RouterWrapper });
 };
 
 describe('CourseCard', () => {

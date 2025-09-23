@@ -37,9 +37,11 @@ const SeasonIcon = ({ variant, term }: SeasonIconProps) => {
   const icon = icons[season];
 
   if (variant === 'large') {
-    <Tooltip text={term}>
-      <div>{icon}</div>
-    </Tooltip>;
+    return (
+      <Tooltip text={term}>
+        <div>{icon}</div>
+      </Tooltip>
+    );
   }
 
   return <div>{icon}</div>;
