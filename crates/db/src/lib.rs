@@ -1,5 +1,4 @@
 use {
-  anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, TimeZone, Utc},
   combine::Combine,
@@ -8,7 +7,6 @@ use {
   futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
-  log::{info, warn},
   model::{
     Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
     Interaction, InteractionKind, Notification, Review, ReviewFilter,
@@ -23,7 +21,9 @@ use {
   },
   mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
   serde::{de::DeserializeOwned, Serialize},
-  std::{collections::HashSet, env, fs, path::PathBuf},
+  std::{collections::HashSet, env, fs, num::TryFromIntError, path::PathBuf},
+  tokio::task::JoinError,
+  tracing::{info, warn},
   {initializer::Initializer, seed::Seed, str_ext::StrExt, utils::*},
 };
 
@@ -36,12 +36,13 @@ use {
   tempdir::TempDir,
 };
 
-type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
+pub type Result<T = ()> = std::result::Result<T, Error>;
 
 mod db;
+mod error;
 mod initializer;
 mod seed;
 mod str_ext;
 mod utils;
 
-pub use crate::db::Db;
+pub use crate::{db::Db, error::Error};

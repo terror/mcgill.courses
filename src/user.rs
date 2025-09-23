@@ -1,6 +1,7 @@
 use super::*;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[typeshare]
 pub(crate) struct User {
   id: String,
   mail: String,
@@ -25,6 +26,7 @@ impl User {
 }
 
 #[derive(Serialize, Deserialize)]
+#[typeshare]
 struct UserResponse {
   user: Option<User>,
 }
@@ -47,22 +49,21 @@ where
   ) -> Result<Self, Self::Rejection> {
     let session_store = MongodbSessionStore::from_ref(state);
 
-    let cookies =
-      parts.extract::<TypedHeader<Cookie>>().await.map_err(|e| {
-        match *e.name() {
-          header::COOKIE => match e.reason() {
-            TypedHeaderRejectionReason::Missing => AuthRedirect,
-            _ => {
-              error!("Unexpected error getting cookie header(s): {}", e);
-              AuthRedirect
-            }
-          },
+    let cookies = parts.extract::<TypedHeader<Cookie>>().await.map_err(
+      |error| match *error.name() {
+        header::COOKIE => match error.reason() {
+          TypedHeaderRejectionReason::Missing => AuthRedirect,
           _ => {
-            error!("Unexpected error getting cookies: {}", e);
+            error!("Unexpected error getting cookie header(s): {error}");
             AuthRedirect
           }
+        },
+        _ => {
+          error!("Unexpected error getting cookies: {error}");
+          AuthRedirect
         }
-      })?;
+      },
+    )?;
 
     Ok(
       session_store

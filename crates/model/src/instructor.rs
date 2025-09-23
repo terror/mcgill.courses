@@ -13,6 +13,7 @@ use super::*;
   Serialize,
 )]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub struct Instructor {
   pub name: String,
   pub name_ngrams: Option<String>,

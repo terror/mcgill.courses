@@ -2,15 +2,18 @@ use super::*;
 
 #[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub struct Review {
   pub content: String,
   pub course_id: String,
-  pub instructors: Vec<String>,
-  pub rating: u32,
   pub difficulty: u32,
+  pub instructors: Vec<String>,
+  pub likes: i32,
+  pub rating: u32,
+  #[serde(with = "crate::datetime")]
+  #[typeshare(serialized_as = "String")]
   pub timestamp: DateTime,
   pub user_id: String,
-  pub likes: i32,
 }
 
 impl Default for Review {
@@ -18,12 +21,12 @@ impl Default for Review {
     Self {
       content: String::new(),
       course_id: String::new(),
-      instructors: vec![],
-      rating: 0,
       difficulty: 0,
+      instructors: vec![],
+      likes: 0,
+      rating: 0,
       timestamp: DateTime::from_millis(0),
       user_id: String::new(),
-      likes: 0,
     }
   }
 }
@@ -36,9 +39,203 @@ impl Into<Bson> for Review {
       "difficulty": self.difficulty,
       "instructors": self.instructors,
       "rating": self.rating,
-      "timestamp": self.timestamp,
+      "timestamp": self.timestamp.timestamp_millis().to_string(),
       "userId": self.user_id,
       "likes": self.likes
     })
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use {
+    super::*,
+    serde_json::{json, Value},
+  };
+
+  #[test]
+  fn serialize_datetime_as_string() {
+    let timestamp = DateTime::from_millis(1640995200000); // 2022-01-01 00:00:00 UTC
+
+    let review = Review {
+      content: "Test review".to_string(),
+      course_id: "COMP101".to_string(),
+      difficulty: 3,
+      instructors: vec!["Dr. Smith".to_string()],
+      likes: 5,
+      rating: 4,
+      timestamp,
+      user_id: "user123".to_string(),
+    };
+
+    let json =
+      serde_json::to_value(&review).expect("failed to serialize review");
+
+    assert_eq!(
+      json["timestamp"],
+      Value::String("1640995200000".to_string())
+    );
+  }
+
+  #[test]
+  fn deserialize_string_timestamp() {
+    let json = json!({
+      "content": "Test review",
+      "courseId": "COMP101",
+      "difficulty": 3,
+      "instructors": ["Dr. Smith"],
+      "likes": 5,
+      "rating": 4,
+      "timestamp": "1640995200000",
+      "userId": "user123"
+    });
+
+    let review: Review =
+      serde_json::from_value(json).expect("failed to deserialize review");
+
+    assert_eq!(review.timestamp.timestamp_millis(), 1640995200000);
+    assert_eq!(review.content, "Test review");
+    assert_eq!(review.course_id, "COMP101");
+  }
+
+  #[test]
+  fn deserialize_legacy_mongodb_timestamp() {
+    let json = json!({
+      "content": "Test review",
+      "courseId": "COMP101",
+      "difficulty": 3,
+      "instructors": ["Dr. Smith"],
+      "likes": 5,
+      "rating": 4,
+      "timestamp": {
+        "$date": {
+          "$numberLong": "1640995200000"
+        }
+      },
+      "userId": "user123"
+    });
+
+    let review: Review = serde_json::from_value(json)
+      .expect("failed to deserialize legacy review");
+
+    assert_eq!(review.timestamp.timestamp_millis(), 1640995200000);
+    assert_eq!(review.content, "Test review");
+  }
+
+  #[test]
+  fn deserialize_invalid_string_timestamp() {
+    let json = json!({
+      "content": "Test review",
+      "courseId": "COMP101",
+      "difficulty": 3,
+      "instructors": ["Dr. Smith"],
+      "likes": 5,
+      "rating": 4,
+      "timestamp": "not-a-number",
+      "userId": "user123"
+    });
+
+    let result = serde_json::from_value::<Review>(json);
+
+    assert!(result.is_err());
+
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("invalid timestamp string"));
+  }
+
+  #[test]
+  fn deserialize_malformed_mongodb_timestamp() {
+    let json = json!({
+      "content": "Test review",
+      "courseId": "COMP101",
+      "difficulty": 3,
+      "instructors": ["Dr. Smith"],
+      "likes": 5,
+      "rating": 4,
+      "timestamp": {
+        "$date": "invalid-format"
+      },
+      "userId": "user123"
+    });
+
+    let result = serde_json::from_value::<Review>(json);
+
+    assert!(result.is_err());
+
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("'$date' field must be an object"));
+  }
+
+  #[test]
+  fn deserialize_missing_numberlong() {
+    let json = json!({
+      "content": "Test review",
+      "courseId": "COMP101",
+      "difficulty": 3,
+      "instructors": ["Dr. Smith"],
+      "likes": 5,
+      "rating": 4,
+      "timestamp": {
+        "$date": {}
+      },
+      "userId": "user123"
+    });
+
+    let result = serde_json::from_value::<Review>(json);
+
+    assert!(result.is_err());
+
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("missing '$numberLong' field"));
+  }
+
+  #[test]
+  fn deserialize_invalid_timestamp_type() {
+    let json = json!({
+      "content": "Test review",
+      "courseId": "COMP101",
+      "difficulty": 3,
+      "instructors": ["Dr. Smith"],
+      "likes": 5,
+      "rating": 4,
+      "timestamp": 123, // Number instead of string or object
+      "userId": "user123"
+    });
+
+    let result = serde_json::from_value::<Review>(json);
+
+    assert!(result.is_err());
+
+    assert!(result
+      .unwrap_err()
+      .to_string()
+      .contains("expected either a timestamp string or MongoDB date object"));
+  }
+
+  #[test]
+  fn roundtrip_serialization() {
+    let original = Review {
+      content: "Round trip test".to_string(),
+      course_id: "MATH200".to_string(),
+      difficulty: 2,
+      instructors: vec!["Prof. Johnson".to_string(), "Dr. Lee".to_string()],
+      likes: 10,
+      rating: 5,
+      timestamp: DateTime::from_millis(1672531200000), // 2023-01-01 00:00:00 UTC
+      user_id: "user456".to_string(),
+    };
+
+    let json = serde_json::to_value(&original).expect("failed to serialize");
+
+    let deserialized: Review =
+      serde_json::from_value(json).expect("failed to deserialize");
+
+    assert_eq!(original, deserialized);
   }
 }

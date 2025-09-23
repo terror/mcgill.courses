@@ -7,12 +7,13 @@ use {
     fmt::{self, Display, Formatter},
     path::PathBuf,
   },
+  typeshare::typeshare,
 };
 
 mod course;
 mod course_filter;
-mod course_listing;
 mod course_page;
+mod datetime;
 mod initialize_options;
 mod instructor;
 mod interaction;
@@ -27,7 +28,6 @@ mod subscription;
 pub use crate::{
   course::Course,
   course_filter::{CourseFilter, CourseSort, CourseSortType},
-  course_listing::CourseListing,
   course_page::CoursePage,
   initialize_options::InitializeOptions,
   instructor::Instructor,
@@ -36,7 +36,7 @@ pub use crate::{
   requirements::{Operator, ReqNode, Requirement, Requirements},
   review::Review,
   review_filter::ReviewFilter,
-  schedule::*,
+  schedule::{Block, Schedule, TimeBlock},
   search_results::SearchResults,
   subscription::Subscription,
 };

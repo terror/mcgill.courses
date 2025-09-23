@@ -14,13 +14,11 @@ impl Db {
   const REVIEW_COLLECTION: &'static str = "reviews";
   const SUBSCRIPTION_COLLECTION: &'static str = "subscriptions";
 
+  #[tracing::instrument(name = "db_connect", skip_all, fields(db_name = %db_name))]
   pub async fn connect(db_name: &str) -> Result<Self> {
     let mut client_options =
       ClientOptions::parse(env::var("MONGODB_URL").unwrap_or_else(|_| {
-        format!(
-          "mongodb://localhost:27017/{}?directConnection=true&replicaSet=rs0",
-          db_name
-        )
+        format!("mongodb://localhost:27017/{db_name}?directConnection=true&replicaSet=rs0")
       }))
       .await?;
 
@@ -33,7 +31,7 @@ impl Db {
       .run_command(doc! { "ping": 1 }, None)
       .await?;
 
-    info!("Connected to MongoDB.");
+    info!("Connected to MongoDB");
 
     Ok(Self {
       database: client.database(db_name),
@@ -171,6 +169,7 @@ impl Db {
     )
   }
 
+  #[tracing::instrument(name = "db_search", skip(self), fields(query = %query))]
   pub async fn search(&self, query: &str) -> Result<SearchResults> {
     Ok(SearchResults {
       courses: self
@@ -186,10 +185,12 @@ impl Db {
     })
   }
 
+  #[tracing::instrument(name = "db_find_course_by_id", skip(self), fields(course_id = %id))]
   pub async fn find_course_by_id(&self, id: &str) -> Result<Option<Course>> {
     self.find_course(doc! { "_id": id }).await
   }
 
+  #[tracing::instrument(name = "db_add_review", skip(self), fields(course_id = %review.course_id, user_id = %review.user_id))]
   pub async fn add_review(&self, review: Review) -> Result<UpdateResult> {
     let mut session = self.client.start_session(None).await?;
 
@@ -234,7 +235,7 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
+        .ok_or(mongodb::error::Error::custom(Error::CourseNotFound))?;
 
       let count = course.review_count as f32;
 
@@ -313,7 +314,7 @@ impl Db {
           session,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(anyhow!("Review not found")))?;
+        .ok_or(mongodb::error::Error::custom(Error::ReviewNotFound))?;
 
       let course = course_coll
         .find_one(
@@ -323,7 +324,7 @@ impl Db {
           None,
         )
         .await?
-        .ok_or(mongodb::error::Error::custom(anyhow!("Course not found")))?;
+        .ok_or(mongodb::error::Error::custom(Error::CourseNotFound))?;
 
       let (avg_rating, avg_difficulty) = if course.review_count == 0 {
         (0.0, 0.0)
@@ -460,6 +461,7 @@ impl Db {
           InteractionKind::Like => 1,
           InteractionKind::Dislike => -1,
         };
+
         if old.is_some() {
           amt * 2
         } else {
@@ -926,10 +928,8 @@ impl Db {
                 "department": course.department,
                 "description": course.description,
                 "faculty": course.faculty,
-                "facultyUrl": course.faculty_url,
                 "instructors": course.instructors.combine(found.instructors),
                 "leadingTo": course.leading_to,
-                "level": course.level,
                 "logicalCorequisites": course.logical_corequisites,
                 "logicalPrerequisites": course.logical_prerequisites,
                 "prerequisites": course.prerequisites,
@@ -2527,7 +2527,7 @@ mod tests {
       for result in results {
         let (a, b) = (
           Regex::new(&format!("(?i).*{}.*", query.replace(' ', ""))).unwrap(),
-          Regex::new(&format!("(?i).*{}.*", query)).unwrap(),
+          Regex::new(&format!("(?i).*{query}.*")).unwrap(),
         );
 
         assert!(

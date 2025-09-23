@@ -10,7 +10,7 @@ pub(crate) async fn get_instructor(
   Path(name): Path<String>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  info!("Fetching instructor for name: {}", name);
+  info!("Fetching instructor for name: {name}");
 
   let instructor = db.find_instructor_by_name(&name).await?;
 

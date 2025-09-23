@@ -1,5 +1,4 @@
 {
-  "*.rs": ["cargo fmt --"],
   "*.ts": ["prettier --write", "eslint"],
   "*.tsx": ["prettier --write", "eslint"]
 }
