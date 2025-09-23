@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+
 import type { Course } from '../model/course';
 import type { Schedule } from '../model/schedule';
 import {
@@ -19,12 +21,12 @@ import {
 
 describe('timeSince', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2024-01-01T00:00:00Z'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('handles string timestamps', () => {
@@ -147,15 +149,15 @@ describe('timeSince', () => {
 
 describe('getCurrentTerms', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('returns summer-fall-winter for May-July', () => {
-    jest.setSystemTime(new Date('2024-06-15'));
+    vi.setSystemTime(new Date('2024-06-15'));
 
     expect(getCurrentTerms()).toEqual([
       'Summer 2024',
@@ -165,7 +167,7 @@ describe('getCurrentTerms', () => {
   });
 
   it('returns fall-winter-summer for August-December', () => {
-    jest.setSystemTime(new Date('2024-09-15'));
+    vi.setSystemTime(new Date('2024-09-15'));
 
     expect(getCurrentTerms()).toEqual([
       'Fall 2024',
@@ -175,7 +177,7 @@ describe('getCurrentTerms', () => {
   });
 
   it('returns fall-winter-summer for January-April', () => {
-    jest.setSystemTime(new Date('2024-03-15'));
+    vi.setSystemTime(new Date('2024-03-15'));
 
     expect(getCurrentTerms()).toEqual([
       'Fall 2023',
@@ -185,7 +187,7 @@ describe('getCurrentTerms', () => {
   });
 
   it('handles edge case dates', () => {
-    jest.setSystemTime(new Date('2024-05-01T12:00:00Z'));
+    vi.setSystemTime(new Date('2024-05-01T12:00:00Z'));
 
     expect(getCurrentTerms()).toEqual([
       'Summer 2024',
@@ -193,7 +195,7 @@ describe('getCurrentTerms', () => {
       'Winter 2025',
     ]);
 
-    jest.setSystemTime(new Date('2024-08-01T12:00:00Z'));
+    vi.setSystemTime(new Date('2024-08-01T12:00:00Z'));
 
     expect(getCurrentTerms()).toEqual([
       'Fall 2024',
@@ -201,7 +203,7 @@ describe('getCurrentTerms', () => {
       'Summer 2025',
     ]);
 
-    jest.setSystemTime(new Date('2024-01-01T12:00:00Z'));
+    vi.setSystemTime(new Date('2024-01-01T12:00:00Z'));
 
     expect(getCurrentTerms()).toEqual([
       'Fall 2023',
@@ -377,12 +379,12 @@ describe('mod', () => {
 
 describe('groupCurrentCourseTermInstructors', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2024-01-01'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2024-01-01'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('groups instructors by current terms', () => {

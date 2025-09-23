@@ -8,10 +8,15 @@
     "client/dist/*",
     "cypress.config.js",
     "cypress/*",
-    "vite.config.ts"
+    "vite.config.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "coverage/*"
   ],
   "parser": "@typescript-eslint/parser",
-  "parserOptions": { "project": ["./tsconfig.json"] },
+  "parserOptions": { "project": ["./tsconfig.json", "./tsconfig.node.json"] },
   "plugins": ["@typescript-eslint"],
   "root": true,
   "rules": {

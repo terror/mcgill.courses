@@ -7,6 +7,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "noEmit": true,
@@ -18,6 +19,6 @@
     "target": "ESNext",
     "useDefineForClassFields": true
   },
-  "include": ["client/src", "jest.setup.ts", "jest.config.js"],
+  "include": ["client/src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
