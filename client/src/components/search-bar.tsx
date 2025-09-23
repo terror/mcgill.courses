@@ -1,5 +1,5 @@
+import { Search } from 'lucide-react';
 import { RefObject } from 'react';
-import { Search } from 'react-feather';
 import { twMerge } from 'tailwind-merge';
 
 export const SearchBar = ({

@@ -1,5 +1,5 @@
+import { Layers, User } from 'lucide-react';
 import { RefObject, useState } from 'react';
-import { Layers, User } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
