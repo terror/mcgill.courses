@@ -134,7 +134,7 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
         </button>
       )}
       <p className='mt-5 text-center text-xs text-gray-700 dark:text-gray-200'>
-        Supported by{' '}
+        Powered by{' '}
         <a href='https://demetrios-koziris.github.io/McGillEnhanced/'>
           <span className='underline'>McGill Enhanced</span>
         </a>
