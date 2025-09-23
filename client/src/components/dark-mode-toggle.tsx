@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
+import { Moon, Sun } from 'lucide-react';
 
 import { useDarkMode } from '../hooks/use-dark-mode';
 
@@ -12,12 +12,12 @@ export const DarkModeToggle = () => {
   return (
     <button
       onClick={toggleDarkMode}
-      className='rounded-2xl p-1 hover:bg-gray-50 dark:hover:bg-neutral-700'
+      className='rounded-2xl p-1.5 hover:bg-gray-50 dark:hover:bg-neutral-700'
     >
       {darkMode ? (
-        <SunIcon className='size-6 fill-gray-400 stroke-gray-400 stroke-2' />
+        <Sun className='size-6 fill-gray-400 stroke-gray-400 stroke-2' />
       ) : (
-        <MoonIcon className='size-6 stroke-neutral-500 stroke-2' />
+        <Moon className='size-6 stroke-neutral-500 stroke-2' />
       )}
     </button>
   );

@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import { ChevronDown } from 'lucide-react';
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { IoIosArrowDown } from 'react-icons/io';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
@@ -275,7 +275,7 @@ export const SchedulesDisplay = ({
               onClick={() => setShowAll(!showAll)}
             >
               {showAll ? 'Show less' : 'Show all'}
-              <IoIosArrowDown
+              <ChevronDown
                 className={`${
                   showAll ? 'rotate-180' : ''
                 } mx-2 size-5 text-gray-900 dark:text-gray-300`}

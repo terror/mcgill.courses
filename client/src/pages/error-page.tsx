@@ -1,5 +1,5 @@
+import { XCircle } from 'lucide-react';
 import { FallbackProps } from 'react-error-boundary';
-import { LuXCircle } from 'react-icons/lu';
 
 import { Layout } from '../components/layout';
 
@@ -13,7 +13,7 @@ export const ErrorPage = ({ error, resetErrorBoundary }: FallbackProps) => {
               Something went wrong :(
             </div>
             <div className='py-1.5' />
-            <LuXCircle
+            <XCircle
               className='mx-auto stroke-gray-400 dark:stroke-gray-600'
               size={40}
               strokeWidth={2}

@@ -1,9 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
-import { Edit, Tag } from 'lucide-react';
+import { Edit, Flame, Pin, Tag, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
-import { BsPinFill } from 'react-icons/bs';
-import { LuFlame, LuThumbsDown, LuThumbsUp } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
@@ -154,7 +152,7 @@ const ReviewInteractions = ({
     <Fragment>
       <div className='mb-0.5 flex items-center'>
         <div className='flex size-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-          <LuThumbsUp
+          <ThumbsUp
             onClick={handleLike}
             className={twMerge(
               'h-4 w-4 cursor-pointer stroke-gray-500',
@@ -166,7 +164,7 @@ const ReviewInteractions = ({
           {likes}
         </span>
         <div className='flex size-8 items-center justify-center rounded-md text-gray-700 focus:outline-none dark:text-white'>
-          <LuThumbsDown
+          <ThumbsDown
             onClick={handleDislike}
             className={twMerge(
               'h-4 w-4 cursor-pointer stroke-gray-500',
@@ -233,7 +231,12 @@ export const CourseReview = ({
                   <Tag className='ml-2 mt-1 w-4 text-red-600' />
                 </Tooltip>
               )}
-              {canModify && <BsPinFill className='ml-2 mt-2 text-red-600' />}
+              {canModify && (
+                <Pin
+                  size={15}
+                  className='ml-2 mt-2 fill-rose-600 text-red-600'
+                />
+              )}
               <div className='grow' />
               <div className='flex w-64 flex-col items-end rounded-lg p-2'>
                 <div className='flex items-center gap-x-2'>
@@ -246,7 +249,7 @@ export const CourseReview = ({
                   <div className='text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400'>
                     Difficulty
                   </div>
-                  <IconRating rating={review.difficulty} icon={LuFlame} />
+                  <IconRating rating={review.difficulty} icon={Flame} />
                 </div>
               </div>
             </div>

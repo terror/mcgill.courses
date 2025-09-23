@@ -1,8 +1,7 @@
 import { produce } from 'immer';
 import _ from 'lodash';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -128,14 +127,14 @@ export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
             {showAll ? 'Show less' : 'Show all'}
           </p>
           {showAll ? (
-            <IoIosArrowUp className='my-auto mr-auto font-extrabold' />
+            <ChevronUp className='my-auto mr-auto font-extrabold' />
           ) : (
-            <IoIosArrowDown className='my-auto mr-auto font-extrabold' />
+            <ChevronDown className='my-auto mr-auto font-extrabold' />
           )}
         </button>
       )}
       <p className='mt-5 text-center text-xs text-gray-700 dark:text-gray-200'>
-        Supported by{' '}
+        Powered by{' '}
         <a href='https://demetrios-koziris.github.io/McGillEnhanced/'>
           <span className='underline'>McGill Enhanced</span>
         </a>

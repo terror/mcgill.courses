@@ -1,6 +1,5 @@
+import { List, Network } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { FiList } from 'react-icons/fi';
-import { PiGraphFill } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -93,7 +92,7 @@ export const CourseRequirements = ({
     [setShowGraph]
   );
 
-  const ToggleButtonIcon = showGraph ? FiList : PiGraphFill;
+  const ToggleButtonIcon = showGraph ? List : Network;
 
   return (
     <div
@@ -103,12 +102,12 @@ export const CourseRequirements = ({
       )}
     >
       <button
-        className='absolute right-4 top-4 z-10 cursor-pointer rounded-full bg-gray-200 p-1.5 transition duration-150 hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-neutral-600'
+        className='absolute right-4 top-4 z-10 cursor-pointer rounded-full bg-gray-200 p-2 transition duration-150 hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-neutral-600'
         onClick={handleGraphToggle}
       >
         <ToggleButtonIcon
           size={28}
-          className='fill-gray-700 stroke-gray-700 dark:fill-gray-400 dark:stroke-gray-400'
+          className='stroke-gray-700 dark:stroke-gray-400'
         />
       </button>
       {!showGraph ? (

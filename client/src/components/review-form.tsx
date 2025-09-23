@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FormikState } from 'formik';
 import { PersistFormikValues } from 'formik-persist-values';
+import { Flame } from 'lucide-react';
 import { PropsWithChildren } from 'react';
-import { LuFlame } from 'react-icons/lu';
 import * as Yup from 'yup';
 
 import type { Course } from '../model/course';
@@ -108,7 +108,7 @@ export const ReviewForm = ({
           <IconRatingInput
             name='difficulty'
             rating={values.difficulty}
-            icon={LuFlame}
+            icon={Flame}
             setFieldValue={setFieldValue}
           />
         </div>

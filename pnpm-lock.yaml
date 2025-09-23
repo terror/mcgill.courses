@@ -56,9 +56,6 @@ importers:
       react-helmet-async:
         specifier: ^2.0.5
         version: 2.0.5(react@18.3.1)
-      react-icons:
-        specifier: ^4.12.0
-        version: 4.12.0(react@18.3.1)
       react-infinite-scroll-component:
         specifier: ^6.1.0
         version: 6.1.0(react@18.3.1)
@@ -2730,11 +2727,6 @@ packages:
     resolution: {integrity: sha512-rYUYHeus+i27MvFE+Jaa4WsyBKGkL6qVgbJvSBoX8mbsWoABJXdEO0bZyi0F6i+4f0NuIb8AvqPMj3iXFHkMwg==}
     peerDependencies:
       react: ^16.6.0 || ^17.0.0 || ^18.0.0
-
-  react-icons@4.12.0:
-    resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
-    peerDependencies:
-      react: '*'
 
   react-infinite-scroll-component@6.1.0:
     resolution: {integrity: sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==}
@@ -5984,10 +5976,6 @@ snapshots:
       react: 18.3.1
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
-
-  react-icons@4.12.0(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   react-infinite-scroll-component@6.1.0(react@18.3.1):
     dependencies:

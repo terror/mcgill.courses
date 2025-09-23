@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/buildingCodes.json';
@@ -225,7 +225,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
       <div className='flex gap-x-6 px-6 py-3'>
         <div className='flex items-center gap-x-2'>
           <button onClick={updateIndex(-1)} disabled={arrowsDisabled}>
-            <LuArrowLeft
+            <ArrowLeft
               size={20}
               className={twMerge(
                 arrowsDisabled
@@ -238,7 +238,7 @@ export const VisualSchedule = ({ course }: VisualScheduleProps) => {
             {schedule.blocks.map((b) => b.display).join(' + ')}
           </div>
           <button onClick={updateIndex(1)} disabled={arrowsDisabled}>
-            <LuArrowRight
+            <ArrowRight
               size={20}
               className={twMerge(
                 arrowsDisabled

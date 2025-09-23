@@ -1,11 +1,8 @@
 import { Disclosure } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown, Github, Mail, MessageCircle } from 'lucide-react';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AiOutlineGithub } from 'react-icons/ai';
-import { FaDiscord } from 'react-icons/fa';
-import { FiMail } from 'react-icons/fi';
-import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
@@ -38,7 +35,7 @@ const Questions = ({ input }: QuestionsProps) => {
                   animate={{ rotate: open ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <IoIosArrowDown className='size-5 text-gray-900 dark:text-gray-300' />
+                  <ChevronDown className='size-5 text-gray-900 dark:text-gray-300' />
                 </motion.div>
               </Disclosure.Button>
               <AnimatePresence initial={false}>
@@ -362,17 +359,17 @@ export const About = () => {
           >
             {[
               {
-                icon: AiOutlineGithub,
+                icon: Github,
                 href: 'https://www.github.com/terror/mcgill.courses',
                 label: 'GitHub',
               },
               {
-                icon: FaDiscord,
+                icon: MessageCircle,
                 href: 'https://discord.gg/d67aYpC7',
                 label: 'Discord',
               },
               {
-                icon: FiMail,
+                icon: Mail,
                 href: 'mailto:admin@mcgill.courses',
                 label: 'Email',
               },
