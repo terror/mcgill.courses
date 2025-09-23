@@ -1,4 +1,4 @@
-import { Layers, Telescope, User } from 'lucide-react';
+import { Layers, User } from 'lucide-react';
 import { RefObject, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
@@ -84,7 +84,7 @@ const ExploreButton = () => {
           isHovering ? highlightResultStyle : 'bg-gray-100 dark:bg-neutral-800'
         )}
       >
-        <Telescope className='dark:text-gray-200' />
+        <Layers className='dark:text-gray-200' />
         <div className='z-50 ml-2 dark:text-gray-200'>Explore all courses</div>
       </div>
     </Link>
