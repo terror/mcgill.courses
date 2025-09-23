@@ -7,6 +7,34 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data:/data/db
+    healthcheck:
+      test:
+        echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  mongodb-init:
+    image: mongo:latest
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    command: >
+      mongosh --host mongodb:27017 --quiet --eval '
+        try {
+          rs.status();
+          print("Replica set already initialized");
+        } catch (e) {
+          if (e.message.includes("no replset config has been received")) {
+            rs.initiate();
+            print("Replica set initialized");
+          } else {
+            throw e;
+          }
+        }
+      '
+    restart: 'no'
 
 volumes:
   mongodb_data:
