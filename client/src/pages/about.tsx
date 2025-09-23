@@ -9,6 +9,10 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
+import jeffImageUrl from '../assets/team/jeff.jpg';
+import joeyImageUrl from '../assets/team/joey.jpg';
+import liamImageUrl from '../assets/team/liam.jpg';
+import samImageUrl from '../assets/team/sam.jpg';
 import { Layout } from '../components/layout';
 import { Paragraph } from '../components/paragraph';
 
@@ -165,8 +169,7 @@ const questions = [
 const people = [
   {
     name: "Liam Scalzulli (CS '2025)",
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQGcvphemecHHw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718323978830?e=1757548800&v=beta&t=u3pmKcOojJfZWlRy0F8GXU0PUxB1jWN0ORo58GkD57g',
+    imageUrl: liamImageUrl,
     links: [
       { title: 'Github', url: 'https://github.com/terror' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/liamscalzulli/' },
@@ -174,8 +177,7 @@ const people = [
   },
   {
     name: "Jeff Zhang (Hons CS '2026)",
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQEiV-UNsvxZHg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1712454391246?e=1757548800&v=beta&t=b_oPkciiB_o4giyGt983VPidipqard9Ei_2FoVuxAyU',
+    imageUrl: jeffImageUrl,
     links: [
       { title: 'Github', url: 'https://github.com/39bytes' },
       { title: 'LinkedIn', url: 'https://www.linkedin.com/in/jeff-zhang72/' },
@@ -183,8 +185,7 @@ const people = [
   },
   {
     name: "Sam Zhang (CS & Stats '2026)",
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQG8t9QPiG5_QQ/profile-displayphoto-shrink_400_400/B4EZTuCUymG0Ag-/0/1739160375140?e=1757548800&v=beta&t=HFdiA45GoxopE96QpHgv339GerkRv_82kgHiBMSgirM',
+    imageUrl: samImageUrl,
     links: [
       { title: 'Github', url: 'https://github.com/samzhang02' },
       { title: 'Linkedin', url: 'https://www.linkedin.com/in/zhang-sam/' },
@@ -192,8 +193,7 @@ const people = [
   },
   {
     name: "Joey Yu (CS '2026)",
-    imageUrl:
-      'https://media.licdn.com/dms/image/v2/D4E03AQHG-xqH9hSkvQ/profile-displayphoto-scale_400_400/B4EZhcBmw8HgAg-/0/1753890582273?e=1757548800&v=beta&t=GvRFoLGyLi3epfkahGT9vx8ioVCHXMdX5goLRwibXAY',
+    imageUrl: joeyImageUrl,
     links: [{ title: 'Github', url: 'https://github.com/itsjoeoui' }],
   },
 ];
