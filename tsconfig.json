@@ -19,6 +19,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true
   },
-  "include": ["client/src", "vitest.setup.ts", "vitest.config.ts"],
+  "include": ["client/src"],
+  "exclude": ["**/*.test.*", "**/*.spec.*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
