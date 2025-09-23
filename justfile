@@ -25,7 +25,7 @@ clippy:
 coverage:
   ./bin/coverage
 
-dev: services
+dev: services typeshare
   concurrently \
     --kill-others \
     --names 'SERVER,CLIENT' \
@@ -37,11 +37,14 @@ dev: services
     --timestamp-format 'HH:mm:ss' \
     --color \
     -- \
-    'just watch run serve --db-name=mcgill-courses' \
+    'just watch run -- --db-name=mcgill-courses' \
     'pnpm run dev'
 
 dev-deps:
   cargo install present
+  cargo install typeshare-cli
+  brew install --cask chromedriver
+  curl -LsSf https://astral.sh/uv/install.sh | sh
 
 e2e:
   pnpm run cy:e2e
@@ -58,25 +61,23 @@ forbid:
   ./bin/forbid
 
 generate-changelog *args:
-  cargo run --manifest-path tools/changelog-gen/Cargo.toml \
+  RUST_LOG=info cargo run --manifest-path tools/changelog-generator/Cargo.toml \
     -- \
     --output client/src/assets/changelog.json \
     {{args}}
 
 initialize *args: restart-services
-  cargo run -- --source=seed serve --initialize --db-name=mcgill-courses {{args}}
+  cargo run -- --source=seed --initialize --db-name=mcgill-courses {{args}}
 
 lint *args:
   pnpm run lint {{args}}
 
 load:
-  cargo run -- --source=seed \
-    load \
-    --batch-size=1 \
+  cargo run --manifest-path tools/scraper/Cargo.toml -- --source=seed \
+    --batch-size=5 \
     --scrape-vsb \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
-    --course-delay 1000 \
-    --page-delay 1000
+    --course-delay 1000
 
 readme:
   present --in-place README.md
@@ -99,7 +100,7 @@ run-container: build-container
     mcgill.courses:latest
 
 serve:
-  cargo run -- serve --db-name=mcgill-courses
+  cargo run -- --db-name=mcgill-courses
 
 services:
   docker compose up --no-recreate -d
@@ -108,6 +109,9 @@ services:
 
 test *filter:
   cargo test --all {{filter}}
+
+typeshare:
+  typeshare -l typescript -o client/src/lib/types.ts .
 
 watch +COMMAND='test':
   cargo watch --clear --exec "{{COMMAND}}"

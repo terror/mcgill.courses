@@ -5,24 +5,23 @@ edition = "2021"
 publish = false
 
 [dependencies]
-anyhow = "1.0.86"
-bson = { version = "2.11.0", features = ["chrono-0_4"] }
-chrono = "0.4.38"
+bson = { version = "2.15.0", features = ["chrono-0_4"] }
+chrono = { workspace = true }
 combine = { path = "../combine" }
-futures = "0.3.30"
+futures = "0.3.31"
 itertools = "0.12.1"
 lazy_static = "1.5.0"
-log = "0.4.22"
 model = { path = "../model" }
 mongodb = "2.8.2"
-serde = "1.0.204"
-serde_json = "1.0.120"
+serde = { workspace = true }
+serde_json = { workspace = true }
 stop-words = "0.7.2"
-tokio = { version = "1.38.1", features = ["rt-multi-thread", "macros"] }
+thiserror = "2.0.16"
+tokio = { workspace = true }
+tracing = { workspace = true }
 
 [dev-dependencies]
-chrono = "0.4.38"
 include_dir = "0.7.4"
-pretty_assertions = "1.4.0"
-regex = "1.10.5"
+pretty_assertions = "1.4.1"
+regex = "1.11.2"
 tempdir = "0.3.7"

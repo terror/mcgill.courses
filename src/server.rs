@@ -2,6 +2,8 @@ use super::*;
 
 #[derive(Parser)]
 pub(crate) struct Server {
+  #[clap(long, default_value = "courses.json")]
+  source: PathBuf,
   #[clap(long, help = "Directory to serve assets from")]
   asset_dir: Option<PathBuf>,
   #[clap(long, default_value = "8000", help = "Port to listen on")]
@@ -29,7 +31,7 @@ struct AppConfig<'a> {
 }
 
 impl Server {
-  pub(crate) async fn run(self, source: PathBuf) -> Result {
+  pub(crate) async fn run(self) -> Result {
     let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
     info!("Listening on port: {}", addr.port());
@@ -37,7 +39,7 @@ impl Server {
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
     if self.initialize {
-      let source_hash = source.hash()?;
+      let source_hash = self.source.hash()?;
 
       let client = match env::var("ENV") {
         Ok(env) if env == "production" => Some(S3Client::new(Region::UsEast1)),
@@ -65,7 +67,7 @@ impl Server {
               multithreaded: self.multithreaded,
               skip_courses: self.skip_courses,
               skip_reviews: self.skip_reviews,
-              source,
+              source: self.source,
             })
             .await
           {
@@ -172,12 +174,43 @@ impl Server {
       .with_state(State::new(config.db, config.session_store).await?)
       .layer(
         TraceLayer::new_for_http()
-          .on_request(|request: &Request<Body>, _span: &Span| {
-            info!("Received {} {}", request.method(), request.uri().path(),)
+          .make_span_with(|request: &Request<Body>| {
+            let request_id = uuid::Uuid::new_v4().to_string();
+
+            tracing::info_span!(
+              "http_request",
+              method = %request.method(),
+              uri = %request.uri(),
+              path = %request.uri().path(),
+              query = %request.uri().query().unwrap_or(""),
+              request_id = %request_id,
+              user_agent = %request.headers()
+                .get("user-agent")
+                .and_then(|h| h.to_str().ok())
+                .unwrap_or("unknown"),
+            )
           })
-          .on_response(
-            |response: &Response, latency: Duration, _span: &Span| {
-              info!("Response {} in {:?}", response.status(), latency)
+          .on_request(|_request: &Request<Body>, span: &Span| {
+            tracing::info!(parent: span, "request started");
+          })
+          .on_response(|response: &Response, latency: Duration, span: &Span| {
+            tracing::info!(
+              parent: span,
+              status = %response.status(),
+              latency_ms = %latency.as_millis(),
+              "request completed"
+            );
+          })
+          .on_failure(
+            |error: tower_http::classify::ServerErrorsFailureClass,
+             latency: Duration,
+             span: &Span| {
+              tracing::error!(
+                parent: span,
+                error = %error,
+                latency_ms = %latency.as_millis(),
+                "request failed"
+              );
             },
           ),
       );

@@ -43,9 +43,11 @@ fn ngram_single_word() {
 #[test]
 fn ngram_multi_word() {
   assert_eq!(
-      "Discrete Structures".ngrams(),
-      String::from("Dis Disc Discr Discre Discret Discrete Str Stru Struc Struct Structu Structur Structure Structures")
+    "Discrete Structures".ngrams(),
+    String::from(
+      "Dis Disc Discr Discre Discret Discrete Str Stru Struc Struct Structu Structur Structure Structures"
     )
+  )
 }
 
 #[test]
