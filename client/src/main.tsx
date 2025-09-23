@@ -27,12 +27,7 @@ const Root = () => {
   return (
     <React.StrictMode>
       <HelmetProvider>
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
+        <BrowserRouter>
           <DarkModeProvider>
             <ErrorBoundary
               FallbackComponent={ErrorPage}

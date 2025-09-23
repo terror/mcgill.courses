@@ -4,17 +4,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { CourseCard } from '../components/course-card';
 import type { Course } from '../model/course';
 
+const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
+  <BrowserRouter
+    future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    }}
+  >
+    {children}
+  </BrowserRouter>
+);
+
 const renderWithRouter = (ui: React.ReactElement) => {
-  const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
-      {children}
-    </BrowserRouter>
-  );
   return render(ui, { wrapper: RouterWrapper });
 };
 
@@ -48,6 +49,7 @@ describe('CourseCard', () => {
 
   it('truncates long descriptions', () => {
     const longDescription = 'a'.repeat(500);
+
     const courseWithLongDesc = { ...mockCourse, description: longDescription };
 
     renderWithRouter(
@@ -67,8 +69,9 @@ describe('CourseCard', () => {
       />
     );
 
-    // The programming text should be wrapped in a span with underline
     const element = screen.getByText('programming');
+
+    // The programming text should be wrapped in a span with underline
     expect(element.tagName).toBe('SPAN');
     expect(element).toHaveClass('underline');
   });
@@ -77,6 +80,7 @@ describe('CourseCard', () => {
     renderWithRouter(<CourseCard course={mockCourse} className='test-class' />);
 
     const link = screen.getByRole('link');
+
     expect(link).toHaveAttribute('href', '/course/comp-202');
   });
 
@@ -86,6 +90,7 @@ describe('CourseCard', () => {
     );
 
     const link = screen.getByRole('link');
+
     expect(link).toHaveClass('custom-class');
   });
 });

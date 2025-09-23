@@ -27,6 +27,7 @@ type SeasonIconProps = {
 
 const SeasonIcon = ({ variant, term }: SeasonIconProps) => {
   const size = variantToSize(variant);
+
   const season = term.split(' ')[0].toLowerCase();
 
   const icons: Record<string, JSX.Element> = {
@@ -34,6 +35,7 @@ const SeasonIcon = ({ variant, term }: SeasonIconProps) => {
     winter: <FaRegSnowflake size={size} color='skyblue' />,
     summer: <BsSun size={size} color='orange' />,
   };
+
   const icon = icons[season];
 
   if (variant === 'large') {
