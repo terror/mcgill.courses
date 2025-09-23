@@ -4,7 +4,7 @@ use {
   combine::Combine,
   futures::Future,
   futures::FutureExt,
-  futures::{TryStreamExt, future::join_all},
+  futures::{future::join_all, TryStreamExt},
   itertools::Itertools,
   lazy_static::lazy_static,
   model::{
@@ -13,14 +13,14 @@ use {
     SearchResults, Subscription,
   },
   mongodb::{
-    Client, Cursor, Database, IndexModel,
-    bson::{Document, doc},
+    bson::{doc, Document},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
+    Client, Cursor, Database, IndexModel,
   },
-  mongodb::{ClientSession, Collection, options::FindOneAndUpdateOptions},
-  serde::{Serialize, de::DeserializeOwned},
+  mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
+  serde::{de::DeserializeOwned, Serialize},
   std::{collections::HashSet, env, fs, num::TryFromIntError, path::PathBuf},
   tokio::task::JoinError,
   tracing::{info, warn},
@@ -30,7 +30,7 @@ use {
 #[cfg(test)]
 use {
   bson::DateTime,
-  include_dir::{Dir, include_dir},
+  include_dir::{include_dir, Dir},
   model::CourseSort,
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
