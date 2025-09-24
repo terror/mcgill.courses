@@ -12,7 +12,7 @@ import { Histogram } from './histogram';
 type Size = 'small' | 'medium' | 'large';
 
 type CourseInfoStatsProps = {
-  allReviews: Review[];
+  reviews: Review[];
   className?: string;
   variant?: Size;
 };
@@ -87,20 +87,20 @@ const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
 };
 
 export const CourseInfoStats = ({
-  allReviews,
+  reviews,
   className,
   variant = 'small',
 }: CourseInfoStatsProps) => {
   const lg = useMediaQuery('(min-width: 1024px)');
 
-  if (allReviews.length === 0) {
+  if (reviews.length === 0) {
     return null;
   }
 
-  const ratings = allReviews.map((r) => r.rating);
-  const averageRating = _.sum(ratings) / allReviews.length;
-  const difficulties = allReviews.map((r) => r.difficulty);
-  const averageDifficulty = _.sum(difficulties) / allReviews.length;
+  const ratings = reviews.map((r) => r.rating);
+  const averageRating = _.sum(ratings) / reviews.length;
+  const difficulties = reviews.map((r) => r.difficulty);
+  const averageDifficulty = _.sum(difficulties) / reviews.length;
 
   return (
     <div

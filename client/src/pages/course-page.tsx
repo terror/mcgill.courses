@@ -179,11 +179,7 @@ export const CoursePage = () => {
       </Helmet>
 
       <div className='mx-auto mt-10 max-w-6xl md:mt-0'>
-        <CourseInfo
-          course={filteredCourse}
-          allReviews={localReviews}
-          numReviews={localReviews.length}
-        />
+        <CourseInfo course={filteredCourse} reviews={localReviews} />
         <div className='py-2.5' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
           <div className='col-span-3'>

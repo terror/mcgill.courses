@@ -14,11 +14,10 @@ import { CourseTerms } from './course-terms';
 
 type CourseInfoProps = {
   course: Course;
-  allReviews: Review[];
-  numReviews?: number;
+  reviews: Review[];
 };
 
-export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
+export const CourseInfo = ({ course, reviews: reviews }: CourseInfoProps) => {
   const user = useAuth();
 
   const { data: subscriptionData } = useSubscription(course._id);
@@ -83,20 +82,20 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
           {parseCourseDescription(course.description)}
         </p>
         <div className='grow py-3' />
-        <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />
+        <CourseInfoStats className='mb-4 sm:hidden' reviews={reviews} />
         <CourseInfoStats
           className='hidden gap-x-6 sm:mb-6 sm:flex md:mb-0 md:hidden'
           variant='medium'
-          allReviews={allReviews}
+          reviews={reviews}
         />
         <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
-          {allReviews.length} review(s)
+          {reviews.length} review(s)
         </p>
       </div>
       <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:mx-5 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
         <CourseInfoStats
           variant='large'
-          allReviews={allReviews}
+          reviews={reviews}
           className='lg:mr-8'
         />
       </div>
