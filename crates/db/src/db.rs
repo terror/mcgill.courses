@@ -450,10 +450,10 @@ impl Db {
         )
         .await?;
 
-      if let Some(old) = old.clone() {
-        if old.kind == interaction.kind {
-          return Ok(());
-        }
+      if let Some(old) = old.clone()
+        && old.kind == interaction.kind
+      {
+        return Ok(());
       }
 
       let increment_amount = {
