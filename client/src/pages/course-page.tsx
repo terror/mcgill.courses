@@ -58,23 +58,14 @@ export const CoursePage = () => {
   const allReviews = courseData?.reviews;
   const userInteractions = interactionsData?.interactions || [];
 
-  if (courseError || courseData === null) {
-    return (
-      <Layout>
-        <NotFound />
-      </Layout>
-    );
-  }
-
-  if (courseLoading || !course || !allReviews) {
-    return <Loading />;
-  }
-
   const filteredCourse = useMemo(
-    () => ({
-      ...course,
-      terms: course.terms.filter((term) => currentTerms.includes(term)),
-    }),
+    () =>
+      course
+        ? {
+            ...course,
+            terms: course.terms.filter((term) => currentTerms.includes(term)),
+          }
+        : null,
     [course, currentTerms]
   );
 
@@ -83,6 +74,18 @@ export const CoursePage = () => {
       setShowingReviews(allReviews);
     }
   }, [allReviews, showingReviews.length]);
+
+  if (courseError || courseData === null) {
+    return (
+      <Layout>
+        <NotFound />
+      </Layout>
+    );
+  }
+
+  if (courseLoading || !course || !allReviews || !filteredCourse) {
+    return <Loading />;
+  }
 
   const requirements: Requirements = {
     prereqs: filteredCourse.prerequisites,

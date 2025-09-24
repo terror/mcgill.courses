@@ -1,5 +1,5 @@
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -16,9 +16,6 @@ import { NotificationDropdown } from './notification-dropdown';
 import { ProfileDropdown } from './profile-dropdown';
 import { SideNav } from './side-nav';
 
-const { courses, instructors, coursesIndex, instructorsIndex } =
-  getSearchIndex();
-
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -32,12 +29,18 @@ export const Navbar = () => {
     instructors: [],
   });
 
+  const { courses, instructors, coursesIndex, instructorsIndex } = useMemo(
+    () => getSearchIndex(),
+    []
+  );
+
   const user = useAuth();
   const location = useLocation();
   const pathName = location.pathname;
 
-  const { data: notifications = [], error: notificationsError } =
-    useNotifications();
+  const { data: notifications, error: notificationsError } = useNotifications({
+    enabled: !!user,
+  });
 
   const [localNotifications, setLocalNotifications] = useState<Notification[]>(
     []
@@ -55,24 +58,27 @@ export const Navbar = () => {
     }
   }, [notificationsError]);
 
-  const handleInputChange = (query: string) => {
-    updateSearchResults(
-      query,
-      courses,
-      instructors,
-      coursesIndex,
-      instructorsIndex,
-      setResults
-    );
-  };
+  const handleInputChange = useCallback(
+    (query: string) => {
+      updateSearchResults(
+        query,
+        courses,
+        instructors,
+        coursesIndex,
+        instructorsIndex,
+        setResults
+      );
+    },
+    [courses, instructors, coursesIndex, instructorsIndex]
+  );
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setResults({
       query: '',
       courses: [],
       instructors: [],
     });
-  };
+  }, []);
 
   return (
     <header className='z-40'>

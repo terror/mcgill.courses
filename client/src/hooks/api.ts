@@ -358,10 +358,11 @@ export const useLikeReview = () => {
   };
 };
 
-export const useNotifications = () => {
+export const useNotifications = (options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: queryKeys.notifications,
     queryFn: api.getNotifications,
+    enabled: options?.enabled ?? true,
     meta: {
       onError: () => {
         toast.error('Failed to get notifications.');

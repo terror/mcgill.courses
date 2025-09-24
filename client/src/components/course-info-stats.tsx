@@ -91,11 +91,11 @@ export const CourseInfoStats = ({
   className,
   variant = 'small',
 }: CourseInfoStatsProps) => {
+  const lg = useMediaQuery('(min-width: 1024px)');
+
   if (allReviews.length === 0) {
     return null;
   }
-
-  const lg = useMediaQuery('(min-width: 1024px)');
 
   const ratings = allReviews.map((r) => r.rating);
   const averageRating = _.sum(ratings) / allReviews.length;
