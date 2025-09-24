@@ -182,7 +182,7 @@ export const useAddSubscription = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (courseId: string) => api.addSubcription(courseId),
+    mutationFn: (courseId: string) => api.addSubscription(courseId),
     onSuccess: (_, courseId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.subscriptions });
       queryClient.invalidateQueries({
