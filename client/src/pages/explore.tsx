@@ -1,8 +1,7 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Skeleton from 'react-loading-skeleton';
-import { toast } from 'sonner';
 
 import { CourseCard } from '../components/course-card';
 import { ExploreFilter, SortByType } from '../components/explore-filter';
@@ -11,11 +10,10 @@ import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { SearchBar } from '../components/search-bar';
 import { Spinner } from '../components/spinner';
+import { useInfiniteCourses } from '../hooks/api-hooks';
 import { useDarkMode } from '../hooks/use-dark-mode';
 import { useExploreFilterState } from '../hooks/use-explore-filter-state';
-import { api } from '../lib/api';
 import { getCurrentTerms } from '../lib/utils';
-import type { Course } from '../model/course';
 
 const makeSortPayload = (sort: SortByType) => {
   switch (sort) {
@@ -58,11 +56,6 @@ export const Explore = () => {
   const limit = 20;
   const currentTerms = getCurrentTerms();
 
-  const [courses, setCourses] = useState<Course[] | undefined>(undefined);
-  const [courseCount, setCourseCount] = useState<number | undefined>(undefined);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(limit);
-
   const [query, setQuery] = useState<string>('');
   const [searchSelected, setSearchSelected] = useState<boolean>(false);
 
@@ -85,32 +78,11 @@ export const Explore = () => {
     sortBy: makeSortPayload(sortBy),
   };
 
-  useEffect(() => {
-    api
-      .getCourses(limit, 0, true, filters)
-      .then((data) => {
-        setCourses(data.courses);
-        setCourseCount(data.courseCount);
-      })
-      .catch(() => {
-        toast.error('Failed to fetch courses. Please try again later.');
-      });
-    setHasMore(true);
-    setOffset(limit);
-  }, [selectedSubjects, selectedLevels, selectedTerms, sortBy, query]);
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+    useInfiniteCourses(limit, filters);
 
-  const fetchMore = async () => {
-    const batch = await api.getCourses(limit, offset, false, filters);
-
-    if (batch.courses.length === 0) setHasMore(false);
-    else {
-      const newCourses = courses
-        ? courses.concat(batch.courses)
-        : batch.courses;
-      setCourses(newCourses);
-      setOffset(offset + limit);
-    }
-  };
+  const courses = data?.pages.flatMap((page) => page.courses) || [];
+  const courseCount = data?.pages[0]?.courseCount;
 
   return (
     <Layout>
@@ -159,21 +131,21 @@ export const Explore = () => {
           </div>
           <div className='lg:flex-1'>
             <InfiniteScroll
-              dataLength={courses?.length || 0}
-              hasMore={hasMore}
+              dataLength={courses.length}
+              hasMore={!!hasNextPage}
               loader={
-                (courses?.length || 0) >= 20 &&
-                hasMore && (
+                courses.length >= 20 &&
+                hasNextPage && (
                   <div className='mt-4 text-center'>
                     <Spinner />
                   </div>
                 )
               }
-              next={fetchMore}
+              next={fetchNextPage}
               style={{ overflowY: 'hidden' }}
             >
               <div className='ml-auto flex w-full max-w-xl flex-col'>
-                {courses ? (
+                {!isLoading ? (
                   <Fragment>
                     <SearchBar
                       handleInputChange={(value) => setQuery(value)}
@@ -184,14 +156,20 @@ export const Explore = () => {
                       searchSelected={searchSelected}
                       setSearchSelected={setSearchSelected}
                     />
-                    {courses.map((course, i) => (
-                      <CourseCard
-                        className='my-1.5'
-                        course={course}
-                        key={i}
-                        query={query}
-                      />
-                    ))}
+                    {isError ? (
+                      <div className='mx-auto mt-4 text-center text-red-500'>
+                        Failed to fetch courses. Please try again later.
+                      </div>
+                    ) : (
+                      courses.map((course, i) => (
+                        <CourseCard
+                          className='my-1.5'
+                          course={course}
+                          key={`${course._id}-${i}`}
+                          query={query}
+                        />
+                      ))
+                    )}
                   </Fragment>
                 ) : (
                   <div className='mx-2'>
@@ -209,18 +187,18 @@ export const Explore = () => {
                     />
                   </div>
                 )}
-                {!hasMore ? (
-                  courses?.length ? (
-                    <div className='mx-auto mt-4 text-center'>
-                      <p className='text-gray-500 dark:text-gray-400'>
-                        No more courses to show
-                      </p>
-                    </div>
-                  ) : (
-                    <div className='mt-4 text-center'>
-                      <Spinner />
-                    </div>
-                  )
+                {!hasNextPage && courses.length > 0 ? (
+                  <div className='mx-auto mt-4 text-center'>
+                    <p className='text-gray-500 dark:text-gray-400'>
+                      No more courses to show
+                    </p>
+                  </div>
+                ) : !hasNextPage && !isLoading && courses.length === 0 ? (
+                  <div className='mx-auto mt-4 text-center'>
+                    <p className='text-gray-500 dark:text-gray-400'>
+                      No courses found matching your criteria
+                    </p>
+                  </div>
                 ) : null}
               </div>
             </InfiniteScroll>

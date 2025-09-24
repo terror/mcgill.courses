@@ -4,8 +4,8 @@ import { Fragment } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
+import { useAddReview } from '../hooks/api-hooks';
 import { useDarkMode } from '../hooks/use-dark-mode';
-import { api } from '../lib/api';
 import type { Course } from '../model/course';
 import {
   ReviewForm,
@@ -17,16 +17,11 @@ type ReviewFormProps = {
   course: Course;
   open: boolean;
   onClose: () => void;
-  handleSubmit: (res: Response) => void;
 };
 
-export const AddReviewForm = ({
-  course,
-  open,
-  onClose,
-  handleSubmit,
-}: ReviewFormProps) => {
+export const AddReviewForm = ({ course, open, onClose }: ReviewFormProps) => {
   const [darkMode] = useDarkMode();
+  const addReviewMutation = useAddReview();
 
   const initialValues: ReviewFormInitialValues = {
     content: '',
@@ -81,10 +76,16 @@ export const AddReviewForm = ({
                   initialValues={initialValues}
                   validationSchema={ReviewSchema}
                   onSubmit={async (values, actions) => {
-                    const res = await api.addReview(course._id, values);
-                    actions.setSubmitting(false);
-                    onClose();
-                    handleSubmit(res);
+                    try {
+                      await addReviewMutation.mutateAsync({
+                        courseId: course._id,
+                        values,
+                      });
+                      actions.setSubmitting(false);
+                      onClose();
+                    } catch (error) {
+                      actions.setSubmitting(false);
+                    }
                   }}
                 >
                   {({ values, setFieldValue, resetForm }) => (

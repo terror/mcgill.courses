@@ -2,9 +2,11 @@ import { Menu, Transition } from '@headlessui/react';
 import { Bell, Circle, Trash2 } from 'lucide-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
 
-import { api } from '../lib/api';
+import {
+  useDeleteNotification,
+  useUpdateNotification,
+} from '../hooks/api-hooks';
 import type { Notification } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { CourseReview } from './course-review';
@@ -19,6 +21,9 @@ export const NotificationDropdown = ({
   const [refs, setRefs] = useState<React.RefObject<HTMLDivElement>[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [seen, setSeen] = useState<Set<string>>(new Set());
+
+  const updateNotificationMutation = useUpdateNotification();
+  const deleteNotificationMutation = useDeleteNotification();
 
   useEffect(() => {
     setRefs(notifications.map(() => React.createRef<HTMLDivElement>()));
@@ -64,30 +69,22 @@ export const NotificationDropdown = ({
   const updateNotification = async (notification: Notification) => {
     if (notification.seen) return;
 
-    try {
-      await api.updateNotification(
-        notification.review.courseId,
-        notification.review.userId,
-        true
-      );
-      seen.add(notification.review.courseId);
-    } catch (err) {
-      toast.error('Failed to update notification.');
-    }
+    updateNotificationMutation.mutate({
+      courseId: notification.review.courseId,
+      creatorId: notification.review.userId,
+      seen: true,
+    });
+    seen.add(notification.review.courseId);
   };
 
   const deleteNotification = async (courseId: string) => {
-    try {
-      await api.deleteNotification(courseId);
-      setNotifications(
-        notifications.filter(
-          (notification) => notification.review.courseId !== courseId
-        )
-      );
-      toast.success('Successfully deleted notification.');
-    } catch (err) {
-      toast.error('Failed to delete notification.');
-    }
+    deleteNotificationMutation.mutate(courseId);
+    // Optimistically update the local state
+    setNotifications(
+      notifications.filter(
+        (notification) => notification.review.courseId !== courseId
+      )
+    );
   };
 
   return (

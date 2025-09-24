@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import { useNotifications } from '../hooks/api-hooks';
 import { useAuth } from '../hooks/use-auth';
-import { api } from '../lib/api';
 import { env } from '../lib/constants';
 import { getSearchIndex, updateSearchResults } from '../lib/searchIndex';
 import type { Notification } from '../lib/types';
@@ -36,16 +36,26 @@ export const Navbar = () => {
   const location = useLocation();
   const pathName = location.pathname;
 
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { data: notifications = [], error: notificationsError } =
+    useNotifications();
 
+  const [localNotifications, setLocalNotifications] = useState<Notification[]>(
+    []
+  );
+
+  // Update local notifications when query data changes
   useEffect(() => {
-    if (!user) return;
+    if (notifications) {
+      setLocalNotifications(notifications);
+    }
+  }, [notifications]);
 
-    api
-      .getNotifications()
-      .then((data) => setNotifications(data))
-      .catch(() => toast.error('Failed to get notifications.'));
-  }, []);
+  // Show error toast if notifications fail to load
+  useEffect(() => {
+    if (notificationsError) {
+      toast.error('Failed to get notifications.');
+    }
+  }, [notificationsError]);
 
   const handleInputChange = (query: string) => {
     updateSearchResults(
@@ -89,8 +99,8 @@ export const Navbar = () => {
         {user && (
           <div className='mr-2 lg:hidden'>
             <NotificationDropdown
-              notifications={notifications}
-              setNotifications={setNotifications}
+              notifications={localNotifications}
+              setNotifications={setLocalNotifications}
             />
           </div>
         )}
@@ -112,8 +122,8 @@ export const Navbar = () => {
             <DarkModeToggle />
             {user && (
               <NotificationDropdown
-                notifications={notifications}
-                setNotifications={setNotifications}
+                notifications={localNotifications}
+                setNotifications={setLocalNotifications}
               />
             )}
           </div>

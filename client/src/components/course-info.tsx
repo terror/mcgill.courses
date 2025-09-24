@@ -1,9 +1,11 @@
 import { Bell, BellOff, ExternalLink } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
+import {
+  useAddSubscription,
+  useRemoveSubscription,
+  useSubscription,
+} from '../hooks/api-hooks';
 import { useAuth } from '../hooks/use-auth';
-import { api } from '../lib/api';
 import { parseCourseDescription } from '../lib/dom-utils';
 import type { Review } from '../lib/types';
 import type { Course } from '../model/course';
@@ -19,47 +21,18 @@ type CourseInfoProps = {
 export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   const user = useAuth();
 
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const { data: subscriptionData } = useSubscription(course._id);
+  const addSubscriptionMutation = useAddSubscription();
+  const removeSubscriptionMutation = useRemoveSubscription();
 
-  useEffect(() => {
-    if (!user) return;
-
-    api
-      .getSubscription(course._id)
-      .then((data) => {
-        setIsSubscribed(data !== null);
-      })
-      .catch(() =>
-        toast.error(
-          `Failed to check subscription for course ${course.subject} ${course.code}`
-        )
-      );
-  }, [course]);
+  const isSubscribed = subscriptionData !== null;
 
   const subscribe = async () => {
-    try {
-      await api.addSubcription(course._id);
-      setIsSubscribed(true);
-      toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
-    } catch (err) {
-      toast.error(
-        `Failed to subscribe to course ${course.subject} ${course.code}.`
-      );
-    }
+    addSubscriptionMutation.mutate(course._id);
   };
 
   const unsubscribe = async () => {
-    try {
-      await api.removeSubscription(course._id);
-      setIsSubscribed(false);
-      toast.success(
-        `Unsubscribed from course ${course.subject} ${course.code}`
-      );
-    } catch (err) {
-      toast.error(
-        `Failed to unsubscribe from course ${course.subject} ${course.code}`
-      );
-    }
+    removeSubscriptionMutation.mutate(course._id);
   };
 
   return (

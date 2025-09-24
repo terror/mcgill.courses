@@ -14,6 +14,7 @@ import { ErrorPage } from './pages/error-page';
 import AuthProvider from './providers/auth-provider';
 import { DarkModeProvider } from './providers/dark-mode-provider';
 import ExploreFilterStateProvider from './providers/explore-filter-state-provider';
+import { QueryProvider } from './providers/query-provider';
 
 const Root = () => {
   // When an error occurs, we want all of the state in the app
@@ -33,12 +34,14 @@ const Root = () => {
               FallbackComponent={ErrorPage}
               onReset={() => setKey(key + 1)}
             >
-              <AuthProvider>
-                <ExploreFilterStateProvider>
-                  <Toaster richColors />
-                  <App key={key} />
-                </ExploreFilterStateProvider>
-              </AuthProvider>
+              <QueryProvider>
+                <AuthProvider>
+                  <ExploreFilterStateProvider>
+                    <Toaster richColors />
+                    <App key={key} />
+                  </ExploreFilterStateProvider>
+                </AuthProvider>
+              </QueryProvider>
             </ErrorBoundary>
           </DarkModeProvider>
         </BrowserRouter>

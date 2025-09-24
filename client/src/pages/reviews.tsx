@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
 
 import { CourseReview } from '../components/course-review';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
-import { api } from '../lib/api';
+import { useInfiniteReviews } from '../hooks/api-hooks';
 import { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
 import { Loading } from './loading';
@@ -16,40 +14,25 @@ import { Loading } from './loading';
 export const Reviews = () => {
   const limit = 20;
 
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(0);
-  const [reviews, setReviews] = useState<Review[] | undefined>(undefined);
-  const [uniqueUserCount, setUniqueUserCount] = useState<number | undefined>(
-    undefined
-  );
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+    useInfiniteReviews(limit, true);
 
-  useEffect(() => {
-    api
-      .getReviews({ limit, offset: 0, sorted: true, withUserCount: true })
-      .then((data) => {
-        setReviews(data.reviews);
-        setUniqueUserCount(data.uniqueUserCount);
-      })
-      .catch(() => {
-        toast.error('Failed to fetch reviews. Please try again later.');
-      });
-    setHasMore(true);
-    setOffset(limit);
-  }, []);
-
-  const fetchMore = async () => {
-    const batch = await api.getReviews({ limit, offset, sorted: true });
-
-    if (batch.reviews.length === 0) setHasMore(false);
-    else {
-      setReviews(reviews?.concat(batch.reviews));
-      setOffset(offset + limit);
-    }
-  };
-
-  if (reviews === undefined || uniqueUserCount === undefined) {
+  if (isLoading) {
     return <Loading />;
   }
+
+  if (isError) {
+    return (
+      <Layout>
+        <div className='mx-auto mt-4 text-center text-red-500'>
+          Failed to fetch reviews. Please try again later.
+        </div>
+      </Layout>
+    );
+  }
+
+  const reviews = data?.pages.flatMap((page) => page.reviews) || [];
+  const uniqueUserCount = data?.pages[0]?.uniqueUserCount;
 
   return (
     <Layout>
@@ -85,7 +68,8 @@ export const Reviews = () => {
             What people are saying
           </h1>
           <p className='mt-2 text-center text-gray-600 dark:text-gray-400'>
-            Check out what {uniqueUserCount.toLocaleString('en-us')} verified
+            Check out what{' '}
+            {uniqueUserCount?.toLocaleString('en-us') || 'verified'} verified
             McGill student{uniqueUserCount === 1 ? '' : 's'} on our platform
             {uniqueUserCount === 1 ? ' has' : ' have'} said about courses at
             McGill University.
@@ -93,22 +77,25 @@ export const Reviews = () => {
         </div>
         <div className='relative flex w-full max-w-xl flex-col lg:max-w-6xl lg:flex-row lg:justify-center'>
           <InfiniteScroll
-            dataLength={reviews?.length || 0}
-            hasMore={hasMore}
+            dataLength={reviews.length}
+            hasMore={!!hasNextPage}
             loader={
-              (reviews?.length || 0) >= 20 &&
-              hasMore && (
+              reviews.length >= 20 &&
+              hasNextPage && (
                 <div className='mt-4 text-center'>
                   <Spinner />
                 </div>
               )
             }
-            next={fetchMore}
+            next={fetchNextPage}
             style={{ overflowY: 'hidden' }}
           >
             <div className='ml-auto flex w-full max-w-xl flex-col lg:max-w-4xl'>
               {reviews.map((review: Review, i: number) => (
-                <div className='mb-6'>
+                <div
+                  key={`${review.courseId}-${review.userId}-${i}`}
+                  className='mb-6'
+                >
                   <Link
                     to={`/course/${courseIdToUrlParam(review.courseId)}`}
                     className='font-semibold text-gray-800 hover:underline dark:text-gray-200'
@@ -120,7 +107,6 @@ export const Reviews = () => {
                   </p>
                   <div>
                     <CourseReview
-                      key={i}
                       canModify={false}
                       review={review}
                       openEditReview={() => undefined}
@@ -129,18 +115,18 @@ export const Reviews = () => {
                   </div>
                 </div>
               ))}
-              {!hasMore ? (
-                reviews?.length ? (
-                  <div className='mx-[200px] mt-4 text-center'>
-                    <p className='text-gray-500 dark:text-gray-400'>
-                      No more reviews to show
-                    </p>
-                  </div>
-                ) : (
-                  <div className='mt-4 text-center'>
-                    <Spinner />
-                  </div>
-                )
+              {!hasNextPage && reviews.length > 0 ? (
+                <div className='mx-[200px] mt-4 text-center'>
+                  <p className='text-gray-500 dark:text-gray-400'>
+                    No more reviews to show
+                  </p>
+                </div>
+              ) : !hasNextPage && reviews.length === 0 ? (
+                <div className='mt-4 text-center'>
+                  <p className='text-gray-500 dark:text-gray-400'>
+                    No reviews found
+                  </p>
+                </div>
               ) : null}
             </div>
           </InfiniteScroll>

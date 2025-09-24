@@ -1,18 +1,15 @@
 import _ from 'lodash';
 import { ExternalLink } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 
 import { CourseInfoStats } from '../components/course-info-stats';
 import { CourseReview } from '../components/course-review';
 import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
+import { useInstructor } from '../hooks/api-hooks';
 import { useAuth } from '../hooks/use-auth';
-import { api } from '../lib/api';
-import type { Instructor as InstructorType } from '../lib/types';
-import type { Review } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
 import { Loading } from './loading';
 import { NotFound } from './not-found';
@@ -20,53 +17,24 @@ import { NotFound } from './not-found';
 export const Instructor = () => {
   const params = useParams<{ name: string }>();
 
-  const [reviews, setReviews] = useState<Review[]>([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
-
-  const [instructor, setInstructor] = useState<
-    InstructorType | undefined | null
-  >(undefined);
 
   const user = useAuth();
 
-  useEffect(() => {
-    if (!params.name) return;
+  const {
+    data: instructorData,
+    isLoading,
+    error,
+  } = useInstructor(params.name || '');
 
-    api
-      .getInstructor(params.name)
-      .then((data) => {
-        setInstructor(data.instructor);
-        setReviews(data.reviews);
-      })
-      .catch(() => {
-        toast.error('Failed to fetch instructor.');
-      });
-  }, [params.name]);
+  if (isLoading) return <Loading />;
+  if (error || !instructorData?.instructor) return <NotFound />;
 
-  if (instructor === undefined) return <Loading />;
-  if (instructor === null) return <NotFound />;
+  const instructor = instructorData.instructor;
+  const reviews = instructorData.reviews;
 
-  const userReview = reviews.find((r) => r.userId === user?.id),
-    uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
-
-  const updateLikes = (review: Review) => {
-    return (likes: number) => {
-      if (reviews) {
-        const updated = reviews.slice();
-        const r = updated.find(
-          (r) => r.courseId == review.courseId && r.userId == review.userId
-        );
-
-        if (r === undefined) {
-          toast.error("Can't update likes for review that doesn't exist.");
-          return;
-        }
-
-        r.likes = likes;
-        setReviews(updated);
-      }
-    };
-  };
+  const userReview = reviews.find((r) => r.userId === user?.id);
+  const uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
 
   return (
     <Layout>
@@ -158,7 +126,6 @@ export const Instructor = () => {
               includeTaughtBy={false}
               openEditReview={() => undefined}
               review={userReview}
-              updateLikes={updateLikes(userReview)}
             />
           )}
           {reviews &&
@@ -173,7 +140,6 @@ export const Instructor = () => {
                   key={i}
                   openEditReview={() => undefined}
                   review={review}
-                  updateLikes={updateLikes(review)}
                 />
               ))}
         </div>

@@ -11,10 +11,13 @@ import { DeleteButton } from '../components/delete-button';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
+import {
+  useRemoveSubscription,
+  useReviews,
+  useSubscriptions,
+} from '../hooks/api-hooks';
 import { useAuth } from '../hooks/use-auth';
-import { api } from '../lib/api';
 import type { Subscription } from '../lib/types';
-import type { Review } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import { Loading } from './loading';
@@ -22,62 +25,63 @@ import { Loading } from './loading';
 export const Profile = () => {
   const user = useAuth();
 
-  const [userReviews, setUserReviews] = useState<Review[] | undefined>(
-    undefined
-  );
-  const [userSubscriptions, setUserSubscriptions] = useState<
-    Subscription[] | undefined
-  >(undefined);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
+  const {
+    data: userReviewsData,
+    error: reviewsError,
+    isLoading: reviewsLoading,
+  } = useReviews({ userId: user?.id, sorted: true });
+
+  const {
+    data: userSubscriptions,
+    error: subscriptionsError,
+    isLoading: subscriptionsLoading,
+  } = useSubscriptions();
+
+  const removeSubscriptionMutation = useRemoveSubscription();
+
+  const [localUserSubscriptions, setLocalUserSubscriptions] = useState<
+    Subscription[] | undefined
+  >(undefined);
+
   useEffect(() => {
-    if (!user) return;
-
     const selectedTabIndex = localStorage.getItem('selectedTabIndex');
-
     if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
-
-    api
-      .getReviews({ userId: user.id, sorted: true })
-      .then((data) => setUserReviews(data.reviews))
-      .catch(() =>
-        toast.error(
-          'An error occurred while fetching your reviews, please try again later.'
-        )
-      );
-
-    api
-      .getSubscriptions()
-      .then((data) => setUserSubscriptions(data))
-      .catch(() =>
-        toast.error(
-          'An error occurred while fetching your subscriptions, please try again later.'
-        )
-      );
   }, []);
 
-  const removeSubscription = async (courseId: string) => {
-    try {
-      await api.removeSubscription(courseId);
-      setUserSubscriptions(
-        userSubscriptions?.filter(
-          (subscription) => subscription.courseId !== courseId
-        )
-      );
-      toast.success(
-        `Subscription for course ${spliceCourseCode(
-          courseId,
-          ' '
-        )} removed successfully.`
-      );
-    } catch (err) {
+  useEffect(() => {
+    if (userSubscriptions) {
+      setLocalUserSubscriptions(userSubscriptions);
+    }
+  }, [userSubscriptions]);
+
+  useEffect(() => {
+    if (reviewsError) {
       toast.error(
-        'An error occurred while removing your subscription, please try again later.'
+        'An error occurred while fetching your reviews, please try again later.'
       );
     }
+    if (subscriptionsError) {
+      toast.error(
+        'An error occurred while fetching your subscriptions, please try again later.'
+      );
+    }
+  }, [reviewsError, subscriptionsError]);
+
+  const removeSubscription = async (courseId: string) => {
+    removeSubscriptionMutation.mutate(courseId);
+    // Optimistically update local state
+    setLocalUserSubscriptions(
+      localUserSubscriptions?.filter(
+        (subscription) => subscription.courseId !== courseId
+      )
+    );
   };
 
-  if (!userReviews || !userSubscriptions) return <Loading />;
+  const userReviews = userReviewsData?.reviews;
+
+  if (reviewsLoading || subscriptionsLoading) return <Loading />;
 
   const tabs = ['Reviews', 'Subscriptions'];
 
@@ -121,9 +125,9 @@ export const Profile = () => {
                   size={20}
                 />
                 <p className='text-gray-700 dark:text-gray-300'>
-                  {userSubscriptions?.length}{' '}
+                  {localUserSubscriptions?.length}{' '}
                   {'subscription' +
-                    (userSubscriptions?.length === 1 ? '' : 's')}
+                    (localUserSubscriptions?.length === 1 ? '' : 's')}
                 </p>
               </div>
             </div>
@@ -200,8 +204,8 @@ export const Profile = () => {
             </Tab.Panel>
             <Tab.Panel>
               <div>
-                {userSubscriptions?.length !== 0 ? (
-                  userSubscriptions?.map((subscription, i) => (
+                {localUserSubscriptions?.length !== 0 ? (
+                  localUserSubscriptions?.map((subscription, i) => (
                     <div
                       key={i}
                       className='m-4 flex items-center rounded-lg border-gray-800 bg-white p-4 duration-300 ease-in-out dark:bg-neutral-800'

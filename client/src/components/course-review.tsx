@@ -3,15 +3,14 @@ import { format } from 'date-fns';
 import { Edit, Flame, Pin, Tag, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
+import { useAddInteraction, useRemoveInteraction } from '../hooks/api-hooks';
 import { useAuth } from '../hooks/use-auth';
-import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import type { Interaction } from '../lib/types';
 import { InteractionKind } from '../lib/types';
-import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
+import { courseIdToUrlParam } from '../lib/utils';
 import { BirdIcon } from './bird-icon';
 import { DeleteButton } from './delete-button';
 import { IconRating } from './icon-rating';
@@ -32,30 +31,17 @@ type ReviewInteractionsProps = {
   review: Review;
   interactions: Interaction[];
   setPromptLogin: (_: boolean) => void;
-  updateLikes: (likes: number) => void;
-};
-
-const interactionToNum = (kind: InteractionKind) => {
-  return kind === InteractionKind.Like ? 1 : -1;
-};
-
-const getLikeChange = (
-  before: InteractionKind | undefined | null,
-  after: InteractionKind
-) => {
-  if (!before) return interactionToNum(after);
-  if (before === after) return 0;
-
-  return interactionToNum(after) * 2;
 };
 
 const ReviewInteractions = ({
   review,
   interactions,
   setPromptLogin,
-  updateLikes,
 }: ReviewInteractionsProps) => {
   const user = useAuth();
+
+  const addInteractionMutation = useAddInteraction();
+  const removeInteractionMutation = useRemoveInteraction();
 
   const getUserInteractionKind = (
     interactions: Interaction[]
@@ -78,53 +64,25 @@ const ReviewInteractions = ({
 
   const { courseId, userId, likes } = review;
 
-  const refreshInteractions = async () => {
-    try {
-      const payload = await api.getInteractions(courseId, userId, user?.id);
-      setKind(payload.kind);
-    } catch (err: any) {
-      toast.error(err.toString());
-    }
-  };
-
   const addInteraction = async (interactionKind: InteractionKind) => {
-    try {
-      await api.addInteraction(interactionKind, courseId, userId, user?.id);
-      const change = getLikeChange(kind, interactionKind);
-      updateLikes(review.likes + change);
+    if (!user) return;
 
-      await refreshInteractions();
-
-      toast.success(
-        `Successfully ${interactionKind}d review for ${spliceCourseCode(
-          courseId,
-          ' '
-        )}.`
-      );
-    } catch (err: any) {
-      toast.error(err.toString());
-    }
+    addInteractionMutation.mutate({
+      kind: interactionKind,
+      courseId,
+      userId,
+      referrer: user.id,
+    });
   };
 
   const removeInteraction = async () => {
-    try {
-      await api.removeInteraction(courseId, userId, user?.id);
-      if (!kind) {
-        throw new Error("Can't remove interaction that doesn't exist.");
-      }
-      updateLikes(review.likes - interactionToNum(kind));
+    if (!user || !kind) return;
 
-      await refreshInteractions();
-
-      toast.success(
-        `Successfully removed interaction for ${spliceCourseCode(
-          courseId,
-          ' '
-        )}.`
-      );
-    } catch (err: any) {
-      toast.error(err.toString());
-    }
+    removeInteractionMutation.mutate({
+      courseId,
+      userId,
+      referrer: user.id,
+    });
   };
 
   const displayLoginPrompt = () => {
@@ -181,7 +139,6 @@ type CourseReviewProps = {
   canModify: boolean;
   handleDelete: () => void;
   openEditReview: () => void;
-  updateLikes?: (likes: number) => void;
   review: Review;
   interactions?: Interaction[];
   showCourse?: boolean;
@@ -195,7 +152,6 @@ export const CourseReview = ({
   canModify,
   openEditReview,
   handleDelete,
-  updateLikes,
   className,
   includeTaughtBy = true,
 }: CourseReviewProps) => {
@@ -340,12 +296,11 @@ export const CourseReview = ({
               </div>
             )}
           </div>
-          {updateLikes && interactions && (
+          {interactions && (
             <ReviewInteractions
               review={review}
               interactions={interactions}
               setPromptLogin={setPromptLogin}
-              updateLikes={updateLikes}
             />
           )}
         </div>
