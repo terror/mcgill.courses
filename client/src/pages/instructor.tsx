@@ -105,7 +105,7 @@ export const Instructor = () => {
               {reviews.length !== 0 && (
                 <Fragment>
                   <div className='grow py-3' />
-                  <CourseInfoStats className='md:hidden' allReviews={reviews} />
+                  <CourseInfoStats className='md:hidden' reviews={reviews} />
                   <p className='mt-4 text-sm text-gray-500 dark:text-gray-400'>
                     {reviews.length} review(s)
                   </p>
@@ -113,7 +113,7 @@ export const Instructor = () => {
               )}
             </div>
             <div className='ml-10 hidden w-5/12 justify-center rounded-md bg-neutral-50 py-6 dark:bg-neutral-800 md:flex lg:mt-6'>
-              <CourseInfoStats variant='large' allReviews={reviews} />
+              <CourseInfoStats variant='large' reviews={reviews} />
             </div>
           </div>
         </div>
