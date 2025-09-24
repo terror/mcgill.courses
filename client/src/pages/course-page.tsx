@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
@@ -38,7 +38,6 @@ export const CoursePage = () => {
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [selectedInstructor, setSelectedInstructor] = useState('');
   const [showAllReviews, setShowAllReviews] = useState(false);
-  const [showingReviews, setShowingReviews] = useState<Review[]>([]);
   const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
 
   const {
@@ -55,7 +54,7 @@ export const CoursePage = () => {
   const deleteReviewMutation = useDeleteReview();
 
   const course = courseData?.course;
-  const allReviews = courseData?.reviews;
+  const reviews = courseData?.reviews;
   const userInteractions = interactionsData?.interactions || [];
 
   const filteredCourse = useMemo(
@@ -69,11 +68,46 @@ export const CoursePage = () => {
     [course, currentTerms]
   );
 
-  useEffect(() => {
-    if (allReviews && showingReviews.length === 0) {
-      setShowingReviews(allReviews);
+  const localReviews = useMemo(() => {
+    if (!reviews) return [];
+
+    let filtered = reviews;
+
+    if (selectedInstructor) {
+      filtered = filtered.filter((review) =>
+        review.instructors
+          .map((ins) => ins.toLowerCase())
+          .includes(selectedInstructor.toLowerCase())
+      );
     }
-  }, [allReviews, showingReviews.length]);
+
+    switch (sortBy) {
+      case 'Most Recent':
+        return filtered.sort(
+          (a, b) => parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10)
+        );
+      case 'Least Recent':
+        return filtered.sort(
+          (a, b) => parseInt(a.timestamp, 10) - parseInt(b.timestamp, 10)
+        );
+      case 'Highest Rating':
+        return filtered.sort((a, b) => b.rating - a.rating);
+      case 'Lowest Rating':
+        return filtered.sort((a, b) => a.rating - b.rating);
+      case 'Hardest':
+        return filtered.sort((a, b) => b.difficulty - a.difficulty);
+      case 'Easiest':
+        return filtered.sort((a, b) => a.difficulty - b.difficulty);
+      case 'Most Liked':
+        return filtered.sort((a, b) => b.likes - a.likes);
+      case 'Most Disliked':
+        return filtered.sort((a, b) => a.likes - b.likes);
+      default:
+        return filtered.sort(
+          (a, b) => parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10)
+        );
+    }
+  }, [reviews, selectedInstructor, sortBy]);
 
   if (courseError || courseData === null) {
     return (
@@ -83,7 +117,7 @@ export const CoursePage = () => {
     );
   }
 
-  if (courseLoading || !course || !allReviews || !filteredCourse) {
+  if (courseLoading || !course || !reviews || !filteredCourse) {
     return <Loading />;
   }
 
@@ -95,10 +129,10 @@ export const CoursePage = () => {
     corequisitesText: filteredCourse.corequisitesText,
   };
 
-  const userReview = showingReviews.find((r) => r.userId === user?.id);
+  const userReview = localReviews.find((r) => r.userId === user?.id);
 
   const canReview = Boolean(
-    user && !allReviews?.find((r) => r.userId === user?.id)
+    user && !reviews?.find((r) => r.userId === user?.id)
   );
 
   const allCourseAverages: Record<string, TermAverage[]> =
@@ -147,8 +181,8 @@ export const CoursePage = () => {
       <div className='mx-auto mt-10 max-w-6xl md:mt-0'>
         <CourseInfo
           course={filteredCourse}
-          allReviews={showingReviews}
-          numReviews={showingReviews.length}
+          allReviews={localReviews}
+          numReviews={localReviews.length}
         />
         <div className='py-2.5' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
@@ -163,12 +197,11 @@ export const CoursePage = () => {
               />
             )}
             <div className='py-2' />
-            {allReviews && allReviews.length > 0 ? (
+            {reviews && reviews.length > 0 ? (
               <div className='mb-2'>
                 <ReviewFilter
                   course={filteredCourse}
-                  allReviews={allReviews ?? []}
-                  setReviews={setShowingReviews}
+                  allReviews={reviews ?? []}
                   setShowAllReviews={setShowAllReviews}
                   sortBy={sortBy}
                   selectedInstructor={selectedInstructor}
@@ -191,12 +224,12 @@ export const CoursePage = () => {
                   interactions={userInteractions}
                 />
               )}
-              {showingReviews.length > 0
-                ? showingReviews
+              {localReviews.length > 0
+                ? localReviews
                     .filter((review) =>
                       user ? review.userId !== user.id : true
                     )
-                    .slice(0, showAllReviews ? showingReviews.length : 8)
+                    .slice(0, showAllReviews ? localReviews.length : 8)
                     .map((review, i) => (
                       <CourseReview
                         canModify={Boolean(user && review.userId === user.id)}
@@ -207,21 +240,21 @@ export const CoursePage = () => {
                         review={review}
                       />
                     ))
-                : allReviews &&
-                  allReviews.length > 0 && (
+                : reviews &&
+                  reviews.length > 0 && (
                     <ReviewEmptyPrompt className='my-8'>
                       No reviews have been left for this course with this
                       instructor yet.
                     </ReviewEmptyPrompt>
                   )}
             </div>
-            {!showAllReviews && showingReviews.length > 8 && (
+            {!showAllReviews && localReviews.length > 8 && (
               <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                 <button
                   className='size-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                   onClick={() => setShowAllReviews(true)}
                 >
-                  Show all {showingReviews.length} reviews
+                  Show all {localReviews.length} reviews
                 </button>
               </div>
             )}
@@ -264,12 +297,11 @@ export const CoursePage = () => {
                   openAddReview={() => setAddReviewOpen(true)}
                 />
               )}
-              {allReviews && allReviews.length > 0 ? (
+              {reviews && reviews.length > 0 ? (
                 <div className='my-2'>
                   <ReviewFilter
                     course={filteredCourse}
-                    allReviews={allReviews ?? []}
-                    setReviews={setShowingReviews}
+                    allReviews={reviews ?? []}
                     setShowAllReviews={setShowAllReviews}
                     sortBy={sortBy}
                     selectedInstructor={selectedInstructor}
@@ -292,12 +324,12 @@ export const CoursePage = () => {
                     interactions={userInteractions}
                   />
                 )}
-                {showingReviews.length > 0
-                  ? showingReviews
+                {localReviews.length > 0
+                  ? localReviews
                       .filter((review) =>
                         user ? review.userId !== user.id : true
                       )
-                      .slice(0, showAllReviews ? showingReviews.length : 8)
+                      .slice(0, showAllReviews ? localReviews.length : 8)
                       .map((review, i) => (
                         <CourseReview
                           canModify={Boolean(user && review.userId === user.id)}
@@ -308,21 +340,21 @@ export const CoursePage = () => {
                           interactions={userInteractions}
                         />
                       ))
-                  : allReviews &&
-                    allReviews.length > 0 && (
+                  : reviews &&
+                    reviews.length > 0 && (
                       <ReviewEmptyPrompt className='my-8'>
                         No reviews have been left for this course with this
                         instructor yet.
                       </ReviewEmptyPrompt>
                     )}
               </div>
-              {!showAllReviews && showingReviews.length > 8 && (
+              {!showAllReviews && localReviews.length > 8 && (
                 <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
                   <button
                     className='size-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
                     onClick={() => setShowAllReviews(true)}
                   >
-                    Show all {showingReviews.length} reviews
+                    Show all {localReviews.length} reviews
                   </button>
                 </div>
               )}

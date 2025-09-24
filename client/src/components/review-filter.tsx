@@ -24,7 +24,6 @@ type ReviewFilterProps = {
   allReviews: Review[];
   sortBy: ReviewSortType;
   selectedInstructor: string;
-  setReviews: Dispatch<SetStateAction<Review[]>>;
   setShowAllReviews: Dispatch<SetStateAction<boolean>>;
   setSelectedInstructor: Dispatch<SetStateAction<string>>;
   setSortBy: Dispatch<SetStateAction<ReviewSortType>>;
@@ -32,49 +31,15 @@ type ReviewFilterProps = {
 
 export const ReviewFilter = ({
   course,
-  allReviews,
   sortBy,
   selectedInstructor,
-  setReviews,
   setShowAllReviews,
   setSortBy,
   setSelectedInstructor,
 }: ReviewFilterProps) => {
   useEffect(() => {
-    setReviews(
-      allReviews
-        .filter(
-          (review: Review) =>
-            selectedInstructor === '' ||
-            review.instructors
-              .map((ins) => ins.toLowerCase())
-              .includes(selectedInstructor.toLowerCase())
-        )
-        .sort((a: Review, b: Review) => {
-          switch (sortBy) {
-            case 'Most Recent':
-              return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10);
-            case 'Least Recent':
-              return parseInt(a.timestamp, 10) - parseInt(b.timestamp, 10);
-            case 'Highest Rating':
-              return b.rating - a.rating;
-            case 'Lowest Rating':
-              return a.rating - b.rating;
-            case 'Hardest':
-              return b.difficulty - a.difficulty;
-            case 'Easiest':
-              return a.difficulty - b.difficulty;
-            case 'Most Liked':
-              return b.likes - a.likes;
-            case 'Most Disliked':
-              return a.likes - b.likes;
-            default:
-              return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10);
-          }
-        })
-    );
     setShowAllReviews(false);
-  }, [sortBy, selectedInstructor, allReviews]);
+  }, [sortBy, selectedInstructor, setShowAllReviews]);
 
   const reset = () => {
     setSortBy('Most Recent');
