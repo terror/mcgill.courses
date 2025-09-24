@@ -236,11 +236,13 @@ export const CourseReview = ({
               Taught by{' '}
               {review.instructors.map((instructor, i) => {
                 let separator = null;
+
                 if (i === review.instructors.length - 2) {
                   separator = ' and ';
                 } else if (i < review.instructors.length - 2) {
                   separator = ', ';
                 }
+
                 return (
                   <Fragment key={instructor + review.userId}>
                     <Link

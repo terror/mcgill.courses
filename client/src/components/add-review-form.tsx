@@ -21,6 +21,7 @@ type ReviewFormProps = {
 
 export const AddReviewForm = ({ course, open, onClose }: ReviewFormProps) => {
   const [darkMode] = useDarkMode();
+
   const addReviewMutation = useAddReview();
 
   const initialValues: ReviewFormInitialValues = {

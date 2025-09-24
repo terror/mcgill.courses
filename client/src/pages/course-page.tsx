@@ -70,7 +70,6 @@ export const CoursePage = () => {
     return <Loading />;
   }
 
-  // Filter current terms
   const filteredCourse = {
     ...course,
     terms: course.terms.filter((term) => currentTerms.includes(term)),

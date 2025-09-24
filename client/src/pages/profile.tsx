@@ -47,7 +47,10 @@ export const Profile = () => {
 
   useEffect(() => {
     const selectedTabIndex = localStorage.getItem('selectedTabIndex');
-    if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
+
+    if (selectedTabIndex) {
+      setSelectedTabIndex(parseInt(selectedTabIndex, 10));
+    }
   }, []);
 
   useEffect(() => {
@@ -62,6 +65,7 @@ export const Profile = () => {
         'An error occurred while fetching your reviews, please try again later.'
       );
     }
+
     if (subscriptionsError) {
       toast.error(
         'An error occurred while fetching your subscriptions, please try again later.'
@@ -71,7 +75,7 @@ export const Profile = () => {
 
   const removeSubscription = async (courseId: string) => {
     removeSubscriptionMutation.mutate(courseId);
-    // Optimistically update local state
+
     setLocalUserSubscriptions(
       localUserSubscriptions?.filter(
         (subscription) => subscription.courseId !== courseId

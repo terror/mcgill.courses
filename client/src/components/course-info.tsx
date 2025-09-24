@@ -22,18 +22,11 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
   const user = useAuth();
 
   const { data: subscriptionData } = useSubscription(course._id);
+
   const addSubscriptionMutation = useAddSubscription();
   const removeSubscriptionMutation = useRemoveSubscription();
 
   const isSubscribed = subscriptionData !== null;
-
-  const subscribe = async () => {
-    addSubscriptionMutation.mutate(course._id);
-  };
-
-  const unsubscribe = async () => {
-    removeSubscriptionMutation.mutate(course._id);
-  };
 
   return (
     <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 shadow-sm dark:bg-neutral-800 md:mt-10'>
@@ -52,13 +45,17 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
               (isSubscribed ? (
                 <BellOff
                   size={20}
-                  onClick={unsubscribe}
+                  onClick={async () =>
+                    removeSubscriptionMutation.mutate(course._id)
+                  }
                   className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ) : (
                 <Bell
                   size={20}
-                  onClick={subscribe}
+                  onClick={async () =>
+                    addSubscriptionMutation.mutate(course._id)
+                  }
                   className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ))}

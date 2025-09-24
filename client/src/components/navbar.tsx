@@ -43,14 +43,12 @@ export const Navbar = () => {
     []
   );
 
-  // Update local notifications when query data changes
   useEffect(() => {
     if (notifications) {
       setLocalNotifications(notifications);
     }
   }, [notifications]);
 
-  // Show error toast if notifications fail to load
   useEffect(() => {
     if (notificationsError) {
       toast.error('Failed to get notifications.');

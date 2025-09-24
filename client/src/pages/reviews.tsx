@@ -32,6 +32,7 @@ export const Reviews = () => {
   }
 
   const reviews = data?.pages.flatMap((page) => page.reviews) || [];
+
   const uniqueUserCount = data?.pages[0]?.uniqueUserCount;
 
   return (

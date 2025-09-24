@@ -28,6 +28,7 @@ export const Instructor = () => {
   } = useInstructor(params.name || '');
 
   if (isLoading) return <Loading />;
+
   if (error || !instructorData?.instructor) return <NotFound />;
 
   const instructor = instructorData.instructor;

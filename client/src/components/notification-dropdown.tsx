@@ -71,12 +71,13 @@ export const NotificationDropdown = ({
       creatorId: notification.review.userId,
       seen: true,
     });
+
     seen.add(notification.review.courseId);
   };
 
   const deleteNotification = async (courseId: string) => {
     deleteNotificationMutation.mutate(courseId);
-    // Optimistically update the local state
+
     setNotifications(
       notifications.filter(
         (notification) => notification.review.courseId !== courseId
