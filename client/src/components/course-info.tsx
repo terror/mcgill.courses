@@ -38,7 +38,7 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
 
   const subscribe = async () => {
     try {
-      await api.addSubcription(course._id);
+      await api.addSubscription(course._id);
       setIsSubscribed(true);
       toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
     } catch (err) {
