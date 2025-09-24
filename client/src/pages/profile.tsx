@@ -15,7 +15,7 @@ import {
   useRemoveSubscription,
   useReviews,
   useSubscriptions,
-} from '../hooks/api-hooks';
+} from '../hooks/api';
 import { useAuth } from '../hooks/use-auth';
 import type { Subscription } from '../lib/types';
 import { courseIdToUrlParam } from '../lib/utils';

@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 import { api } from '../lib/api';
 import { InteractionKind } from '../lib/types';
 
-// Query Keys
 export const queryKeys = {
   courses: ['courses'] as const,
   course: (id: string) => ['courses', id] as const,
@@ -28,7 +27,6 @@ export const queryKeys = {
   user: ['user'] as const,
 };
 
-// Course Queries
 export const useCourseWithReviews = (courseId: string | undefined) => {
   return useQuery({
     queryKey: queryKeys.courseWithReviews(courseId || ''),
@@ -53,7 +51,6 @@ export const useCourses = (
   });
 };
 
-// Infinite Courses Query for Explore page
 export const useInfiniteCourses = (limit: number, filters?: any) => {
   return useInfiniteQuery({
     queryKey: [...queryKeys.courses, 'infinite', { limit, filters }],
@@ -67,7 +64,6 @@ export const useInfiniteCourses = (limit: number, filters?: any) => {
   });
 };
 
-// Review Queries
 export const useReviews = (params?: {
   courseId?: string;
   instructorName?: string;
@@ -83,7 +79,6 @@ export const useReviews = (params?: {
   });
 };
 
-// Infinite Reviews Query for Reviews page
 export const useInfiniteReviews = (limit: number, sorted = true) => {
   return useInfiniteQuery({
     queryKey: [...queryKeys.reviews, 'infinite', { limit, sorted }],
@@ -102,7 +97,6 @@ export const useInfiniteReviews = (limit: number, sorted = true) => {
   });
 };
 
-// Review Mutations
 export const useAddReview = () => {
   const queryClient = useQueryClient();
 
@@ -159,7 +153,6 @@ export const useDeleteReview = () => {
   });
 };
 
-// Subscription Queries
 export const useSubscriptions = () => {
   return useQuery({
     queryKey: queryKeys.subscriptions,
@@ -174,7 +167,6 @@ export const useSubscription = (courseId: string) => {
   });
 };
 
-// Subscription Mutations
 export const useAddSubscription = () => {
   const queryClient = useQueryClient();
 
@@ -211,7 +203,6 @@ export const useRemoveSubscription = () => {
   });
 };
 
-// Interaction Queries
 export const useInteractions = (
   courseId: string,
   userId: string,
@@ -232,7 +223,6 @@ export const useCourseInteractions = (courseId: string, referrer: string) => {
   });
 };
 
-// Interaction Mutations
 export const useAddInteraction = () => {
   const queryClient = useQueryClient();
 
@@ -295,7 +285,6 @@ export const useRemoveInteraction = () => {
   });
 };
 
-// Like/Unlike helpers for reviews
 export const useLikeReview = () => {
   const addInteractionMutation = useAddInteraction();
   const removeInteractionMutation = useRemoveInteraction();
@@ -338,7 +327,6 @@ export const useLikeReview = () => {
   };
 };
 
-// Notification Queries
 export const useNotifications = () => {
   return useQuery({
     queryKey: queryKeys.notifications,
@@ -346,7 +334,6 @@ export const useNotifications = () => {
   });
 };
 
-// Notification Mutations
 export const useUpdateNotification = () => {
   const queryClient = useQueryClient();
 
@@ -384,7 +371,6 @@ export const useDeleteNotification = () => {
   });
 };
 
-// Instructor Queries
 export const useInstructor = (name: string) => {
   return useQuery({
     queryKey: queryKeys.instructor(name),
@@ -393,17 +379,15 @@ export const useInstructor = (name: string) => {
   });
 };
 
-// Search Queries
 export const useSearch = (query: string) => {
   return useQuery({
     queryKey: queryKeys.search(query),
     queryFn: () => api.search(query),
     enabled: !!query && query.length > 0,
-    staleTime: 1 * 60 * 1000, // 1 minute for search results
+    staleTime: 1 * 60 * 1000, // 1 minute
   });
 };
 
-// User Queries
 export const useUser = () => {
   return useQuery({
     queryKey: queryKeys.user,

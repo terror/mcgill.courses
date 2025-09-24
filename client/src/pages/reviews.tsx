@@ -6,7 +6,7 @@ import { CourseReview } from '../components/course-review';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
-import { useInfiniteReviews } from '../hooks/api-hooks';
+import { useInfiniteReviews } from '../hooks/api';
 import { Review } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode, timeSince } from '../lib/utils';
 import { Loading } from './loading';

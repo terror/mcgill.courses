@@ -8,7 +8,7 @@ import { CourseInfoStats } from '../components/course-info-stats';
 import { CourseReview } from '../components/course-review';
 import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
-import { useInstructor } from '../hooks/api-hooks';
+import { useInstructor } from '../hooks/api';
 import { useAuth } from '../hooks/use-auth';
 import { courseIdToUrlParam } from '../lib/utils';
 import { Loading } from './loading';

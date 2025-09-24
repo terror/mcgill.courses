@@ -3,10 +3,7 @@ import { Bell, Circle, Trash2 } from 'lucide-react';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  useDeleteNotification,
-  useUpdateNotification,
-} from '../hooks/api-hooks';
+import { useDeleteNotification, useUpdateNotification } from '../hooks/api';
 import type { Notification } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { CourseReview } from './course-review';

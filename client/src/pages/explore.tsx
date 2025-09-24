@@ -10,7 +10,7 @@ import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { SearchBar } from '../components/search-bar';
 import { Spinner } from '../components/spinner';
-import { useInfiniteCourses } from '../hooks/api-hooks';
+import { useInfiniteCourses } from '../hooks/api';
 import { useDarkMode } from '../hooks/use-dark-mode';
 import { useExploreFilterState } from '../hooks/use-explore-filter-state';
 import { getCurrentTerms } from '../lib/utils';

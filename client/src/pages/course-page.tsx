@@ -19,7 +19,7 @@ import {
   useCourseInteractions,
   useCourseWithReviews,
   useDeleteReview,
-} from '../hooks/api-hooks';
+} from '../hooks/api';
 import { useAuth } from '../hooks/use-auth';
 import type { Review } from '../lib/types';
 import { getCurrentTerms } from '../lib/utils';

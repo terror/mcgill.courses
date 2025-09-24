@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { useAddInteraction, useRemoveInteraction } from '../hooks/api-hooks';
+import { useAddInteraction, useRemoveInteraction } from '../hooks/api';
 import { useAuth } from '../hooks/use-auth';
 import type { Review } from '../lib/types';
 import type { Interaction } from '../lib/types';

@@ -4,7 +4,7 @@ import {
   useAddSubscription,
   useRemoveSubscription,
   useSubscription,
-} from '../hooks/api-hooks';
+} from '../hooks/api';
 import { useAuth } from '../hooks/use-auth';
 import { parseCourseDescription } from '../lib/dom-utils';
 import type { Review } from '../lib/types';

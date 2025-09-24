@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { useAddReview } from '../hooks/api-hooks';
+import { useAddReview } from '../hooks/api';
 import { useDarkMode } from '../hooks/use-dark-mode';
 import type { Course } from '../model/course';
 import {
