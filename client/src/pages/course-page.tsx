@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
@@ -36,10 +36,10 @@ export const CoursePage = () => {
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [editReviewOpen, setEditReviewOpen] = useState(false);
+  const [selectedInstructor, setSelectedInstructor] = useState('');
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
   const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
-  const [selectedInstructor, setSelectedInstructor] = useState('');
 
   const {
     data: courseData,
@@ -78,6 +78,12 @@ export const CoursePage = () => {
     [course, currentTerms]
   );
 
+  useEffect(() => {
+    if (allReviews && showingReviews.length === 0) {
+      setShowingReviews(allReviews);
+    }
+  }, [allReviews, showingReviews.length]);
+
   const requirements: Requirements = {
     prereqs: filteredCourse.prerequisites,
     coreqs: filteredCourse.corequisites,
@@ -86,7 +92,7 @@ export const CoursePage = () => {
     corequisitesText: filteredCourse.corequisitesText,
   };
 
-  const userReview = showingReviews?.find((r) => r.userId === user?.id);
+  const userReview = showingReviews.find((r) => r.userId === user?.id);
 
   const canReview = Boolean(
     user && !allReviews?.find((r) => r.userId === user?.id)
