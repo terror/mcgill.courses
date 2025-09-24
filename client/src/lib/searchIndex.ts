@@ -20,7 +20,7 @@ export const getSearchIndex = () => {
 
   if (coursesIndex === null) {
     coursesIndex = new Index({
-      tokenize: 'forward',
+      tokenize: 'tolerant',
     });
 
     courses.forEach((course, i) =>
@@ -53,11 +53,11 @@ export const updateSearchResults = (
   setResults: (_: SearchResults) => void
 ) => {
   const courseSearchResults = coursesIndex
-    .search(query, 4)
+    .search(query, { limit: 4 })
     ?.map((id) => courses[id as number]);
 
   const instructorSearchResults = instructorsIndex
-    .search(query, 2)
+    .search(query, { limit: 4 })
     ?.map((id) => instructors[id as number]);
 
   setResults({
