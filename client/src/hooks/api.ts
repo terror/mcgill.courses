@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 
 import { api } from '../lib/api';
 import { InteractionKind } from '../lib/types';
+import { spliceCourseCode } from '../lib/utils';
 
 export const queryKeys = {
   courses: ['courses'] as const,
@@ -164,6 +165,16 @@ export const useSubscription = (courseId: string) => {
   return useQuery({
     queryKey: queryKeys.subscription(courseId),
     queryFn: () => api.getSubscription(courseId),
+    meta: {
+      onError: () => {
+        toast.error(
+          `Failed to check subscription for course ${spliceCourseCode(
+            courseId,
+            ' '
+          )}`
+        );
+      },
+    },
   });
 };
 
@@ -177,10 +188,12 @@ export const useAddSubscription = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.subscription(courseId),
       });
-      toast.success('Subscription added successfully!');
+      toast.success(`Subscribed to course ${spliceCourseCode(courseId, ' ')}.`);
     },
-    onError: () => {
-      toast.error('Failed to add subscription. Please try again.');
+    onError: (_, courseId) => {
+      toast.error(
+        `Failed to subscribe to course ${spliceCourseCode(courseId, ' ')}.`
+      );
     },
   });
 };
@@ -195,10 +208,14 @@ export const useRemoveSubscription = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.subscription(courseId),
       });
-      toast.success('Subscription removed successfully!');
+      toast.success(
+        `Unsubscribed from course ${spliceCourseCode(courseId, ' ')}`
+      );
     },
-    onError: () => {
-      toast.error('Failed to remove subscription. Please try again.');
+    onError: (_, courseId) => {
+      toast.error(
+        `Failed to unsubscribe from course ${spliceCourseCode(courseId, ' ')}`
+      );
     },
   });
 };
@@ -212,6 +229,11 @@ export const useInteractions = (
     queryKey: queryKeys.interactions(courseId, userId),
     queryFn: () => api.getInteractions(courseId, userId, referrer),
     enabled: !!courseId && !!userId,
+    meta: {
+      onError: (err: any) => {
+        toast.error(err.toString());
+      },
+    },
   });
 };
 
@@ -238,7 +260,7 @@ export const useAddInteraction = () => {
       userId: string;
       referrer: string | undefined;
     }) => api.addInteraction(kind, courseId, userId, referrer),
-    onSuccess: (_, { courseId, userId }) => {
+    onSuccess: (_, { kind, courseId, userId }) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.interactions(courseId, userId),
       });
@@ -248,9 +270,12 @@ export const useAddInteraction = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.courseWithReviews(courseId),
       });
+      toast.success(
+        `Successfully ${kind}d review for ${spliceCourseCode(courseId, ' ')}.`
+      );
     },
-    onError: () => {
-      toast.error('Failed to add interaction. Please try again.');
+    onError: (err) => {
+      toast.error(err.toString());
     },
   });
 };
@@ -278,9 +303,15 @@ export const useRemoveInteraction = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.courseWithReviews(courseId),
       });
+      toast.success(
+        `Successfully removed interaction for ${spliceCourseCode(
+          courseId,
+          ' '
+        )}.`
+      );
     },
-    onError: () => {
-      toast.error('Failed to remove interaction. Please try again.');
+    onError: (err) => {
+      toast.error(err.toString());
     },
   });
 };
@@ -331,6 +362,11 @@ export const useNotifications = () => {
   return useQuery({
     queryKey: queryKeys.notifications,
     queryFn: api.getNotifications,
+    meta: {
+      onError: () => {
+        toast.error('Failed to get notifications.');
+      },
+    },
   });
 };
 
@@ -351,7 +387,7 @@ export const useUpdateNotification = () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
     },
     onError: () => {
-      toast.error('Failed to update notification. Please try again.');
+      toast.error('Failed to update notification.');
     },
   });
 };
@@ -363,10 +399,10 @@ export const useDeleteNotification = () => {
     mutationFn: (courseId: string) => api.deleteNotification(courseId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
-      toast.success('Notification deleted successfully!');
+      toast.success('Successfully deleted notification.');
     },
     onError: () => {
-      toast.error('Failed to delete notification. Please try again.');
+      toast.error('Failed to delete notification.');
     },
   });
 };
