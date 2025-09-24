@@ -93,16 +93,32 @@ export const CourseGraph = memo(({ course }: CourseGraphProps) => {
     };
   });
 
-  const graphNodes: Node[] = [
-    {
-      id: course._id,
-      label: spliceCourseCode(course._id, ' '),
-      title: course.description,
-    },
-    ...prereqNodes,
-    ...coreqNodes,
-    ...leading,
-  ];
+  const nodeMap = new Map<string, Node>();
+
+  nodeMap.set(course._id, {
+    id: course._id,
+    label: spliceCourseCode(course._id, ' '),
+    title: course.description,
+  });
+
+  prereqNodes.forEach((node) => nodeMap.set(node.id as string, node));
+
+  coreqNodes.forEach((node) => {
+    const existingNode = nodeMap.get(node.id as string);
+
+    if (existingNode) {
+      nodeMap.set(node.id as string, {
+        ...existingNode,
+        color: 'rgb(255 215 0)',
+      });
+    } else {
+      nodeMap.set(node.id as string, node);
+    }
+  });
+
+  leading.forEach((node) => nodeMap.set(node.id as string, node));
+
+  const graphNodes: Node[] = Array.from(nodeMap.values());
 
   const graph: GraphData = {
     nodes: graphNodes,
