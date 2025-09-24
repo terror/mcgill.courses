@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
@@ -70,10 +70,13 @@ export const CoursePage = () => {
     return <Loading />;
   }
 
-  const filteredCourse = {
-    ...course,
-    terms: course.terms.filter((term) => currentTerms.includes(term)),
-  };
+  const filteredCourse = useMemo(
+    () => ({
+      ...course,
+      terms: course.terms.filter((term) => currentTerms.includes(term)),
+    }),
+    [course, currentTerms]
+  );
 
   const requirements: Requirements = {
     prereqs: filteredCourse.prerequisites,
