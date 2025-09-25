@@ -1,6 +1,6 @@
 use {
   super::*,
-  serde::{de::Error, Deserialize, Deserializer, Serializer},
+  serde::{Deserialize, Deserializer, Serializer, de::Error},
   serde_json::Value,
 };
 
