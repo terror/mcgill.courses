@@ -6,6 +6,9 @@ use super::*;
     title = "mcgill.courses",
     description = "A course search and review platform for McGill University."
   ),
+  servers(
+    (url = "/api")
+  ),
   paths(
     courses::get_courses,
     courses::get_course_by_id
