@@ -15,7 +15,7 @@ pub(crate) struct GetCoursesPayload {
 }
 
 #[utoipa::path(
-  get,
+  post,
   path = "/courses",
   responses(
     (status = 200, description = "Get information about many courses", body = GetCoursesPayload)
@@ -39,13 +39,13 @@ pub(crate) async fn get_courses(
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
-pub(crate) struct GetCourseParams {
+pub(crate) struct GetCourseByIdParams {
   with_reviews: Option<bool>,
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
-pub(crate) struct GetCoursePayload {
+pub(crate) struct GetCourseByIdPayload {
   pub(crate) course: Course,
   pub(crate) reviews: Vec<Review>,
 }
@@ -54,12 +54,12 @@ pub(crate) struct GetCoursePayload {
   get,
   path = "/courses/{id}",
   responses(
-    (status = 200, description = "Get information about a specific course", body = GetCoursePayload)
+    (status = 200, description = "Get information about a specific course", body = GetCourseByIdPayload)
   )
 )]
 pub(crate) async fn get_course_by_id(
   Path(id): Path<String>,
-  Query(params): Query<GetCourseParams>,
+  Query(params): Query<GetCourseByIdParams>,
   AppState(state): AppState<State>,
 ) -> Result<impl IntoResponse> {
   Ok(match state.db.find_course_by_id(&id).await? {
@@ -74,7 +74,7 @@ pub(crate) async fn get_course_by_id(
 
         return Ok((
           StatusCode::OK,
-          Json(Some(GetCoursePayload {
+          Json(Some(GetCourseByIdPayload {
             course,
             reviews: reviews.to_vec(),
           })),
@@ -83,7 +83,7 @@ pub(crate) async fn get_course_by_id(
 
       (
         StatusCode::OK,
-        Json(Some(GetCoursePayload {
+        Json(Some(GetCourseByIdPayload {
           course,
           reviews: vec![],
         })),

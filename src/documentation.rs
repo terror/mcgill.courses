@@ -12,8 +12,8 @@ use super::*;
   ),
   components(
     schemas(
-      courses::GetCourseParams,
-      courses::GetCoursePayload,
+      courses::GetCourseByIdParams,
+      courses::GetCourseByIdPayload,
       courses::GetCoursesParams,
       courses::GetCoursesPayload
     )

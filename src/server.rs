@@ -114,7 +114,7 @@ impl Server {
       .route("/api/auth/authorized", get(auth::login_authorized))
       .route("/api/auth/login", get(auth::microsoft_auth))
       .route("/api/auth/logout", get(auth::logout))
-      .route("/api/courses", get(courses::get_courses))
+      .route("/api/courses", post(courses::get_courses))
       .route("/api/courses/{id}", get(courses::get_course_by_id))
       .route("/api/instructors/{name}", get(instructors::get_instructor))
       .route(
@@ -252,7 +252,7 @@ mod tests {
     super::*,
     crate::instructors::GetInstructorPayload,
     axum::body::Body,
-    courses::GetCoursesPayload,
+    courses::{GetCourseByIdPayload, GetCoursesPayload},
     http::{Method, Request},
     interactions::{
       GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
@@ -486,7 +486,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<Course>().await,
+      response.convert::<GetCourseByIdPayload>().await.course,
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
   }
