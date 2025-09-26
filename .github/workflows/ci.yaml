@@ -37,6 +37,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v3
         with:
           version: 9.0.6
@@ -79,6 +80,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9.0.6
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+
       - name: Install toolchain
         id: toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -88,6 +96,13 @@ jobs:
           components: llvm-tools-preview
 
       - uses: Swatinem/rust-cache@v2
+
+      - name: Info
+        run: |
+          cargo --version
+          node --version
+          pnpm --version
+          rustup --version
 
       - name: Install mongodb
         run: |

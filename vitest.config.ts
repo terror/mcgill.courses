@@ -10,6 +10,15 @@ export default defineConfig({
     css: true,
     globals: true,
     include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      include: ['src/**/*'],
+      exclude: [
+        '**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        '**/*.config.*',
+      ],
+    },
   },
   resolve: {
     alias: {
