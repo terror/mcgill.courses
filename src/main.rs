@@ -13,10 +13,12 @@ use {
   async_mongodb_session::MongodbSessionStore,
   async_session::{Session, SessionStore, async_trait},
   axum::{
-    BoxError, Json, RequestPartsExt,
+    Json, RequestPartsExt,
     body::Body,
-    error_handling::HandleErrorLayer,
-    extract::{FromRef, FromRequestParts, Path, Query, State as AppState},
+    extract::{
+      FromRef, FromRequestParts, OptionalFromRequestParts, Path, Query,
+      State as AppState,
+    },
     response::{IntoResponse, Redirect, Response},
     routing::{Router, get, post},
   },
@@ -48,6 +50,7 @@ use {
   sha2::{Digest, Sha256},
   std::{
     backtrace::BacktraceStatus,
+    convert::Infallible,
     env,
     fmt::{self, Display, Formatter},
     fs,
@@ -56,13 +59,12 @@ use {
     path::PathBuf,
     process,
     sync::Arc,
+    thread,
     time::Duration,
   },
   tokio::net::TcpListener,
   tower::ServiceBuilder,
-  tower_governor::{
-    GovernorLayer, errors::display_error, governor::GovernorConfigBuilder,
-  },
+  tower_governor::{GovernorLayer, governor::GovernorConfigBuilder},
   tower_http::{
     cors::CorsLayer,
     services::{ServeDir, ServeFile},

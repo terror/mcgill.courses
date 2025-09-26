@@ -21,8 +21,8 @@ typeshare = "1.0.4"
 anyhow = { workspace = true }
 async-mongodb-session = { version = "3.0.0", default-features = false }
 async-session = "3.0.0"
-axum = { version = "0.7.9", features = ["json"] }
-axum-extra = { version = "0.9.6", features = ["cookie", "typed-header"] }
+axum = { version = "0.8.4", features = ["json"] }
+axum-extra = { version = "0.10.1", features = ["cookie", "typed-header"] }
 base64 = "0.21.7"
 bytes = "1.10.1"
 chrono = { workspace = true }
@@ -43,7 +43,7 @@ sha2 = "0.10.9"
 tokio = { workspace = true }
 tower = { version = "0.4.13", features = ["tracing", "limit", "buffer"] }
 tower-http = { version = "0.5.2", features = ["cors", "fs", "trace"] }
-tower_governor = "0.2.0"
+tower_governor = "0.8.0"
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 typeshare = { workspace = true }
@@ -56,4 +56,4 @@ hyper = { version = "1.7.0", features = ["server"] }
 mockito = "1.7.0"
 pretty_assertions = "1.4.1"
 tempfile = "3.22.0"
-tower = "0.4.13"
+tower = { version = "0.4.13", features = ["util"] }
