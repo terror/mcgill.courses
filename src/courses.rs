@@ -22,6 +22,7 @@ pub(crate) struct GetCoursesPayload {
 #[utoipa::path(
   post,
   path = "/courses",
+  description = "Get a list of courses with optional filtering.",
   params(
     ("limit" = Option<i64>, Query, description = "Maximum number of courses to return."),
     ("offset" = Option<u64>, Query, description = "Number of courses to skip."),
@@ -66,6 +67,7 @@ pub(crate) struct GetCourseByIdPayload {
 #[utoipa::path(
   get,
   path = "/courses/{id}",
+  description = "Get information about a specific course by its ID.",
   params(
     ("id" = String, Path, description = "Course ID to get course information for."),
     ("with_reviews" = Option<bool>, Query, description = "Whether to include reviews in the response."),
