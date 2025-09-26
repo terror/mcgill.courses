@@ -19,7 +19,7 @@ use super::*;
     )
   ),
   tags(
-    (name = "courses", description = "All course related endpoints"),
+    (name = "courses", description = "All course related endpoints."),
   )
 )]
 pub struct Documentation;
