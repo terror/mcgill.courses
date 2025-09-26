@@ -148,7 +148,8 @@ impl Server {
           .post(subscriptions::add_subscription)
           .delete(subscriptions::delete_subscription),
       )
-      .route("/api/user", get(user::get_user));
+      .route("/api/user", get(user::get_user))
+      .merge(Scalar::with_url("/api/docs", Documentation::openapi()));
 
     // Serve microsoft identity association file
     router = router.route(
@@ -251,7 +252,7 @@ mod tests {
     super::*,
     crate::instructors::GetInstructorPayload,
     axum::body::Body,
-    courses::GetCoursesPayload,
+    courses::{GetCourseByIdPayload, GetCoursesPayload},
     http::{Method, Request},
     interactions::{
       GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
@@ -485,7 +486,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<Course>().await,
+      response.convert::<GetCourseByIdPayload>().await.course,
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
   }

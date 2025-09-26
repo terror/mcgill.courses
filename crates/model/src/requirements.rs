@@ -19,7 +19,16 @@ impl From<&str> for Requirement {
 }
 
 #[derive(
-  Debug, PartialEq, Eq, Serialize, Deserialize, Clone, Hash, Ord, PartialOrd,
+  Debug,
+  PartialEq,
+  Eq,
+  Serialize,
+  Deserialize,
+  Clone,
+  Hash,
+  Ord,
+  PartialOrd,
+  ToSchema,
 )]
 pub enum Operator {
   #[serde(rename = "AND")]
@@ -38,11 +47,21 @@ impl Into<Bson> for Operator {
 }
 
 #[derive(
-  Debug, PartialEq, Eq, Serialize, Deserialize, Clone, Hash, Ord, PartialOrd,
+  Debug,
+  PartialEq,
+  Eq,
+  Serialize,
+  Deserialize,
+  Clone,
+  Hash,
+  Ord,
+  PartialOrd,
+  ToSchema,
 )]
 #[serde(untagged)]
 pub enum ReqNode {
   Course(String),
+  #[schema(no_recursion)]
   Group {
     operator: Operator,
     groups: Vec<ReqNode>,

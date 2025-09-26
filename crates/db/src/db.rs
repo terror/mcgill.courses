@@ -1924,13 +1924,13 @@ mod tests {
       rating: 5,
       difficulty: 5,
       user_id: "1".into(),
-      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      timestamp: DateTime::from(Utc::now()),
       ..Review::default()
     })
     .await
     .unwrap();
 
-    let timestamp = DateTime::from_chrono::<Utc>(Utc::now());
+    let timestamp = DateTime::from(Utc::now());
 
     assert_eq!(
       db.add_review(Review {
@@ -1940,7 +1940,7 @@ mod tests {
         rating: 4,
         difficulty: 4,
         user_id: "1".into(),
-        timestamp,
+        timestamp: timestamp.clone(),
         ..Review::default()
       })
       .await
@@ -2341,7 +2341,7 @@ mod tests {
       rating: 5,
       difficulty: 5,
       user_id: "3".into(),
-      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      timestamp: DateTime::from(Utc::now()),
       ..Review::default()
     };
 
@@ -2377,7 +2377,7 @@ mod tests {
       rating: 5,
       difficulty: 5,
       user_id: "1".into(),
-      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      timestamp: DateTime::from(Utc::now()),
       ..Review::default()
     };
 
@@ -2397,7 +2397,7 @@ mod tests {
       rating: 5,
       difficulty: 5,
       user_id: "1".into(),
-      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      timestamp: DateTime::from(Utc::now()),
       ..Review::default()
     };
 
@@ -2451,7 +2451,7 @@ mod tests {
       rating: 5,
       difficulty: 5,
       user_id: "3".into(),
-      timestamp: DateTime::from_chrono::<Utc>(Utc::now()),
+      timestamp: DateTime::from(Utc::now()),
       ..Review::default()
     };
 
@@ -2572,7 +2572,7 @@ mod tests {
       content: "foo".into(),
       course_id: "MATH240".into(),
       user_id: "1".into(),
-      timestamp: DateTime::from_chrono(before_epoch),
+      timestamp: DateTime::from(before_epoch),
       ..Default::default()
     })
     .await
@@ -2586,7 +2586,7 @@ mod tests {
       content: "bar".into(),
       course_id: "COMP202".into(),
       user_id: "2".into(),
-      timestamp: DateTime::from_chrono(after_epoch),
+      timestamp: DateTime::from(after_epoch),
       ..Default::default()
     })
     .await
@@ -2600,7 +2600,7 @@ mod tests {
       content: "baz".into(),
       course_id: "COMP202".into(),
       user_id: "1".into(),
-      timestamp: DateTime::from_chrono(after_epoch),
+      timestamp: DateTime::from(after_epoch),
       ..Default::default()
     })
     .await

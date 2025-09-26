@@ -1,6 +1,8 @@
 use super::*;
 
-#[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(
+  Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq, ToSchema,
+)]
 #[serde(rename_all = "camelCase")]
 #[typeshare]
 pub struct Review {
@@ -10,7 +12,6 @@ pub struct Review {
   pub instructors: Vec<String>,
   pub likes: i32,
   pub rating: u32,
-  #[serde(with = "crate::datetime")]
   #[typeshare(serialized_as = "String")]
   pub timestamp: DateTime,
   pub user_id: String,

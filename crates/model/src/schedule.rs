@@ -11,6 +11,7 @@ use super::*;
   PartialEq,
   PartialOrd,
   Serialize,
+  ToSchema,
 )]
 pub struct Block {
   pub campus: Option<String>,
@@ -45,6 +46,7 @@ impl Into<Bson> for Block {
   PartialEq,
   PartialOrd,
   Serialize,
+  ToSchema,
 )]
 pub struct TimeBlock {
   pub day: Option<String>,
@@ -73,6 +75,7 @@ impl Into<Bson> for TimeBlock {
   PartialEq,
   PartialOrd,
   Serialize,
+  ToSchema,
 )]
 pub struct Schedule {
   pub blocks: Option<Vec<Block>>,
