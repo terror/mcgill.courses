@@ -32,9 +32,9 @@ struct AppConfig<'a> {
 
 impl Server {
   pub(crate) async fn run(self) -> Result {
-    let listener = TcpListener::bind(format!("0.0.0.0:{}", self.port)).await?;
+    let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
-    info!("Listening on port: {}", self.port);
+    info!("Listening on port: {}", addr.port());
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
@@ -100,7 +100,11 @@ impl Server {
     })
     .await?;
 
-    axum::serve(listener, app).await?;
+    axum::serve(
+      TcpListener::bind(addr).await?,
+      app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await?;
 
     Ok(())
   }
