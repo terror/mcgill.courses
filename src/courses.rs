@@ -28,7 +28,7 @@ pub(crate) struct GetCoursesPayload {
     ("with_course_count" = Option<bool>, Query, description = "Whether to include the total course count in the response."),
   ),
   responses(
-    (status = 200, description = "Get information about many courses.", body = GetCoursesPayload)
+    (status = 200, description = "Information about many courses.", body = GetCoursesPayload)
   )
 )]
 pub(crate) async fn get_courses(
@@ -71,7 +71,7 @@ pub(crate) struct GetCourseByIdPayload {
     ("with_reviews" = Option<bool>, Query, description = "Whether to include reviews in the response."),
   ),
   responses(
-    (status = 200, description = "Get information about a specific course.", body = GetCourseByIdPayload)
+    (status = 200, description = "Information about a specific course.", body = GetCourseByIdPayload)
   )
 )]
 pub(crate) async fn get_course_by_id(
