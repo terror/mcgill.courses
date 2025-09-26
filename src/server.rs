@@ -111,10 +111,10 @@ impl Server {
       .route("/api/auth/login", get(auth::microsoft_auth))
       .route("/api/auth/logout", get(auth::logout))
       .route("/api/courses", post(courses::get_courses))
-      .route("/api/courses/:id", get(courses::get_course_by_id))
-      .route("/api/instructors/:name", get(instructors::get_instructor))
+      .route("/api/courses/{id}", get(courses::get_course_by_id))
+      .route("/api/instructors/{name}", get(instructors::get_instructor))
       .route(
-        "/api/interactions/:course_id/referrer/:referrer",
+        "/api/interactions/{course_id}/referrer/{referrer}",
         get(interactions::get_user_interactions_for_course),
       )
       .route(
@@ -136,7 +136,7 @@ impl Server {
           .post(reviews::add_review)
           .put(reviews::update_review),
       )
-      .route("/api/reviews/:id", get(reviews::get_review))
+      .route("/api/reviews/{id}", get(reviews::get_review))
       .route("/api/search", get(search::search))
       .route(
         "/api/subscriptions",
@@ -212,21 +212,27 @@ impl Server {
           ),
       );
 
+    let governor_config = GovernorConfigBuilder::default()
+      .per_millisecond(10)
+      .burst_size(100)
+      .finish()
+      .ok_or(anyhow!("Failed to create governor configuration"))?;
+
+    let governor_limiter = governor_config.limiter().clone();
+
+    let interval = Duration::from_secs(60);
+
+    thread::spawn(move || {
+      loop {
+        thread::sleep(interval);
+        governor_limiter.retain_recent();
+      }
+    });
+
     Ok(if config.rate_limit {
       router.layer(
         ServiceBuilder::new()
-          .layer(HandleErrorLayer::new(|err: BoxError| async move {
-            display_error(err)
-          }))
-          .layer(GovernorLayer {
-            config: Box::leak(Box::new(
-              GovernorConfigBuilder::default()
-                .per_millisecond(10)
-                .burst_size(100)
-                .finish()
-                .ok_or(anyhow!("Failed to create governor configuration"))?,
-            )),
-          })
+          .layer(GovernorLayer::new(governor_config))
           .layer(CorsLayer::very_permissive()),
       )
     } else {

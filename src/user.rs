@@ -7,35 +7,25 @@ pub(crate) struct User {
   mail: String,
 }
 
-impl User {
-  pub(crate) fn id(self) -> String {
-    self.id
-  }
+impl<S> OptionalFromRequestParts<S> for User
+where
+  MongodbSessionStore: FromRef<S>,
+  S: Send + Sync,
+{
+  type Rejection = Infallible;
 
-  pub(crate) fn mail(&self) -> &str {
-    &self.mail
-  }
-
-  #[cfg(test)]
-  pub(crate) fn new(id: &str, mail: &str) -> Self {
-    User {
-      id: String::from(id),
-      mail: String::from(mail),
+  async fn from_request_parts(
+    parts: &mut Parts,
+    state: &S,
+  ) -> Result<Option<Self>, Self::Rejection> {
+    match <User as FromRequestParts<S>>::from_request_parts(parts, state).await
+    {
+      Ok(res) => Ok(Some(res)),
+      Err(AuthRedirect) => Ok(None),
     }
   }
 }
 
-#[derive(Serialize, Deserialize)]
-#[typeshare]
-struct UserResponse {
-  user: Option<User>,
-}
-
-pub(crate) async fn get_user(user: Option<User>) -> impl IntoResponse {
-  Json(UserResponse { user })
-}
-
-#[async_trait]
 impl<S> FromRequestParts<S> for User
 where
   MongodbSessionStore: FromRef<S>,
@@ -75,4 +65,32 @@ where
         .ok_or(AuthRedirect)?,
     )
   }
+}
+
+impl User {
+  pub(crate) fn id(self) -> String {
+    self.id
+  }
+
+  pub(crate) fn mail(&self) -> &str {
+    &self.mail
+  }
+
+  #[cfg(test)]
+  pub(crate) fn new(id: &str, mail: &str) -> Self {
+    User {
+      id: String::from(id),
+      mail: String::from(mail),
+    }
+  }
+}
+
+#[derive(Serialize, Deserialize)]
+#[typeshare]
+struct UserResponse {
+  user: Option<User>,
+}
+
+pub(crate) async fn get_user(user: Option<User>) -> impl IntoResponse {
+  Json(UserResponse { user })
 }
