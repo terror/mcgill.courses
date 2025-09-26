@@ -22,8 +22,13 @@ pub(crate) struct GetCoursesPayload {
 #[utoipa::path(
   post,
   path = "/courses",
+  params(
+    ("limit" = Option<i64>, Query, description = "Maximum number of courses to return."),
+    ("offset" = Option<u64>, Query, description = "Number of courses to skip."),
+    ("with_course_count" = Option<bool>, Query, description = "Whether to include the total course count in the response."),
+  ),
   responses(
-    (status = 200, description = "Get information about many courses", body = GetCoursesPayload)
+    (status = 200, description = "Get information about many courses.", body = GetCoursesPayload)
   )
 )]
 pub(crate) async fn get_courses(
@@ -54,15 +59,19 @@ pub(crate) struct GetCourseByIdParams {
 pub(crate) struct GetCourseByIdPayload {
   /// The course information.
   pub(crate) course: Course,
-  /// Reviews for the course (sorted by timestamp, newest first)
+  /// Reviews for the course (sorted by timestamp, newest first).
   pub(crate) reviews: Vec<Review>,
 }
 
 #[utoipa::path(
   get,
   path = "/courses/{id}",
+  params(
+    ("id" = String, Path, description = "Course ID to get course information for."),
+    ("with_reviews" = Option<bool>, Query, description = "Whether to include reviews in the response."),
+  ),
   responses(
-    (status = 200, description = "Get information about a specific course", body = GetCourseByIdPayload)
+    (status = 200, description = "Get information about a specific course.", body = GetCourseByIdPayload)
   )
 )]
 pub(crate) async fn get_course_by_id(
