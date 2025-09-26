@@ -2,15 +2,20 @@ use super::*;
 
 #[derive(Deserialize, ToSchema)]
 pub(crate) struct GetCoursesParams {
+  /// Maximum number of courses to return.
   limit: Option<i64>,
+  /// Number of courses to skip.
   offset: Option<u64>,
+  /// Whether to include the total course count in the response.
   with_course_count: Option<bool>,
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetCoursesPayload {
+  /// List of courses matching the query.
   pub(crate) courses: Vec<Course>,
+  /// Total number of courses available (if requested).
   pub(crate) course_count: Option<u64>,
 }
 
@@ -40,13 +45,16 @@ pub(crate) async fn get_courses(
 
 #[derive(Debug, Deserialize, ToSchema)]
 pub(crate) struct GetCourseByIdParams {
+  /// Whether to include reviews in the response.
   with_reviews: Option<bool>,
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetCourseByIdPayload {
+  /// The course information.
   pub(crate) course: Course,
+  /// Reviews for the course (sorted by timestamp, newest first)
   pub(crate) reviews: Vec<Review>,
 }
 
