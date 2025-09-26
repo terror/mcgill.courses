@@ -1,5 +1,5 @@
 use {
-  bson::{Bson, DateTime, doc},
+  bson::{Bson, doc},
   combine::Combine,
   derivative::Derivative,
   serde::{Deserialize, Serialize},
@@ -8,6 +8,7 @@ use {
     path::PathBuf,
   },
   typeshare::typeshare,
+  utoipa::ToSchema,
 };
 
 mod course;
@@ -29,6 +30,7 @@ pub use crate::{
   course::Course,
   course_filter::{CourseFilter, CourseSort, CourseSortType},
   course_page::CoursePage,
+  datetime::DateTime,
   initialize_options::InitializeOptions,
   instructor::Instructor,
   interaction::{Interaction, InteractionKind},

@@ -16,6 +16,7 @@ tokio = { version = "1.47.1", features = ["rt-multi-thread", "macros"] }
 tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.20", features = ["env-filter", "json"] }
 typeshare = "1.0.4"
+utoipa = { version = "5.4.0", features = ["axum_extras"] }
 
 [dependencies]
 anyhow = { workspace = true }
@@ -48,6 +49,8 @@ tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 typeshare = { workspace = true }
 url = "2.5.7"
+utoipa = { workspace = true }
+utoipa-scalar = { version = "0.3.0", features = ["axum"] }
 uuid = { version = "1.0", features = ["v4"] }
 walkdir = "2.5.0"
 

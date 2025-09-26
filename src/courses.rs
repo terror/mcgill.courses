@@ -1,27 +1,34 @@
 use super::*;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
 pub(crate) struct GetCoursesParams {
   limit: Option<i64>,
   offset: Option<u64>,
   with_course_count: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetCoursesPayload {
   pub(crate) courses: Vec<Course>,
   pub(crate) course_count: Option<u64>,
 }
 
+#[utoipa::path(
+  get,
+  path = "/courses",
+  responses(
+    (status = 200, description = "Get information about many courses", body = GetCoursesPayload)
+  )
+)]
 pub(crate) async fn get_courses(
   Query(params): Query<GetCoursesParams>,
   AppState(db): AppState<Arc<Db>>,
-  filter: Json<CourseFilter>,
+  Json(filter): Json<CourseFilter>,
 ) -> Result<impl IntoResponse> {
   Ok(Json(GetCoursesPayload {
     courses: db
-      .courses(params.limit, params.offset, Some(filter.0))
+      .courses(params.limit, params.offset, Some(filter))
       .await?,
     course_count: if params.with_course_count.unwrap_or(false) {
       Some(db.course_count().await?)
@@ -31,11 +38,25 @@ pub(crate) async fn get_courses(
   }))
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub(crate) struct GetCourseParams {
   with_reviews: Option<bool>,
 }
 
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct GetCoursePayload {
+  pub(crate) course: Course,
+  pub(crate) reviews: Vec<Review>,
+}
+
+#[utoipa::path(
+  get,
+  path = "/courses/{id}",
+  responses(
+    (status = 200, description = "Get information about a specific course", body = GetCoursePayload)
+  )
+)]
 pub(crate) async fn get_course_by_id(
   Path(id): Path<String>,
   Query(params): Query<GetCourseParams>,
@@ -53,11 +74,20 @@ pub(crate) async fn get_course_by_id(
 
         return Ok((
           StatusCode::OK,
-          Json(Some(json!({ "course": course, "reviews": reviews }))),
+          Json(Some(GetCoursePayload {
+            course,
+            reviews: reviews.to_vec(),
+          })),
         ));
       }
 
-      (StatusCode::OK, Json(Some(json!(course))))
+      (
+        StatusCode::OK,
+        Json(Some(GetCoursePayload {
+          course,
+          reviews: vec![],
+        })),
+      )
     }
     None => (StatusCode::NOT_FOUND, Json(None)),
   })

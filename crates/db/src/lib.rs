@@ -29,9 +29,8 @@ use {
 
 #[cfg(test)]
 use {
-  bson::DateTime,
   include_dir::{Dir, include_dir},
-  model::CourseSort,
+  model::{CourseSort, DateTime},
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };

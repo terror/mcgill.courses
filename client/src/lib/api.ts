@@ -264,7 +264,7 @@ export const api = {
     filters?: any
   ): Promise<GetCoursesPayload> {
     return client.deserialize<GetCoursesPayload>(
-      'POST',
+      'GET',
       client.buildQuery(`/courses`, {
         limit,
         offset,

@@ -2,6 +2,7 @@ use {
   crate::{
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
+    documentation::Documentation,
     error::Error,
     hash::Hash,
     object::Object,
@@ -20,7 +21,7 @@ use {
       State as AppState,
     },
     response::{IntoResponse, Redirect, Response},
-    routing::{Router, get, post},
+    routing::{Router, get},
   },
   axum_extra::{
     TypedHeader, headers::Cookie, typed_header::TypedHeaderRejectionReason,
@@ -76,12 +77,15 @@ use {
   tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
   typeshare::typeshare,
   url::Url,
+  utoipa::{OpenApi, ToSchema},
+  utoipa_scalar::{Scalar, Servable},
   walkdir::WalkDir,
 };
 
 mod assets;
 mod auth;
 mod courses;
+mod documentation;
 mod error;
 mod hash;
 mod instructors;

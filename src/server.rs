@@ -114,7 +114,7 @@ impl Server {
       .route("/api/auth/authorized", get(auth::login_authorized))
       .route("/api/auth/login", get(auth::microsoft_auth))
       .route("/api/auth/logout", get(auth::logout))
-      .route("/api/courses", post(courses::get_courses))
+      .route("/api/courses", get(courses::get_courses))
       .route("/api/courses/{id}", get(courses::get_course_by_id))
       .route("/api/instructors/{name}", get(instructors::get_instructor))
       .route(
@@ -148,7 +148,8 @@ impl Server {
           .post(subscriptions::add_subscription)
           .delete(subscriptions::delete_subscription),
       )
-      .route("/api/user", get(user::get_user));
+      .route("/api/user", get(user::get_user))
+      .merge(Scalar::with_url("/api/docs", Documentation::openapi()));
 
     // Serve microsoft identity association file
     router = router.route(
