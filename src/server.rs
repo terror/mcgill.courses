@@ -32,9 +32,9 @@ struct AppConfig<'a> {
 
 impl Server {
   pub(crate) async fn run(self) -> Result {
-    let listener = TcpListener::bind(format!("0.0.0.0:{}", self.port)).await?;
+    let addr = SocketAddr::from(([0, 0, 0, 0], self.port));
 
-    info!("Listening on port: {}", self.port);
+    info!("Listening on port: {}", addr.port());
 
     let db = Arc::new(Db::connect(&self.db_name).await?);
 
@@ -110,11 +110,11 @@ impl Server {
     .await?;
 
     axum::serve(
-      listener,
+      TcpListener::bind(addr).await?,
       app
         .finish_api(&mut api)
         .layer(Extension(Arc::new(api)))
-        .into_make_service(),
+        .into_make_service_with_connect_info::<SocketAddr>(),
     )
     .await?;
 
@@ -135,7 +135,12 @@ impl Server {
       .route("/api/auth/logout", get(auth::logout))
       .route("/api/courses", post(courses::get_courses))
       .route("/api/courses/{id}", get(courses::get_course_by_id))
-      .route("/api/docs", Scalar::new("/api/api.json").axum_route())
+      .route(
+        "/api/docs",
+        Scalar::new("/api/api.json")
+          .with_title("mcgill.courses")
+          .axum_route(),
+      )
       .route("/api/instructors/{name}", get(instructors::get_instructor))
       .route(
         "/api/interactions",
