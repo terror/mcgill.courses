@@ -2,6 +2,7 @@
 /.DS_Store
 /courses.json
 /coverage
+/client/coverage
 /cypress/downloads
 /cypress/screenshots
 /cypress/videos

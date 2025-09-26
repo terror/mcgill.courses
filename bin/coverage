@@ -8,21 +8,27 @@ MODE=${1:-"debug"}
 
 rm -rf coverage && mkdir coverage
 
-echo '[~] Running coverage...'
+echo '[~] Running server coverage...'
 
 CARGO_INCREMENTAL=0 \
   RUSTFLAGS='-Cinstrument-coverage' \
   LLVM_PROFILE_FILE='cargo-test-%p-%m.profraw' \
   cargo test --all --all-targets
 
-echo '[~] Generating coverage report...'
+echo '[~] Running client coverage...'
+
+pnpm run test --coverage
+
+echo '[~] Generating server coverage report...'
 
 if [ "$MODE" = "debug" ]; then
   FMT=html
-  FILE=coverage/html
+  SERVER_FILE=coverage/server.html
+  CLIENT_FILE=coverage/client.html
 else
   FMT=lcov
-  FILE=coverage/tests.lcov
+  SERVER_FILE=coverage/server.lcov
+  CLIENT_FILE=coverage/client.lcov
 fi
 
 grcov . \
@@ -33,7 +39,24 @@ grcov . \
   --ignore-not-existing \
   --ignore "../*" \
   --ignore "/*" \
-  -o $FILE
+  -o $SERVER_FILE
+
+echo '[~] Copying client coverage report...'
+
+if [ "$MODE" = "debug" ]; then
+  cp -r client/coverage $CLIENT_FILE
+else
+  cp client/coverage/lcov.info $CLIENT_FILE
+fi
+
+echo '[~] Combining coverage reports...'
+
+if [ "$MODE" = "debug" ]; then
+  echo "Server coverage: coverage/server.html"
+  echo "Client coverage: coverage/client.html"
+else
+  cat $SERVER_FILE $CLIENT_FILE > coverage/tests.lcov
+fi
 
 echo '[~] Cleaning up...'
 
