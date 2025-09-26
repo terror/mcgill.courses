@@ -9,18 +9,23 @@ use {
     state::State,
     user::User,
   },
+  aide::{
+    axum::{ApiRouter, IntoApiResponse},
+    openapi::{Info, OpenApi},
+    scalar::Scalar,
+  },
   anyhow::anyhow,
   async_mongodb_session::MongodbSessionStore,
   async_session::{Session, SessionStore, async_trait},
   axum::{
-    Json, RequestPartsExt,
+    Extension, Json, RequestPartsExt,
     body::Body,
     extract::{
       FromRef, FromRequestParts, OptionalFromRequestParts, Path, Query,
       State as AppState,
     },
     response::{IntoResponse, Redirect, Response},
-    routing::{Router, get, post},
+    routing::{get, post},
   },
   axum_extra::{
     TypedHeader, headers::Cookie, typed_header::TypedHeaderRejectionReason,

@@ -92,6 +92,15 @@ impl Server {
     )
     .await?;
 
+    let mut api = OpenApi {
+      info: Info {
+        title: "mcgill.courses".to_string(),
+        description: Some("Public API for mcgill.courses - The course search and review platform for McGill university.".to_string()),
+        ..Info::default()
+      },
+      ..OpenApi::default()
+    };
+
     let app = Self::app(AppConfig {
       db,
       assets,
@@ -100,28 +109,43 @@ impl Server {
     })
     .await?;
 
-    axum::serve(listener, app).await?;
+    axum::serve(
+      listener,
+      app
+        .finish_api(&mut api)
+        .layer(Extension(Arc::new(api)))
+        .into_make_service(),
+    )
+    .await?;
 
     Ok(())
   }
 
-  async fn app(config: AppConfig<'_>) -> Result<Router> {
-    let mut router = Router::new()
+  async fn serve_api(
+    axum::Extension(api): axum::Extension<Arc<OpenApi>>,
+  ) -> impl IntoApiResponse {
+    Json(api).into_response()
+  }
+
+  async fn app(config: AppConfig<'_>) -> Result<ApiRouter> {
+    let mut router = ApiRouter::new()
+      .route("/api/api.json", get(Self::serve_api))
       .route("/api/auth/authorized", get(auth::login_authorized))
       .route("/api/auth/login", get(auth::microsoft_auth))
       .route("/api/auth/logout", get(auth::logout))
       .route("/api/courses", post(courses::get_courses))
       .route("/api/courses/{id}", get(courses::get_course_by_id))
+      .route("/api/docs", Scalar::new("/api/api.json").axum_route())
       .route("/api/instructors/{name}", get(instructors::get_instructor))
-      .route(
-        "/api/interactions/{course_id}/referrer/{referrer}",
-        get(interactions::get_user_interactions_for_course),
-      )
       .route(
         "/api/interactions",
         get(interactions::get_interaction_kind)
           .post(interactions::add_interaction)
           .delete(interactions::delete_interaction),
+      )
+      .route(
+        "/api/interactions/{course_id}/referrer/{referrer}",
+        get(interactions::get_user_interactions_for_course),
       )
       .route(
         "/api/notifications",
@@ -262,7 +286,7 @@ mod tests {
   };
 
   struct TestContext {
-    app: Router,
+    app: ApiRouter,
     db: Arc<Db>,
     session_store: MongodbSessionStore,
   }
