@@ -53,12 +53,12 @@ use {
     fs,
     fs::File,
     io::Read,
-    net::SocketAddr,
     path::PathBuf,
     process,
     sync::Arc,
     time::Duration,
   },
+  tokio::net::TcpListener,
   tower::ServiceBuilder,
   tower_governor::{
     GovernorLayer, errors::display_error, governor::GovernorConfigBuilder,
