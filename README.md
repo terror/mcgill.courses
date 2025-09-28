@@ -35,8 +35,6 @@ and initiate the replica set:
 
 ```bash
 docker compose up --no-recreate -d
-sleep 5
-docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
 ```
 
 Spawn the server with a data source (in this case the `/seed` directory) and
