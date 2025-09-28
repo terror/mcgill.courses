@@ -1,23 +1,49 @@
 use super::*;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub(crate) struct GetReviewsParams {
+  /// Course ID to filter reviews by.
   pub(crate) course_id: Option<String>,
+  /// Instructor name to filter reviews by.
   pub(crate) instructor_name: Option<String>,
+  /// Maximum number of reviews to return.
   pub(crate) limit: Option<i64>,
+  /// Number of reviews to skip.
   pub(crate) offset: Option<u64>,
+  /// Whether to sort reviews by timestamp (newest first).
   pub(crate) sorted: Option<bool>,
+  /// User ID to filter reviews by.
   pub(crate) user_id: Option<String>,
+  /// Whether to include the unique user count in the response.
   pub(crate) with_user_count: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetReviewsPayload {
+  /// List of reviews matching the query.
   pub reviews: Vec<Review>,
+  /// Number of unique users who have submitted reviews (if requested).
   pub unique_user_count: Option<u64>,
 }
 
+#[utoipa::path(
+  get,
+  path = "/reviews",
+  description = "Get a list of reviews with optional filtering.",
+  params(
+    ("course_id" = Option<String>, Query, description = "Course ID to filter reviews by."),
+    ("instructor_name" = Option<String>, Query, description = "Instructor name to filter reviews by."),
+    ("limit" = Option<i64>, Query, description = "Maximum number of reviews to return."),
+    ("offset" = Option<u64>, Query, description = "Number of reviews to skip."),
+    ("sorted" = Option<bool>, Query, description = "Whether to sort reviews by timestamp (newest first)."),
+    ("user_id" = Option<String>, Query, description = "User ID to filter reviews by."),
+    ("with_user_count" = Option<bool>, Query, description = "Whether to include the unique user count in the response."),
+  ),
+  responses(
+    (status = 200, description = "List of reviews with optional metadata.", body = GetReviewsPayload)
+  )
+)]
 #[tracing::instrument(name = "api_get_reviews", skip(db), fields(
   course_id = %params.course_id.as_deref().unwrap_or("all"),
   instructor_name = %params.instructor_name.as_deref().unwrap_or("all"),
@@ -49,6 +75,17 @@ pub(crate) async fn get_reviews(
   }))
 }
 
+#[utoipa::path(
+  get,
+  path = "/reviews/{id}",
+  description = "Get a specific review by its ID.",
+  params(
+    ("id" = String, Path, description = "Review ID to get review information for."),
+  ),
+  responses(
+    (status = 200, description = "Information about a specific review.", body = Review)
+  )
+)]
 pub(crate) async fn get_review(
   user: User,
   Path(id): Path<String>,
@@ -57,15 +94,29 @@ pub(crate) async fn get_review(
   Ok(Json(db.find_review(&id, &user.id()).await?))
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub(crate) struct AddOrUpdateReviewBody {
+  /// The review content/text.
   pub(crate) content: String,
+  /// Course ID this review is for.
   pub(crate) course_id: String,
+  /// List of instructor names for this review.
   pub(crate) instructors: Vec<String>,
+  /// Rating out of 5 (1-5).
   pub(crate) rating: u32,
+  /// Difficulty rating out of 5 (1-5).
   pub(crate) difficulty: u32,
 }
 
+#[utoipa::path(
+  post,
+  path = "/reviews",
+  description = "Add a new review for a course.",
+  request_body = AddOrUpdateReviewBody,
+  responses(
+    (status = 200, description = "Review added successfully.")
+  )
+)]
 #[tracing::instrument(name = "api_add_review", skip_all, fields(
   course_id = %body.course_id,
   rating = %body.rating
@@ -111,6 +162,15 @@ pub(crate) async fn add_review(
   Ok(())
 }
 
+#[utoipa::path(
+  put,
+  path = "/reviews",
+  description = "Update an existing review for a course.",
+  request_body = AddOrUpdateReviewBody,
+  responses(
+    (status = 200, description = "Review updated successfully.")
+  )
+)]
 pub(crate) async fn update_review(
   AppState(db): AppState<Arc<Db>>,
   user: User,
@@ -149,11 +209,24 @@ pub(crate) async fn update_review(
   Ok(())
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub(crate) struct DeleteReviewBody {
+  /// Course ID to delete the review for.
   course_id: String,
 }
 
+#[utoipa::path(
+  delete,
+  path = "/reviews",
+  description = "Delete a review for a specific course.",
+  request_body = DeleteReviewBody,
+  responses(
+    (status = 200, description = "Review deleted successfully.")
+  ),
+  security(
+    ("api_key1" = ["edit:items", "read:items"])
+  )
+)]
 pub(crate) async fn delete_review(
   AppState(db): AppState<Arc<Db>>,
   user: User,
