@@ -24,10 +24,10 @@ use super::*;
       courses::GetCourseByIdPayload,
       courses::GetCoursesParams,
       courses::GetCoursesPayload,
-      reviews::GetReviewsParams,
-      reviews::GetReviewsPayload,
       reviews::AddOrUpdateReviewBody,
-      reviews::DeleteReviewBody
+      reviews::DeleteReviewBody,
+      reviews::GetReviewsParams,
+      reviews::GetReviewsPayload
     )
   ),
   tags(

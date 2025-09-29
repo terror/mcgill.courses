@@ -73,7 +73,8 @@ pub(crate) struct GetCourseByIdPayload {
     ("with_reviews" = Option<bool>, Query, description = "Whether to include reviews in the response."),
   ),
   responses(
-    (status = 200, description = "Information about a specific course.", body = GetCourseByIdPayload)
+    (status = 200, description = "Information about a specific course.", body = GetCourseByIdPayload),
+    (status = 404, description = "Course not found.")
   )
 )]
 pub(crate) async fn get_course_by_id(
