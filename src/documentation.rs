@@ -49,11 +49,11 @@ impl Modify for MicrosoftOAuthSecurity {
     reviews::get_review,
     reviews::add_review,
     reviews::update_review,
-    reviews::delete_review
+    reviews::delete_review,
+    search::search
   ),
   components(
     schemas(
-      Notification,
       courses::GetCourseByIdParams,
       courses::GetCourseByIdPayload,
       courses::GetCoursesParams,
@@ -63,13 +63,15 @@ impl Modify for MicrosoftOAuthSecurity {
       reviews::AddOrUpdateReviewBody,
       reviews::DeleteReviewBody,
       reviews::GetReviewsParams,
-      reviews::GetReviewsPayload
+      reviews::GetReviewsPayload,
+      search::SearchParams,
     )
   ),
   tags(
     (name = "courses", description = "All course related endpoints."),
     (name = "notifications", description = "All notification related endpoints."),
     (name = "reviews", description = "All review related endpoints."),
+    (name = "search", description = "All search related endpoints."),
   ),
 )]
 pub(crate) struct Documentation;
