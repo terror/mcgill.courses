@@ -37,7 +37,7 @@ use {
   },
   model::{
     Course, CourseFilter, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Review, ReviewFilter, Subscription,
+    InteractionKind, Notification, Review, ReviewFilter, Subscription,
   },
   oauth2::{
     AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
