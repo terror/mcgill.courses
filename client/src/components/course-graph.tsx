@@ -4,13 +4,13 @@ import VisGraph, { Edge, GraphData, Node } from 'react-vis-graph-wrapper';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useDarkMode } from '../hooks/use-dark-mode';
+import type { ReqNode } from '../lib/types';
 import {
   courseIdToUrlParam,
   isValidCourseCode,
   spliceCourseCode,
 } from '../lib/utils';
 import type { Course } from '../model/course';
-import type { ReqNode } from '../model/requirements';
 
 type CourseGraphProps = {
   course: Course;
@@ -31,35 +31,36 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   const edges: Edge[] = [];
 
   const traverse = (node: ReqNode): string => {
-    if (typeof node === 'string') {
+    if (node.type === 'course') {
+      const courseCode = node.data;
       const duplicates = nodes.filter((n) =>
-        (n.id as string).startsWith(node)
+        (n.id as string).startsWith(courseCode)
       ).length;
 
-      const id = duplicates === 0 ? node : `${node}_${duplicates}`;
+      const id = duplicates === 0 ? courseCode : `${courseCode}_${duplicates}`;
 
       nodes.push({
         id,
-        label: node,
+        label: courseCode,
         color: groupColors[nodeGroup],
       });
 
       return id;
     }
 
-    const codes = node.groups.map((group) => traverse(group)),
-      id = codes.join(node.operator);
+    const codes = node.data.groups.map((group) => traverse(group)),
+      id = codes.join(node.data.operator);
 
     nodes.push({
       id,
-      label: node.operator,
+      label: node.data.operator,
       size: 6,
       color: groupColors['operator'],
       shape: 'hexagon',
     });
 
     for (const code of codes)
-      edges.push({ from: code, to: id, dashes: node.operator === 'OR' });
+      edges.push({ from: code, to: id, dashes: node.data.operator === 'OR' });
 
     return id;
   };

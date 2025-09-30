@@ -30,6 +30,8 @@ impl From<&str> for Requirement {
   PartialOrd,
   ToSchema,
 )]
+#[serde(rename_all = "camelCase")]
+#[typeshare]
 pub enum Operator {
   #[serde(rename = "AND")]
   And,
@@ -47,18 +49,11 @@ impl Into<Bson> for Operator {
 }
 
 #[derive(
-  Debug,
-  PartialEq,
-  Eq,
-  Serialize,
-  Deserialize,
-  Clone,
-  Hash,
-  Ord,
-  PartialOrd,
-  ToSchema,
+  Debug, PartialEq, Eq, Serialize, Clone, Hash, Ord, PartialOrd, ToSchema,
 )]
-#[serde(untagged)]
+#[serde(tag = "type", content = "data")]
+#[serde(rename_all = "camelCase")]
+#[typeshare]
 pub enum ReqNode {
   Course(String),
   #[schema(no_recursion)]
@@ -66,6 +61,74 @@ pub enum ReqNode {
     operator: Operator,
     groups: Vec<ReqNode>,
   },
+}
+
+impl<'de> Deserialize<'de> for ReqNode {
+  /// Deserializes ReqNode from either old untagged format or new tagged format for
+  /// backward compatibility.
+  ///
+  /// This function handles two different ReqNode serialization formats during
+  /// deserialization. The new format uses serde's tagged enum representation with
+  /// explicit type discriminators: `{type: "course", data: "MATH240"}` for courses
+  /// and `{type: "group", data: {operator: "AND", groups: [...]}}` for groups.
+  /// This matches the typeshare-generated TypeScript types that provide type safety
+  /// on the frontend.
+  ///
+  /// However, existing database records contain the old untagged format where courses
+  /// are stored as plain strings (e.g., `"MATH240"`) and groups as objects without
+  /// type discriminators (e.g., `{operator: "AND", groups: [...]}`).
+  ///
+  /// The dual format support exists because historical course data in the database
+  /// was stored using an untagged enum representation before we introduced typeshare
+  /// for frontend-backend type consistency. This custom deserializer allows the
+  /// backend to read existing data while serializing new data in the tagged format
+  /// for future writes.
+  fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+  where
+    D: serde::Deserializer<'de>,
+  {
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct GroupData {
+      operator: Operator,
+      groups: Vec<ReqNode>,
+    }
+
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase", tag = "type", content = "data")]
+    enum TaggedReqNode {
+      Course(String),
+      Group(GroupData),
+    }
+
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum UntaggedReqNode {
+      Course(String),
+      Group(GroupData),
+    }
+
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum ReqNodeRepr {
+      Tagged(TaggedReqNode),
+      Legacy(UntaggedReqNode),
+    }
+
+    let repr = ReqNodeRepr::deserialize(deserializer)?;
+
+    Ok(match repr {
+      ReqNodeRepr::Tagged(TaggedReqNode::Course(course))
+      | ReqNodeRepr::Legacy(UntaggedReqNode::Course(course)) => {
+        ReqNode::Course(course)
+      }
+      ReqNodeRepr::Tagged(TaggedReqNode::Group(group))
+      | ReqNodeRepr::Legacy(UntaggedReqNode::Group(group)) => {
+        let GroupData { operator, groups } = group;
+        ReqNode::Group { operator, groups }
+      }
+    })
+  }
 }
 
 impl Into<Bson> for ReqNode {
@@ -87,6 +150,8 @@ impl Default for ReqNode {
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+#[typeshare]
 pub struct Requirements {
   pub prerequisites_text: Option<String>,
   pub corequisites_text: Option<String>,
