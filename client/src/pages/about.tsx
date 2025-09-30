@@ -5,7 +5,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-import McGillDesignConsultancyLogoUrl from '../assets/mcgill_design_consultancy.png';
+import McGillDesignConsultancyLogoUrl from '../assets/mcgill-design-consultancy.png';
 import jeffImageUrl from '../assets/team/jeff.jpg';
 import joeyImageUrl from '../assets/team/joey.jpg';
 import liamImageUrl from '../assets/team/liam.jpg';

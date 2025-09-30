@@ -9,8 +9,8 @@ import {
 import { Fragment } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import * as buildingCodes from '../assets/buildingCodes.json';
-import * as buildingCoordinates from '../assets/buildingCoordinates.json';
+import * as buildingCodes from '../assets/building-codes.json';
+import * as buildingCoordinates from '../assets/building-coordinates.json';
 import { useDarkMode } from '../hooks/use-dark-mode';
 import { env } from '../lib/constants';
 

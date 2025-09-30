@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import courseAverageData from '../assets/courseAveragesData.json';
+import courseAverageData from '../assets/course-averages-data.json';
 import { AddReviewForm } from '../components/add-review-form';
 import { CourseAverages } from '../components/course-averages';
 import { CourseInfo } from '../components/course-info';
