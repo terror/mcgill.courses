@@ -4,8 +4,8 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import * as buildingCodes from '../assets/buildingCodes.json';
-import * as buildingCoordinates from '../assets/buildingCoordinates.json';
+import * as buildingCodes from '../assets/building-codes.json';
+import * as buildingCoordinates from '../assets/building-coordinates.json';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/course';
 import type { Block, Schedule } from '../model/schedule';

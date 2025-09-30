@@ -2,7 +2,7 @@ import { Leaf, Snowflake, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import courseCodes from '../assets/courseCodes.json';
+import courseCodes from '../assets/course-codes.json';
 import { useExploreFilterState } from '../hooks/use-explore-filter-state';
 import { Autocomplete } from './autocomplete';
 import { termColorMap } from './course-terms';
