@@ -9,7 +9,7 @@ pub(crate) struct GetReviewsParams {
   /// Maximum number of reviews to return.
   pub(crate) limit: Option<i64>,
   /// Number of reviews to skip.
-  pub(crate) offset: Option<u32>,
+  pub(crate) offset: Option<u64>,
   /// Whether to sort reviews by timestamp (newest first).
   pub(crate) sorted: Option<bool>,
   /// User ID to filter reviews by.
@@ -70,7 +70,7 @@ pub(crate) async fn get_reviews(
   let reviews = db
     .reviews(
       params.limit,
-      params.offset.map(|v| v as u64),
+      params.offset,
       Some(Into::<ReviewFilter>::into(&params)),
     )
     .await?;
