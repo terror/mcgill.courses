@@ -94,12 +94,15 @@ pub(crate) async fn get_reviews(
   path = "/reviews/{id}",
   description = "Get a specific review by its ID.",
   params(
-    ("id" = String, Path, description = "Review ID to get review information for."),
+    ("id" = String, Path, description = "Review ID to get review information for.")
+  ),
+  security(
+    ("microsoftOAuth" = ["User.Read"])
   ),
   responses(
     (status = StatusCode::OK, description = "Information about a specific review.", body = Review),
     (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
-  )
+  ),
 )]
 pub(crate) async fn get_review(
   user: User,
@@ -127,11 +130,14 @@ pub(crate) struct AddOrUpdateReviewBody {
   post,
   path = "/reviews",
   description = "Add a new review for a course.",
+  security(
+    ("microsoftOAuth" = ["User.Read"])
+  ),
   request_body = AddOrUpdateReviewBody,
   responses(
     (status = StatusCode::OK, description = "Review added successfully."),
     (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
-  )
+  ),
 )]
 #[tracing::instrument(name = "api_add_review", skip_all, fields(
   course_id = %body.course_id,
@@ -182,11 +188,14 @@ pub(crate) async fn add_review(
   put,
   path = "/reviews",
   description = "Update an existing review for a course.",
+  security(
+    ("microsoftOAuth" = ["User.Read"])
+  ),
   request_body = AddOrUpdateReviewBody,
   responses(
     (status = StatusCode::OK, description = "Review updated successfully."),
     (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
-  )
+  ),
 )]
 pub(crate) async fn update_review(
   AppState(db): AppState<Arc<Db>>,
@@ -236,6 +245,9 @@ pub(crate) struct DeleteReviewBody {
   delete,
   path = "/reviews",
   description = "Delete a review for a specific course.",
+  security(
+    ("microsoftOAuth" = ["User.Read"])
+  ),
   request_body = DeleteReviewBody,
   responses(
     (status = StatusCode::OK, description = "Review deleted successfully."),

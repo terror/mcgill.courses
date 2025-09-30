@@ -1,5 +1,34 @@
 use super::*;
 
+struct MicrosoftOAuthSecurity;
+
+impl Modify for MicrosoftOAuthSecurity {
+  fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+    let components = openapi.components.get_or_insert_with(Components::default);
+
+    if components.security_schemes.contains_key("microsoftOAuth") {
+      return;
+    }
+
+    components.add_security_scheme(
+      "microsoftOAuth",
+      SecurityScheme::OAuth2(OAuth2::new([Flow::AuthorizationCode(
+        AuthorizationCode::new(
+          "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+          "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+          Scopes::from_iter([
+            ("openid", "Authenticate with Microsoft."),
+            (
+              "User.Read",
+              "Read basic Microsoft user profile information.",
+            ),
+          ]),
+        ),
+      )])),
+    );
+  }
+}
+
 #[derive(OpenApi)]
 #[openapi(
   info(
@@ -9,6 +38,7 @@ use super::*;
   servers(
     (url = "/api")
   ),
+  modifiers(&MicrosoftOAuthSecurity),
   paths(
     courses::get_courses,
     courses::get_course_by_id,
@@ -33,6 +63,6 @@ use super::*;
   tags(
     (name = "courses", description = "All course related endpoints."),
     (name = "reviews", description = "All review related endpoints."),
-  )
+  ),
 )]
 pub(crate) struct Documentation;
