@@ -77,7 +77,13 @@ use {
   tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
   typeshare::typeshare,
   url::Url,
-  utoipa::{OpenApi, ToSchema},
+  utoipa::{
+    Modify, OpenApi, ToSchema,
+    openapi::{
+      Components,
+      security::{AuthorizationCode, Flow, OAuth2, Scopes, SecurityScheme},
+    },
+  },
   utoipa_scalar::{Scalar, Servable},
   walkdir::WalkDir,
 };

@@ -29,7 +29,8 @@ pub(crate) struct GetCoursesPayload {
     ("with_course_count" = Option<bool>, Query, description = "Whether to include the total course count in the response."),
   ),
   responses(
-    (status = 200, description = "Information about many courses.", body = GetCoursesPayload)
+    (status = StatusCode::OK, description = "Information about many courses.", body = GetCoursesPayload),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 pub(crate) async fn get_courses(
@@ -37,16 +38,23 @@ pub(crate) async fn get_courses(
   AppState(db): AppState<Arc<Db>>,
   Json(filter): Json<CourseFilter>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(GetCoursesPayload {
-    courses: db
-      .courses(params.limit, params.offset, Some(filter))
-      .await?,
-    course_count: if params.with_course_count.unwrap_or(false) {
-      Some(db.course_count().await?)
-    } else {
-      None
-    },
-  }))
+  let courses = db
+    .courses(params.limit, params.offset, Some(filter))
+    .await?;
+
+  let course_count = if params.with_course_count.unwrap_or(false) {
+    Some(db.course_count().await?)
+  } else {
+    None
+  };
+
+  Ok((
+    StatusCode::OK,
+    Json(GetCoursesPayload {
+      courses,
+      course_count,
+    }),
+  ))
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
@@ -73,7 +81,9 @@ pub(crate) struct GetCourseByIdPayload {
     ("with_reviews" = Option<bool>, Query, description = "Whether to include reviews in the response."),
   ),
   responses(
-    (status = 200, description = "Information about a specific course.", body = GetCourseByIdPayload)
+    (status = StatusCode::OK, description = "Information about a specific course.", body = GetCourseByIdPayload),
+    (status = StatusCode::NOT_FOUND, description = "Course not found."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 pub(crate) async fn get_course_by_id(
