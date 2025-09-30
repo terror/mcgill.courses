@@ -31,11 +31,12 @@ impl Into<ReviewFilter> for &GetReviewsParams {
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub(crate) struct GetReviewsPayload {
   /// List of reviews matching the query.
   pub reviews: Vec<Review>,
   /// Number of unique users who have submitted reviews (if requested).
-  pub unique_user_count: Option<u64>,
+  pub unique_user_count: Option<u32>,
 }
 
 #[utoipa::path(
@@ -75,7 +76,7 @@ pub(crate) async fn get_reviews(
     .await?;
 
   let unique_user_count = if params.with_user_count.unwrap_or(false) {
-    Some(db.unique_user_count().await?)
+    Some(db.unique_user_count().await?.try_into()?)
   } else {
     None
   };

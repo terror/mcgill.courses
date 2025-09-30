@@ -3,9 +3,9 @@ import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
+import type { Requirements } from '../lib/types';
 import { capitalize, punctuate } from '../lib/utils';
 import type { Course } from '../model/course';
-import type { Requirements } from '../model/requirements';
 import { CourseGraph } from './course-graph';
 
 // Strips prefix strings like "Prerequisites: ..." and "Corequisites: ..."

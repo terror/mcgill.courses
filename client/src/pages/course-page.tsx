@@ -20,9 +20,9 @@ import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import { Interaction } from '../lib/types';
+import type { Requirements } from '../lib/types';
 import { getCurrentTerms } from '../lib/utils';
 import type { Course } from '../model/course';
-import type { Requirements } from '../model/requirements';
 import { TermAverage } from '../model/term-average';
 import { Loading } from './loading';
 
@@ -108,8 +108,8 @@ export const CoursePage = () => {
   }
 
   const requirements: Requirements = {
-    prereqs: course.prerequisites,
-    coreqs: course.corequisites,
+    prerequisites: course.prerequisites,
+    corequisites: course.corequisites,
     restrictions: course.restrictions,
     prerequisitesText: course.prerequisitesText,
     corequisitesText: course.corequisitesText,

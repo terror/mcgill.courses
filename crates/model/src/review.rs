@@ -6,14 +6,22 @@ use super::*;
 #[serde(rename_all = "camelCase")]
 #[typeshare]
 pub struct Review {
+  /// The text content of the review.
   pub content: String,
+  /// The course ID this review is for.
   pub course_id: String,
+  /// Difficulty rating from 1-5.
   pub difficulty: u32,
+  /// List of instructor names for this review.
   pub instructors: Vec<String>,
+  /// Number of likes (net of dislikes) this review has received.
   pub likes: i32,
+  /// Overall rating from 1-5.
   pub rating: u32,
+  /// Timestamp when the review was created or last updated.
   #[typeshare(serialized_as = "String")]
   pub timestamp: DateTime,
+  /// The user ID of the review author.
   pub user_id: String,
 }
 
