@@ -3,28 +3,6 @@ use super::*;
 #[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub struct DateTime(pub BsonDateTime);
 
-impl PartialOrd for DateTime {
-  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-    Some(self.cmp(other))
-  }
-}
-
-impl Ord for DateTime {
-  fn cmp(&self, other: &Self) -> Ordering {
-    self.0.cmp(&other.0)
-  }
-}
-
-impl DateTime {
-  pub fn from_millis(millis: i64) -> Self {
-    DateTime(BsonDateTime::from_millis(millis))
-  }
-
-  pub fn timestamp_millis(&self) -> i64 {
-    self.0.timestamp_millis()
-  }
-}
-
 impl From<BsonDateTime> for DateTime {
   fn from(dt: BsonDateTime) -> Self {
     DateTime(dt)
@@ -49,21 +27,31 @@ impl From<ChronoDateTime<Utc>> for DateTime {
   }
 }
 
-impl ToSchema for DateTime {
-  fn name() -> std::borrow::Cow<'static, str> {
-    std::borrow::Cow::Borrowed("DateTime")
+impl Ord for DateTime {
+  fn cmp(&self, other: &Self) -> Ordering {
+    self.0.cmp(&other.0)
   }
 }
 
-impl utoipa::PartialSchema for DateTime {
-  fn schema() -> utoipa::openapi::RefOr<utoipa::openapi::schema::Schema> {
-    utoipa::openapi::schema::Object::builder()
-      .schema_type(utoipa::openapi::schema::Type::String)
-      .format(Some(utoipa::openapi::SchemaFormat::KnownFormat(
-        utoipa::openapi::KnownFormat::DateTime,
-      )))
+impl PartialOrd for DateTime {
+  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl ToSchema for DateTime {
+  fn name() -> Cow<'static, str> {
+    Cow::Borrowed("DateTime")
+  }
+}
+
+impl PartialSchema for DateTime {
+  fn schema() -> RefOr<Schema> {
+    Object::builder()
+      .schema_type(Type::String)
+      .format(Some(SchemaFormat::KnownFormat(KnownFormat::DateTime)))
       .description(Some("ISO 8601 DateTime string"))
-      .examples([serde_json::json!("2023-01-01T00:00:00.000Z")])
+      .examples(["2023-01-01T00:00:00.000Z"])
       .into()
   }
 }
@@ -138,5 +126,15 @@ impl<'de> Deserialize<'de> for DateTime {
         "expected either a timestamp string or MongoDB date object",
       )),
     }
+  }
+}
+
+impl DateTime {
+  pub fn from_millis(millis: i64) -> Self {
+    DateTime(BsonDateTime::from_millis(millis))
+  }
+
+  pub fn timestamp_millis(&self) -> i64 {
+    self.0.timestamp_millis()
   }
 }
