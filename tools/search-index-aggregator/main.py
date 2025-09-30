@@ -22,7 +22,7 @@ class App:
   output_path: str = argument(
     '-o',
     '--output-path',
-    default='client/src/assets/searchData.json',
+    default='client/src/assets/search-data.json',
     help='Path to the output JSON file.',
   )
 
