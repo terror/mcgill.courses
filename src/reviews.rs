@@ -76,7 +76,7 @@ pub(crate) async fn get_reviews(
     .await?;
 
   let unique_user_count = if params.with_user_count.unwrap_or(false) {
-    Some(db.unique_user_count().await? as u32)
+    Some(db.unique_user_count().await?.try_into()?)
   } else {
     None
   };
