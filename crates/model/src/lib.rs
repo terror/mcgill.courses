@@ -6,12 +6,19 @@ use {
   serde::{Deserialize, Deserializer, Serialize, Serializer, de::Error},
   serde_json::Value,
   std::{
+    borrow::Cow,
     cmp::Ordering,
     fmt::{self, Display, Formatter},
     path::PathBuf,
   },
   typeshare::typeshare,
-  utoipa::ToSchema,
+  utoipa::{
+    PartialSchema, ToSchema,
+    openapi::{
+      KnownFormat, RefOr, SchemaFormat, Type,
+      schema::{Object, Schema},
+    },
+  },
 };
 
 mod course;
