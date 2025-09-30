@@ -38,16 +38,23 @@ pub(crate) async fn get_courses(
   AppState(db): AppState<Arc<Db>>,
   Json(filter): Json<CourseFilter>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(GetCoursesPayload {
-    courses: db
-      .courses(params.limit, params.offset, Some(filter))
-      .await?,
-    course_count: if params.with_course_count.unwrap_or(false) {
-      Some(db.course_count().await?)
-    } else {
-      None
-    },
-  }))
+  let courses = db
+    .courses(params.limit, params.offset, Some(filter))
+    .await?;
+
+  let course_count = if params.with_course_count.unwrap_or(false) {
+    Some(db.course_count().await?)
+  } else {
+    None
+  };
+
+  Ok((
+    StatusCode::OK,
+    Json(GetCoursesPayload {
+      courses,
+      course_count,
+    }),
+  ))
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
