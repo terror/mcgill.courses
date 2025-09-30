@@ -7,7 +7,7 @@ which we repurpose for the search indexing process.
 To address performance concerns, the raw data files are substantial and would consume
 excessive resources when bundled for client-side delivery.
 
-**search-index-aggregator** selectively includes only the [JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/searchData.json) required by the
+**search-index-aggregator** selectively includes only the [JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/search-data.json) required by the
 search component, significantly reducing payload size and improving resource efficiency.
 
 ### Setup

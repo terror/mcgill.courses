@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import * as buildingCodes from '../assets/buildingCodes.json';
+import * as buildingCodes from '../assets/building-codes.json';
 import { mod, sortTerms } from '../lib/utils';
 import { Course } from '../model/course';
 import { Block, TimeBlock } from '../model/schedule';

@@ -1,6 +1,6 @@
 import { Index } from 'flexsearch';
 
-import data from '../assets/searchData.json';
+import data from '../assets/search-data.json';
 import { Course } from '../model/course';
 import type { SearchResults } from '../model/search-results';
 

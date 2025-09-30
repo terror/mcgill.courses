@@ -202,7 +202,7 @@ For more information about how this works, check out our
 ### `search-index-aggregator`
 
 This tool selectively includes only the
-[JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/searchData.json)
+[JSON fields](https://github.com/terror/mcgill.courses/blob/master/client/src/assets/search-data.json)
 (from database
 [seed files](https://github.com/terror/mcgill.courses/tree/master/seed))
 required by the search component, significantly reducing payload size and
