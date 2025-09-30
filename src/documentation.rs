@@ -42,6 +42,9 @@ impl Modify for MicrosoftOAuthSecurity {
   paths(
     courses::get_courses,
     courses::get_course_by_id,
+    notifications::get_notifications,
+    notifications::update_notification,
+    notifications::delete_notification,
     reviews::get_reviews,
     reviews::get_review,
     reviews::add_review,
@@ -50,10 +53,13 @@ impl Modify for MicrosoftOAuthSecurity {
   ),
   components(
     schemas(
+      Notification,
       courses::GetCourseByIdParams,
       courses::GetCourseByIdPayload,
       courses::GetCoursesParams,
       courses::GetCoursesPayload,
+      notifications::DeleteNotificationBody,
+      notifications::UpdateNotificationBody,
       reviews::AddOrUpdateReviewBody,
       reviews::DeleteReviewBody,
       reviews::GetReviewsParams,
@@ -62,6 +68,7 @@ impl Modify for MicrosoftOAuthSecurity {
   ),
   tags(
     (name = "courses", description = "All course related endpoints."),
+    (name = "notifications", description = "All notification related endpoints."),
     (name = "reviews", description = "All review related endpoints."),
   ),
 )]
