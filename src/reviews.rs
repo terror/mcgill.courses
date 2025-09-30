@@ -18,6 +18,17 @@ pub(crate) struct GetReviewsParams {
   pub(crate) with_user_count: Option<bool>,
 }
 
+impl Into<ReviewFilter> for &GetReviewsParams {
+  fn into(self) -> ReviewFilter {
+    ReviewFilter {
+      course_id: self.course_id.clone(),
+      instructor_name: self.instructor_name.clone(),
+      sorted: self.sorted,
+      user_id: self.user_id.clone(),
+    }
+  }
+}
+
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct GetReviewsPayload {
@@ -41,7 +52,8 @@ pub(crate) struct GetReviewsPayload {
     ("with_user_count" = Option<bool>, Query, description = "Whether to include the unique user count in the response."),
   ),
   responses(
-    (status = 200, description = "List of reviews with optional metadata.", body = GetReviewsPayload)
+    (status = StatusCode::OK, description = "List of reviews with optional metadata.", body = GetReviewsPayload),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 #[tracing::instrument(name = "api_get_reviews", skip(db), fields(
@@ -51,28 +63,30 @@ pub(crate) struct GetReviewsPayload {
   offset = %params.offset.unwrap_or(0)
 ))]
 pub(crate) async fn get_reviews(
-  params: Query<GetReviewsParams>,
+  Query(params): Query<GetReviewsParams>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(GetReviewsPayload {
-    reviews: db
-      .reviews(
-        params.limit,
-        params.offset,
-        Some(ReviewFilter {
-          course_id: params.course_id.clone(),
-          instructor_name: params.instructor_name.clone(),
-          sorted: params.sorted,
-          user_id: params.user_id.clone(),
-        }),
-      )
-      .await?,
-    unique_user_count: if params.with_user_count.unwrap_or(false) {
-      Some(db.unique_user_count().await?)
-    } else {
-      None
-    },
-  }))
+  let reviews = db
+    .reviews(
+      params.limit,
+      params.offset,
+      Some(Into::<ReviewFilter>::into(&params)),
+    )
+    .await?;
+
+  let unique_user_count = if params.with_user_count.unwrap_or(false) {
+    Some(db.unique_user_count().await?)
+  } else {
+    None
+  };
+
+  Ok((
+    StatusCode::OK,
+    Json(GetReviewsPayload {
+      reviews,
+      unique_user_count,
+    }),
+  ))
 }
 
 #[utoipa::path(
@@ -83,7 +97,8 @@ pub(crate) async fn get_reviews(
     ("id" = String, Path, description = "Review ID to get review information for."),
   ),
   responses(
-    (status = 200, description = "Information about a specific review.", body = Review)
+    (status = StatusCode::OK, description = "Information about a specific review.", body = Review),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 pub(crate) async fn get_review(
@@ -91,7 +106,7 @@ pub(crate) async fn get_review(
   Path(id): Path<String>,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
-  Ok(Json(db.find_review(&id, &user.id()).await?))
+  Ok((StatusCode::OK, Json(db.find_review(&id, &user.id()).await?)))
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
@@ -114,7 +129,8 @@ pub(crate) struct AddOrUpdateReviewBody {
   description = "Add a new review for a course.",
   request_body = AddOrUpdateReviewBody,
   responses(
-    (status = 200, description = "Review added successfully.")
+    (status = StatusCode::OK, description = "Review added successfully."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 #[tracing::instrument(name = "api_add_review", skip_all, fields(
@@ -159,7 +175,7 @@ pub(crate) async fn add_review(
 
   db.add_notifications(review).await?;
 
-  Ok(())
+  Ok(StatusCode::OK)
 }
 
 #[utoipa::path(
@@ -168,7 +184,8 @@ pub(crate) async fn add_review(
   description = "Update an existing review for a course.",
   request_body = AddOrUpdateReviewBody,
   responses(
-    (status = 200, description = "Review updated successfully.")
+    (status = StatusCode::OK, description = "Review updated successfully."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 pub(crate) async fn update_review(
@@ -206,7 +223,7 @@ pub(crate) async fn update_review(
   db.update_notifications(&user_id, &course_id, review)
     .await?;
 
-  Ok(())
+  Ok(StatusCode::OK)
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
@@ -221,11 +238,9 @@ pub(crate) struct DeleteReviewBody {
   description = "Delete a review for a specific course.",
   request_body = DeleteReviewBody,
   responses(
-    (status = 200, description = "Review deleted successfully.")
+    (status = StatusCode::OK, description = "Review deleted successfully."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   ),
-  security(
-    ("api_key1" = ["edit:items", "read:items"])
-  )
 )]
 pub(crate) async fn delete_review(
   AppState(db): AppState<Arc<Db>>,
@@ -240,7 +255,7 @@ pub(crate) async fn delete_review(
   db.delete_interactions(&body.course_id, &user_id).await?;
   db.delete_notifications(&user_id, &body.course_id).await?;
 
-  Ok(())
+  Ok(StatusCode::OK)
 }
 
 async fn validate_instructors(

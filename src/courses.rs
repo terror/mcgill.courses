@@ -29,7 +29,8 @@ pub(crate) struct GetCoursesPayload {
     ("with_course_count" = Option<bool>, Query, description = "Whether to include the total course count in the response."),
   ),
   responses(
-    (status = 200, description = "Information about many courses.", body = GetCoursesPayload)
+    (status = StatusCode::OK, description = "Information about many courses.", body = GetCoursesPayload),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 pub(crate) async fn get_courses(
@@ -73,8 +74,9 @@ pub(crate) struct GetCourseByIdPayload {
     ("with_reviews" = Option<bool>, Query, description = "Whether to include reviews in the response."),
   ),
   responses(
-    (status = 200, description = "Information about a specific course.", body = GetCourseByIdPayload),
-    (status = 404, description = "Course not found.")
+    (status = StatusCode::OK, description = "Information about a specific course.", body = GetCourseByIdPayload),
+    (status = StatusCode::NOT_FOUND, description = "Course not found."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
   )
 )]
 pub(crate) async fn get_course_by_id(
