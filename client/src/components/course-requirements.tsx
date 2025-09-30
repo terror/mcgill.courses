@@ -19,7 +19,7 @@ const stripColonPrefix = (text: string): string => {
 
 const transformText = (text: string): React.ReactNode[] => {
   const nodes = [],
-    regex = /\b([A-Z]{4})\s(\d{3})([A-Za-z]\d?)?\b/g;
+    regex = /\b([A-Z]{4})\s?(\d{3})([A-Za-z]\d?)?\b/g;
 
   let lastIndex = 0;
 
