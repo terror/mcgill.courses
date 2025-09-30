@@ -9,7 +9,7 @@ pub(crate) struct GetReviewsParams {
   /// Maximum number of reviews to return.
   pub(crate) limit: Option<i64>,
   /// Number of reviews to skip.
-  pub(crate) offset: Option<u64>,
+  pub(crate) offset: Option<u32>,
   /// Whether to sort reviews by timestamp (newest first).
   pub(crate) sorted: Option<bool>,
   /// User ID to filter reviews by.
@@ -31,11 +31,12 @@ impl Into<ReviewFilter> for &GetReviewsParams {
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub(crate) struct GetReviewsPayload {
   /// List of reviews matching the query.
   pub reviews: Vec<Review>,
   /// Number of unique users who have submitted reviews (if requested).
-  pub unique_user_count: Option<u64>,
+  pub unique_user_count: Option<u32>,
 }
 
 #[utoipa::path(
@@ -69,13 +70,13 @@ pub(crate) async fn get_reviews(
   let reviews = db
     .reviews(
       params.limit,
-      params.offset,
+      params.offset.map(|v| v as u64),
       Some(Into::<ReviewFilter>::into(&params)),
     )
     .await?;
 
   let unique_user_count = if params.with_user_count.unwrap_or(false) {
-    Some(db.unique_user_count().await?)
+    Some(db.unique_user_count().await? as u32)
   } else {
     None
   };

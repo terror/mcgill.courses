@@ -1134,7 +1134,7 @@ impl Db {
       .distinct(
         "userId",
         doc! {
-            "timestamp": { "$gte": rmp_scrape_epoch }
+          "timestamp": { "$gte": rmp_scrape_epoch }
         },
         None,
       )

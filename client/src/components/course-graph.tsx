@@ -33,6 +33,7 @@ const makeGraph = (nodeGroup: NodeType, reqs?: ReqNode) => {
   const traverse = (node: ReqNode): string => {
     if (node.type === 'course') {
       const courseCode = node.data;
+
       const duplicates = nodes.filter((n) =>
         (n.id as string).startsWith(courseCode)
       ).length;
