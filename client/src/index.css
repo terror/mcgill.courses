@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 .autocomplete::-webkit-scrollbar {
   width: 3px;
 }
