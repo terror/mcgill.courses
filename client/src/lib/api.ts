@@ -3,7 +3,7 @@ import type { UserResponse } from '../lib/types';
 import type { Notification } from '../lib/types';
 import { InteractionKind } from '../lib/types';
 import type { GetReviewsPayload } from '../lib/types';
-import { GetCourseReviewsInteractionPayload } from '../model/get-course-reviews-interactions-payload';
+import type { GetUserInteractionForCoursePayload } from '../lib/types';
 import type { GetCourseWithReviewsPayload } from '../model/get-course-with-reviews-payload';
 import { GetCoursesPayload } from '../model/get-courses-payload';
 import type { GetInstructorPayload } from '../model/get-instructor-payload';
@@ -176,8 +176,8 @@ export const api = {
   async getUserInteractionsForCourse(
     courseId: string,
     referrer: string
-  ): Promise<GetCourseReviewsInteractionPayload> {
-    return client.deserialize<GetCourseReviewsInteractionPayload>(
+  ): Promise<GetUserInteractionForCoursePayload> {
+    return client.deserialize<GetUserInteractionForCoursePayload>(
       'GET',
       `/interactions/${courseId}/referrer/${referrer}`
     );

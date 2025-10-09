@@ -250,21 +250,24 @@ impl Server {
 mod tests {
   use {
     super::*,
-    crate::instructors::GetInstructorPayload,
-    crate::subscriptions::SubscriptionResponse,
+    crate::{
+      instructors::GetInstructorPayload,
+      interactions::GetUserInteractionForCoursePayload,
+      subscriptions::SubscriptionResponse,
+    },
     axum::body::Body,
     courses::{GetCourseByIdPayload, GetCoursesPayload},
     http::{Method, Request},
-    interactions::{
-      GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
-    },
+    interactions::GetInteractionKindPayload,
     model::{Notification, Subscription},
     pretty_assertions::assert_eq,
     reviews::GetReviewsPayload,
     serde::de::DeserializeOwned,
     serde_json::json,
-    std::collections::HashSet,
-    std::sync::atomic::{AtomicUsize, Ordering},
+    std::{
+      collections::HashSet,
+      sync::atomic::{AtomicUsize, Ordering},
+    },
     tower::{Service, ServiceExt},
   };
 
@@ -1303,7 +1306,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     let payload = response
-      .convert::<GetCourseReviewsInteractionPayload>()
+      .convert::<GetUserInteractionForCoursePayload>()
       .await;
 
     assert_eq!(payload.course_id, "COMP202");
@@ -1399,7 +1402,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     let payload = response
-      .convert::<GetCourseReviewsInteractionPayload>()
+      .convert::<GetUserInteractionForCoursePayload>()
       .await;
 
     assert_eq!(payload.course_id, "MATH240");
