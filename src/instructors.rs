@@ -1,11 +1,25 @@
 use super::*;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub(crate) struct GetInstructorPayload {
+  /// Instructor matching the requested name, if found.
   pub(crate) instructor: Option<Instructor>,
+  /// Reviews associated with the instructor sorted by newest first.
   pub(crate) reviews: Vec<Review>,
 }
 
+#[utoipa::path(
+  get,
+  path = "/instructors/{name}",
+  description = "Get information about an instructor along with their reviews.",
+  params(
+    ("name" = String, Path, description = "Instructor name to retrieve information for.")
+  ),
+  responses(
+    (status = StatusCode::OK, description = "Instructor information with associated reviews.", body = GetInstructorPayload),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
+  )
+)]
 pub(crate) async fn get_instructor(
   Path(name): Path<String>,
   AppState(db): AppState<Arc<Db>>,
