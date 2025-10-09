@@ -58,7 +58,8 @@ impl Modify for MicrosoftOAuthSecurity {
     subscriptions::get_subscription,
     subscriptions::add_subscription,
     subscriptions::delete_subscription,
-    search::search
+    search::search,
+    user::get_user
   ),
   components(
     schemas(
@@ -82,6 +83,8 @@ impl Modify for MicrosoftOAuthSecurity {
       subscriptions::AddOrDeleteSubscriptionBody,
       subscriptions::GetSubscriptionParams,
       subscriptions::SubscriptionResponse,
+      user::User,
+      user::UserResponse,
     )
   ),
   tags(
@@ -92,6 +95,7 @@ impl Modify for MicrosoftOAuthSecurity {
     (name = "reviews", description = "All review related endpoints."),
     (name = "search", description = "All search related endpoints."),
     (name = "subscriptions", description = "All subscription related endpoints."),
+    (name = "user", description = "Endpoints related to user authentication state."),
   ),
 )]
 pub(crate) struct Documentation;
