@@ -1,6 +1,5 @@
 use super::*;
 
-/// Response body returned when querying for an instructor.
 #[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub(crate) struct GetInstructorPayload {
   /// Instructor matching the requested name, if found.
