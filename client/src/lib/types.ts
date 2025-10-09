@@ -28,22 +28,37 @@ export interface GetReviewsPayload {
   uniqueUserCount?: number;
 }
 
-export interface Instructor {
-  name: string;
-  nameNgrams?: string;
-  term: string;
-}
-
 export enum InteractionKind {
+  /** Indicates that the user liked the review. */
   Like = 'like',
+  /** Indicates that the user disliked the review. */
   Dislike = 'dislike',
 }
 
 export interface Interaction {
+  /** Kind of interaction that occurred. */
   kind: InteractionKind;
+  /** ID of the user associated with the interaction. */
   userId: string;
+  /** ID of the course the interaction belongs to. */
   courseId: string;
+  /** Referrer source from which the interaction was made. */
   referrer: string;
+}
+
+export interface GetUserInteractionForCoursePayload {
+  /** Course ID the interactions belong to. */
+  course_id: string;
+  /** Referrer source the interactions were recorded from. */
+  referrer: string;
+  /** Interactions recorded for the course and referrer. */
+  interactions: Interaction[];
+}
+
+export interface Instructor {
+  name: string;
+  nameNgrams?: string;
+  term: string;
 }
 
 export interface Notification {
@@ -78,11 +93,14 @@ export interface Subscription {
 }
 
 export interface User {
+  /** Microsoft Graph user identifier. */
   id: string;
+  /** Primary email address associated with the user. */
   mail: string;
 }
 
 export interface UserResponse {
+  /** Authenticated user information when available. */
   user?: User;
 }
 

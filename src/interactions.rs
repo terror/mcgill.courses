@@ -43,6 +43,7 @@ pub(crate) async fn get_interaction_kind(
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq, ToSchema)]
+#[typeshare]
 pub(crate) struct GetUserInteractionForCoursePayload {
   /// Course ID the interactions belong to.
   pub(crate) course_id: String,
@@ -79,15 +80,6 @@ pub(crate) async fn get_user_interactions_for_course(
       .user_interactions_for_course(&course_id, &referrer)
       .await?,
   }))
-}
-
-#[derive(Debug, Deserialize, Serialize, PartialEq, ToSchema)]
-#[allow(dead_code)]
-pub(crate) struct GetCourseReviewsInteractionPayload {
-  /// Course ID the interactions correspond to.
-  pub(crate) course_id: String,
-  /// Interactions for the course across all referrers.
-  pub(crate) interactions: Vec<Interaction>,
 }
 
 #[derive(Debug, Deserialize, ToSchema)]
