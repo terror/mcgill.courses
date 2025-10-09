@@ -67,18 +67,18 @@ impl Modify for MicrosoftOAuthSecurity {
       reviews::DeleteReviewBody,
       reviews::GetReviewsParams,
       reviews::GetReviewsPayload,
+      search::SearchParams,
       subscriptions::AddOrDeleteSubscriptionBody,
       subscriptions::GetSubscriptionParams,
       subscriptions::SubscriptionResponse,
-      search::SearchParams,
     )
   ),
   tags(
     (name = "courses", description = "All course related endpoints."),
     (name = "notifications", description = "All notification related endpoints."),
     (name = "reviews", description = "All review related endpoints."),
-    (name = "subscriptions", description = "All subscription related endpoints."),
     (name = "search", description = "All search related endpoints."),
+    (name = "subscriptions", description = "All subscription related endpoints."),
   ),
 )]
 pub(crate) struct Documentation;
