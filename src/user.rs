@@ -1,9 +1,11 @@
 use super::*;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[typeshare]
 pub(crate) struct User {
+  /// Microsoft Graph user identifier.
   id: String,
+  /// Primary email address associated with the user.
   mail: String,
 }
 
@@ -83,12 +85,25 @@ impl User {
   }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 #[typeshare]
-struct UserResponse {
-  user: Option<User>,
+pub(crate) struct UserResponse {
+  /// Authenticated user information when available.
+  pub(crate) user: Option<User>,
 }
 
+#[utoipa::path(
+  get,
+  path = "/user",
+  description = "Get information about the currently authenticated user, if any.",
+  responses(
+    (
+      status = StatusCode::OK,
+      description = "Authenticated user details or `null` when the requester is not signed in.",
+      body = UserResponse
+    )
+  )
+)]
 pub(crate) async fn get_user(user: Option<User>) -> impl IntoResponse {
   Json(UserResponse { user })
 }
