@@ -251,20 +251,35 @@ mod tests {
   use {
     super::*,
     crate::instructors::GetInstructorPayload,
+    crate::subscriptions::SubscriptionResponse,
     axum::body::Body,
     courses::{GetCourseByIdPayload, GetCoursesPayload},
     http::{Method, Request},
     interactions::{
       GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
     },
-    model::Notification,
+    model::{Notification, Subscription},
     pretty_assertions::assert_eq,
     reviews::GetReviewsPayload,
     serde::de::DeserializeOwned,
     serde_json::json,
+    std::collections::HashSet,
     std::sync::atomic::{AtomicUsize, Ordering},
     tower::{Service, ServiceExt},
   };
+
+  macro_rules! assert_matches {
+    ($expression:expr, $( $pattern:pat_param )|+ $( if $guard:expr )? $(,)?) => {
+      match $expression {
+        $( $pattern )|+ $( if $guard )? => {}
+        left => panic!(
+          "assertion failed: (left ~= right)\n  left: `{:?}`\n right: `{}`",
+          left,
+          stringify!($($pattern)|+ $(if $guard)?)
+        ),
+      }
+    };
+  }
 
   struct TestContext {
     app: Router,
@@ -1500,6 +1515,203 @@ mod tests {
       response.convert::<GetInteractionKindPayload>().await,
       GetInteractionKindPayload { kind: None }
     );
+  }
+
+  #[tokio::test]
+  async fn get_subscriptions_returns_multiple_for_user() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(
+      session_store.clone(),
+      "subscriber",
+      "subscriber@mail.mcgill.ca",
+    )
+    .await;
+
+    for course_id in ["MATH240", "COMP202"] {
+      let response = app
+        .call(
+          Request::builder()
+            .method(http::Method::POST)
+            .header("Cookie", cookie.clone())
+            .header("Content-Type", "application/json")
+            .uri("/api/subscriptions")
+            .body(Body::from(
+              json!({
+                "course_id": course_id,
+              })
+              .to_string(),
+            ))
+            .unwrap(),
+        )
+        .await
+        .unwrap();
+
+      assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response.convert::<SubscriptionResponse>().await;
+
+    match payload {
+      SubscriptionResponse::Multiple(subscriptions) => {
+        assert_eq!(subscriptions.len(), 2);
+
+        let course_ids = subscriptions
+          .iter()
+          .map(|subscription| subscription.course_id.as_str())
+          .collect::<HashSet<&str>>();
+
+        let expected = ["MATH240", "COMP202"]
+          .into_iter()
+          .collect::<HashSet<&str>>();
+
+        assert_eq!(course_ids, expected);
+
+        assert!(
+          subscriptions
+            .iter()
+            .all(|subscription| subscription.user_id == "subscriber")
+        );
+      }
+      other => panic!("expected multiple subscriptions, got {:?}", other),
+    }
+  }
+
+  #[tokio::test]
+  async fn get_subscription_returns_single_match() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(
+      session_store.clone(),
+      "subscriber",
+      "subscriber@mail.mcgill.ca",
+    )
+    .await;
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions")
+          .body(Body::from(
+            json!({
+              "course_id": "MATH240",
+            })
+            .to_string(),
+          ))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions?course_id=MATH240")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_matches!(
+      response.convert::<SubscriptionResponse>().await,
+      SubscriptionResponse::Single(Some(Subscription {
+        course_id,
+        user_id,
+      })) if course_id == "MATH240" && user_id == "subscriber"
+    );
+  }
+
+  #[tokio::test]
+  async fn get_subscription_returns_none_when_missing() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(
+      session_store.clone(),
+      "subscriber",
+      "subscriber@mail.mcgill.ca",
+    )
+    .await;
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie)
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions?course_id=MATH240")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response.convert::<SubscriptionResponse>().await;
+
+    assert_matches!(payload, SubscriptionResponse::Single(None));
   }
 
   #[tokio::test]

@@ -50,6 +50,9 @@ impl Modify for MicrosoftOAuthSecurity {
     reviews::add_review,
     reviews::update_review,
     reviews::delete_review,
+    subscriptions::get_subscription,
+    subscriptions::add_subscription,
+    subscriptions::delete_subscription,
     search::search
   ),
   components(
@@ -65,6 +68,9 @@ impl Modify for MicrosoftOAuthSecurity {
       reviews::GetReviewsParams,
       reviews::GetReviewsPayload,
       search::SearchParams,
+      subscriptions::AddOrDeleteSubscriptionBody,
+      subscriptions::GetSubscriptionParams,
+      subscriptions::SubscriptionResponse,
     )
   ),
   tags(
@@ -72,6 +78,7 @@ impl Modify for MicrosoftOAuthSecurity {
     (name = "notifications", description = "All notification related endpoints."),
     (name = "reviews", description = "All review related endpoints."),
     (name = "search", description = "All search related endpoints."),
+    (name = "subscriptions", description = "All subscription related endpoints."),
   ),
 )]
 pub(crate) struct Documentation;

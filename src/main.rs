@@ -48,7 +48,6 @@ use {
   rusoto_s3::S3Client,
   rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
   serde::{Deserialize, Serialize},
-  serde_json::json,
   sha2::{Digest, Sha256},
   std::{
     backtrace::BacktraceStatus,
