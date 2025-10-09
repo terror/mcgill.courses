@@ -50,6 +50,9 @@ impl Modify for MicrosoftOAuthSecurity {
     reviews::add_review,
     reviews::update_review,
     reviews::delete_review,
+    subscriptions::get_subscription,
+    subscriptions::add_subscription,
+    subscriptions::delete_subscription,
     search::search
   ),
   components(
@@ -64,6 +67,9 @@ impl Modify for MicrosoftOAuthSecurity {
       reviews::DeleteReviewBody,
       reviews::GetReviewsParams,
       reviews::GetReviewsPayload,
+      subscriptions::AddOrDeleteSubscriptionBody,
+      subscriptions::GetSubscriptionParams,
+      subscriptions::SubscriptionResponse,
       search::SearchParams,
     )
   ),
@@ -71,6 +77,7 @@ impl Modify for MicrosoftOAuthSecurity {
     (name = "courses", description = "All course related endpoints."),
     (name = "notifications", description = "All notification related endpoints."),
     (name = "reviews", description = "All review related endpoints."),
+    (name = "subscriptions", description = "All subscription related endpoints."),
     (name = "search", description = "All search related endpoints."),
   ),
 )]
