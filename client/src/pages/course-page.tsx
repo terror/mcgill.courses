@@ -332,6 +332,7 @@ export const CoursePage = () => {
               {userReview &&
                 (() => {
                   const desktopAnchorId = `desktop-${getReviewAnchorId(userReview)}`;
+
                   return (
                     <CourseReview
                       anchorId={desktopAnchorId}
@@ -353,6 +354,7 @@ export const CoursePage = () => {
                     .slice(0, showAllReviews ? showingReviews.length : 8)
                     .map((review, i) => {
                       const desktopAnchorId = `desktop-${getReviewAnchorId(review)}`;
+
                       return (
                         <CourseReview
                           anchorId={desktopAnchorId}
@@ -434,6 +436,7 @@ export const CoursePage = () => {
                 {userReview &&
                   (() => {
                     const mobileAnchorId = `mobile-${getReviewAnchorId(userReview)}`;
+
                     return (
                       <CourseReview
                         anchorId={mobileAnchorId}
@@ -457,6 +460,7 @@ export const CoursePage = () => {
                       .slice(0, showAllReviews ? showingReviews.length : 8)
                       .map((review, i) => {
                         const mobileAnchorId = `mobile-${getReviewAnchorId(review)}`;
+
                         return (
                           <CourseReview
                             anchorId={mobileAnchorId}

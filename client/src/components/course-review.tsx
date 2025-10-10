@@ -201,7 +201,7 @@ type CourseReviewProps = {
   openEditReview: () => void;
   review: Review;
   showCourse?: boolean;
-  showScrollButton: boolean;
+  showScrollButton?: boolean;
   updateLikes?: (likes: number) => void;
 };
 
