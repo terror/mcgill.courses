@@ -179,6 +179,7 @@ export const Profile = () => {
                             handleDelete={() => null}
                             openEditReview={() => null}
                             review={review}
+                            showScrollButton
                           />
                         </div>
                       </div>

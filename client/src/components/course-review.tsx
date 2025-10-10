@@ -1,6 +1,15 @@
 import { Transition } from '@headlessui/react';
 import { format } from 'date-fns';
-import { Edit, Flame, Pin, Tag, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  ArrowUpRight,
+  Edit,
+  Flame,
+  Pin,
+  Tag,
+  ThumbsDown,
+  ThumbsUp,
+} from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -11,7 +20,11 @@ import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import type { Interaction } from '../lib/types';
 import { InteractionKind } from '../lib/types';
-import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
+import {
+  courseIdToUrlParam,
+  getReviewAnchorId,
+  spliceCourseCode,
+} from '../lib/utils';
 import { BirdIcon } from './bird-icon';
 import { DeleteButton } from './delete-button';
 import { IconRating } from './icon-rating';
@@ -178,15 +191,18 @@ const ReviewInteractions = ({
 };
 
 type CourseReviewProps = {
+  anchorId?: string;
   canModify: boolean;
-  handleDelete: () => void;
-  openEditReview: () => void;
-  updateLikes?: (likes: number) => void;
-  review: Review;
-  interactions?: Interaction[];
-  showCourse?: boolean;
-  includeTaughtBy?: boolean;
   className?: string;
+  handleDelete: () => void;
+  highlighted?: boolean;
+  includeTaughtBy?: boolean;
+  interactions?: Interaction[];
+  openEditReview: () => void;
+  review: Review;
+  showCourse?: boolean;
+  showScrollButton?: boolean;
+  updateLikes?: (likes: number) => void;
 };
 
 export const CourseReview = ({
@@ -198,6 +214,9 @@ export const CourseReview = ({
   updateLikes,
   className,
   includeTaughtBy = true,
+  anchorId,
+  highlighted = false,
+  showScrollButton = false,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
@@ -207,12 +226,75 @@ export const CourseReview = ({
   const shortDate = format(date, 'P'),
     longDate = format(date, 'EEEE, MMMM d, yyyy');
 
+  const highlightAnimation = { scale: highlighted ? 1.02 : 1 };
+
+  const highlightTransition = {
+    duration: 0.5,
+    ease: [0.22, 1, 0.36, 1],
+  } as const;
+
+  const courseRef = (
+    <Link
+      to={`/course/${courseIdToUrlParam(review.courseId)}`}
+      className='font-medium transition hover:text-red-600'
+    >
+      {review.courseId}
+    </Link>
+  );
+
+  const scrollButton = showScrollButton && (
+    <Link
+      to={`/course/${courseIdToUrlParam(review.courseId)}`}
+      state={{ scrollToReview: getReviewAnchorId(review) }}
+      className='inline-flex items-center text-red-600'
+      aria-label={`Open ${review.courseId} and scroll to this review`}
+    >
+      <ArrowUpRight className='h-4 w-4' />
+    </Link>
+  );
+
+  const reviewContext = includeTaughtBy ? (
+    <span className='flex flex-wrap items-center gap-x-1 gap-y-1'>
+      <span>Taught by</span>
+      {review.instructors.map((instructor, i) => {
+        let separator = null;
+
+        if (i === review.instructors.length - 2) {
+          separator = ' and ';
+        } else if (i < review.instructors.length - 2) {
+          separator = ', ';
+        }
+
+        return (
+          <Fragment key={instructor + review.userId}>
+            <Link
+              to={`/instructor/${encodeURIComponent(instructor)}`}
+              className='font-medium transition hover:text-red-600'
+            >
+              {instructor}
+            </Link>
+            {separator}
+          </Fragment>
+        );
+      })}
+    </span>
+  ) : (
+    <span className='flex items-center gap-1'>
+      <span>Written for</span>
+      {courseRef}
+    </span>
+  );
+
   return (
-    <div
+    <motion.div
+      id={anchorId}
       className={twMerge(
         'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800',
         className
       )}
+      animate={highlightAnimation}
+      initial={false}
+      transition={highlightTransition}
     >
       <div className='flex flex-col'>
         <div className='flex w-full'>
@@ -275,40 +357,10 @@ export const CourseReview = ({
       </div>
       <div className='flex items-center'>
         <p className='mb-2 mt-auto flex-1 text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
-          {includeTaughtBy ? (
-            <Fragment>
-              Taught by{' '}
-              {review.instructors.map((instructor, i) => {
-                let separator = null;
-                if (i === review.instructors.length - 2) {
-                  separator = ' and ';
-                } else if (i < review.instructors.length - 2) {
-                  separator = ', ';
-                }
-                return (
-                  <Fragment key={instructor + review.userId}>
-                    <Link
-                      to={`/instructor/${encodeURIComponent(instructor)}`}
-                      className='font-medium transition hover:text-red-600'
-                    >
-                      {instructor}
-                    </Link>
-                    {separator}
-                  </Fragment>
-                );
-              })}
-            </Fragment>
-          ) : (
-            <Fragment>
-              Written for{' '}
-              <Link
-                to={`/course/${courseIdToUrlParam(review.courseId)}`}
-                className='font-medium transition hover:text-red-600'
-              >
-                {review.courseId}
-              </Link>
-            </Fragment>
-          )}
+          <span className='inline-flex items-center gap-1'>
+            {reviewContext}
+            {scrollButton}
+          </span>
         </p>
         <Transition
           show={promptLogin}
@@ -350,6 +402,6 @@ export const CourseReview = ({
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

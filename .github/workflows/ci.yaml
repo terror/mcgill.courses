@@ -60,7 +60,7 @@ jobs:
         run: pnpm run lint
 
       - name: Test (unit)
-        run: pnpm run test
+        run: pnpm run test --reporter verbose
 
       - name: Test (e2e)
         run: pnpm run cy:e2e

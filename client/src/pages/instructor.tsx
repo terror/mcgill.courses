@@ -158,6 +158,7 @@ export const Instructor = () => {
               includeTaughtBy={false}
               openEditReview={() => undefined}
               review={userReview}
+              showScrollButton
               updateLikes={updateLikes(userReview)}
             />
           )}
@@ -173,6 +174,7 @@ export const Instructor = () => {
                   key={i}
                   openEditReview={() => undefined}
                   review={review}
+                  showScrollButton
                   updateLikes={updateLikes(review)}
                 />
               ))}

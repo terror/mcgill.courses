@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 
 import type { Review } from '../lib/types';
 import type { Course } from '../model/course';
@@ -40,6 +40,9 @@ export const ReviewFilter = ({
   setSortBy,
   setSelectedInstructor,
 }: ReviewFilterProps) => {
+  const previousSortRef = useRef<ReviewSortType>(sortBy);
+  const previousInstructorRef = useRef<string>(selectedInstructor);
+
   useEffect(() => {
     setReviews(
       allReviews
@@ -73,7 +76,18 @@ export const ReviewFilter = ({
           }
         })
     );
-    setShowAllReviews(false);
+
+    const sortChanged = previousSortRef.current !== sortBy;
+
+    const instructorChanged =
+      previousInstructorRef.current !== selectedInstructor;
+
+    if (sortChanged || instructorChanged) {
+      setShowAllReviews(false);
+    }
+
+    previousSortRef.current = sortBy;
+    previousInstructorRef.current = selectedInstructor;
   }, [sortBy, selectedInstructor, allReviews]);
 
   const reset = () => {
