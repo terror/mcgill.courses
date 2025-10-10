@@ -38,6 +38,7 @@ export const CoursePage = () => {
   const scrollToReviewId = useRef<string | null>(null);
   const hasAttemptedScroll = useRef(false);
   const highlightTimeoutRef = useRef<number | null>(null);
+
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
   const [userInteractions, setUserInteractions] = useState<
@@ -109,7 +110,9 @@ export const CoursePage = () => {
     if (hasAttemptedScroll.current) return;
 
     const anchor = scrollToReviewId.current;
+
     if (!anchor || !allReviews || allReviews.length === 0) return;
+
     if (typeof window === 'undefined') return;
 
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -125,10 +128,12 @@ export const CoursePage = () => {
 
       hasAttemptedScroll.current = true;
       scrollToReviewId.current = null;
+
       navigate(
         { pathname: location.pathname, search: location.search },
         { replace: true, state: null }
       );
+
       return;
     }
 
