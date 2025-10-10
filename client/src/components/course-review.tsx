@@ -254,8 +254,8 @@ export const CourseReview = ({
   );
 
   const reviewContext = includeTaughtBy ? (
-    <Fragment>
-      Taught by{' '}
+    <span className='flex flex-wrap items-center gap-x-1 gap-y-1'>
+      <span>Taught by</span>
       {review.instructors.map((instructor, i) => {
         let separator = null;
 
@@ -277,9 +277,12 @@ export const CourseReview = ({
           </Fragment>
         );
       })}
-    </Fragment>
+    </span>
   ) : (
-    <Fragment>Written for {courseRef}</Fragment>
+    <span className='flex items-center gap-1'>
+      <span>Written for</span>
+      {courseRef}
+    </span>
   );
 
   return (
