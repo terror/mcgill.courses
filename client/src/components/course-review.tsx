@@ -187,6 +187,7 @@ type CourseReviewProps = {
   showCourse?: boolean;
   includeTaughtBy?: boolean;
   className?: string;
+  anchorId?: string;
 };
 
 export const CourseReview = ({
@@ -198,6 +199,7 @@ export const CourseReview = ({
   updateLikes,
   className,
   includeTaughtBy = true,
+  anchorId,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
@@ -209,6 +211,7 @@ export const CourseReview = ({
 
   return (
     <div
+      id={anchorId}
       className={twMerge(
         'relative flex w-full flex-col gap-4 border-b-[1px] border-b-gray-300 bg-slate-50 px-6 py-3 first:rounded-t-md last:rounded-b-md last:border-b-0 dark:border-b-gray-600 dark:bg-neutral-800',
         className

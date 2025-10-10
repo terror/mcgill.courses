@@ -15,7 +15,7 @@ import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Subscription } from '../lib/types';
 import type { Review } from '../lib/types';
-import { courseIdToUrlParam } from '../lib/utils';
+import { courseIdToUrlParam, getReviewAnchorId } from '../lib/utils';
 import { spliceCourseCode } from '../lib/utils';
 import { Loading } from './loading';
 
@@ -168,6 +168,9 @@ export const Profile = () => {
                             to={`/course/${courseIdToUrlParam(
                               review.courseId
                             )}`}
+                            state={{
+                              scrollToReview: getReviewAnchorId(review),
+                            }}
                             className='text-xl font-semibold text-gray-800 hover:underline dark:text-gray-200'
                           >
                             {spliceCourseCode(review.courseId, ' ')}
