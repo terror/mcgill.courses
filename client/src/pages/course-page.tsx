@@ -163,6 +163,7 @@ export const CoursePage = () => {
     allReviews,
     location.pathname,
     location.search,
+    location.state,
     navigate,
     showAllReviews,
   ]);
