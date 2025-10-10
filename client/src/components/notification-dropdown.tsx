@@ -6,11 +6,7 @@ import { toast } from 'sonner';
 
 import { api } from '../lib/api';
 import type { Notification } from '../lib/types';
-import {
-  courseIdToUrlParam,
-  getReviewAnchorId,
-  spliceCourseCode,
-} from '../lib/utils';
+import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
 import { CourseReview } from './course-review';
 
 export const NotificationDropdown = ({
@@ -145,11 +141,6 @@ export const NotificationDropdown = ({
                                       to={`/course/${courseIdToUrlParam(
                                         notification.review.courseId
                                       )}`}
-                                      state={{
-                                        scrollToReview: getReviewAnchorId(
-                                          notification.review
-                                        ),
-                                      }}
                                     >
                                       {spliceCourseCode(
                                         notification.review.courseId,
