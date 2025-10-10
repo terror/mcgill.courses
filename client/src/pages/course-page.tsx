@@ -37,6 +37,7 @@ export const CoursePage = () => {
   const firstFetch = useRef(true);
   const scrollToReviewId = useRef<string | null>(null);
   const hasAttemptedScroll = useRef(false);
+  const highlightTimeoutRef = useRef<number | null>(null);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
   const [userInteractions, setUserInteractions] = useState<
@@ -46,6 +47,9 @@ export const CoursePage = () => {
   const [editReviewOpen, setEditReviewOpen] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showingReviews, setShowingReviews] = useState<Review[]>([]);
+  const [highlightedReviewId, setHighlightedReviewId] = useState<string | null>(
+    null
+  );
 
   const [sortBy, setSortBy] = useState<ReviewSortType>('Most Recent');
   const [selectedInstructor, setSelectedInstructor] = useState('');
@@ -133,6 +137,17 @@ export const CoursePage = () => {
 
     requestAnimationFrame(() => {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setHighlightedReviewId(elementId);
+
+      if (highlightTimeoutRef.current) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+
+      highlightTimeoutRef.current = window.setTimeout(() => {
+        setHighlightedReviewId(null);
+        highlightTimeoutRef.current = null;
+      }, 1600);
     });
 
     navigate(
@@ -146,6 +161,14 @@ export const CoursePage = () => {
     navigate,
     showAllReviews,
   ]);
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimeoutRef.current) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (course === null) {
     return (
@@ -301,35 +324,44 @@ export const CoursePage = () => {
               </ReviewEmptyPrompt>
             )}
             <div className='w-full shadow-sm'>
-              {userReview && (
-                <CourseReview
-                  anchorId={`desktop-${getReviewAnchorId(userReview)}`}
-                  canModify={Boolean(user && userReview.userId === user.id)}
-                  handleDelete={() => handleDelete(userReview)}
-                  openEditReview={() => setEditReviewOpen(true)}
-                  review={userReview}
-                  interactions={userInteractions}
-                  updateLikes={updateLikes(userReview)}
-                />
-              )}
+              {userReview &&
+                (() => {
+                  const desktopAnchorId = `desktop-${getReviewAnchorId(userReview)}`;
+                  return (
+                    <CourseReview
+                      anchorId={desktopAnchorId}
+                      highlighted={highlightedReviewId === desktopAnchorId}
+                      canModify={Boolean(user && userReview.userId === user.id)}
+                      handleDelete={() => handleDelete(userReview)}
+                      openEditReview={() => setEditReviewOpen(true)}
+                      review={userReview}
+                      interactions={userInteractions}
+                      updateLikes={updateLikes(userReview)}
+                    />
+                  );
+                })()}
               {showingReviews.length > 0
                 ? showingReviews
                     .filter((review) =>
                       user ? review.userId !== user.id : true
                     )
                     .slice(0, showAllReviews ? showingReviews.length : 8)
-                    .map((review, i) => (
-                      <CourseReview
-                        anchorId={`desktop-${getReviewAnchorId(review)}`}
-                        canModify={Boolean(user && review.userId === user.id)}
-                        interactions={userInteractions}
-                        handleDelete={() => handleDelete(review)}
-                        key={i}
-                        openEditReview={() => setEditReviewOpen(true)}
-                        review={review}
-                        updateLikes={updateLikes(review)}
-                      />
-                    ))
+                    .map((review, i) => {
+                      const desktopAnchorId = `desktop-${getReviewAnchorId(review)}`;
+                      return (
+                        <CourseReview
+                          anchorId={desktopAnchorId}
+                          highlighted={highlightedReviewId === desktopAnchorId}
+                          canModify={Boolean(user && review.userId === user.id)}
+                          interactions={userInteractions}
+                          handleDelete={() => handleDelete(review)}
+                          key={i}
+                          openEditReview={() => setEditReviewOpen(true)}
+                          review={review}
+                          updateLikes={updateLikes(review)}
+                        />
+                      );
+                    })
                 : allReviews &&
                   allReviews.length > 0 && (
                     <ReviewEmptyPrompt className='my-8'>
@@ -394,35 +426,48 @@ export const CoursePage = () => {
                 </ReviewEmptyPrompt>
               )}
               <div className='w-full shadow-sm'>
-                {userReview && (
-                  <CourseReview
-                    anchorId={`mobile-${getReviewAnchorId(userReview)}`}
-                    canModify={Boolean(user && userReview.userId === user.id)}
-                    handleDelete={() => handleDelete(userReview)}
-                    openEditReview={() => setEditReviewOpen(true)}
-                    review={userReview}
-                    interactions={userInteractions}
-                    updateLikes={updateLikes(userReview)}
-                  />
-                )}
+                {userReview &&
+                  (() => {
+                    const mobileAnchorId = `mobile-${getReviewAnchorId(userReview)}`;
+                    return (
+                      <CourseReview
+                        anchorId={mobileAnchorId}
+                        highlighted={highlightedReviewId === mobileAnchorId}
+                        canModify={Boolean(
+                          user && userReview.userId === user.id
+                        )}
+                        handleDelete={() => handleDelete(userReview)}
+                        openEditReview={() => setEditReviewOpen(true)}
+                        review={userReview}
+                        interactions={userInteractions}
+                        updateLikes={updateLikes(userReview)}
+                      />
+                    );
+                  })()}
                 {showingReviews.length > 0
                   ? showingReviews
                       .filter((review) =>
                         user ? review.userId !== user.id : true
                       )
                       .slice(0, showAllReviews ? showingReviews.length : 8)
-                      .map((review, i) => (
-                        <CourseReview
-                          anchorId={`mobile-${getReviewAnchorId(review)}`}
-                          canModify={Boolean(user && review.userId === user.id)}
-                          handleDelete={() => handleDelete(review)}
-                          key={i}
-                          openEditReview={() => setEditReviewOpen(true)}
-                          review={review}
-                          interactions={userInteractions}
-                          updateLikes={updateLikes(review)}
-                        />
-                      ))
+                      .map((review, i) => {
+                        const mobileAnchorId = `mobile-${getReviewAnchorId(review)}`;
+                        return (
+                          <CourseReview
+                            anchorId={mobileAnchorId}
+                            highlighted={highlightedReviewId === mobileAnchorId}
+                            canModify={Boolean(
+                              user && review.userId === user.id
+                            )}
+                            handleDelete={() => handleDelete(review)}
+                            key={i}
+                            openEditReview={() => setEditReviewOpen(true)}
+                            review={review}
+                            interactions={userInteractions}
+                            updateLikes={updateLikes(review)}
+                          />
+                        );
+                      })
                   : allReviews &&
                     allReviews.length > 0 && (
                       <ReviewEmptyPrompt className='my-8'>

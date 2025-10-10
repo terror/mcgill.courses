@@ -177,6 +177,8 @@ export const NotificationDropdown = ({
                                 canModify={false}
                                 handleDelete={() => undefined}
                                 openEditReview={() => undefined}
+                                includeTaughtBy={false}
+                                showScrollButton
                               />
                             </div>
                           )}
