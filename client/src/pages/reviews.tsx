@@ -125,7 +125,6 @@ export const Reviews = () => {
                     <CourseReview
                       canModify={false}
                       handleDelete={() => undefined}
-                      key={i}
                       openEditReview={() => undefined}
                       review={review}
                       showScrollButton
