@@ -107,8 +107,11 @@ export const Reviews = () => {
             style={{ overflowY: 'hidden' }}
           >
             <div className='ml-auto flex w-full max-w-xl flex-col lg:max-w-4xl'>
-              {reviews.map((review: Review, i: number) => (
-                <div className='mb-6'>
+              {reviews.map((review: Review) => (
+                <div
+                  className='mb-6'
+                  key={`${review.courseId}-${review.userId}-${review.timestamp}`}
+                >
                   <Link
                     to={`/course/${courseIdToUrlParam(review.courseId)}`}
                     className='font-semibold text-gray-800 hover:underline dark:text-gray-200'
@@ -122,7 +125,6 @@ export const Reviews = () => {
                     <CourseReview
                       canModify={false}
                       handleDelete={() => undefined}
-                      key={i}
                       openEditReview={() => undefined}
                       review={review}
                       attachment={ReviewAttachment.ScrollButton}
