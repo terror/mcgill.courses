@@ -9,6 +9,18 @@ import { getReviewAnchorId } from '../lib/utils';
 import type { Course } from '../model/course';
 import { CoursePage } from './course-page';
 
+const courseReviewMock = vi.hoisted(() =>
+  vi.fn((props: any) => (
+    <div
+      data-testid={`course-review-${props.review.userId}`}
+      id={props.anchorId}
+      data-attachment={props.attachment}
+    >
+      {props.review.content}
+    </div>
+  ))
+);
+
 vi.mock('../lib/api', () => ({
   api: {
     getCourseWithReviews: vi.fn(),
@@ -62,17 +74,7 @@ vi.mock('../components/schedules-display', () => ({
 }));
 
 vi.mock('../components/course-review', () => ({
-  CourseReview: ({
-    anchorId,
-    review,
-  }: {
-    anchorId?: string;
-    review: Review;
-  }) => (
-    <div data-testid={`course-review-${review.userId}`} id={anchorId}>
-      {review.content}
-    </div>
-  ),
+  CourseReview: courseReviewMock,
   ReviewAttachment: {
     ScrollButton: 'scrollButton',
     CopyButton: 'copyButton',
@@ -93,7 +95,7 @@ const getUserInteractionsForCourseMock =
 const scrollIntoViewMock = vi.fn();
 const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
 
-describe('CoursePage', () => {
+describe('Course page', () => {
   beforeAll(() => {
     HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
   });
@@ -102,6 +104,7 @@ describe('CoursePage', () => {
     scrollIntoViewMock.mockClear();
     getCourseWithReviewsMock.mockReset();
     getUserInteractionsForCourseMock.mockReset();
+    courseReviewMock.mockClear();
 
     vi.stubGlobal(
       'matchMedia',
@@ -203,5 +206,71 @@ describe('CoursePage', () => {
       behavior: 'smooth',
       block: 'center',
     });
+
+    const attachments = courseReviewMock.mock.calls.map(
+      ([props]) => props.attachment
+    );
+
+    expect(attachments.length).toBeGreaterThan(0);
+    expect(new Set(attachments)).toEqual(new Set(['copyButton']));
+  });
+
+  it('scrolls to review when scrollToReview is present in the URL search params', async () => {
+    const course: Course = {
+      _id: 'COMP202',
+      title: 'Foundations of Programming',
+      description: 'Intro course',
+      subject: 'COMP',
+      code: '202',
+      credits: '3',
+      url: '',
+      department: 'Computer Science',
+      faculty: 'Science',
+      terms: ['Fall 2023'],
+      instructors: [],
+      prerequisites: [],
+      corequisites: [],
+      leadingTo: [],
+      restrictions: '',
+      schedule: [],
+    };
+
+    const review: Review = {
+      content: 'Single review',
+      courseId: 'COMP202',
+      difficulty: 3,
+      instructors: ['Instructor'],
+      likes: 0,
+      rating: 4,
+      timestamp: '1700000009999',
+      userId: 'user-1',
+    };
+
+    getCourseWithReviewsMock.mockResolvedValue({
+      course,
+      reviews: [review],
+    });
+
+    const anchor = getReviewAnchorId(review);
+
+    render(
+      <MemoryRouter
+        initialEntries={[`/course/comp-202?scrollToReview=${anchor}`]}
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
+        <Routes>
+          <Route path='/course/:id' element={<CoursePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => expect(api.getCourseWithReviews).toHaveBeenCalled());
+    await waitFor(() => expect(scrollIntoViewMock).toHaveBeenCalled());
+
+    const [[firstCallProps]] = courseReviewMock.mock.calls;
+    expect(firstCallProps.attachment).toBe('copyButton');
   });
 });

@@ -125,7 +125,7 @@ const buildReview = (overrides: Partial<Review> = {}): Review => ({
   ...overrides,
 });
 
-describe('Reviews', () => {
+describe('Reviews page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
