@@ -463,7 +463,7 @@ export const CourseReview = ({
       </div>
       <div className='flex items-center'>
         <p className='mb-2 mt-auto flex-1 text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
-          <span className='inline-flex items-center gap-1'>
+          <span className='inline-flex flex-wrap items-center gap-1'>
             {reviewContext}
             {attachmentNode}
           </span>
