@@ -220,8 +220,11 @@ describe('CourseReview', () => {
       expect.stringContaining(`scrollToReview=${expectedAnchor}`)
     );
 
-    const updatedCopyIcon = button.querySelector('svg:nth-of-type(1)');
-    const updatedCheckIcon = button.querySelector('svg:nth-of-type(2)');
+    const updatedButton = screen.getByRole('button', {
+      name: /copy review link for comp202/i,
+    });
+    const updatedCopyIcon = updatedButton.querySelector('svg:nth-of-type(1)');
+    const updatedCheckIcon = updatedButton.querySelector('svg:nth-of-type(2)');
 
     expect(updatedCopyIcon).not.toBeNull();
     expect(updatedCheckIcon).not.toBeNull();

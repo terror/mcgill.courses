@@ -236,7 +236,7 @@ export const CourseReview = ({
   const shortDate = format(date, 'P'),
     longDate = format(date, 'EEEE, MMMM d, yyyy');
 
-  const highlightAnimation = { scale: highlighted ? 1.02 : 1 };
+  const highlightAnimation = { scale: highlighted ? 1.05 : 1 };
 
   const highlightTransition = {
     duration: 0.5,
