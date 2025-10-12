@@ -120,11 +120,12 @@ export const Reviews = () => {
                   </p>
                   <div>
                     <CourseReview
-                      key={i}
                       canModify={false}
-                      review={review}
-                      openEditReview={() => undefined}
                       handleDelete={() => undefined}
+                      key={i}
+                      openEditReview={() => undefined}
+                      review={review}
+                      showScrollButton
                     />
                   </div>
                 </div>
