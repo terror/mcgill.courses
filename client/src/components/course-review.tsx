@@ -194,6 +194,7 @@ const ReviewInteractions = ({
 
 type CourseReviewProps = {
   anchorId?: string;
+  attachment?: ReviewAttachment;
   canModify: boolean;
   className?: string;
   handleDelete: () => void;
@@ -203,7 +204,6 @@ type CourseReviewProps = {
   openEditReview: () => void;
   review: Review;
   showCourse?: boolean;
-  attachment?: ReviewAttachment;
   updateLikes?: (likes: number) => void;
 };
 
@@ -213,21 +213,22 @@ export enum ReviewAttachment {
 }
 
 export const CourseReview = ({
-  review,
-  interactions,
-  canModify,
-  openEditReview,
-  handleDelete,
-  updateLikes,
-  className,
-  includeTaughtBy = true,
   anchorId,
-  highlighted = false,
   attachment,
+  canModify,
+  className,
+  handleDelete,
+  highlighted = false,
+  includeTaughtBy = true,
+  interactions,
+  openEditReview,
+  review,
+  updateLikes,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
   const [copied, setCopied] = useState(false);
+
   const copyTimeoutRef = useRef<number | null>(null);
 
   const date = new Date(parseInt(review.timestamp, 10));
@@ -262,6 +263,7 @@ export const CourseReview = ({
     }
 
     const anchor = getReviewAnchorId(review);
+
     const link = new URL(window.location.href);
     link.searchParams.set('scrollToReview', anchor);
 
@@ -277,6 +279,7 @@ export const CourseReview = ({
     copyPromise
       .then(() => {
         setCopied(true);
+
         if (copyTimeoutRef.current) {
           window.clearTimeout(copyTimeoutRef.current);
         }
@@ -287,6 +290,7 @@ export const CourseReview = ({
       })
       .catch(() => {
         setCopied(false);
+
         if (copyTimeoutRef.current) {
           window.clearTimeout(copyTimeoutRef.current);
           copyTimeoutRef.current = null;
@@ -300,7 +304,7 @@ export const CourseReview = ({
         <Link
           to={`/course/${courseIdToUrlParam(review.courseId)}`}
           state={{ scrollToReview: getReviewAnchorId(review) }}
-          className='inline-flex h-6 w-6 items-center justify-center text-red-600 transition-colors duration-200 hover:text-red-500 focus:outline-none'
+          className='inline-flex h-6 items-center justify-center text-red-600 transition-colors duration-200 hover:text-red-500 focus:outline-none'
           aria-label={`Open ${review.courseId} and scroll to this review`}
         >
           <ArrowUpRight className='h-4 w-4' />
