@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { CourseInfoStats } from '../components/course-info-stats';
-import { CourseReview } from '../components/course-review';
+import { CourseReview, ReviewAttachment } from '../components/course-review';
 import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { useAuth } from '../hooks/use-auth';
@@ -158,7 +158,7 @@ export const Instructor = () => {
               includeTaughtBy={false}
               openEditReview={() => undefined}
               review={userReview}
-              showScrollButton
+              attachment={ReviewAttachment.ScrollButton}
               updateLikes={updateLikes(userReview)}
             />
           )}
@@ -174,7 +174,7 @@ export const Instructor = () => {
                   key={i}
                   openEditReview={() => undefined}
                   review={review}
-                  showScrollButton
+                  attachment={ReviewAttachment.ScrollButton}
                   updateLikes={updateLikes(review)}
                 />
               ))}

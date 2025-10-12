@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import {
   ArrowUpRight,
+  Check,
+  Copy,
   Edit,
   Flame,
   Pin,
@@ -10,7 +12,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
@@ -201,9 +203,14 @@ type CourseReviewProps = {
   openEditReview: () => void;
   review: Review;
   showCourse?: boolean;
-  showScrollButton?: boolean;
+  attachment?: ReviewAttachment;
   updateLikes?: (likes: number) => void;
 };
+
+export enum ReviewAttachment {
+  ScrollButton = 'scrollButton',
+  CopyButton = 'copyButton',
+}
 
 export const CourseReview = ({
   review,
@@ -216,10 +223,12 @@ export const CourseReview = ({
   includeTaughtBy = true,
   anchorId,
   highlighted = false,
-  showScrollButton = false,
+  attachment,
 }: CourseReviewProps) => {
   const [readMore, setReadMore] = useState(false);
   const [promptLogin, setPromptLogin] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<number | null>(null);
 
   const date = new Date(parseInt(review.timestamp, 10));
 
@@ -242,16 +251,109 @@ export const CourseReview = ({
     </Link>
   );
 
-  const scrollButton = showScrollButton && (
-    <Link
-      to={`/course/${courseIdToUrlParam(review.courseId)}`}
-      state={{ scrollToReview: getReviewAnchorId(review) }}
-      className='inline-flex items-center text-red-600'
-      aria-label={`Open ${review.courseId} and scroll to this review`}
-    >
-      <ArrowUpRight className='h-4 w-4' />
-    </Link>
-  );
+  const copyReviewLink = () => {
+    if (
+      typeof window === 'undefined' ||
+      typeof navigator === 'undefined' ||
+      !navigator?.clipboard
+    ) {
+      toast.error('Copy to clipboard is not supported in this browser.');
+      return;
+    }
+
+    const anchor = getReviewAnchorId(review);
+    const link = new URL(window.location.href);
+    link.searchParams.set('scrollToReview', anchor);
+
+    const copyPromise = navigator.clipboard.writeText(link.toString());
+
+    toast.promise(copyPromise, {
+      loading: 'Copying link…',
+      success: 'Copied review link to clipboard.',
+      error:
+        'Something went wrong while copying the review link. Please try again.',
+    });
+
+    copyPromise
+      .then(() => {
+        setCopied(true);
+        if (copyTimeoutRef.current) {
+          window.clearTimeout(copyTimeoutRef.current);
+        }
+        copyTimeoutRef.current = window.setTimeout(() => {
+          setCopied(false);
+          copyTimeoutRef.current = null;
+        }, 2000);
+      })
+      .catch(() => {
+        setCopied(false);
+        if (copyTimeoutRef.current) {
+          window.clearTimeout(copyTimeoutRef.current);
+          copyTimeoutRef.current = null;
+        }
+      });
+  };
+
+  const attachmentNode =
+    attachment === ReviewAttachment.ScrollButton ? (
+      <Tooltip text='Scroll to this review' className='w-36'>
+        <Link
+          to={`/course/${courseIdToUrlParam(review.courseId)}`}
+          state={{ scrollToReview: getReviewAnchorId(review) }}
+          className='inline-flex h-6 w-6 items-center justify-center text-red-600 transition-colors duration-200 hover:text-red-500 focus:outline-none'
+          aria-label={`Open ${review.courseId} and scroll to this review`}
+        >
+          <ArrowUpRight className='h-4 w-4' />
+        </Link>
+      </Tooltip>
+    ) : attachment === ReviewAttachment.CopyButton ? (
+      (() => {
+        const icon = (
+          <span className='relative inline-flex h-4 w-4 items-center justify-center'>
+            <Copy
+              className={twMerge(
+                'absolute h-4 w-4 transition-opacity duration-150 ease-out',
+                copied ? 'opacity-0' : 'opacity-100'
+              )}
+            />
+            <Check
+              className={twMerge(
+                'absolute h-4 w-4 text-green-500 transition-opacity duration-150 ease-out',
+                copied ? 'opacity-100' : 'opacity-0'
+              )}
+            />
+          </span>
+        );
+
+        const button = (
+          <button
+            type='button'
+            onClick={copyReviewLink}
+            className='inline-flex h-6 w-6 items-center justify-center text-gray-600 transition-colors duration-200 hover:text-red-600 focus:outline-none disabled:cursor-default disabled:hover:text-gray-600 dark:text-gray-300 dark:hover:text-red-500 dark:disabled:hover:text-gray-300'
+            aria-label={`Copy review link for ${review.courseId}`}
+            disabled={copied}
+          >
+            {icon}
+          </button>
+        );
+
+        return copied ? (
+          button
+        ) : (
+          <Tooltip text='Copy link to review' className='w-36'>
+            {button}
+          </Tooltip>
+        );
+      })()
+    ) : null;
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        window.clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const reviewContext = includeTaughtBy ? (
     <span className='flex flex-wrap items-center gap-x-1 gap-y-1'>
@@ -359,7 +461,7 @@ export const CourseReview = ({
         <p className='mb-2 mt-auto flex-1 text-sm italic leading-4 text-gray-700 dark:text-gray-200'>
           <span className='inline-flex items-center gap-1'>
             {reviewContext}
-            {scrollButton}
+            {attachmentNode}
           </span>
         </p>
         <Transition

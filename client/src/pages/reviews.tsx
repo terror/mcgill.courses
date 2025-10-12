@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { CourseReview } from '../components/course-review';
+import { CourseReview, ReviewAttachment } from '../components/course-review';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
 import { Spinner } from '../components/spinner';
@@ -125,7 +125,7 @@ export const Reviews = () => {
                       key={i}
                       openEditReview={() => undefined}
                       review={review}
-                      showScrollButton
+                      attachment={ReviewAttachment.ScrollButton}
                     />
                   </div>
                 </div>

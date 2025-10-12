@@ -73,6 +73,10 @@ vi.mock('../components/course-review', () => ({
       {review.content}
     </div>
   ),
+  ReviewAttachment: {
+    ScrollButton: 'scrollButton',
+    CopyButton: 'copyButton',
+  },
 }));
 
 vi.mock('react-helmet-async', () => ({

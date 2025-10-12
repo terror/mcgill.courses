@@ -8,7 +8,7 @@ import { AddReviewForm } from '../components/add-review-form';
 import { CourseAverages } from '../components/course-averages';
 import { CourseInfo } from '../components/course-info';
 import { CourseRequirements } from '../components/course-requirements';
-import { CourseReview } from '../components/course-review';
+import { CourseReview, ReviewAttachment } from '../components/course-review';
 import { CourseReviewPrompt } from '../components/course-review-prompt';
 import { EditReviewForm } from '../components/edit-review-form';
 import { Layout } from '../components/layout';
@@ -38,6 +38,7 @@ export const CoursePage = () => {
   const scrollToReviewId = useRef<string | null>(null);
   const hasAttemptedScroll = useRef(false);
   const highlightTimeoutRef = useRef<number | null>(null);
+  const lastScrollTarget = useRef<string | null>(null);
 
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[] | undefined>(undefined);
@@ -58,16 +59,37 @@ export const CoursePage = () => {
   useEffect(() => {
     firstFetch.current = true;
     setShowAllReviews(false);
+    lastScrollTarget.current = null;
   }, [params.id]);
 
   useEffect(() => {
     const state = location.state as { scrollToReview?: string } | null;
 
-    if (state?.scrollToReview) {
-      scrollToReviewId.current = state.scrollToReview;
+    const searchParams = new URLSearchParams(location.search);
+    const searchTarget = searchParams.get('scrollToReview');
+
+    const hashTarget =
+      typeof location.hash === 'string' && location.hash.length > 1
+        ? location.hash.slice(1)
+        : null;
+
+    const normalizeAnchor = (anchor: string) =>
+      anchor.replace(/^(desktop|mobile)-/, '');
+
+    const resolvedTarget = state?.scrollToReview
+      ? normalizeAnchor(state.scrollToReview)
+      : searchTarget
+        ? normalizeAnchor(searchTarget)
+        : hashTarget
+          ? normalizeAnchor(hashTarget)
+          : null;
+
+    if (resolvedTarget && lastScrollTarget.current !== resolvedTarget) {
+      scrollToReviewId.current = resolvedTarget;
       hasAttemptedScroll.current = false;
+      lastScrollTarget.current = resolvedTarget;
     }
-  }, [location.state]);
+  }, [location.hash, location.search, location.state]);
 
   const refetch = () => {
     const id = params.id?.replace('-', '').toUpperCase();
@@ -343,6 +365,7 @@ export const CoursePage = () => {
                       openEditReview={() => setEditReviewOpen(true)}
                       review={userReview}
                       interactions={userInteractions}
+                      attachment={ReviewAttachment.CopyButton}
                       updateLikes={updateLikes(userReview)}
                     />
                   );
@@ -366,6 +389,7 @@ export const CoursePage = () => {
                           key={i}
                           openEditReview={() => setEditReviewOpen(true)}
                           review={review}
+                          attachment={ReviewAttachment.CopyButton}
                           updateLikes={updateLikes(review)}
                         />
                       );
@@ -449,6 +473,7 @@ export const CoursePage = () => {
                         openEditReview={() => setEditReviewOpen(true)}
                         review={userReview}
                         interactions={userInteractions}
+                        attachment={ReviewAttachment.CopyButton}
                         updateLikes={updateLikes(userReview)}
                       />
                     );
@@ -474,6 +499,7 @@ export const CoursePage = () => {
                             openEditReview={() => setEditReviewOpen(true)}
                             review={review}
                             interactions={userInteractions}
+                            attachment={ReviewAttachment.CopyButton}
                             updateLikes={updateLikes(review)}
                           />
                         );

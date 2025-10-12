@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { api } from '../lib/api';
 import type { Notification } from '../lib/types';
 import { courseIdToUrlParam, spliceCourseCode } from '../lib/utils';
-import { CourseReview } from './course-review';
+import { CourseReview, ReviewAttachment } from './course-review';
 
 export const NotificationDropdown = ({
   notifications,
@@ -168,7 +168,7 @@ export const NotificationDropdown = ({
                                 canModify={false}
                                 handleDelete={() => undefined}
                                 openEditReview={() => undefined}
-                                showScrollButton
+                                attachment={ReviewAttachment.ScrollButton}
                               />
                             </div>
                           )}
