@@ -8,7 +8,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
-import type { Mock } from 'vitest';
+import type { MockInstance } from 'vitest';
 
 import type { Review } from '../lib/types';
 import { CourseReview, ReviewAttachment } from './course-review';
@@ -61,7 +61,7 @@ const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(
   'clipboard'
 );
 
-let writeTextMock: Mock;
+let writeTextMock: MockInstance<any, any>;
 
 beforeAll(() => {
   if (
@@ -81,15 +81,12 @@ beforeAll(() => {
         writeText: mockFn,
       },
     });
-    writeTextMock = mockFn as unknown as Mock;
+    writeTextMock = mockFn;
   }
 });
 
 afterAll(() => {
-  if (
-    'mockRestore' in writeTextMock &&
-    typeof writeTextMock.mockRestore === 'function'
-  ) {
+  if ('mockRestore' in writeTextMock) {
     writeTextMock.mockRestore();
   }
 
@@ -176,9 +173,9 @@ describe('CourseReview', () => {
   });
 
   it('copies review link and shows success indicator when copy attachment is used', async () => {
-    writeTextMock.mockResolvedValueOnce();
+    writeTextMock.mockResolvedValueOnce(undefined);
 
-    const { container } = renderWithRouter(
+    renderWithRouter(
       <CourseReview
         canModify={false}
         handleDelete={vi.fn()}
@@ -192,15 +189,19 @@ describe('CourseReview', () => {
       name: /copy review link for comp202/i,
     });
 
-    const [copyIconEl, checkIconEl] = Array.from(
-      button.querySelectorAll('svg')
-    ) as HTMLElement[];
+    const icons = button.querySelectorAll('svg');
+    const copyIconEl = icons.item(0);
+    const checkIconEl = icons.item(1);
 
-    expect(copyIconEl).toBeDefined();
-    expect(checkIconEl).toBeDefined();
+    expect(copyIconEl).not.toBeNull();
+    expect(checkIconEl).not.toBeNull();
 
-    expect(copyIconEl).toHaveClass('opacity-100');
-    expect(checkIconEl).toHaveClass('opacity-0');
+    expect(
+      (copyIconEl as SVGSVGElement).classList.contains('opacity-100')
+    ).toBe(true);
+    expect((checkIconEl as SVGSVGElement).classList.contains('opacity-0')).toBe(
+      true
+    );
 
     await act(async () => {
       fireEvent.click(button);
@@ -218,5 +219,17 @@ describe('CourseReview', () => {
     expect(writeTextMock).toHaveBeenCalledWith(
       expect.stringContaining(`scrollToReview=${expectedAnchor}`)
     );
+
+    const updatedCopyIcon = button.querySelector('svg:nth-of-type(1)');
+    const updatedCheckIcon = button.querySelector('svg:nth-of-type(2)');
+
+    expect(updatedCopyIcon).not.toBeNull();
+    expect(updatedCheckIcon).not.toBeNull();
+    expect(
+      (updatedCopyIcon as SVGSVGElement).classList.contains('opacity-0')
+    ).toBe(true);
+    expect(
+      (updatedCheckIcon as SVGSVGElement).classList.contains('opacity-100')
+    ).toBe(true);
   });
 });

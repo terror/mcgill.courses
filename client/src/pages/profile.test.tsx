@@ -67,13 +67,20 @@ const mockTab = vi.hoisted(() =>
     }: {
       children: React.ReactNode;
       onClick?: () => void;
-    }) => (
-      <button type='button' onClick={onClick}>
-        {typeof children === 'function'
-          ? children({ selected: true })
-          : children}
-      </button>
-    ),
+    }) => {
+      const childContent =
+        typeof children === 'function'
+          ? (children as (args: { selected: boolean }) => React.ReactNode)({
+              selected: true,
+            })
+          : children;
+
+      return (
+        <button type='button' onClick={onClick}>
+          {childContent}
+        </button>
+      );
+    },
     {
       Group: ({ children }: { children: React.ReactNode }) => (
         <div>{children}</div>
@@ -130,7 +137,7 @@ describe('Profile page', () => {
     const subscriptions: Subscription[] = [
       {
         courseId: 'COMP202',
-        createdAt: '2024-01-01',
+        userId: 'user-1',
       },
     ];
 
