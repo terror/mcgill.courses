@@ -109,10 +109,10 @@ export const Instructor = () => {
                   />
                 </a>
               </div>
-              <p className='mt-4 text-gray-500 dark:text-gray-400'>
+              <div className='mt-4 text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
-                  <div>
-                    <div>Teaches or has taught the following course(s): </div>
+                  <Fragment>
+                    <p>Teaches or has taught the following course(s):</p>
                     <div className='max-w-sm'>
                       {uniqueReviews.map((review, index) => (
                         <Fragment key={index}>
@@ -128,11 +128,14 @@ export const Instructor = () => {
                         </Fragment>
                       ))}
                     </div>
-                  </div>
+                  </Fragment>
                 ) : (
-                  "This professor hasn't taught any courses that have been reviewed yet."
+                  <p>
+                    This professor hasn't taught any courses that have been
+                    reviewed yet.
+                  </p>
                 )}
-              </p>
+              </div>
               {reviews.length !== 0 && (
                 <Fragment>
                   <div className='grow py-3' />
