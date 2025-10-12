@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-import { CourseReview } from '../components/course-review';
+import { CourseReview, ReviewAttachment } from '../components/course-review';
 import { DeleteButton } from '../components/delete-button';
 import { JumpToTopButton } from '../components/jump-to-top-button';
 import { Layout } from '../components/layout';
@@ -179,7 +179,7 @@ export const Profile = () => {
                             handleDelete={() => null}
                             openEditReview={() => null}
                             review={review}
-                            showScrollButton
+                            attachment={ReviewAttachment.ScrollButton}
                           />
                         </div>
                       </div>

@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { CourseInfoStats } from '../components/course-info-stats';
-import { CourseReview } from '../components/course-review';
+import { CourseReview, ReviewAttachment } from '../components/course-review';
 import { Layout } from '../components/layout';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
 import { useAuth } from '../hooks/use-auth';
@@ -109,10 +109,10 @@ export const Instructor = () => {
                   />
                 </a>
               </div>
-              <p className='mt-4 text-gray-500 dark:text-gray-400'>
+              <div className='mt-4 text-gray-500 dark:text-gray-400'>
                 {uniqueReviews.length ? (
-                  <div>
-                    <div>Teaches or has taught the following course(s): </div>
+                  <Fragment>
+                    <p>Teaches or has taught the following course(s):</p>
                     <div className='max-w-sm'>
                       {uniqueReviews.map((review, index) => (
                         <Fragment key={index}>
@@ -128,11 +128,14 @@ export const Instructor = () => {
                         </Fragment>
                       ))}
                     </div>
-                  </div>
+                  </Fragment>
                 ) : (
-                  "This professor hasn't taught any courses that have been reviewed yet."
+                  <p>
+                    This professor hasn't taught any courses that have been
+                    reviewed yet.
+                  </p>
                 )}
-              </p>
+              </div>
               {reviews.length !== 0 && (
                 <Fragment>
                   <div className='grow py-3' />
@@ -158,7 +161,7 @@ export const Instructor = () => {
               includeTaughtBy={false}
               openEditReview={() => undefined}
               review={userReview}
-              showScrollButton
+              attachment={ReviewAttachment.ScrollButton}
               updateLikes={updateLikes(userReview)}
             />
           )}
@@ -174,7 +177,7 @@ export const Instructor = () => {
                   key={i}
                   openEditReview={() => undefined}
                   review={review}
-                  showScrollButton
+                  attachment={ReviewAttachment.ScrollButton}
                   updateLikes={updateLikes(review)}
                 />
               ))}

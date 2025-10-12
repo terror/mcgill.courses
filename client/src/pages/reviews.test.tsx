@@ -46,6 +46,10 @@ vi.mock('../components/course-review', () => ({
   CourseReview: ({ review }: { review: Review }) => (
     <div data-testid={`course-review-${review.userId}`}>{review.content}</div>
   ),
+  ReviewAttachment: {
+    ScrollButton: 'scrollButton',
+    CopyButton: 'copyButton',
+  },
 }));
 
 vi.mock('../components/spinner', () => ({
@@ -121,7 +125,7 @@ const buildReview = (overrides: Partial<Review> = {}): Review => ({
   ...overrides,
 });
 
-describe('Reviews', () => {
+describe('Reviews page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
