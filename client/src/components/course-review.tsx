@@ -304,7 +304,7 @@ export const CourseReview = ({
         <Link
           to={`/course/${courseIdToUrlParam(review.courseId)}`}
           state={{ scrollToReview: getReviewAnchorId(review) }}
-          className='inline-flex h-6 items-center justify-center text-red-600 transition-colors duration-200 hover:text-red-500 focus:outline-none'
+          className='inline-flex h-6 items-center justify-center text-gray-600 transition-colors duration-200 hover:text-red-600 focus:outline-none disabled:cursor-default disabled:hover:text-gray-600 dark:text-gray-300 dark:hover:text-red-500 dark:disabled:hover:text-gray-300'
           aria-label={`Open ${review.courseId} and scroll to this review`}
         >
           <ArrowUpRight className='h-4 w-4' />
