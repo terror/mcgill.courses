@@ -69,22 +69,35 @@ const createIndex = () => {
   return index;
 };
 
+const search = (query: string) =>
+  getRankedCourses(query, courses, createIndex())[0]._id;
+
 describe('getRankedCourses', () => {
   it('prioritizes exact subject and code matches', () => {
-    const results = getRankedCourses('math 222', courses, createIndex());
-
-    expect(results[0]?._id).toBe('MATH222');
+    expect(search('math 222')).toBe('MATH222');
   });
 
   it('prefers exact title matches over partial matches', () => {
-    const results = getRankedCourses('analysis 1', courses, createIndex());
-
-    expect(results[0]?._id).toBe('MATH242');
+    expect(search('analysis 1')).toBe('MATH242');
   });
 
   it('keeps exact course ids on top even when numeric tokens overlap', () => {
-    const results = getRankedCourses('comp 550', courses, createIndex());
+    expect(search('comp 550')).toBe('COMP550');
+  });
 
-    expect(results[0]?._id).toBe('COMP550');
+  it('still prioritizes the primary course when searching by title prefix only', () => {
+    expect(search('analysis')).toBe('MATH242');
+  });
+
+  it('handles mixed casing and punctuation in queries', () => {
+    expect(search('Comp-550')).toBe('COMP550');
+  });
+
+  it('keeps numeric only queries anchored to the matching course code', () => {
+    expect(search('222')).toBe('MATH222');
+  });
+
+  it('returns the earliest subject match when only the subject is provided', () => {
+    expect(search('math')).toBe('MATH203');
   });
 });
