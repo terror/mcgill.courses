@@ -7,10 +7,8 @@ from arrg import app, argument
 
 @dataclass
 class Course:
-  _id: str
-  subject: str
+  id: str
   title: str
-  code: str
 
 
 @app(description='Aggregate course data from seed files and export to JSON.')
@@ -47,9 +45,7 @@ class App:
         for course in courses:
           unique_courses[course['_id']] = Course(
             course['_id'],
-            course['subject'],
             course['title'],
-            course['code'],
           )
 
           for instructor in course['instructors']:

@@ -7,28 +7,32 @@ import type { SearchResults } from '../model/search-results';
 let coursesIndex: Index | null = null;
 let instructorsIndex: Index | null = null;
 
-export type CourseData = Pick<
-  Course,
-  '_id' | 'subject' | 'title' | 'code' | 'instructors'
->;
+export type CourseData = Pick<Course, '_id' | 'subject' | 'code' | 'title'>;
 
 export type InstructorName = string;
 
 export const getSearchIndex = () => {
-  const courses = data.courses as CourseData[];
+  const courseData = data.courses;
   const instructors = data.instructors as InstructorName[];
+
+  const courses = courseData.map((c) => ({
+    subject: c.id.substring(0, 4),
+    code: c.id.substring(4),
+    _id: c.id,
+    title: c.title,
+  }));
 
   if (coursesIndex === null) {
     coursesIndex = new Index({
       tokenize: 'forward',
     });
 
-    courses.forEach((course, i) =>
+    courses.forEach((course, i) => {
       coursesIndex?.add(
         i,
         `${course._id} ${course.subject} ${course.title} ${course.code}`
-      )
-    );
+      );
+    });
   }
 
   if (instructorsIndex === null) {
