@@ -20,7 +20,7 @@ export const getSearchIndex = () => {
 
   if (coursesIndex === null) {
     coursesIndex = new Index({
-      tokenize: 'tolerant',
+      tokenize: 'forward',
     });
 
     courses.forEach((course, i) =>
@@ -52,9 +52,11 @@ export const updateSearchResults = (
   instructorsIndex: Index,
   setResults: (_: SearchResults) => void
 ) => {
-  const courseSearchResults = coursesIndex
-    .search(query, { limit: 4 })
-    ?.map((id) => courses[id as number]);
+  const courseSearchResults = getRankedCourses(
+    query,
+    courses,
+    coursesIndex
+  ).slice(0, 4);
 
   const instructorSearchResults = instructorsIndex
     .search(query, { limit: 4 })
@@ -66,3 +68,90 @@ export const updateSearchResults = (
     instructors: instructorSearchResults,
   });
 };
+
+const normalize = (value: string) => value.toLowerCase();
+
+const compact = (value: string) => normalize(value).replace(/[^a-z0-9]/g, '');
+
+const scoreCourseMatch = (query: string, course: CourseData) => {
+  const normalizedQuery = normalize(query);
+  const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+  const queryCompact = compact(query);
+
+  const subject = normalize(course.subject);
+  const code = normalize(course.code);
+  const id = normalize(course._id);
+  const title = normalize(course.title);
+
+  if (queryCompact.length === 0) {
+    return 0;
+  }
+
+  let score = 0;
+
+  if (id === queryCompact) {
+    score += 1_000;
+  }
+
+  if (`${subject}${code}` === queryCompact) {
+    score += 900;
+  }
+
+  const wordTokens = tokens.filter((token) => /[a-z]/.test(token));
+  const numberTokens = tokens.filter((token) => /\d/.test(token));
+
+  if (title === normalizedQuery) {
+    score += 800;
+  } else if (title.startsWith(normalizedQuery)) {
+    score += 400;
+  } else if (normalizedQuery.length >= 3 && title.includes(normalizedQuery)) {
+    score += 200;
+  }
+
+  if (wordTokens.some((token) => subject === token)) {
+    score += 500;
+  }
+
+  if (numberTokens.some((token) => code === token)) {
+    score += 500;
+  }
+
+  if (wordTokens.some((token) => subject.startsWith(token))) {
+    score += 100;
+  }
+
+  if (
+    numberTokens.some((token) => token.length >= 2 && code.startsWith(token))
+  ) {
+    score += 80;
+  }
+
+  const titleMatches = tokens.reduce((matches, token) => {
+    return matches + (title.includes(token) ? 1 : 0);
+  }, 0);
+
+  score += titleMatches * 10;
+
+  return score;
+};
+
+export const getRankedCourses = (
+  query: string,
+  courses: CourseData[],
+  index: Index
+) =>
+  Array.from(new Set(index.search(query, { limit: 25 }) ?? []))
+    .map((id) => courses[id as number])
+    .filter((course): course is CourseData => course !== undefined)
+    .map((course) => ({
+      course,
+      score: scoreCourseMatch(query, course),
+    }))
+    .sort((a, b) => {
+      if (b.score === a.score) {
+        return a.course._id.localeCompare(b.course._id);
+      }
+
+      return b.score - a.score;
+    })
+    .map(({ course }) => course);
