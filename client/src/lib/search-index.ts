@@ -20,7 +20,7 @@ export const getSearchIndex = () => {
 
   if (coursesIndex === null) {
     coursesIndex = new Index({
-      tokenize: 'tolerant',
+      tokenize: 'forward',
     });
 
     courses.forEach((course, i) =>
