@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import uniq from 'lodash/uniq';
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 
 import type { Review } from '../lib/types';
@@ -98,7 +98,7 @@ export const ReviewFilter = ({
   useEffect(reset, [course]);
 
   const sorts = useMemo(() => sortTypes.slice(), []);
-  const uniqueInstructors = _.uniq(course.instructors.map((ins) => ins.name));
+  const uniqueInstructors = uniq(course.instructors.map((ins) => ins.name));
 
   return (
     <div className='rounded-lg dark:bg-neutral-900 dark:text-gray-200'>
