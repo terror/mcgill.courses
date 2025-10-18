@@ -22,7 +22,11 @@ pub fn extract_course_page(text: &str) -> Result<CoursePage> {
 
   let full_code = parts[0].trim();
 
-  let title = parts[1].trim().to_owned();
+  let title = parts[1..]
+    .iter()
+    .map(|part| part.trim())
+    .collect::<Vec<_>>()
+    .join(". ");
 
   let parts: Vec<&str> = full_code.split(" ").collect();
 
