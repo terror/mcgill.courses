@@ -7,10 +7,7 @@ import type { SearchResults } from '../model/search-results';
 let coursesIndex: Index | null = null;
 let instructorsIndex: Index | null = null;
 
-export type CourseData = Pick<
-  Course,
-  '_id' | 'subject' | 'code' | 'title' | 'instructors'
->;
+export type CourseData = Pick<Course, '_id' | 'subject' | 'code' | 'title'>;
 
 export type InstructorName = string;
 
@@ -19,9 +16,10 @@ export const getSearchIndex = () => {
   const instructors = data.instructors as InstructorName[];
 
   const courses = courseData.map((c) => ({
-    subject: c._id.substring(0, 4),
-    code: c._id.substring(4),
-    ...c,
+    subject: c.id.substring(0, 4),
+    code: c.id.substring(4),
+    _id: c.id,
+    title: c.title,
   }));
 
   if (coursesIndex === null) {

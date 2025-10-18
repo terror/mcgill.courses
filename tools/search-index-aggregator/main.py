@@ -7,7 +7,7 @@ from arrg import app, argument
 
 @dataclass
 class Course:
-  _id: str
+  id: str
   title: str
 
 
