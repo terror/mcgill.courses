@@ -22,11 +22,11 @@ pub fn extract_course_page(text: &str) -> Result<CoursePage> {
 
   let full_code = parts[0].trim();
 
-  let title = parts[1..]
-    .iter()
-    .map(|part| part.trim())
-    .collect::<Vec<_>>()
-    .join(". ");
+  let (_, title_part) = full_title
+    .split_once(".")
+    .ok_or_else(|| anyhow!("Failed to parse course title"))?;
+
+  let title = title_part.trim().trim_matches('.').trim().to_owned();
 
   let parts: Vec<&str> = full_code.split(" ").collect();
 
