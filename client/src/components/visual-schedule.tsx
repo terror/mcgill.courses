@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
+import range from 'lodash/range';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -114,7 +115,7 @@ type ScheduleDayProps = {
   blocks: Block[];
 };
 
-const timeRange = _.range(8, 18);
+const timeRange = range(8, 18);
 
 const ScheduleDay = ({ day, blocks }: ScheduleDayProps) => {
   const dayBlocks = blocks.map((block) => ({
@@ -171,7 +172,7 @@ type VisualScheduleProps = {
 export const VisualSchedule = ({ course }: VisualScheduleProps) => {
   if (!course.schedule) return null;
 
-  const terms = _.groupBy(course.schedule, (s) => s.term);
+  const terms = groupBy(course.schedule, (s) => s.term);
   const offeredTerms = sortTerms(Object.keys(terms));
 
   const [term, setTerm] = useState(offeredTerms[0]);

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 import { ExternalLink } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -47,7 +47,7 @@ export const Instructor = () => {
   if (instructor === null) return <NotFound />;
 
   const userReview = reviews.find((r) => r.userId === user?.id),
-    uniqueReviews = _.uniqBy(reviews, (r) => r.courseId);
+    uniqueReviews = uniqBy(reviews, (r) => r.courseId);
 
   const updateLikes = (review: Review) => {
     return (likes: number) => {

@@ -1,4 +1,8 @@
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
+import sortBy from 'lodash/sortBy';
+import uniq from 'lodash/uniq';
+import uniqBy from 'lodash/uniqBy';
 import { ChevronDown } from 'lucide-react';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -39,11 +43,11 @@ const getSections = (
   schedules: Schedule[]
 ): Record<string, ScheduleBlock[]> => {
   // Group the unique sections by term, i.e Lec 001, Lec 002, Lab 003, etc.
-  const termBlocks = _.mapValues(
-    _.groupBy(schedules, (s) => s.term),
+  const termBlocks = mapValues(
+    groupBy(schedules, (s) => s.term),
     (scheds) =>
-      _.sortBy(
-        _.uniqBy(
+      sortBy(
+        uniqBy(
           scheds.flatMap((s) => s.blocks),
           (b) => b.display
         ),
@@ -53,11 +57,11 @@ const getSections = (
 
   // For each section, group together all timeblocks that occur at the same time
   // into a single RepeatingBlock.
-  const termBlockTimes = _.mapValues(termBlocks, (blocks) =>
+  const termBlockTimes = mapValues(termBlocks, (blocks) =>
     blocks.map((b) => ({
       ...b,
       timeblocks: Object.entries(
-        _.groupBy(b.timeblocks, (tb) => `${tb.t1}-${tb.t2}`)
+        groupBy(b.timeblocks, (tb) => `${tb.t1}-${tb.t2}`)
       ).map(([time, tbs]) => {
         const [t1, t2] = time.split('-', 2);
         return {
@@ -204,7 +208,7 @@ export const SchedulesDisplay = ({
   if (!schedules) return null;
 
   const offeredTerms = sortTerms(
-    _.uniq(schedules.map((schedule) => schedule.term)).filter((term) =>
+    uniq(schedules.map((schedule) => schedule.term)).filter((term) =>
       course.terms.includes(term)
     )
   );
