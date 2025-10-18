@@ -1,5 +1,6 @@
 import { produce } from 'immer';
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -31,9 +32,9 @@ type CourseAveragesProps = {
 export const CourseAverages = ({ course, averages }: CourseAveragesProps) => {
   const [showAll, setShowAll] = useState<boolean>(false);
 
-  const termInstructors = _.groupBy(course.instructors, (i) => i.term);
+  const termInstructors = groupBy(course.instructors, (i) => i.term);
 
-  const initialExpandedState = () => _.mapValues(termInstructors, () => false);
+  const initialExpandedState = () => mapValues(termInstructors, () => false);
   const [expandedState, setExpandedState] = useState(initialExpandedState());
 
   const handleToggle = (term: string) => {

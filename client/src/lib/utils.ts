@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash';
+import groupBy from 'lodash/groupBy';
 
 import { Instructor, Review } from '../lib/types';
 import { Course } from '../model/course';

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import sum from 'lodash/sum';
 import { Flame, LucideIcon } from 'lucide-react';
 import { ComponentType, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -98,9 +98,9 @@ export const CourseInfoStats = ({
   const lg = useMediaQuery('(min-width: 1024px)');
 
   const ratings = allReviews.map((r) => r.rating);
-  const averageRating = _.sum(ratings) / allReviews.length;
+  const averageRating = sum(ratings) / allReviews.length;
   const difficulties = allReviews.map((r) => r.difficulty);
-  const averageDifficulty = _.sum(difficulties) / allReviews.length;
+  const averageDifficulty = sum(difficulties) / allReviews.length;
 
   return (
     <div
