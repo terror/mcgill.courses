@@ -77,6 +77,7 @@ const scoreCourseMatch = (query: string, course: CourseData) => {
   const normalizedQuery = normalize(query);
   const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
   const queryCompact = compact(query);
+
   const subject = normalize(course.subject);
   const code = normalize(course.code);
   const id = normalize(course._id);
@@ -138,11 +139,8 @@ export const getRankedCourses = (
   query: string,
   courses: CourseData[],
   index: Index
-) => {
-  const ids = index.search(query, { limit: 25 }) ?? [];
-  const uniqueIds = Array.from(new Set(ids));
-
-  return uniqueIds
+) =>
+  Array.from(new Set(index.search(query, { limit: 25 }) ?? []))
     .map((id) => courses[id as number])
     .filter((course): course is CourseData => course !== undefined)
     .map((course) => ({
@@ -157,4 +155,3 @@ export const getRankedCourses = (
       return b.score - a.score;
     })
     .map(({ course }) => course);
-};
