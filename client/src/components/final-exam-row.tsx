@@ -371,6 +371,7 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
               payload={calendarPayload}
               ariaLabel='Add final exam to calendar'
               title={start ? 'Add to calendar' : 'Exam date coming soon'}
+              variant='ghost'
             />
           );
 

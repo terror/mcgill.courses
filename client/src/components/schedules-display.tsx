@@ -19,16 +19,18 @@ import { BuildingLocation } from './building-location';
 import { Tooltip } from './tooltip';
 
 const VSBtimeToDisplay = (time: string) => {
-  const approxTimeOfTheDay = parseInt(time, 10) / 60;
-  const hour = Math.floor(approxTimeOfTheDay);
-  const minute = Math.round((approxTimeOfTheDay - hour) * 60);
+  const totalMinutes = parseInt(time, 10);
 
-  return `${hour.toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-  })}:${minute.toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-  })}
-  `;
+  if (Number.isNaN(totalMinutes)) {
+    return time;
+  }
+
+  const hour = Math.floor(totalMinutes / 60);
+  const minute = totalMinutes % 60;
+
+  return `${hour.toString().padStart(2, '0')}:${minute
+    .toString()
+    .padStart(2, '0')}`;
 };
 
 type ScheduleBlock = Omit<Block, 'timeblocks'> & {
@@ -39,6 +41,29 @@ type RepeatingBlock = {
   days: string[];
   startTime: string;
   endTime: string;
+};
+
+const formatDisplayTime = (time: string) => {
+  const [hourString, minuteString] = time.split(':');
+  const hour = parseInt(hourString, 10);
+  const minute = parseInt(minuteString, 10);
+
+  if (Number.isNaN(hour) || Number.isNaN(minute)) {
+    return time;
+  }
+
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const normalizedHour = hour % 12 || 12;
+  const minutePart =
+    minute === 0 ? '' : `:${minute.toString().padStart(2, '0')}`;
+
+  return `${normalizedHour}${minutePart}${period}`;
+};
+
+const formatTimeRange = (start: string, end: string) => {
+  const startDisplay = formatDisplayTime(start);
+  const endDisplay = formatDisplayTime(end);
+  return `${startDisplay} - ${endDisplay}`;
 };
 
 const DAY_CODE_MAP: Record<string, string> = {
@@ -331,9 +356,7 @@ const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
       </td>
       <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
         {block.timeblocks.map((tb, i) => (
-          <div key={i}>
-            {tb.startTime} - {tb.endTime}
-          </div>
+          <div key={i}>{formatTimeRange(tb.startTime, tb.endTime)}</div>
         ))}
       </td>
       <td className='p-2 xs:pr-0'>
@@ -366,6 +389,7 @@ const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
               : 'Schedule calendar download unavailable'
           }
           className='self-center sm:self-center'
+          variant='ghost'
         />
       </td>
     </tr>
