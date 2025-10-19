@@ -203,7 +203,7 @@ fn parse_exam_schedule(text: &PdfText) -> Result<Vec<CourseExam>> {
 
   let mut lines: Vec<&str> = Vec::new();
 
-  for (_page, page_lines) in &text.text {
+  for (_page, page_lines) in text.text {
     for line in page_lines {
       lines.push(line);
     }
