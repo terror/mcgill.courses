@@ -11,6 +11,7 @@ import { CourseRequirements } from '../components/course-requirements';
 import { CourseReview, ReviewAttachment } from '../components/course-review';
 import { CourseReviewPrompt } from '../components/course-review-prompt';
 import { EditReviewForm } from '../components/edit-review-form';
+import { FinalExamRow } from '../components/final-exam-row';
 import { Layout } from '../components/layout';
 import { NotFound } from '../components/not-found';
 import { ReviewEmptyPrompt } from '../components/review-empty-prompt';
@@ -323,6 +324,7 @@ export const CoursePage = () => {
         <div className='py-2.5' />
         <div className='hidden gap-x-6 lg:grid lg:grid-cols-5'>
           <div className='col-span-3'>
+            <FinalExamRow course={course} className='mb-4' />
             <SchedulesDisplay
               course={course}
               className={canReview ? 'mb-4' : ''}
@@ -431,6 +433,7 @@ export const CoursePage = () => {
               <CourseAverages course={course} averages={courseAverages} />
             )}
           </div>
+          <FinalExamRow course={course} className='mb-4' />
           <SchedulesDisplay course={course} />
           <div className='mt-4 flex w-full flex-row justify-between'>
             <div className='w-full'>
