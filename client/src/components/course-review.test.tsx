@@ -215,9 +215,8 @@ describe('CourseReview', () => {
       expect(writeTextMock).toHaveBeenCalledTimes(1);
     });
 
-    const expectedAnchor = `review-${baseReview.courseId}-${baseReview.userId}-${baseReview.timestamp}`;
     expect(writeTextMock).toHaveBeenCalledWith(
-      expect.stringContaining(`scrollToReview=${expectedAnchor}`)
+      expect.stringContaining(`review=${baseReview.userId}`)
     );
 
     const updatedButton = screen.getByRole('button', {

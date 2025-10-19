@@ -262,10 +262,9 @@ export const CourseReview = ({
       return;
     }
 
-    const anchor = getReviewAnchorId(review);
-
     const link = new URL(window.location.href);
-    link.searchParams.set('scrollToReview', anchor);
+    link.searchParams.delete('scrollToReview');
+    link.searchParams.set('review', review.userId);
 
     const copyPromise = navigator.clipboard.writeText(link.toString());
 

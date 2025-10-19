@@ -199,14 +199,14 @@ export const spliceCourseCode = (
 /**
  * Generates a stable DOM anchor identifier for a review.
  *
- * Combines course, user, and timestamp to uniquely identify the review node.
+ * Uses the author ID, which is unique per course review, to produce repeatable anchors.
  *
  * @param {Pick<Review, 'courseId' | 'userId' | 'timestamp'>} review - Review metadata
  * @returns {string} Anchor-friendly identifier
  */
 export const getReviewAnchorId = (
   review: Pick<Review, 'courseId' | 'userId' | 'timestamp'>
-): string => `review-${review.courseId}-${review.userId}-${review.timestamp}`;
+): string => `review-${review.userId}`;
 
 /**
  * Rounds a number to 2 decimal places.
