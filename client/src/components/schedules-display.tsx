@@ -327,8 +327,10 @@ type ScheduleRowProps = {
 
 const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
   const events = buildScheduleEvents(block, course, term);
+
   const filenameBase =
     sanitizeForFilename(`${course._id}-${block.display}-${term}`) || 'schedule';
+
   const calendarPayload =
     events.length > 0
       ? {
@@ -337,6 +339,7 @@ const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
           prodId: '-//mcgill.courses//Schedule//EN',
         }
       : null;
+
   const hasCalendarData = Boolean(calendarPayload);
 
   return (
@@ -423,8 +426,11 @@ export const SchedulesDisplay = ({
   const [selectedTerm, setSelectedTerm] = useState(
     getDefaultTerm(offeredTerms)
   );
+
   const [showAll, setShowAll] = useState(false);
+
   const scheduleByTerm = useMemo(() => getSections(schedules), [course]);
+
   const [blocks, setBlocks] = useState(
     selectedTerm ? scheduleByTerm[selectedTerm] : undefined
   );
