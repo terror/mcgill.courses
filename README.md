@@ -1,5 +1,10 @@
 ## mcgill.courses <a><img src="https://github.com/user-attachments/assets/3d835599-381c-4d82-8e71-4d80be190909" height="40" valign="top" /></a>
 
+[![CI](https://github.com/terror/mcgill.courses/actions/workflows/ci.yaml/badge.svg)](https://github.com/terror/mcgill.courses/actions/workflows/ci.yaml)
+[![codecov](https://img.shields.io/codecov/c/github/terror/mcgill.courses)](https://app.codecov.io/gh/terror/mcgill.courses)
+[![discord](https://img.shields.io/badge/discord-%235865F2.svg?logo=discord&logoColor=white)](https://discord.gg/KcYbwyupmJ)
+[![website](https://img.shields.io/website?url=https%3A%2F%2Fmcgill.courses)](https://mcgill.courses/)
+
 A course search and review platform for McGill university.
 
 ![](https://github.com/user-attachments/assets/8807c010-6d85-4b3a-9199-4cc101417519)
