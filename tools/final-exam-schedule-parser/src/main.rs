@@ -61,6 +61,7 @@ struct CourseExam {
 #[derive(Debug, Serialize, Deserialize)]
 struct Term {
   term: String,
+  url: String,
   exams: Vec<CourseExam>,
 }
 
@@ -79,6 +80,9 @@ struct Arguments {
   /// Path to output JSON file.
   #[clap(short, long, default_value = "client/src/assets/final-exams.json")]
   output: PathBuf,
+  /// URL of the source PDF file.
+  #[clap(short, long)]
+  url: String,
 }
 
 impl Arguments {
@@ -98,8 +102,9 @@ impl Arguments {
       existing_term.exams = parsed_exams;
     } else {
       terms.push(Term {
-        term: self.term.clone(),
         exams: parsed_exams,
+        term: self.term.clone(),
+        url: self.url.clone(),
       });
     }
 

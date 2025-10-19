@@ -1,3 +1,4 @@
+import { Dot } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 import finalExamsData from '../assets/final-exams.json';
@@ -18,7 +19,16 @@ type RawFinalExam = {
 
 type FinalExamTerm = {
   term: string;
+  url?: string | null;
   exams: RawFinalExam[];
+};
+
+type GroupedExam = {
+  key: string;
+  start_time?: string | null;
+  end_time?: string | null;
+  exam: RawFinalExam['exam'];
+  sections: string[];
 };
 
 const finalExams = finalExamsData as FinalExamTerm[];
@@ -27,6 +37,7 @@ const parseDate = (value?: string | null) => {
   if (!value) return null;
 
   const date = new Date(value);
+
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
@@ -74,6 +85,7 @@ const formatTimeLabel = (start: Date | null, end: Date | null) => {
 
 const sortExams = (exams: RawFinalExam[]): RawFinalExam[] => {
   const toSortable = (value?: string | null) => value ?? '';
+
   const compareSections = (a?: string, b?: string) =>
     toSortable(a).localeCompare(toSortable(b), undefined, {
       numeric: true,
@@ -97,6 +109,88 @@ const sortExams = (exams: RawFinalExam[]): RawFinalExam[] => {
   });
 };
 
+const groupExams = (exams: RawFinalExam[]): GroupedExam[] => {
+  const sectionComparator = (a: string, b: string) =>
+    a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
+  const grouped: {
+    key: string;
+    start_time?: string | null;
+    end_time?: string | null;
+    exam: RawFinalExam['exam'];
+    sections: Set<string>;
+  }[] = [];
+
+  const indexByKey = new Map<string, number>();
+
+  exams.forEach((exam) => {
+    const groupKey = [
+      exam.id,
+      exam.start_time ?? '',
+      exam.end_time ?? '',
+      exam.exam.location ?? '',
+      exam.exam.type ?? '',
+      exam.exam.format ?? '',
+    ].join('|');
+
+    const existingIndex = indexByKey.get(groupKey);
+    const section = exam.section?.trim();
+
+    if (existingIndex !== undefined) {
+      if (section) {
+        grouped[existingIndex].sections.add(section);
+      }
+
+      return;
+    }
+
+    const sections = new Set<string>();
+
+    if (section) {
+      sections.add(section);
+    }
+
+    grouped.push({
+      key: groupKey,
+      start_time: exam.start_time,
+      end_time: exam.end_time,
+      exam: exam.exam,
+      sections,
+    });
+
+    indexByKey.set(groupKey, grouped.length - 1);
+  });
+
+  return grouped.map((entry) => ({
+    key: entry.key,
+    start_time: entry.start_time,
+    end_time: entry.end_time,
+    exam: entry.exam,
+    sections: Array.from(entry.sections).sort(sectionComparator),
+  }));
+};
+
+const renderDetailLine = (
+  parts: string[],
+  keyPrefix: string,
+  className?: string
+) => {
+  if (parts.length === 0) return null;
+
+  return (
+    <div className={twMerge('flex flex-wrap items-center', className)}>
+      {parts.map((part, index) => (
+        <span key={`${keyPrefix}-${index}`} className='flex items-center'>
+          {index > 0 && (
+            <Dot className='h-6 w-6 flex-shrink-0 text-gray-400 dark:text-gray-500' />
+          )}
+          <span>{part}</span>
+        </span>
+      ))}
+    </div>
+  );
+};
+
 type FinalExamRowProps = {
   course: Course;
   className?: string;
@@ -104,23 +198,46 @@ type FinalExamRowProps = {
 
 export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
   const currentTerm = getCurrentTerm();
+
   const termEntry = finalExams.find((entry) => entry.term === currentTerm);
 
-  if (!termEntry) return null;
+  if (!termEntry) {
+    return null;
+  }
 
   const courseExams = termEntry.exams.filter((exam) => exam.id === course._id);
 
-  if (courseExams.length === 0) return null;
+  if (courseExams.length === 0) {
+    return null;
+  }
 
   const exams = sortExams(courseExams);
+
   const sectionCount = courseExams.reduce((acc, exam) => {
     if (exam.section) acc.add(exam.section);
     return acc;
   }, new Set<string>()).size;
+
+  const groupedExams = groupExams(exams);
+
   const headerDetail =
     sectionCount > 0
       ? `${sectionCount} ${sectionCount === 1 ? 'section' : 'sections'} scheduled`
       : 'Schedule published';
+
+  const highlightTarget =
+    [course.subject, course.code].filter(Boolean).join(' ') ||
+    course._id ||
+    course.title;
+
+  const encodedHighlight = encodeURIComponent(highlightTarget);
+
+  const examScheduleUrl = termEntry.url
+    ? `${termEntry.url}#:~:text=${encodedHighlight}`
+    : undefined;
+
+  const baseRowClassName =
+    'flex flex-col gap-3 rounded-md border border-slate-200/70 bg-white/70 p-3 text-sm text-gray-700 dark:border-neutral-700 dark:bg-neutral-900/60 dark:text-gray-200 sm:flex-row sm:items-start sm:gap-6';
 
   return (
     <div
@@ -144,39 +261,78 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
       </div>
 
       <div className='mt-3 flex flex-col gap-3'>
-        {exams.map((exam) => {
+        {groupedExams.map((exam) => {
           const start = parseDate(exam.start_time);
           const end = parseDate(exam.end_time);
-          const detailParts = [
-            exam.section ? `Section ${exam.section}` : null,
+
+          const sectionLabel =
+            exam.sections.length === 0
+              ? null
+              : `${exam.sections.length === 1 ? 'Section' : 'Sections'} ${exam.sections.join(', ')}`;
+
+          const topLineParts = [sectionLabel].filter(Boolean) as string[];
+
+          const bottomLineParts = [
             exam.exam.location ?? null,
             exam.exam.type ?? null,
             exam.exam.format ?? null,
           ].filter(Boolean) as string[];
 
+          const key = exam.key;
+
+          const dateLabel = formatDateLabel(start);
+          const timeLabel = formatTimeLabel(start, end);
+
+          const topLine = renderDetailLine(
+            topLineParts,
+            `${key}-top`,
+            'text-sm text-gray-600 dark:text-gray-300 sm:col-start-2 sm:row-start-1'
+          );
+          const bottomLine = renderDetailLine(
+            bottomLineParts,
+            `${key}-bottom`,
+            'text-sm text-gray-600 dark:text-gray-300 sm:col-start-2 sm:row-start-2'
+          );
+
+          const content = (
+            <div className='grid w-full gap-x-6 gap-y-1 sm:grid-cols-[auto_minmax(0,1fr)]'>
+              <span className='text-sm font-medium text-gray-900 dark:text-gray-100 sm:col-start-1 sm:row-start-1'>
+                {dateLabel}
+              </span>
+              {topLine}
+              <span className='text-sm text-gray-600 dark:text-gray-300 sm:col-start-1 sm:row-start-2'>
+                {timeLabel}
+              </span>
+              {bottomLine}
+            </div>
+          );
+
+          if (examScheduleUrl) {
+            return (
+              <a
+                key={key}
+                href={examScheduleUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={twMerge(
+                  baseRowClassName,
+                  'transition-colors hover:border-slate-300 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 dark:hover:border-neutral-600 dark:hover:bg-neutral-900'
+                )}
+              >
+                {content}
+              </a>
+            );
+          }
+
           return (
             <div
-              key={[
-                exam.id,
-                exam.section ?? '',
-                exam.start_time ?? '',
-                exam.end_time ?? '',
-              ].join('|')}
-              className='flex flex-col gap-3 rounded-md border border-slate-200/70 bg-white/70 p-3 text-sm text-gray-700 dark:border-neutral-700 dark:bg-neutral-900/60 dark:text-gray-200 sm:flex-row sm:items-center sm:justify-between'
-            >
-              <div>
-                <p className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                  {formatDateLabel(start)}
-                </p>
-                <p className='text-sm text-gray-600 dark:text-gray-300'>
-                  {formatTimeLabel(start, end)}
-                </p>
-              </div>
-              {detailParts.length > 0 && (
-                <p className='text-sm text-gray-600 dark:text-gray-300'>
-                  {detailParts.join(' • ')}
-                </p>
+              key={key}
+              className={twMerge(
+                baseRowClassName,
+                'focus-visible:outline-none'
               )}
+            >
+              {content}
             </div>
           );
         })}
