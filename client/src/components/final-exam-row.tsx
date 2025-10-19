@@ -184,7 +184,7 @@ const renderDetailLine = (
       {parts.map((part, index) => (
         <span key={`${keyPrefix}-${index}`} className='flex items-center'>
           {index > 0 && (
-            <Dot className='h-6 w-6 flex-shrink-0 text-gray-400 dark:text-gray-500' />
+            <Dot className='h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-500' />
           )}
           <span>{part}</span>
         </span>
@@ -237,9 +237,6 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
   const examScheduleUrl = termEntry.url
     ? `${termEntry.url}#:~:text=${encodedHighlight}`
     : undefined;
-
-  const baseRowClassName =
-    'flex flex-col gap-3 rounded-md border border-slate-200/70 bg-white/70 p-3 text-sm text-gray-700 dark:border-neutral-700 dark:bg-neutral-900/60 dark:text-gray-200 sm:flex-row sm:items-start sm:gap-6';
 
   return (
     <div
@@ -376,8 +373,8 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
           );
 
           const infoContent = (
-            <div className='grid w-full gap-x-6 gap-y-1 sm:grid-cols-[auto_minmax(0,1fr)]'>
-              <span className='text-sm font-medium text-gray-900 dark:text-gray-100 sm:col-start-1 sm:row-start-1'>
+            <div className='relative grid w-full gap-x-6 gap-y-1 sm:grid-cols-[auto_minmax(0,1fr)]'>
+              <span className='flex items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100 sm:col-start-1 sm:row-start-1'>
                 {dateLabel}
               </span>
               {topLine}
@@ -385,37 +382,39 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
                 {timeLabel}
               </span>
               {bottomLine}
+
+              <div className='absolute right-[-6px] top-[-4px] sm:hidden lg:block xl:hidden'>
+                {addToCalendarButton}
+              </div>
             </div>
           );
 
-          const linkedInfoContent = examScheduleUrl ? (
-            <a
-              href={examScheduleUrl}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='block w-full focus-visible:outline-none'
-            >
-              {infoContent}
-            </a>
-          ) : (
-            infoContent
-          );
-
-          const containerClasses = twMerge(
-            baseRowClassName,
-            examScheduleUrl
-              ? 'transition-colors hover:border-slate-300 hover:bg-white dark:hover:border-neutral-600 dark:hover:bg-neutral-900'
-              : ''
-          );
-
-          const rowLayoutClasses =
-            'flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6';
-
           return (
-            <div key={key} className={containerClasses}>
-              <div className={rowLayoutClasses}>
-                <div className='w-full'>{linkedInfoContent}</div>
-                <div className='flex shrink-0 items-center sm:self-center'>
+            <div
+              key={key}
+              className={twMerge(
+                'flex flex-col gap-3 rounded-md border border-slate-200/70 bg-white/70 p-3 text-sm text-gray-700 dark:border-neutral-700 dark:bg-neutral-900/60 dark:text-gray-200 sm:flex-row sm:items-start sm:gap-6',
+                examScheduleUrl
+                  ? 'transition-colors hover:border-slate-300 hover:bg-white dark:hover:border-neutral-600 dark:hover:bg-neutral-900'
+                  : ''
+              )}
+            >
+              <div className='flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6'>
+                <div className='flex w-full sm:block'>
+                  {examScheduleUrl ? (
+                    <a
+                      href={examScheduleUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='block w-full focus-visible:outline-none'
+                    >
+                      {infoContent}
+                    </a>
+                  ) : (
+                    infoContent
+                  )}
+                </div>
+                <div className='hidden shrink-0 items-center sm:flex sm:self-center lg:hidden xl:flex'>
                   {addToCalendarButton}
                 </div>
               </div>
