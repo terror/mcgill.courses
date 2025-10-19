@@ -10,9 +10,11 @@ import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/building-codes.json';
 import * as buildingCoordinates from '../assets/building-coordinates.json';
+import { type IcsEventOptions, sanitizeForFilename } from '../lib/calendar';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/course';
 import type { Block, Schedule } from '../model/schedule';
+import { AddToCalendarButton } from './add-to-calendar-button';
 import { BuildingLocation } from './building-location';
 import { Tooltip } from './tooltip';
 
@@ -37,6 +39,160 @@ type RepeatingBlock = {
   days: string[];
   startTime: string;
   endTime: string;
+};
+
+const DAY_CODE_MAP: Record<string, string> = {
+  '1': 'SU',
+  '2': 'MO',
+  '3': 'TU',
+  '4': 'WE',
+  '5': 'TH',
+  '6': 'FR',
+  '7': 'SA',
+};
+
+const DAY_ORDER = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+
+const DEFAULT_MEETING_COUNT = 13;
+
+const TERM_START_CONFIG = {
+  Winter: { startMonth: 1, offsetDays: 6 },
+  Summer: { startMonth: 5, offsetDays: 6 },
+  Fall: { startMonth: 9, offsetDays: 6 },
+} as const;
+
+type TermSeason = keyof typeof TERM_START_CONFIG;
+
+const parseTermSeason = (
+  term: string
+): { season: TermSeason; year: number } | null => {
+  const match = term.match(/^(Winter|Summer|Fall)\s+(\d{4})$/);
+  if (!match) return null;
+
+  const [, season, year] = match;
+
+  return { season: season as TermSeason, year: parseInt(year, 10) };
+};
+
+const vsbDayToJsDay = (day: string): number | null => {
+  const parsed = parseInt(day, 10);
+  if (Number.isNaN(parsed)) return null;
+  const jsDay = parsed - 1;
+
+  if (jsDay < 0 || jsDay > 6) return null;
+
+  return jsDay;
+};
+
+const getFirstOccurrenceForTermDay = (
+  term: string,
+  day: string
+): Date | null => {
+  const termInfo = parseTermSeason(term);
+  const jsDay = vsbDayToJsDay(day);
+
+  if (!termInfo || jsDay === null) return null;
+
+  const { season, year } = termInfo;
+  const { startMonth, offsetDays } = TERM_START_CONFIG[season];
+
+  const anchor = new Date(year, startMonth - 1, 1);
+  anchor.setDate(anchor.getDate() + offsetDays);
+
+  const occurrence = new Date(anchor);
+  const diff = (jsDay - occurrence.getDay() + 7) % 7;
+  occurrence.setDate(occurrence.getDate() + diff);
+
+  return occurrence;
+};
+
+const parseTimeString = (
+  value: string
+): { hour: number; minute: number } | null => {
+  const trimmed = value.trim();
+  const [hourString, minuteString] = trimmed.split(':');
+
+  const hour = parseInt(hourString, 10);
+  const minute = parseInt(minuteString, 10);
+
+  if (Number.isNaN(hour) || Number.isNaN(minute)) {
+    return null;
+  }
+
+  return { hour, minute };
+};
+
+const buildScheduleEvents = (
+  block: ScheduleBlock,
+  course: Course,
+  term: string
+): IcsEventOptions[] => {
+  const courseUrl = `https://mcgill.courses/${course._id}`;
+  const summary = `${course._id} ${block.display}`.trim();
+  const descriptionParts = [
+    course.title,
+    `Section: ${block.display}`,
+    `Term: ${term}`,
+    block.campus ? `Campus: ${block.campus}` : null,
+  ].filter((part): part is string => Boolean(part));
+
+  const location = block.location.split(';')[0]?.trim() ?? block.location;
+
+  const events: IcsEventOptions[] = [];
+
+  block.timeblocks.forEach((tb, index) => {
+    if (!tb.startTime || !tb.endTime || tb.days.length === 0) return;
+
+    const sortedDays = [...tb.days].sort(
+      (a, b) => parseInt(a, 10) - parseInt(b, 10)
+    );
+    const firstDay = sortedDays[0];
+    const occurrence = getFirstOccurrenceForTermDay(term, firstDay);
+
+    const startTime = parseTimeString(tb.startTime);
+    const endTime = parseTimeString(tb.endTime);
+
+    if (!occurrence || !startTime || !endTime) return;
+
+    const eventStart = new Date(occurrence);
+    eventStart.setHours(startTime.hour, startTime.minute, 0, 0);
+
+    const eventEnd = new Date(occurrence);
+    eventEnd.setHours(endTime.hour, endTime.minute, 0, 0);
+
+    const byDay = sortedDays
+      .map((day) => DAY_CODE_MAP[day])
+      .filter((code): code is string => Boolean(code))
+      .sort((a, b) => DAY_ORDER.indexOf(a) - DAY_ORDER.indexOf(b))
+      .join(',');
+
+    const rruleParts = [
+      'FREQ=WEEKLY',
+      'INTERVAL=1',
+      `COUNT=${DEFAULT_MEETING_COUNT}`,
+    ];
+    if (byDay) {
+      rruleParts.push(`BYDAY=${byDay}`);
+    }
+
+    const uidBase = sanitizeForFilename(
+      `${course._id}-${block.display}-${term}-${tb.startTime}-${tb.endTime}-${index}`
+    );
+    const uid = `${(uidBase || 'schedule').slice(0, 64)}@mcgill.courses`;
+
+    events.push({
+      start: eventStart,
+      end: eventEnd,
+      summary,
+      description: descriptionParts.join('\n'),
+      location,
+      url: courseUrl,
+      uid,
+      rrule: rruleParts.join(';'),
+    });
+  });
+
+  return events;
 };
 
 const getSections = (
@@ -140,9 +296,24 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
 
 type ScheduleRowProps = {
   block: ScheduleBlock;
+  course: Course;
+  term: string;
 };
 
-const ScheduleRow = ({ block }: ScheduleRowProps) => {
+const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
+  const events = buildScheduleEvents(block, course, term);
+  const filenameBase =
+    sanitizeForFilename(`${course._id}-${block.display}-${term}`) || 'schedule';
+  const calendarPayload =
+    events.length > 0
+      ? {
+          filename: `${filenameBase}.ics`,
+          events,
+          prodId: '-//mcgill.courses//Schedule//EN',
+        }
+      : null;
+  const hasCalendarData = Boolean(calendarPayload);
+
   return (
     <tr className='p-2 text-left even:bg-slate-100 even:dark:bg-[rgb(48,48,48)]'>
       <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
@@ -185,6 +356,18 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
           CRN: {block.crn}
         </td>
       )}
+      <td className='whitespace-nowrap px-2 align-middle'>
+        <AddToCalendarButton
+          payload={calendarPayload}
+          ariaLabel={`Add ${block.display} schedule to calendar`}
+          title={
+            hasCalendarData
+              ? 'Add section to calendar'
+              : 'Schedule calendar download unavailable'
+          }
+          className='self-center sm:self-center'
+        />
+      </td>
     </tr>
   );
 };
@@ -266,10 +449,24 @@ export const SchedulesDisplay = ({
         <table>
           <tbody>
             {blocks.length <= 5 || showAll
-              ? blocks.map((s, i) => <ScheduleRow key={i} block={s} />)
+              ? blocks.map((s, i) => (
+                  <ScheduleRow
+                    key={i}
+                    block={s}
+                    course={course}
+                    term={selectedTerm}
+                  />
+                ))
               : blocks
                   .slice(0, 5)
-                  .map((s, i) => <ScheduleRow key={i} block={s} />)}
+                  .map((s, i) => (
+                    <ScheduleRow
+                      key={i}
+                      block={s}
+                      course={course}
+                      term={selectedTerm}
+                    />
+                  ))}
           </tbody>
         </table>
         {blocks.length > 5 && (
