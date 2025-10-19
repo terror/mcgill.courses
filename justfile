@@ -73,7 +73,7 @@ lint *args:
   pnpm run lint {{args}}
 
 load *args:
-  cargo run --manifest-path tools/scraper/Cargo.toml -- --source=seed \
+  cargo run --manifest-path tools/scraper/Cargo.toml -- \
     --batch-size=5 \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
     --course-delay 1000 \
