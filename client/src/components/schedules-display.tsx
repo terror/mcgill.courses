@@ -185,19 +185,21 @@ const buildScheduleEvents = (
     const eventEnd = new Date(occurrence);
     eventEnd.setHours(endTime.hour, endTime.minute, 0, 0);
 
-    const byDay = sortedDays
+    const byDayCodes = sortedDays
       .map((day) => DAY_CODE_MAP[day])
-      .filter((code): code is string => Boolean(code))
-      .sort((a, b) => DAY_ORDER.indexOf(a) - DAY_ORDER.indexOf(b))
-      .join(',');
+      .filter((code): code is string => Boolean(code));
+    const uniqueByDayCodes = Array.from(new Set(byDayCodes)).sort(
+      (a, b) => DAY_ORDER.indexOf(a) - DAY_ORDER.indexOf(b)
+    );
+    const occurrencesPerWeek = Math.max(1, uniqueByDayCodes.length);
 
     const rruleParts = [
       'FREQ=WEEKLY',
       'INTERVAL=1',
-      `COUNT=${DEFAULT_MEETING_COUNT}`,
+      `COUNT=${DEFAULT_MEETING_COUNT * occurrencesPerWeek}`,
     ];
-    if (byDay) {
-      rruleParts.push(`BYDAY=${byDay}`);
+    if (uniqueByDayCodes.length > 0) {
+      rruleParts.push(`BYDAY=${uniqueByDayCodes.join(',')}`);
     }
 
     const uidBase = sanitizeForFilename(
