@@ -1,9 +1,11 @@
-import { CalendarPlus, Dot } from 'lucide-react';
+import { Dot } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 import finalExamsData from '../assets/final-exams.json';
+import { sanitizeForFilename } from '../lib/calendar';
 import { getCurrentTerm } from '../lib/utils';
 import type { Course } from '../model/course';
+import { AddToCalendarButton } from './add-to-calendar-button';
 
 type RawFinalExam = {
   id: string;
@@ -32,114 +34,6 @@ type GroupedExam = {
 };
 
 const finalExams = finalExamsData as FinalExamTerm[];
-
-const ICS_TIMEZONE = 'America/Toronto';
-
-const padNumber = (value: number) => value.toString().padStart(2, '0');
-
-const formatIcsDateTime = (date: Date) =>
-  [
-    date.getFullYear(),
-    padNumber(date.getMonth() + 1),
-    padNumber(date.getDate()),
-    'T',
-    padNumber(date.getHours()),
-    padNumber(date.getMinutes()),
-    padNumber(date.getSeconds()),
-  ].join('');
-
-const formatIcsDateTimeUTC = (date: Date) =>
-  [
-    date.getUTCFullYear(),
-    padNumber(date.getUTCMonth() + 1),
-    padNumber(date.getUTCDate()),
-    'T',
-    padNumber(date.getUTCHours()),
-    padNumber(date.getUTCMinutes()),
-    padNumber(date.getUTCSeconds()),
-    'Z',
-  ].join('');
-
-const escapeIcsText = (value: string) =>
-  value
-    .replace(/\\/g, '\\\\')
-    .replace(/;/g, '\\;')
-    .replace(/,/g, '\\,')
-    .replace(/\r?\n/g, '\\n');
-
-type IcsEventOptions = {
-  start: Date;
-  end?: Date | null;
-  summary: string;
-  description?: string;
-  location?: string | null;
-  url?: string | null;
-  uid: string;
-};
-
-const buildIcsContent = ({
-  start,
-  end,
-  summary,
-  description,
-  location,
-  url,
-  uid,
-}: IcsEventOptions) => {
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//mcgill.courses//FinalExam//EN',
-    'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
-    `UID:${uid}`,
-    `DTSTAMP:${formatIcsDateTimeUTC(new Date())}`,
-    `DTSTART;TZID=${ICS_TIMEZONE}:${formatIcsDateTime(start)}`,
-  ];
-
-  if (end) {
-    lines.push(`DTEND;TZID=${ICS_TIMEZONE}:${formatIcsDateTime(end)}`);
-  }
-
-  lines.push(`SUMMARY:${escapeIcsText(summary)}`);
-
-  if (description) {
-    lines.push(`DESCRIPTION:${escapeIcsText(description)}`);
-  }
-
-  if (location) {
-    lines.push(`LOCATION:${escapeIcsText(location)}`);
-  }
-
-  if (url) {
-    lines.push(`URL:${escapeIcsText(url)}`);
-  }
-
-  lines.push('END:VEVENT', 'END:VCALENDAR');
-
-  return lines.join('\r\n');
-};
-
-const downloadIcsFile = (filename: string, content: string) => {
-  if (typeof window === 'undefined') return;
-
-  const blob = new Blob([content], { type: 'text/calendar' });
-  const downloadUrl = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = downloadUrl;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(downloadUrl);
-};
-
-const sanitizeForFilename = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
 
 const parseDate = (value?: string | null) => {
   if (!value) return null;
@@ -454,33 +348,31 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
             'final-exam'
           ).slice(0, 64)}@mcgill.courses`;
 
-          const handleAddToCalendar = () => {
-            if (!start) return;
-
-            const icsContent = buildIcsContent({
-              start,
-              end,
-              summary: summaryTitle,
-              description,
-              location: exam.exam.location,
-              url: examScheduleUrl,
-              uid,
-            });
-
-            downloadIcsFile(filename, icsContent);
-          };
+          const calendarPayload = start
+            ? {
+                filename,
+                events: [
+                  {
+                    start,
+                    end,
+                    summary: summaryTitle,
+                    description,
+                    location: exam.exam.location,
+                    url: examScheduleUrl,
+                    uid,
+                  },
+                ],
+                prodId: '-//mcgill.courses//FinalExam//EN',
+              }
+            : null;
 
           const addToCalendarButton = (
-            <button
-              type='button'
-              onClick={handleAddToCalendar}
-              disabled={!start}
-              className='inline-flex items-center gap-1.5 self-start rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-950 dark:text-gray-200 dark:hover:bg-neutral-900 sm:flex-none sm:self-start'
-              aria-label='Add final exam to calendar'
+            <AddToCalendarButton
+              payload={calendarPayload}
+              ariaLabel='Add final exam to calendar'
               title={start ? 'Add to calendar' : 'Exam date coming soon'}
-            >
-              <CalendarPlus className='size-4' aria-hidden='true' />
-            </button>
+              variant='ghost'
+            />
           );
 
           const infoContent = (

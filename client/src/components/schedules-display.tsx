@@ -10,23 +10,27 @@ import { twMerge } from 'tailwind-merge';
 
 import * as buildingCodes from '../assets/building-codes.json';
 import * as buildingCoordinates from '../assets/building-coordinates.json';
+import { type IcsEventOptions, sanitizeForFilename } from '../lib/calendar';
 import { getCurrentTerm, sortTerms } from '../lib/utils';
 import type { Course } from '../model/course';
 import type { Block, Schedule } from '../model/schedule';
+import { AddToCalendarButton } from './add-to-calendar-button';
 import { BuildingLocation } from './building-location';
 import { Tooltip } from './tooltip';
 
 const VSBtimeToDisplay = (time: string) => {
-  const approxTimeOfTheDay = parseInt(time, 10) / 60;
-  const hour = Math.floor(approxTimeOfTheDay);
-  const minute = Math.round((approxTimeOfTheDay - hour) * 60);
+  const totalMinutes = parseInt(time, 10);
 
-  return `${hour.toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-  })}:${minute.toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-  })}
-  `;
+  if (Number.isNaN(totalMinutes)) {
+    return time;
+  }
+
+  const hour = Math.floor(totalMinutes / 60);
+  const minute = totalMinutes % 60;
+
+  return `${hour.toString().padStart(2, '0')}:${minute
+    .toString()
+    .padStart(2, '0')}`;
 };
 
 type ScheduleBlock = Omit<Block, 'timeblocks'> & {
@@ -37,6 +41,185 @@ type RepeatingBlock = {
   days: string[];
   startTime: string;
   endTime: string;
+};
+
+const formatDisplayTime = (time: string) => {
+  const [hourString, minuteString] = time.split(':');
+  const hour = parseInt(hourString, 10);
+  const minute = parseInt(minuteString, 10);
+
+  if (Number.isNaN(hour) || Number.isNaN(minute)) {
+    return time;
+  }
+
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const normalizedHour = hour % 12 || 12;
+  const minutePart =
+    minute === 0 ? '' : `:${minute.toString().padStart(2, '0')}`;
+
+  return `${normalizedHour}${minutePart}${period}`;
+};
+
+const formatTimeRange = (start: string, end: string) => {
+  const startDisplay = formatDisplayTime(start);
+  const endDisplay = formatDisplayTime(end);
+  return `${startDisplay} - ${endDisplay}`;
+};
+
+const DAY_CODE_MAP: Record<string, string> = {
+  '1': 'SU',
+  '2': 'MO',
+  '3': 'TU',
+  '4': 'WE',
+  '5': 'TH',
+  '6': 'FR',
+  '7': 'SA',
+};
+
+const DAY_ORDER = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+
+const DEFAULT_MEETING_COUNT = 13;
+
+const TERM_START_CONFIG = {
+  Winter: { startMonth: 1, offsetDays: 6 },
+  Summer: { startMonth: 5, offsetDays: 6 },
+  Fall: { startMonth: 9, offsetDays: 6 },
+} as const;
+
+type TermSeason = keyof typeof TERM_START_CONFIG;
+
+const parseTermSeason = (
+  term: string
+): { season: TermSeason; year: number } | null => {
+  const match = term.match(/^(Winter|Summer|Fall)\s+(\d{4})$/);
+  if (!match) return null;
+
+  const [, season, year] = match;
+
+  return { season: season as TermSeason, year: parseInt(year, 10) };
+};
+
+const vsbDayToJsDay = (day: string): number | null => {
+  const parsed = parseInt(day, 10);
+  if (Number.isNaN(parsed)) return null;
+  const jsDay = parsed - 1;
+
+  if (jsDay < 0 || jsDay > 6) return null;
+
+  return jsDay;
+};
+
+const getFirstOccurrenceForTermDay = (
+  term: string,
+  day: string
+): Date | null => {
+  const termInfo = parseTermSeason(term);
+  const jsDay = vsbDayToJsDay(day);
+
+  if (!termInfo || jsDay === null) return null;
+
+  const { season, year } = termInfo;
+  const { startMonth, offsetDays } = TERM_START_CONFIG[season];
+
+  const anchor = new Date(year, startMonth - 1, 1);
+  anchor.setDate(anchor.getDate() + offsetDays);
+
+  const occurrence = new Date(anchor);
+  const diff = (jsDay - occurrence.getDay() + 7) % 7;
+  occurrence.setDate(occurrence.getDate() + diff);
+
+  return occurrence;
+};
+
+const parseTimeString = (
+  value: string
+): { hour: number; minute: number } | null => {
+  const trimmed = value.trim();
+  const [hourString, minuteString] = trimmed.split(':');
+
+  const hour = parseInt(hourString, 10);
+  const minute = parseInt(minuteString, 10);
+
+  if (Number.isNaN(hour) || Number.isNaN(minute)) {
+    return null;
+  }
+
+  return { hour, minute };
+};
+
+const buildScheduleEvents = (
+  block: ScheduleBlock,
+  course: Course,
+  term: string
+): IcsEventOptions[] => {
+  const courseUrl = `https://mcgill.courses/${course._id}`;
+  const summary = `${course._id} ${block.display}`.trim();
+  const descriptionParts = [
+    course.title,
+    `Section: ${block.display}`,
+    `Term: ${term}`,
+    block.campus ? `Campus: ${block.campus}` : null,
+  ].filter((part): part is string => Boolean(part));
+
+  const location = block.location.split(';')[0]?.trim() ?? block.location;
+
+  const events: IcsEventOptions[] = [];
+
+  block.timeblocks.forEach((tb, index) => {
+    if (!tb.startTime || !tb.endTime || tb.days.length === 0) return;
+
+    const sortedDays = [...tb.days].sort(
+      (a, b) => parseInt(a, 10) - parseInt(b, 10)
+    );
+    const firstDay = sortedDays[0];
+    const occurrence = getFirstOccurrenceForTermDay(term, firstDay);
+
+    const startTime = parseTimeString(tb.startTime);
+    const endTime = parseTimeString(tb.endTime);
+
+    if (!occurrence || !startTime || !endTime) return;
+
+    const eventStart = new Date(occurrence);
+    eventStart.setHours(startTime.hour, startTime.minute, 0, 0);
+
+    const eventEnd = new Date(occurrence);
+    eventEnd.setHours(endTime.hour, endTime.minute, 0, 0);
+
+    const byDayCodes = sortedDays
+      .map((day) => DAY_CODE_MAP[day])
+      .filter((code): code is string => Boolean(code));
+    const uniqueByDayCodes = Array.from(new Set(byDayCodes)).sort(
+      (a, b) => DAY_ORDER.indexOf(a) - DAY_ORDER.indexOf(b)
+    );
+    const occurrencesPerWeek = Math.max(1, uniqueByDayCodes.length);
+
+    const rruleParts = [
+      'FREQ=WEEKLY',
+      'INTERVAL=1',
+      `COUNT=${DEFAULT_MEETING_COUNT * occurrencesPerWeek}`,
+    ];
+    if (uniqueByDayCodes.length > 0) {
+      rruleParts.push(`BYDAY=${uniqueByDayCodes.join(',')}`);
+    }
+
+    const uidBase = sanitizeForFilename(
+      `${course._id}-${block.display}-${term}-${tb.startTime}-${tb.endTime}-${index}`
+    );
+    const uid = `${(uidBase || 'schedule').slice(0, 64)}@mcgill.courses`;
+
+    events.push({
+      start: eventStart,
+      end: eventEnd,
+      summary,
+      description: descriptionParts.join('\n'),
+      location,
+      url: courseUrl,
+      uid,
+      rrule: rruleParts.join(';'),
+    });
+  });
+
+  return events;
 };
 
 const getSections = (
@@ -140,9 +323,53 @@ const TimeblockDays = ({ days }: TimeblockDaysProps) => {
 
 type ScheduleRowProps = {
   block: ScheduleBlock;
+  course: Course;
+  term: string;
 };
 
-const ScheduleRow = ({ block }: ScheduleRowProps) => {
+const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
+  const events = buildScheduleEvents(block, course, term);
+
+  const filenameBase =
+    sanitizeForFilename(`${course._id}-${block.display}-${term}`) || 'schedule';
+
+  const calendarPayload =
+    events.length > 0
+      ? {
+          filename: `${filenameBase}.ics`,
+          events,
+          prodId: '-//mcgill.courses//Schedule//EN',
+        }
+      : null;
+
+  const hasCalendarData = Boolean(calendarPayload);
+
+  const locationEntries = block.location
+    .split(';')
+    .map((location) => location.trim())
+    .filter((location) => location.length > 0);
+
+  const timeRanges = block.timeblocks
+    .filter((tb) => Boolean(tb.startTime) && Boolean(tb.endTime))
+    .map((tb) => formatTimeRange(tb.startTime, tb.endTime));
+
+  const daySets = block.timeblocks
+    .map((tb) =>
+      tb.days.filter((day) => typeof day === 'string' && day.trim().length > 0)
+    )
+    .filter((days) => days.length > 0);
+
+  const handleCopyCrn = () => {
+    if (!block.crn) return;
+
+    toast.promise(navigator.clipboard.writeText(block.crn), {
+      success: `Copied CRN for ${block.display} to clipboard.`,
+      loading: undefined,
+      error:
+        'Something went wrong when trying to copy section CRN, please try again!',
+    });
+  };
+
   return (
     <tr className='p-2 text-left even:bg-slate-100 even:dark:bg-[rgb(48,48,48)]'>
       <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
@@ -150,41 +377,72 @@ const ScheduleRow = ({ block }: ScheduleRowProps) => {
       </td>
       <td className='py-2 text-gray-700 dark:text-gray-300'>
         <div className='flex flex-col items-start pl-1 text-center font-medium'>
-          {((split) =>
-            split.map((location: string, index) => (
-              <span key={index}>
-                <BlockLocation location={location.trim()} />
+          {locationEntries.length > 0 ? (
+            locationEntries.map((location, index) => (
+              <span key={`${location}-${index}`}>
+                <BlockLocation location={location} />
               </span>
-            )))(block.location.split(';'))}
+            ))
+          ) : (
+            <span
+              aria-hidden
+              className='invisible select-none text-sm font-medium sm:text-base'
+            >
+              Placeholder
+            </span>
+          )}
         </div>
       </td>
       <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
-        {block.timeblocks.map((tb, i) => (
-          <div key={i}>
-            {tb.startTime} - {tb.endTime}
-          </div>
-        ))}
+        {timeRanges.length > 0 ? (
+          timeRanges.map((range, index) => <div key={index}>{range}</div>)
+        ) : (
+          <span
+            aria-hidden
+            className='invisible select-none text-sm font-medium sm:text-base'
+          >
+            Placeholder
+          </span>
+        )}
       </td>
       <td className='p-2 xs:pr-0'>
-        {block.timeblocks.map((tb, i) => (
-          <TimeblockDays days={tb.days} key={i} />
-        ))}
+        {daySets.length > 0 ? (
+          daySets.map((days, index) => (
+            <TimeblockDays days={days} key={index} />
+          ))
+        ) : (
+          <div
+            aria-hidden
+            className='pointer-events-none opacity-0 [line-height:1]'
+          >
+            <TimeblockDays days={['2', '3', '4', '5', '6']} />
+          </div>
+        )}
       </td>
-      {block.crn && (
-        <td
-          className='hidden cursor-pointer pr-2 text-sm font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
-          onClick={() => {
-            toast.promise(navigator.clipboard.writeText(block.crn), {
-              success: `Copied CRN for ${block.display} to clipboard.`,
-              loading: undefined,
-              error:
-                'Something went wrong when trying to copy section CRN, please try again!',
-            });
-          }}
-        >
-          CRN: {block.crn}
-        </td>
-      )}
+      <td
+        className={twMerge(
+          'hidden pr-2 text-sm font-medium xs:table-cell',
+          block.crn
+            ? 'cursor-pointer text-gray-500 dark:text-gray-400'
+            : 'cursor-default text-gray-400 dark:text-gray-500'
+        )}
+        onClick={block.crn ? handleCopyCrn : undefined}
+      >
+        {block.crn ? `CRN: ${block.crn}` : 'CRN unavailable'}
+      </td>
+      <td className='whitespace-nowrap px-2 align-middle'>
+        <AddToCalendarButton
+          payload={calendarPayload}
+          ariaLabel={`Add ${block.display} schedule to calendar`}
+          title={
+            hasCalendarData
+              ? 'Add section to calendar'
+              : 'Schedule calendar download unavailable'
+          }
+          className='self-center sm:self-center'
+          variant='ghost'
+        />
+      </td>
     </tr>
   );
 };
@@ -216,8 +474,11 @@ export const SchedulesDisplay = ({
   const [selectedTerm, setSelectedTerm] = useState(
     getDefaultTerm(offeredTerms)
   );
+
   const [showAll, setShowAll] = useState(false);
+
   const scheduleByTerm = useMemo(() => getSections(schedules), [course]);
+
   const [blocks, setBlocks] = useState(
     selectedTerm ? scheduleByTerm[selectedTerm] : undefined
   );
@@ -266,10 +527,24 @@ export const SchedulesDisplay = ({
         <table>
           <tbody>
             {blocks.length <= 5 || showAll
-              ? blocks.map((s, i) => <ScheduleRow key={i} block={s} />)
+              ? blocks.map((s, i) => (
+                  <ScheduleRow
+                    key={i}
+                    block={s}
+                    course={course}
+                    term={selectedTerm}
+                  />
+                ))
               : blocks
                   .slice(0, 5)
-                  .map((s, i) => <ScheduleRow key={i} block={s} />)}
+                  .map((s, i) => (
+                    <ScheduleRow
+                      key={i}
+                      block={s}
+                      course={course}
+                      term={selectedTerm}
+                    />
+                  ))}
           </tbody>
         </table>
         {blocks.length > 5 && (
