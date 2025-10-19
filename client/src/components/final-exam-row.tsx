@@ -165,7 +165,7 @@ export const FinalExamRow = ({ course, className }: FinalExamRowProps) => {
               className='flex flex-col gap-3 rounded-md border border-slate-200/70 bg-white/70 p-3 text-sm text-gray-700 dark:border-neutral-700 dark:bg-neutral-900/60 dark:text-gray-200 sm:flex-row sm:items-center sm:justify-between'
             >
               <div>
-                <p className='text-xs font-medium text-gray-900 dark:text-gray-100 sm:text-sm'>
+                <p className='text-sm font-medium text-gray-900 dark:text-gray-100'>
                   {formatDateLabel(start)}
                 </p>
                 <p className='text-sm text-gray-600 dark:text-gray-300'>
