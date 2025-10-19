@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/terror/mcgill.courses/actions/workflows/ci.yaml/badge.svg)](https://github.com/terror/mcgill.courses/actions/workflows/ci.yaml)
 ![codecov](https://img.shields.io/codecov/c/github/terror/mcgill.courses)
-![discord](https://img.shields.io/discord/1230925003164487861)
+[![discord](https://img.shields.io/badge/discord-%235865F2.svg?logo=discord&logoColor=white)](https://discord.gg/KcYbwyupmJ)
 ![website](https://img.shields.io/website?url=https%3A%2F%2Fmcgill.courses)
 
 A course search and review platform for McGill university.
