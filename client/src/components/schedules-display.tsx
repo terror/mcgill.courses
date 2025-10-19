@@ -342,6 +342,32 @@ const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
 
   const hasCalendarData = Boolean(calendarPayload);
 
+  const locationEntries = block.location
+    .split(';')
+    .map((location) => location.trim())
+    .filter((location) => location.length > 0);
+
+  const timeRanges = block.timeblocks
+    .filter((tb) => Boolean(tb.startTime) && Boolean(tb.endTime))
+    .map((tb) => formatTimeRange(tb.startTime, tb.endTime));
+
+  const daySets = block.timeblocks
+    .map((tb) =>
+      tb.days.filter((day) => typeof day === 'string' && day.trim().length > 0)
+    )
+    .filter((days) => days.length > 0);
+
+  const handleCopyCrn = () => {
+    if (!block.crn) return;
+
+    toast.promise(navigator.clipboard.writeText(block.crn), {
+      success: `Copied CRN for ${block.display} to clipboard.`,
+      loading: undefined,
+      error:
+        'Something went wrong when trying to copy section CRN, please try again!',
+    });
+  };
+
   return (
     <tr className='p-2 text-left even:bg-slate-100 even:dark:bg-[rgb(48,48,48)]'>
       <td className='whitespace-nowrap pl-4 text-sm font-semibold sm:pl-6 sm:text-base'>
@@ -349,39 +375,59 @@ const ScheduleRow = ({ block, course, term }: ScheduleRowProps) => {
       </td>
       <td className='py-2 text-gray-700 dark:text-gray-300'>
         <div className='flex flex-col items-start pl-1 text-center font-medium'>
-          {((split) =>
-            split.map((location: string, index) => (
-              <span key={index}>
-                <BlockLocation location={location.trim()} />
+          {locationEntries.length > 0 ? (
+            locationEntries.map((location, index) => (
+              <span key={`${location}-${index}`}>
+                <BlockLocation location={location} />
               </span>
-            )))(block.location.split(';'))}
+            ))
+          ) : (
+            <span
+              aria-hidden
+              className='invisible select-none text-sm font-medium sm:text-base'
+            >
+              Placeholder
+            </span>
+          )}
         </div>
       </td>
       <td className='whitespace-nowrap py-2 text-sm font-medium sm:text-base'>
-        {block.timeblocks.map((tb, i) => (
-          <div key={i}>{formatTimeRange(tb.startTime, tb.endTime)}</div>
-        ))}
+        {timeRanges.length > 0 ? (
+          timeRanges.map((range, index) => <div key={index}>{range}</div>)
+        ) : (
+          <span
+            aria-hidden
+            className='invisible select-none text-sm font-medium sm:text-base'
+          >
+            Placeholder
+          </span>
+        )}
       </td>
       <td className='p-2 xs:pr-0'>
-        {block.timeblocks.map((tb, i) => (
-          <TimeblockDays days={tb.days} key={i} />
-        ))}
+        {daySets.length > 0 ? (
+          daySets.map((days, index) => (
+            <TimeblockDays days={days} key={index} />
+          ))
+        ) : (
+          <div
+            aria-hidden
+            className='pointer-events-none opacity-0 [line-height:1]'
+          >
+            <TimeblockDays days={['2', '3', '4', '5', '6']} />
+          </div>
+        )}
       </td>
-      {block.crn && (
-        <td
-          className='hidden cursor-pointer pr-2 text-sm font-medium text-gray-500 dark:text-gray-400 xs:table-cell'
-          onClick={() => {
-            toast.promise(navigator.clipboard.writeText(block.crn), {
-              success: `Copied CRN for ${block.display} to clipboard.`,
-              loading: undefined,
-              error:
-                'Something went wrong when trying to copy section CRN, please try again!',
-            });
-          }}
-        >
-          CRN: {block.crn}
-        </td>
-      )}
+      <td
+        className={twMerge(
+          'hidden pr-2 text-sm font-medium xs:table-cell',
+          block.crn
+            ? 'cursor-pointer text-gray-500 dark:text-gray-400'
+            : 'cursor-default text-gray-400 dark:text-gray-500'
+        )}
+        onClick={block.crn ? handleCopyCrn : undefined}
+      >
+        {block.crn ? `CRN: ${block.crn}` : 'CRN unavailable'}
+      </td>
       <td className='whitespace-nowrap px-2 align-middle'>
         <AddToCalendarButton
           payload={calendarPayload}
