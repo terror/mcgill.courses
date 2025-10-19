@@ -1,9 +1,14 @@
 use super::*;
 
-#[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(
+  Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq, ToSchema,
+)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub enum InteractionKind {
+  /// Indicates that the user liked the review.
   Like,
+  /// Indicates that the user disliked the review.
   Dislike,
 }
 
@@ -22,11 +27,18 @@ impl Into<Bson> for InteractionKind {
   }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(
+  Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq, ToSchema,
+)]
 #[serde(rename_all = "camelCase")]
+#[typeshare]
 pub struct Interaction {
+  /// Kind of interaction that occurred.
   pub kind: InteractionKind,
+  /// ID of the user associated with the interaction.
   pub user_id: String,
+  /// ID of the course the interaction belongs to.
   pub course_id: String,
+  /// Referrer source from which the interaction was made.
   pub referrer: String,
 }

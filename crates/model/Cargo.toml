@@ -1,13 +1,15 @@
 [package]
 name = "model"
 version = "0.0.0"
-edition = "2021"
+edition = "2024"
 publish = false
 
 [dependencies]
 bson = { version = "2.15.0", features = ["chrono-0_4"] }
+chrono = { workspace = true }
 combine = { path = "../combine" }
 derivative = "2.2.0"
 serde = { workspace = true }
 serde_json = { workspace = true }
 typeshare = { workspace = true }
+utoipa = { workspace = true }

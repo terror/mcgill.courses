@@ -1,8 +1,8 @@
-import { groupBy } from 'lodash';
+import groupBy from 'lodash/groupBy';
 
-import { Instructor } from '../lib/types';
-import { Course } from '../model/Course';
-import type { Schedule } from '../model/Schedule';
+import { Instructor, Review } from '../lib/types';
+import { Course } from '../model/course';
+import type { Schedule } from '../model/schedule';
 
 const TERM_ORDER = ['Winter', 'Summer', 'Fall'];
 
@@ -195,6 +195,18 @@ export const spliceCourseCode = (
   courseCode: string,
   delimiter: string
 ): string => courseCode.slice(0, 4) + delimiter + courseCode.slice(4);
+
+/**
+ * Generates a stable DOM anchor identifier for a review.
+ *
+ * Uses the author ID, which is unique per course review, to produce repeatable anchors.
+ *
+ * @param {Pick<Review, 'courseId' | 'userId' | 'timestamp'>} review - Review metadata
+ * @returns {string} Anchor-friendly identifier
+ */
+export const getReviewAnchorId = (
+  review: Pick<Review, 'courseId' | 'userId' | 'timestamp'>
+): string => `review-${review.userId}`;
 
 /**
  * Rounds a number to 2 decimal places.

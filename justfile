@@ -72,12 +72,12 @@ initialize *args: restart-services
 lint *args:
   pnpm run lint {{args}}
 
-load:
-  cargo run --manifest-path tools/scraper/Cargo.toml -- --source=seed \
+load *args:
+  cargo run --manifest-path tools/scraper/Cargo.toml -- \
     --batch-size=5 \
-    --scrape-vsb \
     --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" \
-    --course-delay 1000
+    --course-delay 1000 \
+    {{ args }}
 
 readme:
   present --in-place README.md
@@ -104,8 +104,6 @@ serve:
 
 services:
   docker compose up --no-recreate -d
-  sleep 5
-  docker exec mongodb mongosh --quiet --eval 'rs.initiate()' > /dev/null 2>&1 || true
 
 test *filter:
   cargo test --all {{filter}}

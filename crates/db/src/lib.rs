@@ -1,47 +1,47 @@
 use {
-  anyhow::anyhow,
   bson::Bson,
   chrono::{Datelike, TimeZone, Utc},
   combine::Combine,
   futures::Future,
   futures::FutureExt,
-  futures::{future::join_all, TryStreamExt},
+  futures::{TryStreamExt, future::join_all},
   itertools::Itertools,
   lazy_static::lazy_static,
-  log::{info, warn},
   model::{
     Course, CourseFilter, CourseSortType, InitializeOptions, Instructor,
     Interaction, InteractionKind, Notification, Review, ReviewFilter,
     SearchResults, Subscription,
   },
   mongodb::{
-    bson::{doc, Document},
+    Client, Cursor, Database, IndexModel,
+    bson::{Document, doc},
     options::UpdateModifications,
     options::{ClientOptions, FindOptions, IndexOptions, UpdateOptions},
     results::{CreateIndexResult, DeleteResult, InsertOneResult, UpdateResult},
-    Client, Cursor, Database, IndexModel,
   },
-  mongodb::{options::FindOneAndUpdateOptions, ClientSession, Collection},
-  serde::{de::DeserializeOwned, Serialize},
-  std::{collections::HashSet, env, fs, path::PathBuf},
+  mongodb::{ClientSession, Collection, options::FindOneAndUpdateOptions},
+  serde::{Serialize, de::DeserializeOwned},
+  std::{collections::HashSet, env, fs, num::TryFromIntError, path::PathBuf},
+  tokio::task::JoinError,
+  tracing::{info, warn},
   {initializer::Initializer, seed::Seed, str_ext::StrExt, utils::*},
 };
 
 #[cfg(test)]
 use {
-  bson::DateTime,
-  include_dir::{include_dir, Dir},
-  model::CourseSort,
+  include_dir::{Dir, include_dir},
+  model::{CourseSort, DateTime},
   std::sync::atomic::{AtomicUsize, Ordering},
   tempdir::TempDir,
 };
 
-type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
+pub type Result<T = ()> = std::result::Result<T, Error>;
 
 mod db;
+mod error;
 mod initializer;
 mod seed;
 mod str_ext;
 mod utils;
 
-pub use crate::db::Db;
+pub use crate::{db::Db, error::Error};

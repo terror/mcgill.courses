@@ -2,6 +2,7 @@ use {
   crate::{
     assets::Assets,
     auth::{AuthRedirect, COOKIE_NAME},
+    documentation::Documentation,
     error::Error,
     hash::Hash,
     object::Object,
@@ -11,45 +12,46 @@ use {
   },
   anyhow::anyhow,
   async_mongodb_session::MongodbSessionStore,
-  async_session::{async_trait, Session, SessionStore},
+  async_session::{Session, SessionStore, async_trait},
   axum::{
+    Json, RequestPartsExt,
     body::Body,
-    error_handling::HandleErrorLayer,
-    extract::{FromRef, FromRequestParts, Path, Query, State as AppState},
+    extract::{
+      FromRef, FromRequestParts, OptionalFromRequestParts, Path, Query,
+      State as AppState,
+    },
     response::{IntoResponse, Redirect, Response},
-    routing::{get, post, Router},
-    BoxError, Json, RequestPartsExt,
+    routing::{Router, get, post},
   },
   axum_extra::{
-    headers::Cookie, typed_header::TypedHeaderRejectionReason, TypedHeader,
+    TypedHeader, headers::Cookie, typed_header::TypedHeaderRejectionReason,
   },
-  base64::{engine::general_purpose::STANDARD, Engine},
+  base64::{Engine, engine::general_purpose::STANDARD},
   chrono::prelude::*,
   clap::Parser,
   db::Db,
   dotenv::dotenv,
-  env_logger::Env,
   futures::TryStreamExt,
   http::{
-    header, header::SET_COOKIE, request::Parts, HeaderMap, Request, StatusCode,
+    HeaderMap, Request, StatusCode, header, header::SET_COOKIE, request::Parts,
   },
-  log::{debug, error, info, trace},
   model::{
     Course, CourseFilter, InitializeOptions, Instructor, Interaction,
-    InteractionKind, Review, ReviewFilter, Subscription,
+    InteractionKind, Notification, Review, ReviewFilter, SearchResults,
+    Subscription,
   },
   oauth2::{
-    basic::BasicClient, AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken,
-    RedirectUrl, Scope, TokenUrl,
+    AuthType, AuthUrl, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
+    TokenUrl, basic::BasicClient,
   },
   rusoto_core::Region,
   rusoto_s3::S3Client,
   rusoto_s3::{GetObjectRequest, PutObjectOutput, PutObjectRequest, S3},
   serde::{Deserialize, Serialize},
-  serde_json::json,
   sha2::{Digest, Sha256},
   std::{
     backtrace::BacktraceStatus,
+    convert::Infallible,
     env,
     fmt::{self, Display, Formatter},
     fs,
@@ -59,26 +61,37 @@ use {
     path::PathBuf,
     process,
     sync::Arc,
+    thread,
     time::Duration,
   },
+  tokio::net::TcpListener,
   tower::ServiceBuilder,
-  tower_governor::{
-    errors::display_error, governor::GovernorConfigBuilder, GovernorLayer,
-  },
+  tower_governor::{GovernorLayer, governor::GovernorConfigBuilder},
   tower_http::{
     cors::CorsLayer,
     services::{ServeDir, ServeFile},
     trace::TraceLayer,
   },
   tracing::Span,
+  tracing::{debug, error, info, trace},
+  tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
   typeshare::typeshare,
   url::Url,
+  utoipa::{
+    Modify, OpenApi, ToSchema,
+    openapi::{
+      Components,
+      security::{AuthorizationCode, Flow, OAuth2, Scopes, SecurityScheme},
+    },
+  },
+  utoipa_scalar::{Scalar, Servable},
   walkdir::WalkDir,
 };
 
 mod assets;
 mod auth;
 mod courses;
+mod documentation;
 mod error;
 mod hash;
 mod instructors;
@@ -97,8 +110,26 @@ type Result<T = (), E = error::Error> = std::result::Result<T, E>;
 
 #[tokio::main]
 async fn main() {
-  env_logger::Builder::from_env(Env::default().default_filter_or("info"))
-    .init();
+  let env_filter = tracing_subscriber::EnvFilter::try_from_default_env()
+    .unwrap_or_else(|_| "info,tower_http=debug,hyper=debug".into());
+
+  let fmt_layer = tracing_subscriber::fmt::layer()
+    .with_target(true)
+    .with_thread_ids(true)
+    .with_file(true)
+    .with_line_number(true);
+
+  if env::var("ENV").unwrap_or_default() == "production" {
+    tracing_subscriber::registry()
+      .with(env_filter)
+      .with(fmt_layer.json())
+      .init();
+  } else {
+    tracing_subscriber::registry()
+      .with(env_filter)
+      .with(fmt_layer.pretty())
+      .init();
+  }
 
   dotenv().ok();
 

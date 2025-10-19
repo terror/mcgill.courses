@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash';
+import escapeRegExp from 'lodash/escapeRegExp';
 import { Link } from 'react-router-dom';
 
 import { isValidCourseCode } from '../lib/utils';

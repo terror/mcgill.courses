@@ -1,25 +1,51 @@
 use super::*;
 
+#[utoipa::path(
+  get,
+  path = "/notifications",
+  tag = "notifications",
+  description = "Get the current user's notifications.",
+  security(("microsoftOAuth" = ["User.Read"])),
+  responses(
+    (status = StatusCode::OK, description = "Notifications for the authenticated user, sorted by recency.", body = [Notification]),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
+  )
+)]
 pub(crate) async fn get_notifications(
   user: User,
   AppState(db): AppState<Arc<Db>>,
 ) -> Result<impl IntoResponse> {
   let mut notifications = db.get_notifications(&user.id()).await?;
   notifications.sort_by(|a, b| b.review.timestamp.cmp(&a.review.timestamp));
-  Ok(Json(notifications))
+  Ok((StatusCode::OK, Json(notifications)))
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub(crate) struct UpdateNotificationbody {
-  course_id: String,
-  creator_id: String,
-  seen: bool,
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub(crate) struct UpdateNotificationBody {
+  /// Identifier of the course associated with the notification.
+  pub(crate) course_id: String,
+  /// Identifier of the user who created the notification's review.
+  pub(crate) creator_id: String,
+  /// Whether the notification has been marked as seen.
+  pub(crate) seen: bool,
 }
 
+#[utoipa::path(
+  put,
+  path = "/notifications",
+  tag = "notifications",
+  description = "Mark a notification as seen or unseen.",
+  security(("microsoftOAuth" = ["User.Read"])),
+  request_body = UpdateNotificationBody,
+  responses(
+    (status = StatusCode::OK, description = "Notification updated successfully."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
+  )
+)]
 pub(crate) async fn update_notification(
   user: User,
   AppState(db): AppState<Arc<Db>>,
-  body: Json<UpdateNotificationbody>,
+  body: Json<UpdateNotificationBody>,
 ) -> Result<impl IntoResponse> {
   db.update_notification(
     &user.id(),
@@ -28,19 +54,33 @@ pub(crate) async fn update_notification(
     body.seen,
   )
   .await?;
-  Ok(())
+
+  Ok(StatusCode::OK)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub(crate) struct DeleteNotificationbody {
-  course_id: String,
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub(crate) struct DeleteNotificationBody {
+  /// Identifier of the course whose notification should be removed.
+  pub(crate) course_id: String,
 }
 
+#[utoipa::path(
+  delete,
+  path = "/notifications",
+  tag = "notifications",
+  description = "Delete a notification for the current user.",
+  security(("microsoftOAuth" = ["User.Read"])),
+  request_body = DeleteNotificationBody,
+  responses(
+    (status = StatusCode::OK, description = "Notification deleted successfully."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Internal server error.", body = String)
+  )
+)]
 pub(crate) async fn delete_notification(
   user: User,
   AppState(db): AppState<Arc<Db>>,
-  body: Json<DeleteNotificationbody>,
+  body: Json<DeleteNotificationBody>,
 ) -> Result<impl IntoResponse> {
   db.delete_notification(&user.id(), &body.course_id).await?;
-  Ok(())
+  Ok(StatusCode::OK)
 }

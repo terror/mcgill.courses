@@ -92,18 +92,19 @@ impl Server {
     )
     .await?;
 
-    axum_server::Server::bind(addr)
-      .serve(
-        Self::app(AppConfig {
-          db,
-          assets,
-          session_store,
-          rate_limit: true,
-        })
-        .await?
-        .into_make_service_with_connect_info::<SocketAddr>(),
-      )
-      .await?;
+    let app = Self::app(AppConfig {
+      db,
+      assets,
+      session_store,
+      rate_limit: true,
+    })
+    .await?;
+
+    axum::serve(
+      TcpListener::bind(addr).await?,
+      app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await?;
 
     Ok(())
   }
@@ -114,10 +115,10 @@ impl Server {
       .route("/api/auth/login", get(auth::microsoft_auth))
       .route("/api/auth/logout", get(auth::logout))
       .route("/api/courses", post(courses::get_courses))
-      .route("/api/courses/:id", get(courses::get_course_by_id))
-      .route("/api/instructors/:name", get(instructors::get_instructor))
+      .route("/api/courses/{id}", get(courses::get_course_by_id))
+      .route("/api/instructors/{name}", get(instructors::get_instructor))
       .route(
-        "/api/interactions/:course_id/referrer/:referrer",
+        "/api/interactions/{course_id}/referrer/{referrer}",
         get(interactions::get_user_interactions_for_course),
       )
       .route(
@@ -139,7 +140,7 @@ impl Server {
           .post(reviews::add_review)
           .put(reviews::update_review),
       )
-      .route("/api/reviews/:id", get(reviews::get_review))
+      .route("/api/reviews/{id}", get(reviews::get_review))
       .route("/api/search", get(search::search))
       .route(
         "/api/subscriptions",
@@ -147,7 +148,8 @@ impl Server {
           .post(subscriptions::add_subscription)
           .delete(subscriptions::delete_subscription),
       )
-      .route("/api/user", get(user::get_user));
+      .route("/api/user", get(user::get_user))
+      .merge(Scalar::with_url("/api/docs", Documentation::openapi()));
 
     // Serve microsoft identity association file
     router = router.route(
@@ -174,31 +176,68 @@ impl Server {
       .with_state(State::new(config.db, config.session_store).await?)
       .layer(
         TraceLayer::new_for_http()
-          .on_request(|request: &Request<Body>, _span: &Span| {
-            info!("Received {} {}", request.method(), request.uri().path(),)
+          .make_span_with(|request: &Request<Body>| {
+            let request_id = uuid::Uuid::new_v4().to_string();
+
+            tracing::info_span!(
+              "http_request",
+              method = %request.method(),
+              uri = %request.uri(),
+              path = %request.uri().path(),
+              query = %request.uri().query().unwrap_or(""),
+              request_id = %request_id,
+              user_agent = %request.headers()
+                .get("user-agent")
+                .and_then(|h| h.to_str().ok())
+                .unwrap_or("unknown"),
+            )
           })
-          .on_response(
-            |response: &Response, latency: Duration, _span: &Span| {
-              info!("Response {} in {:?}", response.status(), latency)
+          .on_request(|_request: &Request<Body>, span: &Span| {
+            tracing::info!(parent: span, "request started");
+          })
+          .on_response(|response: &Response, latency: Duration, span: &Span| {
+            tracing::info!(
+              parent: span,
+              status = %response.status(),
+              latency_ms = %latency.as_millis(),
+              "request completed"
+            );
+          })
+          .on_failure(
+            |error: tower_http::classify::ServerErrorsFailureClass,
+             latency: Duration,
+             span: &Span| {
+              tracing::error!(
+                parent: span,
+                error = %error,
+                latency_ms = %latency.as_millis(),
+                "request failed"
+              );
             },
           ),
       );
 
+    let governor_config = GovernorConfigBuilder::default()
+      .per_millisecond(10)
+      .burst_size(100)
+      .finish()
+      .ok_or(anyhow!("Failed to create governor configuration"))?;
+
+    let governor_limiter = governor_config.limiter().clone();
+
+    let interval = Duration::from_secs(60);
+
+    thread::spawn(move || {
+      loop {
+        thread::sleep(interval);
+        governor_limiter.retain_recent();
+      }
+    });
+
     Ok(if config.rate_limit {
       router.layer(
         ServiceBuilder::new()
-          .layer(HandleErrorLayer::new(|err: BoxError| async move {
-            display_error(err)
-          }))
-          .layer(GovernorLayer {
-            config: Box::leak(Box::new(
-              GovernorConfigBuilder::default()
-                .per_millisecond(10)
-                .burst_size(100)
-                .finish()
-                .ok_or(anyhow!("Failed to create governor configuration"))?,
-            )),
-          })
+          .layer(GovernorLayer::new(governor_config))
           .layer(CorsLayer::very_permissive()),
       )
     } else {
@@ -211,21 +250,39 @@ impl Server {
 mod tests {
   use {
     super::*,
-    crate::instructors::GetInstructorPayload,
-    axum::body::Body,
-    courses::GetCoursesPayload,
-    http::{Method, Request},
-    interactions::{
-      GetCourseReviewsInteractionPayload, GetInteractionKindPayload,
+    crate::{
+      instructors::GetInstructorPayload,
+      interactions::GetUserInteractionForCoursePayload,
+      subscriptions::SubscriptionResponse,
     },
-    model::Notification,
+    axum::body::Body,
+    courses::{GetCourseByIdPayload, GetCoursesPayload},
+    http::{Method, Request},
+    interactions::GetInteractionKindPayload,
+    model::{Notification, Subscription},
     pretty_assertions::assert_eq,
     reviews::GetReviewsPayload,
     serde::de::DeserializeOwned,
     serde_json::json,
-    std::sync::atomic::{AtomicUsize, Ordering},
+    std::{
+      collections::HashSet,
+      sync::atomic::{AtomicUsize, Ordering},
+    },
     tower::{Service, ServiceExt},
   };
+
+  macro_rules! assert_matches {
+    ($expression:expr, $( $pattern:pat_param )|+ $( if $guard:expr )? $(,)?) => {
+      match $expression {
+        $( $pattern )|+ $( if $guard )? => {}
+        left => panic!(
+          "assertion failed: (left ~= right)\n  left: `{:?}`\n right: `{}`",
+          left,
+          stringify!($($pattern)|+ $(if $guard)?)
+        ),
+      }
+    };
+  }
 
   struct TestContext {
     app: Router,
@@ -447,7 +504,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     assert_eq!(
-      response.convert::<Course>().await,
+      response.convert::<GetCourseByIdPayload>().await.course,
       db.find_course_by_id("COMP202").await.unwrap().unwrap()
     );
   }
@@ -1249,7 +1306,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     let payload = response
-      .convert::<GetCourseReviewsInteractionPayload>()
+      .convert::<GetUserInteractionForCoursePayload>()
       .await;
 
     assert_eq!(payload.course_id, "COMP202");
@@ -1345,7 +1402,7 @@ mod tests {
     assert_eq!(response.status(), StatusCode::OK);
 
     let payload = response
-      .convert::<GetCourseReviewsInteractionPayload>()
+      .convert::<GetUserInteractionForCoursePayload>()
       .await;
 
     assert_eq!(payload.course_id, "MATH240");
@@ -1461,6 +1518,203 @@ mod tests {
       response.convert::<GetInteractionKindPayload>().await,
       GetInteractionKindPayload { kind: None }
     );
+  }
+
+  #[tokio::test]
+  async fn get_subscriptions_returns_multiple_for_user() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(
+      session_store.clone(),
+      "subscriber",
+      "subscriber@mail.mcgill.ca",
+    )
+    .await;
+
+    for course_id in ["MATH240", "COMP202"] {
+      let response = app
+        .call(
+          Request::builder()
+            .method(http::Method::POST)
+            .header("Cookie", cookie.clone())
+            .header("Content-Type", "application/json")
+            .uri("/api/subscriptions")
+            .body(Body::from(
+              json!({
+                "course_id": course_id,
+              })
+              .to_string(),
+            ))
+            .unwrap(),
+        )
+        .await
+        .unwrap();
+
+      assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response.convert::<SubscriptionResponse>().await;
+
+    match payload {
+      SubscriptionResponse::Multiple(subscriptions) => {
+        assert_eq!(subscriptions.len(), 2);
+
+        let course_ids = subscriptions
+          .iter()
+          .map(|subscription| subscription.course_id.as_str())
+          .collect::<HashSet<&str>>();
+
+        let expected = ["MATH240", "COMP202"]
+          .into_iter()
+          .collect::<HashSet<&str>>();
+
+        assert_eq!(course_ids, expected);
+
+        assert!(
+          subscriptions
+            .iter()
+            .all(|subscription| subscription.user_id == "subscriber")
+        );
+      }
+      other => panic!("expected multiple subscriptions, got {:?}", other),
+    }
+  }
+
+  #[tokio::test]
+  async fn get_subscription_returns_single_match() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(
+      session_store.clone(),
+      "subscriber",
+      "subscriber@mail.mcgill.ca",
+    )
+    .await;
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::POST)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions")
+          .body(Body::from(
+            json!({
+              "course_id": "MATH240",
+            })
+            .to_string(),
+          ))
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie.clone())
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions?course_id=MATH240")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    assert_matches!(
+      response.convert::<SubscriptionResponse>().await,
+      SubscriptionResponse::Single(Some(Subscription {
+        course_id,
+        user_id,
+      })) if course_id == "MATH240" && user_id == "subscriber"
+    );
+  }
+
+  #[tokio::test]
+  async fn get_subscription_returns_none_when_missing() {
+    let TestContext {
+      db,
+      mut app,
+      session_store,
+      ..
+    } = TestContext::new().await;
+
+    db.initialize(InitializeOptions {
+      source: seed(),
+      ..Default::default()
+    })
+    .await
+    .unwrap();
+
+    let cookie = mock_login(
+      session_store.clone(),
+      "subscriber",
+      "subscriber@mail.mcgill.ca",
+    )
+    .await;
+
+    let response = app
+      .call(
+        Request::builder()
+          .method(http::Method::GET)
+          .header("Cookie", cookie)
+          .header("Content-Type", "application/json")
+          .uri("/api/subscriptions?course_id=MATH240")
+          .body(Body::empty())
+          .unwrap(),
+      )
+      .await
+      .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let payload = response.convert::<SubscriptionResponse>().await;
+
+    assert_matches!(payload, SubscriptionResponse::Single(None));
   }
 
   #[tokio::test]

@@ -1,18 +1,27 @@
 use super::*;
 
-#[derive(Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(
+  Clone, Debug, Serialize, Deserialize, Hash, Eq, PartialEq, ToSchema,
+)]
 #[serde(rename_all = "camelCase")]
 #[typeshare]
 pub struct Review {
+  /// The text content of the review.
   pub content: String,
+  /// The course ID this review is for.
   pub course_id: String,
+  /// Difficulty rating from 1-5.
   pub difficulty: u32,
+  /// List of instructor names for this review.
   pub instructors: Vec<String>,
+  /// Number of likes (net of dislikes) this review has received.
   pub likes: i32,
+  /// Overall rating from 1-5.
   pub rating: u32,
-  #[serde(with = "crate::datetime")]
+  /// Timestamp when the review was created or last updated.
   #[typeshare(serialized_as = "String")]
   pub timestamp: DateTime,
+  /// The user ID of the review author.
   pub user_id: String,
 }
 
@@ -50,7 +59,7 @@ impl Into<Bson> for Review {
 mod tests {
   use {
     super::*,
-    serde_json::{json, Value},
+    serde_json::{Value, json},
   };
 
   #[test]
@@ -139,10 +148,12 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(result
-      .unwrap_err()
-      .to_string()
-      .contains("invalid timestamp string"));
+    assert!(
+      result
+        .unwrap_err()
+        .to_string()
+        .contains("invalid timestamp string")
+    );
   }
 
   #[test]
@@ -164,10 +175,12 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(result
-      .unwrap_err()
-      .to_string()
-      .contains("'$date' field must be an object"));
+    assert!(
+      result
+        .unwrap_err()
+        .to_string()
+        .contains("'$date' field must be an object")
+    );
   }
 
   #[test]
@@ -189,10 +202,12 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(result
-      .unwrap_err()
-      .to_string()
-      .contains("missing '$numberLong' field"));
+    assert!(
+      result
+        .unwrap_err()
+        .to_string()
+        .contains("missing '$numberLong' field")
+    );
   }
 
   #[test]
@@ -212,10 +227,12 @@ mod tests {
 
     assert!(result.is_err());
 
-    assert!(result
-      .unwrap_err()
-      .to_string()
-      .contains("expected either a timestamp string or MongoDB date object"));
+    assert!(
+      result
+        .unwrap_err()
+        .to_string()
+        .contains("expected either a timestamp string or MongoDB date object")
+    );
   }
 
   #[test]

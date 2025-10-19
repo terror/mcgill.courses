@@ -11,6 +11,7 @@ use super::*;
   PartialEq,
   PartialOrd,
   Serialize,
+  ToSchema,
 )]
 #[serde(rename_all = "camelCase")]
 #[typeshare]

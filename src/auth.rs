@@ -36,6 +36,18 @@ struct AccessTokenResponse {
   token_type: String,
 }
 
+#[utoipa::path(
+  get,
+  path = "/auth/login",
+  tag = "auth",
+  description = "Redirect the requester to initiate the Microsoft OAuth flow.",
+  params(
+    ("redirect" = String, Query, description = "Absolute URL to send the user back to after sign-in completes.")
+  ),
+  responses(
+    (status = StatusCode::SEE_OTHER, description = "Redirect to the Microsoft login page.")
+  )
+)]
 pub(crate) async fn microsoft_auth(
   Query(query): Query<LoginRequest>,
   AppState(client): AppState<BasicClient>,
@@ -57,6 +69,20 @@ pub(crate) async fn microsoft_auth(
   )
 }
 
+#[utoipa::path(
+  get,
+  path = "/auth/authorized",
+  tag = "auth",
+  description = "Complete the Microsoft OAuth flow and establish a session for the authenticated user.",
+  params(
+    ("code" = String, Query, description = "Authorization code issued by Microsoft."),
+    ("state" = String, Query, description = "Opaque state returned by Microsoft and used for redirect validation.")
+  ),
+  responses(
+    (status = StatusCode::SEE_OTHER, description = "Redirect to the original post-login location."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Failed to exchange the authorization code or create the session.", body = String)
+  )
+)]
 pub(crate) async fn login_authorized(
   Query(query): Query<AuthRequest>,
   AppState(state): AppState<State>,
@@ -139,6 +165,19 @@ pub(crate) async fn login_authorized(
   Ok((headers, Redirect::to(url.as_ref())))
 }
 
+#[utoipa::path(
+  get,
+  path = "/auth/logout",
+  tag = "auth",
+  description = "Invalidate the current session and redirect the user back to the client.",
+  params(
+    ("redirect" = String, Query, description = "Absolute URL to send the user to after logout.")
+  ),
+  responses(
+    (status = StatusCode::SEE_OTHER, description = "Redirect to the requested post-logout location."),
+    (status = StatusCode::INTERNAL_SERVER_ERROR, description = "Failed to destroy the session.", body = String)
+  )
+)]
 pub(crate) async fn logout(
   Query(query): Query<LogoutRequest>,
   TypedHeader(cookies): TypedHeader<Cookie>,
