@@ -1,0 +1,18 @@
+[package]
+name = "final-exam-schedule-parser"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+anyhow = { workspace = true }
+chrono = { workspace = true }
+clap = { version = "4.5.49", features = ["derive"] }
+lopdf = "0.38.0"
+rayon = "1.11.0"
+regex = "1.12.2"
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+shellexpand = "3.1.1"
+tempfile = "3.23.0"
+ureq = "3.1.2"
