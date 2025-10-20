@@ -1,4 +1,4 @@
-import { highlight } from '../lib/dom-utils';
+import escapeRegExp from 'lodash/escapeRegExp';
 
 export const Highlight = ({
   text,
@@ -9,5 +9,31 @@ export const Highlight = ({
   query?: string;
   className?: string;
 }) => {
-  return <span className={className}>{highlight(text, query)}</span>;
+  if (!query) {
+    return <span className={className}>{text}</span>;
+  }
+
+  const trimmedQuery = query.trim();
+
+  if (!trimmedQuery) {
+    return <span className={className}>{text}</span>;
+  }
+
+  const queryRegex = new RegExp(`(${escapeRegExp(trimmedQuery)})`, 'gi');
+
+  const normalizedQuery = trimmedQuery.toLowerCase();
+
+  return (
+    <span className={className}>
+      {text.split(queryRegex).map((part, index) => {
+        const isMatch = part.toLowerCase().trim() === normalizedQuery;
+
+        return (
+          <span key={index} className={isMatch ? 'underline' : undefined}>
+            {part}
+          </span>
+        );
+      })}
+    </span>
+  );
 };
