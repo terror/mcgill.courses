@@ -102,12 +102,14 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
                 <BellOff
                   size={20}
                   onClick={() => unsubscribeMutation.mutate()}
+                  data-testid='unsubscribe-icon'
                   className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ) : (
                 <Bell
                   size={20}
                   onClick={() => subscribeMutation.mutate()}
+                  data-testid='subscribe-icon'
                   className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ))}
