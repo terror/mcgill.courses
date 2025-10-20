@@ -4,18 +4,9 @@ import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 import type { Requirements } from '../lib/types';
-import { capitalize, punctuate } from '../lib/utils';
+import { capitalize, punctuate, stripColonPrefix } from '../lib/utils';
 import type { Course } from '../model/course';
 import { CourseGraph } from './course-graph';
-
-// Strips prefix strings like "Prerequisites: ..." and "Corequisites: ..."
-const stripColonPrefix = (text: string): string => {
-  const parts = text.split(' ');
-  if (parts[0] && parts[0].endsWith(':')) {
-    return parts.slice(1).join(' ');
-  }
-  return text;
-};
 
 const transformText = (text: string): React.ReactNode[] => {
   const nodes = [],
