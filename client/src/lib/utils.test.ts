@@ -16,6 +16,7 @@ import {
   sortSchedulesByBlocks,
   sortTerms,
   spliceCourseCode,
+  stripColonPrefix,
   timeSince,
 } from './utils';
 
@@ -327,6 +328,24 @@ describe('punctuate', () => {
 
   it('handles empty string', () => {
     expect(punctuate('')).toBe('.');
+  });
+});
+
+describe('stripColonPrefix', () => {
+  it('removes leading colon-prefixed word', () => {
+    expect(stripColonPrefix('Prerequisites: MATH 203')).toBe('MATH 203');
+  });
+
+  it('returns original text when no colon suffix on first word', () => {
+    expect(stripColonPrefix('Prerequisites are required')).toBe(
+      'Prerequisites are required'
+    );
+  });
+
+  it('leaves strings without leading words intact', () => {
+    expect(stripColonPrefix('MATH 203 Prerequisites: None')).toBe(
+      'MATH 203 Prerequisites: None'
+    );
   });
 });
 
