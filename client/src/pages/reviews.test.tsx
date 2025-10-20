@@ -1,12 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { ReactElement, ReactNode } from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { vi } from 'vitest';
 import type { Mock } from 'vitest';
 
 import { api } from '../lib/api';
 import type { Review } from '../lib/types';
+import { renderWithRouter } from '../testing/router-wrapper';
 import { Reviews } from './reviews';
 
 const { timeSinceMock, toastErrorMock } = vi.hoisted(() => ({
@@ -98,20 +98,6 @@ vi.mock('react-infinite-scroll-component', () => ({
 }));
 
 const getReviewsMock = api.getReviews as Mock;
-
-const RouterWrapper = ({ children }: { children: ReactNode }) => (
-  <MemoryRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    {children}
-  </MemoryRouter>
-);
-
-const renderWithRouter = (ui: ReactElement) =>
-  render(ui, { wrapper: RouterWrapper });
 
 const buildReview = (overrides: Partial<Review> = {}): Review => ({
   content: 'A thoughtful take',
