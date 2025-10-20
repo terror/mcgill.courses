@@ -5,9 +5,9 @@ import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
-import { parseCourseDescription } from '../lib/dom-utils';
 import type { Review, Subscription } from '../lib/types';
 import type { Course } from '../model/course';
+import { CourseDescription } from './course-description';
 import { CourseInfoStats } from './course-info-stats';
 import { CourseTerms } from './course-terms';
 
@@ -134,7 +134,7 @@ export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
         <CourseTerms course={course} variant='large' />
         <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
-          {parseCourseDescription(course.description)}
+          <CourseDescription description={course.description} />
         </p>
         <div className='grow py-3' />
         <CourseInfoStats className='mb-4 sm:hidden' reviews={reviews} />
