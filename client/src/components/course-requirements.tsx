@@ -1,5 +1,5 @@
 import { List, Network } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
@@ -7,37 +7,46 @@ import { capitalize, punctuate, stripColonPrefix } from '../lib/utils';
 import type { Course } from '../model/course';
 import { CourseGraph } from './course-graph';
 
-const transformText = (text: string): React.ReactNode[] => {
-  const nodes = [],
-    regex = /\b([A-Z]{4})\s?(\d{3})([A-Za-z]\d?)?\b/g;
+type RequirementTextProps = {
+  text: string;
+};
 
-  let lastIndex = 0;
+const RequirementText = ({ text }: RequirementTextProps) => {
+  const nodes = useMemo(() => {
+    const fragments: React.ReactNode[] = [];
 
-  text.replace(regex, (match, code, number, level, index) => {
-    if (index > lastIndex) nodes.push(text.substring(lastIndex, index));
+    const regex = /\b([A-Z]{4})\s?(\d{3})([A-Za-z]\d?)?\b/g;
 
-    const courseLink = level
-      ? `${code}-${number}${level}`
-      : `${code}-${number}`;
+    let lastIndex = 0;
 
-    nodes.push(
-      <Link
-        key={`course-${index}`}
-        to={`/course/${courseLink}`}
-        className='text-gray-800 hover:underline dark:text-gray-200'
-      >
-        {`${code} ${number}${level ? level : ''}`}
-      </Link>
-    );
+    text.replace(regex, (match, code, number, level, index) => {
+      if (index > lastIndex) fragments.push(text.substring(lastIndex, index));
 
-    lastIndex = index + match.length;
+      const courseLink = level
+        ? `${code}-${number}${level}`
+        : `${code}-${number}`;
 
-    return match;
-  });
+      fragments.push(
+        <Link
+          key={`course-${index}`}
+          to={`/course/${courseLink}`}
+          className='text-gray-800 hover:underline dark:text-gray-200'
+        >
+          {`${code} ${number}${level ? level : ''}`}
+        </Link>
+      );
 
-  if (lastIndex < text.length) nodes.push(text.substring(lastIndex));
+      lastIndex = index + match.length;
 
-  return nodes;
+      return match;
+    });
+
+    if (lastIndex < text.length) fragments.push(text.substring(lastIndex));
+
+    return fragments;
+  }, [text]);
+
+  return <>{nodes}</>;
 };
 
 type RequirementBlockProps = {
@@ -53,7 +62,9 @@ const RequirementBlock = ({ title, text }: RequirementBlockProps) => {
       </h2>
       {text ? (
         <div className='text-gray-500 dark:text-gray-400'>
-          {transformText(capitalize(punctuate(stripColonPrefix(text.trim()))))}
+          <RequirementText
+            text={capitalize(punctuate(stripColonPrefix(text.trim())))}
+          />
         </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
