@@ -12,8 +12,8 @@ import { Histogram } from './histogram';
 type Size = 'small' | 'medium' | 'large';
 
 type CourseInfoStatsProps = {
-  allReviews: Review[];
   className?: string;
+  reviews: Review[];
   variant?: Size;
 };
 
@@ -87,20 +87,20 @@ const Stat = ({ title, value, icon: Icon, variant }: StatProps) => {
 };
 
 export const CourseInfoStats = ({
-  allReviews,
   className,
+  reviews,
   variant = 'small',
 }: CourseInfoStatsProps) => {
-  if (allReviews.length === 0) {
+  if (reviews.length === 0) {
     return null;
   }
 
   const lg = useMediaQuery('(min-width: 1024px)');
 
-  const ratings = allReviews.map((r) => r.rating);
-  const averageRating = sum(ratings) / allReviews.length;
-  const difficulties = allReviews.map((r) => r.difficulty);
-  const averageDifficulty = sum(difficulties) / allReviews.length;
+  const ratings = reviews.map((r) => r.rating);
+  const averageRating = sum(ratings) / reviews.length;
+  const difficulties = reviews.map((r) => r.difficulty);
+  const averageDifficulty = sum(difficulties) / reviews.length;
 
   return (
     <div
