@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import type { Requirements } from '../lib/types';
 import { capitalize, punctuate, stripColonPrefix } from '../lib/utils';
 import type { Course } from '../model/course';
 import { CourseGraph } from './course-graph';
@@ -66,15 +65,13 @@ const RequirementBlock = ({ title, text }: RequirementBlockProps) => {
 };
 
 type RequirementsProps = {
-  course: Course;
-  requirements: Requirements;
   className?: string;
+  course: Course;
 };
 
 export const CourseRequirements = ({
-  course,
-  requirements,
   className,
+  course,
 }: RequirementsProps) => {
   const [showGraph, setShowGraph] = useState(false);
 
@@ -105,16 +102,13 @@ export const CourseRequirements = ({
         <div className='space-y-7 p-6'>
           <RequirementBlock
             title='Prerequisites'
-            text={requirements.prerequisitesText}
+            text={course.prerequisitesText}
           />
           <RequirementBlock
             title='Corequisites'
-            text={requirements.corequisitesText}
+            text={course.corequisitesText}
           />
-          <RequirementBlock
-            title='Restrictions'
-            text={requirements.restrictions}
-          />
+          <RequirementBlock title='Restrictions' text={course.restrictions} />
         </div>
       ) : (
         <CourseGraph course={course} />

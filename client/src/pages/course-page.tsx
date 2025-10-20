@@ -21,7 +21,6 @@ import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
 import type { Review } from '../lib/types';
 import { Interaction } from '../lib/types';
-import type { Requirements } from '../lib/types';
 import { getCurrentTerms, getReviewAnchorId } from '../lib/utils';
 import type { Course } from '../model/course';
 import { TermAverage } from '../model/term-average';
@@ -243,21 +242,15 @@ export const CoursePage = () => {
     });
   }
 
-  const requirements: Requirements = {
-    prerequisites: course.prerequisites,
-    corequisites: course.corequisites,
-    restrictions: course.restrictions,
-    prerequisitesText: course.prerequisitesText,
-    corequisitesText: course.corequisitesText,
-  };
-
   const userReview = showingReviews?.find((r) => r.userId === user?.id);
+
   const canReview = Boolean(
     user && !allReviews?.find((r) => r.userId === user?.id)
   );
 
   const allCourseAverages: Record<string, TermAverage[]> =
     courseAverageData as Record<string, TermAverage[]>;
+
   const courseAverages: TermAverage[] = allCourseAverages[course._id];
 
   const handleSubmit = (successMessage: string) => {
@@ -442,7 +435,7 @@ export const CoursePage = () => {
           </div>
 
           <div className='col-span-2 flex flex-col gap-5'>
-            <CourseRequirements course={course} requirements={requirements} />
+            <CourseRequirements course={course} />
             {courseAverages && courseAverages.length >= 1 && (
               <CourseAverages course={course} averages={courseAverages} />
             )}
@@ -450,7 +443,7 @@ export const CoursePage = () => {
         </div>
         <div className='flex flex-col lg:hidden'>
           <div className='mb-4 flex'>
-            <CourseRequirements course={course} requirements={requirements} />
+            <CourseRequirements course={course} />
           </div>
 
           <div className='mb-4 flex'>
