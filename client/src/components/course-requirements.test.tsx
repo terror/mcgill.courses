@@ -1,30 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { Requirements } from '../lib/types';
 import type { Course } from '../model/course';
+import { renderWithRouter } from '../testing/router-wrapper';
 import { CourseRequirements } from './course-requirements';
 
 vi.mock('./course-graph', () => ({
   CourseGraph: () => <div data-testid='course-graph'>Graph View</div>,
 }));
-
-const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    {children}
-  </BrowserRouter>
-);
-
-const renderWithRouter = (ui: React.ReactElement) => {
-  return render(ui, { wrapper: RouterWrapper });
-};
 
 const baseCourse: Course = {
   _id: 'COMP202',
