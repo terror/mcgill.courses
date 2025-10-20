@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { Requirements } from '../lib/types';
 import type { Course } from '../model/course';
 import { CourseRequirements } from './course-requirements';
 
@@ -47,18 +46,16 @@ const baseCourse: Course = {
 
 describe('CourseRequirements', () => {
   it('renders formatted requirement text and course links', () => {
-    const requirements: Requirements = {
+    const courseWithRequirements: Course = {
+      ...baseCourse,
       prerequisitesText: 'Prerequisites: COMP 202 and MATH 133',
       corequisitesText: 'Corequisites: PHYS 101',
       restrictions: 'Restrictions: Departmental approval required',
-      prerequisites: [],
-      corequisites: [],
     };
 
     renderWithRouter(
       <CourseRequirements
-        course={baseCourse}
-        requirements={requirements}
+        course={courseWithRequirements}
         className='extra-class'
       />
     );
@@ -100,14 +97,7 @@ describe('CourseRequirements', () => {
   });
 
   it('renders fallback text when requirement sections are empty', () => {
-    const requirements: Requirements = {
-      prerequisites: [],
-      corequisites: [],
-    };
-
-    renderWithRouter(
-      <CourseRequirements course={baseCourse} requirements={requirements} />
-    );
+    renderWithRouter(<CourseRequirements course={baseCourse} />);
 
     expect(
       screen.getByText('This course has no prerequisites.')
@@ -121,17 +111,14 @@ describe('CourseRequirements', () => {
   });
 
   it('toggles between requirement list and graph view', async () => {
-    const requirements: Requirements = {
+    const courseWithRequirements: Course = {
+      ...baseCourse,
       prerequisitesText: 'Prerequisites: COMP 202',
       corequisitesText: 'Corequisites: PHYS 101',
       restrictions: 'Restrictions: Departmental approval required',
-      prerequisites: [],
-      corequisites: [],
     };
 
-    renderWithRouter(
-      <CourseRequirements course={baseCourse} requirements={requirements} />
-    );
+    renderWithRouter(<CourseRequirements course={courseWithRequirements} />);
 
     expect(screen.queryByTestId('course-graph')).not.toBeInTheDocument();
 
