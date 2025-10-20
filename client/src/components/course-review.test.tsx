@@ -1,16 +1,10 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import type { MockInstance } from 'vitest';
 
 import type { Review } from '../lib/types';
+import { renderWithRouter } from '../testing/router-wrapper';
 import { CourseReview, ReviewAttachment } from './course-review';
 
 const toastPromiseMock = vi.hoisted(() =>
@@ -29,21 +23,6 @@ vi.mock('sonner', () => ({
     success: vi.fn(),
   },
 }));
-
-const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    {children}
-  </BrowserRouter>
-);
-
-const renderWithRouter = (ui: React.ReactElement) => {
-  return render(ui, { wrapper: RouterWrapper });
-};
 
 const baseReview: Review = {
   content: 'Short content',

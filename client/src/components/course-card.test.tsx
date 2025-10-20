@@ -1,23 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 
 import { CourseCard } from '../components/course-card';
 import type { Course } from '../model/course';
-
-const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    {children}
-  </BrowserRouter>
-);
-
-const renderWithRouter = (ui: React.ReactElement) => {
-  return render(ui, { wrapper: RouterWrapper });
-};
+import { renderWithRouter } from '../testing/router-wrapper';
 
 describe('CourseCard', () => {
   const mockCourse: Course = {
