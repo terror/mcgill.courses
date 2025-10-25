@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 
 import changelogItems from '../assets/changelog.json';
 import { Layout } from '../components/layout';
-import { ChangelogItem } from '../model/changelog-item';
+import type { ChangelogItem } from '../lib/types';
 
 const typedChangelogItems: Record<string, ChangelogItem[]> = changelogItems;
 
@@ -66,7 +66,7 @@ export const Changelog = () => {
                 .map((item, index) => (
                   <div key={index} className='mt-4'>
                     <p className='text-lg text-gray-800 dark:text-gray-300'>
-                      - {item.summary.replace('/^- /', '')} (
+                      - {(item.summary ?? '').replace('/^- /', '')} (
                       <a
                         href={item.url}
                         className='text-blue-600 dark:text-blue-400'

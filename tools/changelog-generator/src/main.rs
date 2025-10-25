@@ -17,6 +17,7 @@ use {
   },
   tracing::info,
   tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt},
+  typeshare::typeshare,
 };
 
 const BASE_URL: &str = "https://github.com";
@@ -100,20 +101,25 @@ impl PullRequest<'_> {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, Hash, PartialEq)]
-struct Item {
-  number: u64,
-  summary: Option<String>,
-  url: String,
-  merged_at: DateTime<Utc>,
+#[serde(rename_all = "camelCase")]
+#[typeshare]
+pub struct ChangelogItem {
+  pub number: u32,
+  pub summary: Option<String>,
+  pub url: String,
+  #[serde(alias = "merged_at")]
+  #[typeshare(serialized_as = "String")]
+  pub merged_at: DateTime<Utc>,
 }
 
-impl Item {
+impl ChangelogItem {
   async fn try_from(
     pull_request: PullRequest<'_>,
     merged_at: DateTime<Utc>,
-  ) -> Result<Item> {
-    Ok(Item {
-      number: pull_request.number,
+    number: u32,
+  ) -> Result<ChangelogItem> {
+    Ok(ChangelogItem {
+      number,
       summary: pull_request.summary().await?,
       url: pull_request.url()?,
       merged_at,
@@ -121,14 +127,14 @@ impl Item {
   }
 }
 
-type Entry = HashMap<String, Vec<Item>>;
+type Entry = HashMap<String, Vec<ChangelogItem>>;
 
 #[derive(Parser)]
 struct Arguments {
   #[clap(long, default_value = "../../client/src/assets/changelog.json")]
   output: PathBuf,
   #[clap(long, value_delimiter = ' ', num_args = 0..)]
-  regenerate: Vec<u64>,
+  regenerate: Vec<u32>,
   #[clap(long, default_value = "false")]
   regenerate_all: bool,
   #[clap(long, default_value = "mcgill.courses")]
@@ -166,9 +172,9 @@ impl Arguments {
           .flat_map(|(_, value)| {
             value.into_iter().map(|item| (item.number, item))
           })
-          .collect::<HashMap<u64, Item>>()
+          .collect::<HashMap<u32, ChangelogItem>>()
       })
-      .unwrap_or_else(|_| HashMap::new());
+      .unwrap_or_else(|_| HashMap::<u32, ChangelogItem>::new());
 
     let pull_requests = model
       .iter()
@@ -186,24 +192,24 @@ impl Arguments {
 
     for pull_request in pull_requests {
       if let Some(merged_at) = pull_request.merged_at {
+        let number = u32::try_from(pull_request.number).map_err(|_| {
+          anyhow!("pull request number {} exceeds u32", pull_request.number)
+        })?;
+
         let month = merged_at.format("%B %Y").to_string();
 
-        if let Some(item) = existing_items.get(&pull_request.number) {
-          if self.regenerate_all
-            || self.regenerate.contains(&pull_request.number)
-          {
-            grouped
-              .entry(month)
-              .or_default()
-              .push(Item::try_from(pull_request, merged_at).await?);
+        if let Some(item) = existing_items.get(&number) {
+          if self.regenerate_all || self.regenerate.contains(&number) {
+            grouped.entry(month).or_default().push(
+              ChangelogItem::try_from(pull_request, merged_at, number).await?,
+            );
           } else {
             grouped.entry(month).or_default().push(item.clone());
           }
         } else {
-          grouped
-            .entry(month)
-            .or_default()
-            .push(Item::try_from(pull_request, merged_at).await?);
+          grouped.entry(month).or_default().push(
+            ChangelogItem::try_from(pull_request, merged_at, number).await?,
+          );
         }
       }
     }
