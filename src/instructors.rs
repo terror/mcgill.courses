@@ -1,6 +1,7 @@
 use super::*;
 
 #[derive(Debug, Deserialize, Serialize, ToSchema)]
+#[typeshare]
 pub(crate) struct GetInstructorPayload {
   /// Instructor matching the requested name, if found.
   pub(crate) instructor: Option<Instructor>,
