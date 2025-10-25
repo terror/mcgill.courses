@@ -1332,9 +1332,9 @@
     },
     {
       "number": 494,
-      "summary": "Added functionality to remember the selected pane on the user profile page, so users can easily navigate back to their preferred view without resetting it each time they visit the page.",
       "url": "https://github.com/terror/mcgill.courses/pull/494",
-      "mergedAt": "2024-03-11T01:38:25Z"
+      "mergedAt": "2024-03-11T01:38:25Z",
+      "summary": "Added functionality to remember the selected pane on the user profile page, so users can easily navigate back to their preferred view without resetting it each time they visit the page."
     },
     {
       "number": 493,

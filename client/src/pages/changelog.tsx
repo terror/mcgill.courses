@@ -56,17 +56,31 @@ export const Changelog = () => {
           </p>
         </div>
         <div className='w-full max-w-4xl px-4 sm:px-6 lg:px-8'>
-          {sortedChangelogItems.map(([month, items]) => (
-            <div key={month} className='mb-8'>
-              <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-200'>
-                {month}
-              </h2>
-              {items
-                .slice(0, expandedMonths.includes(month) ? items.length : 5)
-                .map((item, index) => (
-                  <div key={index} className='mt-4'>
+          {sortedChangelogItems.map(([month, items]) => {
+            const sanitizedItems = items.filter(
+              (
+                item
+              ): item is ChangelogItem & {
+                summary: string;
+              } =>
+                typeof item.summary === 'string' &&
+                item.summary.trim().length > 0
+            );
+
+            const itemsToRender = sanitizedItems.slice(
+              0,
+              expandedMonths.includes(month) ? sanitizedItems.length : 5
+            );
+
+            return (
+              <div key={month} className='mb-8'>
+                <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-200'>
+                  {month}
+                </h2>
+                {itemsToRender.map((item) => (
+                  <div key={item.number} className='mt-4'>
                     <p className='text-lg text-gray-800 dark:text-gray-300'>
-                      - {(item.summary ?? '').replace('/^- /', '')} (
+                      - {item.summary.replace('/^- /', '')} (
                       <a
                         href={item.url}
                         className='text-blue-600 dark:text-blue-400'
@@ -79,16 +93,17 @@ export const Changelog = () => {
                     </p>
                   </div>
                 ))}
-              {items.length > 10 && (
-                <button
-                  onClick={() => toggleShowAll(month)}
-                  className='mt-4 underline dark:text-gray-400'
-                >
-                  {expandedMonths.includes(month) ? 'Show less' : 'Show all'}
-                </button>
-              )}
-            </div>
-          ))}
+                {sanitizedItems.length > 10 && (
+                  <button
+                    onClick={() => toggleShowAll(month)}
+                    className='mt-4 underline dark:text-gray-400'
+                  >
+                    {expandedMonths.includes(month) ? 'Show less' : 'Show all'}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </Layout>
