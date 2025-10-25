@@ -34,18 +34,23 @@ export interface GetInstructorPayload {
   reviews: Review[];
 }
 
-export interface GetReviewsPayload {
-  /** List of reviews matching the query. */
-  reviews: Review[];
-  /** Number of unique users who have submitted reviews (if requested). */
-  uniqueUserCount?: number;
-}
-
 export enum InteractionKind {
   /** Indicates that the user liked the review. */
   Like = 'like',
   /** Indicates that the user disliked the review. */
   Dislike = 'dislike',
+}
+
+export interface GetInteractionKindPayload {
+  /** Interaction the user has taken for this course and referrer, if any. */
+  kind?: InteractionKind;
+}
+
+export interface GetReviewsPayload {
+  /** List of reviews matching the query. */
+  reviews: Review[];
+  /** Number of unique users who have submitted reviews (if requested). */
+  uniqueUserCount?: number;
 }
 
 export interface Interaction {
