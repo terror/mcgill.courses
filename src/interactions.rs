@@ -11,6 +11,7 @@ pub(crate) struct GetInteractionKindParams {
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq, ToSchema)]
+#[typeshare]
 pub(crate) struct GetInteractionKindPayload {
   /// Interaction the user has taken for this course and referrer, if any.
   pub(crate) kind: Option<InteractionKind>,
