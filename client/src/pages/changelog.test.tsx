@@ -32,6 +32,7 @@ vi.mock('../assets/changelog.json', () => ({
 
 const renderChangelog = async () => {
   const { Changelog } = await import('./changelog');
+
   return render(
     <HelmetProvider>
       <Changelog />
