@@ -12,7 +12,7 @@ import { twMerge } from 'tailwind-merge';
 import * as buildingCodes from '../assets/building-codes.json';
 import * as buildingCoordinates from '../assets/building-coordinates.json';
 import { useDarkMode } from '../hooks/use-dark-mode';
-import { env } from '../lib/constants';
+import { env } from '../lib/env';
 
 type MarkerProps = {
   position: google.maps.LatLngLiteral;
