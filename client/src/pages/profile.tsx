@@ -34,7 +34,10 @@ export const Profile = () => {
     if (!user) return;
 
     const storage =
-      typeof window !== 'undefined' ? window.localStorage : undefined;
+      typeof window !== 'undefined' &&
+      typeof window.localStorage?.getItem === 'function'
+        ? window.localStorage
+        : undefined;
 
     const selectedTabIndex = storage?.getItem('selectedTabIndex');
 
@@ -143,7 +146,7 @@ export const Profile = () => {
                   setSelectedTabIndex(index);
                   if (
                     typeof window !== 'undefined' &&
-                    window.localStorage !== undefined
+                    typeof window.localStorage?.setItem === 'function'
                   ) {
                     window.localStorage.setItem(
                       'selectedTabIndex',
