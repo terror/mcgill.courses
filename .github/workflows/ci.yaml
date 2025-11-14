@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
+  pull_request_target:
     branches:
       - master
 
@@ -13,8 +13,34 @@ defaults:
     shell: bash
 
 jobs:
+  gate:
+    name: Approval Gate
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get User Permission
+        if: ${{ github.event_name == 'pull_request_target' }}
+        id: checkAccess
+        uses: actions-cool/check-user-permission@7b90a27f92f3961b368376107661682c441f6103
+        with:
+          require: write
+          username: ${{ github.triggering_actor }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check User Permission
+        if: ${{ github.event_name == 'pull_request_target' && steps.checkAccess.outputs.require-result == 'false' }}
+        run: |
+          echo "For security purposes, ${{ github.triggering_actor }} does not have the required permissions on this repository to safely run this workflow."
+          echo "Current permission level is ${{ steps.checkAccess.outputs.user-permission }}."
+          echo "Please wait for a collaborator to review your code and re-trigger this workflow."
+          exit 1
+
   check:
     name: Check
+
+    needs: gate
 
     runs-on: ubuntu-latest
 
@@ -32,6 +58,8 @@ jobs:
 
   client:
     name: Client
+
+    needs: gate
 
     runs-on: macos-latest
 
@@ -67,6 +95,8 @@ jobs:
 
   coverage:
     name: Coverage
+
+    needs: gate
 
     runs-on: macos-latest
 
@@ -125,6 +155,8 @@ jobs:
 
   server:
     name: Server
+
+    needs: gate
 
     runs-on: macos-latest
 
