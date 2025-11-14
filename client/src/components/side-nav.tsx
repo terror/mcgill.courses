@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { useAuth } from '../hooks/use-auth';
 import { useDarkMode } from '../hooks/use-dark-mode';
-import { env } from '../lib/constants';
+import { env } from '../lib/env';
 import { DarkModeToggle } from './dark-mode-toggle';
 import { navigationItems } from './footer';
 import { Logo } from './logo';

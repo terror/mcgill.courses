@@ -1,9 +1,9 @@
 ## mcgill.courses <a><img src="https://github.com/user-attachments/assets/3d835599-381c-4d82-8e71-4d80be190909" height="40" valign="top" /></a>
 
 [![CI](https://github.com/mcgill-courses/mcgill.courses/actions/workflows/ci.yaml/badge.svg)](https://github.com/mcgill-courses/mcgill.courses/actions/workflows/ci.yaml)
-[![codecov](https://img.shields.io/codecov/c/github/terror/mcgill.courses)](https://app.codecov.io/gh/terror/mcgill.courses)
+[![codecov](https://codecov.io/github/mcgill-courses/mcgill.courses/graph/badge.svg?token=5BJLERWSY1)](https://codecov.io/github/mcgill-courses/mcgill.courses)
 [![discord](https://img.shields.io/badge/discord-%235865F2.svg?logo=discord&logoColor=white)](https://discord.gg/KcYbwyupmJ)
-[![website](https://img.shields.io/website?url=https%3A%2F%2Fmcgill.courses)](https://mcgill.courses/)
+[![website](https://img.shields.io/website?url=https%3A%2F%2Fmcgill.courses%2F&up_message=mcgill.courses&down_message=mcgill.courses)](https://mcgill.courses/)
 
 A course search and review platform for McGill university.
 

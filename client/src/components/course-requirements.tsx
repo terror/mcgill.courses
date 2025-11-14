@@ -1,53 +1,52 @@
 import { List, Network } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import type { Requirements } from '../lib/types';
-import { capitalize, punctuate } from '../lib/utils';
+import { capitalize, punctuate, stripColonPrefix } from '../lib/utils';
 import type { Course } from '../model/course';
 import { CourseGraph } from './course-graph';
 
-// Strips prefix strings like "Prerequisites: ..." and "Corequisites: ..."
-const stripColonPrefix = (text: string): string => {
-  const parts = text.split(' ');
-  if (parts[0] && parts[0].endsWith(':')) {
-    return parts.slice(1).join(' ');
-  }
-  return text;
+type RequirementTextProps = {
+  text: string;
 };
 
-const transformText = (text: string): React.ReactNode[] => {
-  const nodes = [],
-    regex = /\b([A-Z]{4})\s?(\d{3})([A-Za-z]\d?)?\b/g;
+const RequirementText = ({ text }: RequirementTextProps) => {
+  const nodes = useMemo(() => {
+    const fragments: React.ReactNode[] = [];
 
-  let lastIndex = 0;
+    const regex = /\b([A-Z]{4})\s?(\d{3})([A-Za-z]\d?)?\b/g;
 
-  text.replace(regex, (match, code, number, level, index) => {
-    if (index > lastIndex) nodes.push(text.substring(lastIndex, index));
+    let lastIndex = 0;
 
-    const courseLink = level
-      ? `${code}-${number}${level}`
-      : `${code}-${number}`;
+    text.replace(regex, (match, code, number, level, index) => {
+      if (index > lastIndex) fragments.push(text.substring(lastIndex, index));
 
-    nodes.push(
-      <Link
-        key={`course-${index}`}
-        to={`/course/${courseLink}`}
-        className='text-gray-800 hover:underline dark:text-gray-200'
-      >
-        {`${code} ${number}${level ? level : ''}`}
-      </Link>
-    );
+      const courseLink = level
+        ? `${code}-${number}${level}`
+        : `${code}-${number}`;
 
-    lastIndex = index + match.length;
+      fragments.push(
+        <Link
+          key={`course-${index}`}
+          to={`/course/${courseLink}`}
+          className='text-gray-800 hover:underline dark:text-gray-200'
+        >
+          {`${code} ${number}${level ? level : ''}`}
+        </Link>
+      );
 
-    return match;
-  });
+      lastIndex = index + match.length;
 
-  if (lastIndex < text.length) nodes.push(text.substring(lastIndex));
+      return match;
+    });
 
-  return nodes;
+    if (lastIndex < text.length) fragments.push(text.substring(lastIndex));
+
+    return fragments;
+  }, [text]);
+
+  return <>{nodes}</>;
 };
 
 type RequirementBlockProps = {
@@ -63,7 +62,9 @@ const RequirementBlock = ({ title, text }: RequirementBlockProps) => {
       </h2>
       {text ? (
         <div className='text-gray-500 dark:text-gray-400'>
-          {transformText(capitalize(punctuate(stripColonPrefix(text.trim()))))}
+          <RequirementText
+            text={capitalize(punctuate(stripColonPrefix(text.trim())))}
+          />
         </div>
       ) : (
         <p className='text-gray-500 dark:text-gray-400'>
@@ -75,15 +76,13 @@ const RequirementBlock = ({ title, text }: RequirementBlockProps) => {
 };
 
 type RequirementsProps = {
-  course: Course;
-  requirements: Requirements;
   className?: string;
+  course: Course;
 };
 
 export const CourseRequirements = ({
-  course,
-  requirements,
   className,
+  course,
 }: RequirementsProps) => {
   const [showGraph, setShowGraph] = useState(false);
 
@@ -114,16 +113,13 @@ export const CourseRequirements = ({
         <div className='space-y-7 p-6'>
           <RequirementBlock
             title='Prerequisites'
-            text={requirements.prerequisitesText}
+            text={course.prerequisitesText}
           />
           <RequirementBlock
             title='Corequisites'
-            text={requirements.corequisitesText}
+            text={course.corequisitesText}
           />
-          <RequirementBlock
-            title='Restrictions'
-            text={requirements.restrictions}
-          />
+          <RequirementBlock title='Restrictions' text={course.restrictions} />
         </div>
       ) : (
         <CourseGraph course={course} />

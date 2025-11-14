@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-import { env } from '../lib/constants';
+import { env } from '../lib/env';
 
 interface MenuItemProps {
   href?: string;

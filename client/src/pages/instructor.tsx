@@ -49,6 +49,9 @@ export const Instructor = () => {
   const userReview = reviews.find((r) => r.userId === user?.id),
     uniqueReviews = uniqBy(reviews, (r) => r.courseId);
 
+  const reviewCount = reviews.length;
+  const reviewLabel = reviewCount === 1 ? 'review' : 'reviews';
+
   const updateLikes = (review: Review) => {
     return (likes: number) => {
       if (reviews) {
@@ -136,18 +139,18 @@ export const Instructor = () => {
                   </p>
                 )}
               </div>
-              {reviews.length !== 0 && (
+              {reviewCount !== 0 && (
                 <Fragment>
                   <div className='grow py-3' />
-                  <CourseInfoStats className='md:hidden' allReviews={reviews} />
+                  <CourseInfoStats className='md:hidden' reviews={reviews} />
                   <p className='mt-4 text-sm text-gray-500 dark:text-gray-400'>
-                    {reviews.length} review(s)
+                    {reviewCount} {reviewLabel}
                   </p>
                 </Fragment>
               )}
             </div>
             <div className='ml-10 hidden w-5/12 justify-center rounded-md bg-neutral-50 py-6 dark:bg-neutral-800 md:flex lg:mt-6'>
-              <CourseInfoStats variant='large' allReviews={reviews} />
+              <CourseInfoStats variant='large' reviews={reviews} />
             </div>
           </div>
         </div>
@@ -182,17 +185,17 @@ export const Instructor = () => {
                 />
               ))}
         </div>
-        {!showAllReviews && reviews.length > 8 && (
+        {!showAllReviews && reviewCount > 8 && (
           <div className='flex justify-center text-gray-400 dark:text-neutral-500'>
             <button
               className='size-full border border-dashed border-neutral-400 py-2 dark:border-neutral-500'
               onClick={() => setShowAllReviews(true)}
             >
-              Show all {reviews.length} reviews
+              Show all {reviewCount} {reviewLabel}
             </button>
           </div>
         )}
-        {reviews.length === 0 && (
+        {reviewCount === 0 && (
           <ReviewEmptyPrompt className='my-8'>
             No reviews have been left for this instructor yet, be the first!
           </ReviewEmptyPrompt>

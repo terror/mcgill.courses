@@ -99,6 +99,7 @@ impl Arguments {
 
     if let Some(existing_term) = terms.iter_mut().find(|t| t.term == self.term)
     {
+      existing_term.url = self.url;
       existing_term.exams = parsed_exams;
     } else {
       terms.push(Term {

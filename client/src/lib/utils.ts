@@ -167,6 +167,22 @@ export const capitalize = (s: string): string =>
 export const punctuate = (s: string): string =>
   s.charAt(s.length - 1) === '.' ? s : s + '.';
 
+/**
+ * Removes a leading word ending with a colon, such as "Prerequisites:".
+ *
+ * @param {string} text - The text to strip
+ * @returns {string} Text without the colon-prefixed first word
+ */
+export const stripColonPrefix = (text: string): string => {
+  const parts = text.split(' ');
+
+  if (parts[0] && parts[0].endsWith(':')) {
+    return parts.slice(1).join(' ');
+  }
+
+  return text;
+};
+
 const COURSE_CODE_REGEX = /^(([A-Z0-9]){4} [0-9]{3}(D1|D2|N1|N2|J1|J2|J3)?)$/;
 
 /**

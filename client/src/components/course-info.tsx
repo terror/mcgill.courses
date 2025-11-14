@@ -1,66 +1,88 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Bell, BellOff, ExternalLink } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
-import { parseCourseDescription } from '../lib/dom-utils';
-import type { Review } from '../lib/types';
+import type { Review, Subscription } from '../lib/types';
 import type { Course } from '../model/course';
+import { CourseDescription } from './course-description';
 import { CourseInfoStats } from './course-info-stats';
 import { CourseTerms } from './course-terms';
 
 type CourseInfoProps = {
   course: Course;
-  allReviews: Review[];
-  numReviews?: number;
+  reviews: Review[];
 };
 
-export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
+export const CourseInfo = ({ course, reviews }: CourseInfoProps) => {
   const user = useAuth();
 
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const queryClient = useQueryClient();
+
+  const subscriptionQueryKey = [
+    'subscription',
+    course._id,
+    user?.id ?? 'guest',
+  ] as const;
+
+  const { data: subscription, isError: isSubscriptionError } = useQuery({
+    enabled: Boolean(user),
+    queryFn: () => api.getSubscription(course._id),
+    queryKey: subscriptionQueryKey,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
 
   useEffect(() => {
-    if (!user) return;
+    if (!isSubscriptionError) return;
 
-    api
-      .getSubscription(course._id)
-      .then((data) => {
-        setIsSubscribed(data !== null);
-      })
-      .catch(() =>
-        toast.error(
-          `Failed to check subscription for course ${course.subject} ${course.code}`
-        )
-      );
-  }, [course]);
+    toast.error(
+      `Failed to check subscription for course ${course.subject} ${course.code}`
+    );
+  }, [course.code, course.subject, isSubscriptionError]);
 
-  const subscribe = async () => {
-    try {
-      await api.addSubscription(course._id);
-      setIsSubscribed(true);
+  const subscribeMutation = useMutation({
+    mutationFn: () => api.addSubscription(course._id),
+    onSuccess: () => {
+      if (!user) return;
+
+      queryClient.setQueryData<Subscription | null>(subscriptionQueryKey, {
+        courseId: course._id,
+        userId: user.id,
+      });
+
       toast.success(`Subscribed to course ${course.subject} ${course.code}.`);
-    } catch (err) {
+    },
+    onError: () => {
       toast.error(
         `Failed to subscribe to course ${course.subject} ${course.code}.`
       );
-    }
-  };
+    },
+  });
 
-  const unsubscribe = async () => {
-    try {
-      await api.removeSubscription(course._id);
-      setIsSubscribed(false);
+  const unsubscribeMutation = useMutation({
+    mutationFn: () => api.removeSubscription(course._id),
+    onSuccess: () => {
+      queryClient.setQueryData<Subscription | null>(subscriptionQueryKey, null);
+
       toast.success(
         `Unsubscribed from course ${course.subject} ${course.code}`
       );
-    } catch (err) {
+    },
+    onError: () => {
       toast.error(
         `Failed to unsubscribe from course ${course.subject} ${course.code}`
       );
-    }
-  };
+    },
+  });
+
+  const isSubscribed = Boolean(subscription);
+
+  const reviewCount = reviews.length;
+  const reviewLabel = reviewCount === 1 ? 'review' : 'reviews';
 
   return (
     <div className='relative flex w-full flex-row rounded-md bg-slate-50 px-6 pt-8 shadow-sm dark:bg-neutral-800 md:mt-10'>
@@ -79,13 +101,15 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
               (isSubscribed ? (
                 <BellOff
                   size={20}
-                  onClick={unsubscribe}
+                  onClick={() => unsubscribeMutation.mutate()}
+                  data-testid='unsubscribe-icon'
                   className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ) : (
                 <Bell
                   size={20}
-                  onClick={subscribe}
+                  onClick={() => subscribeMutation.mutate()}
+                  data-testid='subscribe-icon'
                   className='my-auto ml-1 cursor-pointer transition-colors duration-300 hover:stroke-red-600 dark:text-gray-200'
                 />
               ))}
@@ -110,23 +134,23 @@ export const CourseInfo = ({ course, allReviews }: CourseInfoProps) => {
         <CourseTerms course={course} variant='large' />
         <div className='py-1' />
         <p className='break-words text-gray-500 dark:text-gray-400'>
-          {parseCourseDescription(course.description)}
+          <CourseDescription description={course.description} />
         </p>
         <div className='grow py-3' />
-        <CourseInfoStats className='mb-4 sm:hidden' allReviews={allReviews} />
+        <CourseInfoStats className='mb-4 sm:hidden' reviews={reviews} />
         <CourseInfoStats
           className='hidden gap-x-6 sm:mb-6 sm:flex md:mb-0 md:hidden'
           variant='medium'
-          allReviews={allReviews}
+          reviews={reviews}
         />
         <p className='mb-6 text-sm text-gray-500 dark:text-gray-400'>
-          {allReviews.length} review(s)
+          {reviewCount} {reviewLabel}
         </p>
       </div>
       <div className='hidden w-5/12 justify-center rounded-md bg-neutral-50 py-4 dark:bg-neutral-800 md:mx-5 md:flex lg:ml-12 lg:mt-6 xl:justify-start'>
         <CourseInfoStats
           variant='large'
-          allReviews={allReviews}
+          reviews={reviews}
           className='lg:mr-8'
         />
       </div>

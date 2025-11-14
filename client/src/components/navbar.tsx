@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 import { useAuth } from '../hooks/use-auth';
 import { api } from '../lib/api';
-import { env } from '../lib/constants';
+import { env } from '../lib/env';
 import { getSearchIndex, updateSearchResults } from '../lib/search-index';
 import type { Notification } from '../lib/types';
 import type { SearchResults } from '../model/search-results';
