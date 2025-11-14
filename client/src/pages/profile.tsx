@@ -33,9 +33,17 @@ export const Profile = () => {
   useEffect(() => {
     if (!user) return;
 
-    const selectedTabIndex = localStorage.getItem('selectedTabIndex');
+    const storage =
+      typeof window !== 'undefined' &&
+      typeof window.localStorage?.getItem === 'function'
+        ? window.localStorage
+        : undefined;
 
-    if (selectedTabIndex) setSelectedTabIndex(parseInt(selectedTabIndex, 10));
+    const selectedTabIndex = storage?.getItem('selectedTabIndex');
+
+    if (selectedTabIndex) {
+      setSelectedTabIndex(parseInt(selectedTabIndex, 10));
+    }
 
     api
       .getReviews({ userId: user.id, sorted: true })
@@ -136,7 +144,15 @@ export const Profile = () => {
                 key={tab}
                 onClick={() => {
                   setSelectedTabIndex(index);
-                  localStorage.setItem('selectedTabIndex', index.toString());
+                  if (
+                    typeof window !== 'undefined' &&
+                    typeof window.localStorage?.setItem === 'function'
+                  ) {
+                    window.localStorage.setItem(
+                      'selectedTabIndex',
+                      index.toString()
+                    );
+                  }
                 }}
                 className={({ selected }) =>
                   twMerge(
