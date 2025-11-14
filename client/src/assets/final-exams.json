@@ -1,7 +1,7 @@
 [
   {
     "term": "Fall 2025",
-    "url": "https://www.mcgill.ca/exams/files/exams/december_2025_final_scheduleo08b.pdf",
+    "url": "https://www.mcgill.ca/exams/files/exams/december_2025_final_scheduleon12.pdf",
     "exams": [
       {
         "id": "ACCT352",
@@ -2159,6 +2159,17 @@
         "end_time": "2025-12-17T17:00:00"
       },
       {
+        "id": "ECON257D1",
+        "section": "001",
+        "exam": {
+          "format": "IN-PERSON",
+          "type": "IN DEPARTMENT EXAM",
+          "location": "D.T. CAMPUS"
+        },
+        "start_time": "2025-12-09T18:30:00",
+        "end_time": "2025-12-09T21:30:00"
+      },
+      {
         "id": "ECON302",
         "section": "001",
         "exam": {
@@ -2592,7 +2603,7 @@
         "section": "001",
         "exam": {
           "format": "IN-PERSON",
-          "type": "FORMAL EXAM",
+          "type": "IN DEPARTMENT EXAM",
           "location": "D.T. CAMPUS"
         },
         "start_time": "2025-12-11T18:30:00",
@@ -2603,7 +2614,7 @@
         "section": "002",
         "exam": {
           "format": "IN-PERSON",
-          "type": "FORMAL EXAM",
+          "type": "IN DEPARTMENT EXAM",
           "location": "D.T. CAMPUS"
         },
         "start_time": "2025-12-11T18:30:00",
@@ -2614,7 +2625,7 @@
         "section": "003",
         "exam": {
           "format": "IN-PERSON",
-          "type": "FORMAL EXAM",
+          "type": "IN DEPARTMENT EXAM",
           "location": "D.T. CAMPUS"
         },
         "start_time": "2025-12-11T18:30:00",
@@ -3097,12 +3108,12 @@
         "id": "ENVB410",
         "section": "001",
         "exam": {
-          "format": "IN-PERSON",
-          "type": "FORMAL EXAM",
-          "location": "MAC CAMPUS"
+          "format": "ONLINE",
+          "type": "TAKE-HOME",
+          "location": "72 HOURS"
         },
-        "start_time": "2025-12-17T09:00:00",
-        "end_time": "2025-12-17T12:00:00"
+        "start_time": "2025-12-15T09:00:00",
+        "end_time": "2025-12-18T09:00:00"
       },
       {
         "id": "ENVR200",
@@ -3130,12 +3141,12 @@
         "id": "ENVR201",
         "section": "051",
         "exam": {
-          "format": "IN-PERSON",
-          "type": "IN DEPARTMENT EXAM",
-          "location": "MAC CAMPUS"
+          "format": "ONLINE",
+          "type": "TAKE-HOME",
+          "location": "72 HOURS"
         },
-        "start_time": "2025-12-10T14:00:00",
-        "end_time": "2025-12-10T17:00:00"
+        "start_time": "2025-12-08T14:00:00",
+        "end_time": "2025-12-11T14:00:00"
       },
       {
         "id": "EPSC185",
@@ -3783,8 +3794,8 @@
           "type": "FORMAL EXAM",
           "location": "MAC CAMPUS"
         },
-        "start_time": "2025-12-17T14:00:00",
-        "end_time": "2025-12-17T17:00:00"
+        "start_time": "2025-12-10T14:00:00",
+        "end_time": "2025-12-10T17:00:00"
       },
       {
         "id": "FREN250",
@@ -4063,17 +4074,6 @@
       },
       {
         "id": "HIST315",
-        "section": "001",
-        "exam": {
-          "format": "ONLINE",
-          "type": "TAKE-HOME",
-          "location": "72 HOURS"
-        },
-        "start_time": "2025-12-08T14:00:00",
-        "end_time": "2025-12-11T14:00:00"
-      },
-      {
-        "id": "HIST315",
         "section": "002",
         "exam": {
           "format": "ONLINE",
@@ -4344,8 +4344,8 @@
           "type": "FORMAL EXAM",
           "location": "D.T. CAMPUS"
         },
-        "start_time": "2025-12-10T14:00:00",
-        "end_time": "2025-12-10T17:00:00"
+        "start_time": "2025-12-08T09:00:00",
+        "end_time": "2025-12-08T12:00:00"
       },
       {
         "id": "ISLA333D1",
@@ -4434,6 +4434,17 @@
         },
         "start_time": "2025-12-10T14:00:00",
         "end_time": "2025-12-10T17:00:00"
+      },
+      {
+        "id": "ISLA621D1",
+        "section": "002",
+        "exam": {
+          "format": "IN-PERSON",
+          "type": "FORMAL EXAM",
+          "location": "D.T. CAMPUS"
+        },
+        "start_time": "2025-12-09T09:00:00",
+        "end_time": "2025-12-09T12:00:00"
       },
       {
         "id": "ISLA622D1",
@@ -6942,17 +6953,6 @@
         },
         "start_time": "2025-12-16T09:00:00",
         "end_time": "2025-12-16T12:00:00"
-      },
-      {
-        "id": "NUTR507",
-        "section": "001",
-        "exam": {
-          "format": "IN-PERSON",
-          "type": "FORMAL EXAM",
-          "location": "MAC CAMPUS"
-        },
-        "start_time": "2025-12-17T14:00:00",
-        "end_time": "2025-12-17T17:00:00"
       },
       {
         "id": "NUTR545",
