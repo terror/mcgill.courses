@@ -30,8 +30,8 @@ importers:
         specifier: ^5.103.2
         version: 5.103.2(react@19.2.7)
       '@vis.gl/react-google-maps':
-        specifier: ^1.5.5
-        version: 1.5.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: ^1.10.1
+        version: 1.10.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       flexsearch:
         specifier: ^0.8.212
         version: 0.8.212
@@ -206,12 +206,12 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/runtime@7.29.2':
-    resolution: {integrity: sha512-JiDShH45zKHWyGe4ZNVRrCjBz8Nh9TMmZG1kh4QTK8hCBTWBi8Da+i7s1fJw7/lYpM4ccepSNfqzZ/QvABBi5g==}
+  '@babel/runtime@7.29.10':
+    resolution: {integrity: sha512-NpugTzbKgGrNe45Ui32cN8vCFFMxVtP/9rtfwv0nP5FRDAjvYBxJcLVpYA9mr1jxP6cnIT7x9LUzuDTbWYYNRA==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/runtime@7.29.7':
-    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
+  '@babel/runtime@7.29.2':
+    resolution: {integrity: sha512-JiDShH45zKHWyGe4ZNVRrCjBz8Nh9TMmZG1kh4QTK8hCBTWBi8Da+i7s1fJw7/lYpM4ccepSNfqzZ/QvABBi5g==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
@@ -355,6 +355,9 @@ packages:
 
   '@fontsource/inter@5.2.8':
     resolution: {integrity: sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==}
+
+  '@googlemaps/js-api-loader@2.1.3':
+    resolution: {integrity: sha512-1t6umwRufEGzIPjHPjPeuuY1dCal0zU2bZeomkf4OA0MprFdlKCnXY3zeFkzDaCvKjwbFubeapm61P5+EbrAoA==}
 
   '@headlessui/react@1.7.19':
     resolution: {integrity: sha512-Ll+8q3OlMJfJbAKM/+/Y2q6PPYbryqNTXDbryx7SXLIDamkF6iQFbriYHga0dY44PvDhvvBWCx1Xj4U5+G4hOw==}
@@ -969,8 +972,8 @@ packages:
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
-  '@types/google.maps@3.58.1':
-    resolution: {integrity: sha512-X9QTSvGJ0nCfMzYOnaVs/k6/4L+7F5uCS+4iUmkLEls6J9S/Phv+m/i3mDeyc49ZBgwab3EFO1HEoBY7k98EGQ==}
+  '@types/google.maps@3.66.5':
+    resolution: {integrity: sha512-z7wMLjozUDNC6SYoxvnsh4RvbFQoiqgjHmfcOWKCjKiLklAKV32jvywuBvJRfpThJZn4TonyoeJc/3t9RlVnWQ==}
 
   '@types/hammerjs@2.0.46':
     resolution: {integrity: sha512-ynRvcq6wvqexJ9brDMS4BnBLzmr0e14d6ZJTEShTBWKymQiHwlAyGu0ZPEFI2Fh1U53F7tN9ufClWM5KvqkKOw==}
@@ -1059,8 +1062,8 @@ packages:
     resolution: {integrity: sha512-BoC8PiO4Hkdo0TVJh9Ntxr5MxPDI7/oFsrygN5ADelFSeXG/qgNuucIGA+L5Z6JpPTE/uRfcTWtscjbUaufepQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@vis.gl/react-google-maps@1.5.5':
-    resolution: {integrity: sha512-LgHtK1AtE2/BN4dPoK05oWu0jWmeDdyX0Ffqi+mZc+M4apaHn2sUxxKXAxhPF90O9vcsiou/ntm6/XBWX+gpqw==}
+  '@vis.gl/react-google-maps@1.10.1':
+    resolution: {integrity: sha512-2a6Bv04WcJIVN7IIjqygzVrmWKIgTXn/lmMdjeRWbKxX5FV6/Y3LhFScGJAKfAKqoAYIG6s31CWebhFUQdmBsw==}
     peerDependencies:
       react: '>=16.8.0 || ^19.0 || ^19.0.0-rc'
       react-dom: '>=16.8.0 || ^19.0 || ^19.0.0-rc'
@@ -1388,6 +1391,10 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
+  fast-equals@6.1.0:
+    resolution: {integrity: sha512-MDA0N5wXvmx0yR0xeOf20qVMbyaEzS2kuxhBrDrIT5w3Gap7bZ/24jtvOvbthbZFmf+7PCC8XCJKGpmhVtvbIg==}
+    engines: {node: '>=6.0.0'}
 
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
@@ -2504,9 +2511,9 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.7
 
-  '@babel/runtime@7.29.2': {}
+  '@babel/runtime@7.29.10': {}
 
-  '@babel/runtime@7.29.7': {}
+  '@babel/runtime@7.29.2': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -2639,6 +2646,10 @@ snapshots:
   '@exodus/bytes@1.15.1': {}
 
   '@fontsource/inter@5.2.8': {}
+
+  '@googlemaps/js-api-loader@2.1.3':
+    dependencies:
+      '@types/google.maps': 3.66.5
 
   '@headlessui/react@1.7.19(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
@@ -2970,7 +2981,7 @@ snapshots:
   '@testing-library/dom@10.4.1':
     dependencies:
       '@babel/code-frame': 7.29.7
-      '@babel/runtime': 7.29.7
+      '@babel/runtime': 7.29.10
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
@@ -3057,7 +3068,7 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
-  '@types/google.maps@3.58.1': {}
+  '@types/google.maps@3.66.5': {}
 
   '@types/hammerjs@2.0.46': {}
 
@@ -3175,10 +3186,11 @@ snapshots:
       '@typescript-eslint/types': 8.70.0
       eslint-visitor-keys: 5.0.1
 
-  '@vis.gl/react-google-maps@1.5.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@vis.gl/react-google-maps@1.10.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
-      '@types/google.maps': 3.58.1
-      fast-deep-equal: 3.1.3
+      '@googlemaps/js-api-loader': 2.1.3
+      '@types/google.maps': 3.66.5
+      fast-equals: 6.1.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
 
@@ -3523,6 +3535,8 @@ snapshots:
   expect-type@1.4.0: {}
 
   fast-deep-equal@3.1.3: {}
+
+  fast-equals@6.1.0: {}
 
   fast-json-stable-stringify@2.1.0: {}
 
