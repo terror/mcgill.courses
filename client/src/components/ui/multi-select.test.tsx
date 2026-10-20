@@ -90,8 +90,7 @@ vi.mock('@headlessui/react', () => {
   }: {
     value: unknown;
     className?:
-      | string
-      | ((args: { active: boolean; selected: boolean }) => string);
+      string | ((args: { active: boolean; selected: boolean }) => string);
     children:
       | ReactNode
       | ((args: {

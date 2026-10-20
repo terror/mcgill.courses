@@ -71,11 +71,9 @@ afterAll(() => {
 
   if (originalClipboardDescriptor) {
     Object.defineProperty(navigator, 'clipboard', originalClipboardDescriptor);
-  } else if (
-    !(
-      navigator.clipboard && typeof navigator.clipboard.writeText === 'function'
-    )
-  ) {
+  } else if (!(
+    navigator.clipboard && typeof navigator.clipboard.writeText === 'function'
+  )) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (navigator as any).clipboard;
   }
