@@ -87,9 +87,10 @@ const canonicalTimeblocks = (timeblocks: TimeBlock[]) =>
 const uniqTimeblocks = (timeblocks: TimeBlock[]) =>
   Array.from(
     timeblocks
-      .reduce<
-        Map<string, TimeBlock>
-      >((map, timeblock) => map.set(timeblockKey(timeblock), timeblock), new Map())
+      .reduce<Map<string, TimeBlock>>(
+        (map, timeblock) => map.set(timeblockKey(timeblock), timeblock),
+        new Map()
+      )
       .values()
   );
 
@@ -120,9 +121,10 @@ const normalizeBlock = (course: Course, block: Block): BuilderBlock => ({
 const uniqBlocks = (blocks: BuilderBlock[]) =>
   Array.from(
     blocks
-      .reduce<
-        Map<string, BuilderBlock>
-      >((map, block) => map.set(blockKey(block), block), new Map())
+      .reduce<Map<string, BuilderBlock>>(
+        (map, block) => map.set(blockKey(block), block),
+        new Map()
+      )
       .values()
   );
 
@@ -367,9 +369,10 @@ export const getCourseScheduleOptions = (
 
   return Array.from(
     options
-      .reduce<
-        Map<string, CourseScheduleOption>
-      >((map, option) => map.set(optionKey(option.blocks), option), new Map())
+      .reduce<Map<string, CourseScheduleOption>>(
+        (map, option) => map.set(optionKey(option.blocks), option),
+        new Map()
+      )
       .values()
   );
 };
